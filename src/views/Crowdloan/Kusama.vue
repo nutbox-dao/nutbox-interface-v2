@@ -10,14 +10,12 @@
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noAuction') }} </p>
       </div>
-      <div class="cards-container">
-          <div class="row">
-            <div class="col-xl-5 col-md-6" v-for="card, idx of showingCard()" :key="idx">
-                <CrowdloanCard
-                  :paraId="parseInt(card.para.paraId)"
-                  :communityId="card.community.communityId"
-                />
-            </div>
+      <div class="cards-container row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="card, idx of showingCard()" :key="idx">
+          <CrowdloanCard
+            :paraId="parseInt(card.para.paraId)"
+            :communityId="card.community.communityId"
+          />
         </div>
       </div>
     </template>

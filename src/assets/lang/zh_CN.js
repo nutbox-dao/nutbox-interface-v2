@@ -16,7 +16,7 @@ module.exports = {
     pnutprofits: 'PNUT收益',
     withdraw: '收获',
     balance: '余额',
-    approveContract: "授权合约",
+    approveContract: '授权合约',
     max: '最大',
     confirmconvert: '确认兑换',
     servicecharge: '手续费',
@@ -33,7 +33,7 @@ module.exports = {
     tsbdbalance: 'TSBD余额',
     pnutbalance: 'PNUT余额',
     input: '输入',
-    tips: "帮助信息",
+    tips: '帮助信息',
 
     setting: '设置',
     admin: '管理员',
@@ -52,8 +52,8 @@ module.exports = {
     changeSteemNode: 'steem节点(可选)',
     contractAddr: '合约地址',
 
-    dashboard: "仪表盘",
-    contributions: "我的投票",
+    dashboard: '仪表盘',
+    contributions: '我的投票',
 
     language: '语言',
     zh: '中文',
@@ -67,82 +67,82 @@ module.exports = {
   wallet: {
     wallet: '钱包',
     swap: '跨链转账',
-    connectSteem: "链接Steem钱包",
-    connectTron: "链接波场钱包",
-    swapSubTitle: "及时、安全的将资产转移到波场网络",
-    install: "立即安装",
-    transfer: "转账",
-    asset: "资产",
-    nomination: "投票节点",
-    contribution: "平行链投票",
-    balance: "余额",
-    bond: "绑定",
-    unBond: "解绑",
-    redeem: "领取奖励"
+    connectSteem: '链接Steem钱包',
+    connectTron: '链接波场钱包',
+    swapSubTitle: '及时、安全的将资产转移到波场网络',
+    install: '立即安装',
+    transfer: '转账',
+    asset: '资产',
+    nomination: '投票节点',
+    contribution: '平行链投票',
+    balance: '余额',
+    bond: '绑定',
+    unBond: '解绑',
+    redeem: '领取奖励'
 
   },
   admin: {
-    admin: "管理员"
+    admin: '管理员'
   },
   cs: {
-    crowdstaking: "质押投票",
-    community: "社区",
-    nominate: "投票",
-    nominated: "已投票",
-    inputBondAmount: "Please Input ",
-    bond: "绑定资金",
-    available: "可绑定资金",
-    bondAndNominate: " 绑定并投票",
-    cancel: "取消",
-    bondInfo1: "请保留少量资金用于后续操作手续费",
-    bondInfo2: "建议至少绑定 1 DOT",
-    bondInfo3: "解绑操作后需要等待28天",
-    confirm: "确定",
-    cancelValidorsInfo: "请取消至少 {n} 个您已经投票过的节点，再进行本次投票"
+    crowdstaking: '质押投票',
+    community: '社区',
+    nominate: '投票',
+    nominated: '已投票',
+    inputBondAmount: 'Please Input ',
+    bond: '绑定资金',
+    available: '可绑定资金',
+    bondAndNominate: ' 绑定并投票',
+    cancel: '取消',
+    bondInfo1: '请保留少量资金用于后续操作手续费',
+    bondInfo2: '建议至少绑定 1 DOT',
+    bondInfo3: '解绑操作后需要等待28天',
+    confirm: '确定',
+    cancelValidorsInfo: '请取消至少 {n} 个您已经投票过的节点，再进行本次投票'
   },
   validator: {
     validator: '验证人',
-    commission: "佣金",
-    otherStake: "其他人的质押",
-    ownStake: "自己的质押",
-    waiting: "候选"
+    commission: '佣金',
+    otherStake: '其他人的质押',
+    ownStake: '自己的质押',
+    waiting: '候选'
   },
   dashboard: {
-    export: "导出",
-    nominators: "提名人数"
+    export: '导出',
+    nominators: '提名人数'
   },
   cl: {
-    crowdloan: "平行链拍卖",
-    contribute: "投票",
-    withdraw: "赎回",
-    youWillWithdraw: "你可以赎回",
-    confirm: "确认",
-    amount: "数量",
-    inputAmount: "请输入投票数量",
-    nominator: "推荐人",
-    inputNominator: "请输入推荐人地址",
-    optional: "(可选)",
-    completed: "已完成"
+    crowdloan: '平行链拍卖',
+    contribute: '投票',
+    withdraw: '赎回',
+    youWillWithdraw: '你可以赎回',
+    confirm: '确认',
+    amount: '数量',
+    inputAmount: '请输入投票数量',
+    nominator: '推荐人',
+    inputNominator: '请输入推荐人地址',
+    optional: '(可选)',
+    completed: '已完成'
   },
   transaction: {
-    broadcasting: "正在广播交易",
-    inBlock: "交易已上链",
-    contributeOk: "投票成功",
-    withdrawOk: "赎回成功",
-    transactionOk:"交易成功",
+    broadcasting: '正在广播交易',
+    inBlock: '交易已上链',
+    contributeOk: '投票成功',
+    withdrawOk: '赎回成功',
+    transactionOk: '交易成功'
 
   },
   stake: {
     stake: '质押挖矿',
-    creaseDelegation: "增加代理",
-    increaseDelegation: "减少代理",
-    getSp: "获取 SP",
-    get: '获取',
+    creaseDelegation: '增加代理',
+    increaseDelegation: '减少代理',
+    getSp: '获取 SP',
+    get: '获取'
   },
   farm: {
     farm: '流动性挖矿',
-    stake: "储蓄",
-    unStake: "减少储蓄",
+    stake: '储蓄',
+    unStake: '减少储蓄',
     tsp: {
       tspMine: 'TSP挖矿',
       yourTspAmount: '储蓄的TSP数量',
@@ -152,7 +152,7 @@ module.exports = {
       confirmDeposit: '确认储蓄',
       addTspDeposit: '增加储蓄',
       minusTspDeposit: '减少储蓄',
-      notEnoughFee: '手续费不足',
+      notEnoughFee: '手续费不足'
     },
     tsteem: {
       tsteemMine: 'TSTEEM挖矿',
@@ -163,13 +163,13 @@ module.exports = {
       confirmDeposit: '确认储蓄',
       addTsteemDeposit: '增加储蓄',
       minusTsteemDeposit: '减少储蓄',
-      notEnoughFee: '手续费不足',
+      notEnoughFee: '手续费不足'
     },
     tspLp: {
       tspLPBalance: 'S-TSP-TRX 余额',
       yourTSPLPAmount: '储蓄的S-TSP-TRX',
-      totalDepositTspLP: "储蓄总量",
-      totalTSP: 'TSP总量',
+      totalDepositTspLP: '储蓄总量',
+      totalTSP: 'TSP总量'
     },
     pnutLp: {
       pnutLPBalance: 'S-PNUT-TRX 余额',
@@ -179,40 +179,40 @@ module.exports = {
   },
   liquidStaking: {
     liquidStaking: '质押资产流动',
-    title: "TSP 质押与赎回",
+    title: 'TSP 质押与赎回',
     tsp: {
       tspIsCirculatingSP: 'TSP为SP的等价物，TSP可享受SP同等的质押奖励，且TSP可交易',
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
     }
   },
   tip: {
-    loading: "加载中，请稍等",
-    noAuction: "没有进行中的众贷",
-    noProject: "没有进行中的项目",
-    noNominations: "没有投票验证者节点",
-    tokenSafeTip: "您的资产将被锁定到 {symbol} 的官方众贷合约内，而不是Nutbox的账户内。",
-    belowMinContribution: "投票数小于最小投票数1.0000个。",
-    belowMinBond: "绑定数小于最小绑定数0.1个。",
-    wrongNominatorAddress: "推荐人地址格式错误",
-    insufficientBalance: "余额不足",
-    outOfCap: "超过最大需求数",
-    tips: "提示信息",
-    error: "错误！",
-    success: "成功！",
-    warning: "警告！",
+    loading: '加载中，请稍等',
+    noAuction: '没有进行中的众贷',
+    noProject: '没有进行中的项目',
+    noNominations: '没有投票验证者节点',
+    tokenSafeTip: '您的资产将被锁定到 {symbol} 的官方众贷合约内，而不是Nutbox的账户内。',
+    belowMinContribution: '投票数小于最小投票数1.0000个。',
+    belowMinBond: '绑定数小于最小绑定数0.1个。',
+    wrongNominatorAddress: '推荐人地址格式错误',
+    insufficientBalance: '余额不足',
+    outOfCap: '超过最大需求数',
+    tips: '提示信息',
+    error: '错误！',
+    success: '成功！',
+    warning: '警告！',
     noNeedWithdraw: '没有可赎回投票',
     comingSoon: '敬请期待'
   },
   vote: {
-    upvote: "点赞",
-    vote: "点赞帖子",
-    title: "支付PNUT,获得nutbox.mine点赞",
-    link: "帖子链接",
-    payPnut: "支付PNUT",
-    linkPlaceholder: "请填写需要点赞的帖子链接",
-    pnutPlaceholder: "请填写支付金额",
-    transfer: "转账",
-    voteRate: "PNUT - 10% 点赞",
+    upvote: '点赞',
+    vote: '点赞帖子',
+    title: '支付PNUT,获得nutbox.mine点赞',
+    link: '帖子链接',
+    payPnut: '支付PNUT',
+    linkPlaceholder: '请填写需要点赞的帖子链接',
+    pnutPlaceholder: '请填写支付金额',
+    transfer: '转账',
+    voteRate: 'PNUT - 10% 点赞'
   },
   nps: {
     nps: '提案改善',
@@ -244,13 +244,14 @@ module.exports = {
     illegalTronAddress: '无效的波场地址',
     inputError: '输入值无效',
     inputOverflow: '输入超过最大值',
-    inputOutOfRange: "请输入{lowerPnutAmount}-{upperPnutAmount}的值",
-    inputLinkIllegal: "请输入正确的链接",
-    transferFail: "转账失败",
+    inputOutOfRange: '请输入{lowerPnutAmount}-{upperPnutAmount}的值',
+    inputLinkIllegal: '请输入正确的链接',
     notEnoughFee: '手续费不足',
-    insufficentPnut: "PNUT余额不足",
-    hasVoted: "Nutbox已经点赞了您的帖子。",
-    pleaseRetry: "请重试"
+    insufficentPnut: 'PNUT余额不足',
+    hasVoted: 'Nutbox已经点赞了您的帖子。',
+    pleaseRetry: '请重试'
+  },
+  community: {
+    community: '社区'
   }
-
 }

@@ -1,29 +1,31 @@
 <template>
   <div class="ksm-wallet">
     <div class="ksm-wallet">
-      <p class="item-title">
-        {{ $t("wallet.asset") }}
-      </p>
-      <div class="balance-box">
-        <BalanceView
-          name="DOT"
-          :balances="available / 1e10"
-          desc="DOT"
-          :logo="dotLogo"
-          :transfer="true"
-        />
-        <LockedBalanceView
-          name="DOT"
-          :balances="locked / 1e10"
-          desc="Locked DOT"
-          :logo="dotLogo"
-          :transfer="true"
-        />
+      <div class="balance-box row">
+        <div class="col-xl-4 col-md-6 mb-4">
+          <BalanceView
+            name="DOT"
+            :balances="available / 1e10"
+            desc="DOT"
+            :logo="dotLogo"
+            :transfer="true"
+          />
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4">
+          <LockedBalanceView
+            name="DOT"
+            :balances="locked / 1e10"
+            desc="Locked DOT"
+            :logo="dotLogo"
+            :transfer="true"
+          />
+        </div>
       </div>
-      <p class="item-title">
-        {{ $t("wallet.nomination") }}
-      </p>
-      <UserNominations />
+      <UserNominations>
+        <template #title>
+          <div class="card-title">{{ $t("wallet.nomination") }}</div>
+        </template>
+      </UserNominations>
     </div>
   </div>
 </template>
@@ -53,19 +55,5 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.ksm-wallet {
-  margin-top: 20px;
-  .balance-box {
-    display: flex;
-    align-content: left;
-    // z-index: 1;
-    // justify-content: space-between;
-    flex-wrap: wrap;
-    > div {
-      margin-top: 24px;
-      margin-right: 24px;
-    }
-  }
-}
+<style lang="scss">
 </style>

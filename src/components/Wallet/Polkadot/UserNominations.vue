@@ -4,22 +4,21 @@
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
-
-    <div class="empty-bg" v-if="!loadingStaking && nominators.length === 0">
-      <img src="~@/static/images/empty-data.png" alt="" />
-      <p>{{ $t("tip.noNominations") }}</p>
-    </div>
-
-    <div v-show="nominators.length > 0 && !loadingStaking">
-      <b-card class="table-card">
-        <b-table
-          :items="nominators"
-          :fields="fields"
-          thead-tr-class="th-cell"
-          table-class="c-table"
-          hover
-          tbody-tr-class="c-tr"
-          thead-class="c-th"
+    <template v-else>
+      <div class="table-card">
+        <slot name="title"></slot>
+        <div class="empty-bg" v-if="nominators.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t("tip.noNominations") }}</p>
+        </div>
+        <b-table v-else
+                 :items="nominators"
+                 :fields="fields"
+                 thead-tr-class="th-cell"
+                 table-class="c-table"
+                 hover
+                 tbody-tr-class="c-tr"
+                 thead-class="c-th"
         >
           <template #cell(icon)="row">
             <!-- <b-avatar size="sm" class="mr-2">C</b-avatar> -->
@@ -31,8 +30,8 @@
             />
           </template>
         </b-table>
-      </b-card>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -89,28 +88,6 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.table-card {
-  border-radius: 1.4rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
-  border: none;
-  .card-body {
-    padding: 0;
-    margin: 1rem;
-    overflow: auto;
-  }
-}
-
-.Active {
-  color: rgba(80, 191, 0, 1);
-}
-.Retired {
-  color: rgba(248, 182, 42, 1);
-}
-.Completed {
-  color: rgba(255, 91, 77, 1);
-}
-.change-page-box {
-  margin: 1rem auto;
-}
+<style lang="scss" scoped>
+@import "src/static/css/card/table-card";
 </style>

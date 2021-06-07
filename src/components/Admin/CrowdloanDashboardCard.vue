@@ -1,36 +1,42 @@
 <template>
-  <div class="row">
+  <div>
     <div class="loading-bg" v-if="isLoading">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
-    <div class="col-lg-4 col-md-6" v-for="(item, index) of items" :key="index">
-      <div class="c-card">
-        <div class="card-title-box flex-start-center">
-          <div class="icons">
-            <img class="icon2" :src="item.para.iconUrl" alt="" />
-            <img class="icon1" :src="item.community.iconUrl" alt="" />
+    <div class="empty-bg" v-if="!isLoading && items.length === 0">
+      <img src="~@/static/images/empty-data.png" alt="" />
+      <p>{{ $t("tip.noStakingProject") }}</p>
+    </div>
+    <div class="row" v-else>
+      <div class="col-xl-4 col-md-6 mb-4" v-for="(item, index) of items" :key="index">
+        <div class="c-card">
+          <div class="card-title-box flex-start-center">
+            <div class="icons">
+              <img class="icon2" :src="item.para.iconUrl" alt="" />
+              <img class="icon1" :src="item.community.iconUrl" alt="" />
+            </div>
+            <div class="title-text font20 font-bold">
+              <span>{{ item.community.communityName }}</span>
+              <img src="~@/static/images/close.svg" alt="" />
+              <span>{{ item.para.paraName }}</span>
+            </div>
           </div>
-          <div class="title-text font20 font-bold">
-            <span>{{ item.community.communityName }}</span>
-            <img src="~@/static/images/close.svg" alt="" />
-            <span>{{ item.para.paraName }}</span>
+          <div class="h-line"></div>
+          <div class="detail-info-box">
+            <div class="project-info-container">
+              <span class="name"> Contributors </span>
+              <div class="info">{{ item.contributorCount }}</div>
+            </div>
+            <div class="project-info-container">
+              <span class="name"> Fund </span>
+              <div class="info">{{ item.raised }}</div>
+            </div>
           </div>
+          <button class="primary-btn" @click="downloadCsv(index)">
+            {{ $t("dashboard.export") }}
+          </button>
         </div>
-        <div class="h-line"></div>
-        <div class="detail-info-box">
-          <div class="project-info-container">
-            <span class="name"> Contributors </span>
-            <div class="info">{{ item.contributorCount }}</div>
-          </div>
-          <div class="project-info-container">
-            <span class="name"> Fund </span>
-            <div class="info">{{ item.raised }}</div>
-          </div>
-        </div>
-        <button class="primary-btn" @click="downloadCsv(index)">
-          {{ $t("dashboard.export") }}
-        </button>
       </div>
     </div>
   </div>

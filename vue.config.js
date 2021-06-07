@@ -36,5 +36,12 @@ module.exports = {
         }
       ]
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: '@import "@/static/css/mixin.scss";'
+      }
+    }
   }
 }

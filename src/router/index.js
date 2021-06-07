@@ -14,7 +14,8 @@ import PolkadotAdmin from '../views/Admin/Polkadot'
 import KusamaAdmin from '../views/Admin/Kusama'
 import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
 import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
-
+import CIndex from '../views/Community/Index'
+import Community from '../views/Community/Community'
 
 Vue.use(VueRouter)
 
@@ -82,6 +83,20 @@ const routes = [
       {
         path: '',
         component: PolkadotAdmin
+      },
+      {
+        path: 'kusama',
+        component: KusamaAdmin
+      }
+    ]
+  },
+  {
+    path: '/community',
+    component: CIndex,
+    children: [
+      {
+        path: '',
+        component: Community
       },
       {
         path: 'kusama',

@@ -1,7 +1,7 @@
 <template>
   <div class="contribution-page">
     <div class="container">
-      <div class="font24 border-bottom mt-3 mb-3 text-left">{{ $t('cs.crowdstaking') }}</div>
+      <div class="font20 font-bold mt-3 mb-3 text-left">{{ $t('cl.crowdstaking') }}</div>
       <DashboardCard/>
     </div>
   </div>
