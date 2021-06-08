@@ -1,0 +1,15 @@
+.custom-form input {
+  border-color: transparent;
+  background: #F6F7F9;
+  border-radius: .8rem;
+  font-size: .8rem;
+  padding: .8rem;
+  height: 2.4rem;
+}
+.custom-form::-webkit-input-placeholder {
+  color: #BDBFC2;
+}
+
+.custom-form::-moz-placeholder {
+  color: #BDBFC2;
+}

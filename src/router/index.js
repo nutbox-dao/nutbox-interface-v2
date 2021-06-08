@@ -14,8 +14,12 @@ import PolkadotAdmin from '../views/Admin/Polkadot'
 import KusamaAdmin from '../views/Admin/Kusama'
 import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
 import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
-import CIndex from '../views/Community/Index'
 import Community from '../views/Community/Community'
+import DeployToken from '../views/Community/DeployToken'
+import Register from '@/views/RegisterAsset/Register'
+import NativeAsset from '@/views/RegisterAsset/NativeAsset'
+import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
+import AddPool from '@/views/RegisterAsset/AddPool'
 
 Vue.use(VueRouter)
 
@@ -26,15 +30,15 @@ const routes = [
     redirect: '/crowdloan'
   },
   {
-    path:'/wallet',
+    path: '/wallet',
     component: Wallet,
     children: [
       {
-        path:'',
+        path: '',
         component: PolkadotWallet
       },
       {
-        path:'kusama',
+        path: 'kusama',
         component: KusamaWallet
       }
     ]
@@ -74,7 +78,7 @@ const routes = [
   },
   {
     path: '/blog',
-    component: Blog,
+    component: Blog
   },
   {
     path: '/admin',
@@ -92,17 +96,29 @@ const routes = [
   },
   {
     path: '/community',
-    component: CIndex,
+    component: Community
+  },
+  {
+    path: '/deploy-token',
+    component: DeployToken
+  },
+  {
+    path: '/register',
+    component: Register,
     children: [
       {
         path: '',
-        component: Community
+        component: NativeAsset
       },
       {
-        path: 'kusama',
-        component: KusamaAdmin
+        path: 'cross-chain-asset',
+        component: CrossChainAsset
       }
     ]
+  },
+  {
+    path: '/add-pool',
+    component: AddPool
   }
 ]
 

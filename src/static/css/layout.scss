@@ -1,6 +1,5 @@
 .page-layout {
   position: relative;
-  min-height: 600px;
   overflow: hidden;
   height: 100%;
   display: flex;
@@ -134,13 +133,41 @@
   width: 100%;
   background-color: var(--background);
   padding-left: 12rem;
-  overflow: auto;
-  padding-bottom: 2rem;
+  overflow: hidden;
+  .container {
+    height: 100%;
+  }
   .page-view-title {
     text-align: left;
     font-size: 1.8rem;
     font-weight: bold;
     line-height: 1.8rem;
+  }
+  .page-view-subtitle {
+    text-align: left;
+    font-size: .8rem;
+    line-height: .8rem;
+    margin-top: .6rem;
+  }
+  .page-back-text-icon {
+    padding-left: 1.8rem;
+    height: 1.2rem;
+    background-image: url("~@/static/images/back-blcak-arrow.svg");
+    background-position: left center;
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+    line-height: 1.2rem;
+    text-align: left;
+  }
+  .page-view-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .scroll-content {
+      flex: 1;
+      overflow: auto;
+      padding-bottom: 2rem;
+    }
   }
   .nav {
     display: inline-flex;

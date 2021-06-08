@@ -1,0 +1,28 @@
+.tab-card {
+  @include card(0, white, hidden, auto);
+  .tabs {
+    padding: 1.6rem 1.2rem 0;
+    span {
+      padding-top: .9rem;
+      padding-bottom: .6rem;
+      &.active {
+        background-image: linear-gradient(to right, var(--primary-custom), var(--primary-custom));
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: 5.6rem .2rem;
+      }
+    }
+  }
+  .tabs-2 {
+    @include c-grid-repeat(2);
+  }
+  .tabs-3 {
+    @include c-grid-repeat(3);
+  }
+  .h-line {
+    @include line(100%, 1px, 0, #E2E7EF);
+  }
+  .form-box {
+    padding: 1.2rem;
+  }
+}

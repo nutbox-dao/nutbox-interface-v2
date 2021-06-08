@@ -422,6 +422,7 @@ body {
   font-size: 14px;
   background-color: var(--background);
 }
+::-webkit-scrollbar{display:none;}
 .spinner-grow {
   margin-bottom: 2px;
   margin-right: 8px;
@@ -466,7 +467,34 @@ input::-webkit-input-placeholder {
     line-height: 22px;
   }
 }
-
+#dropdown-1 .dropdown-toggle {
+  border-color: #F6F7F9;
+  background: #F6F7F9;
+  border-radius: .8rem;
+  outline: none;
+  &::after {
+    display: none;
+  }
+}
+#dropdown-1 .dropdown-menu {
+  width: 100%;
+  border-color: transparent;
+  border-radius: 1rem;
+  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.1);
+  .dropdown-item {
+    padding: .6rem 1.2rem;
+    &:hover {
+      background: rgba(255, 219, 38, 0.05);
+    }
+  }
+}
+.c-tooltip {
+  @include c-flex-between-center;
+  span:first-child {
+    font-weight: bold;
+    min-width: 5rem;
+  }
+}
 #wallet-icon {
   background-image: url("./static/images/wallet.svg");
 }

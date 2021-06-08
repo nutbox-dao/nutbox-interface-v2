@@ -1,12 +1,14 @@
 <template>
-  <div class="crowdstaking">
+  <div class="page-view-content crowdstaking">
     <div class="page-view-title">{{$t("cs.crowdstaking") }}</div>
     <div class="nav">
       <router-link to="/crowdstaking/kusama">Kusama</router-link>
       <router-link to="/crowdstaking" exact>Polkadot</router-link>
       <div class="center-blank"></div>
     </div>
-    <router-view></router-view>
+    <div class="scroll-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

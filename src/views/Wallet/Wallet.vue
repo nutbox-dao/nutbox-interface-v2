@@ -1,11 +1,13 @@
 <template>
-  <div class="wallet">
+  <div class="page-view-content wallet">
     <div class="page-view-title">{{ $t("wallet.wallet") }}</div>
     <div class="nav">
       <router-link to="/wallet" exact>Pokadot</router-link>
       <router-link to="/wallet/kusama">Kusama</router-link>
     </div>
-    <router-view></router-view>
+    <div class="scroll-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

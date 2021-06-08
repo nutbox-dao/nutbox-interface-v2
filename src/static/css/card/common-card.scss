@@ -82,6 +82,14 @@
     }
   }
 }
+.more-text-icon {
+  padding-right: .8rem;
+  background-image: url("~@/static/images/right-arrow.svg");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: .6rem .6rem;
+  color: #717376;
+}
 .validator-container{
   display: flex;
   flex-wrap: wrap;

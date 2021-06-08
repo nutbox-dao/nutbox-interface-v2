@@ -253,5 +253,6 @@ module.exports = {
   },
   community: {
     community: '社区'
-  }
+  },
+  percentage: '占比'
 }

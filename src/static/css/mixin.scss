@@ -1,6 +1,8 @@
 @mixin icon($w: 1rem, $h: 1rem) {
   width: $w;
+  min-width: $w;
   height: $h;
+  min-height: $h;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: center;
@@ -16,11 +18,11 @@
   flex-direction: column;
   justify-content: space-between;
 }
-@mixin card($pd: 1.2rem, $bg:white) {
+@mixin card($pd: 1.2rem, $bg:white, $overflow: hidden, $h: 100%) {
   width: 100%;
-  height: 100%;
+  height: $h;
   border-radius: 1.4rem;
-  overflow: hidden;
+  overflow: $overflow;
   border: none;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
   position: relative;
@@ -60,4 +62,10 @@
   width: 100%;
   height: $h;
   object-fit: cover;
+}
+@mixin single-color-bg($size: 0 0, $position: center, $color: var(--primary-custom)) {
+  background-repeat: no-repeat;
+  background-image: linear-gradient(to right, $color, $color);
+  background-size: $size;
+  background-position: $position;
 }

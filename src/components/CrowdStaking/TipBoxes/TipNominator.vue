@@ -217,19 +217,6 @@ export default {
     background-position-x: 50%;
   }
 }
-.h-line {
-  width: 100%;
-  height: 1px;
-  background-color: #f6f7f9;
-  margin-bottom: 15px;
-  margin-top: 24px;
-}
-.v-line {
-  height: 26px;
-  width: 1px;
-  background-color: #bdbfc2;
-  opacity: 0.2;
-}
 .stake-info {
   display: block;
   line-height: 16px;

@@ -1,12 +1,10 @@
 <template>
-  <div class="community">
-    <router-view></router-view>
-  </div>
+
 </template>
 
 <script>
 export default {
-  name: 'Index'
+  name: 'ContributionForm'
 }
 </script>
 

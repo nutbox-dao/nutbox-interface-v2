@@ -1,27 +1,29 @@
 <template>
-  <div>
+  <div class="page-view-content">
     <div class="top row">
-      <div class="col-md-5 text-left">
+      <div class="col-md-4 text-left">
         <div class="page-view-title">{{$t("community.community") }}</div>
-        <div class="sub-title font16">Choose token type you want deploy</div>
+        <div class="page-view-subtitle">Choose token type you want deploy</div>
       </div>
-      <div class="col-md-7 btn-group">
-        <button>Manage Your Community</button>
-        <button>
+      <div class="col-md-8 btn-group">
+        <button  @click="$router.push('/add-pool')">Manage Your Community</button>
+        <button @click="$router.push('/deploy-token')">
           <i class="add-icon"></i>
           <span>Create Your Own Staking Economy</span>
         </button>
       </div>
     </div>
     <b-input-group class="search-input">
-      <b-form-input></b-form-input>
+      <b-form-input placeholder="Search"></b-form-input>
       <template #append>
         <i class="search-icon"></i>
       </template>
     </b-input-group>
-    <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4">
-        <IndexCard/>
+    <div class="scroll-content">
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="i of 5" :key="i">
+          <IndexCard/>
+        </div>
       </div>
     </div>
   </div>
@@ -41,12 +43,10 @@ export default {
   align-items: flex-end;
   justify-content: space-between;
 }
-.sub-title {
-  margin-top: .6rem;
-  line-height: .8rem;
-}
 .btn-group {
-  @include c-grid-repeat(2, .4rem);
+  display: flex;
+  gap: .4rem;
+  justify-content: flex-end;
   button {
     border-radius: .6rem;
     padding: .5rem .8rem;
@@ -73,6 +73,7 @@ export default {
 @media (max-width: 768px) {
   .btn-group {
     margin-top: 1rem;
+    flex-direction: column;
   }
   .btn-group button {
     line-height: 1rem;
