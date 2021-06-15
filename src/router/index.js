@@ -14,12 +14,15 @@ import PolkadotAdmin from '../views/Admin/Polkadot'
 import KusamaAdmin from '../views/Admin/Kusama'
 import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
 import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
+import CommunityIndex from '../views/Community/Index'
 import Community from '../views/Community/Community'
 import DeployToken from '../views/Community/DeployToken'
+import CreateEconomy from '@/views/Community/CreateEconomy'
+import PoolsDashboard from '@/views/Community/PoolsDashboard'
+import AddPool from '@/views/Community/AddPool'
 import Register from '@/views/RegisterAsset/Register'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
-import AddPool from '@/views/RegisterAsset/AddPool'
 
 Vue.use(VueRouter)
 
@@ -96,11 +99,29 @@ const routes = [
   },
   {
     path: '/community',
-    component: Community
-  },
-  {
-    path: '/deploy-token',
-    component: DeployToken
+    component: CommunityIndex,
+    children: [
+      {
+        path: '/',
+        component: Community
+      },
+      {
+        path: 'deploy-token',
+        component: DeployToken
+      },
+      {
+        path: 'create-economy',
+        component: CreateEconomy
+      },
+      {
+        path: 'pool-dashboard',
+        component: PoolsDashboard
+      },
+      {
+        path: 'add-pool',
+        component: AddPool
+      }
+    ]
   },
   {
     path: '/register',
@@ -115,10 +136,6 @@ const routes = [
         component: CrossChainAsset
       }
     ]
-  },
-  {
-    path: '/add-pool',
-    component: AddPool
   }
 ]
 

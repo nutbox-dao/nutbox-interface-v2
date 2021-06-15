@@ -113,6 +113,8 @@
       background-position: center left;
       background-size: .8rem .8rem;
       .dropdown-menu {
+        border: none;
+        border-radius: 1.2rem;
         width: 10rem;
         min-width: 10rem;
         box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.1);
@@ -151,12 +153,10 @@
   }
   .page-back-text-icon {
     padding-left: 1.8rem;
-    height: 1.2rem;
     background-image: url("~@/static/images/back-blcak-arrow.svg");
     background-position: left center;
     background-size: 1.2rem 1.2rem;
     background-repeat: no-repeat;
-    line-height: 1.2rem;
     text-align: left;
   }
   .page-view-content {
@@ -194,6 +194,46 @@
     .active {
       color: var(--primary-text);
       background-color: var(--primary-custom);
+    }
+  }
+  .view-top-header {
+    display: flex;
+    justify-content: space-between;
+    .btn-group {
+      display: flex;
+      gap: .4rem;
+      justify-content: flex-end;
+      button {
+        border-radius: .6rem;
+        padding: .5rem .8rem;
+        font-size: .8rem;
+        line-height: .8rem;
+        border: 1px solid var(--primary-custom);
+      }
+      button:nth-child(1) {
+        background: white;
+      }
+      button:nth-child(2) {
+        background: var(--primary-custom);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .add-icon {
+        @include icon;
+        min-width: 1rem;
+        margin-right: .2rem;
+        background-image: url("~@/static/images/add-icon.svg");
+      }
+    }
+    @media (max-width: 768px) {
+      .btn-group {
+        margin-top: 1rem;
+        flex-direction: column;
+      }
+      .btn-group button {
+        line-height: 1rem;
+      }
     }
   }
 }

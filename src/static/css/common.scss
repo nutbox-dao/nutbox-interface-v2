@@ -177,3 +177,12 @@ input, button {
   color: #717376;
   margin-bottom: .4rem;
 }
+#mint-checkbox .custom-control-label {
+  line-height: 1.5rem;
+}
+#mint-checkbox .custom-control-label::before{
+  border-radius: 1rem;
+}
+#mint-checkbox .custom-control-label::after{
+  border-radius: 1rem;
+}

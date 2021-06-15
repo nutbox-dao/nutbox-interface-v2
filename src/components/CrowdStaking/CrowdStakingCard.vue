@@ -1,6 +1,6 @@
 <template>
   <div class="c-card">
-    <div class="card-top">
+    <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
         <div class="card-icons">
           <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
@@ -12,7 +12,7 @@
           <span>{{ crowdstaking.project.projectName }}</span>
         </div>
       </div>
-      <div class="h-line"></div>
+      <div class="h-line mt-4 mb-3"></div>
 
       <div class="desc">
         {{ crowdstaking.community.description }}
