@@ -1,76 +1,84 @@
 <template>
-  <div class="crowdloan-parachain scroll-content">
-    <div class="loading-bg" v-if="!paraInfo">
-      <img src="~@/static/images/loading.gif" alt="" />
-      <p class="font16">{{ $t('tip.loading') }}</p>
+  <div class="page-view-content">
+    <div class="page-view-title">{{$t("cl.crowdloan") }}</div>
+    <div class="page-back-text-icon font20 mt-4 mb-4" @click="$router.back()">
+      拍卖详情/{{ paraInfo.paraName }}
     </div>
-    <div class="parachain-info p-card" v-show="paraInfo">
-      <img class="poster" :src="paraInfo.posterUrl" v-show="paraInfo.posterUrl && paraInfo.posterUrl.length>4" alt="">
-      <img class="back-icon" src="~@/static/images/left-arrow.png" alt="" @click="$router.back()"/>
-      <div class="p-detail-info">
-        <img class="logo" :src="paraInfo.iconUrl" alt="" />
-        <div class="text-info">
-          <span class="font20 font-bold title" v-if="paraInfo && paraInfo.website.length === 0">
-              {{ paraInfo.paraName }}
-          </span>
-          <a class="font20 font-bold title official-link" v-else :href="paraInfo.website"
-             target="_blank">{{ paraInfo.paraName }}</a>
-          <div class="desc">{{ paraInfo && (paraInfo.description[lang] || paraInfo.description['zh-CN']) }}</div>
+    <div class="scroll-content">
+      <div class="crowdloan-parachain">
+        <div class="loading-bg" v-if="!paraInfo">
+          <img src="~@/static/images/loading.gif" alt="" />
+          <p class="font16">{{ $t('tip.loading') }}</p>
         </div>
-      </div>
-    </div>
-    <div class="c-card" v-show="paraInfo">
-      <a class="font20 font-bold title link" :href="paraInfo && (paraInfo.rewardLink[lang] || paraInfo.rewardLink['zh-CN'])"
-         target="_blank">{{ $t("cl.auctionPlan") }}</a>
-      <div class="desc" style="margin-top: .8rem" v-html="paraInfo && (paraInfo.rewardPlan[lang] || paraInfo.rewardPlan['zh-CN'])">
-        
-      </div>
-    </div>
-
-    <div class="c-card crowdloan-detail" v-show="paraInfo">
-      <div class="flex-between-center mb-2">
-        <div class="font20 font-bold title">{{ $t("cl.auctionInfo") }}</div>
-        <div class="status-container">
-          <span :class="status" v-show="status">{{ $t('cl.'+status) }}</span>
+        <div class="p-card mb-4" v-show="paraInfo">
+          <img class="large-poster" :src="paraInfo.posterUrl" v-show="paraInfo.posterUrl && paraInfo.posterUrl.length>4" alt="">
+          <div class="second-card">
+            <img class="large-logo" :src="paraInfo.iconUrl" alt="" />
+            <div class="project-info text-left">
+              <span class="font20 font-bold" v-if="paraInfo && paraInfo.website.length === 0">
+                  {{ paraInfo.paraName }}
+              </span>
+              <a class="font20 font-bold icon-title official-link-icon" v-else :href="paraInfo.website"
+                 target="_blank">{{ paraInfo.paraName }}</a>
+              <div class="desc font14">{{ paraInfo && (paraInfo.description[lang] || paraInfo.description['zh-CN']) }}</div>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="p-card c-card mb-4 text-left" v-show="paraInfo">
+          <a class="font20 font-bold icon-title link-icon"
+             :href="paraInfo && (paraInfo.rewardLink[lang] || paraInfo.rewardLink['zh-CN'])"
+             target="_blank">{{ $t("cl.auctionPlan") }}</a>
+          <div class="font14"
+               v-html="paraInfo && (paraInfo.rewardPlan[lang] || paraInfo.rewardPlan['zh-CN'])">
+          </div>
+        </div>
 
-      <b-table-simple responsive>
-        <b-thead>
-          <b-tr>
-            <b-th>{{ $t('cl.leasePeriod') }}</b-th>
-            <b-th>{{ $t('cl.countDown') }}</b-th>
-            <b-th>{{ $t('cl.raised') }}</b-th>
-            <b-th>{{ $t('cl.fund') }}</b-th>
-            <b-th>{{ $t('cl.progress') }}</b-th>
-            <b-th>{{ $t('cl.contributors') }}</b-th>
-            <b-th>{{ $t('cl.contributed') }}</b-th>
-          </b-tr>
-        </b-thead>
-        <b-tbody>
-          <b-tr>
-            <td data-label="Lease Period">{{ leasePeriod }}</td>
-            <td data-label="Countdown">{{ countDown || 'Loading' }}</td>
-            <td data-label="Raised">{{ getFundInfo && fb(getFundInfo.raised) }}</td>
-            <td data-label="Fund">{{ getFundInfo && fb(getFundInfo.cap) }}</td>
-            <td data-label="Progress">{{ percent }}</td>
-            <td data-label="Contributors">{{ getFundInfo && getFundInfo.funds.length }}</td>
-            <td data-label="Contributed">{{ fb(contributed) }}</td>
-          </b-tr>
-        </b-tbody>
-      </b-table-simple>
-    </div>
+        <div class="c-card mb-4 crowdloan-detail" v-show="paraInfo">
+          <div class="flex-between-center mb-2">
+            <div class="font20 font-bold title">{{ $t("cl.auctionInfo") }}</div>
+            <div class="status-container">
+              <span :class="status" v-show="status">{{ $t('cl.'+status) }}</span>
+            </div>
+          </div>
 
-    <div class="card-container" v-show="paraInfo">
-      <div class="font20 font-bold title">{{ $t('cl.joinAuction') }}</div>
-      <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="crowdloan in crowdloanInfo"
-             :key="crowdloan.community.communtiyId">
-          <ParaCRCard
-            :crowdloan="crowdloan"
-            :status="status || 'Completed'"
-            chain='kusama'
-          />
+          <b-table-simple responsive>
+            <b-thead>
+              <b-tr>
+                <b-th>{{ $t('cl.leasePeriod') }}</b-th>
+                <b-th>{{ $t('cl.countDown') }}</b-th>
+                <b-th>{{ $t('cl.raised') }}</b-th>
+                <b-th>{{ $t('cl.fund') }}</b-th>
+                <b-th>{{ $t('cl.progress') }}</b-th>
+                <b-th>{{ $t('cl.contributors') }}</b-th>
+                <b-th>{{ $t('cl.contributed') }}</b-th>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr>
+                <td data-label="Lease Period">{{ leasePeriod }}</td>
+                <td data-label="Countdown">{{ countDown || 'Loading' }}</td>
+                <td data-label="Raised">{{ getFundInfo && fb(getFundInfo.raised) }}</td>
+                <td data-label="Fund">{{ getFundInfo && fb(getFundInfo.cap) }}</td>
+                <td data-label="Progress">{{ percent }}</td>
+                <td data-label="Contributors">{{ getFundInfo && getFundInfo.funds.length }}</td>
+                <td data-label="Contributed">{{ fb(contributed) }}</td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </div>
+
+        <div class="card-container" v-show="paraInfo">
+          <div class="font20 font-bold title text-left mb-2">{{ $t('cl.joinAuction') }}</div>
+          <div class="row">
+            <div class="col-xl-4 col-md-6 mb-4" v-for="crowdloan in crowdloanInfo"
+                 :key="crowdloan.community.communtiyId">
+              <ParaCRCard
+                :crowdloan="crowdloan"
+                :status="status || 'Completed'"
+                chain='kusama'
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -226,7 +234,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/projectInfoCard";
+@import "src/static/css/card/poster-card";
+@import "src/static/css/card/common-card";
 .table-responsive {
   margin-bottom: 0;
 }

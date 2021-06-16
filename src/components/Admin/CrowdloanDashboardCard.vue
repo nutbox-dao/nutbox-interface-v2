@@ -180,15 +180,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/customCard";
-.c-card {
-  padding: 1.2rem;
-}
-.card-top-box {
-  background-image: none;
-  padding: 0;
-}
-.primary-btn{
-  margin-top: 1rem;
-}
+@import "src/static/css/card/common-card";
 </style>

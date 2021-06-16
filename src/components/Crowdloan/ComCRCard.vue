@@ -4,18 +4,18 @@
       <span :class="status">{{ $t('cl.'+status) }}</span>
     </div>
     <div class="card-title-box flex-start-center">
-      <div class="icons">
-        <img class="icon1" :src="crowdloan.para.iconUrl" alt="" />
+      <div class="card-single-icon mr-2">
+        <img :src="crowdloan.para.iconUrl" alt="" />
       </div>
       <div class="card-link-title-text">
-      <div class="title-text font20 font-bold link-title">
-        <span @click="toParaChain">{{ crowdloan.para.paraName }}</span>
-        <i class="link-icon" @click="toParaChain"></i>
-      </div>
+        <div class="title-text font20 font-bold link-title">
+          <span @click="toParaChain">{{ crowdloan.para.paraName }}</span>
+          <i class="link-icon" @click="toParaChain"></i>
+        </div>
       </div>
 
     </div>
-    <div class="h-line"></div>
+    <div class="h-line mt-4 mb-2"></div>
     <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.leasePeriod') }} </span>
@@ -258,15 +258,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/crowdloanCard";
-.c-card {
-  padding-top: .8rem;
-  .status-container {
-    top: 0.8rem;
-    right: 1.2rem;
-  }
-  .card-title-box .icons {
-    margin-right: 1rem;
-  }
-}
+@import "src/static/css/card/common-card";
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-page crowdloan-page scroll-content">
+  <div class="p-page crowdloan-page">
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.comingSoon') }} </p>
@@ -26,5 +26,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/crowdloanPage.scss";
+
 </style>

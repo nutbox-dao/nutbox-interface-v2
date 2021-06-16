@@ -1,5 +1,5 @@
 <template>
-  <div class="k-page crowdstaking-page scroll-content">
+  <div class="k-page crowdstaking-page">
     <div class="loading-bg" v-if="!isConnected">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
@@ -12,7 +12,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
+          <div class="col-xl-4 col-md-6" v-for="card, idx of crowdstakings" :key="idx">
             <CrowdStakingCard
               :crowdstaking="card"
             />
@@ -38,6 +38,5 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "src/static/css/crowdstakingPage.scss"
+<style lang="scss" scoped>
 </style>

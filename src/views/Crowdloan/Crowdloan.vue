@@ -1,16 +1,17 @@
 <template>
-  <div class="crowdloan">
-    <h3>
-      {{ this.$t("cl.crowdloan") }}
-    </h3>
-    <div class="nav sub-page-nav">
+  <div class="page-view-content">
+    <div class="page-view-title">{{$t("cl.crowdloan") }}</div>
+    <div class="nav">
+<!--      <router-link to="/crowdloan" exact>Kusama</router-link>-->
       <router-link to="/crowdloan/polkadot">Polkadot</router-link>
       <router-link to="/crowdloan/kusama">Kusama</router-link>
       <router-link v-if="isDebug" to="/crowdloan/rococo">Rococo</router-link>
 
       <div class="center-blank"></div>
     </div>
-    <router-view></router-view>
+    <div class="scroll-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -28,12 +29,9 @@ export default {
   },
   methods: {
   },
-  mounted() {},
-};
+  mounted () {}
+}
 </script>
 
 <style lang="less" scoped>
-.sub-page-nav {
-  margin-bottom: 0.5rem;
-}
 </style>

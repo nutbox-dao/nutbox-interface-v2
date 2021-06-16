@@ -6,7 +6,7 @@
     </div>
       <div class="community-info p-card" v-show="communityInfo">
         <img
-          class="poster"
+          class="large-poster"
           :src="communityInfo.posterUrl"
           v-show="communityInfo.posterUrl && communityInfo.posterUrl.length > 4"
           alt=""
@@ -94,7 +94,7 @@ export default {
     const nominator = stanfiAddress(this.$route.params.nominatorId)
     if (nominator){
       this.communityNominatorId = nominator;
-    } 
+    }
   },
   async created() {
     if (this.communityInfo) return;
@@ -105,5 +105,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/projectInfoCard";
+@import "src/static/css/card/poster-card";
 </style>

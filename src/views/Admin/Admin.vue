@@ -1,15 +1,15 @@
 <template>
-  <div class="admin">
-    <h3>
-      {{ this.$t("admin.admin") }}
-    </h3>
-    <div class="nav sub-page-nav">
+  <div class="page-view-content admin">
+    <div class="page-view-title">{{$t("admin.admin") }}</div>
+    <div class="nav">
       <router-link to="/admin" exact>Pokadot</router-link>
       <router-link to="/admin/kusama">Kusama</router-link>
       <router-link v-if="isDebug" to="/admin/rococo">Rococo</router-link>
       <div class="center-blank"></div>
     </div>
-    <router-view></router-view>
+    <div class="scroll-content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -56,8 +56,5 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.sub-page-nav{
-  margin-bottom: 0.5rem;
-}
+<style lang="scss" scoped>
 </style>

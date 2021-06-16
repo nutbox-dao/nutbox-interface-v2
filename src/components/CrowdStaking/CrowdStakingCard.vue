@@ -1,18 +1,19 @@
 <template>
-  <div class="c-card staking-card">
-    <div class="card-top">
-      <div class="flex-start-center">
+  <div class="c-card">
+    <div class="card-top mt-4">
+      <div class="card-title-box flex-start-center">
         <div class="card-icons">
           <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
           <img class="icon1" :src="crowdstaking.community.iconUrl" alt="" />
         </div>
-        <div class="card-title-text font20 font-bold">
+        <div class="title-text font20 font-bold">
           <span>{{crowdstaking.community.communityName }}</span>
           <img src="~@/static/images/close.svg" alt="" />
           <span>{{ crowdstaking.project.projectName }}</span>
         </div>
       </div>
-      <div class="h-line"></div>
+      <div class="h-line mt-4 mb-3"></div>
+
       <div class="desc">
         {{ crowdstaking.community.description[lang] }}
       </div>
@@ -151,13 +152,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/customCard";
-.staking-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.project-info-container .info {
-  color: #BDBFC2;
-}
+@import "src/static/css/card/common-card";
 </style>

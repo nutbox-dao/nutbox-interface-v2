@@ -128,18 +128,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/customCard";
-.c-card {
-  padding: 1.2rem;
-  .card-title-box .icons {
-    margin-right: 1rem;
-    .icon1 {
-      width: 2.8rem;
-      height: 2.8rem;
-    }
-  }
-}
-.primary-btn {
-  margin-top: 1rem;
-}
+@import "src/static/css/card/common-card";
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="k-page crowdloan-page scroll-content">
+  <div class="k-page crowdloan-page">
     <div class="loading-bg" v-if="loadingFunds">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
@@ -63,5 +63,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/crowdloanPage.scss";
+
 </style>

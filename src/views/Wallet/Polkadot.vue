@@ -1,42 +1,35 @@
 <template>
-  <div class="scroll-content">
-    <div class="ksm-wallet">
-<!--      <p class="item-title">-->
-<!--        {{ $t("wallet.asset") }}-->
-<!--      </p>-->
-      <div class="balance-box row">
-        <div class="col-xl-4 col-md-6 mb-2">
-          <BalanceView
-            name="DOT"
-            :balances="available / 1e10"
-            desc="DOT"
-            :logo="dotLogo"
-            :transfer="true"
-          />
-        </div>
-        <div class="col-xl-4 col-md-6 mb-2">
-          <LockedBalanceView
-            name="DOT"
-            :balances="locked / 1e10"
-            desc="Locked DOT"
-            :logo="dotLogo"
-            :transfer="true"
-          />
-        </div>
+  <div class="ksm-wallet">
+    <div class="balance-box row">
+      <div class="col-xl-4 col-md-6 mb-4">
+        <BalanceView
+          name="DOT"
+          :balances="available / 1e10"
+          desc="DOT"
+          :logo="dotLogo"
+          :transfer="true"
+        />
       </div>
-      <UserContributions>
-        <template #title>
-          <div class="item-title">
-            {{ $t("wallet.contribution") }}
-          </div>
-        </template>
-      </UserContributions>
-      <UserNominations>
-        <template #title>
-          <div class="item-title">{{ $t("wallet.nomination") }}</div>
-        </template>
-      </UserNominations>
+      <div class="col-xl-4 col-md-6 mb-4">
+        <LockedBalanceView
+          name="DOT"
+          :balances="locked / 1e10"
+          desc="Locked DOT"
+          :logo="dotLogo"
+          :transfer="true"
+        />
+      </div>
     </div>
+    <UserContributions class="mb-4">
+      <template #title>
+        <div class="card-title">{{ $t("wallet.contribution") }}</div>
+      </template>
+    </UserContributions>
+    <UserNominations>
+      <template #title>
+        <div class="card-title">{{ $t("wallet.nomination") }}</div>
+      </template>
+    </UserNominations>
   </div>
 </template>
 

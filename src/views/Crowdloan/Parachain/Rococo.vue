@@ -23,7 +23,7 @@
       <a class="font20 font-bold title link" :href="paraInfo && paraInfo.rewardLink[lang]"
          target="_blank">{{ $t("cl.auctionPlan") }}</a>
       <div class="desc" style="margin-top: .8rem" v-html="paraInfo && paraInfo.rewardPlan[lang]">
-        
+
       </div>
     </div>
 
@@ -226,7 +226,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/projectInfoCard";
+@import "src/static/css/card/poster-card";
+.c-card {
+  @include card;
+}
 .table-responsive {
   margin-bottom: 0;
 }

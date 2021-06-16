@@ -257,15 +257,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/crowdloanCard";
-.c-card {
-  padding-top: .8rem;
-  .status-container {
-    top: 0.8rem;
-    right: 1.2rem;
-  }
-  .card-title-box .icons {
-    margin-right: 1rem;
-  }
-}
+@import "src/static/css/card/common-card";
 </style>

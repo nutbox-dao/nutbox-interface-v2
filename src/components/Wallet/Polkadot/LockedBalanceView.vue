@@ -1,35 +1,27 @@
 <template>
   <div>
-    <Card>
-      <div class="top">
-        <img :src="logo" alt="" class="icon" />
-        <div class="balance-right">
-          <div class="balance-name">
-            <span class="title">
-              {{ name }}
-            </span>
-            <div>
-              <span style="font-size: 12px; color: var(--secondary-text)">
-                {{ desc }}
-              </span>
-            </div>
+    <div class="wallet-card">
+      <div class="top flex-between-center">
+        <img :src="logo" alt="" class="logo" />
+        <div class="balance-right flex-full">
+          <div class="flex-between-center font-bold font16 mb-1">
+            <span>{{ name }}</span>
+            <span>{{ balances | amountForm(4) }}</span>
           </div>
-          <div class="balance">
-            <span class="title">
-              {{ balances | amountForm(4) }}
-            </span>
+          <div class="text-left font12 desc">
+            <span>{{ desc }}</span>
           </div>
         </div>
       </div>
-      <div class="bottom">
-        <b-button variant="primary" @click="showUnbond=true" :disabled='parseFloat(balances) < 0.0001'>
+      <div class="btn-group btn-group-1">
+        <button class="primary-btn" @click="showUnbond=true" :disabled='parseFloat(balances) < 0.0001'>
           {{ $t('wallet.unBond') }}
-        </b-button>
+        </button>
         <!-- <b-button variant="primary" @click="redeem" :disabled='parseFloat(balances) < 0.0001'>
           {{ $t('wallet.redeem') }}
         </b-button> -->
       </div>
-    </Card>
+    </div>
       <b-modal
       v-model="showUnbond"
       modal-class="custom-modal"
@@ -44,70 +36,65 @@
 </template>
 
 <script>
-import Card from "@/components/ToolsComponents/Card";
-import TipUnbond from "./TipUnbond"
-import { mapState } from "vuex"
+import TipUnbond from './TipUnbond'
+import { mapState } from 'vuex'
 
 export default {
-  name: "BalanceView",
-  data() {
+  name: 'BalanceView',
+  data () {
     return {
       showTransfer: false,
       showUnbond: false
-    };
+    }
   },
   props: {
     name: {
       type: String,
-      default: "DOT",
+      default: 'DOT'
     },
     balances: {
       type: Number,
-      default: 0.00,
+      default: 0.00
     },
     logo: {
       type: String,
-      default: "",
+      default: ''
     },
-    transfer:{
+    transfer: {
       type: Boolean,
       default: true
     },
     walletType: {
       type: String,
-      default: "DOT", // 0:steem  1: tron
+      default: 'DOT' // 0:steem  1: tron
     },
     desc: {
       type: String,
-      default: "DOT",
+      default: 'DOT'
     },
     balanceDigit: {
       type: Number,
-      default: 4,
+      default: 4
     },
     address: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   computed: {
     ...mapState('polkadot', ['redeemable'])
   },
   components: {
-    Card,
     TipUnbond
   },
   methods: {
-    redeem(){
+    redeem () {
 
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/wallet-card.scss";
-button {
-  flex: 1;
-}
+@import "src/static/css/card/wallet-card";
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="c-card">
     <div class="card-title-box flex-start-center">
-      <div class="icons">
+      <div class="card-single-icon mr-2">
         <img
           class="icon1"
           :src="crowdloan.community.iconUrl"
@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div class="h-line"></div>
-   <div class="detail-info-box">
+    <div class="h-line mt-4 mb-3"></div>
+   <div class="detail-info-box text-left">
        <p class="description font14">
            {{ crowdloan.community.description[this.$store.state.lang] || crowdloan.community.description['zh-CN'] }}
        </p>
@@ -152,34 +152,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/customCard";
-.c-card {
-  .card-title-box .icons {
-    margin-right: 1rem;
-    .icon1 {
-      width: 2.8rem;
-      height: 2.8rem;
-      border-radius: 2.8rem;
-    }
-  }
-  .detail-info-box{
-    .description{
-      font-weight: 600;
-      color: #BDBFC2;
-      line-height: 18px;
-      word-break: break-word;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-    }
-  }
-  .h-line {
-    margin-top: 1rem;
-  }
-  .primary-btn {
-    margin-top: 1.8rem;
-  }
+@import "src/static/css/card/common-card";
+.description{
+  color: #BDBFC2;
+  @include text-multi-line(2);
+  text-align: justify;
 }
+
 </style>

@@ -6,7 +6,7 @@
     </div>
 
     <template v-else>
-      <b-card class="table-card">
+      <div class="table-card">
         <slot name="title"></slot>
         <div class="empty-bg" v-if="items.length === 0">
           <img src="~@/static/images/empty-data.png" alt="" />
@@ -29,7 +29,7 @@
             <span>{{ row.item.chain }}</span>
           </template>
         </b-table>
-      </b-card>
+      </div>
       <b-pagination v-if="items.length !== 0"
         v-model="currentPage"
         :total-rows="totalRows"
@@ -41,70 +41,70 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import { CROWD_LOAN_API_URL } from "@/config";
-import axios from "axios";
-import BN from "bn.js";
-import { formatDate } from "@/utils/commen/util";
-import { stanfiAddress } from "@/utils/commen/account";
+import { mapState, mapMutations } from 'vuex'
+import { CROWD_LOAN_API_URL } from '@/config'
+import axios from 'axios'
+import BN from 'bn.js'
+import { formatDate } from '@/utils/commen/util'
+import { stanfiAddress } from '@/utils/commen/account'
 
 export default {
-  name: "UserContributions",
+  name: 'UserContributions',
   props: {
     chain: {
-      type: String,
-    },
+      type: String
+    }
   },
   computed: {
-    ...mapState("polkadot", ["account"]),
-    ...mapState("kusama", ["loadingContributions"]),
+    ...mapState('polkadot', ['account']),
+    ...mapState('kusama', ['loadingContributions'])
   },
-  data() {
+  data () {
     return {
       cancelToken: null,
       fields: [
-        { key: "community", label: "Community", class: "text-left" },
-        { key: "chain", label: "Chain", class: "text-left" },
-        { key: "trieIndex", label: "TrieIndex", class: "text-right" },
-        { key: "date", label: "Lease period", class: "text-right" },
-        { key: "amount", label: "Contribute amount", class: "text-right" },
-        { key: "time", label: "Contribute time" },
-        { key: "operate", label: "", class: "text-left" },
+        { key: 'community', label: 'Community', class: 'text-left' },
+        { key: 'chain', label: 'Chain', class: 'text-left' },
+        { key: 'trieIndex', label: 'TrieIndex', class: 'text-right' },
+        { key: 'date', label: 'Lease period', class: 'text-right' },
+        { key: 'amount', label: 'Contribute amount', class: 'text-right' },
+        { key: 'time', label: 'Contribute time' },
+        { key: 'operate', label: '', class: 'text-left' }
       ],
       items: [],
       currentPage: 1,
       totalRows: 0,
-      perPage: 7,
-    };
+      perPage: 7
+    }
   },
   watch: {
-    currentPage(newValue, oldValue) {
-      if (newValue == oldValue) return;
-      this.requstData((newValue - 1) * this.perPage, this.perPage);
+    currentPage (newValue, oldValue) {
+      if (newValue == oldValue) return
+      this.requstData((newValue - 1) * this.perPage, this.perPage)
     },
-    account(newValue, oldValue) {
-      this.requstData(0, this.perPage);
+    account (newValue, oldValue) {
+      this.requstData(0, this.perPage)
     }
   },
   methods: {
-    ...mapMutations("kusama", ["saveLoadingContributions"]),
-    async requstData(offset, limit) {
-      this.saveLoadingContributions(true);
+    ...mapMutations('kusama', ['saveLoadingContributions']),
+    async requstData (offset, limit) {
+      this.saveLoadingContributions(true)
       this.cancelToken &&
         this.cancelToken((cancel) => {
-          cancel();
-        });
-      this.cancelToken = axios.CancelToken;
-      const decimal = new BN(12);
+          cancel()
+        })
+      this.cancelToken = axios.CancelToken
+      const decimal = new BN(12)
       axios
-        .post(CROWD_LOAN_API_URL + "/contrib/find/contributor", {
-          relaychain: "kusama",
+        .post(CROWD_LOAN_API_URL + '/contrib/find/contributor', {
+          relaychain: 'kusama',
           contributor: stanfiAddress(this.account.address),
           offset,
-          limit,
+          limit
         })
         .then((res) => {
-          this.totalRows = res && res.data && res.data.count;
+          this.totalRows = res && res.data && res.data.count
           this.items =
             res &&
             res.data &&
@@ -112,52 +112,27 @@ export default {
               community: c.communityName,
               chain: c.paraName,
               trieIndex: c.trieIndex,
-              date: c.firstPeriod + "-" + c.lastPeriod,
+              date: c.firstPeriod + '-' + c.lastPeriod,
               amount: (
                 new BN(c.amount)
                   .div(new BN(10).pow(decimal.sub(new BN(4))))
                   .toNumber() / 1e4
               ).toFixed(4),
-              time: formatDate(c.createdAt),
-            }));
-          this.saveLoadingContributions(false);
+              time: formatDate(c.createdAt)
+            }))
+          this.saveLoadingContributions(false)
         })
         .catch((err) => {
-          this.saveLoadingContributions(false);
-        });
-    },
+          this.saveLoadingContributions(false)
+        })
+    }
   },
-  async mounted() {
-    this.requstData(0, this.perPage);
-  },
-};
-</script>
-
-<style lang="less" scoped>
-.contributions {
-  margin-top: 1.2rem;
-}
-.table-card {
-  border-radius: 1.4rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
-  border: none;
-  .card-body {
-    padding: 0;
-    margin: 1.6rem 1.2rem;
-    overflow: auto;
+  async mounted () {
+    this.requstData(0, this.perPage)
   }
 }
+</script>
 
-.Active {
-  color: rgba(80, 191, 0, 1);
-}
-.Retired {
-  color: rgba(248, 182, 42, 1);
-}
-.Completed {
-  color: rgba(255, 91, 77, 1);
-}
-.change-page-box {
-  margin: 1rem auto;
-}
+<style lang="scss" scoped>
+@import "src/static/css/card/table-card";
 </style>

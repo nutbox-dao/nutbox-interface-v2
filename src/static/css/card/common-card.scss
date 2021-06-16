@@ -18,6 +18,11 @@
     margin-top: 1rem;
   }
 }
+.card-single-icon img{
+  @include card-icon;
+  @include coin-shadow;
+  border: 1px solid white;
+}
 .card-icons {
   position: relative;
   margin-right: 2.4rem;
@@ -118,5 +123,22 @@
   .info {
     text-align: right;
     font-weight: 500;
+  }
+}
+
+.status-container {
+  span {
+    border: 1px solid;
+    padding: .1rem .3rem;
+    border-radius: 2rem;
+  }
+  .Active {
+    color: rgba(80, 191, 0, 1);
+  }
+  .Retired {
+    color: rgba(248, 182, 42, 1);
+  }
+  .Completed {
+    color: rgba(255, 91, 77, 1);
   }
 }
