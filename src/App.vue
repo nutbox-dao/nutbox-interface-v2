@@ -2,10 +2,10 @@
   <div id="app">
     <div class="page-layout">
       <div class="page-header flex-between-center">
-        <div class="logo">
-          <img v-if="screenWidth < 960" src="./static/images/logo_small.png"
-          @click="gotoOfficial"
-               alt="nutbox" v-b-toggle.sidebar-menu/>
+        <div class="header-brand">
+          <img class="logo" v-if="screenWidth < 960" src="./static/images/logo_small.png"
+               @click="gotoOfficial" alt="nutbox" />
+          <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>
         </div>
       </div>
       <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<960">
@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import Clipboard from "clipboard";
+import Clipboard from 'clipboard'
 import { LOCALE_KEY } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
 import { mapState, mapMutations } from 'vuex'
@@ -151,17 +151,17 @@ import {
   getBalance as getPolkadotBalance,
   loadAccounts as loadPolkadotAccounts
 } from './utils/polkadot/account'
-import { getBalance as getKusamaBalance } from "./utils/kusama/account";
-import { getBalance as getRococoBalance } from "./utils/rococo/account";
+import { getBalance as getKusamaBalance } from './utils/kusama/account'
+import { getBalance as getRococoBalance } from './utils/rococo/account'
 import {
   subBonded,
   subNominators,
   getValidatorsInfo
 } from './utils/polkadot/staking'
 import { subBonded as subKusamaBonded } from './utils/kusama/staking'
-import { stanfiAddress } from "./utils/commen/account";
-import { initApis } from "./utils/commen/api"
-import { isMobile } from "./utils/commen/util"
+import { stanfiAddress } from './utils/commen/account'
+import { initApis } from './utils/commen/api'
+import { isMobile } from './utils/commen/util'
 
 export default {
   data () {
@@ -192,7 +192,7 @@ export default {
       const res = isCrowdloanAdmin || isCrowdstakingAdmin
       return res
     },
-    showMenu() {
+    showMenu () {
       return this.screenWidth > 960
     }
   },
@@ -208,8 +208,8 @@ export default {
       'saveAccount'
     ]),
     ...mapMutations('polkadot', ['saveClCommunitys']),
-    gotoOfficial(){
-      window.open('https://nutbox.io', '_blank');
+    gotoOfficial () {
+      window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
@@ -229,19 +229,19 @@ export default {
         return `${start}...${end}`
       }
     },
-    copyAddress(a){
-      var clipboard = new Clipboard('#avatar');
-      clipboard.on("success", (e) => {
-        clipboard.destroy();
-         this.$bvToast.toast(this.$t('tip.copyAddress', {address: this.formatUserAddress(this.account.address)}), {
+    copyAddress (a) {
+      var clipboard = new Clipboard('#avatar')
+      clipboard.on('success', (e) => {
+        clipboard.destroy()
+        this.$bvToast.toast(this.$t('tip.copyAddress', { address: this.formatUserAddress(this.account.address) }), {
           title: this.$t('tip.clipboard'),
           autoHideDelay: 5000,
-          variant: "info", // info success danger
-        });
-      });
-      clipboard.on("error", (e) => {
-        clipboard.destroy;
-      });
+          variant: 'info' // info success danger
+        })
+      })
+      clipboard.on('error', (e) => {
+        clipboard.destroy
+      })
     },
     changeAccount (acc) {
       if (!this.isConnected) return
@@ -252,7 +252,7 @@ export default {
       this.saveAccount(acc)
       getPolkadotBalance(acc)
       getKusamaBalance(acc)
-      DEBUG && getRococoBalance(acc);
+      DEBUG && getRococoBalance(acc)
       subKusamaBonded()
       subBonded()
       subNominators()
@@ -272,8 +272,8 @@ export default {
         console.log('communitys', res)
         const ccc = res.map((r) => stanfiAddress(r.communityId))
         this.saveClCommunitys(ccc)
-        this.$store.commit('rococo/saveClCommunitys', ccc);
-        this.$store.commit('kusama/saveClCommunitys', ccc);
+        this.$store.commit('rococo/saveClCommunitys', ccc)
+        this.$store.commit('kusama/saveClCommunitys', ccc)
       })
     },
 
@@ -299,18 +299,18 @@ export default {
         )
         const polkadotcs = crowdstaking.filter(c => c.relaychain === 'polkadot')
         const kusamacs = crowdstaking.filter(c => c.relaychain === 'kusama')
-        this.saveCrowdstakings(polkadotcs);
+        this.saveCrowdstakings(polkadotcs)
         this.$store.commit('kusama/saveCrowdstakings', kusamacs)
         // this.saveCommunitys(
         //   crowdstaking.map(({ community }) => community.communityId)
         // );
         // 所有注册的projectid
-        this.saveProjects(crowdstaking.map(({ project }) => project.projectId));
+        this.saveProjects(crowdstaking.map(({ project }) => project.projectId))
         // 波卡验证者
-        let validators = polkadotcs.map(({ project }) => project.validators);
-        validators = validators.reduce((t, v) => t.concat(...v), []);
-        validators = [...new Set(validators)];
-        getValidatorsInfo(validators);
+        let validators = polkadotcs.map(({ project }) => project.validators)
+        validators = validators.reduce((t, v) => t.concat(...v), [])
+        validators = [...new Set(validators)]
+        getValidatorsInfo(validators)
         // kusama验证者
         // TODO
       })
@@ -335,19 +335,19 @@ export default {
   },
   async created () {
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
-    if (isMobile()){
-      console.log('Is mobile device');
+    if (isMobile()) {
+      console.log('Is mobile device')
       this.$store.commit('polkadot/saveAccount', null)
     }
     // 获取众贷和验证者投票卡片
-    this.getCommnunitys();
-    this.getCrowdstacking();
+    this.getCommnunitys()
+    this.getCrowdstacking()
     // 初始化apis
     initApis()
     this.isConnectingPolkadot = false
 
     // 从钱包加载账号
-    loadPolkadotAccounts();
+    loadPolkadotAccounts()
   }
 }
 </script>

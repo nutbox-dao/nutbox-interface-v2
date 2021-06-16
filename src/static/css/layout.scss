@@ -6,11 +6,15 @@
   flex-direction: column;
 }
 .page-header {
-  padding: 0 1.2rem;
+  padding: .8rem 1.2rem;
   min-height: 2.8rem;
-  .logo img{
-    width: 2.4rem;
-    height: 2.4rem;
+  .logo{
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+  .menu {
+    width: 1.8rem;
+    height: 1.8rem;
   }
   .account-dropdown .dropdown-menu {
     border-radius: 1.2rem;
