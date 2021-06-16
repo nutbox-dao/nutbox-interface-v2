@@ -1,30 +1,46 @@
-.wallet-card {
-  @include card(1.2rem 0);
-  @include c-col-flex-between-center;
+.card {
+  width: 100%;
   .top {
-    width: 100%;
-    background-image: linear-gradient(to bottom, var(--primary-custom), var(--primary-custom));
-    background-size: 4px 24px;
-    background-repeat: no-repeat;
-    background-position: left center;
-    padding: 0 1.2rem;
-    margin-bottom: .8rem;
-  }
-  .logo {
-    @include card-icon;
-    margin-right: .4rem;
-  }
-  .desc {
-    color: var(--secondary-text);
-  }
-  .btn-group {
-    width: 100%;
-    padding: 0 1.2rem;
-    &.btn-group-1 {
-      @include c-grid-repeat(1, .4rem)
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    .icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      margin-right: .4rem;
     }
-    &.btn-group-2 {
-      @include c-grid-repeat(2, .4rem)
+    .balance-right {
+      display: flex;
+      flex: 1;
+      align-content: center;
+      justify-content: space-between;
+      span {
+        text-align: left;
+      }
+      .title {
+        font-size: .8rem;
+        font-weight: 600;
+      }
+      .balance-name {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        img:hover {
+          cursor: pointer;
+        }
+      }
     }
+  }
+  .bottom{
+    padding-top: 1.2rem;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+  }
+  button {
+    height: 2.4rem;
+    font-size: .8rem;
+    line-height: .8rem;
   }
 }

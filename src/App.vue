@@ -4,73 +4,13 @@
       <div class="page-header flex-between-center">
         <div class="logo">
           <img v-if="screenWidth < 960" src="./static/images/logo_small.png"
+          @click="gotoOfficial"
                alt="nutbox" v-b-toggle.sidebar-menu/>
         </div>
-<!--        <div class="account-header">-->
-<!--          <div class="p-2">-->
-<!--            <b-dropdown-->
-<!--              class="account-dropdown"-->
-<!--              toggle-class="accounts-toggle"-->
-<!--              variant="text"-->
-<!--              right-->
-<!--              no-caret-->
-<!--            >-->
-<!--              <template #button-content>-->
-<!--                <div-->
-<!--                  class="flex-between-center font18"-->
-<!--                  @click="accountsPop = !accountsPop"-->
-<!--                >-->
-<!--                  <Identicon-->
-<!--                    :size="30"-->
-<!--                    theme="polkadot"-->
-<!--                    v-if="account"-->
-<!--                    :value="account.address"-->
-<!--                  />-->
-<!--                  <b-avatar v-else class="mr-2" size="sm" text=""></b-avatar>-->
-<!--                  <span style="margin-left: 8px">{{-->
-<!--                      formatUserAddress(-->
-<!--                        account && account.meta && account.meta.name-->
-<!--                      )-->
-<!--                    }}</span>-->
-<!--                </div>-->
-<!--              </template>-->
-<!--              <b-dropdown-item-->
-<!--                v-for="(item, index) of allAccounts ? allAccounts : []"-->
-<!--                :key="index"-->
-<!--                @click="changeAccount(item)"-->
-<!--              >-->
-<!--                <template>-->
-<!--                  <div class="flex-between-center">-->
-<!--                    <Identicon-->
-<!--                      class="ident-icon"-->
-<!--                      :size="30"-->
-<!--                      theme="polkadot"-->
-<!--                      :value="item.address"-->
-<!--                    />-->
-<!--                    <div class="account-info">-->
-<!--                      <div class="font-bold">-->
-<!--                        {{ item.meta ? item.meta.name : "" }}-->
-<!--                      </div>-->
-<!--                      <div class="address">-->
-<!--                        {{ formatUserAddress(item.address) }}-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                    <img-->
-<!--                      class="ml-3"-->
-<!--                      v-if="item.address === (account && account.address)"-->
-<!--                      src="~@/static/images/selected.png"-->
-<!--                      alt=""-->
-<!--                    />-->
-<!--                  </div>-->
-<!--                </template>-->
-<!--              </b-dropdown-item>-->
-<!--            </b-dropdown>-->
-<!--          </div>-->
-<!--        </div>-->
       </div>
       <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<960">
         <div class="menu-box">
-          <img class="menu-logo" src="./static/images/logo.png" alt="nutbox"/>
+          <img class="menu-logo" src="./static/images/logo.png" @click="gotoOfficial" alt="nutbox"/>
           <div class="menu-items">
             <b-nav vertical align="center" class="top">
               <b-nav-item to="/wallet" router-tag="div">
@@ -89,22 +29,17 @@
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("message.blog") }}</span>
               </b-nav-item>
+              <b-nav-item to="/community">
+                <i id="community-icon" class="menu-icon" />
+                <span>{{ $t("cs.community") }}</span>
+              </b-nav-item>
               <b-nav-item to="/admin" v-if="isAdmin">
                 <i id="admin-icon" class="menu-icon" />
                 <span>{{ $t("message.admin") }}</span>
               </b-nav-item>
-              <b-nav-item to="/community" v-if="isAdmin">
-                <i id="community-icon" class="menu-icon" />
-                <span>{{ $t("cs.community") }}</span>
-              </b-nav-item>
             </b-nav>
             <div class="bottom">
               <div class="links">
-<!--                <a id="justswap-icon" href="https://github.com/nutbox-dao" target="_blank">-->
-<!--                  <b-popover target="github-icon" triggers="hover focus" placement="top">-->
-<!--                    Github-->
-<!--                  </b-popover>-->
-<!--                </a>-->
                 <a id="github-icon" href="https://github.com/nutbox-dao" target="_blank">
                   <b-popover target="github-icon" triggers="hover focus" placement="top">
                     Github
@@ -206,6 +141,7 @@
 </template>
 
 <script>
+import Clipboard from "clipboard";
 import { LOCALE_KEY } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
 import { mapState, mapMutations } from 'vuex'
@@ -215,16 +151,17 @@ import {
   getBalance as getPolkadotBalance,
   loadAccounts as loadPolkadotAccounts
 } from './utils/polkadot/account'
-import { getBalance as getKusamaBalance } from './utils/kusama/account'
-import { subBlock as subPolkadotBlock } from './utils/polkadot/block'
-import { subBlock as subKusamaBlock } from './utils/kusama/block'
+import { getBalance as getKusamaBalance } from "./utils/kusama/account";
+import { getBalance as getRococoBalance } from "./utils/rococo/account";
 import {
   subBonded,
   subNominators,
   getValidatorsInfo
 } from './utils/polkadot/staking'
 import { subBonded as subKusamaBonded } from './utils/kusama/staking'
-import { stanfiAddress } from './utils/polkadot/polkadot'
+import { stanfiAddress } from "./utils/commen/account";
+import { initApis } from "./utils/commen/api"
+import { isMobile } from "./utils/commen/util"
 
 export default {
   data () {
@@ -233,7 +170,8 @@ export default {
       tipTitle: '',
       showMessage: false,
       accountsPop: false,
-      screenWidth: document.body.clientWidth
+      screenWidth: document.body.clientWidth,
+      isConnectingPolkadot: true
     }
   },
   computed: {
@@ -245,24 +183,17 @@ export default {
       'communitys',
       'projects'
     ]),
-    ...mapState('kusama', ['clCommunitys']),
+    ...mapState('polkadot', ['clCommunitys']),
     ...mapState(['lang']),
-    contributionsIcon () {
-      return this.activeNav === 'contributions'
-        ? require('./static/images/contributions_selected.png')
-        : require('./static/images/contributions.png')
-    },
-    dashboardIcon () {
-      return this.activeNav === 'dashboard'
-        ? require('./static/images/dashboard_selected.png')
-        : require('./static/images/dashboard.png')
-    },
     isAdmin () {
       if (!this.clCommunitys || !this.projects) return false
       const isCrowdloanAdmin = this.clCommunitys?.indexOf(this.account?.address) !== -1
       const isCrowdstakingAdmin = this.projects?.indexOf(this.account?.address) !== -1
       const res = isCrowdloanAdmin || isCrowdstakingAdmin
       return res
+    },
+    showMenu() {
+      return this.screenWidth > 960
     }
   },
   components: {
@@ -276,7 +207,10 @@ export default {
       'saveProjects',
       'saveAccount'
     ]),
-    ...mapMutations('kusama', ['saveClCommunitys']),
+    ...mapMutations('polkadot', ['saveClCommunitys']),
+    gotoOfficial(){
+      window.open('https://nutbox.io', '_blank');
+    },
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
       this.$store.commit('saveLang', lang)
@@ -295,6 +229,20 @@ export default {
         return `${start}...${end}`
       }
     },
+    copyAddress(a){
+      var clipboard = new Clipboard('#avatar');
+      clipboard.on("success", (e) => {
+        clipboard.destroy();
+         this.$bvToast.toast(this.$t('tip.copyAddress', {address: this.formatUserAddress(this.account.address)}), {
+          title: this.$t('tip.clipboard'),
+          autoHideDelay: 5000,
+          variant: "info", // info success danger
+        });
+      });
+      clipboard.on("error", (e) => {
+        clipboard.destroy;
+      });
+    },
     changeAccount (acc) {
       if (!this.isConnected) return
       if (this.$route.path === '/admin') {
@@ -304,6 +252,7 @@ export default {
       this.saveAccount(acc)
       getPolkadotBalance(acc)
       getKusamaBalance(acc)
+      DEBUG && getRococoBalance(acc);
       subKusamaBonded()
       subBonded()
       subNominators()
@@ -323,14 +272,15 @@ export default {
         console.log('communitys', res)
         const ccc = res.map((r) => stanfiAddress(r.communityId))
         this.saveClCommunitys(ccc)
-        console.log('store comm', this.clCommunitys, ccc)
+        this.$store.commit('rococo/saveClCommunitys', ccc);
+        this.$store.commit('kusama/saveClCommunitys', ccc);
       })
     },
 
     getCrowdstacking () {
       // 获取验证者节点投票卡片信息 --- polkadot
       getCrowdstacking().then((res) => {
-        const crowdstaking = res.map(({ community, project }) => ({
+        const crowdstaking = res.map(({ community, project, nominatorCount, relaychain }) => ({
           community: {
             ...community,
             communityId: stanfiAddress(community.communityId)
@@ -339,17 +289,30 @@ export default {
             ...project,
             projectId: stanfiAddress(project.projectId),
             validators: project.validators.map((v) => stanfiAddress(v))
-          }
+          },
+          nominatorCount,
+          relaychain
         }))
         this.saveCrowdstakings(crowdstaking)
         this.saveCommunitys(
           crowdstaking.map(({ community }) => community.communityId)
         )
-        this.saveProjects(crowdstaking.map(({ project }) => project.projectId))
-        let validators = crowdstaking.map(({ project }) => project.validators)
-        validators = validators.reduce((t, v) => t.concat(...v), [])
-        validators = [...new Set(validators)]
-        getValidatorsInfo(validators)
+        const polkadotcs = crowdstaking.filter(c => c.relaychain === 'polkadot')
+        const kusamacs = crowdstaking.filter(c => c.relaychain === 'kusama')
+        this.saveCrowdstakings(polkadotcs);
+        this.$store.commit('kusama/saveCrowdstakings', kusamacs)
+        // this.saveCommunitys(
+        //   crowdstaking.map(({ community }) => community.communityId)
+        // );
+        // 所有注册的projectid
+        this.saveProjects(crowdstaking.map(({ project }) => project.projectId));
+        // 波卡验证者
+        let validators = polkadotcs.map(({ project }) => project.validators);
+        validators = validators.reduce((t, v) => t.concat(...v), []);
+        validators = [...new Set(validators)];
+        getValidatorsInfo(validators);
+        // kusama验证者
+        // TODO
       })
     }
   },
@@ -371,8 +334,20 @@ export default {
     this.getCrowdstacking()
   },
   async created () {
-    await Promise.all([subPolkadotBlock(), subKusamaBlock()])
-    await loadPolkadotAccounts()
+    // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
+    if (isMobile()){
+      console.log('Is mobile device');
+      this.$store.commit('polkadot/saveAccount', null)
+    }
+    // 获取众贷和验证者投票卡片
+    this.getCommnunitys();
+    this.getCrowdstacking();
+    // 初始化apis
+    initApis()
+    this.isConnectingPolkadot = false
+
+    // 从钱包加载账号
+    loadPolkadotAccounts();
   }
 }
 </script>
@@ -399,6 +374,7 @@ $blue: #ffdb1b;
 @import "static/css/layout";
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
+@import "static/css/modal";
 html,
 body {
   height: 100%;

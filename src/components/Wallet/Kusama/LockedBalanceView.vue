@@ -1,27 +1,35 @@
 <template>
   <div>
-    <div class="wallet-card">
-      <div class="top flex-between-center">
-        <img :src="logo" alt="" class="logo" />
-        <div class="balance-right flex-full">
-          <div class="flex-between-center font-bold font16 mb-1">
-            <span>{{ name }}</span>
-            <span>{{ balances | amountForm(4) }}</span>
+    <Card>
+      <div class="top">
+        <img :src="logo" alt="" class="icon" />
+        <div class="balance-right">
+          <div class="balance-name">
+            <span class="title">
+              {{ name }}
+            </span>
+            <div>
+              <span style="font-size: 12px; color: var(--secondary-text)">
+                {{ desc }}
+              </span>
+            </div>
           </div>
-          <div class="text-left font12 desc">
-            <span>{{ desc }}</span>
+          <div class="balance">
+            <span class="title">
+              {{ locked / 1e12 | amountForm(4) }}
+            </span>
           </div>
         </div>
       </div>
-      <div class="btn-group btn-group-1">
-        <button class="primary-btn" @click="showUnbond=true" :disabled='parseFloat(balances) < 0.0001'>
+      <div class="bottom">
+        <b-button variant="primary" @click="showUnbond=true" :disabled='parseFloat(balances) < 0.0001'>
           {{ $t('wallet.unBond') }}
-        </button>
+        </b-button>
         <!-- <b-button variant="primary" @click="redeem" :disabled='parseFloat(balances) < 0.0001'>
           {{ $t('wallet.redeem') }}
         </b-button> -->
       </div>
-    </div>
+    </Card>
       <b-modal
       v-model="showUnbond"
       modal-class="custom-modal"
@@ -93,5 +101,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/static/css/card/wallet-card";
+@import "src/static/css/card/wallet-card.scss";
+button {
+  flex: 1;
+}
 </style>

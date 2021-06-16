@@ -7,12 +7,13 @@ import {
 
 import polkadot from './polkadot'
 import kusama from './kusama'
+import rococo from './rococo'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    lang: Cookie.get(LOCALE_KEY) || 'zh',
+    lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -24,6 +25,7 @@ export default new Vuex.Store({
   },
   modules: {
     polkadot,
-    kusama
+    kusama,
+    rococo
   }
 })

@@ -1,32 +1,39 @@
 <template>
-  <div class="page-view-content crowdloan">
-    <div class="page-view-title">{{$t("cl.crowdloan") }}</div>
-    <div class="nav">
-      <router-link to="/crowdloan" exact>Kusama</router-link>
+  <div class="crowdloan">
+    <h3>
+      {{ this.$t("cl.crowdloan") }}
+    </h3>
+    <div class="nav sub-page-nav">
       <router-link to="/crowdloan/polkadot">Polkadot</router-link>
+      <router-link to="/crowdloan/kusama">Kusama</router-link>
+      <router-link v-if="isDebug" to="/crowdloan/rococo">Rococo</router-link>
+
       <div class="center-blank"></div>
     </div>
-    <div class="scroll-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import { DEBUG } from "@/config"
 export default {
-  name: 'Crowdloan',
-  data () {
+  name: "Crowdloan",
+  data() {
     return {
-    }
+      isDebug: DEBUG
+    };
   },
   computed: {
   },
   methods: {
   },
-  mounted () {}
-}
+  mounted() {},
+};
 </script>
 
 <style lang="less" scoped>
+.sub-page-nav {
+  margin-bottom: 0.5rem;
+}
 </style>

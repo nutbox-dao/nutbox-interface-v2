@@ -1,8 +1,11 @@
 <template>
-  <div class="ksm-wallet">
+  <div class="scroll-content">
     <div class="ksm-wallet">
+<!--      <p class="item-title">-->
+<!--        {{ $t("wallet.asset") }}-->
+<!--      </p>-->
       <div class="balance-box row">
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-2">
           <BalanceView
             name="KSM"
             :balances="available / 1e12"
@@ -11,7 +14,7 @@
             :transfer="true"
           />
         </div>
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-2">
           <LockedBalanceView
             name="KSM"
             :balances="locked / 1e12"
@@ -23,11 +26,16 @@
       </div>
       <UserContributions>
         <template #title>
-          <div class="card-title">
+          <div class="item-title">
             {{ $t("wallet.contribution") }}
           </div>
         </template>
       </UserContributions>
+      <UserNominations>
+        <template #title>
+          <div class="item-title">{{ $t("wallet.nomination") }}</div>
+        </template>
+      </UserNominations>
     </div>
   </div>
 </template>
@@ -36,6 +44,7 @@
 import BalanceView from "@/components/Wallet/Kusama/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Kusama/LockedBalanceView";
 import UserContributions from "@/components/Wallet/Kusama/UserContributions";
+import UserNominations from "@/components/Wallet/Kusama/UserNominations"
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -52,10 +61,12 @@ export default {
     BalanceView,
     UserContributions,
     LockedBalanceView,
+    UserNominations
   },
   async mounted() {},
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+
 </style>

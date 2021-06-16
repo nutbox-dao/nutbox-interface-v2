@@ -8,10 +8,17 @@ import {
 } from '../config'
 
 // crowdstaking
+/**
+ * 获取所有的投票的卡片
+ * @returns 
+ */
 export const getCrowdstacking = async () => post(CROWD_STAKING_API_URL + '/crowdstaking/find/all')
 
-export const getDarshboardCard = async (param) => post(CROWD_STAKING_API_URL + '/crowdstaking/find/summary', param)
-
+/**
+ * 获取要导出的投票数据
+ * @param {*} param {relaychain, communityId, projectId}
+ * @returns 
+ */
 export const getNominationSummary = async (param) => post(CROWD_STAKING_API_URL + '/crowdstaking/find/nominations', param)
 
 

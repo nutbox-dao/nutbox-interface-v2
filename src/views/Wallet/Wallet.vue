@@ -1,33 +1,35 @@
 <template>
-  <div class="page-view-content wallet">
-    <div class="page-view-title">{{ $t("wallet.wallet") }}</div>
-    <div class="nav">
-      <router-link to="/wallet" exact>Pokadot</router-link>
+  <div class="wallet">
+    <h3>
+      {{ this.$t("wallet.wallet") }}
+    </h3>
+    <div class="nav sub-page-nav">
+      <router-link to="/wallet/polkadot" exact>Polkadot</router-link>
       <router-link to="/wallet/kusama">Kusama</router-link>
+      <router-link v-if="isDebug" to="/wallet/rococo">Rococo</router-link>
     </div>
-    <div class="scroll-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import { DEBUG } from "@/config"
 export default {
-  name: 'Wallet',
-  data () {
+  name: "Wallet",
+  data() {
     return {
-      showLogout: false
-    }
+      showLogout: false,
+      isDebug: DEBUG
+    };
   },
   computed: {
   },
   methods: {
   },
-  mounted () {}
-}
+  mounted() {},
+};
 </script>
 
-<style lang="scss" scoped>
-//@import "src/static/css/card";
+<style lang="less" scoped>
 </style>

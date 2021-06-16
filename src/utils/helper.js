@@ -1,3 +1,9 @@
+import { TIME_PERIOD, BLOCK_SECOND } from "@/constant"
+import {
+  $t
+} from '@/i18n'
+
+
 export const firstToUpper = function (str) {
   if (!str) {
     return
@@ -69,4 +75,41 @@ export function getDateString(now, timezone, extra = 0) {
   const offset = timezone != null ? timezone * 60 : 0
   now = new Date(now.getTime() + (offset + extra) * 60 * 1000)
   return now.toISOString().replace('T', ' ').substring(0, 19)
+}
+
+// 竞拍倒计时
+export function formatCountdown(end, currentBlockNum) {
+  try {
+    if (!end || !currentBlockNum) return 'Loading'
+    const diff = end - parseInt(currentBlockNum);
+    if (diff > 0) {
+      const secs = diff * BLOCK_SECOND;
+      const month = Math.floor(secs / TIME_PERIOD["MONTH"]);
+      const day = Math.floor(
+        (secs % TIME_PERIOD["MONTH"]) / TIME_PERIOD["DAY"]
+      );
+      const hour = Math.floor(
+        (secs % TIME_PERIOD["DAY"]) / TIME_PERIOD["HOUR"]
+      );
+      const min = Math.floor(
+        (secs % TIME_PERIOD["HOUR"]) / TIME_PERIOD["MINUTES"]
+      );
+      const sec = Math.floor(secs % TIME_PERIOD["MINUTES"]);
+
+      let res = ''
+      if (secs >= TIME_PERIOD["MONTH"]) {
+        res = month + $t('date.month') + day + $t('date.day') + hour + $t('date.hour');
+      } else if (secs >= TIME_PERIOD["DAY"]) {
+        res = day + $t('date.day') + hour + $t('date.hour')+ min + $t('date.min');
+      } else if (secs >= TIME_PERIOD["HOUR"]) {
+        res = hour + $t('date.hour') + min + $t('date.min');
+      } else {
+        res = min + $t('date.min') + sec + $t('date.sec');
+      }
+      return res.trim()
+    }
+  } catch (e) {
+    console.error("err", e);
+    return "Loading";
+  }
 }

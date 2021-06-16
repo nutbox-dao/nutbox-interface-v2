@@ -10,14 +10,10 @@ import {
 
 import {
   getApi,
-  token2Uni,
-  stanfiAddress,
   getTxPaymentInfo
 } from './polkadot'
-import {
-  injectAccount
-} from './account'
-import BN from 'bn.js'
+import { stanfiAddress } from '@/utils/commen/account'
+import { createCrowdstakingRemark } from '../commen/remark'
 
 
 /**
@@ -48,11 +44,11 @@ export const subNominators = async () => {
     subNominators()
   } catch (e) {}
   const api = await getApi()
-  const {validators} = await api.derive.staking.overview()
+  // const {validators} = await api.derive.staking.overview()
 
   store.commit('polkadot/saveLoadingStaking', true)
 // 获取用户投票的情况
-  const nominators = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
+  const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
     if (!nominators.toJSON()) {
       store.commit('polkadot/saveNominators', [])
       store.commit('polkadot/saveLoadingStaking', false)
@@ -63,9 +59,11 @@ export const subNominators = async () => {
     infos = infos.map(acc => {
       let nick = ''
       let address = stanfiAddress(acc.accountId)
-      if (acc.identity?.displayParent){
-        if (acc.identity?.display){
+      if (acc.identity?.displayParent || acc.identity?.display){
+        if (acc.identity?.display && acc.identity?.displayParent){
           nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
+        }else if(acc.identity?.display){
+          nick = acc.identity.display
         }else{
           nick = acc.identity.displayParent
         }
@@ -93,11 +91,11 @@ export const subNominators = async () => {
     store.commit('polkadot/saveLoadingStaking', false)
     store.commit('polkadot/saveNominators', infos)
   })
-  store.commit('polkadot/saveSubNominators', subNominators)
+  store.commit('polkadot/saveSubNominators', unsub)
 }
 
 /**
- * 或者我们平台所有社区支持的验证者节点信息
+ * 或取我们平台所有社区支持的验证者节点信息
  * @param {Array} validators 验证者节点地址数组
  */
 export const getValidatorsInfo = async (validators) => {
@@ -113,7 +111,6 @@ export const getValidatorsInfo = async (validators) => {
       allValidatorInfosInOurDB[validators[i]] = res[i]
     }
     store.commit('polkadot/saveAllValidatorInfosInOurDB', allValidatorInfosInOurDB)
-
   })
 }
 
@@ -132,9 +129,9 @@ export const nominate = async (validators, communityId, projectId, toast, callba
     if (!from) {
       reject('no account')
     }
-    const api = await injectAccount(store.state.polkadot.account)
+    const api = await getApi()
     const nominatorTx = api.tx.staking.nominate(validators)
-    const remark = encodeRemark(communityId, projectId)
+    const remark = createCrowdstakingRemark(api, communityId, projectId, null)
     const remarkTx = api.tx.system.remarkWithEvent(remark)
     const nonce = (await api.query.system.account(from)).nonce.toNumber()
   
@@ -146,7 +143,7 @@ export const nominate = async (validators, communityId, projectId, toast, callba
         dispatchError
       }) => {
         try {
-          handelBlockState(api, mstatus, dispatchError, toast, callback, unsub)
+          handelBlockState(api, status, dispatchError, toast, callback, unsub)
         } catch (e) {
           toast(e.message, {
             title: $t('tip.error'),
@@ -172,8 +169,8 @@ export const bondAndNominate = async (amount, validators, communityId, projectId
   if (!from) {
     reject('no account')
   }
-  const api = await injectAccount(store.state.polkadot.account)
-  const uni = api.createType('Compact<BalanceOf>', token2Uni(amount))
+  const api = await getApi()
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(4))))
   const bondTx = api.tx.staking.bond(store.state.polkadot.account.address, uni, {
     Staked: null
   })
@@ -267,13 +264,4 @@ function handelBlockState(api, status, dispatchError, toast, callback, unsub) {
     // 上传daemon
     return true
   }
-}
-
-export function encodeRemark(communityId, projectId) {
-  // 01 表示使用dot投票
-  let buf = new Uint8Array(65)
-  buf[0] = 1;
-  buf.set(decodeAddress(communityId), 1);
-  buf.set(decodeAddress(projectId), 33)
-  return '0x' + Buffer.from(buf).toString('hex')
 }

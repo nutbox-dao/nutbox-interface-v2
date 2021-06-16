@@ -1,26 +1,22 @@
 <template>
-  <div class="page-view-content crowdstaking">
-    <div class="page-view-title">{{$t("cs.crowdstaking") }}</div>
-    <div class="nav">
+  <div class="crowdstaking">
+    <h3>
+      {{ this.$t("cs.crowdstaking") }}
+    </h3>
+    <div class="nav sub-page-nav">
       <router-link to="/crowdstaking/kusama">Kusama</router-link>
-      <router-link to="/crowdstaking" exact>Polkadot</router-link>
+      <router-link to="/crowdstaking/polkadot">Polkadot</router-link>
       <div class="center-blank"></div>
     </div>
-    <div class="scroll-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import CrowdStakingCard from "../../components/CrowdStaking/CrowdStakingCard";
 import { mapMutations, mapState, mapGetters } from "vuex";
 
 export default {
   name: "Home",
-  components: {
-    CrowdStakingCard,
-  },
   computed: {
     ...mapState('polkadot',["projectFundInfos", "symbol", "isConnected", 'balance', 'crowdstakings']),
     funds() {
@@ -45,5 +41,8 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.sub-page-nav {
+  margin-bottom: 0.5rem;
+}
 </style>

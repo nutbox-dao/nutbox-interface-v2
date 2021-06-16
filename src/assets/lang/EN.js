@@ -51,6 +51,9 @@ module.exports = {
     blog: 'Blog',
     changeSteemNode: 'Steem Node(Option)',
     contractAddr: 'Contract Address',
+
+    dashboard: "Dashboard",
+    contributions: "My contributions",
     
     language: 'Language',
     zh: '中文',
@@ -69,7 +72,98 @@ module.exports = {
     swapSubTitle:"The fast and secure way to bring cross-chain assets to Tron chain.",
     install:"Install",
     transfer:"Transfer",
+    asset: "Asset",
+    nomination: "Validator Nomination",
+    contribution: "Crowdloan Contribution",
+    balance: "Balance",
+    bond: "Bond",
+    unBond: "Unbond",
+    redeem: "Redeem",
+    bindAmount: "Bond amount",
+    inputAmount: 'Please input amount',
+    receiveAddress: 'Send to address',
+    transferAmount: 'Transfer amount',
+    unbindAmount: 'Unbond amount'
   },
+  admin: {
+    admin: "管理员"
+  },
+  cs: {
+    crowdstaking: "Crowdstaking",
+    community:"Commnunity",
+    nominate: "Nominate",
+    nominated: "Nominated",
+    inputBondAmount: "Please Input ",
+    bond: "Bond",
+    available: "Available",
+    bondAndNominate: " Bond & Nominate",
+    cancel: "cancel",
+    bondInfo1: "Please keep a small amount for the subsequent fee",
+    bondInfo2: "It is recommended to bind at least {min} {symbol}",
+    bondInfo3: "You need to wait {days} days after unbond",
+    confirm: "Confirm",
+    cancelValidorsInfo:"Please cancel at least {n} validators before this nominate operation"
+},
+validator: {
+    validator: 'Validators',
+    commission: "Commission",
+    otherStake: "OtherStake",
+    ownStake: "OwnStake",
+    waiting: "Waiting"
+},
+date: {
+  year: ' year ',
+  month: ' mons ',
+  day: ' days ',
+  hour: ' hrs ',
+  min: ' mins ',
+  sec: ' sec '
+},
+dashboard: {
+  export: "Export",
+  nominators: "Nominators"
+},
+cl:{
+  crowdloan: 'Crowdloan',
+  community: "Community",
+  contribute: "Contribute",
+  withdraw: "Withdraw",
+  youWillWithdraw: "You Would Withdraw",
+  confirm: "Comfirm & sign",
+  amount: "Amount",
+  inputAmount: "Staking amount",
+  nominator: "Nominator",
+  inputNominator: "Your Nominator's address",
+  optional: "(optional)",
+  completed: "Completed",
+  leasePeriod: "Lease Period",
+  countDown: "Countdown",
+  rewards: 'Rewards',
+  auctionPlan: "Crowdloan Reward",
+  auctionInfo: "Crowdloan Detail",
+  joinAuction: "Join Crowdloan",
+  raised: "Raised",
+  fund: "Fund",
+  progress: 'Progress',
+  contributors:"Contributors",
+  contributed: "My Contribution",
+  myBalance: "Balance of {token}",
+  Active: "Active",
+  Retired: "Retired",
+  Completed: "Completed",
+  chain: "Chain",
+  trieIndex: "TrieIndex",
+  contributeAmount: 'Contribute amount',
+  contributeTime: 'Contribute time'
+},
+transaction: {
+  broadcasting: "Transaction Is Broadcasting.",
+  inBlock: "Transaction included at blockHash.",
+  contributeOk: "Contribution Success!",
+  withdrawOk: "Withdraw Success!",
+  nominateOk: "Nominate Success!",
+  transactionOk:"Transaction Success!",
+},
   stake: {
     stake: 'Staking Mining',
     creaseDelegation: "Delegate",
@@ -123,6 +217,33 @@ module.exports = {
       tsptosteemintro: 'The STEEM will be returned to your Steem account in around 33~40 days after TSP is claimed to be redeemed.'
     }
   },
+  tip: {
+    loading: "Loading, please wait",
+    connectingPolkadot: "Connecting Polkadot network",
+    noAuction : "No ongoing auction",
+    noProject:"No ongoing project",
+    noNominations: "No nominated validators",
+    noContribuitons: "No contribution records",
+    noCrowdloan: "No ongoing crowdloan",
+    noStakingProject: "No validators",
+    tokenSafeTip: "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
+    belowMinContribution:"Input is less than the minimum allowed contribution of  {min}",
+    belowMinBond: "Input is less than the minimum surggest bonded of 0.1",
+    wrongNominatorAddress: "Wrong Nominator Address",
+    wrongTransferAddress: "Wrong Transfer Address",
+    inputAddressType: "Please Input {relaychain} Address",
+    insufficientBalance:"Insufficient Balance",
+    outOfCap: "Out of cap",
+    tips:"Tips",
+    error: "Error!",
+    success: "Success!",
+    warning: "Warning!",
+    noNeedWithdraw: 'No Need To Withdraw',
+    comingSoon: 'Coming Soon',
+    clipboard:"	Clipboard",
+    copyAddress:"Copied address:  {address}",
+    signing: "Signing"
+},
   vote:{
     upvote:"Upvote",
     vote:"Upvote post",
@@ -171,5 +292,9 @@ module.exports = {
     insufficentPnut:"Insufficent PNUT",
     hasVoted:"Your post has been voted by nutbox.mine",
     pleaseRetry: "Please try again"
+  },
+  community: {
+    community: 'Community',
+    percentage: 'Percentage'
   },
 }

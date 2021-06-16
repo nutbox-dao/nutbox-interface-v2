@@ -109,7 +109,6 @@ export default {
       );
     },
     needToCancelValidators() {
-      console.log(333,this.availableNominators.length, this.crowdstaking.project.validators.length);
       return (
         this.availableNominators.length +
         this.crowdstaking.project.validators.length -
@@ -162,7 +161,6 @@ export default {
           }
         );
       } catch (e) {
-        console.log("eee", e);
         this.$bvToast.toast(e.message, {
           title: this.$t("tip.error"),
           autoHideDelay: 5000,
@@ -177,7 +175,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .tip-modal {
   position: relative;
   max-height: 80vh;
@@ -201,7 +199,6 @@ export default {
   }
   .primary-btn {
     width: 100%;
-    margin-top: 1rem;
     height: 48px;
     min-height: 48px;
   }
@@ -216,6 +213,19 @@ export default {
     background-position-y: bottom;
     background-position-x: 50%;
   }
+}
+.h-line {
+  width: 100%;
+  height: 1px;
+  background-color: #f6f7f9;
+  margin-bottom: 15px;
+  margin-top: 24px;
+}
+.v-line {
+  height: 26px;
+  width: 1px;
+  background-color: #bdbfc2;
+  opacity: 0.2;
 }
 .stake-info {
   display: block;
@@ -236,7 +246,7 @@ export default {
     width: 1.4rem !important;
     height: 1.4rem !important;
     border: none !important;
-    background-image: url("../../../static/images/no-check.png");
+    background-image: url("~@/static/images/no-check.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -253,7 +263,7 @@ input {
   height: 1.4rem !important;
 }
 .custom-control-input:checked ~ .custom-control-label::before {
-  background-image: url("../../../static/images/checked.png");
+  background-image: url("~@/static/images/checked.png");
   background-color: transparent !important;
 }
 .checkbox-item-card {
@@ -282,28 +292,6 @@ input {
     border-bottom-left-radius: 40px;
     font-size: 0.7rem;
   }
-}
-.input-group-box {
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-  input {
-    flex: 1;
-    border: none;
-    background: rgba(246, 247, 249, 1);
-    font-size: 0.8rem;
-    height: 2.4rem;
-    padding: 0.4rem 0.8rem;
-    box-sizing: border-box;
-    border-radius: 0.8rem;
-    margin-right: 1rem;
-  }
-  span {
-    display: inline-block;
-    min-width: 5rem;
-  }
-}
-.label {
-  text-align: left;
 }
 @media (max-width: 320px) {
   .card-row {
