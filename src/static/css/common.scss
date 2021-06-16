@@ -266,38 +266,6 @@ input::-webkit-input-placeholder {
 .pagination li {
   margin: 0 .2rem;
 }
-.status-container {
-  //position: absolute;
-  //right: 0;
-  //top: 0;
-  img {
-    width: 3.4rem;
-    height: 3.4rem;
-  }
-  span {
-    padding: 0 .4rem;
-    display: inline-block;
-    border-radius: 1.2rem;
-    font-size: .6rem;
-    line-height: 1.2rem;
-  }
-  .Active {
-    color: rgba(80, 191, 0, 1);
-    border: 1px solid rgba(80, 191, 0, 1);
-    background: rgba(80, 191, 0, 0.05);
-  }
-  .Retired {
-    color: rgba(248, 182, 42, 1);
-    border: 1px solid rgba(248, 182, 42, 1);
-    background: rgba(255, 219, 38, 0.05);
-  }
-  .Completed {
-    color: rgba(255, 91, 77, 1);
-    border: 1px solid rgba(255, 91, 77, 1);
-    background: rgba(255, 91, 77, 0.051);
-  }
-}
-
 #mint-checkbox .custom-control-label {
   line-height: 1.5rem;
 }
