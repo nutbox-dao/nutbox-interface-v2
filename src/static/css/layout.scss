@@ -169,7 +169,8 @@
     flex-direction: column;
     .scroll-content {
       flex: 1;
-      overflow: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
       padding-bottom: 2rem;
     }
   }

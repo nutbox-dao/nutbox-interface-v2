@@ -1,5 +1,6 @@
 <template>
   <div class="k-page crowdloan-page">
+    <Searchbar></Searchbar>
     <div class="loading-bg" v-if="loadingFunds">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
@@ -31,37 +32,43 @@
 </template>
 
 <script>
-import CrowdloanCard from "../../components/Crowdloan/CrowdloanCard";
-import { loadFunds } from "@/utils/kusama/crowdloan";
-import { mapState, mapGetters } from "vuex";
-import { getOnshowingCrowdloanCard } from "@/apis/api";
+import CrowdloanCard from '../../components/Crowdloan/CrowdloanCard'
+import { loadFunds } from '@/utils/kusama/crowdloan'
+import { mapState, mapGetters } from 'vuex'
+import { getOnshowingCrowdloanCard } from '@/apis/api'
+import Searchbar from '@/components/ToolsComponents/Searchbar'
 
 export default {
-  name: "Kusama",
+  name: 'Kusama',
   components: {
     CrowdloanCard,
+    Searchbar
   },
   computed: {
-    ...mapState("kusama", ["clProjectFundInfos", "loadingFunds"]),
-    funds() {
-      const fundInfos = this.clProjectFundInfos;
-      return fundInfos || [];
-    },
+    ...mapState('kusama', ['clProjectFundInfos', 'loadingFunds']),
+    funds () {
+      const fundInfos = this.clProjectFundInfos
+      return fundInfos || []
+    }
   },
   methods: {
-    ...mapGetters("kusama", ["showingCard"]),
+    ...mapGetters('kusama', ['showingCard'])
   },
-  async created() {
+  async created () {
     if (this.showingCard() && this.showingCard().length > 0) {
       return
     };
-    const res = await getOnshowingCrowdloanCard({ relaychain: "kusama" });
+    const res = await getOnshowingCrowdloanCard({ relaychain: 'kusama' })
     // 缓存数据
     loadFunds(res)
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
+.search-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 </style>

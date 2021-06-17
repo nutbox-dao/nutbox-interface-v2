@@ -1,6 +1,6 @@
 <template>
-  <div class="page-view-content">
-    <div class="page-view-title">{{$t("cl.crowdloan") }}</div>
+  <div class="page-view-content crowdloan">
+    <div class="page-view-title mt-2 mb-2">{{$t("cl.crowdloan") }}</div>
     <div class="nav">
 <!--      <router-link to="/crowdloan" exact>Kusama</router-link>-->
       <router-link to="/crowdloan/polkadot">Polkadot</router-link>
@@ -33,5 +33,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.crowdloan {
+  position: relative;
+}
 </style>
