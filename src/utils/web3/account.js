@@ -18,5 +18,6 @@ export const changeAccount = async () => {
     const metamask = await getEthWeb()
     metamask.on('accountsChanged', (accounts) => {
         console.log('Changed accounts', accounts);
+        store.commit('web3/saveAccount', accounts[0])
     })
 }

@@ -162,6 +162,8 @@ import { subBonded as subKusamaBonded } from './utils/kusama/staking'
 import { stanfiAddress } from './utils/commen/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
+import { setupNetwork, getWeb3, test, chainChanged } from './utils/web3/web3'
+import { changeAccount } from './utils/web3/account'
 
 export default {
   data () {
@@ -209,7 +211,8 @@ export default {
     ]),
     ...mapMutations('polkadot', ['saveClCommunitys']),
     gotoOfficial () {
-      window.open('https://nutbox.io', '_blank')
+      test()
+      // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
@@ -269,7 +272,6 @@ export default {
     getCommnunitys () {
       // 获取支持平行链项目的社区信息  -   kusama
       getCommnunitys().then((res) => {
-        console.log('communitys', res)
         const ccc = res.map((r) => stanfiAddress(r.communityId))
         this.saveClCommunitys(ccc)
         this.$store.commit('rococo/saveClCommunitys', ccc)
@@ -334,6 +336,13 @@ export default {
     this.getCrowdstacking()
   },
   async created () {
+    // bsc related
+    setupNetwork()
+    getWeb3()
+    chainChanged()
+    changeAccount()
+
+
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {
       console.log('Is mobile device')

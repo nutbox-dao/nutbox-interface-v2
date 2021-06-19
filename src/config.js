@@ -39,9 +39,13 @@ export const NUTBOX_REMARK_TYPE = {
 }
 
 // Phala推荐机制 remark
-export const   PhalaCrowdloanReferrerRemark = {
+export const PhalaCrowdloanReferrerRemark = {
   "magic": "Bytes",
   "paraId": "ParaId",
   "referrer": "AccountId",
   "referrerHash": "Bytes"
 }
+/** ==========================================================================================================*/
+
+export const RPC_NODE = process.env.VUE_APP_RPC_NODE
+export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337

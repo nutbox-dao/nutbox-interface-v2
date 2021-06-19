@@ -23,6 +23,7 @@
     "csv-exportor": "^1.0.2",
     "dotenv": "^8.2.0",
     "echarts": "^5.1.1",
+    "ethers": "^5.3.1",
     "lodash.debounce": "^4.0.8",
     "polkadot": "^1.0.0",
     "steem": "^0.7.11",
