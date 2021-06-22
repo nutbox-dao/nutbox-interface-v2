@@ -6,32 +6,21 @@ import { ethers } from 'ethers'
 import { add } from 'lodash'
 import { getAccounts } from './account'
 
-/** 
- Contract Addresses
-================================================================
-RegistryHub:                        0xF6149F38bEA7bB07a779AF30Ee1983566e5E1218
-----------------------------------------------------------------
-HomeChainAssetRegistry:             0xD8930d33FCb22e9c96D35d7466B86f5801047D4c
-----------------------------------------------------------------
-SteemHiveDelegateAssetRegistry:     0x594931B680872b924bc66bBf21369Cde46D1d235
-----------------------------------------------------------------
-SubstrateCrowdloanAssetRegistry:    0x0EA245d9e163f8E112C4B7a5434e58201c4c36b4
-----------------------------------------------------------------
-SubstrateNominateAssetRegistry:     0x65Ea6C8299cDc716d19eB7Bd575EFeB9aCa58c1D
-----------------------------------------------------------------
-ERC20AssetHandler:                  0x5aE09cDE2955872be4E2346ce012e8263c6E8406
-----------------------------------------------------------------
-ERC721AssetHandler:                 Not Deployed
-----------------------------------------------------------------
-TrustlessAssetHandler:              0x6dec5623Ceb1e790316832B44a4560F4ee85576f
-----------------------------------------------------------------
-Executor:                           0xbce61B30395f82bB60171f5362c4010427509088
-----------------------------------------------------------------
-Bridge:                             0x0Bdda4f918839fc223faE4769979b8f67F62DF15
-----------------------------------------------------------------
-StakingFactory:                     0x129E6A65c96E5585263AB09d42baF96644F2028D
-================================================================
-*/
+const contractAddress = {
+    "RegistryHub": "0x59A040E99f62445C52f2f272b5AeEC0FF1b5A133",
+    "HomeChainAssetRegistry": "0x5B91d7D24Ec4e1A29B9699e8cf351D1e29c558Bc",
+    "SteemHiveDelegateAssetRegistry": "0xD09AE2e3Fe4aA2C82BD1Af8cB8949142b1C680ed",
+    "SubstrateCrowdloanAssetRegistry": "0x3a21674E35A289f21C3943341BccD34138EBf822",
+    "SubstrateNominateAssetRegistry": "0xf2148de8c870a7dE80C2aC375674d5A4f29a191D",
+    "ERC20AssetHandler": "0x3E9fD32A9362Ae6b5f0BF2deE64A5Dc697E6E8c7",
+    "ERC721AssetHandler": "Not Deployed",
+    "TrustlessAssetHandler": "0xD6f2787a1e3f47f2Af7D3AF7b1234dd867FcCA4D",
+    "Executor": "0xA3416425349b8e58224568061B1dE5AdddF24F8b",
+    "Bridge": "0x4ED6182c783580DD994BFe3cFaF6347eB78CE49F",
+    "StakingFactory": "0xf25E87B994945280C4CA1C3042e8bb465efC3F00"
+  }
+
+const erc20Address = '0x0a5101FaB7Ed01F9B6D8bEDd94BC617D7ed6Bad9'
 
 
 // contract file name

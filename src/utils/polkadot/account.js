@@ -54,7 +54,7 @@ export const loadAccounts = async () => {
     subNominators()
     subBonded()
   } catch (e) {
-    console.error('get all accounts fail:', e);
+    // console.error('get all accounts fail:', e);
   }
 }
 
