@@ -6,8 +6,8 @@ import store from '@/store'
  * Get metamask provider
  * @returns 
  */
-export const getProvider = async () => {
-    if (store.state.web3.ethers) {
+export const getProvider = async (force = false) => {
+    if (store.state.web3.ethers && !force) {
         return store.state.web3.ethers
     }
     const metamask = await getEthWeb()

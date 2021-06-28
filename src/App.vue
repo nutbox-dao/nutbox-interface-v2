@@ -162,7 +162,7 @@ import { subBonded as subKusamaBonded } from './utils/kusama/staking'
 import { stanfiAddress } from './utils/commen/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
-import { setupNetwork, getWeb3, test, chainChanged } from './utils/web3/web3'
+import { setupNetwork, test, chainChanged } from './utils/web3/web3'
 import { changeAccount } from './utils/web3/account'
 
 export default {
@@ -337,10 +337,14 @@ export default {
   },
   async created () {
     // bsc related
-    setupNetwork()
-    getWeb3()
-    chainChanged()
-    changeAccount()
+    try{
+      setupNetwork()
+      chainChanged()
+      changeAccount()
+    }catch(e) {
+      console.log(533, e);
+    }
+    
 
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址

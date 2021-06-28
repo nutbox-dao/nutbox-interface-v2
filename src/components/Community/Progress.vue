@@ -29,7 +29,9 @@ export default {
       type: [String, Number],
       default: 'Max'
     },
-    progressData: [],
+    progressData: {
+      type: Array,
+    },
     isEdit: {
       type: Boolean,
       default: false

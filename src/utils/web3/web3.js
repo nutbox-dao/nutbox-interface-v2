@@ -15,10 +15,12 @@ import {
   createWatcher
 } from '@makerdao/multicall'
 
-import {
-    hexToString,
-  } from "@polkadot/util"
-  
+import { 
+    getRegitryAssets
+} from './asset'
+
+import { getProvider } from './ethers'
+import  { contractAddress, erc20Address, multiAddress } from './contract'
 
 /**
  * Add bsc to metamask
@@ -45,7 +47,7 @@ export const setupNetwork = async () => {
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
-    // console.log(333, error);
+    console.log(333, error);
     store.commit('web3/saveChainId', chainId)
     return false
   }
@@ -66,8 +68,8 @@ export const getEthWeb = async () => {
     if (typeof metamask !== 'undefined') {
       return metamask
     }
-    metamask = window.ethereum
     await sleep(0.5)
+    metamask = window.ethereum
   }
   return metamask
 }
@@ -87,9 +89,11 @@ export const connectMetamask = async () => {
  */
 export const chainChanged = async () => {
   const metamask = await getEthWeb()
+  console.log('monitor chain id');
   metamask.on('chainChanged', (chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
+    getProvider()
     // window.location.reload()
   })
 }
@@ -129,16 +133,11 @@ export const addAssetToWallet = async (address, symbol, decimals, image) => {
 }
 
 
-/**************************************web3*****************************************************/
-
-export const getWeb3 = async () => {
-  const web3 = new Web3(RPC_NODE || Web3.givenProvider)
-  return web3
-}
-
 
 export const test = async () => {
-  // const ethw = await getWeb3()
+
+        console.log(1234, await getRegitryAssets().catch(console.log));
+
 
   // const contract = await getContract('REGISTRYHUB', '0xF6149F38bEA7bB07a779AF30Ee1983566e5E1218')
   // if (!contract) return 
@@ -160,37 +159,28 @@ export const test = async () => {
 export const testMulticall = async () => {
   const config = {
     rpcUrl: 'http://localhost:8545',
-    multicallAddress: '0xE592738f39FdfE67Daf2f7b8b5bef8FaF1C68C46'
+    multicallAddress: multiAddress
   }
 
   const watcher = createWatcher([{
-      target: '0x0a5101FaB7Ed01F9B6D8bEDd94BC617D7ed6Bad9',
-      call: [
-          'balanceOf(address)(uint256)',
-          '0xb182f4892397BF758179B220C881E32ce6EE32E2'
-      ],
-      returns: [
-          ['TC_BALANCE', val => val / 10 ** 18]
-      ]
-  },{
-      target: '0x59A040E99f62445C52f2f272b5AeEC0FF1b5A133',
-      call: [
-          'whiteList(address)(bool)',
-          '0x5B91d7D24Ec4e1A29B9699e8cf351D1e29c558Bc'
-      ],
-      returns: [
-          ['WHITE_LIST', val => val]
-      ]
-  },{
-    target: '0x59A040E99f62445C52f2f272b5AeEC0FF1b5A133',
+    target: erc20Address,
     call: [
-        'registryCounter(address)(uint8)',
-        '0x5B91d7D24Ec4e1A29B9699e8cf351D1e29c558Bc'
+      'balanceOf(address)(uint256)',
+      store.account
     ],
     returns: [
-        ['REGISTRY_COUNTER', val => val]
+      ['TC_BALANCE', val => val / 10 ** 18]
     ]
-}], config)
+  },{
+    target: contractAddress['RegistryHub'],
+    call: [
+      'registryCounter(address)(uint8)',
+      store.account
+    ],
+    returns: [
+      ['REGISTRY_COUNTER']
+    ]
+  }], config)
 
   watcher.subscribe(update => {
     console.log(`Update: ${update.type} = ${update.value}`);
