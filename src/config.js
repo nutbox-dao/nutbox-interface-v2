@@ -49,3 +49,14 @@ export const PhalaCrowdloanReferrerRemark = {
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
+
+// Nutbox official registried assets IDs
+export const NUTBOX_REGISTRY_ASSETS = [
+  
+]
+
+// sended transaction configs
+export const Transaction_config = {
+  gasPrice: 50000000,
+  gasLimit: 1000000000
+}
