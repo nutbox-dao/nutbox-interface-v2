@@ -54,7 +54,7 @@ export const registryHomeChainAsset = async (assetAddress) => {
 }
 
 /**
- * Depoly un mintable ERC20 token
+ * Depoly unmintable ERC20 token
  * @param {*} param0 
  * @returns 
  */
@@ -77,3 +77,28 @@ export const deploySimpleERC20 = async ({
     return null
   }
 }
+
+/**
+ * Depoly mintable ERC20 token
+ * @param {*} param0 
+ * @returns 
+ */
+ export const deployMintableERC20 = async ({
+    name,
+    symbol,
+    decimal,
+    totalSupply
+  }) => {
+    try {
+      const abi = await getAbi('MintableERC20')
+      const eth = await getProvider()
+      const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
+      const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
+        Transaction_config)
+      await contract.deployed()
+      return contract.address
+    } catch (e) {
+      console.log(`Deploy mintable token ${name} failed`, e);
+      return null
+    }
+  }

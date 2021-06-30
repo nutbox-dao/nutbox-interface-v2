@@ -15,7 +15,11 @@
             <b-nav vertical align="center" class="top">
               <b-nav-item to="/wallet" router-tag="div">
                 <i id="wallet-icon" class="menu-icon" />
-                <span>{{ $t("wallet.wallet") }}</span>
+                <span>{{ address || $t("wallet.wallet") }}</span>
+              </b-nav-item>
+              <b-nav-item to="/community">
+                <i id="community-icon" class="menu-icon" />
+                <span>{{ $t("cs.community") }}</span>
               </b-nav-item>
               <b-nav-item to="/crowdloan">
                 <i id="farming-icon" class="menu-icon" />
@@ -28,10 +32,6 @@
               <b-nav-item to="/blog">
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("message.blog") }}</span>
-              </b-nav-item>
-              <b-nav-item to="/community">
-                <i id="community-icon" class="menu-icon" />
-                <span>{{ $t("cs.community") }}</span>
               </b-nav-item>
               <b-nav-item to="/admin" v-if="isAdmin">
                 <i id="admin-icon" class="menu-icon" />
@@ -193,6 +193,11 @@ export default {
       const isCrowdstakingAdmin = this.projects?.indexOf(this.account?.address) !== -1
       const res = isCrowdloanAdmin || isCrowdstakingAdmin
       return res
+    },
+    address (){
+      if (this.$store.state.web3.account){
+        return this.formatUserAddress(this.$store.state.web3.account, false)
+      }
     },
     showMenu () {
       return this.screenWidth > 960

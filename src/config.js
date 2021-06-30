@@ -10,9 +10,9 @@ export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io"
 // export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.nutbox.io"
 export const ROCOCO_WEB_SOCKET = "wss://crowdloan-test.nutbox.io/relaychain/ws"
 
-export const CROWD_STAKING_API_URL = "https://api.crowdstaking.nutbox.io"
+export const CROWD_STAKING_API_URL = "https://crowdstaking-api.nutbox.io"
 // export const CROWD_STAKING_API_URL = "http://localhost:3200"
-export const CROWD_LOAN_API_URL = "https://api.crowdloan-test.nutbox.io"
+export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 export const PARA_STATUS = {
