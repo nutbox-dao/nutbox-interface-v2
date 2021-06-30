@@ -19,7 +19,7 @@
               specific address, also burn them from a specific address.
             </div>
           </div>
-          <DeployForm/>
+          <DeployForm :isMintable="activeTab===1"/>
         </div>
       </div>
     </div>

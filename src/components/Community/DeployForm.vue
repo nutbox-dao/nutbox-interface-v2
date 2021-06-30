@@ -28,29 +28,48 @@
       <b-form-group id="input-group-amount" label="Distribution Amount" label-for="input-amount">
         <b-form-input
           id="input-amount"
-          v-model="form.amount"
+          v-model="form.totalSupply"
           placeholder="Please enter"
           required
         ></b-form-input>
       </b-form-group>
-      <button class="primary-btn">Deploy</button>
+      <button class="primary-btn" @click="deploy">Deploy</button>
     </b-form>
   </div>
 </template>
 
 <script>
+import { deploySimpleERC20 } from '@/utils/web3/asset'
+
 export default {
   name: 'DeployForm',
+  props: {
+    isMintable: {
+      type: Boolean,
+      default: false
+    },
+  },
   data () {
     return {
       form: {
         name: '',
         symbol: '',
         decimal: '',
-        amount: ''
+        totalSupply: ''
       }
     }
-  }
+  },
+  methods: {
+    async deploy() {
+      if (this.isMintable){
+
+      }else{
+        console.log(1234);
+        const tokenAddress = await deploySimpleERC20(this.form)
+        console.log('address', tokenAddress);
+      }
+    }
+  },
 }
 
 </script>

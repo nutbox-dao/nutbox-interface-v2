@@ -51,7 +51,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   Executor: '',
   Bridge: 'Bridge.json',
   StakingFactory: 'StakingFactory.json',
-  ERC20: 'ERC20.json'
+  ERC20: 'ERC20.json',
+  SimpleERC20: 'SimpleERC20.json'
 }
 
 // Get contract Abi
@@ -60,7 +61,7 @@ export const getAbi = async function (contractName) {
     return store.state.web3.abis[contractName]
   }
   const res = await axios.get('/' + CONTRACT_ABI_FILE_NAME_LIST[contractName])
-  const abi = res.data.abi
+  const abi = res.data
   if (abi) {
     store.commit('web3/saveAbi', {
       name: contractName,
@@ -97,7 +98,7 @@ export const getContract = async function (contractName, address) {
   const abi = await getAbi(contractName)
   if (!provider || !abi) return;
   // construct contract
-  const contract = new ethers.Contract(contractAddress[contractName] || address, abi, provider)
+  const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
   // inject metamask
   return contract.connect(provider.getSigner())
 }

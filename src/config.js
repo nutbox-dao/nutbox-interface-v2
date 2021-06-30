@@ -10,9 +10,9 @@ export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io"
 // export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.nutbox.io"
 export const ROCOCO_WEB_SOCKET = "wss://crowdloan-test.nutbox.io/relaychain/ws"
 
-export const CROWD_STAKING_API_URL = "https://api.crowdstaking.nutbox.io"
+export const CROWD_STAKING_API_URL = "https://crowdstaking-api.nutbox.io"
 // export const CROWD_STAKING_API_URL = "http://localhost:3200"
-export const CROWD_LOAN_API_URL = "https://api.crowdloan-test.nutbox.io"
+export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 export const PARA_STATUS = {
@@ -49,3 +49,14 @@ export const PhalaCrowdloanReferrerRemark = {
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
+
+// Nutbox official registried assets IDs
+export const NUTBOX_REGISTRY_ASSETS = [
+  
+]
+
+// sended transaction configs
+export const Transaction_config = {
+  gasPrice: 50000000,
+  gasLimit: 1000000000
+}
