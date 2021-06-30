@@ -11,7 +11,27 @@
           Step1：Your community token contact address
         </div>
         <div class="form-card custom-form step-1">
-          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>
+          <Dropdown :menu-options="concatAddressOptions"
+                    :selected-key="selectedKey"
+                    :selected-item="selectedAddressData"
+                    @setSelectedData="setSelectedData">
+            <template v-slot:empty0>
+              <div class="text-center">
+                <div class="custom-control" style="line-height: 1.5rem">
+                  Havn’n deloyed yet？
+                  <router-link to="/community/deploy-token">Deploy one</router-link>
+                </div>
+              </div>
+            </template>
+            <template v-slot:drop-item="slotProps">
+              <img class="prefix-icon" :src="slotProps.item.logo" alt="">
+              <div class="flex-full d-flex flex-column">
+                <span>{{slotProps.item.name}}</span>
+                <span class="font12 text-grey-light">{{slotProps.item.address | formatUserAddress}}</span>
+              </div>
+            </template>
+          </Dropdown>
+<!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
               <div v-show="isMint">* This is a mintable token</div>
@@ -39,7 +59,8 @@
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Start block</span>
-            <b-input placeholder="输入起始区块高度" v-model="poolForm.start"></b-input>
+            <b-input placeholder="输入起始区块高度" :disabled="progressData.length>0"
+                     v-model="poolForm.start"></b-input>
           </div>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Stop block</span>
@@ -49,9 +70,10 @@
             <span class="font16 font-bold mr-3">Reward amount</span>
             <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
           </div>
-          <button class="primary-btn" @click="confirmAdd">Confirm Add</button>
+          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>2"
+                  @click="confirmAdd">Confirm Add</button>
         </div>
-        <button class="primary-btn">Deploy</button>
+        <button class="primary-btn" :disabled="progressData.length===0" @click="confirmDeploy">Deploy</button>
       </div>
     </div>
   </div>
@@ -59,11 +81,27 @@
 
 <script>
 import Progress from '@/components/Community/Progress'
+import Dropdown from '@/components/ToolsComponents/Dropdown'
+import { mapState } from 'vuex'
 export default {
   name: 'CreateEconomy',
-  components: { Progress },
+  components: { Progress, Dropdown },
   data () {
     return {
+      selectedKey: 'address',
+      selectedAddressData: {},
+      concatAddressOptions: [
+        {
+          categoryName: 'Personal',
+          items: []
+        },
+        {
+          categoryName: ' Official',
+          items: [
+            { name: 'BBB', address: '0xaaaaaaaaaaaaaaaa' }
+          ]
+        }
+      ],
       progressData: [],
       form: {
         contractAddr: '',
@@ -80,9 +118,24 @@ export default {
   computed: {
     isMint () {
       return true
+    },
+    ...mapState({
+      userDeployTokens: state => state.community.userDeployTokens
+    })
+  },
+  watch: {
+    userDeployTokens (val) {
+      this.concatAddressOptions[0].items = val
     }
   },
+  mounted () {
+    this.concatAddressOptions[0].items = this.userDeployTokens
+  },
   methods: {
+    setSelectedData (data) {
+      this.selectedAddressData = data
+      this.form.contractAddr = data.address
+    },
     confirmAdd () {
       const barData = {
         start: this.poolForm.start,
@@ -91,6 +144,15 @@ export default {
         percentage: Number(this.poolForm.end) - Number(this.poolForm.start)
       }
       this.progressData.push(barData)
+      if (this.progressData.length > 2) return
+      this.poolForm.start = barData.end
+      this.poolForm.end = ''
+      this.poolForm.reward = ''
+    },
+    confirmDeploy () {
+      this.form.poolData = this.progressData
+      this.$store.commit('community/setUserDeployEconomy', this.form)
+      this.$router.replace('/community/edit-community-info')
     }
   }
 }
@@ -109,7 +171,7 @@ export default {
   padding-left: 1rem;
 }
 .form-card {
-  @include card(.8rem 1.2rem 1rem);
+  @include card(.8rem 1.2rem 1rem, white, unset);
   margin-bottom: 1.2rem;
 }
 .step-1 {

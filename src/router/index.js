@@ -30,6 +30,7 @@ import AddPool from '@/views/Community/AddPool'
 import Register from '@/views/RegisterAsset/Register'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
+import EditCommunityInfo from "@/views/Community/EditCommunityInfo";
 
 Vue.use(VueRouter)
 
@@ -163,6 +164,10 @@ const routes = [
       {
         path: 'add-pool',
         component: AddPool
+      },
+      {
+        path: 'edit-community-info',
+        component: EditCommunityInfo
       }
     ]
   },

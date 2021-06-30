@@ -9,18 +9,19 @@ import polkadot from './polkadot'
 import kusama from './kusama'
 import rococo from './rococo'
 import web3 from './web3'
+import community from '@/store/community'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
+    lang: Cookie.get(LOCALE_KEY) || 'zh-CN'
   },
   mutations: {
     saveLang: (state, lang) => {
-      state.lang = lang;
+      state.lang = lang
       Cookie.set(LOCALE_KEY, lang, '30d')
-    },
+    }
   },
   getters: {
   },
@@ -29,5 +30,6 @@ export default new Vuex.Store({
     kusama,
     rococo,
     web3,
+    community
   }
 })
