@@ -13,9 +13,9 @@
         <div class="form-card custom-form step-1">
           <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
-            <b-form-checkbox v-model="form.isMint">
-              This is a mintable token
-            </b-form-checkbox>
+            <div class="text-grey">
+              <div v-show="isMint">* This is a mintable token</div>
+            </div>
             <div class="custom-control" style="line-height: 1.5rem">
               Havn’n deloyed yet？
               <router-link to="/community/deploy-token">Deploy one</router-link>
@@ -28,10 +28,10 @@
         <div class="form-card custom-form step-2">
           <div class="flex-between-center">
             <span>Token distribution era</span>
-            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">
-              <i class="add-icon"></i>
-              <span>Add Pool</span>
-            </button>
+<!--            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">-->
+<!--              <i class="add-icon"></i>-->
+<!--              <span>Add Pool</span>-->
+<!--            </button>-->
           </div>
           <Progress :min="progressData.length>0?progressData[0].start:0"
                     :is-edit="progressData.length>0"
@@ -75,6 +75,11 @@ export default {
         end: '3000',
         reward: '100'
       }
+    }
+  },
+  computed: {
+    isMint () {
+      return true
     }
   },
   methods: {
