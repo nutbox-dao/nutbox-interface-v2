@@ -6,8 +6,9 @@
         <div class="page-view-subtitle">Choose token type you want deploy</div>
       </div>
       <div class="col-md-8 btn-group">
-        <button  @click="$router.push('/community/pool-dashboard')">Manage Your Community</button>
-        <button @click="$router.push('/community/create-economy')">
+        <button v-if="userEconomy"
+                @click="$router.push('/community/pool-dashboard')">Manage Your Community</button>
+        <button v-else @click="$router.push('/community/create-economy')">
           <i class="add-icon"></i>
           <span>Create Your Own Staking Economy</span>
         </button>
@@ -31,9 +32,15 @@
 
 <script>
 import CommunityCard from '@/components/Community/CommunityCard'
+import { mapState } from 'vuex'
 export default {
   name: 'Community',
-  components: { CommunityCard }
+  components: { CommunityCard },
+  computed: {
+    ...mapState({
+      userEconomy: state => state.community.userEconomy
+    })
+  }
 }
 </script>
 

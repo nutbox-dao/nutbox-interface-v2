@@ -214,15 +214,12 @@
         font-size: .8rem;
         line-height: .8rem;
         border: 1px solid var(--primary-custom);
-      }
-      button:nth-child(1) {
-        background: white;
-      }
-      button:nth-child(2) {
         background: var(--primary-custom);
         display: flex;
-        justify-content: center;
         align-items: center;
+        &.outline-btn {
+          background: white;
+        }
       }
       .add-icon {
         @include icon;
