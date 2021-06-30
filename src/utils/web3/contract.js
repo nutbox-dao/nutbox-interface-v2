@@ -48,6 +48,7 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   Executor: '',
   Bridge: 'Bridge.json',
   StakingFactory: 'StakingFactory.json',
+  StakingTemplate: 'StakingTemplate.json',
   ERC20: 'ERC20.json',
   SimpleERC20: 'SimpleERC20.json'
 }

@@ -11,6 +11,7 @@ export const getMyStakingFactory = async () => {
         return id;
     }
     const account = store.state.web3.account
+    if (!account) return;
     const contract = await getContract('StakingFactory')
     let stakingFactoryId = null
     try{
@@ -21,4 +22,11 @@ export const getMyStakingFactory = async () => {
     console.log('community', stakingFactoryId);
     store.commit('web3/saveStakingFactoryId', stakingFactoryId)
     return stakingFactoryId
+}
+
+export const getMyOpenedPools = async () => {
+    const stakingFactoryId = await getMyStakingFactory()
+    if (!stakingFactoryId) return;
+    const contract = await getContract('StakingTemplate', stakingFactoryId)
+    const pools = await contract.openedPools()
 }
