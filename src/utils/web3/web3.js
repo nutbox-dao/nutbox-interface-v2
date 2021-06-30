@@ -22,6 +22,11 @@ import {
 import { getProvider } from './ethers'
 import  { contractAddress, erc20Address, multiAddress } from './contract'
 
+export const getWeb3 = () => {
+  const web3  = new Web3(Web3.givenProvider)
+  return web3
+}
+
 /**
  * Add bsc to metamask
  * @returns 
@@ -132,13 +137,13 @@ export const addAssetToWallet = async (address, symbol, decimals, image) => {
   }).catch(console.log)
 }
 
-
+import { getMyStakingFactory } from './community'
 
 export const test = async () => {
 
         console.log(1234, await getRegitryAssets().catch(console.log));
 
-
+        getMyStakingFactory()
   // const contract = await getContract('REGISTRYHUB', '0xF6149F38bEA7bB07a779AF30Ee1983566e5E1218')
   // if (!contract) return 
   // try{

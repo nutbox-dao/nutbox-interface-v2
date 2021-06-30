@@ -14,9 +14,6 @@ import {
   ethers
 } from 'ethers'
 import {
-  add
-} from 'lodash'
-import {
   getAccounts
 } from './account'
 

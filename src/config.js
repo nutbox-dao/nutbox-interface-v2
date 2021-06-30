@@ -15,6 +15,9 @@ export const CROWD_STAKING_API_URL = "https://crowdstaking-api.nutbox.io"
 export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
+// nutbox backend server
+export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+
 export const PARA_STATUS = {
   ACTIVE: "Active",
   RETIRED: "Retired",

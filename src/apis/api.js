@@ -1,13 +1,15 @@
 import {
   get,
-  post
+  post,
+  put
 } from './axios'
 import {
   CROWD_STAKING_API_URL,
-  CROWD_LOAN_API_URL
+  CROWD_LOAN_API_URL,
+  BACKEND_API_URL
 } from '../config'
 
-// crowdstaking
+// ============================================ crowdstaking ============================================ 
 /**
  * 获取所有的投票的卡片
  * @returns 
@@ -22,10 +24,10 @@ export const getCrowdstacking = async () => post(CROWD_STAKING_API_URL + '/crowd
 export const getNominationSummary = async (param) => post(CROWD_STAKING_API_URL + '/crowdstaking/find/nominations', param)
 
 
-// crowdloan
+// ============================================ crowdloan ============================================ 
 
 // 获取所有注册的社区信息
-export const getCommnunitys = async () => post(CROWD_LOAN_API_URL + '/community/all')
+export const getCommunitys = async () => post(CROWD_LOAN_API_URL + '/community/all')
 /**
  * 上传contribution数据
  * params：
@@ -67,3 +69,11 @@ export const getExportContributionInfo = async (params) => post(CROWD_LOAN_API_U
  * relaychain: 'rococo'
  */
 export const getDashboardSummary = async (params) => post(CROWD_LOAN_API_URL + '/crowdloan/summary', params)
+
+// ============================================ backend ============================================ 
+
+export const getAllCommunities = async () => get(BACKEND_API_URL + '/community/get')
+
+export const insertCommunity = async (params) => post(BACKEND_API_URL + '/community/insert', params)
+
+export const updateCommunity = async (params) => put(BACKEND_API_URL, 'community/update', params)

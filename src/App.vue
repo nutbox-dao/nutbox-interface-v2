@@ -146,7 +146,7 @@ import { LOCALE_KEY } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
 import { mapState, mapMutations } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
-import { getCommnunitys, getCrowdstacking } from '@/apis/api'
+import { getCommunitys, getCrowdstacking } from '@/apis/api'
 import {
   getBalance as getPolkadotBalance,
   loadAccounts as loadPolkadotAccounts
@@ -264,7 +264,7 @@ export default {
       subKusamaBonded()
       subBonded()
       subNominators()
-      this.getCommnunitys()
+      this.getCommunitys()
       this.getCrowdstacking()
     },
     showError (err) {
@@ -274,9 +274,9 @@ export default {
         variant: 'danger'
       })
     },
-    getCommnunitys () {
+    getCommunitys () {
       // 获取支持平行链项目的社区信息  -   kusama
-      getCommnunitys().then((res) => {
+      getCommunitys().then((res) => {
         const ccc = res.map((r) => stanfiAddress(r.communityId))
         this.saveClCommunitys(ccc)
         this.$store.commit('rococo/saveClCommunitys', ccc)
@@ -337,7 +337,7 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY))
-    this.getCommnunitys()
+    this.getCommunitys()
     this.getCrowdstacking()
   },
   async created () {
@@ -358,7 +358,7 @@ export default {
       this.$store.commit('polkadot/saveAccount', null)
     }
     // 获取众贷和验证者投票卡片
-    this.getCommnunitys()
+    this.getCommunitys()
     this.getCrowdstacking()
     // 初始化apis
     initApis()

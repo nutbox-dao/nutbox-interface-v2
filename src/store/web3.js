@@ -8,7 +8,8 @@ export default {
     account: Cookie.get('bsc-account'),
     allAccounts: [],
     abis: {},
-    chainId: -1
+    chainId: -1,
+    stakingFactoryId: null
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -26,6 +27,9 @@ export default {
     },
     saveChainId: (state, chainId) => {
       state.chainId = chainId
+    },
+    saveStakingFactoryId: (state, stakingFactoryId) => {
+      state.stakingFactoryId = stakingFactoryId
     }
   },
   getters: {
