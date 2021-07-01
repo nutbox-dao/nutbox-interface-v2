@@ -2,6 +2,9 @@ import { TIME_PERIOD, BLOCK_SECOND } from "@/constant"
 import {
   $t
 } from '@/i18n'
+import { QN_UPLOAD_URL } from "@/config"
+import axios from 'axios'
+import { reject } from "q"
 
 
 export const firstToUpper = function (str) {
@@ -112,4 +115,26 @@ export function formatCountdown(end, currentBlockNum) {
     console.error("err", e);
     return "Loading";
   }
+}
+
+/**
+ * 上传图片到七牛云，返回图片url
+ * @param {*} img 
+ * @returns 
+ */
+export const uploadImage = async (img) => {
+  return new Promise((resolve, reject) => {
+    let param = new FormData()
+    param.append('file', img)
+    const config = {
+      headers: {'Content-Type': 'multipart/form-data'}
+    }
+    axios.post(QN_UPLOAD_URL, param, config)
+      .then((res) => {
+        resolve(res?.data?.url)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }

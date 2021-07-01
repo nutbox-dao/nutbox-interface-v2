@@ -24,6 +24,10 @@ export const getMyStakingFactory = async () => {
     return stakingFactoryId
 }
 
+/**
+ * Get opened pools of community
+ * @returns 
+ */
 export const getMyOpenedPools = async () => {
     const stakingFactoryId = await getMyStakingFactory()
     if (!stakingFactoryId) return;

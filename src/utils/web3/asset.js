@@ -55,18 +55,19 @@ export const registryHomeChainAsset = async (assetAddress) => {
 }
 
 /**
- * Depoly unmintable ERC20 token
+ * Depoly ERC20 token
  * @param {*} param0
+ * @param {Bool} isMintalbel  
  * @returns
  */
-export const deploySimpleERC20 = async ({
+export const deployERC20 = async ({
   name,
   symbol,
   decimal,
   totalSupply
-}) => {
+}, isMintalbel) => {
   try {
-    const abi = await getAbi('SimpleERC20')
+    const abi = await getAbi(isMintalbel ? 'MintableERC20' : "SimpleERC20")
     const eth = await getProvider()
     const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
     const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
@@ -74,34 +75,7 @@ export const deploySimpleERC20 = async ({
     await contract.deployed()
     return contract.address
   } catch (e) {
-    console.log(`Deploy unmintable token ${name} failed`, e)
-    // return null
-    // 随机测试数据
-    return utils.namehash(name)
+    console.log(`Deploy mintable token ${name} failed`, e);
+    return null
   }
 }
-
-/**
- * Depoly mintable ERC20 token
- * @param {*} param0
- * @returns
- */
- export const deployMintableERC20 = async ({
-    name,
-    symbol,
-    decimal,
-    totalSupply
-  }) => {
-    try {
-      const abi = await getAbi('MintableERC20')
-      const eth = await getProvider()
-      const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
-      const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
-        Transaction_config)
-      await contract.deployed()
-      return contract.address
-    } catch (e) {
-      console.log(`Deploy mintable token ${name} failed`, e);
-      return null
-    }
-  }

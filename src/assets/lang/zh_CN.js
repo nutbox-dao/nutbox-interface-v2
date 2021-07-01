@@ -242,7 +242,9 @@ module.exports = {
     comingSoon: '敬请期待',
     clipboard:"剪贴板",
     copyAddress:"已复制地址:  {address}",
-    signing: "签名中"
+    signing: "签名中",
+    picUploadFail: "图片上传失败，请重试",
+    uploadLogo: "请添加logo"
   },
   vote: {
     upvote: "点赞",

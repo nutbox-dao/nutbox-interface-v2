@@ -1,28 +1,44 @@
 <template>
   <div>
     <b-form class="custom-form c-form-label">
-      <b-form-group id="input-group-name" label="Token Name" label-for="input-name">
+      <b-form-group
+        id="input-group-name"
+        label="Token Name"
+        label-for="input-name"
+      >
         <b-form-input
           id="input-name"
           v-model="form.name"
           placeholder="Please enter"
         ></b-form-input>
       </b-form-group>
-      <b-form-group id="input-group-symbol" label="Token Symbol" label-for="input-symbol">
+      <b-form-group
+        id="input-group-symbol"
+        label="Token Symbol"
+        label-for="input-symbol"
+      >
         <b-form-input
           id="input-symbol"
           v-model="form.symbol"
           placeholder="Please enter"
         ></b-form-input>
       </b-form-group>
-      <b-form-group id="input-group-decimal" label="Token Decimal" label-for="input-decimal">
+      <b-form-group
+        id="input-group-decimal"
+        label="Token Decimal"
+        label-for="input-decimal"
+      >
         <b-form-input
           id="input-decimal"
           v-model="form.decimal"
           placeholder="Please enter"
         ></b-form-input>
       </b-form-group>
-      <b-form-group id="input-group-amount" label="Distribution Amount" label-for="input-amount">
+      <b-form-group
+        id="input-group-amount"
+        label="Distribution Amount"
+        label-for="input-amount"
+      >
         <b-form-input
           id="input-amount"
           v-model="form.totalSupply"
@@ -30,26 +46,32 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group label="Logo" label-for="logo">
-        <b-form-file id="logo" v-model="logo"
-                     @input="updateFile"
-                     ref="logo-file-input" ></b-form-file>
+        <b-form-file
+          id="logo"
+          v-model="logo"
+          @input="updateFile"
+          accept="image/png,image/jpeg"
+          ref="logo-file-input"
+        ></b-form-file>
       </b-form-group>
       <button class="primary-btn" :disabled="!deployBtnStatus" @click="deploy">
         Deploy
       </button>
     </b-form>
-    <b-modal v-model="modalVisible"
-             modal-class="custom-modal"
-             centered
-             hide-header
-             hide-footer
-             no-close-on-backdrop>
+    <b-modal
+      v-model="modalVisible"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
       <div class="tip-modal">
         <img
           class="close-btn"
           src="~@/static/images/close.svg"
           alt=""
-          @click="modalVisible=false"
+          @click="modalVisible = false"
         />
         <div class="c-modal-header text-center">
           <div class="font20 font-bold">已部署资产成功</div>
@@ -59,98 +81,168 @@
         <div class="info-box">
           <div class="row-info">
             <span class="label">Token Name</span>
-            <span class="info">{{form.name}}</span>
+            <span class="info">{{ form.name }}</span>
           </div>
           <div class="row-info">
             <span class="label">Token Symbol</span>
-            <span class="info">{{form.symbol}}</span>
+            <span class="info">{{ form.symbol }}</span>
           </div>
           <div class="row-info">
             <span class="label">Token Decimal</span>
-            <span class="info">{{form.decimal}}</span>
+            <span class="info">{{ form.decimal }}</span>
           </div>
           <div class="row-info">
             <span class="label">Distribution Amount</span>
-            <span class="info">{{form.totalSupply}}</span>
+            <span class="info">{{ form.totalSupply }}</span>
           </div>
           <div class="row-info">
             <span class="label">Logo</span>
-            <span class="info"><img class="logo" src="" alt=""></span>
+            <span class="info"><img class="logo" src="" alt="" /></span>
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
               <span class="label">合约地址</span>
-              <button class="font14 copy-btn" id="copy-addr"
-                      :data-clipboard-text="tokenAddress"
-                      @click="copyAddress">复制</button>
+              <button
+                class="font14 copy-btn"
+                id="copy-addr"
+                :data-clipboard-text="tokenAddress"
+                @click="copyAddress"
+              >
+                复制
+              </button>
             </div>
             <div class="address copy-value">
-             {{tokenAddress}}
+              {{ tokenAddress }}
             </div>
           </div>
         </div>
 
-        <button class="primary-btn mt-4" @click="confirmRegister">
-          完成
-        </button>
+        <button class="primary-btn mt-4" @click="confirmRegister">完成</button>
       </div>
     </b-modal>
   </div>
 </template>
 
 <script>
-import { deploySimpleERC20 } from '@/utils/web3/asset'
-import Clipboard from 'clipboard'
+import { deployERC20 } from "@/utils/web3/asset";
+import Clipboard from "clipboard";
+import { uploadImage } from "@/utils/helper";
+import { insertToken } from "@/apis/api";
 
 export default {
-  name: 'DeployForm',
+  name: "DeployForm",
   props: {
     isMintable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       form: {
-        name: '',
-        symbol: '',
-        decimal: '',
-        totalSupply: ''
+        name: "",
+        symbol: "",
+        decimal: "",
+        totalSupply: "",
       },
       logo: null,
       modalVisible: false,
-      tokenAddress: ''
-    }
+      tokenAddress: "",
+      logoUrl: null,
+    };
   },
   computed: {
-    deployBtnStatus () {
-      return this.form.name && this.form.symbol && this.form.decimal && this.form.totalSupply
-    }
+    deployBtnStatus() {
+      return (
+        this.form.name &&
+        this.form.symbol &&
+        this.form.decimal &&
+        this.form.totalSupply
+      );
+    },
   },
   methods: {
-    async deploy () {
-      if (this.isMintable) {
+    async deploy() {
+      if (!this.logoUrl || this.logoUrl.length === 0) {
+        this.$bvToast.toast(this.$t("tip.uploadLogo"), {
+          title: this.$t("tip.tips"),
+          autoHideDelay: 5000,
+          variant: "warning",
+        });
+        return;
+      }
 
-      } else {
-        this.tokenAddress = await deploySimpleERC20(this.form)
-        console.log('address', this.tokenAddress)
-        this.modalVisible = true
+      this.tokenAddress = await deployERC20(this.form, this.isMintable);
+      console.log("address", this.tokenAddress);
+      const token = {
+        ...this.form,
+        address: this.tokenAddress,
+        icon: this.logoUrl,
+      };
+      await insertToken(token);
+      this.modalVisible = true;
+    },
+
+    async updateFile() {
+      if(!this.logo) return;
+      try {
+        this.logoUrl = await uploadImage(this.logo);
+      } catch (e) {
+        this.$bvToast.toast(this.$t("tip.picUploadFail"), {
+          title: this.$t("tip.tips"),
+          autoHideDelay: 5000,
+          variant: "warning",
+        });
+        this.logo = null
+        this.logoUrl = null
       }
     },
-    updateFile () {
+    formatUserAddress(address, long = true) {
+      if (!address) return "Loading Account";
+      if (long) {
+        if (address.length < 16) return address;
+        const start = address.slice(0, 28);
+        const end = address.slice(-5);
+        return `${start}...`;
+      } else {
+        const start = address.slice(0, 6);
+        const end = address.slice(-6);
+        return `${start}...${end}`;
+      }
     },
-    copyAddress () {
 
+    copyAddress() {
+      var clipboard = new Clipboard("#copy-addr");
+      clipboard.on("success", (e) => {
+        clipboard.destroy();
+        this.$bvToast.toast(
+          this.$t("tip.copyAddress", {
+            address: this.formatUserAddress(this.tokenAddress),
+          }),
+          {
+            title: this.$t("tip.clipboard"),
+            autoHideDelay: 5000,
+            variant: "info", // info success danger
+          }
+        );
+      });
+      clipboard.on("error", (e) => {
+        console.log(e);
+        clipboard.destroy;
+      });
     },
-    confirmRegister () {
-      this.$store.commit('community/setUserDeployToken',
-        Object.assign(this.form, { logo: this.logo, address: this.tokenAddress }))
-      this.$router.push('/community/create-economy')
-    }
-  }
-}
-
+    confirmRegister() {
+      this.$store.commit(
+        "community/setUserDeployToken",
+        Object.assign(this.form, {
+          logo: this.logo,
+          address: this.tokenAddress,
+        })
+      );
+      this.$router.push("/community/create-economy");
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -161,14 +253,14 @@ export default {
 }
 .row-info {
   @include c-flex-between-center;
-  padding: .8rem 0;
+  padding: 0.8rem 0;
   font-weight: bolder;
   .label {
-    flex: .4;
+    flex: 0.4;
     color: #717376;
   }
   .info {
-    flex: .6;
+    flex: 0.6;
   }
   .logo {
     width: 3rem;
@@ -180,20 +272,19 @@ export default {
   .label {
     color: #717376;
     margin-bottom: 0;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
   .copy-btn {
     background-color: var(--primary-custom);
-    padding: .25rem .8rem;
+    padding: 0.25rem 0.8rem;
     border-radius: 1.4rem;
     border: transparent;
   }
   .address {
-    padding: .8rem 1rem;
-    border-radius: .8rem;
-    background-color: #F6F7F9;
+    padding: 0.8rem 1rem;
+    border-radius: 0.8rem;
+    background-color: #f6f7f9;
     word-break: break-all;
   }
 }
-
 </style>
