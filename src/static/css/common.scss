@@ -328,23 +328,14 @@ input::-webkit-input-placeholder {
   border-radius: 50%!important;
   background-color: #F6F7F9!important;
   border: 1px solid #E3E5E8!important;
+  padding: 0!important;
 }
 .custom-file-label::after{
   content: ''!important;
-  @include icon(1.6rem, 1.6rem);
-  background-image: url("~@/static/images/add.svg");
-  background-color: transparent!important;
-  border: none!important;
-  top: 50%!important;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 0!important;
 }
 .form-file-text {
   position: absolute;
-  bottom: .6rem;
   left: 50%;
   transform: translateX(-50%);
-  &.d-block {
-    display: none!important;
-  }
 }

@@ -13,8 +13,8 @@ const getUserEconomy = () => {
 export default {
   namespaced: true,
   state: {
-    userDeployTokens: getUserDeployTokens(),
-    userEconomy: getUserEconomy()
+    userDeployTokens: [],
+    userEconomy: null
   },
   mutations: {
     setUserDeployToken (state, data) {
