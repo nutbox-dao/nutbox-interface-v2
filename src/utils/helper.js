@@ -119,8 +119,8 @@ export function formatCountdown(end, currentBlockNum) {
 
 /**
  * 上传图片到七牛云，返回图片url
- * @param {*} img 
- * @returns 
+ * @param {*} img
+ * @returns
  */
 export const uploadImage = async (img) => {
   return new Promise((resolve, reject) => {

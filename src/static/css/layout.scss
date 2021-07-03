@@ -16,25 +16,6 @@
     width: 1.8rem;
     height: 1.8rem;
   }
-  .account-dropdown .dropdown-menu {
-    border-radius: 1.2rem;
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.1);
-    border: none;
-    margin-top: 0.5rem;
-    min-width: 15rem;
-    padding: 0.8rem;
-    .dropdown-item {
-      padding: 0.2rem 0.5rem;
-    }
-    .account-info {
-      flex: 1;
-      font-size: 0.7rem;
-      margin-left: .3rem;
-    }
-    .dropdown-item:hover {
-      background: transparent;
-    }
-  }
 }
 #sidebar-menu {
   bottom: 0;
@@ -174,23 +155,27 @@
       padding-bottom: 2rem;
     }
   }
-  .nav {
-    display: inline-flex;
+  .nav-box {
+    border-bottom: 1px solid #E2E7EF;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    margin: 1.5rem auto;
-    height: 1.6rem;
-    border-radius: 1.6rem;
-    background-color: #E3E5E8;
+    margin: 1.5rem 0;
+  }
+  .nav {
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
     a {
       border: 0;
+      height: 2rem;
       font-size: .8rem;
+      line-height: 2rem;
       color: #666;
       box-sizing: border-box;
       font-weight: 600;
-      line-height: 1.6rem;
       padding: 0 1rem;
-      border-radius: 1.6rem;
     }
     a:hover {
       text-decoration: none;
@@ -198,7 +183,7 @@
     }
     .active {
       color: var(--primary-text);
-      background-color: var(--primary-custom);
+      @include single-color-bg(3rem .2rem, center bottom)
     }
   }
   .view-top-header {

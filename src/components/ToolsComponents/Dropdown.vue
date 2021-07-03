@@ -1,7 +1,7 @@
 <template>
-  <b-dropdown class="c-dropdown">
+  <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
     <template #button-content>
-      <div class="flex-between-center">
+      <div class="c-dropdown-btn flex-between-center">
         <span>{{selectedItem[selectedKey]}}</span>
         <i class="dropdown-icon ml-3"></i>
       </div>
@@ -61,7 +61,13 @@ export default {
 <style scoped lang="scss">
 .c-dropdown {
   width: 100%;
+  background-color: #F6F7F9;
+  border-radius: .8rem;
+}
+.c-dropdown-btn {
   height: 2.4rem;
+  border-radius: .8rem;
+  background-color: #F6F7F9;
   .btn img {
     width: 1.2rem;
     height: 1.2rem;

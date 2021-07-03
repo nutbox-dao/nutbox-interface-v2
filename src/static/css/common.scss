@@ -278,54 +278,9 @@ input::-webkit-input-placeholder {
 #mint-checkbox .custom-control-label::after{
   border-radius: 1rem;
 }
-.c-dropdown {
-  //overflow-x: hidden;
-}
-.c-dropdown .dropdown-toggle {
-  width: 100%;
-  background: #F6F7F9;
-  border-color: transparent;
-  border-radius: .8rem;
-  line-height: .8rem;
-  span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  &::after {
-    display: none;
-  }
-}
-.c-dropdown .btn-secondary:focus, .btn-secondary.focus {
-  background: #F6F7F9!important;
-  border-color: transparent!important;
-}
-.c-dropdown.show > .dropdown-toggle {
-  background-color: #F6F7F9!important;
-  border-color: transparent!important;
-}
-.c-dropdown .dropdown-menu {
-  width: 100%;
-  max-height: 16rem;
-  overflow: scroll;
-  border-radius: .8rem;
-  border-color: transparent;
-  @include coin-shadow;
-}
-.c-dropdown .dropdown-header {
-  font-weight: bolder;
-  color: #242629;
-}
-.c-dropdown .dropdown-item .prefix-icon {
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-right: .8rem;
-}
-
 .custom-file-input, .custom-file-label {
   width: 100%!important;
   height: 100%!important;
-  border-radius: 50%!important;
   background-color: #F6F7F9!important;
   border: 1px solid #E3E5E8!important;
   padding: 0!important;
@@ -335,7 +290,23 @@ input::-webkit-input-placeholder {
   padding: 0!important;
 }
 .form-file-text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
 }
+.logo-form .custom-file {
+  width: 6rem;
+  height: 6rem;
+}
+.logo-form .custom-file-input, .logo-form .custom-file-label {
+  border-radius: 50%;
+}
+
+.cover-form .custom-file {
+  width: 100%;
+  height: 6rem;
+}
+
+.cover-form .custom-file-input, .cover-form .custom-file-label {
+  border-radius: .8rem;
+}
+@import "dropdown";

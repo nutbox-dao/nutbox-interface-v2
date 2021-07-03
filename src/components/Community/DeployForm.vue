@@ -45,7 +45,7 @@
           placeholder="Please enter"
         ></b-form-input>
       </b-form-group>
-      <b-form-group label="Logo" label-for="logo">
+      <b-form-group label="Logo" label-for="logo" class="logo-form">
         <b-form-file
           id="logo"
           v-model="logo"
@@ -54,12 +54,12 @@
           ref="logo-file-input"
         >
           <template #placeholder>
-            <div class="input-file-img">
+            <div class="input-file-logo">
               <img class="add-icon" src="~@/static/images/add.svg" alt="">
             </div>
           </template>
           <template #file-name>
-            <div class="input-file-img">
+            <div class="input-file-logo">
               <img class="logo-preview" v-if="logoUrl" :src="logoUrl" alt="">
             </div>
           </template>
@@ -160,7 +160,6 @@ export default {
       modalVisible: false,
       tokenAddress: '',
       logoUrl: null
-      // logoUrl: 'https://cdn.wherein.mobi/nutbox/v2/1625238444577.png'
     }
   },
   computed: {
@@ -240,7 +239,7 @@ export default {
       })
       clipboard.on('error', (e) => {
         console.log(e)
-        clipboard.destroy
+        clipboard.destroy()
       })
     },
     confirmRegister () {
@@ -262,22 +261,6 @@ export default {
 .custom-file {
   height: 6rem;
   width: 6rem;
-}
-.input-file-img {
-  width: 6rem;
-  height: 6rem;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .logo-preview {
-    width: 100%;
-    height: 100%;
-  }
-  .add-icon {
-    width: 1.2rem;
-    height: 1.2rem;
-  }
 }
 .row-info {
   @include c-flex-between-center;
