@@ -18,8 +18,8 @@
             <template v-slot:empty0>
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
-                  Havn’n deloyed yet？
-                  <router-link to="/community/deploy-token">Deploy one</router-link>
+                  Havn’t Registry yet？
+                  <router-link to="/community/register">Registry one</router-link>
                 </div>
               </div>
             </template>
@@ -37,8 +37,8 @@
               <div v-show="isMint">* This is a mintable token</div>
             </div>
             <div class="custom-control" style="line-height: 1.5rem">
-              Havn’n deloyed yet？
-              <router-link to="/community/deploy-token">Deploy one</router-link>
+              Havn’t Registry yet？
+              <router-link to="/community/register">Registry one</router-link>
             </div>
           </div>
         </div>

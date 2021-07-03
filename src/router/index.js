@@ -177,23 +177,24 @@ const routes = [
       {
         path: 'community-info',
         component: CommunityInfo
+      },
+      {
+        path: 'register',
+        component: Register,
+        children: [
+          {
+            path: '',
+            component: NativeAsset
+          },
+          {
+            path: 'cross-chain-asset',
+            component: CrossChainAsset
+          }
+        ]
       }
     ]
   },
-  {
-    path: '/register',
-    component: Register,
-    children: [
-      {
-        path: '',
-        component: NativeAsset
-      },
-      {
-        path: 'cross-chain-asset',
-        component: CrossChainAsset
-      }
-    ]
-  }
+
 ]
 
 const router = new VueRouter({

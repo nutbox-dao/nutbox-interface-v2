@@ -1,39 +1,57 @@
 <template>
   <div class="tab-card">
-    <b-form class="custom-form text-left">
-      <b-form-group id="input-group-1" label="Home Location" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          v-model="form.location"
-          placeholder="Your token contract address"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <button class="primary-btn">Register</button>
-    </b-form>
+    <div class="tabs tabs-3 font16">
+      <span v-for="item of tabOptions" :key="item.id"
+            :class="activeTab===item.id?'active':''"
+            @click="activeTab=item.id">{{item.name}}</span>
+    </div>
+    <div class="h-line"></div>
+    <div class="text-left form-box">
+      <component :is="tabOptions[activeTab]['cName']"></component>
+    </div>
   </div>
 </template>
 
 <script>
+import DelegationForm from '@/components/RegisterAsset/DelegationForm'
+import ContributionForm from '@/components/RegisterAsset/ContributionForm'
+import NominationForm from '@/components/RegisterAsset/NominationForm'
 export default {
-  name: 'CrossChainAsset',
+  name: 'NativeAsset',
+  components: { DelegationForm, ContributionForm, NominationForm },
   data () {
     return {
-      form: {
-        location: ''
-      }
+      activeTab: 0,
+      tabOptions: [
+        { name: 'Bingding STEEM/HIVE SP Delegation', id: 0, cName: 'DelegationForm' },
+        { name: 'Binding Polkadot Crowdloan Contribution', id: 1, cName: 'ContributionForm' },
+        { name: 'Binding Polkadot Validator Nomination', id: 2, cName: 'NominationForm' }
+      ]
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-@import "src/static/css/form";
+@import "src/static/css/card/tab-card";
 .tab-card {
-  @include card(2.4rem 1.2rem, white, hidden, auto);
-  max-width: 500px;
   min-height: 27rem;
-  margin: auto;
+  .tabs {
+    padding-top: 1.2rem;
+    span {
+      padding-top: .3rem;
+      padding-bottom: .3rem;
+    }
+  }
 }
-
+.tab-card .tabs span {
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+}
+@media (max-width: 960px) {
+  .tab-card .tabs span{
+    padding-left: .2rem;
+    padding-right: .2rem;
+  }
+}
 </style>

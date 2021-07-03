@@ -1,8 +1,13 @@
 <template>
   <div class="page-view-content">
-    <div class="page-view-title">Deploy Your Own Token</div>
+      <div class="view-top-header mb-4">
+      <div class="page-back-text-icon page-view-title" @click="$router.back()">
+        Deploy Your Own Token
+      </div>
+    </div>
+    <!-- <div class="page-view-title">Deploy Your Own Token</div>
     <div class="page-view-subtitle">Choose token type you want deploy</div>
-    <div class="page-back-text-icon font20 mt-4" @click="$router.back()">commuity</div>
+    <div class="page-back-text-icon font20 mt-4" @click="$router.back()">commuity</div> -->
     <div class="scroll-content">
       <div class="tab-card">
         <div class="tabs tabs-2 font16">
