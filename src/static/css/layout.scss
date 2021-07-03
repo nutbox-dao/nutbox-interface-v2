@@ -163,10 +163,10 @@
     margin: 1.5rem 0;
   }
   .nav {
-    flex: 1;
     display: flex;
     flex-wrap: nowrap;
-    overflow: scroll;
+    overflow-y: hidden;
+    overflow-x: scroll;
     a {
       border: 0;
       height: 2rem;

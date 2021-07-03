@@ -3,7 +3,7 @@
     <div class="page-view-title">{{ this.$t("wallet.wallet") }}</div>
     <div class="page-view-subtitle">Choose asset type</div>
     <div class="nav-box">
-      <div class="nav">
+      <div class="nav mr-5">
         <router-link to="/wallet/polkadot" exact>Polkadot</router-link>
         <router-link to="/wallet/kusama">Kusama</router-link>
         <router-link to="/wallet/steem">Steem</router-link>
