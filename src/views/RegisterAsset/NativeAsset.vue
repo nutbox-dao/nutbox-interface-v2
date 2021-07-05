@@ -22,12 +22,14 @@
           </div>
         </div>
       </b-form-group>
-      <button class="primary-btn">Register</button>
+      <button class="primary-btn" @click="registry">Register</button>
     </b-form>
   </div>
 </template>
 
 <script>
+import { registryHomeChainAsset } from '@/utils/web3/asset'
+
 export default {
   name: "CrossChainAsset",
   data() {
@@ -36,6 +38,12 @@ export default {
         location: "",
       },
     };
+  },
+  methods: {
+    async registry() {
+      // validate token
+      const res = await registryHomeChainAsset(this.form.location)
+    }
   },
 };
 </script>

@@ -50,7 +50,8 @@ export const getERC20Info = async (address) => {
 export const registryHomeChainAsset = async (assetAddress) => {
   const contract = await getContract('HomeChainAssetRegistry');
   await contract.registerAsset(
-    '0x', assetAddress, '0x', {}
+    '0x', assetAddress, '0x',
+    Transaction_config
   )
 }
 
