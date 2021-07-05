@@ -1,6 +1,7 @@
 import {
   getContract,
-  getAbi
+  getAbi,
+  contractAddress
 } from "./contract";
 import store from '@/store'
 import {
@@ -15,32 +16,97 @@ import {
   Transaction_config
 } from '@/config'
 
+/**
+ * Judge asset wheather Homechain assets
+ * @param {String} address regitsry contract address address 
+ */
+const isHomeChainAsset = (address) => {
+  return address === contractAddress['HomeChainAssetRegistry']
+}
+/**
+ * Judge asset wheather SteemHive assets
+ * @param {String} address regitsry contract address address 
+ */
+const isSteemHiveAsset = (address) => {
+  return address === contractAddress['SteemHiveDelegateAssetRegistry']
+}
+/**
+ * Judge asset wheather Crowdloan assets
+ * @param {String} address regitsry contract address address 
+ */
+const isCrowdloanAsset = (address) => {
+  return address === contractAddress['SubstrateCrowdloanAssetRegistry']
+}
+/**
+ * Judge asset wheather Nominate assets
+ * @param {String} address regitsry contract address address 
+ */
+const isNominateAsset = (address) => {
+  return address === contractAddress['SubstrateNominateAssetRegistry']
+}
+/**
+ * 获取资产类型
+ * @param {*} address 
+ * @returns 
+ */
+const assetType = (address) => {
+  for (let contract in contractAddress){
+    if (contractAddress[contract].toLowerCase() === address.toLowerCase()){
+      return contract
+    }
+  }
+}
+
+/**
+ * Get regisryAssets of user
+ * Restore these infos to cache
+ * @returns assets list contains detail infos
+ */
 export const getRegitryAssets = async () => {
   const account = store.state.web3.account
   const contract = await getContract('RegistryHub');
   if (!contract) return;
   const assetCount = await contract.registryCounter(account);
   let assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
-  const isTrustless = await Promise.all(assets.map(asset => contract.isTrustless(asset)))
+  const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
   assets = assets.map((asset, index) => ({
     asset,
-    isTrustless: isTrustless[index]
+    contract: registryContract[index],
+    type: assetType(registryContract[index])
   }));
-  const homechainasset = assets.filter(a => !a.isTrustless)[0].asset
-  const homechaintokenaddress = await contract.getHomeLocation(homechainasset)
-  console.log(await getERC20Info(homechaintokenaddress));
-
+  console.log(6, assets);
+  const metadatas = await Promise.all(assets.map(asset => getForeignChainMetadata(asset.asset, asset.type)))
+  
+  assets = assets.map((asset, index) => ({
+    ...asset,
+    metadata: metadatas[index]
+  }))
   return assets
 }
-// "0xa4cdab0282b3b084c1cf26eb76a7bf0d56101b9b4332d63d5b964ee507e7d2c3"
 
-// get ERC20 info from chain.
+/**
+ * get foreignchain asset meta data
+ * @param {String} id asset id 
+ * @param {String} assetType asset contract address
+ */
+export const getForeignChainMetadata = async (id, assetType) => {
+  const contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
+  if (!contract) return;
+  if (assetType === 'HomeChainAssetRegistry'){
+    const homeLocation = await contract.getHomeLocation(id)
+    return await getERC20Info(homeLocation)
+  }
+  const meta = await contract.idToMetadata(id)
+  return meta
+}
+
+// get ERC20 info from home chain.
 // TODO:  Change to get info from our server
 export const getERC20Info = async (address) => {
   const contract = await getContract('ERC20', address);
   if (!contract) return;
-  const infos = await Promise.all([contract.name(), contract.symbol()])
-  return infos;
+  let infos = await Promise.all([contract.name(), contract.symbol()])
+  return {name: infos[0], symbol: infos[1], address}
 }
 
 /**
