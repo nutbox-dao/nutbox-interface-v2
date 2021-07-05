@@ -65,7 +65,8 @@
           </template>
         </b-form-file>
       </b-form-group>
-      <button class="primary-btn" :disabled="!deployBtnStatus" @click="deploy">
+      <button class="primary-btn" :disabled="(!deployBtnStatus) || deploying" @click="deploy">
+        <b-spinner small type="grow" v-show="deploying" />
         Deploy
       </button>
     </b-form>
@@ -108,16 +109,16 @@
           </div>
           <div class="row-info">
             <span class="label">Logo</span>
-            <span class="info"><img class="logo" src="" alt="" /></span>
+            <span class="info"><img class="logo" :src="logoUrl" alt="" /></span>
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
               <span class="label">合约地址</span>
               <button
                 class="font14 copy-btn"
-                id="copy-addr"
+                id='copy'
                 :data-clipboard-text="tokenAddress"
-                @click="copyAddress"
+                @click="copyAddress()"
               >
                 复制
               </button>
@@ -154,12 +155,13 @@ export default {
         name: '',
         symbol: '',
         decimal: '',
-        totalSupply: ''
+        totalSupply: '',
       },
       logo: null,
       modalVisible: false,
       tokenAddress: '',
-      logoUrl: null
+      logoUrl: null,
+      deploying: false
     }
   },
   computed: {
@@ -183,15 +185,26 @@ export default {
         return
       }
 
-      this.tokenAddress = await deployERC20(this.form, this.isMintable)
-      console.log('address', this.tokenAddress)
-      const token = {
-        ...this.form,
-        address: this.tokenAddress,
-        icon: this.logoUrl
+      this.deploying = true
+      try{
+        this.tokenAddress = await deployERC20(this.form, this.isMintable)
+        console.log('address', this.tokenAddress)
+        const token = {
+          ...this.form,
+          address: this.tokenAddress,
+          icon: this.logoUrl
+        }
+        await insertToken(token)
+      }catch (e) {
+        this.$bvToast.toast(this.$t('tip.deloyTokenFail'), {
+          title: this.$t('tip.error'),
+          variant: 'err'
+        })
+      }finally{
+        this.modalVisible = true
+        this.deploying = false
       }
-      await insertToken(token)
-      this.modalVisible = true
+      
     },
 
     async updateFile () {
@@ -223,7 +236,7 @@ export default {
     },
 
     copyAddress () {
-      var clipboard = new Clipboard('#copy-addr')
+      var clipboard = new Clipboard('#copy')
       clipboard.on('success', (e) => {
         clipboard.destroy()
         this.$bvToast.toast(

@@ -244,7 +244,8 @@ module.exports = {
     copyAddress:"已复制地址:  {address}",
     signing: "签名中",
     picUploadFail: "图片上传失败，请重试",
-    uploadLogo: "请添加logo"
+    uploadLogo: "请添加logo",
+    deloyTokenFail:"部署资产失败，请重试"
   },
   vote: {
     upvote: "点赞",
