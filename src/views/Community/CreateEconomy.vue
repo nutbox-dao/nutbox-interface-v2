@@ -152,7 +152,7 @@ export default {
     confirmDeploy () {
       this.form.poolData = this.progressData
       this.$store.commit('community/setUserDeployEconomy', this.form)
-      this.$router.replace('/community/edit-community-info')
+      this.$router.replace('/community/community-info?type=edit')
     }
   }
 }

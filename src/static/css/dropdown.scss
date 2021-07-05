@@ -1,0 +1,60 @@
+.c-dropdown .dropdown-toggle {
+  width: 100%;
+  padding: 0!important;
+  background-color: transparent;
+  border: none;
+  border-radius: .8rem;
+  &::after {
+    display: none;
+  }
+}
+.c-dropdown .dropdown-toggle:focus, .dropdown-toggle.focus, .dropdown-toggle:hover {
+  background: #F6F7F9!important;
+  border-color: transparent!important;
+}
+.c-dropdown.show > .dropdown-toggle {
+  background-color: #F6F7F9!important;
+  border-color: transparent!important;
+}
+.c-dropdown .dropdown-menu {
+  max-height: 16rem;
+  overflow: scroll;
+  border-radius: .8rem;
+  border-color: transparent;
+  @include coin-shadow;
+}
+.c-dropdown .dropdown-header {
+  font-weight: bolder;
+  color: #242629;
+}
+.c-dropdown .dropdown-item .prefix-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: .8rem;
+}
+.c-dropdown-btn {
+  padding: 0 1rem;
+  span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #242629;
+  }
+  .dropdown-icon {
+    @include icon(.6rem, .6rem);
+    background-image: url("~@/static/images/dropdown-icon.svg");
+  }
+  .selected-icon {
+    @include icon(1.4rem, 1.4rem);
+    background-image: url("~@/static/images/selected.png");
+  }
+}
+.full-dropdown-menu {
+  width: 100%;
+}
+.account-dropdown-btn {
+  @extend .c-dropdown-btn;
+  background: white;
+  border-radius: .8rem;
+  height: 2rem;
+}

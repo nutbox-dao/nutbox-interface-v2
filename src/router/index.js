@@ -10,6 +10,7 @@ import RococoCrowdloan from '../views/Crowdloan/Rococo'
 import Wallet from '../views/Wallet/Wallet'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
+import SteemWallet from '../views/Wallet/Steem'
 import RococoWallet from '../views/Wallet/Rococo'
 import Admin from '../views/Admin/Admin'
 import PolkadotAdmin from '../views/Admin/Polkadot'
@@ -30,7 +31,7 @@ import AddPool from '@/views/Community/AddPool'
 import Register from '@/views/RegisterAsset/Register'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
-import EditCommunityInfo from "@/views/Community/EditCommunityInfo";
+import CommunityInfo from '@/views/Community/CommunityInfo'
 
 Vue.use(VueRouter)
 
@@ -41,20 +42,28 @@ const routes = [
     redirect: '/crowdloan'
   },
   {
-    path:'/wallet',
+    path: '/wallet',
     redirect: '/wallet/polkadot',
     component: Wallet,
     children: [
       {
-        path:'polkadot',
+        path: 'polkadot',
+        name: 'PolkadotWallet',
         component: PolkadotWallet
       },
       {
-        path:'kusama',
+        path: 'kusama',
+        name: 'KusamaWallet',
         component: KusamaWallet
       },
       {
+        path: 'steem',
+        name: 'SteemWallet',
+        component: SteemWallet
+      },
+      {
         path: 'rococo',
+        name: RococoWallet,
         component: RococoWallet
       }
     ]
@@ -79,7 +88,7 @@ const routes = [
         path: 'rococo',
         name: 'rococo',
         component: RococoCrowdloan
-      },
+      }
     ]
   },
   {
@@ -121,7 +130,7 @@ const routes = [
   },
   {
     path: '/blog',
-    component: Blog,
+    component: Blog
   },
   {
     path: '/admin',
@@ -166,8 +175,8 @@ const routes = [
         component: AddPool
       },
       {
-        path: 'edit-community-info',
-        component: EditCommunityInfo
+        path: 'community-info',
+        component: CommunityInfo
       },
       {
         path: 'register',

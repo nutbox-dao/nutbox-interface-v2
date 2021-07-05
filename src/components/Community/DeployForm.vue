@@ -45,14 +45,25 @@
           placeholder="Please enter"
         ></b-form-input>
       </b-form-group>
-      <b-form-group label="Logo" label-for="logo">
+      <b-form-group label="Logo" label-for="logo" class="logo-form">
         <b-form-file
           id="logo"
           v-model="logo"
           @input="updateFile"
           accept="image/png,image/jpeg"
           ref="logo-file-input"
-        ></b-form-file>
+        >
+          <template #placeholder>
+            <div class="input-file-logo">
+              <img class="add-icon" src="~@/static/images/add.svg" alt="">
+            </div>
+          </template>
+          <template #file-name>
+            <div class="input-file-logo">
+              <img class="logo-preview" v-if="logoUrl" :src="logoUrl" alt="">
+            </div>
+          </template>
+        </b-form-file>
       </b-form-group>
       <button class="primary-btn" :disabled="!deployBtnStatus" @click="deploy">
         Deploy
@@ -124,125 +135,125 @@
 </template>
 
 <script>
-import { deployERC20 } from "@/utils/web3/asset";
-import Clipboard from "clipboard";
-import { uploadImage } from "@/utils/helper";
-import { insertToken } from "@/apis/api";
+import { deployERC20 } from '@/utils/web3/asset'
+import Clipboard from 'clipboard'
+import { uploadImage } from '@/utils/helper'
+import { insertToken } from '@/apis/api'
 
 export default {
-  name: "DeployForm",
+  name: 'DeployForm',
   props: {
     isMintable: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
       form: {
-        name: "",
-        symbol: "",
-        decimal: "",
-        totalSupply: "",
+        name: '',
+        symbol: '',
+        decimal: '',
+        totalSupply: ''
       },
       logo: null,
       modalVisible: false,
-      tokenAddress: "",
-      logoUrl: null,
-    };
+      tokenAddress: '',
+      logoUrl: null
+    }
   },
   computed: {
-    deployBtnStatus() {
+    deployBtnStatus () {
       return (
         this.form.name &&
         this.form.symbol &&
         this.form.decimal &&
         this.form.totalSupply
-      );
-    },
+      )
+    }
   },
   methods: {
-    async deploy() {
+    async deploy () {
       if (!this.logoUrl || this.logoUrl.length === 0) {
-        this.$bvToast.toast(this.$t("tip.uploadLogo"), {
-          title: this.$t("tip.tips"),
+        this.$bvToast.toast(this.$t('tip.uploadLogo'), {
+          title: this.$t('tip.tips'),
           autoHideDelay: 5000,
-          variant: "warning",
-        });
-        return;
+          variant: 'warning'
+        })
+        return
       }
 
-      this.tokenAddress = await deployERC20(this.form, this.isMintable);
-      console.log("address", this.tokenAddress);
+      this.tokenAddress = await deployERC20(this.form, this.isMintable)
+      console.log('address', this.tokenAddress)
       const token = {
         ...this.form,
         address: this.tokenAddress,
-        icon: this.logoUrl,
-      };
-      await insertToken(token);
-      this.modalVisible = true;
+        icon: this.logoUrl
+      }
+      await insertToken(token)
+      this.modalVisible = true
     },
 
-    async updateFile() {
-      if(!this.logo) return;
+    async updateFile () {
+      if (!this.logo) return
       try {
-        this.logoUrl = await uploadImage(this.logo);
+        this.logoUrl = await uploadImage(this.logo)
       } catch (e) {
-        this.$bvToast.toast(this.$t("tip.picUploadFail"), {
-          title: this.$t("tip.tips"),
+        this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+          title: this.$t('tip.tips'),
           autoHideDelay: 5000,
-          variant: "warning",
-        });
+          variant: 'warning'
+        })
         this.logo = null
         this.logoUrl = null
       }
     },
-    formatUserAddress(address, long = true) {
-      if (!address) return "Loading Account";
+    formatUserAddress (address, long = true) {
+      if (!address) return 'Loading Account'
       if (long) {
-        if (address.length < 16) return address;
-        const start = address.slice(0, 28);
-        const end = address.slice(-5);
-        return `${start}...`;
+        if (address.length < 16) return address
+        const start = address.slice(0, 28)
+        const end = address.slice(-5)
+        return `${start}...`
       } else {
-        const start = address.slice(0, 6);
-        const end = address.slice(-6);
-        return `${start}...${end}`;
+        const start = address.slice(0, 6)
+        const end = address.slice(-6)
+        return `${start}...${end}`
       }
     },
 
-    copyAddress() {
-      var clipboard = new Clipboard("#copy-addr");
-      clipboard.on("success", (e) => {
-        clipboard.destroy();
+    copyAddress () {
+      var clipboard = new Clipboard('#copy-addr')
+      clipboard.on('success', (e) => {
+        clipboard.destroy()
         this.$bvToast.toast(
-          this.$t("tip.copyAddress", {
-            address: this.formatUserAddress(this.tokenAddress),
+          this.$t('tip.copyAddress', {
+            address: this.formatUserAddress(this.tokenAddress)
           }),
           {
-            title: this.$t("tip.clipboard"),
+            title: this.$t('tip.clipboard'),
             autoHideDelay: 5000,
-            variant: "info", // info success danger
+            variant: 'info' // info success danger
           }
-        );
-      });
-      clipboard.on("error", (e) => {
-        console.log(e);
-        clipboard.destroy;
-      });
+        )
+      })
+      clipboard.on('error', (e) => {
+        console.log(e)
+        clipboard.destroy()
+      })
     },
-    confirmRegister() {
+    confirmRegister () {
       this.$store.commit(
-        "community/setUserDeployToken",
+        'community/setUserDeployToken',
         Object.assign(this.form, {
           logo: this.logo,
-          address: this.tokenAddress,
+          address: this.tokenAddress
         })
-      );
-      this.$router.push("/community/create-economy");
-    },
-  },
-};
+      )
+      this.$router.push('/community/create-economy')
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
