@@ -62,25 +62,29 @@ const assetType = (address) => {
  * Restore these infos to cache
  * @returns assets list contains detail infos
  */
-export const getRegitryAssets = async () => {
+export const getRegitryAssets = async (update=false) => {
+  let assets = store.state.web3.allAssetsOfUser
+  if (!update && assets){
+    return assets
+  }
   const account = store.state.web3.account
   const contract = await getContract('RegistryHub');
   if (!contract) return;
   const assetCount = await contract.registryCounter(account);
-  let assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
+  assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
   const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
   assets = assets.map((asset, index) => ({
     asset,
     contract: registryContract[index],
     type: assetType(registryContract[index])
   }));
-  console.log(6, assets);
   const metadatas = await Promise.all(assets.map(asset => getForeignChainMetadata(asset.asset, asset.type)))
   
   assets = assets.map((asset, index) => ({
     ...asset,
     metadata: metadatas[index]
   }))
+  store.commit('web3/saveAllAssetsOfUser', assets)
   return assets
 }
 

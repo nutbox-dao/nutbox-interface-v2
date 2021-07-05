@@ -9,7 +9,8 @@ export default {
     allAccounts: [],
     abis: {},
     chainId: -1,
-    stakingFactoryId: null
+    stakingFactoryId: null,
+    allAssetsOfUser: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -30,6 +31,9 @@ export default {
     },
     saveStakingFactoryId: (state, stakingFactoryId) => {
       state.stakingFactoryId = stakingFactoryId
+    },
+    saveAllAssetsOfUser: (state, allAssetsOfUser) => {
+      state.allAssetsOfUser = allAssetsOfUser
     }
   },
   getters: {
