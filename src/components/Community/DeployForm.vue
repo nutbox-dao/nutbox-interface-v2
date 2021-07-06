@@ -155,7 +155,7 @@ export default {
         name: '',
         symbol: '',
         decimal: '',
-        totalSupply: '',
+        totalSupply: ''
       },
       logo: null,
       modalVisible: false,
@@ -186,7 +186,7 @@ export default {
       }
 
       this.deploying = true
-      try{
+      try {
         this.tokenAddress = await deployERC20(this.form, this.isMintable)
         console.log('address', this.tokenAddress)
         const token = {
@@ -198,13 +198,13 @@ export default {
         await insertToken(token)
         // update tokens cache
         await getAllTokens(true)
-      }catch (e) {
-        console.log(e);
+      } catch (e) {
+        console.log(e)
         this.$bvToast.toast(this.$t('tip.deloyTokenFail'), {
           title: this.$t('tip.error'),
           variant: 'danger'
         })
-      }finally{
+      } finally {
         this.deploying = false
       }
     },
@@ -238,9 +238,7 @@ export default {
     },
 
     copyAddress () {
-      var clipboard = new Clipboard('#copy')
-      clipboard.on('success', (e) => {
-        clipboard.destroy()
+      navigator.clipboard.writeText(this.tokenAddress).then(() => {
         this.$bvToast.toast(
           this.$t('tip.copyAddress', {
             address: this.formatUserAddress(this.tokenAddress)
@@ -251,10 +249,8 @@ export default {
             variant: 'info' // info success danger
           }
         )
-      })
-      clipboard.on('error', (e) => {
+      }, (e) => {
         console.log(e)
-        clipboard.destroy()
       })
     },
     confirmDeploy () {
