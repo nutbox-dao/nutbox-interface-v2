@@ -4,9 +4,9 @@
       <b-form-group id="input-group-0"
                     label="Net work"
                     label-for="dropdown-1">
-        <b-dropdown id="dropdown-1">
+        <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
           <template #button-content>
-            <div class="flex-between-center">
+            <div class="c-dropdown-btn flex-between-center">
               <div class="flex-full flex-start-center text-left">
                 <img :src="networkOptions[networkIndex].icon" alt="">
                 <span>{{networkOptions[networkIndex].name}}</span>
@@ -77,6 +77,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/static/css/form";
+@import "src/static/css/dropdown";
 .d-form {
   max-width: 500px;
   margin: auto;
@@ -84,7 +85,7 @@ export default {
 label {
   margin-bottom: .2rem!important;
 }
-#dropdown-1 {
+.c-dropdown {
   width: 100%;
   height: 2.4rem;
   .btn img {
@@ -94,10 +95,6 @@ label {
   }
   .btn span {
     color: #242629;
-  }
-  .dropdown-icon {
-    @include icon(.6rem, .6rem);
-    background-image: url("~@/static/images/dropdown-icon.svg");
   }
   .dropdown-item img {
     width: 1.2rem;
