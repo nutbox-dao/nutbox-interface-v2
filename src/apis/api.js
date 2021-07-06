@@ -79,3 +79,5 @@ export const insertCommunity = async (params) => post(BACKEND_API_URL + '/commun
 export const updateCommunity = async (params) => put(BACKEND_API_URL + '/community/update', params)
 
 export const insertToken = async (params) => post(BACKEND_API_URL + '/token/insert', params)
+
+export const getAllTokens = async () => get(BACKEND_API_URL + '/token/get')

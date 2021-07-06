@@ -23,7 +23,7 @@ import { getProvider } from './ethers'
 import  { contractAddress, erc20Address, multiAddress } from './contract'
 
 export const getWeb3 = () => {
-  const web3  = new Web3(Web3.givenProvider)
+  const web3  = new Web3(RPC_NODE)
   return web3
 }
 
@@ -163,7 +163,7 @@ export const test = async () => {
 
 export const testMulticall = async () => {
   const config = {
-    rpcUrl: 'http://localhost:8545',
+    rpcUrl: RPC_NODE,
     multicallAddress: multiAddress
   }
 

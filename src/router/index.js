@@ -183,8 +183,11 @@ const routes = [
         component: Register,
         children: [
           {
-            path: '',
-            component: NativeAsset
+            path: 'native',
+            component: NativeAsset,
+            props: route => ({
+              tokenAddress:route.query.tokenAddress
+            })
           },
           {
             path: 'cross-chain-asset',

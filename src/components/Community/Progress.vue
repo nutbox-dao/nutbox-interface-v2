@@ -3,10 +3,10 @@
     <div class="c-progress-container" :style="{background: trackColor}"
          :data-min="min" :data-max="max">
       <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"
-           :data-value="data.end"
+           :data-value="data.stopHeight"
            :style="{ flex: data.percentage,
          background: data.background || `rgba(80, 191, 0, ${(index+1) / progressData.length})`}" >
-        <span class="progress-tooltip">{{data.value}}</span>
+        <span class="progress-tooltip">{{data.amount}}</span>
       </div>
     </div>
     <i v-if="isEdit" class="delete-icon" @click="$emit('delete')"></i>

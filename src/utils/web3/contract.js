@@ -100,3 +100,13 @@ export const getContract = async function (contractName, address) {
   // inject metamask
   return contract.connect(provider.getSigner())
 }
+
+/**
+ * Judge address wheather a contract address
+ * @param {*} address 
+ */
+export const isContractAddress = async (address) => {
+  const provider = await getWeb3()
+  const res = await provider.eth.getCode(address)
+  return res
+}

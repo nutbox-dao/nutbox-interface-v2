@@ -164,6 +164,7 @@ import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
 import { setupNetwork, test, chainChanged } from './utils/web3/web3'
 import { changeAccount } from './utils/web3/account'
+import { subBlockNum } from '@/utils/web3/block'
 
 export default {
   data () {
@@ -346,6 +347,7 @@ export default {
       setupNetwork()
       chainChanged()
       changeAccount()
+      subBlockNum()
     }catch(e) {
       console.log(533, e);
     }

@@ -15,6 +15,7 @@ import {
 import {
   Transaction_config
 } from '@/config'
+import { getAllTokens } from '@/apis/api'
 
 /**
  * Judge asset wheather Homechain assets
@@ -78,22 +79,22 @@ export const getRegitryAssets = async (update=false) => {
     contract: registryContract[index],
     type: assetType(registryContract[index])
   }));
-  const metadatas = await Promise.all(assets.map(asset => getForeignChainMetadata(asset.asset, asset.type)))
+  const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
   
   assets = assets.map((asset, index) => ({
     ...asset,
-    metadata: metadatas[index]
+    ...metadatas[index]
   }))
   store.commit('web3/saveAllAssetsOfUser', assets)
   return assets
 }
 
 /**
- * get foreignchain asset meta data
+ * get asset meta data
  * @param {String} id asset id 
  * @param {String} assetType asset contract address
  */
-export const getForeignChainMetadata = async (id, assetType) => {
+export const getAssetMetadata = async (id, assetType) => {
   const contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
   if (!contract) return;
   if (assetType === 'HomeChainAssetRegistry'){
@@ -109,8 +110,14 @@ export const getForeignChainMetadata = async (id, assetType) => {
 export const getERC20Info = async (address) => {
   const contract = await getContract('ERC20', address);
   if (!contract) return;
-  let infos = await Promise.all([contract.name(), contract.symbol()])
-  return {name: infos[0], symbol: infos[1], address}
+  const tokens = await getAllTokenFromBackend()
+  let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
+  const tokenFromBackend = tokens?.filter(token => token.address === address)
+  let icon = null
+  if (tokenFromBackend && tokenFromBackend.length > 0){
+    icon = tokenFromBackend[0].icon
+  }
+  return {name: infos[0], symbol: infos[1], decimal: infos[2], address, icon}
 }
 
 /**
@@ -122,15 +129,21 @@ export const registryHomeChainAsset = async (assetAddress) => {
 
   // regitster asset
   const contract = await getContract('HomeChainAssetRegistry');
-  await contract.registerAsset(
-    '0x', assetAddress, '0x',
-    Transaction_config
-  )
+  if (!contract) return
+  try{
+    const tx = await contract.registerAsset(
+      '0x', assetAddress, '0x',
+      Transaction_config
+    )
+    return tx
+  }catch(e) {
+    console.log('Registry Homechain Asset Fail', e);
+  }
 }
 
 /**
  * Depoly ERC20 token
- * @param {*} param0
+ * @param {*} param0 token object
  * @param {Bool} isMintalbel  
  * @returns
  */
@@ -152,4 +165,26 @@ export const deployERC20 = async ({
     console.log(`Deploy mintable token ${name} failed`, e);
     return null
   }
+}
+
+/**
+ * Get all tokens from nutbox backend
+ * Will store data to cache
+ * @param {*} update  wheather update local cache
+ * @returns 
+ */
+export const getAllTokenFromBackend = async (update=false) => {
+  const tokens = store.state.web3.allTokens
+  if (!update && tokens) {
+    return tokens
+  }
+  try{
+    const allTokens = await getAllTokens()
+    store.commit('web3/saveAllTokens', allTokens)
+    return allTokens
+  }catch(e){
+    console.log('Get All Tokens Failed');
+    return null
+  }
+  
 }

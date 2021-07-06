@@ -245,7 +245,12 @@ module.exports = {
     signing: "签名中",
     picUploadFail: "图片上传失败，请重试",
     uploadLogo: "请添加logo",
-    deloyTokenFail:"部署资产失败，请重试"
+    deloyTokenFail:"部署资产失败，请重试",
+    notContractAddress:"请提供已部署的token合约地址",
+    registryAssetFail:"注册失败",
+    registryAssetSuccess: "注册成功",
+    wrongStartBlockNum:"开始块必须大于当前块",
+    wrongStopBlockNum: "结束块必须大于开始块"
   },
   vote: {
     upvote: "点赞",

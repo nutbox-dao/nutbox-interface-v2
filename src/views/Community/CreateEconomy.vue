@@ -8,7 +8,7 @@
     <div class="scroll-content mt-3">
       <div class="form">
         <div class="primary-line-title font-bold font20">
-          Step1：Your community token contact address
+          Step1：Your community asset ID
         </div>
         <div class="form-card custom-form step-1">
           <Dropdown :menu-options="concatAddressOptions"
@@ -19,15 +19,15 @@
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
                   Havn’t Registry yet？
-                  <router-link to="/community/register">Registry one</router-link>
+                  <router-link to="/community/register/native">Registry one</router-link>
                 </div>
               </div>
             </template>
             <template v-slot:drop-item="slotProps">
-              <img class="prefix-icon" :src="slotProps.item.logo" alt="">
+              <img class="prefix-icon" :src="slotProps.item.icon" alt="">
               <div class="flex-full d-flex flex-column">
-                <span>{{slotProps.item.name}}</span>
-                <span class="font12 text-grey-light">{{slotProps.item.address | formatUserAddress}}</span>
+                <span>{{slotProps.item.symbol}}</span>
+                <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
               </div>
             </template>
           </Dropdown>
@@ -35,10 +35,11 @@
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
               <div v-show="isMint">* This is a mintable token</div>
+              <div v-show="!isMint">* This is not a mintable token</div>
             </div>
             <div class="custom-control" style="line-height: 1.5rem">
               Havn’t Registry yet？
-              <router-link to="/community/register">Registry one</router-link>
+              <router-link to="/community/register/native">Registry one</router-link>
             </div>
           </div>
         </div>
@@ -53,9 +54,12 @@
 <!--              <span>Add Pool</span>-->
 <!--            </button>-->
           </div>
+          <p style="margin:0;">
+            Current Block Number: {{blockNum}}
+          </p>
           <Progress :min="progressData.length>0?progressData[0].start:0"
                     :is-edit="progressData.length>0"
-                    @delete="progressData.pop()"
+                    @delete="deleteData"
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Start block</span>
@@ -70,7 +74,7 @@
             <span class="font16 font-bold mr-3">Reward amount</span>
             <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
           </div>
-          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>2"
+          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6"
                   @click="confirmAdd">Confirm Add</button>
         </div>
         <button class="primary-btn" :disabled="progressData.length===0" @click="confirmDeploy">Deploy</button>
@@ -83,13 +87,17 @@
 import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
+import { getRegitryAssets } from '@/utils/web3/asset'
+
+
 export default {
   name: 'CreateEconomy',
   components: { Progress, Dropdown },
   data () {
     return {
-      selectedKey: 'address',
+      selectedKey: 'asset',
       selectedAddressData: {},
+      assets:null,
       concatAddressOptions: [
         {
           categoryName: 'Personal',
@@ -98,7 +106,7 @@ export default {
         {
           categoryName: ' Official',
           items: [
-            { name: 'BBB', address: '0xaaaaaaaaaaaaaaaa' }
+            { name: 'BBB',symbol: 'BBB' , asset: '0xaaaaaaaaaaaaaaaa' }
           ]
         }
       ],
@@ -120,34 +128,63 @@ export default {
       return true
     },
     ...mapState({
-      userDeployTokens: state => state.community.userDeployTokens
+      userDeployTokens: state => state.web3.allAssetsOfUser,
+      blockNum: state => state.web3.blockNum
     })
   },
   watch: {
     userDeployTokens (val) {
-      this.concatAddressOptions[0].items = val
+      this.concatAddressOptions[0].items = val.filter(asset => asset.type === 'HomeChainAssetRegistry')
     }
   },
-  mounted () {
-    this.concatAddressOptions[0].items = this.userDeployTokens
+  async mounted () {
+    this.assets = await getRegitryAssets()
+    this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
+    console.log(234, this.concatAddressOptions[0].items);
   },
   methods: {
     setSelectedData (data) {
       this.selectedAddressData = data
-      this.form.contractAddr = data.address
+      this.form.contractAddr = data.asset
+    },
+    deleteData () {
+      this.progressData.pop();
+      if (this.progressData.length === 0){
+        this.poolForm.start = this.blockNum
+      }else{
+        this.poolForm.start = this.progressData[this.progressData.length -1].stopHeight
+      }
+      this.end = ''
     },
     confirmAdd () {
+      if (parseInt(this.poolForm.start) <= this.blockNum){
+        this.$bvToast.toast(this.$t('tip.wrongStartBlockNum'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
+      if(parseInt(this.poolForm.end) <= parseInt(this.poolForm.start)){
+        this.$bvToast.toast(this.$t('tip.wrongStopBlockNum'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return
+      }
+      const decimal = this.selectedAddressData.decimal
       const barData = {
-        start: this.poolForm.start,
-        end: this.poolForm.end,
-        value: this.poolForm.reward,
+        hasPassed: false,
+        startHeight: Number(this.poolForm.start),
+        stopHeight: Number(this.poolForm.end),
+        amount: Number(this.poolForm.reward),
         percentage: Number(this.poolForm.end) - Number(this.poolForm.start)
       }
       this.progressData.push(barData)
-      if (this.progressData.length > 2) return
-      this.poolForm.start = barData.end
+      // if (this.progressData.length > 2) return
+      this.poolForm.start = barData.stopHeight
       this.poolForm.end = ''
       this.poolForm.reward = ''
+      console.log(this.progressData);
     },
     confirmDeploy () {
       this.form.poolData = this.progressData

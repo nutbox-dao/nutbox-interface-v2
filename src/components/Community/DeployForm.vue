@@ -129,7 +129,7 @@
           </div>
         </div>
 
-        <button class="primary-btn mt-4" @click="confirmRegister">完成</button>
+        <button class="primary-btn mt-4" @click="confirmDeploy">完成</button>
       </div>
     </b-modal>
   </div>
@@ -139,7 +139,7 @@
 import { deployERC20 } from '@/utils/web3/asset'
 import Clipboard from 'clipboard'
 import { uploadImage } from '@/utils/helper'
-import { insertToken } from '@/apis/api'
+import { insertToken, getAllTokens } from '@/apis/api'
 
 export default {
   name: 'DeployForm',
@@ -194,17 +194,19 @@ export default {
           address: this.tokenAddress,
           icon: this.logoUrl
         }
+        this.modalVisible = true
         await insertToken(token)
+        // update tokens cache
+        await getAllTokens(true)
       }catch (e) {
+        console.log(e);
         this.$bvToast.toast(this.$t('tip.deloyTokenFail'), {
           title: this.$t('tip.error'),
-          variant: 'err'
+          variant: 'danger'
         })
       }finally{
-        this.modalVisible = true
         this.deploying = false
       }
-      
     },
 
     async updateFile () {
@@ -255,15 +257,8 @@ export default {
         clipboard.destroy()
       })
     },
-    confirmRegister () {
-      this.$store.commit(
-        'community/setUserDeployToken',
-        Object.assign(this.form, {
-          logo: this.logo,
-          address: this.tokenAddress
-        })
-      )
-      this.$router.push('/community/create-economy')
+    confirmDeploy () {
+      this.$router.push('/community/register/native?tokenAddress=' + this.tokenAddress)
     }
   }
 }

@@ -11,6 +11,8 @@ export default {
     chainId: -1,
     stakingFactoryId: null,
     allAssetsOfUser: null,
+    allTokens: null,
+    blockNum: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -34,6 +36,12 @@ export default {
     },
     saveAllAssetsOfUser: (state, allAssetsOfUser) => {
       state.allAssetsOfUser = allAssetsOfUser
+    },
+    saveAllTokens: (state, allTokens) => {
+      state.allTokens = allTokens
+    },
+    saveBlockNum : (state, blockNum) => {
+      state.blockNum = blockNum
     }
   },
   getters: {

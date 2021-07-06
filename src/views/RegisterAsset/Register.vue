@@ -8,7 +8,7 @@
     <!-- <div class="page-view-subtitle">Choose asset type</div> -->
     <div class="nav-box">
       <div class="nav">
-        <router-link to="/community/register" exact
+        <router-link to="/community/register/native"
         >Native Asset Only</router-link
         >
         <router-link to="/community/register/cross-chain-asset"
