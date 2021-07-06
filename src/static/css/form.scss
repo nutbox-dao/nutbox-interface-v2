@@ -45,3 +45,18 @@
   font-size: .6rem;
   color: #BDBFC2;
 }
+.append-input-btn {
+  background-color: #F6F7F9;
+  border-radius: 0 .8rem .8rem 0;
+  height: 2.4rem;
+  border-color: transparent;
+  color: var(--primary-text);
+  font-size: 1rem;
+  line-height: 2.4rem;
+  padding: 0 .8rem;
+  cursor: pointer;
+}
+.upload-loading {
+  position: absolute;
+  margin: 0;
+}

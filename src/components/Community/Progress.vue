@@ -1,5 +1,5 @@
 <template>
-  <div class="c-progress">
+  <div class="c-progress" :class="progressData.length>0?'mt-5':'mt-3'">
     <div class="c-progress-container" :style="{background: trackColor}"
          :data-min="min" :data-max="max">
       <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"

@@ -60,7 +60,8 @@
           </template>
           <template #file-name>
             <div class="input-file-logo">
-              <img class="logo-preview" v-if="logoUrl" :src="logoUrl" alt="">
+              <img class="logo-preview" v-if="logoPreviewScr" :src="logoPreviewScr" alt="">
+              <b-spinner v-if="loading" class="upload-loading" type="grow"></b-spinner>
             </div>
           </template>
         </b-form-file>
@@ -109,7 +110,7 @@
           </div>
           <div class="row-info">
             <span class="label">Logo</span>
-            <span class="info"><img class="logo" :src="logoUrl" alt="" /></span>
+            <span class="info"><img class="logo" :src="logoPreviewScr" alt="" /></span>
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
@@ -161,7 +162,9 @@ export default {
       modalVisible: false,
       tokenAddress: '',
       logoUrl: null,
-      deploying: false
+      deploying: false,
+      logoPreviewScr: null,
+      loading: true
     }
   },
   computed: {
@@ -209,10 +212,16 @@ export default {
       }
     },
 
-    async updateFile () {
+    async updateFile (file) {
       if (!this.logo) return
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.logoPreviewScr = res.target.result
+      }
       try {
         this.logoUrl = await uploadImage(this.logo)
+        this.loading = false
       } catch (e) {
         this.$bvToast.toast(this.$t('tip.picUploadFail'), {
           title: this.$t('tip.tips'),

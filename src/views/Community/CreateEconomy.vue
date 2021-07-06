@@ -68,7 +68,10 @@
           </div>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Stop block</span>
-            <b-input placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
+            <b-input-group class="d-flex flex-between-center">
+              <b-input class="flex-full" placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
+              <span class="append-input-btn">MAX</span>
+            </b-input-group>
           </div>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Reward amount</span>
@@ -239,7 +242,6 @@ export default {
     }
   }
   .c-progress {
-    margin-top: 3rem;
     margin-bottom: 2rem;
   }
   .c-input-group {
