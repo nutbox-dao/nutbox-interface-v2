@@ -11,17 +11,17 @@
         <div class="title font-bold">社区基本信息</div>
         <b-form class="custom-form pl-md-3">
           <b-form-group label-cols-md="2" content-cols-md="5" label="社区名字">
-            <b-form-input v-model="form.name" placeholder="请输入社区名字" ></b-form-input>
+            <b-form-input :disabled="!isEdit" v-model="form.name" placeholder="请输入社区名字" ></b-form-input>
           </b-form-group>
           <b-form-group label-cols-md="2" content-cols-md="5" label="社区官网">
-            <b-form-input v-model="form.website" placeholder="请输入社区官网链接" ></b-form-input>
+            <b-form-input :disabled="!isEdit" v-model="form.website" placeholder="请输入社区官网链接" ></b-form-input>
           </b-form-group>
           <b-form-group label-cols-md="2" content-cols-md="8" label="社区介绍">
-            <b-form-textarea v-model="form.introduction" placeholder="请写一段关于社区的介绍" rows="5"></b-form-textarea>
+            <b-form-textarea :disabled="!isEdit" v-model="form.introduction" placeholder="请写一段关于社区的介绍" rows="5"></b-form-textarea>
           </b-form-group>
           <b-form-group label-cols-md="2" content-cols-md="8" class="logo-form" label="社区Logo">
             <b-form-file
-              id="logo"
+              :disabled="!isEdit"
               v-model="logo"
               @input="updateLogo"
               accept="image/png,image/jpeg"
@@ -41,7 +41,8 @@
               </template>
               <template #file-name>
                 <div class="input-file-logo">
-                  <img class="logo-preview" v-if="form.logoUrl" :src="form.logoUrl" alt="">
+                  <img class="logo-preview" v-if="logoPreviewSrc" :src="logoPreviewSrc" alt="">
+                  <b-spinner v-if="logoUploadLoading" class="upload-loading" type="grow"></b-spinner>
                 </div>
               </template>
             </b-form-file>
@@ -49,7 +50,7 @@
           </b-form-group>
           <b-form-group label-cols-md="2" content-cols-md="8" class="cover-form" label="社区封面">
             <b-form-file
-              id="logo"
+              :disabled="!isEdit"
               v-model="coverImg"
               @input="updateCover"
               accept="image/png,image/jpeg"
@@ -69,13 +70,14 @@
               </template>
               <template #file-name>
                 <div class="input-file-cover">
-                  <img class="cover-preview" v-if="form.coverUrl" :src="form.coverUrl" alt="">
+                  <img class="cover-preview" v-if="coverPreviewSrc" :src="coverPreviewSrc" alt="">
+                  <b-spinner v-if="coverUploadLoading" class="upload-loading" type="grow"></b-spinner>
                 </div>
               </template>
             </b-form-file>
             <div class="font12 text-grey-light mt-1">建议尺寸1200*280，小于2M，支持jpg、png、jpeg格式</div>
           </b-form-group>
-          <b-form-group label-cols-md="2" content-cols-md="5" label="">
+          <b-form-group v-if="isEdit" label-cols-md="2" content-cols-md="5" label="">
             <button class="primary-btn" @click="onConfirm">提交</button>
           </b-form-group>
         </b-form>
@@ -100,6 +102,10 @@ export default {
         logoUrl: '',
         coverUrl: ''
       },
+      logoPreviewSrc: '',
+      logoUploadLoading: false,
+      coverPreviewSrc: '',
+      coverUploadLoading: false,
       isEdit: false
     }
   },
@@ -117,10 +123,17 @@ export default {
         coverUrl: 'https://cdn.wherein.mobi/nutbox/slotauction/poster/BML-poster.png'
       }
     },
-    async updateLogo () {
+    async updateLogo (file) {
       if (!this.logo) return
+      this.logoUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.logoPreviewSrc = res.target.result
+      }
       try {
         this.form.logoUrl = await uploadImage(this.logo)
+        this.logoUploadLoading = false
       } catch (e) {
         this.$bvToast.toast(this.$t('tip.picUploadFail'), {
           title: this.$t('tip.tips'),
@@ -129,11 +142,17 @@ export default {
         })
         this.logo = null
         this.form.logoUrl = null
+        this.logoUploadLoading = false
       }
     },
-    async updateCover () {
-      console.log(this.coverImg)
+    async updateCover (file) {
       if (!this.coverImg) return
+      this.coverUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.coverPreviewSrc = res.target.result
+      }
       try {
         this.form.coverUrl = await uploadImage(this.coverImg)
       } catch (e) {
