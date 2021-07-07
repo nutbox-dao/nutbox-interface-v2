@@ -1,6 +1,6 @@
 <template>
   <div class="page-view-content">
-    <div class="mb-3 flex-between-center">
+    <div class="mb-3 flex-between-center" style="height: 2.4rem">
       <div class="page-back-text-icon font20" style="line-height: 1rem"
            @click="isEdit?isEdit= false:$router.back()">{{isEdit?'编辑':''}}社区信息</div>
       <div v-if="!isEdit"><button class="primary-btn pl-3 pr-3"
