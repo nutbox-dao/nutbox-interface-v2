@@ -2,7 +2,7 @@
   <div class="page-view-content">
     <div class="mb-3 flex-between-center">
       <div class="page-back-text-icon font20" style="line-height: 1rem"
-           @click="$router.back()">{{isEdit?'编辑':''}}社区信息</div>
+           @click="isEdit?isEdit= false:$router.back()">{{isEdit?'编辑':''}}社区信息</div>
       <div v-if="!isEdit"><button class="primary-btn pl-3 pr-3"
                    @click="isEdit = true">修改信息</button></div>
     </div>
