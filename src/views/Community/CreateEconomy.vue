@@ -70,17 +70,20 @@
             <span class="font16 font-bold mr-3">Stop block</span>
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full" placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
-              <span class="append-input-btn">MAX</span>
+              <span @click="max" class="append-input-btn">MAX</span>
             </b-input-group>
           </div>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold mr-3">Reward amount</span>
             <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
           </div>
-          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6"
+          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
                   @click="confirmAdd">Confirm Add</button>
         </div>
-        <button class="primary-btn" :disabled="progressData.length===0" @click="confirmDeploy">Deploy</button>
+        <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
+          <b-spinner small type="grow" v-show="deploying" />
+          Deploy
+        </button>
       </div>
     </div>
   </div>
@@ -91,16 +94,18 @@ import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
-
+import { getMyStakingFactory, createStakingFeast } from '@/utils/web3/community'
 
 export default {
   name: 'CreateEconomy',
   components: { Progress, Dropdown },
   data () {
     return {
-      selectedKey: 'asset',
+      selectedKey: 'name',
       selectedAddressData: {},
       assets:null,
+      deploying: false,
+      maxBlock: 999999999999999,
       concatAddressOptions: [
         {
           categoryName: 'Personal',
@@ -115,8 +120,9 @@ export default {
       ],
       progressData: [],
       form: {
-        contractAddr: '',
+        assetId: null,
         isMint: false,
+        decimal: null,
         poolData: []
       },
       poolForm: {
@@ -148,7 +154,7 @@ export default {
   methods: {
     setSelectedData (data) {
       this.selectedAddressData = data
-      this.form.contractAddr = data.asset
+      this.form.assetId = data.asset
     },
     deleteData () {
       this.progressData.pop();
@@ -158,6 +164,9 @@ export default {
         this.poolForm.start = this.progressData[this.progressData.length -1].stopHeight
       }
       this.end = ''
+    },
+    max () {
+      this.poolForm.end = 'max'
     },
     confirmAdd () {
       if (parseInt(this.poolForm.start) <= this.blockNum){
@@ -174,25 +183,57 @@ export default {
         })
         return
       }
-      const decimal = this.selectedAddressData.decimal
       const barData = {
-        hasPassed: false,
         startHeight: Number(this.poolForm.start),
-        stopHeight: Number(this.poolForm.end),
+        stopHeight: this.poolForm.end === 'max' ? this.maxBlock : Number(this.poolForm.end),
         amount: Number(this.poolForm.reward),
-        percentage: Number(this.poolForm.end) - Number(this.poolForm.start)
+        percentage: this.poolForm.end === 'max' ? 1e8 : Number(this.poolForm.end) - Number(this.poolForm.start)
       }
       this.progressData.push(barData)
       // if (this.progressData.length > 2) return
-      this.poolForm.start = barData.stopHeight
+      this.poolForm.start = Number(barData.stopHeight) + 1
       this.poolForm.end = ''
       this.poolForm.reward = ''
       console.log(this.progressData);
     },
-    confirmDeploy () {
+    async confirmDeploy () {
+      const comId = await getMyStakingFactory()
+      if (comId){
+        this.$bvToast.toast(this.$t('tip.youHaveCreatedCommunity'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return
+      }
       this.form.poolData = this.progressData
-      this.$store.commit('community/setUserDeployEconomy', this.form)
-      this.$router.replace('/community/community-info?type=edit')
+      if (!this.form.assetId || this.form.poolData.length === 0){
+        this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
+      try{
+        this.deploying = true
+        const decimal = this.selectedAddressData.decimal
+        this.form.decimal = decimal
+        const hash = createStakingFeast(this.form)
+        if(hash){
+          this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
+            title: this.$t('tip.tips'),
+            variant: 'success'
+          })
+        await getMyStakingFactory()
+        this.$router.replace('/community/community-info?type=edit')
+        }
+      }catch(e){
+        this.$bvToast.toast(this.$t('tip.deployFactoryFail'), {
+          title: this.$t('tip.error'),
+          variant: 'danger'
+        })
+      }finally{
+        this.deploying = false
+      }
     }
   }
 }

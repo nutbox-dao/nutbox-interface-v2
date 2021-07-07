@@ -250,7 +250,11 @@ module.exports = {
     registryAssetFail:"注册失败",
     registryAssetSuccess: "注册成功",
     wrongStartBlockNum:"开始块必须大于当前块",
-    wrongStopBlockNum: "结束块必须大于开始块"
+    wrongStopBlockNum: "结束块必须大于开始块",
+    youHaveCreatedCommunity: "您已经创建了一个社区",
+    pleaseFillData: "请选择部署的资产和分发策略",
+    deployFactoryFail: "部署失败，请重试",
+    deployFactorySuccess:"部署成功，请稍候"
   },
   vote: {
     upvote: "点赞",
@@ -303,6 +307,22 @@ module.exports = {
   },
   community: {
     community: '社区',
-    percentage: '占比'
+    percentage: '占比',
+    communityInfo: '社区资料',
+    edit:'编辑',
+    create:'完善',
+    communityName: "社区名字",
+    communityLink: "社区官网",
+    communityDesc: "社区介绍",
+    communityLogo: "社区Logo",
+    communityPoster: "社区封面",
+    commit: '提交',
+    inputName: "请输入社区名字",
+    inputLink: "请输入社区官网链接",
+    inputDesc: "请输入一段社区的介绍",
+    uploadLogo: "上传Logo",
+    picTip: "建议尺寸 {size} ，小于2M，支持jpg、png、jpeg格式",
+    uploadPoster: "上传封面",
+    poster: "封面"
   },
 }

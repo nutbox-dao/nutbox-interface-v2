@@ -2,40 +2,40 @@
   <div class="page-view-content">
     <div class="mb-3 flex-between-center" style="height: 2.4rem">
       <div class="page-back-text-icon font20" style="line-height: 1rem"
-           @click="isEdit?isEdit= false:$router.back()">{{isEdit?'编辑':''}}社区信息</div>
+           @click="isEdit?isEdit= false:$router.back()">{{(isEdit?$t('community.'+ type):'') + $t('community.communityInfo')}}</div>
       <div v-if="!isEdit"><button class="primary-btn pl-3 pr-3"
-                   @click="isEdit = true">修改信息</button></div>
+                   @click="isEdit = true">{{ $t('community.edit') }}</button></div>
     </div>
     <div class="scroll-content mt-3">
       <div class="community-info-card text-left">
-        <div class="title font-bold">社区基本信息</div>
+        <div class="title font-bold">{{ $t('community.communityInfo') }}</div>
         <b-form class="custom-form pl-md-3">
-          <b-form-group label-cols-md="2" content-cols-md="5" label="社区名字">
-            <b-form-input :disabled="!isEdit" v-model="form.name" placeholder="请输入社区名字" ></b-form-input>
+          <b-form-group label-cols-md="2" content-cols-md="5" :label="$t('community.communityName')">
+            <b-form-input :disabled="!isEdit" v-model="form.name" :placeholder="$t('community.inputName')" ></b-form-input>
           </b-form-group>
-          <b-form-group label-cols-md="2" content-cols-md="5" label="社区官网">
-            <b-form-input :disabled="!isEdit" v-model="form.website" placeholder="请输入社区官网链接" ></b-form-input>
+          <b-form-group label-cols-md="2" content-cols-md="5" :label="$t('community.communityLink')">
+            <b-form-input :disabled="!isEdit" v-model="form.website" :placeholder="$t('community.inputLink')" ></b-form-input>
           </b-form-group>
-          <b-form-group label-cols-md="2" content-cols-md="8" label="社区介绍">
-            <b-form-textarea :disabled="!isEdit" v-model="form.introduction" placeholder="请写一段关于社区的介绍" rows="5"></b-form-textarea>
+          <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.communityDesc')">
+            <b-form-textarea :disabled="!isEdit" v-model="form.introduction" :placeholder="$t('community.inputDesc')" rows="5"></b-form-textarea>
           </b-form-group>
-          <b-form-group label-cols-md="2" content-cols-md="8" class="logo-form" label="社区Logo">
+          <b-form-group label-cols-md="2" content-cols-md="8" class="logo-form" :label="$t('community.communityLogo')">
             <b-form-file
               :disabled="!isEdit"
               v-model="logo"
               @input="updateLogo"
-              accept="image/png,image/jpeg"
+              accept="image/png,image/jpeg, image/jpg"
               ref="logo-file-input"
             >
               <template #placeholder>
                 <div class="input-file-logo">
                   <template v-if="form.logoUrl" >
                     <img class="cover-preview" :src="form.logoUrl" alt="">
-                    <div v-if="isEdit" class="edit-mask"><span>编辑<br>LOGO</span></div>
+                    <div v-if="isEdit" class="edit-mask"><span>{{ $t('community.edit') }}<br>LOGO</span></div>
                   </template>
                   <template v-else>
                     <img class="add-icon" src="~@/static/images/add.svg" alt="">
-                    <div class="add-text">上传Logo</div>
+                    <div class="add-text">{{ $t('community.uploadLogo') }}</div>
                   </template>
                 </div>
               </template>
@@ -46,25 +46,25 @@
                 </div>
               </template>
             </b-form-file>
-            <div class="font12 text-grey-light mt-1">建议尺寸1:1，小于2M，支持jpg、png、jpeg格式</div>
+            <div class="font12 text-grey-light mt-1">{{ $t('community.picTip', {size: '200*200'}) }}</div>
           </b-form-group>
-          <b-form-group label-cols-md="2" content-cols-md="8" class="cover-form" label="社区封面">
+          <b-form-group label-cols-md="2" content-cols-md="8" class="cover-form" :label="$t('community.communityPoster')">
             <b-form-file
               :disabled="!isEdit"
               v-model="coverImg"
               @input="updateCover"
-              accept="image/png,image/jpeg"
+              accept="image/png,image/jpeg,image/jpg"
               ref="logo-file-input"
             >
               <template #placeholder>
                 <div class="input-file-cover">
                   <template v-if="form.coverUrl" >
                     <img class="cover-preview" :src="form.coverUrl" alt="">
-                    <div v-if="isEdit" class="edit-mask"><span>编辑<br>封面</span></div>
+                    <div v-if="isEdit" class="edit-mask"><span>{{ $t('community.edit') }}<br>{{ $t('community.poster') }}</span></div>
                   </template>
                   <template v-else>
                     <img class="add-icon" src="~@/static/images/add.svg" alt="">
-                    <div class="add-text">上传封面</div>
+                    <div class="add-text">{{ $t('community.uploadPoster') }}</div>
                   </template>
                 </div>
               </template>
@@ -75,10 +75,10 @@
                 </div>
               </template>
             </b-form-file>
-            <div class="font12 text-grey-light mt-1">建议尺寸1200*280，小于2M，支持jpg、png、jpeg格式</div>
+            <div class="font12 text-grey-light mt-1">{{ $t('community.picTip', {size: '1200*280'}) }}</div>
           </b-form-group>
           <b-form-group v-if="isEdit" label-cols-md="2" content-cols-md="5" label="">
-            <button class="primary-btn" @click="onConfirm">提交</button>
+            <button class="primary-btn" @click="onConfirm">{{ $t('community.commit') }}</button>
           </b-form-group>
         </b-form>
       </div>
@@ -96,9 +96,10 @@ export default {
       logo: null,
       coverImg: null,
       form: {
+        id:'',
         name: '',
         website: '',
-        introduction: '',
+        summary: '',
         logoUrl: '',
         coverUrl: ''
       },
@@ -106,11 +107,18 @@ export default {
       logoUploadLoading: false,
       coverPreviewSrc: '',
       coverUploadLoading: false,
-      isEdit: false
+      type: null,
+      isEdit:false
+    }
+  },
+  watch: {
+    type(newValue, oldValue) {
+      this.isEdit = !!newValue
     }
   },
   mounted () {
-    this.isEdit = this.$route.query.type === 'edit'
+    this.type = this.$route.query.type
+    this.isEdit = !!this.type
     this.setFormInfo()
   },
   methods: {
@@ -155,6 +163,7 @@ export default {
       }
       try {
         this.form.coverUrl = await uploadImage(this.coverImg)
+        this.coverUploadLoading = false
       } catch (e) {
         this.$bvToast.toast(this.$t('tip.picUploadFail'), {
           title: this.$t('tip.tips'),
