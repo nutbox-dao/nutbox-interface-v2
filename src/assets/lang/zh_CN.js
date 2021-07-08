@@ -254,7 +254,13 @@ module.exports = {
     youHaveCreatedCommunity: "您已经创建了一个社区",
     pleaseFillData: "请选择部署的资产和分发策略",
     deployFactoryFail: "部署失败，请重试",
-    deployFactorySuccess:"部署成功，请稍候"
+    deployFactorySuccess:"部署成功，请稍候",
+    needName: "请输入社区名字",
+    needWebsit: "请输入社区官网",
+    needDescription: "请输入社区描述",
+    needIcon: "请上传社区logo",
+    needPoster: "请上传社区封面",
+    compliteCommunityInfoSuccess: "社区信息更新成功"
   },
   vote: {
     upvote: "点赞",
@@ -303,7 +309,10 @@ module.exports = {
     notEnoughFee: '手续费不足',
     insufficentPnut: "PNUT余额不足",
     hasVoted: "Nutbox已经点赞了您的帖子。",
-    pleaseRetry: "请重试"
+    pleaseRetry: "请重试",
+    signatureFailed: "签名错误，请刷新页面重试",
+    serveError: "服务端错误",
+    networkError: "网络错误"
   },
   community: {
     community: '社区',

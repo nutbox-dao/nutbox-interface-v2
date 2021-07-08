@@ -1,11 +1,15 @@
-import { TIME_PERIOD, BLOCK_SECOND } from "@/constant"
+import {
+  TIME_PERIOD,
+  BLOCK_SECOND
+} from "@/constant"
 import {
   $t
 } from '@/i18n'
-import { QN_UPLOAD_URL } from "@/config"
+import {
+  QN_UPLOAD_URL,
+  errCode
+} from "@/config"
 import axios from 'axios'
-import { reject } from "q"
-
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -59,14 +63,14 @@ export const formatBalance = function (value, digit = 3) {
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
 }
 
-export const formatUserAddress = (address, long=true) => {
+export const formatUserAddress = (address, long = true) => {
   if (!address) return 'Loading Account'
-  if (long){
+  if (long) {
     if (address.length < 16) return address
     const start = address.slice(0, 28)
     const end = address.slice(-5)
     return `${start}...`
-  }else{
+  } else {
     const start = address.slice(0, 6)
     const end = address.slice(-6)
     return `${start}...${end}`
@@ -103,7 +107,7 @@ export function formatCountdown(end, currentBlockNum) {
       if (secs >= TIME_PERIOD["MONTH"]) {
         res = month + $t('date.month') + day + $t('date.day') + hour + $t('date.hour');
       } else if (secs >= TIME_PERIOD["DAY"]) {
-        res = day + $t('date.day') + hour + $t('date.hour')+ min + $t('date.min');
+        res = day + $t('date.day') + hour + $t('date.hour') + min + $t('date.min');
       } else if (secs >= TIME_PERIOD["HOUR"]) {
         res = hour + $t('date.hour') + min + $t('date.min');
       } else {
@@ -127,7 +131,9 @@ export const uploadImage = async (img) => {
     let param = new FormData()
     param.append('file', img)
     const config = {
-      headers: {'Content-Type': 'multipart/form-data'}
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     }
     axios.post(QN_UPLOAD_URL, param, config)
       .then((res) => {
@@ -137,4 +143,32 @@ export const uploadImage = async (img) => {
         reject(err)
       })
   })
+}
+
+/**
+ * Handle API err code
+ * @param {*} code 
+ * @param {*} toast 
+ * @returns 
+ */
+export const handleApiErrCode = (code, toast) => {
+  if (code === 200) {
+    return true
+  } else if (code === errCode.SIGNATURE_FAILED) {
+    toast($t('error.signatureFailed'), {
+      title: $t('tip.error'),
+      variant: 'danger'
+    })
+  } else if (code === errCode.INVALID_NONCE) {
+    toast($t('error.signatureFailed'), {
+      title: $t('tip.error'),
+      variant: 'danger'
+    })
+  } else if (code === errCode.DB_ERROR || code == errCode.SERVER_ERR) {
+    toast($t('error.serveError'), {
+      title: $t('tip.error'),
+      variant: 'danger'
+    })
+  }
+  return false
 }

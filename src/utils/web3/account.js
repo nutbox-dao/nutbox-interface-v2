@@ -1,6 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
-import {  getMyStakingFactory } from './community'
+import {  getMyStakingFactory, getNonce } from './community'
 
 /**
  * Get metamask accounts
@@ -21,6 +21,7 @@ export const changeAccount = async () => {
         console.log('Changed accounts', accounts);
         store.commit('web3/saveAccount', accounts[0])
         store.commit('web3/saveStakingFactoryId', null)
-        getMyStakingFactory()
+        getMyStakingFactory(true)
+        getNonce(true)
     })
 }
