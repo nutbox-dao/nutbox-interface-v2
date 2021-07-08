@@ -32,6 +32,7 @@ import Register from '@/views/RegisterAsset/Register'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
 import CommunityInfo from '@/views/Community/CommunityInfo'
+import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
 
 Vue.use(VueRouter)
 
@@ -159,6 +160,10 @@ const routes = [
         component: Community
       },
       {
+        path: 'detail-info',
+        component: CommunityDetailInfo
+      },
+      {
         path: 'deploy-token',
         component: DeployToken
       },
@@ -186,7 +191,7 @@ const routes = [
             path: 'native',
             component: NativeAsset,
             props: route => ({
-              tokenAddress:route.query.tokenAddress
+              tokenAddress: route.query.tokenAddress
             })
           },
           {
@@ -196,7 +201,7 @@ const routes = [
         ]
       }
     ]
-  },
+  }
 
 ]
 

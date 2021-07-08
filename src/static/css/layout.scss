@@ -167,7 +167,7 @@
     flex-wrap: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;
-    a {
+    a, span {
       border: 0;
       height: 2rem;
       font-size: .8rem;
@@ -176,8 +176,9 @@
       box-sizing: border-box;
       font-weight: 600;
       padding: 0 1rem;
+      cursor: pointer;
     }
-    a:hover {
+    a:hover, span:hover {
       text-decoration: none;
       font-weight: 300;
     }

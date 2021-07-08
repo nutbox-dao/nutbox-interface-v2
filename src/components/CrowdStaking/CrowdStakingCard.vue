@@ -1,19 +1,23 @@
 <template>
-  <div class="c-card">
-    <div class="card-top mt-4">
-      <div class="card-title-box flex-start-center">
-        <div class="card-icons">
-          <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
+  <div class="multi-card">
+    <div class="card-link-top-box">
+      <div class="flex-start-center">
+        <div class="card-link-icons">
           <img class="icon1" :src="crowdstaking.community.iconUrl" alt="" />
+          <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
         </div>
-        <div class="title-text font20 font-bold">
-          <span>{{crowdstaking.community.communityName }}</span>
-          <img src="~@/static/images/close.svg" alt="" />
-          <span>{{ crowdstaking.project.projectName }}</span>
+        <div class="card-link-title-text font20 font-bold">
+          <div class="link-title">
+            <span>{{crowdstaking.community.communityName }}</span>
+            <i class="link-icon"></i>
+          </div>
+          <div class="link-title">
+            <span>{{ crowdstaking.project.projectName }}</span>
+          </div>
         </div>
       </div>
-      <div class="h-line mt-4 mb-3"></div>
-
+    </div>
+    <div class="c-card">
       <div class="desc">
         {{ crowdstaking.community.description[lang] }}
       </div>
@@ -22,25 +26,25 @@
           {{ v | formatValidatorAdd }}
         </div>
       </div>
-    </div>
-    <div class="detail-info-box">
-      <template v-if="isConnected">
-        <button
-          class="primary-btn"
-          @click="nominate"
-          :disabled="nominated || loadingStaking"
-        >
-          <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-          >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
-        </button>
-      </template>
-      <div class="project-info-container">
-        <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
-      </div>
-      <div class="project-info-container">
-        <span class="name"> APY </span>
-        <div class="info">13.0%</div>
+      <div class="detail-info-box">
+        <template v-if="isConnected">
+          <button
+            class="primary-btn"
+            @click="nominate"
+            :disabled="nominated || loadingStaking"
+          >
+            <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
+            >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
+          </button>
+        </template>
+        <div class="project-info-container">
+          <span class="name"> TVL </span>
+          <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
+        </div>
+        <div class="project-info-container">
+          <span class="name"> APY </span>
+          <div class="info">13.0%</div>
+        </div>
       </div>
     </div>
 

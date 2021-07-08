@@ -24,7 +24,7 @@
         <span class="name">年华收益率</span>
         <div class="info">100-200%</div>
       </div>
-      <button class="primary-btn" @click="$router.push('/community/deploy-token')">参与</button>
+      <button class="primary-btn" @click="$router.push('/community/detail-info')">参与</button>
     </div>
   </div>
 </template>
