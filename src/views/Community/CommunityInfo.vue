@@ -161,15 +161,21 @@
     <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
+      size="sm"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      Havn't Create Community
-      <button class="primary-btn" @click="gotoCreate">
-        Go to create a community!
-      </button>
+      <div class="tip-modal">
+        <img class="close-btn" src="~@/static/images/close.svg" alt="" @click="noCommunity=false"/>
+        <div class="font20 font-bold text-center my-5">
+          Havn't Create Community
+        </div>
+        <button class="primary-btn" @click="gotoCreate">
+          Go to create a community!
+        </button>
+      </div>
     </b-modal>
     <b-modal
       v-model="showSignatureTip"
@@ -179,20 +185,27 @@
       hide-footer
       no-close-on-backdrop
     >
-      Upload community info need you sign this info with your wallet.This will
-      not cost you any asset or fee.Please be assured.
-      <button class="primary-btn" @click="onConfirm" :disabled="uploading">
-        <b-spinner small type="grow" v-show="uploading" />
-        Sign & upload data
-      </button>
-      <button
-        class="primary-btn"
-        @click="showSignatureTip = false"
-        :disabled="uploading"
-      >
-        <b-spinner small type="grow" v-show="uploading" />
-        Cancel
-      </button>
+      <div class="tip-modal">
+        <img class="close-btn" src="~@/static/images/close.svg" alt="" @click="noCommunity=false"/>
+        <div class="my-5">
+          Upload community info need you sign this info with your wallet.This will
+          not cost you any asset or fee.Please be assured.
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button class="primary-btn" @click="onConfirm" :disabled="uploading">
+            <b-spinner small type="grow" v-show="uploading" />
+            Sign & upload data
+          </button>
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showSignatureTip = false"
+            :disabled="uploading"
+          >
+            <b-spinner small type="grow" v-show="uploading" />
+            Cancel
+          </button>
+        </div>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -229,7 +242,7 @@ export default {
       type: null,
       isEdit: false,
       noCommunity: false,
-      showSignatureTip: false,
+      showSignatureTip: true,
       uploading: false,
     };
   },

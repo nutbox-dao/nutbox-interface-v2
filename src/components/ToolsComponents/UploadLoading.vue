@@ -21,37 +21,14 @@ export default {
 .loader {
   position: absolute;
   left: 50%;
-  top: 70%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: 36px;
-  height: 10px;
-  background: var(--primary-custom);
-  display: inline-block;
-  &::after {
-    content: '';
-    left: 50%;
-    top: -47px;
-    transform: translate(-50%, 0);
-    position: absolute;
-    border: 15px solid transparent;
-    border-bottom-color: var(--primary-custom);
-    animation: bump 0.4s ease-in-out infinite alternate;
-  }
-  &::before {
-    content: '';
-    left: 50%;
-    bottom: 15px;
-    transform: translate(-50%, 0);
-    position: absolute;
-    width: 15px;
-    height: 20px;
-    background: var(--primary-custom);
-    animation: bump 0.4s ease-in-out infinite alternate;
-
-  }
+  @include icon(4rem, 4rem);
+  background-image: url("~@/static/images/upload.svg");
+  animation: bump 0.4s ease-in-out infinite alternate;
 }
 @keyframes bump {
-  0% {  transform: translate(-50%, 5px) }
-  100% {  transform: translate(-50% , -5px ) }
+  0% {  transform: translate(-50%, -40%) }
+  100% {  transform: translate(-50%, -60%) }
 }
 </style>
