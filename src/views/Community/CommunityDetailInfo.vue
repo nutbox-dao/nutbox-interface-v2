@@ -45,7 +45,7 @@
               v-for="idx of 10"
               :key="idx"
             >
-              <MiningCard/>
+              <MiningCard :chain="tabOptions[activeTab].chain"/>
             </div>
           </div>
         </div>
@@ -70,8 +70,9 @@ export default {
       communityNominatorId: null,
       activeTab: 0,
       tabOptions: [
-        { name: 'Polkadot', component: 'PolkadotAccount' },
-        { name: 'Steem', component: 'SteemAccount' }
+        { name: 'Polkadot', component: 'PolkadotAccount', chain: 'polkadot' },
+        { name: 'Kusama', component: 'PolkadotAccount', chain: 'kusama' },
+        { name: 'Steem', component: 'SteemAccount', chain: 'steem' }
       ]
     }
   },

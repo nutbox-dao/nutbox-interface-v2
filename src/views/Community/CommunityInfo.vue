@@ -186,7 +186,8 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <img class="close-btn" src="~@/static/images/close.svg" alt="" @click="noCommunity=false"/>
+        <img class="close-btn" src="~@/static/images/close.svg"
+             alt="" @click="showSignatureTip=false"/>
         <div class="my-5">
           Upload community info need you sign this info with your wallet.This will
           not cost you any asset or fee.Please be assured.
