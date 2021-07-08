@@ -5,7 +5,7 @@
         <div class="page-back-text-icon page-view-title" @click="$router.back()">Your Staking pools</div>
       </div>
       <div class="col-md-6 btn-group">
-        <button class="outline-btn">
+        <button class="outline-btn" @click="$router.push('/community/community-info')">
           <i class="setting-icon"></i>
           <span>Setting</span>
         </button>

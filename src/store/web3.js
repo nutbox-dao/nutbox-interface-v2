@@ -10,9 +10,11 @@ export default {
     abis: {},
     chainId: -1,
     stakingFactoryId: null,
+    communityInfo: null,
     allAssetsOfUser: null,
     allTokens: null,
     blockNum: null,
+    nonce: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -34,6 +36,9 @@ export default {
     saveStakingFactoryId: (state, stakingFactoryId) => {
       state.stakingFactoryId = stakingFactoryId
     },
+    saveCommunityInfo: (state, communityInfo) => {
+      state.communityInfo = communityInfo
+    },
     saveAllAssetsOfUser: (state, allAssetsOfUser) => {
       state.allAssetsOfUser = allAssetsOfUser
     },
@@ -42,6 +47,9 @@ export default {
     },
     saveBlockNum : (state, blockNum) => {
       state.blockNum = blockNum
+    },
+    saveNonce: (state, nonce) => {
+      state.nonce = nonce
     }
   },
   getters: {

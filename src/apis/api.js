@@ -74,6 +74,8 @@ export const getDashboardSummary = async (params) => post(CROWD_LOAN_API_URL + '
 
 export const getAllCommunities = async () => get(BACKEND_API_URL + '/community/get')
 
+export const getMyCommunityInfo = async (communityId) => get(BACKEND_API_URL + '/community/get', {id: communityId})
+
 export const insertCommunity = async (params) => post(BACKEND_API_URL + '/community/insert', params)
 
 export const updateCommunity = async (params) => put(BACKEND_API_URL + '/community/update', params)
@@ -81,3 +83,5 @@ export const updateCommunity = async (params) => put(BACKEND_API_URL + '/communi
 export const insertToken = async (params) => post(BACKEND_API_URL + '/token/insert', params)
 
 export const getAllTokens = async () => get(BACKEND_API_URL + '/token/get')
+
+export const getNonce = async (accountId) => get(BACKEND_API_URL + '/user/getnonce', {userId: accountId})

@@ -16,8 +16,8 @@ export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-// export const BACKEND_API_URL = "http://localhost:3000"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = "http://v2-api-test.nutbox.io/qiNiu/upload"
 
@@ -65,4 +65,14 @@ export const NUTBOX_REGISTRY_ASSETS = [
 export const Transaction_config = {
   gasPrice: 50000000,
   gasLimit: 1000000000
+}
+
+/**
+ * ERROR CODE DEFINE
+ */
+ export const errCode = {
+  SIGNATURE_FAILED: 451,
+  INVALID_NONCE: 452,
+  DB_ERROR: 453,
+  SERVER_ERR: 500
 }
