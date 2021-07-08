@@ -88,17 +88,8 @@
               </template>
               <template #file-name>
                 <div class="input-file-logo">
-                  <img
-                    class="logo-preview"
-                    v-if="logoPreviewSrc"
-                    :src="logoPreviewSrc"
-                    alt=""
-                  />
-                  <b-spinner
-                    v-if="logoUploadLoading"
-                    class="upload-loading"
-                    type="grow"
-                  ></b-spinner>
+                  <img class="logo-preview" v-if="logoPreviewSrc" :src="logoPreviewSrc" alt="">
+                  <UploadLoading v-if="logoUploadLoading" />
                 </div>
               </template>
             </b-form-file>
@@ -145,17 +136,8 @@
               </template>
               <template #file-name>
                 <div class="input-file-cover">
-                  <img
-                    class="cover-preview"
-                    v-if="coverPreviewSrc"
-                    :src="coverPreviewSrc"
-                    alt=""
-                  />
-                  <b-spinner
-                    v-if="coverUploadLoading"
-                    class="upload-loading"
-                    type="grow"
-                  ></b-spinner>
+                  <img class="cover-preview" v-if="coverPreviewSrc" :src="coverPreviewSrc" alt="">
+                  <UploadLoading v-if="coverUploadLoading"/>
                 </div>
               </template>
             </b-form-file>
@@ -216,7 +198,8 @@
 </template>
 
 <script>
-import { uploadImage } from "@/utils/helper";
+import { uploadImage } from '@/utils/helper'
+import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import {
   compliteCommunityInfo,
   getMyCommunityInfo,
@@ -224,8 +207,9 @@ import {
 import { handleApiErrCode, sleep } from "@/utils/helper";
 
 export default {
-  name: "EditCommunityInfo",
-  data() {
+  name: 'EditCommunityInfo',
+  components: { UploadLoading },
+  data () {
     return {
       logo: null,
       coverImg: null,
