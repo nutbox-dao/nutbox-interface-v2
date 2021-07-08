@@ -55,7 +55,6 @@
         >
           <template #placeholder>
             <div class="input-file-logo">
-              <UploadLoading></UploadLoading>
               <img class="add-icon" src="~@/static/images/add.svg" alt="">
             </div>
           </template>
