@@ -55,13 +55,14 @@
         >
           <template #placeholder>
             <div class="input-file-logo">
+              <UploadLoading></UploadLoading>
               <img class="add-icon" src="~@/static/images/add.svg" alt="">
             </div>
           </template>
           <template #file-name>
             <div class="input-file-logo">
               <img class="logo-preview" v-if="logoPreviewScr" :src="logoPreviewScr" alt="">
-              <b-spinner v-if="loading" class="upload-loading" type="grow"></b-spinner>
+              <UploadLoading v-if="loading"/>
             </div>
           </template>
         </b-form-file>
@@ -141,9 +142,11 @@ import { deployERC20 } from '@/utils/web3/asset'
 import Clipboard from 'clipboard'
 import { uploadImage } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
+import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 
 export default {
   name: 'DeployForm',
+  components: { UploadLoading },
   props: {
     isMintable: {
       type: Boolean,

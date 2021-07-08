@@ -42,7 +42,7 @@
               <template #file-name>
                 <div class="input-file-logo">
                   <img class="logo-preview" v-if="logoPreviewSrc" :src="logoPreviewSrc" alt="">
-                  <b-spinner v-if="logoUploadLoading" class="upload-loading" type="grow"></b-spinner>
+                  <UploadLoading v-if="logoUploadLoading" />
                 </div>
               </template>
             </b-form-file>
@@ -71,7 +71,7 @@
               <template #file-name>
                 <div class="input-file-cover">
                   <img class="cover-preview" v-if="coverPreviewSrc" :src="coverPreviewSrc" alt="">
-                  <b-spinner v-if="coverUploadLoading" class="upload-loading" type="grow"></b-spinner>
+                  <UploadLoading v-if="coverUploadLoading"/>
                 </div>
               </template>
             </b-form-file>
@@ -88,9 +88,11 @@
 
 <script>
 import { uploadImage } from '@/utils/helper'
+import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 
 export default {
   name: 'EditCommunityInfo',
+  components: { UploadLoading },
   data () {
     return {
       logo: null,

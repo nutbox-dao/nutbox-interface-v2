@@ -284,6 +284,7 @@ input::-webkit-input-placeholder {
   background-color: #F6F7F9!important;
   border: 1px solid #E3E5E8!important;
   padding: 0!important;
+  box-sizing: content-box;
 }
 .custom-file-label::after{
   content: ''!important;
