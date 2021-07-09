@@ -5,10 +5,11 @@ import {
 } from "./contract";
 import store from '@/store'
 import {
-  Contract,
-  ethers,
-  utils
+  ethers
 } from "ethers";
+import {
+  getWeb3
+} from './web3'
 import {
   getProvider
 } from './ethers'
@@ -106,7 +107,6 @@ export const getAssetMetadata = async (id, assetType) => {
 }
 
 // get ERC20 info from home chain.
-// TODO:  Change to get info from our server
 export const getERC20Info = async (address) => {
   const contract = await getContract('ERC20', address);
   if (!contract) return;
@@ -121,10 +121,10 @@ export const getERC20Info = async (address) => {
 }
 
 /**
- * registry homechain asset
+ * register homechain asset
  * @param {*} assetAddress
  */
-export const registryHomeChainAsset = async (assetAddress) => {
+export const registerHomeChainAsset = async (assetAddress) => {
   // validate asset address
 
   // regitster asset
@@ -138,6 +138,32 @@ export const registryHomeChainAsset = async (assetAddress) => {
     return tx
   }catch(e) {
     console.log('Registry Homechain Asset Fail', e);
+  }
+}
+
+/**
+ * Register steem/hive bind asset
+ * @param {*} form 
+ */
+export const registerSteemHiveAsset = async (form) => {
+  const contract = await getContract('SteemHiveDelegateAssetRegistry');
+  if (!contract) return;
+  try{
+    const web3 = await getWeb3()
+    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
+    const foreignLocation = '0x' +
+    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) + 
+    web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) + 
+    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) + 
+    web3.utils.stringToHex(form.account).substr(2)
+    console.log(homeChain, foreignLocation);
+    const tx = await contract.registerAsset(
+      foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+      Transaction_config
+    )
+    return tx.hash
+  }catch(e){
+    return e
   }
 }
 

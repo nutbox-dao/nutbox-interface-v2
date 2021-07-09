@@ -21,14 +21,21 @@
         </div>
         <b-form class="custom-form pool-form">
           <b-form-group id="input-group-1"
-                        label="Staking Token"
+                        label="Staking Asset"
                         label-for="input-1">
             <b-form-input
               id="input-1"
               v-model="form.amount"
-              placeholder="crowdloan-plasm-bml-period1-40%"
+              placeholder="Please select an asset"
               required
             ></b-form-input>
+            <div class="flex-between-center">
+                <div class="custom-control" style="line-height: 1.5rem">
+                  <span v-show="isHomeChainAsset">* This is a homechian asset</span>
+                  <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
+                  <router-link to="/community/register/native">Registry a new asset</router-link>
+                </div>
+              </div>
           </b-form-group>
           <div class="row">
             <b-form-group class="col-md-6"
@@ -77,6 +84,7 @@ export default {
   name: 'AddPool',
   data () {
     return {
+      isHomeChainAsset: true,
       colorList: ['#FF7366', '#7CBF4D', '#70ACFF', '#FFE14D', '#CC85FF', '#FF9500', '#00C7D9', '#9D94FF', '#FF73AD'],
       options: {
         tooltip: { show: true, trigger: 'item' },

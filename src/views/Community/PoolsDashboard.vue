@@ -9,7 +9,7 @@
           <i class="setting-icon"></i>
           <span>Setting</span>
         </button>
-        <button class="outline-btn">Update Pool Rations</button>
+        <button class="outline-btn" v-show="stakingPools.length > 0">Update Pool Rations</button>
         <button @click="$router.push('/community/add-pool')">
           <i class="add-icon"></i>
           <span>Add Pool</span>
@@ -57,7 +57,7 @@
 <script>
 import StakePoolCard from '@/components/Community/StakePoolCard'
 import Progress from '@/components/Community/Progress'
-
+import { getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'PoolsDashboard',
@@ -79,7 +79,7 @@ export default {
     },
   },
   async mounted () {
-    ;
+    const assets = await getRegitryAssets()
   },
 }
 </script>

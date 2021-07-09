@@ -23,9 +23,9 @@ export default {
     return {
       activeTab: 0,
       tabOptions: [
-        { name: 'Bingding STEEM/HIVE SP Delegation', id: 0, cName: 'DelegationForm' },
-        { name: 'Binding Polkadot Crowdloan Contribution', id: 1, cName: 'ContributionForm' },
-        { name: 'Binding Polkadot Validator Nomination', id: 2, cName: 'NominationForm' }
+        { name: 'Register STEEM/HIVE Delegation Asset', id: 0, cName: 'DelegationForm' },
+        { name: 'Regitster Polkadot Crowdloan Asset', id: 1, cName: 'ContributionForm' },
+        { name: 'Regitster Polkadot Validator Asset', id: 2, cName: 'NominationForm' }
       ]
     }
   }

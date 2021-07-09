@@ -3,13 +3,13 @@
     <b-form class="custom-form text-left">
       <b-form-group
         id="input-group-1"
-        label="Home Location"
+        :label="$t('asset.homeLocation')"
         label-for="input-1"
       >
         <b-form-input
           id="input-1"
           v-model="tokenAddress"
-          placeholder="Your token contract address"
+          :placeholder="$t('asset.inputHomeLocation')"
           required
         ></b-form-input>
         <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
@@ -17,22 +17,21 @@
             <div v-if="false"></div>
           </div>
           <div class="custom-control" style="line-height: 1.5rem">
-            Havn’t Deploy yet？
-            <router-link to="/community/deploy-token">Deploy one</router-link>
+            {{ $t('asset.notDeploy') }}
+            <router-link to="/community/deploy-token">{{ $t('asset.deployOne') }}</router-link>
           </div>
         </div>
       </b-form-group>
       <button class="primary-btn" @click="registry" :disabled='registring'>
         <b-spinner small type="grow" v-show="registring" />
-        Register
+        {{ $t('asset.register') }}
       </button>
     </b-form>
   </div>
 </template>
 
 <script>
-import { registryHomeChainAsset, getRegitryAssets, getERC20Info } from '@/utils/web3/asset'
-import { isContractAddress } from '@/utils/web3/contract'
+import { registerHomeChainAsset, getRegitryAssets, getERC20Info } from '@/utils/web3/asset'
 
 export default {
   name: "CrossChainAsset",
@@ -56,7 +55,7 @@ export default {
         return;
       }
       try{
-        const res = await registryHomeChainAsset(this.tokenAddress)
+        const res = await registerHomeChainAsset(this.tokenAddress)
         if (res){
           this.$bvToast.toast('txHash:'+res.hash, {
             title: this.$t('tip.registryAssetSuccess'),

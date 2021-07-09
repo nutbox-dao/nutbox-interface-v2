@@ -338,4 +338,20 @@ module.exports = {
     editTip:"上传社区资料需要使用您的钱包签名，此操作不会消耗你任何费用，请放心使用。",
     sign: "签名并上传社区资料"
   },
+  asset: {
+    network: "网络",
+    native: "主链资产",
+    foreign:"跨链资产",
+    registerTitle: '注册您的专属资产',
+    yourSteemAccount: "你的Steem/Hive账号",
+    assetName: "为该资产取个名字",
+    assetProperties: "资产属性",
+    register: "注册",
+    homeLocation: "主链资产地址",
+    inputHomeLocation: "请输入ERC20地址",
+    notDeploy:"还没有Token？",
+    deployOne:"部署一个",
+    inputAccount:"请输入您的账号",
+    inputAssetName:"请输入资产名字"
+  }
 }

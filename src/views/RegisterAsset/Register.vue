@@ -2,17 +2,17 @@
   <div class="page-view-content register">
     <div class="view-top-header mb-2">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
-        Register Your Asset On Nutbox
+        {{ $t('asset.registerTitle') }}
       </div>
     </div>
     <!-- <div class="page-view-subtitle">Choose asset type</div> -->
     <div class="nav-box">
       <div class="nav">
         <router-link to="/community/register/native"
-        >Native Asset Only</router-link
+        >{{ $t('asset.native') }}</router-link
         >
         <router-link to="/community/register/cross-chain-asset"
-        >Cross-chain Binding Asset</router-link
+        >{{ $t('asset.foreign') }}</router-link
         >
       </div>
     </div>

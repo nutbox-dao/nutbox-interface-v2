@@ -255,7 +255,9 @@ export default {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
     try{
+      console.log(331);
       const communityInfo = await getMyCommunityInfo();
+      console.log(44, this.form);
       if (!communityInfo) {
         // Havn't create feast
         this.noCommunity = true;
@@ -264,6 +266,7 @@ export default {
       this.canEdit = true
       this.form = communityInfo;
     }catch(e){
+      console.log(666, e);
         handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
