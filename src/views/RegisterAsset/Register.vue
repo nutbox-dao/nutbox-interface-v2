@@ -8,10 +8,10 @@
     <!-- <div class="page-view-subtitle">Choose asset type</div> -->
     <div class="nav-box">
       <div class="nav">
-        <router-link to="/community/register/native"
+        <router-link to="/community/register/native" replace
         >{{ $t('asset.native') }}</router-link
         >
-        <router-link to="/community/register/cross-chain-asset"
+        <router-link to="/community/register/cross-chain-asset" replace
         >{{ $t('asset.foreign') }}</router-link
         >
       </div>
