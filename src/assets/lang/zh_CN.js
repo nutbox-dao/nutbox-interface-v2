@@ -332,6 +332,10 @@ module.exports = {
     uploadLogo: "上传Logo",
     picTip: "建议尺寸 {size} ，小于2M，支持jpg、png、jpeg格式",
     uploadPoster: "上传封面",
-    poster: "封面"
+    poster: "封面",
+    noCommunity:"你还没有创建社区",
+    gotoCreate:"现在去创建",
+    editTip:"上传社区资料需要使用您的钱包签名，此操作不会消耗你任何费用，请放心使用。",
+    sign: "签名并上传社区资料"
   },
 }

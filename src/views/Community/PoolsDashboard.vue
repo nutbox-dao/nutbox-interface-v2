@@ -33,25 +33,54 @@
         </div>
       </template>
     </div>
+        <b-modal
+      v-model="noCommunity"
+      modal-class="custom-modal"
+      size="sm"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center my-5">
+          {{ $t('community.noCommunity') }}
+        </div>
+        <button class="primary-btn" @click="gotoCreate">
+          {{ $t('community.gotoCreate') }}
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import StakePoolCard from '@/components/Community/StakePoolCard'
 import Progress from '@/components/Community/Progress'
+
+
 export default {
   name: 'PoolsDashboard',
   components: { StakePoolCard, Progress },
   data () {
     return {
       stakingPools: [],
+      noCommunity:false,
       progressData: [
         { percentage: '10', value: 200, start: 1001, end: 2000, background: 'rgba(80, 191, 0, 0.3)' },
         { percentage: '30', value: 300, start: 2001, end: 4000, background: 'rgba(80, 191, 0, 0.6)' },
         { percentage: '50', value: 400, start: 4001, end: 2000, background: 'rgba(80, 191, 0, 1)' }
       ]
     }
-  }
+  },
+  methods: {
+    gotoCreate() {
+      this.$router.push("/community/create-economy");
+    },
+  },
+  async mounted () {
+    ;
+  },
 }
 </script>
 

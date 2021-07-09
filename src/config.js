@@ -71,6 +71,7 @@ export const Transaction_config = {
  * ERROR CODE DEFINE
  */
  export const errCode = {
+  BLOCK_CHAIN_ERR: 351,
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,
   DB_ERROR: 453,

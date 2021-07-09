@@ -12,7 +12,7 @@
         }}
       </div>
       <div v-if="!isEdit">
-        <button class="primary-btn pl-3 pr-3" @click="isEdit = true">
+        <button class="primary-btn pl-3 pr-3" :disabled="!canEdit" @click="type='edit'">
           {{ $t("community.edit") }}
         </button>
       </div>
@@ -168,12 +168,11 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <img class="close-btn" src="~@/static/images/close.svg" alt="" @click="noCommunity=false"/>
         <div class="font20 font-bold text-center my-5">
-          Havn't Create Community
+          {{ $t('community.noCommunity') }}
         </div>
         <button class="primary-btn" @click="gotoCreate">
-          Go to create a community!
+          {{ $t('community.gotoCreate') }}
         </button>
       </div>
     </b-modal>
@@ -189,13 +188,12 @@
         <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/>
         <div class="my-5">
-          Upload community info need you sign this info with your wallet.This will
-          not cost you any asset or fee.Please be assured.
+          {{ $t('community.editTip') }}
         </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            Sign & upload data
+            {{ $t('community.sign') }}
           </button>
           <button
             class="primary-btn primary-btn-outline"
@@ -242,8 +240,9 @@ export default {
       coverUploadLoading: false,
       type: null,
       isEdit: false,
+      canEdit:false,
       noCommunity: false,
-      showSignatureTip: true,
+      showSignatureTip: false,
       uploading: false,
     };
   },
@@ -255,13 +254,20 @@ export default {
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
-    const communityInfo = await getMyCommunityInfo();
-    if (!communityInfo) {
-      // Havn't create feast
-      this.noCommunity = true;
-      return;
+    try{
+      const communityInfo = await getMyCommunityInfo();
+      if (!communityInfo) {
+        // Havn't create feast
+        this.noCommunity = true;
+        return;
+      }
+      this.canEdit = true
+      this.form = communityInfo;
+    }catch(e){
+        handleApiErrCode(e, (info, params) => {
+          this.$bvToast.toast(info, params);
+        });
     }
-    this.form = communityInfo;
   },
   methods: {
     setFormInfo() {
@@ -350,10 +356,7 @@ export default {
       try {
         this.uploading = true;
         const resCode = await compliteCommunityInfo(this.form, this.type);
-        const handleRes = handleApiErrCode(resCode, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-        if (handleRes) {
+
           // go to community dashboard
           this.$bvToast.toast(this.$t("tip.compliteCommunityInfoSuccess"), {
             title: this.$t("tip.tips"),
@@ -361,17 +364,13 @@ export default {
           });
           await sleep(3);
           this.$router.push("/community/pool-dashboard");
-        }
       } catch (e) {
-        this.$bvToast.toast(this.$t("error.networkError"), {
-          title: this.$t("error.error"),
-          variant: "danger",
+          const handleRes = handleApiErrCode(resCode, (info, params) => {
+          this.$bvToast.toast(info, params);
         });
       } finally {
         this.uploading = false;
       }
-
-      // this.isEdit = false
     },
     gotoCreate() {
       this.$router.push("/community/create-economy");

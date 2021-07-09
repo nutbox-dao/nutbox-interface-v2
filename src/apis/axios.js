@@ -10,11 +10,7 @@ export function get (url, params) {
     axios.get(url, {
       params: params
     }).then(res => {
-      if (res.status == 200){
-        resolve(res.data)
-      }else{
-        resolve(res.status)
-      }
+      resolve(res.data)
     }).catch(err => {
       if (err.response){
         reject(err.response.status)
@@ -28,11 +24,7 @@ export function get (url, params) {
 export function post (url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params).then(res => {
-      if (res.status == 200){
-        resolve(res.data)
-      }else{
-        resolve(res)
-      }
+      resolve(res.data)
     }).catch(err => {
       if (err.response){
         reject(err.response.status)
@@ -46,11 +38,7 @@ export function post (url, params) {
 export function put (url, params) {
   return new Promise((resolve, reject) => {
     axios.put(url, params).then(res => {
-      if (res.status == 200){
-        resolve(res.data)
-      }else{
-        resolve(res)
-      }
+      resolve(res.data)
     }).catch(err => {
       if (err.response){
         reject(err.response.status)
