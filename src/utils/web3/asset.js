@@ -190,21 +190,42 @@ export const registerCrowdloanAsset = async (form) => {
     const web3 = await getWeb3()
     const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
     const foreignLocation = '0x' +
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.ch)), 1).substr(2) + // chainId: polkadot
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
       ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
       ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
       addressToHex(form.communityAddress).substr(2) // communityAccount
 
-    console.log(foreignLocation);
-
     const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
       name: form.assetName,
       endingBlock: form.endingBlock
-    })),Transaction_config)
+    })), Transaction_config)
     await waitForTx(tx.hash)
     return tx.hash
   } catch (e) {
     throw (e)
+  }
+}
+
+/**
+ * Register validate node binding asset
+ * @param {*} form 
+ * @returns 
+ */
+export const registerNominateAsset = async (form) => {
+  const contract = await getContract('SubstrateNominateAssetRegistry');
+  if (!contract) return;
+  try {
+    const web3 = await getWeb3()
+    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+    const foreignLocation = '0x' +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
+      addressToHex(form.nodeAddress).substr(2) // node address
+
+    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName), Transaction_config)
+    await waitForTx(tx.hash)
+    return tx.hash
+  } catch (e) {
+    throw e
   }
 }
 

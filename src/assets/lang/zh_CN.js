@@ -261,7 +261,7 @@ module.exports = {
     needIcon: "请上传社区logo",
     needPoster: "请上传社区封面",
     compliteCommunityInfoSuccess: "社区信息更新成功",
-    wrongSubstrateAddress:"请输入正确的 {type} 社区地址"
+    wrongSubstrateAddress:"请输入正确的 {type} 地址"
   },
   vote: {
     upvote: "点赞",
@@ -361,6 +361,11 @@ module.exports = {
     communityAddress: "社区地址（波卡地址）",
     inputCommunityAddress: '请输入社区的波卡地址',
     endingBlock: "资产有效期",
-    inputEndingBlock: "请输入资产失效的最后区块高度"
+    inputEndingBlock: "请输入资产失效的最后区块高度",
+    registerSteemTab: "注册STEEM/HIVE代理绑定资产",
+    registerCrowdloanTab: "注册Polkadot/Kusma众贷绑定资产",
+    registerValidatorTab: "注册Polkadot/Kuama验证者节点绑定资产",
+    validatorNodeAddress: "验证者节点地址",
+    inputValidatorNode: "请输入验证者节点地址",
   }
 }

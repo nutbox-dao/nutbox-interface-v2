@@ -3,7 +3,7 @@
     <div class="tabs tabs-3 font16">
       <span v-for="item of tabOptions" :key="item.id"
             :class="activeTab===item.id?'active':''"
-            @click="activeTab=item.id">{{item.name}}</span>
+            @click="activeTab=item.id">{{ $t('asset.' + item.name) }}</span>
     </div>
     <div class="h-line"></div>
     <div class="text-left form-box">
@@ -23,9 +23,9 @@ export default {
     return {
       activeTab: 0,
       tabOptions: [
-        { name: 'Register STEEM/HIVE Delegation Asset', id: 0, cName: 'DelegationForm' },
-        { name: 'Regitster Polkadot Crowdloan Asset', id: 1, cName: 'ContributionForm' },
-        { name: 'Regitster Polkadot Validator Asset', id: 2, cName: 'NominationForm' }
+        { name: 'registerSteemTab', id: 0, cName: 'DelegationForm' },
+        { name: 'registerCrowdloanTab', id: 1, cName: 'ContributionForm' },
+        { name: 'registerValidatorTab', id: 2, cName: 'NominationForm' }
       ]
     }
   }
