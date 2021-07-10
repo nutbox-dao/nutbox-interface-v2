@@ -11,7 +11,8 @@ import {
   getWeb3
 } from './web3'
 import {
-  getProvider
+  getProvider,
+  waitForTx
 } from './ethers'
 import {
   Transaction_config
@@ -156,14 +157,14 @@ export const registerSteemHiveAsset = async (form) => {
     web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) + 
     ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) + 
     web3.utils.stringToHex(form.account).substr(2)
-    console.log(homeChain, foreignLocation);
     const tx = await contract.registerAsset(
       foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
       Transaction_config
     )
+    await waitForTx(tx.hash)
     return tx.hash
   }catch(e){
-    return e
+    throw(e)
   }
 }
 

@@ -15,3 +15,15 @@ export const getProvider = async (force = false) => {
     store.commit('web3/saveEthers', provider)
     return provider 
 }
+
+/**
+ * Wait for the transaction comfirmed
+ * @param {*} hash 
+ */
+export const waitForTx = async (hash) => {
+    const provider = await getProvider()
+    console.log(`Waiting for tx: ${hash}...`)
+    while (!await provider.getTransactionReceipt(hash)) {
+        sleep(1000)
+    }
+}
