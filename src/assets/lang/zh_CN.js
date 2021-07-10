@@ -260,7 +260,8 @@ module.exports = {
     needDescription: "请输入社区描述",
     needIcon: "请上传社区logo",
     needPoster: "请上传社区封面",
-    compliteCommunityInfoSuccess: "社区信息更新成功"
+    compliteCommunityInfoSuccess: "社区信息更新成功",
+    wrongSubstrateAddress:"请输入正确的 {type} 社区地址"
   },
   vote: {
     upvote: "点赞",
@@ -352,6 +353,14 @@ module.exports = {
     notDeploy:"还没有Token？",
     deployOne:"部署一个",
     inputAccount:"请输入您的账号",
-    inputAssetName:"请输入资产名字"
+    inputAssetName:"请输入资产名字",
+    parachainId: "平行链ID",
+    inputParachainId: "请输入平行链ID",
+    trieIndex: 'Trie Index',
+    inputTrieIndex: '请输入Trie Index',
+    communityAddress: "社区地址（波卡地址）",
+    inputCommunityAddress: '请输入社区的波卡地址',
+    endingBlock: "资产有效期",
+    inputEndingBlock: "请输入资产失效的最后区块高度"
   }
 }

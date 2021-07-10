@@ -5,6 +5,9 @@ import {
 } from "./contract";
 import store from '@/store'
 import {
+  addressToHex
+} from '@/utils/commen/account'
+import {
   ethers
 } from "ethers";
 import {
@@ -17,7 +20,9 @@ import {
 import {
   Transaction_config
 } from '@/config'
-import { getAllTokens } from '@/apis/api'
+import {
+  getAllTokens
+} from '@/apis/api'
 
 /**
  * Judge asset wheather Homechain assets
@@ -53,8 +58,8 @@ const isNominateAsset = (address) => {
  * @returns 
  */
 const assetType = (address) => {
-  for (let contract in contractAddress){
-    if (contractAddress[contract].toLowerCase() === address.toLowerCase()){
+  for (let contract in contractAddress) {
+    if (contractAddress[contract].toLowerCase() === address.toLowerCase()) {
       return contract
     }
   }
@@ -65,9 +70,9 @@ const assetType = (address) => {
  * Restore these infos to cache
  * @returns assets list contains detail infos
  */
-export const getRegitryAssets = async (update=false) => {
+export const getRegitryAssets = async (update = false) => {
   let assets = store.state.web3.allAssetsOfUser
-  if (!update && assets){
+  if (!update && assets) {
     return assets
   }
   const account = store.state.web3.account
@@ -82,7 +87,7 @@ export const getRegitryAssets = async (update=false) => {
     type: assetType(registryContract[index])
   }));
   const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-  
+
   assets = assets.map((asset, index) => ({
     ...asset,
     ...metadatas[index]
@@ -99,7 +104,7 @@ export const getRegitryAssets = async (update=false) => {
 export const getAssetMetadata = async (id, assetType) => {
   const contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
   if (!contract) return;
-  if (assetType === 'HomeChainAssetRegistry'){
+  if (assetType === 'HomeChainAssetRegistry') {
     const homeLocation = await contract.getHomeLocation(id)
     return await getERC20Info(homeLocation)
   }
@@ -115,10 +120,16 @@ export const getERC20Info = async (address) => {
   let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
   const tokenFromBackend = tokens?.filter(token => token.address === address)
   let icon = null
-  if (tokenFromBackend && tokenFromBackend.length > 0){
+  if (tokenFromBackend && tokenFromBackend.length > 0) {
     icon = tokenFromBackend[0].icon
   }
-  return {name: infos[0], symbol: infos[1], decimal: infos[2], address, icon}
+  return {
+    name: infos[0],
+    symbol: infos[1],
+    decimal: infos[2],
+    address,
+    icon
+  }
 }
 
 /**
@@ -131,13 +142,13 @@ export const registerHomeChainAsset = async (assetAddress) => {
   // regitster asset
   const contract = await getContract('HomeChainAssetRegistry');
   if (!contract) return
-  try{
+  try {
     const tx = await contract.registerAsset(
       '0x', assetAddress, '0x',
       Transaction_config
     )
     return tx
-  }catch(e) {
+  } catch (e) {
     console.log('Registry Homechain Asset Fail', e);
   }
 }
@@ -149,22 +160,51 @@ export const registerHomeChainAsset = async (assetAddress) => {
 export const registerSteemHiveAsset = async (form) => {
   const contract = await getContract('SteemHiveDelegateAssetRegistry');
   if (!contract) return;
-  try{
+  try {
     const web3 = await getWeb3()
     const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
     const foreignLocation = '0x' +
-    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) + 
-    web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) + 
-    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) + 
-    web3.utils.stringToHex(form.account).substr(2)
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
+      web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
+      web3.utils.stringToHex(form.account).substr(2)
     const tx = await contract.registerAsset(
       foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
       Transaction_config
     )
     await waitForTx(tx.hash)
     return tx.hash
-  }catch(e){
-    throw(e)
+  } catch (e) {
+    throw (e)
+  }
+}
+
+/**
+ * Register crowdloan on polkadot as a binding asset
+ * @param {*} form 
+ */
+export const registerCrowdloanAsset = async (form) => {
+  const contract = await getContract('SubstrateCrowdloanAssetRegistry');
+  if (!contract) return;
+  try {
+    const web3 = await getWeb3()
+    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+    const foreignLocation = '0x' +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.ch)), 1).substr(2) + // chainId: polkadot
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
+      addressToHex(form.communityAddress).substr(2) // communityAccount
+
+    console.log(foreignLocation);
+
+    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
+      name: form.assetName,
+      endingBlock: form.endingBlock
+    })),Transaction_config)
+    await waitForTx(tx.hash)
+    return tx.hash
+  } catch (e) {
+    throw (e)
   }
 }
 
@@ -200,18 +240,18 @@ export const deployERC20 = async ({
  * @param {*} update  wheather update local cache
  * @returns 
  */
-export const getAllTokenFromBackend = async (update=false) => {
+export const getAllTokenFromBackend = async (update = false) => {
   const tokens = store.state.web3.allTokens
   if (!update && tokens) {
     return tokens
   }
-  try{
+  try {
     const allTokens = await getAllTokens()
     store.commit('web3/saveAllTokens', allTokens)
     return allTokens
-  }catch(e){
+  } catch (e) {
     console.log('Get All Tokens Failed');
     return null
   }
-  
+
 }
