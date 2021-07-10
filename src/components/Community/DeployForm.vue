@@ -284,9 +284,11 @@ export default {
   .label {
     flex: 0.4;
     color: #717376;
+    white-space: nowrap;
   }
   .info {
     flex: 0.6;
+    word-break: break-all;
   }
   .logo {
     width: 3rem;

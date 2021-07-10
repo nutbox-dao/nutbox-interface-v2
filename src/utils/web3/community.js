@@ -7,7 +7,7 @@ import { signMessage } from './utils'
 
 /**
  * Get community admin's staking factory id
- * @returns 
+ * @returns
  */
 export const getMyStakingFactory = async (update=false) => {
     return new Promise(async (resolve, reject) => {
@@ -34,8 +34,8 @@ export const getMyStakingFactory = async (update=false) => {
 
 /**
  * Get community's infos from backend
- * @param {*} update 
- * @returns 
+ * @param {*} update
+ * @returns
  */
 export const getMyCommunityInfo = async (update=false) => {
     return new Promise(async (resolve, reject) => {
@@ -70,7 +70,7 @@ export const getMyCommunityInfo = async (update=false) => {
 
 /**
  * Get opened pools of community
- * @returns 
+ * @returns
  */
 export const getMyOpenedPools = async () => {
     const stakingFactoryId = await getMyStakingFactory()
@@ -113,7 +113,7 @@ export const createStakingFeast = async (form) => {
 
 /**
  * Create or update community info to backend
- * @param {*} form 
+ * @param {*} form
  */
 export const compliteCommunityInfo = async (form, type) => {
     let nonce = await getNonce()
@@ -147,7 +147,7 @@ export const compliteCommunityInfo = async (form, type) => {
 
 /**
  * Get User's nonce
- * @param {*} update 
+ * @param {*} update
  */
 export const getNonce = async (update=false) => {
     let nonce = store.state.web3.nonce

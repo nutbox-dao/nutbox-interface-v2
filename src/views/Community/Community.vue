@@ -21,11 +21,21 @@
       </template>
     </b-input-group>
     <div class="scroll-content">
-      <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="i of 5" :key="i">
-          <CommunityCard/>
-        </div>
+      <div class="loading-bg" v-if="loading">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
       </div>
+      <template v-else>
+        <div class="empty-bg" v-if="allCommunities && allCommunities.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t("tip.noContribuitons") }}</p>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of allCommunities" :key="index">
+            <CommunityCard :card-info="cItem"/>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -33,13 +43,36 @@
 <script>
 import CommunityCard from '@/components/Community/CommunityCard'
 import { mapState } from 'vuex'
+import { getAllCommunities } from '@/apis/api'
+import { getMyStakingFactory } from '@/utils/web3/community'
+
 export default {
   name: 'Community',
   components: { CommunityCard },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapState({
-      userEconomy: state => state.community.userEconomy
+      userEconomy: state => state.community.userEconomy,
+      allCommunities: state => state.web3.allCommunities
     })
+  },
+  mounted () {
+    this.fetchData()
+  },
+  methods: {
+    async fetchData () {
+      if (!this.allCommunities) {
+        this.loading = true
+        // const userStakingId = await getMyStakingFactory()
+        const allCommunities = await getAllCommunities()
+        this.$store.commit('web3/saveCommunities', allCommunities)
+        this.loading = false
+      }
+    }
   }
 }
 </script>

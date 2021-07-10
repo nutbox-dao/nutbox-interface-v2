@@ -1,37 +1,44 @@
 <template>
   <div class="p-card">
-    <img class="poster" src="~@/static/images/back-ground.png" alt="">
+    <img class="poster" :src="cardInfo.poster" alt="">
     <div class="second-card">
-      <img class="logo" src="~@/static/images/steem.svg" alt="">
+      <img class="logo" :src="cardInfo.icon" alt="">
       <div class="flex-between-center mb-2">
-        <div class="font20 font-bold">Peanut (PNUT）</div>
-        <div class="more-text-icon">More</div>
+        <div class="font20 font-bold">{{cardInfo.name}}</div>
+        <a :href="cardInfo.website" target="_blank">
+          <div class="more-text-icon">More</div>
+        </a>
       </div>
-      <div class="desc font14 text-grey-light text-left">基于Steem区块链的去中心化质押平台</div>
+      <div class="desc font14 text-grey-light text-left">{{cardInfo.description}}</div>
       <div class="project-info-container">
         <span class="name">质押资产</span>
         <div class="info flex-start-center">
-          <img class="info-icon" src="~@/static/images/steem.svg" alt="">
-          <img class="info-icon" src="~@/static/images/steem.svg" alt="">
-          <img class="info-icon" src="~@/static/images/steem.svg" alt="">
+          --
+<!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
+<!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
+<!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
         </div>
       </div>
       <div class="project-info-container">
         <span class="name">总质押价值</span>
-        <div class="info">$1000.00.00</div>
+        <div class="info">--</div>
       </div>
       <div class="project-info-container">
         <span class="name">年华收益率</span>
-        <div class="info">100-200%</div>
+        <div class="info">--</div>
       </div>
-      <button class="primary-btn" @click="$router.push('/community/detail-info')">参与</button>
+      <button class="primary-btn"
+              @click="$router.push(`/community/detail-info?id=${cardInfo.id}`)">参与</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CommunityCard'
+  name: 'CommunityCard',
+  props: {
+    cardInfo: Object
+  }
 }
 </script>
 
