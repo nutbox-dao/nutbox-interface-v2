@@ -59,8 +59,8 @@
 }
 @mixin card-poster-bg($h: 6.2rem, $br: 1.4rem 1.4rem 0 0) {
   border-radius: $br ;
-  width: 100%;
   height: $h;
+  max-height: $h;
   object-fit: cover;
 }
 @mixin single-color-bg($size: 0 0, $position: center, $color: var(--primary-custom)) {

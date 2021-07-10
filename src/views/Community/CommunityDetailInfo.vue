@@ -7,26 +7,20 @@
 <!--          <p class="font16">{{ $t("tip.loading") }}</p>-->
 <!--        </div>-->
         <div class="community-info p-card" >
-          <img class="poster" src="~@/static/images/back-ground.png" alt="">
+          <img class="poster" :src="communityInfo.poster" alt="">
           <i class="back-icon" @click="$router.back()"></i>
           <div class="second-card">
-            <img class="large-logo" src="~@/static/images/steem.svg" alt="" />
+            <img class="large-logo" :src="communityInfo.icon" alt="" />
             <div class="project-info text-left">
               <div class="d-flex align-items-center">
-                <span v-if="communityInfo && communityInfo.website.length < 6"
-                      class="font20 font-bold title">
-                  {{ communityInfo.communityName }}
-                </span>
-                <a v-else class="font20 font-bold title icon-title official-link-icon m-0"
+                <a class="font20 font-bold title icon-title official-link-icon m-0"
                    :href="communityInfo.website"
-                   target="_blank">{{ communityInfo.communityName || 'Nutbox' }}</a>
+                   target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
                 <i class="v-line"></i>
                 <span>矿池余额：1000.00</span>
               </div>
-              <div class="desc font14"
-                   v-html="(communityInfo.description &&
-                   (communityInfo.description[lang] ||
-                   communityInfo.description['zh-CN']))"></div>
+              <div class="desc font14 mt-2"
+                   v-html="(communityInfo.description)"></div>
             </div>
           </div>
         </div>
@@ -56,26 +50,12 @@
 
 <script>
 import ComCRCard from '@/components/Crowdloan/ComCRCard'
-import { mapState, mapGetters } from 'vuex'
-import { stanfiAddress } from '@/utils/commen/account'
-import { getOnshowingCrowdloanCard as getOnshowingComCRCard } from '@/apis/api'
-import { loadFunds } from '@/utils/kusama/crowdloan'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import MiningCard from '@/components/Community/MiningCard'
-
+import { mapState } from 'vuex'
+import { getMyCommunityInfo } from '@/apis/api'
 export default {
-  data () {
-    return {
-      communityNominatorId: null,
-      activeTab: 0,
-      tabOptions: [
-        { name: 'Polkadot', component: 'PolkadotAccount', chain: 'polkadot' },
-        { name: 'Kusama', component: 'PolkadotAccount', chain: 'kusama' },
-        { name: 'Steem', component: 'SteemAccount', chain: 'steem' }
-      ]
-    }
-  },
   name: 'CommunityDetailInfo',
   components: {
     ComCRCard,
@@ -84,33 +64,30 @@ export default {
     MiningCard
   },
   props: {},
-  computed: {
-    ...mapState('kusama', ['showingCrowdloan']),
-    ...mapGetters('kusama', ['showingCard']),
-    ...mapState(['lang']),
-    crowdloanInfo () {
-      const id = stanfiAddress(this.$route.params.communityid)
-      if (this.showingCard && this.showingCard.length > 0) {
-        return this.showingCard.filter(
-          (a) => stanfiAddress(a.community.communityId) == id
-        )
-      }
-      return []
-    },
-    communityInfo () {
-      return this.crowdloanInfo.length > 0 && this.crowdloanInfo[0].community
+  data () {
+    return {
+      communityNominatorId: null,
+      activeTab: 0,
+      tabOptions: [
+        { name: 'Polkadot', component: 'PolkadotAccount', chain: 'polkadot' },
+        { name: 'Kusama', component: 'PolkadotAccount', chain: 'kusama' },
+        { name: 'Steem', component: 'SteemAccount', chain: 'steem' }
+      ],
+      communityInfo: {}
     }
+  },
+  computed: {
+    ...mapState({
+    })
   },
   mounted () {
-    const nominator = stanfiAddress(this.$route.params.nominatorId)
-    if (nominator) {
-      this.communityNominatorId = nominator
-    }
+    console.log(this.communityInfo)
+    this.getCommunityInfo()
   },
-  async created () {
-    if (this.communityInfo) return
-    const res = await getOnshowingComCRCard({ relaychain: 'kusama' })
-    loadFunds(res)
+  methods: {
+    async getCommunityInfo () {
+      this.communityInfo = await getMyCommunityInfo(this.$route.query.id)
+    }
   }
 }
 </script>

@@ -15,6 +15,7 @@ export default {
     allTokens: null,
     blockNum: null,
     nonce: null,
+    allCommunities: null
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -50,6 +51,9 @@ export default {
     },
     saveNonce: (state, nonce) => {
       state.nonce = nonce
+    },
+    saveCommunities: (state, communities) => {
+      state.allCommunities = communities
     }
   },
   getters: {

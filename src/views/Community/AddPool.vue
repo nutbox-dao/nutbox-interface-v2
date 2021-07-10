@@ -23,19 +23,12 @@
           <b-form-group id="input-group-1"
                         label="Staking Asset"
                         label-for="input-1">
-            <b-form-input
-              id="input-1"
-              v-model="form.amount"
-              placeholder="Please select an asset"
-              required
-            ></b-form-input>
-            <div class="flex-between-center">
-                <div class="custom-control" style="line-height: 1.5rem">
-                  <span v-show="isHomeChainAsset">* This is a homechian asset</span>
-                  <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
-                  <router-link to="/community/register/native">Registry a new asset</router-link>
-                </div>
-              </div>
+            <AssetsDropdown @setSelectedAsset="setStakingAsset"/>
+            <div class="text-left text-grey-light mt-1" v-if="form.stakingAsset">
+              <span v-show="isHomeChainAsset">* This is a homechian asset</span>
+              <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
+              <!--                  <router-link to="/community/register/native">Registry a new asset</router-link>-->
+            </div>
           </b-form-group>
           <div class="row">
             <b-form-group class="col-md-6"
@@ -67,7 +60,7 @@
           </b-form-group>
           <div class="row">
             <div class="col-md-5">
-              <button class="primary-btn">Add Pool</button>
+              <button class="primary-btn" @click="confirmAdd">Add Pool</button>
             </div>
           </div>
         </b-form>
@@ -79,9 +72,11 @@
 <script>
 import * as echarts from 'echarts/core'
 import debounce from 'lodash.debounce'
+import AssetsDropdown from '@/components/Community/AssetsDropdown'
 
 export default {
   name: 'AddPool',
+  components: { AssetsDropdown },
   data () {
     return {
       isHomeChainAsset: true,
@@ -121,6 +116,7 @@ export default {
         ]
       },
       form: {
+        stakingAsset: '',
         amount: '',
         name: '',
         rations: [0]
@@ -157,7 +153,14 @@ export default {
         item.value = this.form.rations[index]
       })
       this.chart.setOption(this.options)
-    }, 1500)
+    }, 1500),
+    setStakingAsset (asset) {
+      this.form.stakingAsset = asset.asset
+      this.isHomeChainAsset = !this.isHomeChainAsset
+    },
+    confirmAdd () {
+      console.log(this.form)
+    }
   }
 }
 </script>

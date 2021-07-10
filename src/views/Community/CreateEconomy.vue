@@ -11,35 +11,16 @@
           Step1：Your community asset ID
         </div>
         <div class="form-card custom-form step-1">
-          <Dropdown :menu-options="concatAddressOptions"
-                    :selected-key="selectedKey"
-                    :selected-item="selectedAddressData"
-                    @setSelectedData="setSelectedData">
-            <template v-slot:empty0>
-              <div class="text-center">
-                <div class="custom-control" style="line-height: 1.5rem">
-                  Havn’t Registry yet？
-                  <router-link to="/community/register/native">Registry one</router-link>
-                </div>
-              </div>
-            </template>
-            <template v-slot:drop-item="slotProps">
-              <img class="prefix-icon" :src="slotProps.item.icon" alt="">
-              <div class="flex-full d-flex flex-column">
-                <span>{{slotProps.item.symbol}}</span>
-                <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
-              </div>
-            </template>
-          </Dropdown>
-<!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
+          <AssetsDropdown @setSelectedAsset="setStakingAsset"/>
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
               <div v-show="isMint">* This is a mintable token</div>
               <div v-show="!isMint">* This is not a mintable token</div>
             </div>
-            <div class="custom-control" style="line-height: 1.5rem">
+            <div class="" style="line-height: 1.5rem">
               Havn’t Registry yet？
-              <router-link to="/community/register/native">Registry one</router-link>
+              <router-link class="text-primary"
+                           to="/community/register/native">Registry one</router-link>
             </div>
           </div>
         </div>
@@ -91,33 +72,18 @@
 
 <script>
 import Progress from '@/components/Community/Progress'
-import Dropdown from '@/components/ToolsComponents/Dropdown'
+import AssetsDropdown from '@/components/Community/AssetsDropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { getMyStakingFactory, createStakingFeast } from '@/utils/web3/community'
 
 export default {
   name: 'CreateEconomy',
-  components: { Progress, Dropdown },
+  components: { Progress, AssetsDropdown },
   data () {
     return {
-      selectedKey: 'name',
-      selectedAddressData: {},
-      assets:null,
       deploying: false,
       maxBlock: 999999999999999,
-      concatAddressOptions: [
-        {
-          categoryName: 'Personal',
-          items: []
-        },
-        {
-          categoryName: ' Official',
-          items: [
-            { name: 'BBB',symbol: 'BBB' , asset: '0xaaaaaaaaaaaaaaaa' }
-          ]
-        }
-      ],
       progressData: [],
       form: {
         assetId: null,
@@ -149,19 +115,18 @@ export default {
   async mounted () {
     this.assets = await getRegitryAssets()
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
-    console.log(234, this.concatAddressOptions[0].items);
+    console.log(234, this.concatAddressOptions[0].items)
   },
   methods: {
-    setSelectedData (data) {
-      this.selectedAddressData = data
-      this.form.assetId = data.asset
+    setStakingAsset (asset) {
+      this.form.assetId = asset.asset
     },
     deleteData () {
-      this.progressData.pop();
-      if (this.progressData.length === 0){
+      this.progressData.pop()
+      if (this.progressData.length === 0) {
         this.poolForm.start = this.blockNum
-      }else{
-        this.poolForm.start = this.progressData[this.progressData.length -1].stopHeight
+      } else {
+        this.poolForm.start = this.progressData[this.progressData.length - 1].stopHeight
       }
       this.end = ''
     },
@@ -169,14 +134,14 @@ export default {
       this.poolForm.end = 'max'
     },
     confirmAdd () {
-      if (parseInt(this.poolForm.start) <= this.blockNum){
+      if (parseInt(this.poolForm.start) <= this.blockNum) {
         this.$bvToast.toast(this.$t('tip.wrongStartBlockNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
         })
-        return;
+        return
       }
-      if(parseInt(this.poolForm.end) <= parseInt(this.poolForm.start)){
+      if (parseInt(this.poolForm.end) <= parseInt(this.poolForm.start)) {
         this.$bvToast.toast(this.$t('tip.wrongStopBlockNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
@@ -194,11 +159,11 @@ export default {
       this.poolForm.start = Number(barData.stopHeight) + 1
       this.poolForm.end = ''
       this.poolForm.reward = ''
-      console.log(this.progressData);
+      console.log(this.progressData)
     },
     async confirmDeploy () {
       const comId = await getMyStakingFactory()
-      if (comId){
+      if (comId) {
         this.$bvToast.toast(this.$t('tip.youHaveCreatedCommunity'), {
           title: this.$t('tip.tips'),
           variant: 'info'
@@ -206,32 +171,32 @@ export default {
         return
       }
       this.form.poolData = this.progressData
-      if (!this.form.assetId || this.form.poolData.length === 0){
+      if (!this.form.assetId || this.form.poolData.length === 0) {
         this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
           title: this.$t('tip.tips'),
           variant: 'info'
         })
-        return;
+        return
       }
-      try{
+      try {
         this.deploying = true
         const decimal = this.selectedAddressData.decimal
         this.form.decimal = decimal
         const hash = createStakingFeast(this.form)
-        if(hash){
+        if (hash) {
           this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
-        await getMyStakingFactory()
-        this.$router.replace('/community/community-info?type=edit')
+          await getMyStakingFactory()
+          this.$router.replace('/community/community-info?type=edit')
         }
-      }catch(e){
+      } catch (e) {
         this.$bvToast.toast(this.$t('tip.deployFactoryFail'), {
           title: this.$t('tip.error'),
           variant: 'danger'
         })
-      }finally{
+      } finally {
         this.deploying = false
       }
     }
