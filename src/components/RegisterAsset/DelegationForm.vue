@@ -49,7 +49,10 @@
           required
         ></b-form-input>
       </b-form-group>
-      <button class="primary-btn" @click="register">{{ $t('asset.register') }}</button>
+      <button class="primary-btn" @click="register" :disabled="registring">
+        <b-spinner small type="grow" v-show="registring" />
+        {{ $t('asset.register') }}
+      </button>
     </b-form>
     <!-- <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div> -->
   </div>
@@ -62,6 +65,7 @@ export default {
   name: 'DelegationForm',
   data () {
     return {
+      registring: false,
       form: {
         account: '',
         assetName: '',
@@ -78,8 +82,29 @@ export default {
     async register() {
       this.form.chainId = this.networkIndex + 1
       console.log(this.form);
-      const hash = await registerSteemHiveAsset(this.form)
-      console.log(13487, hash);
+      try{
+        this.registring = true
+        const hash = await registerSteemHiveAsset(this.form)
+        console.log(13487, hash);
+        this.$bvToast.toast(this.$t('registryAssetSuccess'), {
+          title: this.$t('tip.seccuss'),
+          variant: 'success'
+        })
+        this.form = {
+          account: '',
+           assetName: '',
+           chainId:1
+        }
+        this.networkIndex = 0
+      }catch(e){
+        console.log(2345, e);
+        this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
+            title: this.$t('tip.error'),
+            variant: 'danger'
+          })
+      }finally{
+        this.registring = false
+      }
     }
   },
 }
