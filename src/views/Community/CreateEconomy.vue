@@ -12,6 +12,7 @@
         </div>
         <div class="form-card custom-form step-1">
           <Dropdown :menu-options="concatAddressOptions"
+                    :loading="assetLoading"
                     :selected-key="selectedKey"
                     :selected-item="selectedAddressData"
                     @setSelectedData="setSelectedData">
@@ -37,7 +38,7 @@
               <div v-show="isMint">* This is a mintable token</div>
               <div v-show="!isMint">* This is not a mintable token</div>
             </div>
-            <div class="custom-control" style="line-height: 1.5rem">
+            <div class="" style="line-height: 1.5rem">
               Havn’t Registry yet？
               <router-link class="text-primary"
                            to="/community/register/native">Registry one</router-link>
@@ -117,6 +118,7 @@ export default {
           items: []
         }
       ],
+      assetLoading: true,
       progressData: [],
       form: {
         assetId: null,
@@ -149,6 +151,7 @@ export default {
     this.assets = await getRegitryAssets()
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     console.log(234, this.concatAddressOptions[0].items)
+    this.assetLoading = false
   },
   methods: {
     setSelectedData (data) {
