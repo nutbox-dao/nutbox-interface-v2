@@ -16,8 +16,8 @@ export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-// export const BACKEND_API_URL = "http://localhost:3000"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = "http://v2-api-test.nutbox.io/qiNiu/upload"
 
@@ -56,6 +56,34 @@ export const PhalaCrowdloanReferrerRemark = {
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
 
+/**
+ * chainId on blockchain to chain name
+ */
+export const DELEGATION_CHAINID_TO_NAME = {
+  1: 'steem',
+  2: 'hive'
+}
+
+/**
+ * chainId on blockchain to chain name
+ */
+export const CROWDLOAN_CHAINID_TO_NAME = {
+  0: 'polkadot',
+  1: 'polkadot',
+  2: 'polkadot',
+  3: 'kusama'
+}
+
+/**
+ * chainId on blockchain to chain name
+ */
+ export const VALIDATOR_CHAINID_TO_NAME = {
+  0: 'polkadot',
+  1: 'polkadot',
+  2: 'polkadot',
+  3: 'kusama'
+}
+
 // Nutbox official registried assets IDs
 export const NUTBOX_REGISTRY_ASSETS = [
 
@@ -71,10 +99,11 @@ export const Transaction_config = {
  * ERROR CODE DEFINE
  */
  export const errCode = {
+  NO_STAKING_FACTORY: 101,
   BLOCK_CHAIN_ERR: 351,
   CONTRACT_CREATE_FAIL: 352,
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,
   DB_ERROR: 453,
-  SERVER_ERR: 500
+  SERVER_ERR: 500,
 }

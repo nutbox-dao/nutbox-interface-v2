@@ -79,7 +79,7 @@ export default {
     },
   },
   async mounted () {
-    const assets = await getRegitryAssets()
+    // const assets = await getRegitryAssets()
   },
 }
 </script>

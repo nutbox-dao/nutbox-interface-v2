@@ -24,7 +24,7 @@ import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
-import { errCode } from "../../config";
+import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME } from "../../config";
 
 /**
  * Judge asset wheather Homechain assets
@@ -127,7 +127,7 @@ export const getAssetMetadata = async (id, assetType) => {
   let icon = ''
   switch(assetType){
     case 'SteemHiveDelegateAssetRegistry':
-      icon = meta[0] === 1 ? ASSET_LOGO_URL['steem'] : ASSET_LOGO_URL['hive'] 
+      icon = ASSET_LOGO_URL[DELEGATION_CHAINID_TO_NAME[meta[0]]]
       meta = {
         chainId: meta[0],
         assetType: meta[1],
@@ -136,7 +136,7 @@ export const getAssetMetadata = async (id, assetType) => {
       }
       break;
     case 'SubstrateCrowdloanAssetRegistry':
-      icon = meta[0] === 2 ? ASSET_LOGO_URL['polkadot'][meta[1]] : ASSET_LOGO_URL['kusama'][meta[1]]
+      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]][parseInt(meta[1])]
       meta = {
         chainId: meta[0],
         paraId: meta[1],
@@ -152,6 +152,8 @@ export const getAssetMetadata = async (id, assetType) => {
         validatorAccount:meta[1],
         icon
       }
+      break;
+    default:
       break;
   }
   return meta
@@ -317,7 +319,7 @@ export const getAllTokenFromBackend = async (update = false) => {
     store.commit('web3/saveAllTokens', allTokens)
     return allTokens
   } catch (e) {
-    console.log('Get All Tokens Failed');
+    console.log('Get All Tokens Failed', e);
     return null
   }
 
