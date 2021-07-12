@@ -73,6 +73,7 @@
 import * as echarts from 'echarts/core'
 import debounce from 'lodash.debounce'
 import AssetsDropdown from '@/components/Community/AssetsDropdown'
+import { getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'AddPool',
@@ -80,6 +81,7 @@ export default {
   data () {
     return {
       isHomeChainAsset: true,
+      assets: null,
       colorList: ['#FF7366', '#7CBF4D', '#70ACFF', '#FFE14D', '#CC85FF', '#FF9500', '#00C7D9', '#9D94FF', '#FF73AD'],
       options: {
         tooltip: { show: true, trigger: 'item' },
@@ -123,8 +125,39 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.initChart()
+    const assets = await getRegitryAssets() 
+    console.log(assets);
+    this.assets = assets.map(asset => {
+      switch(asset.type){
+        case 'HomeChainAssetRegistry':
+          return {
+            icon: asset.icon,
+            name: asset.name,
+            assetId: asset.asset
+          }
+        case 'SteemHiveDelegateAssetRegistry':
+          return {
+            icon: asset.icon,
+            name: asset.asset,
+            assetId: asset.asset
+          }
+        case 'SubstrateCrowdloanAssetRegistry':
+          return {
+            icon: asset.icon,
+            name: asset.paraId,
+            assetId: asset.asset
+          }
+        case 'SubstrateNominateAssetRegistry':
+          return {
+            icon: asset.icon,
+            name: asset.validatorAccount,
+            assetId: asset.asset
+          }
+      }
+    })
+    this.options
   },
   methods: {
     initChart () {
@@ -135,13 +168,13 @@ export default {
     setData () {
       this.options.color = this.colorList
       const data = [
-        { value: 45, name: 'PNUT-TRX LP' },
+        { value: 100, name: '' },
         { value: 20, name: 'PNUT-TSP LP' },
-        { value: 20, name: 'PNUT-TSP1 LP' },
-        { value: 30, name: 'TSP-TRC LP' },
-        { value: 30, name: 'TSP-TRC2 LP' },
-        { value: 30, name: 'TSP-TRC3 LP' },
-        { value: 30, name: 'TSP-TRC4 LP' }
+        // { value: 20, name: 'PNUT-TSP1 LP' },
+        // { value: 30, name: 'TSP-TRC LP' },
+        // { value: 30, name: 'TSP-TRC2 LP' },
+        // { value: 30, name: 'TSP-TRC3 LP' },
+        // { value: 30, name: 'TSP-TRC4 LP' }
       ]
       this.options.series[0].data = data
       this.form.rations = data.map(item => {

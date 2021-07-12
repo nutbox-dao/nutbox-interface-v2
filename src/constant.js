@@ -35,3 +35,25 @@ export const DECIMAL = {
 
 // 最大投票数
 export const MAX_NOMINATE_VALIDATOR = 16
+
+/**
+ * Parachain project logo url
+ */
+export const ASSET_LOGO_URL = {
+    kusama:{
+        2006: 'https://cdn.wherein.mobi/polkadot/token/logo/crab.png',
+        2012: 'https://cdn.wherein.mobi/polkadot/token/logo/crust.png',
+        2004: 'https://cdn.wherein.mobi/polkadot/token/logo/khala.png',
+        2001: 'https://cdn.wherein.mobi/polkadot/parachain/logo/bifrost.png',
+        2007: 'https://cdn.wherein.mobi/shiden.png',
+        2013: 'https://cdn.wherein.mobi/polkadot/parachain/logo/sherpax.png',
+        2018: 'https://cdn.wherein.mobi/polkadot/parachain/logo/subgame.png',
+        2024: 'https://cdn.wherein.mobi/polkadot/token/logo/gens.png',
+    },
+    polkadot: {
+
+    },
+    steem: 'https://cdn.wherein.mobi//nutbox/token/logo/steem.png',
+    hive: ''
+
+}

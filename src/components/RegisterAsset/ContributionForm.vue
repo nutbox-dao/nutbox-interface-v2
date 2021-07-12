@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { registerCrowdloanAsset } from "@/utils/web3/asset";
+import { registerCrowdloanAsset, getRegitryAssets } from "@/utils/web3/asset";
 import { isPositiveInt } from "@/utils/helper";
 import { stanfiAddress } from "@/utils/commen/account";
 
@@ -141,12 +141,14 @@ export default {
       try{
         this.registring = true;
         const tx = await registerCrowdloanAsset(this.form);
+        // update cache
+        getRegitryAssets(true)
         this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
         this.form = {
-           chainId: "",
+          chainId: "",
           paraId: "",
           trieIndex: "",
           communityAddress: "",

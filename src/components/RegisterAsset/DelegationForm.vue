@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { registerSteemHiveAsset } from '@/utils/web3/asset'
+import { registerSteemHiveAsset, getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'DelegationForm',
@@ -85,6 +85,8 @@ export default {
       try{
         this.registring = true
         const hash = await registerSteemHiveAsset(this.form)
+        // update cache
+        getRegitryAssets(true)
         console.log(13487, hash);
         this.$bvToast.toast(this.$t('registryAssetSuccess'), {
           title: this.$t('tip.seccuss'),

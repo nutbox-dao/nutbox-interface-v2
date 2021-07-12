@@ -60,7 +60,7 @@
 
 <script>
 import { stanfiAddress } from '@/utils/commen/account'
-import { registerNominateAsset } from '@/utils/web3/asset'
+import { registerNominateAsset, getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'NominationForm',
@@ -98,6 +98,8 @@ export default {
       try{
         this.registring = true
         const tx = await registerNominateAsset(this.form)
+        // update cache
+        getRegitryAssets(true)
          this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
