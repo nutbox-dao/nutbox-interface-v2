@@ -43,10 +43,12 @@
                 </div>
               </template>
             </Dropdown>
-            <div class="text-left text-grey-light mt-1" v-if="form.stakingAsset">
-              <span v-show="isHomeChainAsset">* This is a homechian asset</span>
-              <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
-              <!--                  <router-link to="/community/register/native">Registry a new asset</router-link>-->
+            <div class="flex-between-center">
+              <div class="text-grey-light">
+                <span v-show="form.stakingAsset && isHomeChainAsset">* This is a homechian asset</span>
+                <span v-show="form.stakingAsset && !isHomeChainAsset">* This is a foreignchain asset</span>
+              </div>
+              <router-link to="/community/register/native">Registry a new asset</router-link>
             </div>
           </b-form-group>
           <div class="row">

@@ -37,7 +37,7 @@
               <div v-show="isMint">* This is a mintable token</div>
               <div v-show="!isMint">* This is not a mintable token</div>
             </div>
-            <div class="custom-control" style="line-height: 1.5rem">
+            <div class="" style="line-height: 1.5rem">
               Havn’t Registry yet？
               <router-link class="text-primary"
                            to="/community/register/native">Registry one</router-link>
