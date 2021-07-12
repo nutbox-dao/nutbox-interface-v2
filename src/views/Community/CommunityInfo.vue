@@ -4,7 +4,7 @@
       <div
         class="page-back-text-icon font20"
         style="line-height: 1rem"
-        @click="isEdit ? (isEdit = false) : $router.back()"
+        @click="isEdit ? (type = null) : $router.back()"
       >
         {{
           (isEdit ? $t("community." + type) : "") +
@@ -255,9 +255,7 @@ export default {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
     try{
-      console.log(331);
       const communityInfo = await getMyCommunityInfo();
-      console.log(44, this.form);
       if (!communityInfo) {
         // Havn't create feast
         this.noCommunity = true;
