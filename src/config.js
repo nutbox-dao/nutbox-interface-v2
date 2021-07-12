@@ -16,8 +16,8 @@ export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 // nutbox backend server
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-export const BACKEND_API_URL = "http://localhost:3000"
+export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+// export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = "http://v2-api-test.nutbox.io/qiNiu/upload"
 
@@ -58,7 +58,7 @@ export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
 
 // Nutbox official registried assets IDs
 export const NUTBOX_REGISTRY_ASSETS = [
-  
+
 ]
 
 // sended transaction configs

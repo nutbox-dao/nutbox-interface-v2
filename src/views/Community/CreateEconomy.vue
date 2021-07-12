@@ -11,14 +11,33 @@
           Step1：Your community asset ID
         </div>
         <div class="form-card custom-form step-1">
-          <AssetsDropdown :concat-address-options="concatAddressOptions"
-                          @setSelectedAsset="setStakingAsset"/>
+          <Dropdown :menu-options="concatAddressOptions"
+                    :selected-key="selectedKey"
+                    :selected-item="selectedAddressData"
+                    @setSelectedData="setSelectedData">
+            <template v-slot:empty0>
+              <div class="text-center">
+                <div class="custom-control" style="line-height: 1.5rem">
+                  Havn’t Registry yet？
+                  <router-link to="/community/register/native">Registry one</router-link>
+                </div>
+              </div>
+            </template>
+            <template v-slot:drop-item="slotProps">
+              <img class="prefix-icon" :src="slotProps.item.icon" alt="">
+              <div class="flex-full d-flex flex-column">
+                <span>{{slotProps.item.symbol}}</span>
+                <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
+              </div>
+            </template>
+          </Dropdown>
+<!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
               <div v-show="isMint">* This is a mintable token</div>
               <div v-show="!isMint">* This is not a mintable token</div>
             </div>
-            <div class="" style="line-height: 1.5rem">
+            <div class="custom-control" style="line-height: 1.5rem">
               Havn’t Registry yet？
               <router-link class="text-primary"
                            to="/community/register/native">Registry one</router-link>
@@ -73,18 +92,31 @@
 
 <script>
 import Progress from '@/components/Community/Progress'
-import AssetsDropdown from '@/components/Community/AssetsDropdown'
+import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { getMyStakingFactory, createStakingFeast } from '@/utils/web3/community'
 
 export default {
   name: 'CreateEconomy',
-  components: { Progress, AssetsDropdown },
+  components: { Progress, Dropdown },
   data () {
     return {
+      selectedKey: 'name',
+      selectedAddressData: {},
+      assets: null,
       deploying: false,
       maxBlock: 999999999999999,
+      concatAddressOptions: [
+        {
+          categoryName: 'Personal',
+          items: []
+        },
+        {
+          categoryName: ' Official',
+          items: []
+        }
+      ],
       progressData: [],
       form: {
         assetId: null,
@@ -96,17 +128,7 @@ export default {
         start: '1001',
         end: '3000',
         reward: '100'
-      },
-      concatAddressOptions: [
-        {
-          categoryName: 'Personal',
-          items: []
-        },
-        {
-          categoryName: ' Official',
-          items: []
-        }
-      ]
+      }
     }
   },
   computed: {
@@ -129,8 +151,9 @@ export default {
     console.log(234, this.concatAddressOptions[0].items)
   },
   methods: {
-    setStakingAsset (asset) {
-      this.form.assetId = asset.asset
+    setSelectedData (data) {
+      this.selectedAddressData = data
+      this.form.assetId = data.assetId
     },
     deleteData () {
       this.progressData.pop()

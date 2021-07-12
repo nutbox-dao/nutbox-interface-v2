@@ -23,8 +23,26 @@
           <b-form-group id="input-group-1"
                         label="Staking Asset"
                         label-for="input-1">
-            <AssetsDropdown :concat-address-options="concatAddressOptions"
-                            @setSelectedAsset="setStakingAsset"/>
+            <Dropdown :menu-options="concatAddressOptions"
+                      :selected-key="selectedKey"
+                      :selected-item="selectedAddressData"
+                      @setSelectedData="setSelectedData">
+              <template v-slot:empty0>
+                <div class="text-center">
+                  <div class="custom-control" style="line-height: 1.5rem">
+                    Havn’t Registry yet？
+                    <router-link to="/community/register/native">Registry one</router-link>
+                  </div>
+                </div>
+              </template>
+              <template v-slot:drop-item="slotProps">
+                <img class="prefix-icon" :src="slotProps.item.icon" alt="">
+                <div class="flex-full d-flex flex-column">
+                  <span>{{slotProps.item.symbol}}</span>
+                  <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
+                </div>
+              </template>
+            </Dropdown>
             <div class="text-left text-grey-light mt-1" v-if="form.stakingAsset">
               <span v-show="isHomeChainAsset">* This is a homechian asset</span>
               <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
@@ -73,12 +91,12 @@
 <script>
 import * as echarts from 'echarts/core'
 import debounce from 'lodash.debounce'
-import AssetsDropdown from '@/components/Community/AssetsDropdown'
+import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'AddPool',
-  components: { AssetsDropdown },
+  components: { Dropdown },
   data () {
     return {
       isHomeChainAsset: true,
@@ -124,6 +142,8 @@ export default {
         name: '',
         rations: [0]
       },
+      selectedKey: 'name',
+      selectedAddressData: {},
       concatAddressOptions: [
         {
           categoryName: 'Personal',
@@ -138,10 +158,10 @@ export default {
   },
   async mounted () {
     this.initChart()
-    const assets = await getRegitryAssets() 
-    console.log(assets);
+    const assets = await getRegitryAssets()
+    console.log(assets)
     this.assets = assets.map(asset => {
-      switch(asset.type){
+      switch (asset.type) {
         case 'HomeChainAssetRegistry':
           return {
             icon: asset.icon,
@@ -168,7 +188,7 @@ export default {
           }
       }
     })
-    this.options
+    // this.options
   },
   methods: {
     initChart () {
@@ -180,7 +200,7 @@ export default {
       this.options.color = this.colorList
       const data = [
         { value: 100, name: '' },
-        { value: 20, name: 'PNUT-TSP LP' },
+        { value: 20, name: 'PNUT-TSP LP' }
         // { value: 20, name: 'PNUT-TSP1 LP' },
         // { value: 30, name: 'TSP-TRC LP' },
         // { value: 30, name: 'TSP-TRC2 LP' },
@@ -198,9 +218,9 @@ export default {
       })
       this.chart.setOption(this.options)
     }, 1500),
-    setStakingAsset (asset) {
-      this.form.stakingAsset = asset.asset
-      this.isHomeChainAsset = !this.isHomeChainAsset
+    setSelectedData (data) {
+      this.selectedAddressData = data
+      this.form.assetId = data.assetId
     },
     confirmAdd () {
       console.log(this.form)
