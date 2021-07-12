@@ -99,7 +99,7 @@ import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { DELEGATION_CHAINID_TO_NAME, CROWDLOAN_CHAINID_TO_NAME, VALIDATOR_CHAINID_TO_NAME } from '@/config'
 import { stanfiAddress } from '@/utils/commen/account'
-import { addPool } from '@/utils/web3/community'
+import { addPool, getMyOpenedPools } from '@/utils/web3/community'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -165,6 +165,7 @@ export default {
   },
   async mounted () {
     this.initChart()
+    getMyOpenedPools()
     let assets = await getRegitryAssets()
     console.log(123 , assets)
     assets = assets.map(asset => {
@@ -245,7 +246,7 @@ export default {
         tipStr = this.$t('asset.selectStakingAsset')
       }else if(!this.form.name){
         tipStr = this.$t('asset.inputPoolName')
-      }else if(this.form.ratios.reduce((t, r) => t+parseFloat(r),0.0) != 100){
+      }else if(this.form.ratios.reduce((t, r) => t+parseInt(r * 100),0) != 10000){
         tipStr = this.$t('tip.ratioError')
       }else{
         return true;

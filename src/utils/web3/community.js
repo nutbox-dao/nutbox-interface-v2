@@ -79,6 +79,7 @@ export const getMyOpenedPools = async () => {
     if (!stakingFactoryId) return;
     const contract = await getContract('StakingTemplate', stakingFactoryId)
     const pools = await contract.openedPools()
+    console.log('pools', pools);
 }
 
 /**
@@ -171,10 +172,12 @@ export const addPool = async (form) => {
             return;
         }
         try{
-            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r.value * 100)))
+            console.log(235, form.ratios, form.ratios.map(r => parseInt(r * 100)));
+            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r * 100)))
             await waitForTx(tx.hash)
             resolve(tx.hash)
         }catch (e) {
+            console.log(542, e);
             reject(errCode.BLOCK_CHAIN_ERR)
         }
     })
