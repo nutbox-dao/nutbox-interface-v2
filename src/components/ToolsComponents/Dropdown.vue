@@ -6,7 +6,11 @@
         <i class="dropdown-icon ml-3"></i>
       </div>
     </template>
-    <b-dropdown-group v-for="(group, index) of menuOptions" :key="index"
+    <div class="text-center my-3 text-primary" v-if="loading" >
+      <b-spinner class="dropdown-loading" label="Spinning"></b-spinner>
+    </div>
+    <b-dropdown-group v-else
+                      v-for="(group, index) of menuOptions" :key="index"
                       :header="group.categoryName">
       <slot v-if="group.items.length===0" :name="`empty${index}`"></slot>
       <b-dropdown-item v-for="(item, sIndex) of group.items" :key="index+sIndex"
@@ -48,6 +52,10 @@ export default {
       default: () => {
         return []
       }
+    },
+    loading: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

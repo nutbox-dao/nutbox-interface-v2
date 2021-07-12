@@ -11,7 +11,7 @@
           <div class="col-lg-6 col-md-5 legend-box">
             <div class="legend-info" v-for="(item, index) of options.series[0].data" :key="index">
               <span class="circle" :style="{'border-color': colorList[index]}"></span>
-              <span class="name">{{ item.name }}</span>
+              <span class="name">{{ item.name||'--' }}</span>
               <span class="value">{{ item.value }}</span>
             </div>
           </div>
@@ -24,6 +24,7 @@
                         :label="$t('asset.stakingAsset')"
                         label-for="input-1">
             <Dropdown :menu-options="concatAddressOptions"
+                      :loading="assetLoading"
                       :selected-key="selectedKey"
                       :selected-item="selectedAddressData"
                       @setSelectedData="setSelectedData">
@@ -43,10 +44,12 @@
                 </div>
               </template>
             </Dropdown>
-            <div class="text-left text-grey-light mt-1" v-if="form.assetId">
-              <span v-show="isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
-              <span v-show="!isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
-              <!--                  <router-link to="/community/register/native">Registry a new asset</router-link>-->
+            <div class="flex-between-center mt-1">
+              <div class="text-left text-grey-light ">
+                <span v-show="form.assetId && isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
+                <span v-show="form.assetId && !isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
+              </div>
+              <router-link class="text-right" to="/community/register/native">Registry a new asset</router-link>
             </div>
           </b-form-group>
           <div class="row">
@@ -72,6 +75,7 @@
                               :data-label="options.series[0].data[inputIndex].name"
                               v-model="form.ratios[inputIndex]"
                               @input="inputChange"
+                              step="0.01"
                               type="number"
                 ></b-form-input>
                 <span class="font12 text-grey mt-1">{{ options.series[0].data[inputIndex].name }}</span>
@@ -145,7 +149,7 @@ export default {
         ]
       },
       form: {
-        assetId:'',
+        assetId: '',
         name: '',
         ratios: [0]
       },
@@ -154,19 +158,20 @@ export default {
       concatAddressOptions: [
         {
           categoryName: 'Personal',
-          items: []
+          items: [{ name: 'AAA', address: '0x000' }]
         },
         {
           categoryName: ' Official',
           items: []
         }
-      ]
+      ],
+      assetLoading: true
     }
   },
   async mounted () {
     this.initChart()
     let assets = await getRegitryAssets()
-    console.log(123 , assets)
+    console.log(123, assets)
     assets = assets.map(asset => {
       switch (asset.type) {
         case 'HomeChainAssetRegistry':
@@ -180,16 +185,16 @@ export default {
         case 'SteemHiveDelegateAssetRegistry':
           return {
             icon: asset.icon,
-            name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + " " + this.$t('asset.delegation'),
-            symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + " " + this.$t('asset.delegation'),
+            name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
+            symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
             asset: asset.asset,
             isHomeChainAsset: false
           }
         case 'SubstrateCrowdloanAssetRegistry':
           return {
             icon: asset.icon,
-            name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +' '+this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
-            symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +' '+this.$t('asset.crowdloan') + ":" + asset.paraId + '-' + asset.trieIndex,
+            name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
+            symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
             asset: asset.asset,
             isHomeChainAsset: false
           }
@@ -204,6 +209,7 @@ export default {
       }
     })
     this.concatAddressOptions[0].items = assets
+    this.assetLoading = false
   },
   methods: {
     initChart () {
@@ -214,7 +220,7 @@ export default {
     setData () {
       this.options.color = this.colorList
       const data = [
-        { value: 100, name: this.form.name },
+        { value: 100, name: this.form.name }
         // { value: 20, name: 'PNUT-TSP LP' }
         // { value: 20, name: 'PNUT-TSP1 LP' },
         // { value: 30, name: 'TSP-TRC LP' },
@@ -241,35 +247,35 @@ export default {
     },
     checkInput () {
       let tipStr = ''
-      if (!this.form.assetId){
+      if (!this.form.assetId) {
         tipStr = this.$t('asset.selectStakingAsset')
-      }else if(!this.form.name){
+      } else if (!this.form.name) {
         tipStr = this.$t('asset.inputPoolName')
-      }else if(this.form.ratios.reduce((t, r) => t+parseFloat(r),0.0) != 100){
+      } else if (this.form.ratios.reduce((t, r) => t + parseFloat(r), 0.0) != 100) {
         tipStr = this.$t('tip.ratioError')
-      }else{
-        return true;
+      } else {
+        return true
       }
       this.$bvToast.toast(tipStr, {
         title: this.$t('tip.tips'),
         variant: 'info'
       })
-      console.log(tipStr);
+      console.log(tipStr)
     },
     async confirmAdd () {
-      if(!this.checkInput()) return;
-
-      // add pool
-      try{
-        this.adding = true
-        const hash = await addPool(this.form)
-      }catch (e){
-        handleApiErrCode(e, (info, para) => {
-          this.$bvToast.toast(info, para)
-        })
-      }finally {
-        this.adding = false
-      }
+      if (!this.checkInput()) return
+      //
+      // // add pool
+      // try {
+      //   this.adding = true
+      //   const hash = await addPool(this.form)
+      // } catch (e) {
+      //   handleApiErrCode(e, (info, para) => {
+      //     this.$bvToast.toast(info, para)
+      //   })
+      // } finally {
+      //   this.adding = false
+      // }
     }
   }
 }

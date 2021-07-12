@@ -12,6 +12,7 @@
         </div>
         <div class="form-card custom-form step-1">
           <Dropdown :menu-options="concatAddressOptions"
+                    :loading="assetLoading"
                     :selected-key="selectedKey"
                     :selected-item="selectedAddressData"
                     @setSelectedData="setSelectedData">
@@ -117,6 +118,7 @@ export default {
           items: []
         }
       ],
+      assetLoading: true,
       progressData: [],
       form: {
         assetId: null,
@@ -149,6 +151,7 @@ export default {
     this.assets = await getRegitryAssets()
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     console.log(234, this.concatAddressOptions[0].items)
+    this.assetLoading = false
   },
   methods: {
     setSelectedData (data) {
