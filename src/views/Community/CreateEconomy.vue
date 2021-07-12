@@ -216,7 +216,7 @@ export default {
         this.deploying = true
         const decimal = this.selectedAddressData.decimal
         this.form.decimal = decimal
-        const hash = createStakingFeast(this.form)
+        const hash = await createStakingFeast(this.form)
         if (hash) {
           this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
             title: this.$t('tip.tips'),

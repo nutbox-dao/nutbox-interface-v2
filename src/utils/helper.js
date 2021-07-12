@@ -144,7 +144,6 @@ export const uploadImage = async (img) => {
       })
   })
 }
-
 /**
  * Handle API err code
  * @param {*} code 
@@ -152,24 +151,27 @@ export const uploadImage = async (img) => {
  * @returns 
  */
 export const handleApiErrCode = (code, toast) => {
+  let tipStr = ''
+  console.log('error code', code);
   if (code === 200) {
     return true
+  } else if(code === errCode.NO_STAKING_FACTORY){
+    tipStr = $T('error.noStakingFactory')
+  } else if(code === errCode.BLOCK_CHAIN_ERR){
+    tipStr = $t('error.blockChainError')
+  } else if(code === errCode.CONTRACT_CREATE_FAIL){
+    tipStr = $t('error.blockChainError')
   } else if (code === errCode.SIGNATURE_FAILED) {
-    toast($t('error.signatureFailed'), {
-      title: $t('tip.error'),
-      variant: 'danger'
-    })
+    tipStr = $t('error.signatureFailed')
   } else if (code === errCode.INVALID_NONCE) {
-    toast($t('error.signatureFailed'), {
-      title: $t('tip.error'),
-      variant: 'danger'
-    })
+    tipStr = $t('error.signatureFailed')
   } else if (code === errCode.DB_ERROR || code == errCode.SERVER_ERR) {
-    toast($t('error.serveError'), {
-      title: $t('tip.error'),
-      variant: 'danger'
-    })
+    tipStr = $t('error.serveError')
   }
+  toast(tipStr, {
+    title: $t('tip.error'),
+    variant: 'danger'
+  })
   return false
 }
 

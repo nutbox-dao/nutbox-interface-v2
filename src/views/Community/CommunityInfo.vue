@@ -213,7 +213,7 @@
 import { uploadImage } from '@/utils/helper'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import {
-  compliteCommunityInfo,
+  completeCommunityInfo,
   getMyCommunityInfo,
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
@@ -356,17 +356,17 @@ export default {
     async onConfirm() {
       try {
         this.uploading = true;
-        const resCode = await compliteCommunityInfo(this.form, this.type);
+        const resCode = await completeCommunityInfo(this.form, this.type);
 
           // go to community dashboard
-          this.$bvToast.toast(this.$t("tip.compliteCommunityInfoSuccess"), {
+          this.$bvToast.toast(this.$t("tip.completeCommunityInfoSuccess"), {
             title: this.$t("tip.tips"),
             variant: "success",
           });
           await sleep(3);
           this.$router.push("/community/pool-dashboard");
       } catch (e) {
-          const handleRes = handleApiErrCode(resCode, (info, params) => {
+          const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
       } finally {

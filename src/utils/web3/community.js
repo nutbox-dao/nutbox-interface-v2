@@ -4,6 +4,8 @@ import store from '@/store'
 import { Transaction_config } from '@/config'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity } from '@/apis/api'
 import { signMessage } from './utils'
+import { errCode } from '../../config'
+import { waitForTx } from './ethers'
 
 /**
  * Get community admin's staking factory id
@@ -115,35 +117,68 @@ export const createStakingFeast = async (form) => {
  * Create or update community info to backend
  * @param {*} form
  */
-export const compliteCommunityInfo = async (form, type) => {
-    let nonce = await getNonce()
-    const userId = store.state.web3.account
-    nonce = nonce ? nonce + 1 : 1
-    const originMessage = JSON.stringify(form)
-    const signature = await signMessage(originMessage + nonce)
-    const params = {
-        userId,
-        infoStr: originMessage,
-        nonce,
-        signature
-    }
-    try{
-        let res = null;
-        if (type === 'create'){
-            res  = await insertCommunity(params)
-        }else{
-            res = await updateCommunity(params)
+export const completeCommunityInfo = async (form, type) => {
+    return new Promise(async (resolve, rejct) => {
+        let nonce = await getNonce()
+        const userId = store.state.web3.account
+        nonce = nonce ? nonce + 1 : 1
+        const originMessage = JSON.stringify(form)
+        const signature = await signMessage(originMessage + nonce)
+        const params = {
+            userId,
+            infoStr: originMessage,
+            nonce,
+            signature
         }
-        // update nonce in storage
-        store.commit('web3/saveNonce', nonce)
-        return 200
-    }catch(e) {
-        console.log('Insert community info failed', e);
-        return e
-    }
+        try{
+            let res = null;
+            if (type === 'create'){
+                res  = await insertCommunity(params)
+            }else{
+                res = await updateCommunity(params)
+            }
+            // update nonce in storage
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            console.log('Insert community info failed', e);
+            reject(500)
+        }
+    })
+
 }
 
-
+/**
+ * Add new pool
+ * @param {*} form 
+ */
+export const addPool = async (form) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e){
+            reject(e)
+            return
+        }
+        const contract = await getContract('StakingTemplate', stakingFactoryId)
+        if (!contract) {
+            reject(errCode.CONTRACT_CREATE_FAIL)
+            return;
+        }
+        try{
+            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r.value * 100)))
+            await waitForTx(tx.hash)
+            resolve(tx.hash)
+        }catch (e) {
+            reject(errCode.BLOCK_CHAIN_ERR)
+        }
+    })
+}
 
 /**
  * Get User's nonce

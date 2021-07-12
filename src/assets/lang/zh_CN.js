@@ -260,8 +260,9 @@ module.exports = {
     needDescription: "请输入社区描述",
     needIcon: "请上传社区logo",
     needPoster: "请上传社区封面",
-    compliteCommunityInfoSuccess: "社区信息更新成功",
-    wrongSubstrateAddress:"请输入正确的 {type} 地址"
+    completeCommunityInfoSuccess: "社区信息更新成功",
+    wrongSubstrateAddress:"请输入正确的 {type} 地址",
+    ratioError: "矿池分润比例总和应为100"
   },
   vote: {
     upvote: "点赞",
@@ -313,7 +314,9 @@ module.exports = {
     pleaseRetry: "请重试",
     signatureFailed: "签名错误，请刷新页面重试",
     serveError: "服务端错误",
-    networkError: "网络错误"
+    networkError: "网络错误",
+    noStakingFactory: "您还没有创建社区",
+    blockChainError: "合约调用错误"
   },
   community: {
     community: '社区',
@@ -352,6 +355,8 @@ module.exports = {
     inputHomeLocation: "请输入ERC20地址",
     notDeploy:"还没有Token？",
     deployOne:"部署一个",
+    notRegister: "还没有注册资产？",
+    registerOne:"马上注册",
     inputAccount:"请输入您的账号",
     inputAssetName:"请输入资产名字",
     parachainId: "平行链ID",
@@ -367,5 +372,20 @@ module.exports = {
     registerValidatorTab: "注册Polkadot/Kuama验证者节点绑定资产",
     validatorNodeAddress: "验证者节点地址",
     inputValidatorNode: "请输入验证者节点地址",
+    delegation: '代理',
+    crowdloan: '众贷',
+    validator: '验证者节点',
+    addPool: '创建矿池',
+    updatePoo: '调整矿池',
+    poolRatios: '矿池分润比例',
+    poolInfo: '矿池信息',
+    stakingAsset:'质押资产',
+    selectStakingAsset: '请选择质押资产',
+    isHomeAsset: "主链资产",
+    isForeignAsset: "跨链资产",
+    poolName: '矿池名称',
+    inputPoolName: "请输入矿池名称",
+    add: '新增',
+    update: '更新'
   }
 }

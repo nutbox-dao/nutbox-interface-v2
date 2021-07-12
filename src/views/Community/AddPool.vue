@@ -1,9 +1,9 @@
 <template>
   <div class="page-view-content">
-    <div class="fixed-header page-back-text-icon font20" @click="$router.back()">Add Pool</div>
+    <div class="fixed-header page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
     <div class="scroll-content">
       <div class="pool-card text-left">
-        <div class="line-card-title">Pool Rations</div>
+        <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
         <div class="row">
           <div class="col-lg-6 col-md-7">
             <div id="pie"></div>
@@ -17,11 +17,11 @@
           </div>
         </div>
         <div class="divide-box">
-          <div class="line-card-title">Pool Information</div>
+          <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
         </div>
         <b-form class="custom-form pool-form">
           <b-form-group id="input-group-1"
-                        label="Staking Asset"
+                        :label="$t('asset.stakingAsset')"
                         label-for="input-1">
             <Dropdown :menu-options="concatAddressOptions"
                       :selected-key="selectedKey"
@@ -30,8 +30,8 @@
               <template v-slot:empty0>
                 <div class="text-center">
                   <div class="custom-control" style="line-height: 1.5rem">
-                    Havn’t Registry yet？
-                    <router-link to="/community/register/native">Registry one</router-link>
+                    {{ $t('asset.notRegister') }}
+                    <router-link to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
                   </div>
                 </div>
               </template>
@@ -43,35 +43,34 @@
                 </div>
               </template>
             </Dropdown>
-            <div class="flex-between-center">
-              <div class="text-grey-light">
-                <span v-show="form.stakingAsset && isHomeChainAsset">* This is a homechian asset</span>
-                <span v-show="form.stakingAsset && !isHomeChainAsset">* This is a foreignchain asset</span>
-              </div>
-              <router-link to="/community/register/native">Registry a new asset</router-link>
+            <div class="text-left text-grey-light mt-1" v-if="form.assetId">
+              <span v-show="isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
+              <span v-show="!isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
+              <!--                  <router-link to="/community/register/native">Registry a new asset</router-link>-->
             </div>
           </b-form-group>
           <div class="row">
             <b-form-group class="col-md-6"
                           id="input-group-2"
-                          label="Pool Name"
+                          :label="$t('asset.poolName')"
                           label-for="input-2">
               <b-form-input
                 id="input-2"
                 v-model="form.name"
-                placeholder="Please enter"
+                :placeholder="$t('asset.inputPoolName')"
+                @input="inputChange"
                 required
               ></b-form-input>
             </b-form-group>
           </div>
           <b-form-group id="input-group-2"
-                        label="Pool Rations">
-            <div class="rations-box">
+                        :label="$t('asset.poolRatios')">
+            <div class="ratios-box">
               <div class="text-center item-box"
-                   v-for="(inputItem, inputIndex) of form.rations" :key="inputIndex">
+                   v-for="(inputItem, inputIndex) of form.ratios" :key="inputIndex">
                 <b-form-input class="ration-input"
                               :data-label="options.series[0].data[inputIndex].name"
-                              v-model="form.rations[inputIndex]"
+                              v-model="form.ratios[inputIndex]"
                               @input="inputChange"
                               type="number"
                 ></b-form-input>
@@ -81,7 +80,10 @@
           </b-form-group>
           <div class="row">
             <div class="col-md-5">
-              <button class="primary-btn" @click="confirmAdd">Add Pool</button>
+              <button class="primary-btn" @click="confirmAdd" :disabled="adding">
+                <b-spinner small type="grow" v-show="adding" />
+                {{ $t('asset.add') }}
+              </button>
             </div>
           </div>
         </b-form>
@@ -95,6 +97,10 @@ import * as echarts from 'echarts/core'
 import debounce from 'lodash.debounce'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { getRegitryAssets } from '@/utils/web3/asset'
+import { DELEGATION_CHAINID_TO_NAME, CROWDLOAN_CHAINID_TO_NAME, VALIDATOR_CHAINID_TO_NAME } from '@/config'
+import { stanfiAddress } from '@/utils/commen/account'
+import { addPool } from '@/utils/web3/community'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   name: 'AddPool',
@@ -102,7 +108,7 @@ export default {
   data () {
     return {
       isHomeChainAsset: true,
-      assets: null,
+      adding: false,
       colorList: ['#FF7366', '#7CBF4D', '#70ACFF', '#FFE14D', '#CC85FF', '#FF9500', '#00C7D9', '#9D94FF', '#FF73AD'],
       options: {
         tooltip: { show: true, trigger: 'item' },
@@ -139,10 +145,9 @@ export default {
         ]
       },
       form: {
-        stakingAsset: '',
-        amount: '',
+        assetId:'',
         name: '',
-        rations: [0]
+        ratios: [0]
       },
       selectedKey: 'name',
       selectedAddressData: {},
@@ -160,37 +165,45 @@ export default {
   },
   async mounted () {
     this.initChart()
-    const assets = await getRegitryAssets()
-    console.log(assets)
-    this.assets = assets.map(asset => {
+    let assets = await getRegitryAssets()
+    console.log(123 , assets)
+    assets = assets.map(asset => {
       switch (asset.type) {
         case 'HomeChainAssetRegistry':
           return {
             icon: asset.icon,
             name: asset.name,
-            assetId: asset.asset
+            symbol: asset.symbol,
+            asset: asset.asset,
+            isHomeChainAsset: true
           }
         case 'SteemHiveDelegateAssetRegistry':
           return {
             icon: asset.icon,
-            name: asset.asset,
-            assetId: asset.asset
+            name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + " " + this.$t('asset.delegation'),
+            symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + " " + this.$t('asset.delegation'),
+            asset: asset.asset,
+            isHomeChainAsset: false
           }
         case 'SubstrateCrowdloanAssetRegistry':
           return {
             icon: asset.icon,
-            name: asset.paraId,
-            assetId: asset.asset
+            name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +' '+this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
+            symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +' '+this.$t('asset.crowdloan') + ":" + asset.paraId + '-' + asset.trieIndex,
+            asset: asset.asset,
+            isHomeChainAsset: false
           }
         case 'SubstrateNominateAssetRegistry':
           return {
             icon: asset.icon,
-            name: asset.validatorAccount,
-            assetId: asset.asset
+            name: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
+            symbol: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
+            asset: asset.asset,
+            isHomeChainAsset: false
           }
       }
     })
-    // this.options
+    this.concatAddressOptions[0].items = assets
   },
   methods: {
     initChart () {
@@ -201,8 +214,8 @@ export default {
     setData () {
       this.options.color = this.colorList
       const data = [
-        { value: 100, name: '' },
-        { value: 20, name: 'PNUT-TSP LP' }
+        { value: 100, name: this.form.name },
+        // { value: 20, name: 'PNUT-TSP LP' }
         // { value: 20, name: 'PNUT-TSP1 LP' },
         // { value: 30, name: 'TSP-TRC LP' },
         // { value: 30, name: 'TSP-TRC2 LP' },
@@ -210,22 +223,53 @@ export default {
         // { value: 30, name: 'TSP-TRC4 LP' }
       ]
       this.options.series[0].data = data
-      this.form.rations = data.map(item => {
+      this.form.ratios = data.map(item => {
         return item.value
       })
     },
     inputChange: debounce(function () {
       this.options.series[0].data.map((item, index) => {
-        item.value = this.form.rations[index]
+        item.value = this.form.ratios[index]
       })
+      this.options.series[0].data[this.options.series[0].data.length - 1].name = this.form.name
       this.chart.setOption(this.options)
     }, 1500),
     setSelectedData (data) {
       this.selectedAddressData = data
-      this.form.assetId = data.assetId
+      this.isHomeChainAsset = data.isHomeChainAsset
+      this.form.assetId = data.asset
     },
-    confirmAdd () {
-      console.log(this.form)
+    checkInput () {
+      let tipStr = ''
+      if (!this.form.assetId){
+        tipStr = this.$t('asset.selectStakingAsset')
+      }else if(!this.form.name){
+        tipStr = this.$t('asset.inputPoolName')
+      }else if(this.form.ratios.reduce((t, r) => t+parseFloat(r),0.0) != 100){
+        tipStr = this.$t('tip.ratioError')
+      }else{
+        return true;
+      }
+      this.$bvToast.toast(tipStr, {
+        title: this.$t('tip.tips'),
+        variant: 'info'
+      })
+      console.log(tipStr);
+    },
+    async confirmAdd () {
+      if(!this.checkInput()) return;
+
+      // add pool
+      try{
+        this.adding = true
+        const hash = await addPool(this.form)
+      }catch (e){
+        handleApiErrCode(e, (info, para) => {
+          this.$bvToast.toast(info, para)
+        })
+      }finally {
+        this.adding = false
+      }
     }
   }
 }
@@ -297,7 +341,7 @@ export default {
 .pool-form {
   padding: 1rem 1.2rem 0;
 
-  .rations-box {
+  .ratios-box {
     display: flex;
     flex-flow: wrap;
   }
