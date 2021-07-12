@@ -5,6 +5,9 @@ import {
 } from "./contract";
 import store from '@/store'
 import {
+  addressToHex
+} from '@/utils/commen/account'
+import {
   ethers
 } from "ethers";
 import {
@@ -17,7 +20,11 @@ import {
 import {
   Transaction_config
 } from '@/config'
-import { getAllTokens } from '@/apis/api'
+import {
+  getAllTokens
+} from '@/apis/api'
+import { ASSET_LOGO_URL } from '@/constant'
+import { errCode } from "../../config";
 
 /**
  * Judge asset wheather Homechain assets
@@ -53,8 +60,8 @@ const isNominateAsset = (address) => {
  * @returns 
  */
 const assetType = (address) => {
-  for (let contract in contractAddress){
-    if (contractAddress[contract].toLowerCase() === address.toLowerCase()){
+  for (let contract in contractAddress) {
+    if (contractAddress[contract].toLowerCase() === address.toLowerCase()) {
       return contract
     }
   }
@@ -65,30 +72,43 @@ const assetType = (address) => {
  * Restore these infos to cache
  * @returns assets list contains detail infos
  */
-export const getRegitryAssets = async (update=false) => {
-  let assets = store.state.web3.allAssetsOfUser
-  if (!update && assets){
-    return assets
-  }
-  const account = store.state.web3.account
-  const contract = await getContract('RegistryHub');
-  if (!contract) return;
-  const assetCount = await contract.registryCounter(account);
-  assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
-  const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
-  assets = assets.map((asset, index) => ({
-    asset,
-    contract: registryContract[index],
-    type: assetType(registryContract[index])
-  }));
-  const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-  
-  assets = assets.map((asset, index) => ({
-    ...asset,
-    ...metadatas[index]
-  }))
-  store.commit('web3/saveAllAssetsOfUser', assets)
-  return assets
+export const getRegitryAssets = async (update = false) => {
+  return new Promise(async (resolve, reject) => {
+    let assets = store.state.web3.allAssetsOfUser
+    if (!update && assets) {
+      resolve(assets)
+    }
+    const account = store.state.web3.account
+    const contract = await getContract('RegistryHub');
+    if (!contract) reject(errCode.CONTRACT_CREATE_FAIL);
+    try{
+      const assetCount = await contract.registryCounter(account);
+      // get register assets
+      assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
+      if(assets.length === 0) {
+        resolve([]);
+        return;
+      }
+      // get assets contract and type
+      const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
+      assets = assets.map((asset, index) => ({
+        asset,
+        contract: registryContract[index],
+        type: assetType(registryContract[index])
+      }));
+      // get metadata of assets
+      const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
+    
+      assets = assets.map((asset, index) => ({
+        ...asset,
+        ...metadatas[index]
+      }))
+      store.commit('web3/saveAllAssetsOfUser', assets)
+      resolve(assets)
+    }catch(e){
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+  })
 }
 
 /**
@@ -99,11 +119,41 @@ export const getRegitryAssets = async (update=false) => {
 export const getAssetMetadata = async (id, assetType) => {
   const contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
   if (!contract) return;
-  if (assetType === 'HomeChainAssetRegistry'){
+  if (assetType === 'HomeChainAssetRegistry') {
     const homeLocation = await contract.getHomeLocation(id)
     return await getERC20Info(homeLocation)
   }
-  const meta = await contract.idToMetadata(id)
+  let meta = await contract.idToMetadata(id)
+  let icon = ''
+  switch(assetType){
+    case 'SteemHiveDelegateAssetRegistry':
+      icon = meta[0] === 1 ? ASSET_LOGO_URL['steem'] : ASSET_LOGO_URL['hive'] 
+      meta = {
+        chainId: meta[0],
+        assetType: meta[1],
+        agentAccount: meta[2],
+        icon
+      }
+      break;
+    case 'SubstrateCrowdloanAssetRegistry':
+      icon = meta[0] === 2 ? ASSET_LOGO_URL['polkadot'][meta[1]] : ASSET_LOGO_URL['kusama'][meta[1]]
+      meta = {
+        chainId: meta[0],
+        paraId: meta[1],
+        trieIndex: meta[2],
+        communityAccount: meta[3],
+        icon
+      }
+      break;
+    case 'SubstrateNominateAssetRegistry':
+      icon = '';
+      meta = {
+        chainId: meta[0],
+        validatorAccount:meta[1],
+        icon
+      }
+      break;
+  }
   return meta
 }
 
@@ -115,10 +165,16 @@ export const getERC20Info = async (address) => {
   let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
   const tokenFromBackend = tokens?.filter(token => token.address === address)
   let icon = null
-  if (tokenFromBackend && tokenFromBackend.length > 0){
+  if (tokenFromBackend && tokenFromBackend.length > 0) {
     icon = tokenFromBackend[0].icon
   }
-  return {name: infos[0], symbol: infos[1], decimal: infos[2], address, icon}
+  return {
+    name: infos[0],
+    symbol: infos[1],
+    decimal: infos[2],
+    address,
+    icon
+  }
 }
 
 /**
@@ -131,13 +187,13 @@ export const registerHomeChainAsset = async (assetAddress) => {
   // regitster asset
   const contract = await getContract('HomeChainAssetRegistry');
   if (!contract) return
-  try{
+  try {
     const tx = await contract.registerAsset(
       '0x', assetAddress, '0x',
       Transaction_config
     )
     return tx
-  }catch(e) {
+  } catch (e) {
     console.log('Registry Homechain Asset Fail', e);
   }
 }
@@ -149,22 +205,73 @@ export const registerHomeChainAsset = async (assetAddress) => {
 export const registerSteemHiveAsset = async (form) => {
   const contract = await getContract('SteemHiveDelegateAssetRegistry');
   if (!contract) return;
-  try{
+  try {
     const web3 = await getWeb3()
     const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
     const foreignLocation = '0x' +
-    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) + 
-    web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) + 
-    ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) + 
-    web3.utils.stringToHex(form.account).substr(2)
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
+      web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
+      web3.utils.stringToHex(form.account).substr(2)
     const tx = await contract.registerAsset(
       foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
       Transaction_config
     )
     await waitForTx(tx.hash)
     return tx.hash
-  }catch(e){
-    throw(e)
+  } catch (e) {
+    throw (e)
+  }
+}
+
+/**
+ * Register crowdloan on polkadot as a binding asset
+ * @param {*} form 
+ */
+export const registerCrowdloanAsset = async (form) => {
+  const contract = await getContract('SubstrateCrowdloanAssetRegistry');
+  if (!contract) return;
+  try {
+    const web3 = await getWeb3()
+    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+    const foreignLocation = '0x' +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
+      addressToHex(form.communityAddress).substr(2) // communityAccount
+    console.log(foreignLocation, form);
+
+    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
+      name: form.assetName,
+      endingBlock: form.endingBlock
+    })), Transaction_config)
+    await waitForTx(tx.hash)
+    return tx.hash
+  } catch (e) {
+    throw (e)
+  }
+}
+
+/**
+ * Register validate node binding asset
+ * @param {*} form 
+ * @returns 
+ */
+export const registerNominateAsset = async (form) => {
+  const contract = await getContract('SubstrateNominateAssetRegistry');
+  if (!contract) return;
+  try {
+    const web3 = await getWeb3()
+    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+    const foreignLocation = '0x' +
+      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
+      addressToHex(form.nodeAddress).substr(2) // node address
+
+    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName), Transaction_config)
+    await waitForTx(tx.hash)
+    return tx.hash
+  } catch (e) {
+    throw e
   }
 }
 
@@ -200,18 +307,18 @@ export const deployERC20 = async ({
  * @param {*} update  wheather update local cache
  * @returns 
  */
-export const getAllTokenFromBackend = async (update=false) => {
+export const getAllTokenFromBackend = async (update = false) => {
   const tokens = store.state.web3.allTokens
   if (!update && tokens) {
     return tokens
   }
-  try{
+  try {
     const allTokens = await getAllTokens()
     store.commit('web3/saveAllTokens', allTokens)
     return allTokens
-  }catch(e){
+  } catch (e) {
     console.log('Get All Tokens Failed');
     return null
   }
-  
+
 }

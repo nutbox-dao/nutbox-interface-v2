@@ -72,6 +72,7 @@ export const Transaction_config = {
  */
  export const errCode = {
   BLOCK_CHAIN_ERR: 351,
+  CONTRACT_CREATE_FAIL: 352,
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,
   DB_ERROR: 453,

@@ -1,76 +1,173 @@
 <template>
   <div class="d-form">
     <b-form class="custom-form">
-      <b-form-group id="input-group-0"
-                    label="Net work"
-                    label-for="dropdown-1">
+      <b-form-group
+        id="input-group-0"
+        :label="$t('asset.network')"
+        label-for="dropdown-1"
+      >
         <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
           <template #button-content>
             <div class="c-dropdown-btn flex-between-center">
               <div class="flex-full flex-start-center text-left">
-                <img :src="networkOptions[networkIndex].icon" alt="">
-                <span>{{networkOptions[networkIndex].name}}</span>
+                <img :src="networkOptions[networkIndex].icon" alt="" />
+                <span>{{ networkOptions[networkIndex].name }}</span>
               </div>
               <i class="dropdown-icon"></i>
             </div>
           </template>
-          <b-dropdown-item v-for="(item, index) of networkOptions" :key="item.name" @click="networkIndex=index">
+          <b-dropdown-item
+            v-for="(item, index) of networkOptions"
+            :key="item.name"
+            @click="networkIndex = index"
+          >
             <template #default>
               <div class="flex-between-center">
                 <div class="flex-full flex-start-center">
-                  <img :src="item.icon" alt="">
-                  <span>{{item.name}}</span>
+                  <img :src="item.icon" alt="" />
+                  <span>{{ item.name }}</span>
                 </div>
-                <i class="selected-icon" v-if="networkIndex===index"></i>
+                <i class="selected-icon" v-if="networkIndex === index"></i>
               </div>
             </template>
           </b-dropdown-item>
         </b-dropdown>
-
       </b-form-group>
-      <b-form-group label="Parachian">
-        <b-form-input v-model="form.chain" placeholder="Please enter"></b-form-input>
+      <b-form-group :label="$t('asset.parachainId')">
+        <b-form-input
+          v-model="form.paraId"
+          :placeholder="$t('asset.inputParachainId')"
+        ></b-form-input>
       </b-form-group>
-      <b-form-group label="Trie Index">
-        <b-form-input v-model="form.index" placeholder="Please enter"></b-form-input>
+      <b-form-group :label="$t('asset.trieIndex')">
+        <b-form-input
+          v-model="form.trieIndex"
+          :placeholder="$t('asset.inputTrieIndex')"
+        ></b-form-input>
       </b-form-group>
-      <b-form-group label="Community Address">
-        <b-form-input v-model="form.address" placeholder="Please enter"></b-form-input>
+      <b-form-group :label="$t('asset.communityAddress')">
+        <b-form-input
+          v-model="form.communityAddress"
+          :placeholder="$t('asset.inputCommunityAddress')"
+        ></b-form-input>
       </b-form-group>
-      <b-form-group label="Asset Properties">
-        <div class="font12 text-grey-light" style="margin: -.6rem 0 .4rem">Name of Your Asset</div>
-        <b-form-input v-model="form.assetName" placeholder="Please enter"></b-form-input>
+      <b-form-group :label="$t('asset.assetProperties')">
+        <div class="font12 text-grey-light" style="margin: -0.6rem 0 0.4rem">
+          {{ $t("asset.assetName") }}
+        </div>
+        <b-form-input
+          v-model="form.assetName"
+          :placeholder="$t('asset.inputAssetName')"
+        ></b-form-input>
       </b-form-group>
-      <b-form-group label="Ending Block" label-class="text-grey-light">
-        <b-form-input v-model="form.block" placeholder="Please enter"></b-form-input>
+      <b-form-group
+        :label="$t('asset.endingBlock')"
+        label-class="text-grey-light"
+      >
+        <b-form-input
+          v-model="form.endingBlock"
+          :placeholder="$t('asset.inputEndingBlock')"
+        ></b-form-input>
       </b-form-group>
-      <button class="primary-btn">Register</button>
+      <button class="primary-btn" @click="register" :disabled='registring'>
+        <b-spinner small type="grow" v-show="registring" />
+        {{ $t("asset.register") }}
+      </button>
     </b-form>
-    <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div>
+    <!-- <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div> -->
   </div>
 </template>
 
 <script>
+import { registerCrowdloanAsset, getRegitryAssets } from "@/utils/web3/asset";
+import { isPositiveInt } from "@/utils/helper";
+import { stanfiAddress } from "@/utils/commen/account";
+
 export default {
-  name: 'NominationForm',
-  data () {
+  name: "NominationForm",
+  data() {
     return {
+      registring: false,
       form: {
-        chain: '',
-        index: '',
-        address: '',
-        assetName: '',
-        block: ''
+        chainId: "",
+        paraId: "",
+        trieIndex: "",
+        communityAddress: "",
+        assetName: "",
+        endingBlock: "",
       },
       networkIndex: 0,
       networkOptions: [
-        { name: 'Kusuma', icon: require('../../static/images/tokens/ksm.png') },
-        { name: 'Polkadot', icon: require('../../static/images/tokens/dot.png') }
-      ]
-    }
-  }
-}
-
+        {
+          name: "Polkadot",
+          icon: require("../../static/images/tokens/dot.png"),
+        },
+        { name: "Kusuma", icon: require("../../static/images/tokens/ksm.png") },
+      ],
+    };
+  },
+  methods: {
+    validateParams() {
+      const substrateAddressType = this.networkIndex === 0 ? 0 : 2;
+      let tipStr = "";
+      if (!isPositiveInt(this.form.paraId)) {
+        tipStr = this.$t("asset.inputParachainId");
+      } else if (!isPositiveInt(this.form.trieIndex)) {
+        tipStr = this.$t("asset.inputTrieIndex");
+      } else if (
+        !stanfiAddress(this.form.communityAddress, substrateAddressType) ||
+        stanfiAddress(
+          this.form.communityAddress,
+          substrateAddressType
+        ).toLowerCase() !== this.form.communityAddress.toLowerCase()
+      ) {
+        tipStr = this.$t("tip.wrongSubstrateAddress", {
+          type: this.networkIndex === 0 ? "Polkadot" : "Kusama",
+        });
+      }else {
+        return true
+      }
+      this.$bvToast.toast(tipStr, {
+        title: this.$t('tip.tips'),
+        variant: 'info'
+      })
+      return false
+    },
+    async register() {
+      if (!this.validateParams()) {
+        return;
+      }
+      this.form.chainId = parseInt(this.networkIndex) + 2;
+      try{
+        this.registring = true;
+        const tx = await registerCrowdloanAsset(this.form);
+        // update cache
+        getRegitryAssets(true)
+        this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.form = {
+          chainId: "",
+          paraId: "",
+          trieIndex: "",
+          communityAddress: "",
+          assetName: "",
+          endingBlock: "",
+        }
+        this.networkIndex = 0
+      }catch(e){
+        console.log(2345, e);
+        this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
+            title: this.$t('tip.error'),
+            variant: 'danger'
+          })
+      }finally{
+        this.registring = false
+      }
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -81,7 +178,7 @@ export default {
   margin: auto;
 }
 label {
-  margin-bottom: .2rem!important;
+  margin-bottom: 0.2rem !important;
 }
 .c-dropdown {
   width: 100%;
@@ -89,7 +186,7 @@ label {
   .btn img {
     width: 1.4rem;
     height: 1.4rem;
-    margin-right: .6rem;
+    margin-right: 0.6rem;
   }
   .btn span {
     color: #242629;
@@ -97,7 +194,7 @@ label {
   .dropdown-item img {
     width: 1.2rem;
     height: 1.2rem;
-    margin-right: .8rem;
+    margin-right: 0.8rem;
   }
   .selected-icon {
     @include icon;

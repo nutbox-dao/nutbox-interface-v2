@@ -172,3 +172,12 @@ export const handleApiErrCode = (code, toast) => {
   }
   return false
 }
+
+/**
+ * judge a str wheather a positive integer
+ * @param {*} str 
+ */
+export const isPositiveInt = (str) => {
+  const r = /^\d+$/
+  return r.test(str)
+}

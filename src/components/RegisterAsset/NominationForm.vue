@@ -2,7 +2,7 @@
   <div class="d-form">
     <b-form class="custom-form">
       <b-form-group id="input-group-0"
-                    label="Net work"
+                    :label="$t('asset.network')"
                     label-for="dropdown-1">
         <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
           <template #button-content>
@@ -29,48 +29,98 @@
 
       </b-form-group>
       <b-form-group id="input-group-1"
-                    label="Validator Address"
+                    :label="$t('asset.validatorNodeAddress')"
                     label-for="input-1">
         <b-form-input
           id="input-1"
-          v-model="form.account"
-          placeholder="Please enter"
+          v-model="form.nodeAddress"
+          :placeholder="$t('asset.inputValidatorNode')"
           required
         ></b-form-input>
       </b-form-group>
       <b-form-group id="input-group-2"
-                    label="Asset Properties"
+                    :label="$t('asset.assetProperties')"
                     label-for="input-2">
-        <div class="font12 text-grey-light" style="margin: -.6rem 0 .4rem">Name of Your Asset</div>
+        <div class="font12 text-grey-light" style="margin: -.6rem 0 .4rem">{{ $t('asset.assetName') }}</div>
         <b-form-input
           id="input-2"
           v-model="form.assetName"
-          placeholder="Please enter"
+          :placeholder="$t('asset.inputAssetName')"
           required
         ></b-form-input>
       </b-form-group>
-      <button class="primary-btn">Register</button>
+      <button class="primary-btn" :disabled="registring" @click="register">
+        <b-spinner small type="grow" v-show="registring" />
+        {{ $t('asset.register') }}
+        </button>
     </b-form>
-    <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div>
+    <!-- <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div> -->
   </div>
 </template>
 
 <script>
+import { stanfiAddress } from '@/utils/commen/account'
+import { registerNominateAsset, getRegitryAssets } from '@/utils/web3/asset'
+
 export default {
   name: 'NominationForm',
   data () {
     return {
+      registring: false,
       form: {
-        account: '',
+        chainId: '',
+        nodeAddress: '',
         assetName: ''
       },
       networkIndex: 0,
       networkOptions: [
-        { name: 'Kusuma', icon: require('../../static/images/tokens/ksm.png') },
-        { name: 'Polkadot', icon: require('../../static/images/tokens/dot.png') }
+        { name: 'Polkadot', icon: require('../../static/images/tokens/dot.png') },
+        { name: 'Kusuma', icon: require('../../static/images/tokens/ksm.png') }
       ]
     }
-  }
+  },
+  methods: {
+    validateInput() {
+      const substrateAddressType = this.networkIndex === 0 ? 0 : 2;
+      if (!stanfiAddress(this.form.nodeAddress) || stanfiAddress(this.form.nodeAddress, substrateAddressType).toLowerCase() !== this.form.nodeAddress.toLowerCase()){
+        this.$bvToast.toast(this.$t('tip.wrongSubstrateAddress', {type: this.networkIndex == 0 ? 'Polkadot' : 'Kusama'}), {
+        title: this.$t('tip.tips'),
+        variant: 'info'
+      })
+        return
+      }
+      return true
+    },
+    async register() {
+      if(!this.validateInput()){
+        return
+      }
+      try{
+        this.registring = true
+        const tx = await registerNominateAsset(this.form)
+        // update cache
+        getRegitryAssets(true)
+         this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.form = {
+           chainId: "",
+          nodeAddress: "",
+          assetName: "",
+        }
+        this.networkIndex = 0
+      }catch(e){
+         console.log(2345, e);
+        this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
+            title: this.$t('tip.error'),
+            variant: 'danger'
+          })
+      }finally{
+        this.registring = false
+      }
+    }
+  },
 }
 
 </script>
