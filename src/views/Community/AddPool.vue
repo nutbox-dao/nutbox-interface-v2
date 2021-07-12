@@ -23,7 +23,8 @@
           <b-form-group id="input-group-1"
                         label="Staking Asset"
                         label-for="input-1">
-            <AssetsDropdown @setSelectedAsset="setStakingAsset"/>
+            <AssetsDropdown :concat-address-options="concatAddressOptions"
+                            @setSelectedAsset="setStakingAsset"/>
             <div class="text-left text-grey-light mt-1" v-if="form.stakingAsset">
               <span v-show="isHomeChainAsset">* This is a homechian asset</span>
               <span v-show="!isHomeChainAsset">* This is a foreignchain asset</span>
@@ -120,7 +121,17 @@ export default {
         amount: '',
         name: '',
         rations: [0]
-      }
+      },
+      concatAddressOptions: [
+        {
+          categoryName: 'Personal',
+          items: []
+        },
+        {
+          categoryName: ' Official',
+          items: []
+        }
+      ]
     }
   },
   mounted () {

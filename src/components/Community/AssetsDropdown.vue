@@ -26,23 +26,14 @@ import Dropdown from '@/components/ToolsComponents/Dropdown'
 export default {
   name: 'AssetsDropdown',
   components: { Dropdown },
+  props: {
+    concatAddressOptions: Array
+  },
   data () {
     return {
       selectedKey: 'name',
       selectedAssetData: {},
-      assets: null,
-      concatAddressOptions: [
-        {
-          categoryName: 'Personal',
-          items: []
-        },
-        {
-          categoryName: ' Official',
-          items: [
-            { name: 'BBB', symbol: 'BBB', asset: '0xaaaaaaaaaaaaaaaa' }
-          ]
-        }
-      ]
+      assets: null
     }
   },
   methods: {

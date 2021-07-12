@@ -11,7 +11,8 @@
           Step1：Your community asset ID
         </div>
         <div class="form-card custom-form step-1">
-          <AssetsDropdown @setSelectedAsset="setStakingAsset"/>
+          <AssetsDropdown :concat-address-options="concatAddressOptions"
+                          @setSelectedAsset="setStakingAsset"/>
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
               <div v-show="isMint">* This is a mintable token</div>
@@ -95,7 +96,17 @@ export default {
         start: '1001',
         end: '3000',
         reward: '100'
-      }
+      },
+      concatAddressOptions: [
+        {
+          categoryName: 'Personal',
+          items: []
+        },
+        {
+          categoryName: ' Official',
+          items: []
+        }
+      ]
     }
   },
   computed: {
