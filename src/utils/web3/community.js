@@ -173,7 +173,7 @@ export const addPool = async (form) => {
         }
         try{
             console.log(235, form.ratios, form.ratios.map(r => parseInt(r * 100)));
-            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r * 100)))
+            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r)))
             await waitForTx(tx.hash)
             resolve(tx.hash)
         }catch (e) {

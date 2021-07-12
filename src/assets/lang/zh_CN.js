@@ -356,7 +356,7 @@ module.exports = {
     notDeploy:"还没有Token？",
     deployOne:"部署一个",
     notRegister: "还没有注册资产？",
-    registerOne:"马上注册",
+    registerOne:"注册新资产",
     inputAccount:"请输入您的账号",
     inputAssetName:"请输入资产名字",
     parachainId: "平行链ID",

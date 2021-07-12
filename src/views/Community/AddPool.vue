@@ -49,7 +49,7 @@
                 <span v-show="form.assetId && isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
                 <span v-show="form.assetId && !isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
               </div>
-              <router-link class="text-right" to="/community/register/native">Registry a new asset</router-link>
+              <router-link class="text-right" to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </b-form-group>
           <div class="row">
@@ -165,51 +165,59 @@ export default {
           items: []
         }
       ],
-      assetLoading: true
+      assetLoading: false
     }
   },
   async mounted () {
     this.initChart()
     getMyOpenedPools()
-    let assets = await getRegitryAssets()
-    console.log(123, assets)
-    assets = assets.map(asset => {
-      switch (asset.type) {
-        case 'HomeChainAssetRegistry':
-          return {
-            icon: asset.icon,
-            name: asset.name,
-            symbol: asset.symbol,
-            asset: asset.asset,
-            isHomeChainAsset: true
-          }
-        case 'SteemHiveDelegateAssetRegistry':
-          return {
-            icon: asset.icon,
-            name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
-            symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
-            asset: asset.asset,
-            isHomeChainAsset: false
-          }
-        case 'SubstrateCrowdloanAssetRegistry':
-          return {
-            icon: asset.icon,
-            name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
-            symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
-            asset: asset.asset,
-            isHomeChainAsset: false
-          }
-        case 'SubstrateNominateAssetRegistry':
-          return {
-            icon: asset.icon,
-            name: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
-            symbol: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
-            asset: asset.asset,
-            isHomeChainAsset: false
-          }
-      }
-    })
-    this.concatAddressOptions[0].items = assets
+    this.assetLoading = true
+    try{
+      let assets = await getRegitryAssets()
+      console.log(123, assets)
+      assets = assets.map(asset => {
+        switch (asset.type) {
+          case 'HomeChainAssetRegistry':
+            return {
+              icon: asset.icon,
+              name: asset.name,
+              symbol: asset.symbol,
+              asset: asset.asset,
+              isHomeChainAsset: true
+            }
+          case 'SteemHiveDelegateAssetRegistry':
+            return {
+              icon: asset.icon,
+              name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
+              symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
+              asset: asset.asset,
+              isHomeChainAsset: false
+            }
+          case 'SubstrateCrowdloanAssetRegistry':
+            return {
+              icon: asset.icon,
+              name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
+              symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
+              asset: asset.asset,
+              isHomeChainAsset: false
+            }
+          case 'SubstrateNominateAssetRegistry':
+            return {
+              icon: asset.icon,
+              name: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
+              symbol: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
+              asset: asset.asset,
+              isHomeChainAsset: false
+            }
+        }
+      })
+      this.concatAddressOptions[0].items = assets
+    }catch(e) {
+      handleApiErrCode(e, (tip, param) => {
+        this.$bvToast.toast(tip, param)
+      })
+    }
+    
     this.assetLoading = false
   },
   methods: {
@@ -265,18 +273,18 @@ export default {
     },
     async confirmAdd () {
       if (!this.checkInput()) return
-      //
-      // // add pool
-      // try {
-      //   this.adding = true
-      //   const hash = await addPool(this.form)
-      // } catch (e) {
-      //   handleApiErrCode(e, (info, para) => {
-      //     this.$bvToast.toast(info, para)
-      //   })
-      // } finally {
-      //   this.adding = false
-      // }
+      
+      // add pool
+      try {
+        this.adding = true
+        const hash = await addPool(this.form)
+      } catch (e) {
+        handleApiErrCode(e, (info, para) => {
+          this.$bvToast.toast(info, para)
+        })
+      } finally {
+        this.adding = false
+      }
     }
   }
 }
