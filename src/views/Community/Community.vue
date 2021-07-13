@@ -45,6 +45,8 @@ import CommunityCard from '@/components/Community/CommunityCard'
 import { mapState } from 'vuex'
 import { getAllCommunities } from '@/apis/api'
 import { getMyStakingFactory, getMyCommunityInfo } from '@/utils/web3/community'
+import { handleApiErrCode } from '../../utils/helper'
+import { errCode } from '@/config'
 
 export default {
   name: 'Community',
@@ -63,7 +65,12 @@ export default {
   },
   mounted () {
     this.fetchData()
-    getMyCommunityInfo()
+    getMyCommunityInfo().catch(e => {
+      if (e === errCode.NO_STAKING_FACTORY) return;
+      handleApiErrCode(e, (tip, param) => {
+        this.$bvToast.toast(tip, param)
+      })
+    })
   },
   methods: {
     async fetchData () {

@@ -157,11 +157,11 @@ export default {
       selectedAddressData: {},
       concatAddressOptions: [
         {
-          categoryName: 'Personal',
+          categoryName: 'personal',
           items: [{ name: 'AAA', address: '0x000' }]
         },
         {
-          categoryName: ' Official',
+          categoryName: 'official',
           items: []
         }
       ],

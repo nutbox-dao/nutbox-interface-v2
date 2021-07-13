@@ -111,11 +111,11 @@ export default {
       maxBlock: 999999999999999,
       concatAddressOptions: [
         {
-          categoryName: 'Personal',
+          categoryName: 'personal',
           items: []
         },
         {
-          categoryName: ' Official',
+          categoryName: 'official',
           items: []
         }
       ],

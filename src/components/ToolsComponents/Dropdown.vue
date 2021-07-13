@@ -11,7 +11,7 @@
     </div>
     <b-dropdown-group v-else
                       v-for="(group, index) of menuOptions" :key="index"
-                      :header="group.categoryName">
+                      :header="$t('community.'+group.categoryName)">
       <slot v-if="group.items.length===0" :name="`empty${index}`"></slot>
       <b-dropdown-item v-for="(item, sIndex) of group.items" :key="index+sIndex"
                        @click="setSelectedItem(item)">

@@ -352,6 +352,8 @@ module.exports = {
     stopBlock:'结束区块',
     rewardAmount: '分发数量',
     comfirmAdd:'确认添加',
+    personal: '我注册的资产',
+    official: '官方提供的资产'
   },
   asset: {
     network: "网络",

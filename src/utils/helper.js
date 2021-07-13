@@ -156,7 +156,7 @@ export const handleApiErrCode = (code, toast) => {
   if (code === 200) {
     return true
   } else if(code === errCode.NO_STAKING_FACTORY){
-    tipStr = $T('error.noStakingFactory')
+    tipStr = $t('error.noStakingFactory')
   } else if(code === errCode.BLOCK_CHAIN_ERR){
     tipStr = $t('error.blockChainError')
   } else if(code === errCode.CONTRACT_CREATE_FAIL){

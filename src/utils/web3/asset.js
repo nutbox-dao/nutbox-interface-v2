@@ -25,6 +25,7 @@ import {
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME } from "../../config";
+import { asset } from "../../assets/lang/zh_CN";
 
 /**
  * Judge asset wheather Homechain assets
@@ -86,12 +87,13 @@ export const getRegitryAssets = async (update = false) => {
     } 
     try{
       const assetCount = await contract.registryCounter(account);
-      // get register assets
-      assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
-      if(assets.length === 0) {
-        resolve([]);
+      if (assetCount === 0){
+        resolve([])
         return;
       }
+      // get register assets
+      assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
+
       // get assets contract and type
       const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
       assets = assets.map((asset, index) => ({
