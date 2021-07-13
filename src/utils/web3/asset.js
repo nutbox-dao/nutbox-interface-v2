@@ -80,7 +80,10 @@ export const getRegitryAssets = async (update = false) => {
     }
     const account = store.state.web3.account
     const contract = await getContract('RegistryHub');
-    if (!contract) reject(errCode.CONTRACT_CREATE_FAIL);
+    if (!contract){
+      reject(errCode.CONTRACT_CREATE_FAIL);
+      return;
+    } 
     try{
       const assetCount = await contract.registryCounter(account);
       // get register assets
@@ -194,6 +197,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       '0x', assetAddress, '0x',
       Transaction_config
     )
+    await waitForTx(tx.hash)
     return tx
   } catch (e) {
     console.log('Registry Homechain Asset Fail', e);

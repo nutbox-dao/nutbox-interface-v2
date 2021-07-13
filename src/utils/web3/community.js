@@ -16,15 +16,21 @@ export const getMyStakingFactory = async (update=false) => {
         const id = store.state.web3.stakingFactoryId
         if (!update && id){
             resolve(id);
+            return;
         }
         const account = store.state.web3.account
         if (!account) return;
         const contract = await getContract('StakingFactory')
         let stakingFactoryId = null
         try{
-            stakingFactoryId = await contract.stakingFeastRecord(account, 0)
+            const count = await contract.stakingFeastCounter(account)
+            if (count > 0){
+                stakingFactoryId = await contract.stakingFeastRecord(account, 0)
+            }else{
+                resolve(null);
+                return;
+            }
         }catch(e){
-            console.log(e);
             reject(errCode.BLOCK_CHAIN_ERR)
             return;
         }
@@ -44,9 +50,13 @@ export const getMyCommunityInfo = async (update=false) => {
         let stakingFactoryId = null
         try{
             stakingFactoryId = await getMyStakingFactory(update)
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
         }catch(e){
-            reject(e)
-            return
+            reject(e);
+            return;
         }
         if (!stakingFactoryId) return;
         if (!update && store.state.web3.communityInfo){
@@ -87,31 +97,42 @@ export const getMyOpenedPools = async () => {
  * @param {*} form contract params
  */
 export const createStakingFeast = async (form) => {
-    const comId = await getMyStakingFactory()
-    if (comId){
-        return;
-    }
-    const contract = await getContract('StakingFactory')
-    if (!contract) return
-    try{
-        // make params
-        const assetId = form.assetId
-        let distribution = form.poolData
-        distribution = distribution.map(d => ({
-            amount: ethers.utils.parseUnits(d.amount.toString(), form.decimal),
-            hasPassed: false,
-            startHeight: d.startHeight,
-            stopHeight: d.stopHeight
-        }))
-        console.log(234, distribution);
-        // call contract
-        const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
-        console.log(333, res.hash);
-        return res.hash
-    }catch(e){
-        console.log('Create Staking Feast Failed', e);
-        return;
-    }
+    return new Promise(async(resolve, reject) => {
+        try{
+            const comId = await getMyStakingFactory()
+            if (comId){
+                reject(errCode.CONTRACT_CREATE_FAIL)
+                return;
+            }
+        }catch(e) {
+            reject(e);
+            return;
+        }
+        const contract = await getContract('StakingFactory')
+        if (!contract) {
+            reject(errCode.CONTRACT_CREATE_FAIL)
+            return;
+        }
+        try{
+            // make params
+            const assetId = form.assetId
+            let distribution = form.poolData
+            distribution = distribution.map(d => ({
+                amount: ethers.utils.parseUnits(d.amount.toString(), form.decimal),
+                hasPassed: false,
+                startHeight: d.startHeight,
+                stopHeight: d.stopHeight
+            }))
+            // call contract
+            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
+            console.log(333, res.hash);
+            resolve(res.hash)
+        }catch(e){
+            console.log('Create Staking Feast Failed', e);
+            reject(errCode.BLOCK_CHAIN_ERR)
+            return;
+        }
+    })
 }
 
 /**
@@ -133,10 +154,10 @@ export const completeCommunityInfo = async (form, type) => {
         }
         try{
             let res = null;
-            if (type === 'create'){
-                res  = await insertCommunity(params)
+            if (type === 'edit'){
+                res  = await updateCommunity(params)
             }else{
-                res = await updateCommunity(params)
+                res = await insertCommunity(params)
             }
             // update nonce in storage
             store.commit('web3/saveNonce', nonce)

@@ -3,10 +3,10 @@
     <div class="view-top-header row">
       <div class="col-md-4 text-left">
         <div class="page-view-title">{{$t("community.community") }}</div>
-        <div class="page-view-subtitle">Choose token type you want deploy</div>
+        <!-- <div class="page-view-subtitle">Choose token type you want deploy</div> -->
       </div>
       <div class="col-md-8 btn-group">
-        <button v-if="userEconomy"
+        <button v-if="communityId"
                 @click="$router.push('/community/pool-dashboard')">Manage Your Community</button>
         <button v-else @click="$router.push('/community/create-economy')">
           <i class="add-icon"></i>
@@ -44,24 +44,26 @@
 import CommunityCard from '@/components/Community/CommunityCard'
 import { mapState } from 'vuex'
 import { getAllCommunities } from '@/apis/api'
-import { getMyStakingFactory } from '@/utils/web3/community'
+import { getMyStakingFactory, getMyCommunityInfo } from '@/utils/web3/community'
 
 export default {
   name: 'Community',
   components: { CommunityCard },
   data () {
     return {
-      loading: false
+      loading: false,
     }
   },
   computed: {
     ...mapState({
       userEconomy: state => state.community.userEconomy,
-      allCommunities: state => state.web3.allCommunities
+      allCommunities: state => state.web3.allCommunities,
+      communityId: state => state.web3.stakingFactoryId
     })
   },
   mounted () {
     this.fetchData()
+    getMyCommunityInfo()
   },
   methods: {
     async fetchData () {

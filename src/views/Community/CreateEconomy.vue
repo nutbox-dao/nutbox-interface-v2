@@ -2,13 +2,13 @@
   <div class="page-view-content">
     <div class="view-top-header mb-4">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
-        Create Your Own Staking Economy
+        {{ $t('community.createCommunity') }}
       </div>
     </div>
     <div class="scroll-content mt-3">
       <div class="form">
         <div class="primary-line-title font-bold font20">
-          Step1：Your community asset ID
+          {{ $t('community.yourCTokenId') }}
         </div>
         <div class="form-card custom-form step-1">
           <Dropdown :menu-options="concatAddressOptions"
@@ -19,8 +19,8 @@
             <template v-slot:empty0>
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
-                  Havn’t Registry yet？
-                  <router-link to="/community/register/native">Registry one</router-link>
+                  {{ $t('asset.notRegister') }}
+                  <router-link to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
                 </div>
               </div>
             </template>
@@ -39,52 +39,52 @@
               <div v-show="!isMint">* This is not a mintable token</div>
             </div>
             <div class="" style="line-height: 1.5rem">
-              Havn’t Registry yet？
+              {{ $t('asset.notRegister') }}
               <router-link class="text-primary"
-                           to="/community/register/native">Registry one</router-link>
+                           to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </div>
         </div>
         <div class="primary-line-title font-bold font20">
-          Step2：Setting your Community token distrbution mechanism
+          {{ $t('community.settingTokenDistribution') }}
         </div>
         <div class="form-card custom-form step-2">
           <div class="flex-between-center">
-            <span>Token distribution era</span>
+            <span>{{ $t('community.tokenEra') }}</span>
 <!--            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">-->
 <!--              <i class="add-icon"></i>-->
 <!--              <span>Add Pool</span>-->
 <!--            </button>-->
           </div>
           <p style="margin:0;">
-            Current Block Number: {{blockNum}}
+            {{ $t('community.currentBlock') }}{{blockNum}}
           </p>
           <Progress :min="progressData.length>0?progressData[0].start:0"
                     :is-edit="progressData.length>0"
                     @delete="deleteData"
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">Start block</span>
+            <span class="font16 font-bold mr-3">{{ $t('community.startBlock') }}</span>
             <b-input placeholder="输入起始区块高度" :disabled="progressData.length>0"
                      v-model="poolForm.start"></b-input>
           </div>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">Stop block</span>
+            <span class="font16 font-bold mr-3">{{ $t('community.stopBlock') }}</span>
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full" placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
-              <span @click="max" class="append-input-btn">MAX</span>
+              <span @click="max" class="append-input-btn">{{ $t('message.max') }}</span>
             </b-input-group>
           </div>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">Reward amount</span>
+            <span class="font16 font-bold mr-3">{{ $t('community.rewardAmount') }}</span>
             <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
           </div>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
-                  @click="confirmAdd">Confirm Add</button>
+                  @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
         </div>
         <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
           <b-spinner small type="grow" v-show="deploying" />
-          Deploy
+          {{ $t('asset.deploy') }}
         </button>
       </div>
     </div>
@@ -97,6 +97,7 @@ import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { getMyStakingFactory, createStakingFeast } from '@/utils/web3/community'
+import { handleApiErrCode } from '../../utils/helper'
 
 export default {
   name: 'CreateEconomy',
@@ -156,7 +157,7 @@ export default {
   methods: {
     setSelectedData (data) {
       this.selectedAddressData = data
-      this.form.assetId = data.assetId
+      this.form.assetId = data.asset
     },
     deleteData () {
       this.progressData.pop()
@@ -199,15 +200,8 @@ export default {
       console.log(this.progressData)
     },
     async confirmDeploy () {
-      const comId = await getMyStakingFactory()
-      if (comId) {
-        this.$bvToast.toast(this.$t('tip.youHaveCreatedCommunity'), {
-          title: this.$t('tip.tips'),
-          variant: 'info'
-        })
-        return
-      }
       this.form.poolData = this.progressData
+      console.log(this.form.assetId, this.form.poolData);
       if (!this.form.assetId || this.form.poolData.length === 0) {
         this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
           title: this.$t('tip.tips'),
@@ -229,9 +223,8 @@ export default {
           this.$router.replace('/community/community-info?type=edit')
         }
       } catch (e) {
-        this.$bvToast.toast(this.$t('tip.deployFactoryFail'), {
-          title: this.$t('tip.error'),
-          variant: 'danger'
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
         })
       } finally {
         this.deploying = false

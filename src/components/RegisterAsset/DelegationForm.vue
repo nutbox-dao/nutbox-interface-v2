@@ -86,7 +86,7 @@ export default {
         this.registring = true
         const hash = await registerSteemHiveAsset(this.form)
         // update cache
-        getRegitryAssets(true)
+        await getRegitryAssets(true)
         console.log(13487, hash);
         this.$bvToast.toast(this.$t('registryAssetSuccess'), {
           title: this.$t('tip.seccuss'),
