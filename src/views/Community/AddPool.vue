@@ -112,7 +112,8 @@ export default {
   data () {
     return {
       isHomeChainAsset: true,
-      adding: false,
+      adding: true,
+      myPools:[],
       colorList: ['#FF7366', '#7CBF4D', '#70ACFF', '#FFE14D', '#CC85FF', '#FF9500', '#00C7D9', '#9D94FF', '#FF73AD'],
       options: {
         tooltip: { show: true, trigger: 'item' },
@@ -165,12 +166,22 @@ export default {
           items: []
         }
       ],
-      assetLoading: false
+      assetLoading: true,
     }
   },
   async mounted () {
-    this.initChart()
-    getMyOpenedPools()
+    getMyOpenedPools().then(pools => {
+      this.myPools = pools.map(pool => ({
+        name: pool.asset.name,
+        value: pool.poolRatio
+      }))
+      this.initChart()
+      this.adding = false
+    }).catch(e => {
+      handleApiErrCode(e, (tip, param) => {
+        this.$bvToast.toast(tip, param)
+      })
+    })
     this.assetLoading = true
     try{
       let assets = await getRegitryAssets()
@@ -228,7 +239,7 @@ export default {
     },
     setData () {
       this.options.color = this.colorList
-      const data = [
+      let data = [
         { value: 100, name: this.form.name }
         // { value: 20, name: 'PNUT-TSP LP' }
         // { value: 20, name: 'PNUT-TSP1 LP' },

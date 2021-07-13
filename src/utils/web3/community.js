@@ -91,15 +91,15 @@ export const getMyCommunityInfo = async (update=false) => {
  * Get opened pools of community
  * @returns
  */
-export const getMyOpenedPools = async () => {
+export const getMyOpenedPools = async (update = false) => {
     return new Promise(async (resolve, reject) => {
-        if (store.state.web3.watcher.myPools){
-            resolve(store.state.web3.myPools);
+        if (!update && store.state.web3.myPools){
+            resolve(store.state.myPools);
             return;
         }
         let stakingFactoryId = null
         try{
-            stakingFactoryId = await getMyStakingFactory(update)
+            stakingFactoryId = await getMyStakingFactory()
             if (!stakingFactoryId) {
                 reject(errCode.NO_STAKING_FACTORY);
                 return;
@@ -108,22 +108,20 @@ export const getMyOpenedPools = async () => {
             reject(e);
             return;
         }
-        const account = store.state.web3.account
-        const watcher = await createWatcher(new Array(10).toString().split(',').map((item,i) => ({
-            target: stakingFactoryId,
-            call: [
-                'opendPools(uint8)(Pool)',
-                account
-            ],
-            returns:[
-                ['Pool']
-            ]
-        })), Multi_Config)
-        watcher.batche().subscribe(updates => {
-            console.log('Upate my pool', updates);
-        })
-        watcher.start()
-        store.commit('web3/saveWatcher', {name: 'myPools', watcher})
+
+       
+        try{
+            const contract = await getContract('StakingTemplate', stakingFactoryId)
+            // get active pools
+            let pools = await Promise.all(new Array(10).toString().split(',').map((item, i) => contract.openedPools(i)))
+            console.log(3214, pools);
+            pools = pools.filter(pool => pool.hasActived)
+            store.commit('web3/saveMyPools', pools)
+            resolve(pools);
+        }catch(e) {
+            reject(errCode.BLOCK_CHAIN_ERR)
+            return;
+        }
     })
 }
 
