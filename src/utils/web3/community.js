@@ -4,8 +4,11 @@ import store from '@/store'
 import { Transaction_config } from '@/config'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode } from '../../config'
+import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
+import {
+    createWatcher
+  } from '@makerdao/multicall'
 
 /**
  * Get community admin's staking factory id
@@ -21,6 +24,10 @@ export const getMyStakingFactory = async (update=false) => {
         const account = store.state.web3.account
         if (!account) return;
         const contract = await getContract('StakingFactory')
+        if (!contract){
+            reject(errCode.CONTRACT_CREATE_FAIL);
+            return;
+        }
         let stakingFactoryId = null
         try{
             const count = await contract.stakingFeastCounter(account)
@@ -85,11 +92,39 @@ export const getMyCommunityInfo = async (update=false) => {
  * @returns
  */
 export const getMyOpenedPools = async () => {
-    const stakingFactoryId = await getMyStakingFactory()
-    if (!stakingFactoryId) return;
-    const contract = await getContract('StakingTemplate', stakingFactoryId)
-    const pools = await contract.openedPools()
-    console.log('pools', pools);
+    return new Promise(async (resolve, reject) => {
+        if (store.state.web3.watcher.myPools){
+            resolve(store.state.web3.myPools);
+            return;
+        }
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory(update)
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+        }catch(e){
+            reject(e);
+            return;
+        }
+        const account = store.state.web3.account
+        const watcher = await createWatcher(new Array(10).toString().split(',').map((item,i) => ({
+            target: stakingFactoryId,
+            call: [
+                'opendPools(uint8)(Pool)',
+                account
+            ],
+            returns:[
+                ['Pool']
+            ]
+        })), Multi_Config)
+        watcher.batche().subscribe(updates => {
+            console.log('Upate my pool', updates);
+        })
+        watcher.start()
+        store.commit('web3/saveWatcher', {name: 'myPools', watcher})
+    })
 }
 
 /**
@@ -140,12 +175,20 @@ export const createStakingFeast = async (form) => {
  * @param {*} form
  */
 export const completeCommunityInfo = async (form, type) => {
-    return new Promise(async (resolve, rejct) => {
+    return new Promise(async (resolve, reject) => {
         let nonce = await getNonce()
         const userId = store.state.web3.account
         nonce = nonce ? nonce + 1 : 1
         const originMessage = JSON.stringify(form)
-        const signature = await signMessage(originMessage + nonce)
+        let signature = ''
+        try{
+            signature = await signMessage(originMessage + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
         const params = {
             userId,
             infoStr: originMessage,

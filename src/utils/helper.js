@@ -167,6 +167,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.signatureFailed')
   } else if (code === errCode.DB_ERROR || code == errCode.SERVER_ERR) {
     tipStr = $t('error.serveError')
+  } else if (code === errCode.USER_CANCEL_SIGNING){
+    tipStr = $t('error.cancelSigning')
   }
   toast(tipStr, {
     title: $t('tip.error'),

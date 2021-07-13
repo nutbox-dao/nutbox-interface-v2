@@ -102,8 +102,16 @@ export const Transaction_config = {
   NO_STAKING_FACTORY: 101,
   BLOCK_CHAIN_ERR: 351,
   CONTRACT_CREATE_FAIL: 352,
+  USER_CANCEL_SIGNING: 353,
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,
   DB_ERROR: 453,
   SERVER_ERR: 500,
+}
+
+export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
+
+export const Multi_Config = {
+  rpcUrl: RPC_NODE,
+  multicallAddress: MultiAddress
 }

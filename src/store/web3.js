@@ -15,7 +15,9 @@ export default {
     allTokens: null,
     blockNum: null,
     nonce: null,
-    allCommunities: null
+    allCommunities: null,
+    myPools: null,
+    watcher: {},
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -54,6 +56,12 @@ export default {
     },
     saveCommunities: (state, communities) => {
       state.allCommunities = communities
+    },
+    saveMyPools: (state, myPools) => {
+      state.myPools = myPools
+    },
+    saveWatcher: (state, param) => {
+      state.watcher[param.name] = param.watcher
     }
   },
   getters: {

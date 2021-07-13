@@ -316,7 +316,8 @@ module.exports = {
     serveError: "服务端错误",
     networkError: "网络错误",
     noStakingFactory: "您还没有创建社区",
-    blockChainError: "合约调用错误"
+    blockChainError: "合约调用错误",
+    cancelSigning: '签名取消'
   },
   community: {
     community: '社区',

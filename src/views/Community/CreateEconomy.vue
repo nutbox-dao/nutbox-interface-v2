@@ -219,7 +219,7 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
-          await getMyStakingFactory()
+          await getMyStakingFactory(true)
           this.$router.replace('/community/community-info?type=edit')
         }
       } catch (e) {

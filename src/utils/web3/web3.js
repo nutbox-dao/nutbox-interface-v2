@@ -137,13 +137,8 @@ export const addAssetToWallet = async (address, symbol, decimals, image) => {
   }).catch(console.log)
 }
 
-import { getMyStakingFactory } from './community'
-
 export const test = async () => {
-
-        console.log(1234, await getRegitryAssets().catch(console.log));
-
-        getMyStakingFactory()
+  
   // const contract = await getContract('REGISTRYHUB', '0xF6149F38bEA7bB07a779AF30Ee1983566e5E1218')
   // if (!contract) return 
   // try{
@@ -171,7 +166,7 @@ export const testMulticall = async () => {
     target: erc20Address,
     call: [
       'balanceOf(address)(uint256)',
-      store.account
+      store.state.web3.account
     ],
     returns: [
       ['TC_BALANCE', val => val / 10 ** 18]
@@ -180,28 +175,31 @@ export const testMulticall = async () => {
     target: contractAddress['RegistryHub'],
     call: [
       'registryCounter(address)(uint8)',
-      store.account
+      store.state.web3.account
     ],
     returns: [
       ['REGISTRY_COUNTER']
     ]
   }], config)
 
-  watcher.subscribe(update => {
-    console.log(`Update: ${update.type} = ${update.value}`);
-  })
+
+  // watcher.subscribe(update => {
+  //   console.log(`Update: ${update.type} = ${update.value}`);
+  // })
   // Subscribe to batched state updates
   watcher.batch().subscribe(updates => {
     // Handle batched updates here
     // Updates are returned as { type, value } objects, e.g:
     // { type: 'BALANCE_OF_MKR_WHALE', value: 70000 }
     console.log('Updates', updates);
+    watcher.stop()
   });
 
 
-  watcher.onNewBlock(blockNumber => {
-    console.log('New Block:', blockNumber);
-  })
+  // watcher.onNewBlock(blockNumber => {
+  //   console.log('New Block:', blockNumber);
+  //   watcher.stop()
+  // })
 
   console.log('watcher start');
 

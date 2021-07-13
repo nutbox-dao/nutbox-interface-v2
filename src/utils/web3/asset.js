@@ -195,6 +195,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
   const contract = await getContract('HomeChainAssetRegistry');
   if (!contract) return
   try {
+    console.log(assetAddress);
     const tx = await contract.registerAsset(
       '0x', assetAddress, '0x',
       Transaction_config
