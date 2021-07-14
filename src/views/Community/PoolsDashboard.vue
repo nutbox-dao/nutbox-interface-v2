@@ -2,7 +2,7 @@
   <div class="page-view-content">
     <div class="view-top-header row">
       <div class="col-md-6 text-left">
-        <div class="page-back-text-icon page-view-title" @click="$router.back()">Your Staking pools</div>
+        <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">Your Staking pools</div>
       </div>
       <div class="col-md-6 btn-group">
         <button class="outline-btn" @click="$router.push('/community/community-info')">
@@ -58,6 +58,8 @@
 
 <script>
 import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
+import { getMyOpenedPools } from '@/utils/web3/community'
+
 export default {
   name: 'PoolsDashboard',
   components: { CrowdLoanPool },
@@ -81,6 +83,8 @@ export default {
   },
   async mounted () {
     // const assets = await getRegitryAssets()
+    const myPools = await getMyOpenedPools()
+    
   }
 }
 </script>
