@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
     <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 3" :key="i">
+      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 10" :key="i">
         <StakePoolCard/>
       </div>
     </div>
@@ -11,11 +10,10 @@
 
 <script>
 import StakePoolCard from '@/components/Community/PoolsCard/StakePoolCard'
-import Progress from '@/components/Community/Progress'
 
 export default {
   name: 'CrowdLoanPool',
-  components: { StakePoolCard, Progress },
+  components: { StakePoolCard },
   data () {
     return {
       progressData: [
@@ -29,8 +27,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.c-progress {
-  margin-top: 4rem;
-  margin-bottom: 3.5rem;
-}
+
 </style>

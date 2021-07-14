@@ -2,7 +2,7 @@
   <div class="page-view-content wallet">
     <div class="page-view-title">{{ this.$t("wallet.wallet") }}</div>
     <div class="page-view-subtitle">Choose asset type</div>
-    <div class="nav-box">
+    <div class="nav-box container" ref="navBox">
       <div class="nav mr-5">
         <router-link to="/wallet/polkadot" exact>Polkadot</router-link>
         <router-link to="/wallet/kusama">Kusama</router-link>
@@ -11,9 +11,7 @@
       </div>
       <component :is="$route.name"></component>
     </div>
-    <div class="scroll-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 

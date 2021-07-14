@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div class="page-layout">
-      <div class="page-header flex-between-center">
+      <div class="page-header flex-between-center" v-if="screenWidth < 960">
         <div class="header-brand">
-          <img class="logo" v-if="screenWidth < 960" src="./static/images/logo_small.png"
+          <img class="logo" src="./static/images/logo_small.png"
                @click="gotoOfficial" alt="nutbox" />
           <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>
         </div>
@@ -132,8 +132,10 @@
         @hideMask="showMessage = false"
       />
       <div class="page-container">
-        <div class="container">
-          <router-view></router-view>
+        <div class="scroll-content" v-on:scroll="pageScroll" ref="scrollContent">
+          <div class="container">
+            <router-view></router-view>
+          </div>
         </div>
       </div>
     </div>
@@ -174,7 +176,8 @@ export default {
       showMessage: false,
       accountsPop: false,
       screenWidth: document.body.clientWidth,
-      isConnectingPolkadot: true
+      isConnectingPolkadot: true,
+      navBoxEl: null
     }
   },
   computed: {
@@ -195,8 +198,8 @@ export default {
       const res = isCrowdloanAdmin || isCrowdstakingAdmin
       return res
     },
-    address (){
-      if (this.$store.state.web3.account){
+    address () {
+      if (this.$store.state.web3.account) {
         return this.formatUserAddress(this.$store.state.web3.account, false)
       }
     },
@@ -322,11 +325,21 @@ export default {
         // kusama验证者
         // TODO
       })
+    },
+    pageScroll (e) {
+      if (e.target.scrollTop > this.navBoxEl[0].offsetTop) {
+        this.navBoxEl[0].classList.add('fixed-nav-box')
+      } else {
+        this.navBoxEl[0].classList.remove('fixed-nav-box')
+      }
     }
   },
   watch: {
     screenWidth (val) {
       this.screenWidth = val
+    },
+    '$route' (val) {
+      this.$refs.scrollContent.scrollTo({ top: 0 })
     }
   },
   async mounted () {
@@ -340,19 +353,32 @@ export default {
     this.setLanguage(localStorage.getItem(LOCALE_KEY))
     this.getCommunitys()
     this.getCrowdstacking()
+    // const scrollEl = document.getElementsByClassName('scroll-content')
+    // console.log(scrollEl)
+    this.navBoxEl = document.getElementsByClassName('nav-box')
+    // console.log(navBox[0].classList)
+    //
+    // scrollEl[0].addEventListener('scroll', (e) => {
+    //   // console.log(e)
+    //   console.log(navBox[0].offsetTop, e.target.scrollTop)
+    //   if (e.target.scrollTop > navBox[0].offsetTop) {
+    //     navBox[0].classList.add('fixed-nav-box')
+    //   } else {
+    //     navBox[0].classList.remove('fixed-nav-box')
+    //   }
+    // })
+    // console.log(scrollEl[0].scrollHeight)
   },
   async created () {
     // bsc related
-    try{
+    try {
       setupNetwork()
       chainChanged()
       changeAccount()
       subBlockNum()
-    }catch(e) {
-      console.log(533, e);
+    } catch (e) {
+      console.log(533, e)
     }
-    
-
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {

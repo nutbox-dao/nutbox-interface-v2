@@ -2,9 +2,8 @@
   <div class="c-card">
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
-        <div class="card-icons">
+        <div class="card-single-icon">
           <img class="icon1" src="~@/static/images/tokens/dot.png" alt="">
-          <img class="icon2" src="~@/static/images/logo_small.png" alt="">
         </div>
         <div class="title-text font20 font-bold ml-2">
           <span>PNUT-TRX LP</span>
