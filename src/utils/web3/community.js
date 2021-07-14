@@ -303,7 +303,7 @@ export const getDistributionEras = async (update=false) => {
             let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => contract.distributionEras(i)))
             console.log('distribution', distri);
             distri = distri.map((item, i) => ({
-                percentage: item.amount.toString() / (10 ** decimal),
+                percentage: item.stopHeight - item.startHeight,
                 amount: item.amount.toString() / (10 ** decimal),
                 start: item.startHeight.toString(),
                 stopHeight: item.stopHeight.toString(),

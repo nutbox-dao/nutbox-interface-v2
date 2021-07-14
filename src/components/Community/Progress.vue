@@ -16,12 +16,6 @@
 <script>
 export default {
   name: 'Progress',
-  data() {
-    return {
-      min: 0,
-      max: 'Max'
-    }
-  },
   props: {
     trackColor: {
       type: String,
@@ -35,9 +29,13 @@ export default {
       default: false
     }
   },
-  mounted () {
-    this.min = this.progressData[0].start
-    this.max = this.progressData[this.progressData.length-1].stopHeight
+  computed: {
+    min() {
+      return this.progressData[0].start
+    },
+    max(){
+      return this.progressData[this.progressData.length-1].stopHeight
+    }
   },
 }
 </script>
