@@ -20,23 +20,21 @@
         <i class="search-icon"></i>
       </template>
     </b-input-group>
-    <div class="scroll-content">
-      <div class="loading-bg" v-if="loading">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t("tip.loading") }}</p>
-      </div>
-      <template v-else>
-        <div class="empty-bg" v-if="allCommunities && allCommunities.length === 0">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t("tip.noContribuitons") }}</p>
-        </div>
-        <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of allCommunities" :key="index">
-            <CommunityCard :card-info="cItem"/>
-          </div>
-        </div>
-      </template>
+    <div class="loading-bg" v-if="loading">
+      <img src="~@/static/images/loading.gif" alt="" />
+      <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
+    <template v-else>
+      <div class="empty-bg" v-if="allCommunities && allCommunities.length === 0">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>{{ $t("tip.noContribuitons") }}</p>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of allCommunities" :key="index">
+          <CommunityCard :card-info="cItem"/>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 

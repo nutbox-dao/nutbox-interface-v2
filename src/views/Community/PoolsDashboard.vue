@@ -23,7 +23,7 @@
         <p>No ongoing auction</p>
       </div>
     </div>
-    <template>
+    <template v-else>
       <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
 
       <div class="nav-box" ref="navBox">
