@@ -18,17 +18,17 @@ import {
 } from './account'
 
 export const contractAddress = {
-  "RegistryHub": "0x632fc5A0e9b214F6f762801cFA8b6b6bB1448345",
-  "HomeChainAssetRegistry": "0xc37d848BC48348ed3F3ede5E5425C87Bf5d98356",
-  "SteemHiveDelegateAssetRegistry": "0x436796Eaeb12A568272B1B03C767bE39d21B2061",
-  "SubstrateCrowdloanAssetRegistry": "0x66D577002c08b51E18BB0cF95f8D56902AE1ec3C",
-  "SubstrateNominateAssetRegistry": "0x1457F920A5374F84A373bc95Cc7aB3Ad1637Cd8a",
-  "ERC20AssetHandler": "0xea7D2Fd997F3E6cc53C64Cf0e9Aa7CB4D6913da1",
+  "RegistryHub": "0x63DEEA94B4ADb98447d3FAA36853122BFb388Cc0",
+  "HomeChainAssetRegistry": "0xCe5690AD4562413847dad15Fc0c154A8E68e048C",
+  "SteemHiveDelegateAssetRegistry": "0x0304706D48F1B98e25aaD71Ae73B9CE9934AA7a1",
+  "SubstrateCrowdloanAssetRegistry": "0x141E7D99ae1438F79640414Ba25EB598CA962663",
+  "SubstrateNominateAssetRegistry": "0x6F5d4AdC3a0c5A30c763C148315A0fb11984B047",
+  "ERC20AssetHandler": "0x8246B3cF4325bAA0c5f7EE8460Dc1997bbd59B8e",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x309938166BfE37FF1E4a6e542d77D26840e031ab",
-  "Executor": "0xB505615D709dD74784dCcD94ce8c786E7A7f5DF6",
-  "Bridge": "0x488D3ef38eE843D3100730a7f09Dfd58E64a36Ed",
-  "StakingFactory": "0xFdE755Fc2B257312ad19934fB84F017DA107b3dE"
+  "TrustlessAssetHandler": "0xEb0b3F0888e98b848e3f0ce97b883446722411fe",
+  "Executor": "0x543012c315947F542D2c771cFCd383FF3869F285",
+  "Bridge": "0x9103ae8D36B2fF098944017eaC4406b1B64cF43D",
+  "StakingFactory": "0xfdE61A2AbaCe2B05a3E28025Bcbf43e768DA2E4D"
 }
 
 export const erc20Address = '0x31DB9e2c1276356874c94C7648990a898DC3FA8B'

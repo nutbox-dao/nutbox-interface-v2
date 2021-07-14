@@ -61,6 +61,7 @@
 <script>
 import { stanfiAddress } from '@/utils/commen/account'
 import { registerNominateAsset, getRegitryAssets } from '@/utils/web3/asset'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   name: 'NominationForm',
@@ -111,11 +112,9 @@ export default {
         }
         this.networkIndex = 0
       }catch(e){
-         console.log(2345, e);
-        this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
-            title: this.$t('tip.error'),
-            variant: 'danger'
-          })
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
       }finally{
         this.registring = false
       }
@@ -128,6 +127,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 @import "src/static/css/dropdown";
+
 .d-form {
   max-width: 500px;
   margin: auto;

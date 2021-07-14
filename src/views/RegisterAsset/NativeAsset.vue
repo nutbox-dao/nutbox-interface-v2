@@ -32,6 +32,7 @@
 
 <script>
 import { registerHomeChainAsset, getRegitryAssets, getERC20Info } from '@/utils/web3/asset'
+import { handleApiErrCode } from '../../utils/helper';
 
 export default {
   name: "CrossChainAsset",
@@ -55,15 +56,14 @@ export default {
         return;
       }
       try{
-        const res = await registerHomeChainAsset(this.tokenAddress)
-        if (res){
-          this.$bvToast.toast('txHash:'+res.hash, {
+        const tsHash = await registerHomeChainAsset(this.tokenAddress)
+        if (tsHash){
+          this.$bvToast.toast('txHash:'+tsHash, {
             title: this.$t('tip.registryAssetSuccess'),
             variant: 'success'
           })
           // update assets cache
           await getRegitryAssets(true)
-          this.$router.push('/community/create-economy')
         }else{
           this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
             title: this.$t('tip.error'),
@@ -71,6 +71,9 @@ export default {
           })
         }
       }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
         console.log('Registry homechain asset failed', e);
       }finally{
         this.registring = false

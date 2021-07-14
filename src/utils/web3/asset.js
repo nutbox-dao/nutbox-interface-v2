@@ -25,7 +25,6 @@ import {
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME } from "../../config";
-import { asset } from "../../assets/lang/zh_CN";
 
 /**
  * Judge asset wheather Homechain assets
@@ -185,26 +184,45 @@ export const getERC20Info = async (address) => {
 }
 
 /**
+ * Check assetId have been registered before
+ * TODO
+ * @param {*} assetId 
+ */
+function checkAssetIfRegister(assetId){
+
+}
+
+/**
  * register homechain asset
  * @param {*} assetAddress
  */
 export const registerHomeChainAsset = async (assetAddress) => {
-  // validate asset address
+  return new Promise(async (resolve, reject) => {
+    // validate asset address
 
-  // regitster asset
-  const contract = await getContract('HomeChainAssetRegistry');
-  if (!contract) return
-  try {
-    console.log(assetAddress);
-    const tx = await contract.registerAsset(
-      '0x', assetAddress, '0x',
-      Transaction_config
-    )
-    await waitForTx(tx.hash)
-    return tx
-  } catch (e) {
-    console.log('Registry Homechain Asset Fail', e);
-  }
+      // regitster asset
+      const contract = await getContract('HomeChainAssetRegistry');
+      if (!contract) {
+        reject(errCode.CONTRACT_CREATE_FAIL);
+        return;
+      }
+      try {
+        console.log(assetAddress);
+        const tx = await contract.registerAsset(
+          '0x', assetAddress, '0x',
+          Transaction_config
+        )
+        await waitForTx(tx.hash)
+        resolve(tx.hash)
+      } catch (e) {
+        if (e.code === 4001){
+          reject(errCode.USER_CANCEL_SIGNING)
+        }else {
+          reject(errCode.BLOCK_CHAIN_ERR)
+        }
+        console.log('Registry Homechain Asset Fail', e);
+      }
+  })
 }
 
 /**
@@ -212,25 +230,34 @@ export const registerHomeChainAsset = async (assetAddress) => {
  * @param {*} form 
  */
 export const registerSteemHiveAsset = async (form) => {
-  const contract = await getContract('SteemHiveDelegateAssetRegistry');
-  if (!contract) return;
-  try {
-    const web3 = await getWeb3()
-    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
-    const foreignLocation = '0x' +
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
-      web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
-      web3.utils.stringToHex(form.account).substr(2)
-    const tx = await contract.registerAsset(
-      foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
-      Transaction_config
-    )
-    await waitForTx(tx.hash)
-    return tx.hash
-  } catch (e) {
-    throw (e)
-  }
+  return new Promise(async (resolve, reject) => {
+    const contract = await getContract('SteemHiveDelegateAssetRegistry');
+    if (!contract) {
+      reject(errCode.CONTRACT_CREATE_FAIL);
+      return;
+    };
+    try {
+      const web3 = await getWeb3()
+      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
+      const foreignLocation = '0x' +
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
+        web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
+        web3.utils.stringToHex(form.account).substr(2)
+      const tx = await contract.registerAsset(
+        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+        Transaction_config
+      )
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+    }
+  })
 }
 
 /**
@@ -238,27 +265,36 @@ export const registerSteemHiveAsset = async (form) => {
  * @param {*} form 
  */
 export const registerCrowdloanAsset = async (form) => {
-  const contract = await getContract('SubstrateCrowdloanAssetRegistry');
-  if (!contract) return;
-  try {
-    const web3 = await getWeb3()
-    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-    const foreignLocation = '0x' +
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
-      addressToHex(form.communityAddress).substr(2) // communityAccount
-    console.log(foreignLocation, form);
-
-    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
-      name: form.assetName,
-      endingBlock: form.endingBlock
-    })), Transaction_config)
-    await waitForTx(tx.hash)
-    return tx.hash
-  } catch (e) {
-    throw (e)
-  }
+  return new Promise(async (resolve, reject) => {
+    const contract = await getContract('SubstrateCrowdloanAssetRegistry');
+    if (!contract) {
+      reject(errCode.CONTRACT_CREATE_FAIL);
+      return;
+    };
+    try {
+      const web3 = await getWeb3()
+      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+      const foreignLocation = '0x' +
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
+        addressToHex(form.communityAddress).substr(2) // communityAccount
+      console.log(foreignLocation, form);
+  
+      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
+        name: form.assetName,
+        endingBlock: form.endingBlock
+      })), Transaction_config)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+    }
+  })
 }
 
 /**
@@ -267,21 +303,30 @@ export const registerCrowdloanAsset = async (form) => {
  * @returns 
  */
 export const registerNominateAsset = async (form) => {
-  const contract = await getContract('SubstrateNominateAssetRegistry');
-  if (!contract) return;
-  try {
-    const web3 = await getWeb3()
-    const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-    const foreignLocation = '0x' +
-      ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
-      addressToHex(form.nodeAddress).substr(2) // node address
-
-    const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName), Transaction_config)
-    await waitForTx(tx.hash)
-    return tx.hash
-  } catch (e) {
-    throw e
-  }
+  return new Promise(async (resolve, reject) => {
+    const contract = await getContract('SubstrateNominateAssetRegistry');
+    if (!contract) {
+      reject(errCode.CONTRACT_CREATE_FAIL);
+      return;
+    }
+    try {
+      const web3 = await getWeb3()
+      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+      const foreignLocation = '0x' +
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
+        addressToHex(form.nodeAddress).substr(2) // node address
+  
+      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName), Transaction_config)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+    }
+  })
 }
 
 /**
@@ -296,18 +341,24 @@ export const deployERC20 = async ({
   decimal,
   totalSupply
 }, isMintalbel) => {
-  try {
-    const abi = await getAbi(isMintalbel ? 'MintableERC20' : "SimpleERC20")
-    const eth = await getProvider()
-    const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
-    const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
-      Transaction_config)
-    await contract.deployed()
-    return contract.address
-  } catch (e) {
-    console.log(`Deploy mintable token ${name} failed`, e);
-    return null
-  }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const abi = await getAbi(isMintalbel ? 'MintableERC20' : "SimpleERC20")
+      const eth = await getProvider()
+      const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
+      const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
+        Transaction_config)
+      await contract.deployed()
+      resolve(contract.address)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else{
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log(`Deploy mintable token ${name} failed`, e);
+    }
+  })
 }
 
 /**

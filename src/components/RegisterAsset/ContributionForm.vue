@@ -82,6 +82,7 @@
 import { registerCrowdloanAsset, getRegitryAssets } from "@/utils/web3/asset";
 import { isPositiveInt } from "@/utils/helper";
 import { stanfiAddress } from "@/utils/commen/account";
+import { handleApiErrCode } from '../../utils/helper';
 
 export default {
   name: "NominationForm",
@@ -157,11 +158,9 @@ export default {
         }
         this.networkIndex = 0
       }catch(e){
-        console.log(2345, e);
-        this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
-            title: this.$t('tip.error'),
-            variant: 'danger'
-          })
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
       }finally{
         this.registring = false
       }

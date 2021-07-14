@@ -129,8 +129,8 @@ export default {
       },
       poolForm: {
         start: '1001',
-        end: '3000',
-        reward: '100'
+        end: '',
+        reward: ''
       }
     }
   },
@@ -153,6 +153,7 @@ export default {
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     console.log(234, this.concatAddressOptions[0].items)
     this.assetLoading = false
+    this.poolForm.start = this.blockNum + 1
   },
   methods: {
     setSelectedData (data) {
@@ -220,7 +221,7 @@ export default {
             variant: 'success'
           })
           await getMyStakingFactory(true)
-          this.$router.replace('/community/community-info?type=edit')
+          this.$router.replace('/community/community-info?type=create')
         }
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {

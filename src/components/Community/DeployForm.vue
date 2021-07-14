@@ -142,6 +142,7 @@ import Clipboard from 'clipboard'
 import { uploadImage } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
+import { handleApiErrCode } from '../../utils/helper'
 
 export default {
   name: 'DeployForm',
@@ -204,10 +205,8 @@ export default {
         // update tokens cache
         await getAllTokens(true)
       } catch (e) {
-        console.log(e)
-        this.$bvToast.toast(this.$t('tip.deloyTokenFail'), {
-          title: this.$t('tip.error'),
-          variant: 'danger'
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
         })
       } finally {
         this.deploying = false
@@ -265,7 +264,7 @@ export default {
       })
     },
     confirmDeploy () {
-      this.$router.push('/community/register/native?tokenAddress=' + this.tokenAddress)
+      this.$router.replace('/community/register/native?tokenAddress=' + this.tokenAddress)
     }
   }
 }

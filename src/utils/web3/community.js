@@ -34,6 +34,7 @@ export const getMyStakingFactory = async (update=false) => {
             if (count > 0){
                 stakingFactoryId = await contract.stakingFeastRecord(account, 0)
             }else{
+                store.commit('web3/saveStakingFactoryId', null)
                 resolve(null);
                 return;
             }
@@ -111,6 +112,11 @@ export const getMyOpenedPools = async (update = false) => {
        
         try{
             const contract = await getContract('StakingTemplate', stakingFactoryId)
+            const poolCount = await contract.numberOfPools()
+            if (poolCount === 0) {
+                resolve([])
+                return;
+            }
             // get active pools
             let pools = await Promise.all((new Array(10).toString().split(',')).map((item, i) => contract.openedPools(i)))
             console.log(3214, pools);
@@ -158,6 +164,7 @@ export const createStakingFeast = async (form) => {
             // call contract
             const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
             console.log(333, res.hash);
+            await waitForTx(res.hash)
             resolve(res.hash)
         }catch(e){
             console.log('Create Staking Feast Failed', e);
