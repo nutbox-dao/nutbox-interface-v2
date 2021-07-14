@@ -42,7 +42,7 @@
 import CommunityCard from '@/components/Community/CommunityCard'
 import { mapState } from 'vuex'
 import { getAllCommunities } from '@/apis/api'
-import { getMyStakingFactory, getMyCommunityInfo } from '@/utils/web3/community'
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '@/config'
 

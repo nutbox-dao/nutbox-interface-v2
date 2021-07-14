@@ -19,7 +19,7 @@ export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 export const BACKEND_API_URL = "http://localhost:3000"
 
-export const QN_UPLOAD_URL = "http://v2-api-test.nutbox.io/qiNiu/upload"
+export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
 export const PARA_STATUS = {
   ACTIVE: "Active",

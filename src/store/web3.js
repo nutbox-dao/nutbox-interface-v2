@@ -18,6 +18,8 @@ export default {
     allCommunities: null,
     myPools: null,
     watcher: {},
+    cTokens: {},
+    distributions: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -62,6 +64,12 @@ export default {
     },
     saveWatcher: (state, param) => {
       state.watcher[param.name] = param.watcher
+    },
+    saveCTokens: (state, cTokens) => {
+      state.cTokens = cTokens
+    },
+    saveDistributions: (state, distributions) =>{
+      state.distributions = distributions
     }
   },
   getters: {

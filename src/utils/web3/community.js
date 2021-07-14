@@ -9,6 +9,7 @@ import { waitForTx } from './ethers'
 import {
     createWatcher
   } from '@makerdao/multicall'
+import { getCToken } from './asset'
 
 /**
  * Get community admin's staking factory id
@@ -259,6 +260,61 @@ export const addPool = async (form) => {
         }catch (e) {
             console.log(542, e);
             reject(errCode.BLOCK_CHAIN_ERR)
+        }
+    })
+}
+
+/**
+ * Get cToken distribuitons eras
+ * @param {*} update 
+ */
+export const getDistributionEras = async (update=false) => {
+    return new Promise(async (resolve, reject) => {
+        const distribuitons = store.state.web3.distribuitons;
+        if (!update && distribuitons) {
+            resolve(distribuitons)
+        }
+
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+        }catch(e){
+            reject(e);
+            return;
+        }
+
+        let contract;
+        let decimal;
+        try{
+            contract = await getContract('StakingTemplate', stakingFactoryId)
+            const cToken = await getCToken(stakingFactoryId)
+            decimal = cToken.decimal
+        }catch(e){
+            reject(e);
+            return;
+        }
+
+        try{
+            const count = await contract.numberOfDistributionEras()
+            let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => contract.distributionEras(i)))
+            console.log('distribution', distri);
+            distri = distri.map((item, i) => ({
+                percentage: item.amount.toString() / (10 ** decimal),
+                amount: item.amount.toString() / (10 ** decimal),
+                start: item.startHeight.toString(),
+                stopHeight: item.stopHeight.toString(),
+                background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
+            }))
+            console.log('contrrrr', distri);
+            store.commit('web3/saveDistributions', distri)
+            resolve(distri)
+        }catch(e){
+            reject(e);
+            return
         }
     })
 }
