@@ -21,13 +21,14 @@ export const getMyStakingFactory = async (update=false) => {
             resolve(id);
             return;
         }
-        const account = store.state.web3.account
-        if (!account) return;
-        const contract = await getContract('StakingFactory')
-        if (!contract){
-            reject(errCode.CONTRACT_CREATE_FAIL);
-            return;
+        let contract;
+        try{
+            contract = await getContract('StakingFactory', null, false)
+        }catch(e){
+            reject(e);
+            return
         }
+        const account = store.state.web3.account
         let stakingFactoryId = null
         try{
             const count = await contract.stakingFeastCounter(account)
@@ -66,7 +67,6 @@ export const getMyCommunityInfo = async (update=false) => {
             reject(e);
             return;
         }
-        if (!stakingFactoryId) return;
         if (!update && store.state.web3.communityInfo){
             resolve(store.state.web3.communityInfo)
             return;
@@ -109,11 +109,19 @@ export const getMyOpenedPools = async (update = false) => {
             reject(e);
             return;
         }
+
+        let contract;
+        try{
+            contract = await getContract('StakingTemplate', stakingFactoryId, false);
+        }catch(e){
+            reject(e);
+            return;
+        }
        
         try{
-            const contract = await getContract('StakingTemplate', stakingFactoryId)
             const poolCount = await contract.numberOfPools()
             if (poolCount === 0) {
+                console.log('no pools');
                 resolve([])
                 return;
             }
@@ -146,11 +154,15 @@ export const createStakingFeast = async (form) => {
             reject(e);
             return;
         }
-        const contract = await getContract('StakingFactory')
-        if (!contract) {
-            reject(errCode.CONTRACT_CREATE_FAIL)
+
+        let contract;
+        try{
+            contract = await getContract('StakingFactory', null, false)
+        }catch(e){
+            reject(e);
             return;
         }
+        
         try{
             // make params
             const assetId = form.assetId

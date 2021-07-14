@@ -79,11 +79,13 @@ export const getRegitryAssets = async (update = false) => {
       resolve(assets)
     }
     const account = store.state.web3.account
-    const contract = await getContract('RegistryHub');
-    if (!contract){
-      reject(errCode.CONTRACT_CREATE_FAIL);
-      return;
-    } 
+    let contract;
+    try{
+      contract = await getContract('RegistryHub', null, false);
+    }catch(e){
+      reject(e);
+      return
+    }
     try{
       const assetCount = await contract.registryCounter(account);
       if (assetCount === 0){
@@ -121,8 +123,14 @@ export const getRegitryAssets = async (update = false) => {
  * @param {String} assetType asset contract address
  */
 export const getAssetMetadata = async (id, assetType) => {
-  const contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
-  if (!contract) return;
+  
+  let contract;
+  try{
+    contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
+  }catch(e){
+    reject(e);
+    return;
+  }
   if (assetType === 'HomeChainAssetRegistry') {
     const homeLocation = await contract.getHomeLocation(id)
     return await getERC20Info(homeLocation)
@@ -165,22 +173,33 @@ export const getAssetMetadata = async (id, assetType) => {
 
 // get ERC20 info from home chain.
 export const getERC20Info = async (address) => {
-  const contract = await getContract('ERC20', address);
-  if (!contract) return;
-  const tokens = await getAllTokenFromBackend()
-  let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
-  const tokenFromBackend = tokens?.filter(token => token.address === address)
-  let icon = null
-  if (tokenFromBackend && tokenFromBackend.length > 0) {
-    icon = tokenFromBackend[0].icon
-  }
-  return {
-    name: infos[0],
-    symbol: infos[1],
-    decimal: infos[2],
-    address,
-    icon
-  }
+  return new Promise(async (resolve, reject) => {
+    let contract;
+    try{
+      contract = await getContract('ERC20', address);
+    }catch (e) {
+      reject(e);
+      return;
+    }
+    try{
+      const tokens = await getAllTokenFromBackend()
+      let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
+      const tokenFromBackend = tokens?.filter(token => token.address === address)
+      let icon = null
+      if (tokenFromBackend && tokenFromBackend.length > 0) {
+        icon = tokenFromBackend[0].icon
+      }
+      resolve({
+        name: infos[0],
+        symbol: infos[1],
+        decimal: infos[2],
+        address,
+        icon
+      })
+    }catch(e){
+      reject(e)
+    }
+  })
 }
 
 /**
@@ -201,11 +220,14 @@ export const registerHomeChainAsset = async (assetAddress) => {
     // validate asset address
 
       // regitster asset
-      const contract = await getContract('HomeChainAssetRegistry');
-      if (!contract) {
-        reject(errCode.CONTRACT_CREATE_FAIL);
+      let contract;
+      try{
+        contract = await getContract('HomeChainAssetRegistry', null, false);
+      }catch(e) {
+        reject(e);
         return;
       }
+
       try {
         console.log(assetAddress);
         const tx = await contract.registerAsset(
@@ -231,11 +253,14 @@ export const registerHomeChainAsset = async (assetAddress) => {
  */
 export const registerSteemHiveAsset = async (form) => {
   return new Promise(async (resolve, reject) => {
-    const contract = await getContract('SteemHiveDelegateAssetRegistry');
-    if (!contract) {
-      reject(errCode.CONTRACT_CREATE_FAIL);
+    let contract;
+    try{
+      contract = await getContract('SteemHiveDelegateAssetRegistry', null, false);
+    }catch(e){
+      reject(e);
       return;
-    };
+    }
+    
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
@@ -266,11 +291,14 @@ export const registerSteemHiveAsset = async (form) => {
  */
 export const registerCrowdloanAsset = async (form) => {
   return new Promise(async (resolve, reject) => {
-    const contract = await getContract('SubstrateCrowdloanAssetRegistry');
-    if (!contract) {
-      reject(errCode.CONTRACT_CREATE_FAIL);
+    let contract;
+    try{
+      contract = await getContract('SubstrateCrowdloanAssetRegistry', null, false);
+    }catch(e){
+      reject(e);
       return;
-    };
+    }
+    
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
@@ -304,11 +332,14 @@ export const registerCrowdloanAsset = async (form) => {
  */
 export const registerNominateAsset = async (form) => {
   return new Promise(async (resolve, reject) => {
-    const contract = await getContract('SubstrateNominateAssetRegistry');
-    if (!contract) {
-      reject(errCode.CONTRACT_CREATE_FAIL);
+    let contract;
+    try{
+      contract = await getContract('SubstrateNominateAssetRegistry', null, false);
+    }catch(e){
+      reject(e)
       return;
     }
+    
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
@@ -368,17 +399,17 @@ export const deployERC20 = async ({
  * @returns 
  */
 export const getAllTokenFromBackend = async (update = false) => {
-  const tokens = store.state.web3.allTokens
-  if (!update && tokens) {
-    return tokens
-  }
-  try {
-    const allTokens = await getAllTokens()
-    store.commit('web3/saveAllTokens', allTokens)
-    return allTokens
-  } catch (e) {
-    console.log('Get All Tokens Failed', e);
-    return null
-  }
-
+  return new Promise(async (resolve, reject) => {
+    const tokens = store.state.web3.allTokens
+    if (!update && tokens) {
+      resolve(tokens)
+    }
+    try {
+      const allTokens = await getAllTokens()
+      store.commit('web3/saveAllTokens', allTokens)
+      resolve(allTokens)
+    } catch (e) {
+      reject(500)
+    }
+  })
 }

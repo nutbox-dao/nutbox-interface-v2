@@ -8,7 +8,8 @@ import {
   connectMetamask
 } from './web3'
 import {
-  getProvider
+  getProvider,
+  getReadonlyProvider
 } from './ethers'
 import {
   ethers
@@ -16,6 +17,7 @@ import {
 import {
   getAccounts
 } from './account'
+import { errCode, RPC_NODE } from '../../config'
 
 export const contractAddress = {
   "RegistryHub": "0x63DEEA94B4ADb98447d3FAA36853122BFb388Cc0",
@@ -70,35 +72,54 @@ export const getAbi = async function (contractName) {
 }
 
 // Get contract
-export const getContract = async function (contractName, address) {
-  // wheather metamask is locked
-  if (await !isUnlocked()) {
-    console.log('metamask locked');
-    await connectMetamask()
-  }
-  // wheather get account
-  if (!store.state.account) {
-    const accounts = await getAccounts()
-    if (accounts === []) {
-      console.log('Please unlock wallet');
-      return
+export const getContract = async function (contractName, address, onlyRead=false) {
+  return new Promise(async (resolve, reject) => {
+      // wheather metamask is locked
+    if (await !isUnlocked() && !onlyRead) {
+      console.log('metamask locked');
+      try{
+        await connectMetamask()
+      }catch(e){
+        reject(errCode.NOT_CONNECT_METAMASK);
+        return;
+      }
     }
-  }
-  // Wheather connect to BSC network
-  if (!store.getters['web3/isMainChain']) {
-    if (!(await setupNetwork())) {
-      console.log('Wrong chain Id', store.state.web3.chainId);
-      // chainId is wrong
-      return;
+    // wheather get account
+    if (!store.state.web3.account && !onlyRead) {
+      const accounts = await getAccounts()
+      if (accounts === []) {
+        console.log('Please unlock wallet');
+        reject(errCode.UNLOCK_METAMASK)
+        return
+      }
     }
-  }
-  const provider = await getProvider()
-  const abi = await getAbi(contractName)
-  if (!provider || !abi) return;
-  // construct contract
-  const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
-  // inject metamask
-  return contract.connect(provider.getSigner())
+    // Wheather connect to BSC network
+    if (!store.getters['web3/isMainChain'] && !onlyRead) {
+      if (!(await setupNetwork())) {
+        console.log('Wrong chain Id', store.state.web3.chainId);
+        // chainId is wrong
+        reject(errCode.WRONG_CHAIN_ID);
+        return;
+      }
+    }
+
+    const abi = await getAbi(contractName)
+    if (!onlyRead){
+      const provider = await getProvider()
+      if (!provider || !abi) {
+        reject(500);
+        return;
+      };
+      // construct contract
+      const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
+      // inject metamask
+      resolve(contract.connect(provider.getSigner()))
+    }else{
+      const provider = getReadonlyProvider()
+      const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
+      resolve(contract)
+    }
+  })
 }
 
 /**

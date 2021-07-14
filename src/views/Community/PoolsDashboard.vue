@@ -16,15 +16,15 @@
         </button>
       </div>
     </div>
-    <div v-if="stakingPools.length===0"
+    <!-- <div v-if="stakingPools.length===0"
          class="empty-card d-flex flex-column justify-content-center">
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>No ongoing auction</p>
       </div>
-    </div>
+    </div> -->
     <template>
-      <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
+      <Progress :min="progressData[0].start" :max="$t('message.max')" :progress-data="progressData"></Progress>
 
       <div class="nav-box" ref="navBox">
         <div class="nav mr-5">
@@ -59,7 +59,7 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
-import { getMyOpenedPools } from '@/utils/web3/community'
+import { getMyOpenedPools, getMyCommunityInfo } from '@/utils/web3/community'
 
 export default {
   name: 'PoolsDashboard',
@@ -88,6 +88,11 @@ export default {
     }
   },
   async mounted () {
+    getMyCommunityInfo().then(com => {
+      if (!com){
+        this.noCommunity = true
+      }
+    })
     // const assets = await getRegitryAssets()
     const myPools = await getMyOpenedPools()
     

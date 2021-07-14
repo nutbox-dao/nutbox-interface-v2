@@ -6,18 +6,11 @@ import {
   RPC_NODE
 } from '@/config'
 import Web3 from "web3"
-import {
-  getContract
-} from './contract'
 import store from '@/store'
 
 import {
   createWatcher
 } from '@makerdao/multicall'
-
-import { 
-    getRegitryAssets
-} from './asset'
 
 import { getProvider } from './ethers'
 import  { contractAddress, erc20Address, multiAddress } from './contract'

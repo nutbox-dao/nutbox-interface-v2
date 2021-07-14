@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { getEthWeb } from './web3'
 import store from '@/store'
+import { RPC_NODE } from '../../config'
 
 /**
  * Get metamask provider
@@ -14,6 +15,20 @@ export const getProvider = async (force = false) => {
     const provider = new ethers.providers.Web3Provider(metamask)
     store.commit('web3/saveEthers', provider)
     return provider 
+}
+
+/**
+ * Readonly provider
+ * If user do not install metamask, use this provider can read the contract data 
+ * @returns 
+ */
+export const getReadonlyProvider = () => {
+    if (store.state.web3.readonlyProvider){
+        return store.state.web3.readonlyProvider
+    }
+    const provider = new ethers.providers.JsonRpcProvider(RPC_NODE)
+    store.commit('web3/saveReadonlyProvider', provider)
+    return provider;
 }
 
 /**
