@@ -1,15 +1,15 @@
 <template>
   <div class="page-view-content admin">
     <div class="page-view-title">{{$t("admin.admin") }}</div>
-    <div class="nav">
-      <router-link to="/admin" exact>Pokadot</router-link>
-      <router-link to="/admin/kusama">Kusama</router-link>
-      <router-link v-if="isDebug" to="/admin/rococo">Rococo</router-link>
-      <div class="center-blank"></div>
+    <div class="nav-box container">
+      <div class="nav">
+        <router-link to="/admin" exact>Pokadot</router-link>
+        <router-link to="/admin/kusama">Kusama</router-link>
+        <router-link v-if="isDebug" to="/admin/rococo">Rococo</router-link>
+        <div class="center-blank"></div>
+      </div>
     </div>
-    <div class="scroll-content">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 

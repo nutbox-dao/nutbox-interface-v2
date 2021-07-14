@@ -17,7 +17,7 @@
         </button>
       </div>
     </div>
-    <div class="scroll-content mt-3">
+    <div class="mt-3">
       <div class="community-info-card text-left">
         <div class="title font-bold">{{ $t("community.communityInfo") }}</div>
         <b-form class="custom-form pl-md-3">

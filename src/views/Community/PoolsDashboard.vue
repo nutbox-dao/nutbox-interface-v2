@@ -16,15 +16,15 @@
         </button>
       </div>
     </div>
-    <!-- <div v-if="stakingPools.length===0"
+    <div v-if="stakingPools.length===0"
          class="empty-card d-flex flex-column justify-content-center">
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>No ongoing auction</p>
       </div>
-    </div> -->
-    <template>
-      <Progress :min="progressData[0].start" :max="$t('message.max')" :progress-data="progressData"></Progress>
+    </div>
+    <template v-else>
+      <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
 
       <div class="nav-box" ref="navBox">
         <div class="nav mr-5">
@@ -102,7 +102,8 @@ export default {
 
 <style scoped lang="scss">
 .empty-card {
-  @include card
+  @include card;
+  flex: 1;
 }
 .view-top-header {
   align-items: center;
