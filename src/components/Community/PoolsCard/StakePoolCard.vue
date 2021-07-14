@@ -25,7 +25,7 @@
       </div>
       <div class="project-info-container">
         <span class="name">APY</span>
-        <b-input type="number" class="apy-input" placeholder="请输入"></b-input>
+        <b-input type="number" class="apy-input" step="0.01" placeholder="请输入"></b-input>
       </div>
     </div>
   </div>

@@ -30,18 +30,9 @@
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
           </div>
-          <component :is="tabOptions[activeTab].component"></component>
         </div>
         <div class="card-container mt-4">
-          <div class="row">
-            <div
-              class="col-xl-4 col-md-6 mb-4"
-              v-for="idx of 10"
-              :key="idx"
-            >
-              <MiningCard :chain="tabOptions[activeTab].chain"/>
-            </div>
-          </div>
+          <component :is="tabOptions[activeTab].component"></component>
         </div>
       </div>
     </div>
@@ -50,18 +41,14 @@
 
 <script>
 import ComCRCard from '@/components/Crowdloan/ComCRCard'
-import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
-import SteemAccount from '@/components/Accounts/SteemAccount'
-import MiningCard from '@/components/Community/MiningCard'
 import { mapState } from 'vuex'
 import { getMyCommunityInfo } from '@/apis/api'
+import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 export default {
   name: 'CommunityDetailInfo',
   components: {
     ComCRCard,
-    PolkadotAccount,
-    SteemAccount,
-    MiningCard
+    DCrowdLoan
   },
   props: {},
   data () {
@@ -69,9 +56,10 @@ export default {
       communityNominatorId: null,
       activeTab: 0,
       tabOptions: [
-        { name: 'Polkadot', component: 'PolkadotAccount', chain: 'polkadot' },
-        { name: 'Kusama', component: 'PolkadotAccount', chain: 'kusama' },
-        { name: 'Steem', component: 'SteemAccount', chain: 'steem' }
+        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
+        { name: 'Crowdstaking', component: '', chain: '' },
+        { name: 'Delegate', component: '', chain: '' },
+        { name: 'Nominate', component: '', chain: '' }
       ],
       communityInfo: {}
     }
