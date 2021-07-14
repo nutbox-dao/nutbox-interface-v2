@@ -17,20 +17,22 @@
       </div>
     </div>
     <div class="scroll-content">
-      <div v-if="stakingPools.length===0"
-           class="empty-card d-flex flex-column justify-content-center">
-        <div class="empty-bg">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>No ongoing auction</p>
-        </div>
-      </div>
-      <template v-else>
-        <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
-        <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="i of 3" :key="i">
-            <StakePoolCard/>
+<!--      <div v-if="stakingPools.length===0"-->
+<!--           class="empty-card d-flex flex-column justify-content-center">-->
+<!--        <div class="empty-bg">-->
+<!--          <img src="~@/static/images/empty-data.png" alt="" />-->
+<!--          <p>No ongoing auction</p>-->
+<!--        </div>-->
+<!--      </div>-->
+      <template >
+        <div class="nav-box">
+          <div class="nav mr-5">
+            <span v-for="(item, index) of tabOptions" :key="index"
+                  :class="activeTab===index?'active':''"
+                  @click="activeTab = index">{{item.name}}</span>
           </div>
         </div>
+        <component :is="tabOptions[activeTab].component"></component>
       </template>
     </div>
         <b-modal
@@ -55,32 +57,31 @@
 </template>
 
 <script>
-import StakePoolCard from '@/components/Community/StakePoolCard'
-import Progress from '@/components/Community/Progress'
-import { getRegitryAssets } from '@/utils/web3/asset'
-
+import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
 export default {
   name: 'PoolsDashboard',
-  components: { StakePoolCard, Progress },
+  components: { CrowdLoanPool },
   data () {
     return {
+      activeTab: 0,
+      tabOptions: [
+        { name: 'Crowdloan', component: 'CrowdLoanPool', chain: '' },
+        { name: 'Crowdstaking', component: '', chain: '' },
+        { name: 'Delegate', component: '', chain: '' },
+        { name: 'Nominate', component: '', chain: '' }
+      ],
       stakingPools: [],
-      noCommunity:false,
-      progressData: [
-        { percentage: '10', value: 200, start: 1001, end: 2000, background: 'rgba(80, 191, 0, 0.3)' },
-        { percentage: '30', value: 300, start: 2001, end: 4000, background: 'rgba(80, 191, 0, 0.6)' },
-        { percentage: '50', value: 400, start: 4001, end: 2000, background: 'rgba(80, 191, 0, 1)' }
-      ]
+      noCommunity: false
     }
   },
   methods: {
-    gotoCreate() {
-      this.$router.push("/community/create-economy");
-    },
+    gotoCreate () {
+      this.$router.push('/community/create-economy')
+    }
   },
   async mounted () {
     // const assets = await getRegitryAssets()
-  },
+  }
 }
 </script>
 
@@ -94,10 +95,6 @@ export default {
 }
 .scroll-content {
   padding-top: .5rem;
-}
-.c-progress {
-  margin-top: 4rem;
-  margin-bottom: 3.5rem;
 }
 .setting-icon {
   @include icon;

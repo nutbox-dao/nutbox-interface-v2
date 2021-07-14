@@ -45,7 +45,8 @@ export default {
   },
   computed: {
     isConnected () {
-      return this.$store.state[this.chain].isConnected
+      // return this.$store.state[this.chain].isConnected
+      return true
     }
   }
 }
