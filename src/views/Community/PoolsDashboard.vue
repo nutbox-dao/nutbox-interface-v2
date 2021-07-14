@@ -16,26 +16,26 @@
         </button>
       </div>
     </div>
-    <div class="scroll-content">
-<!--      <div v-if="stakingPools.length===0"-->
-<!--           class="empty-card d-flex flex-column justify-content-center">-->
-<!--        <div class="empty-bg">-->
-<!--          <img src="~@/static/images/empty-data.png" alt="" />-->
-<!--          <p>No ongoing auction</p>-->
-<!--        </div>-->
-<!--      </div>-->
-      <template >
-        <div class="nav-box">
-          <div class="nav mr-5">
+    <div v-if="stakingPools.length===0"
+         class="empty-card d-flex flex-column justify-content-center">
+      <div class="empty-bg">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>No ongoing auction</p>
+      </div>
+    </div>
+    <template>
+      <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
+
+      <div class="nav-box" ref="navBox">
+        <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
-          </div>
         </div>
-        <component :is="tabOptions[activeTab].component"></component>
-      </template>
-    </div>
-        <b-modal
+      </div>
+      <component :is="tabOptions[activeTab].component"></component>
+    </template>
+    <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
       size="sm"
@@ -57,12 +57,13 @@
 </template>
 
 <script>
+import Progress from '@/components/Community/Progress'
 import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
 import { getMyOpenedPools } from '@/utils/web3/community'
 
 export default {
   name: 'PoolsDashboard',
-  components: { CrowdLoanPool },
+  components: { Progress, CrowdLoanPool },
   data () {
     return {
       activeTab: 0,
@@ -73,7 +74,12 @@ export default {
         { name: 'Nominate', component: '', chain: '' }
       ],
       stakingPools: [],
-      noCommunity: false
+      noCommunity: false,
+      progressData: [
+        { percentage: '10', amount: 200, start: 1001, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
+        { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
+        { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
+      ]
     }
   },
   methods: {
@@ -97,8 +103,9 @@ export default {
   align-items: center;
   margin-bottom: 2rem;
 }
-.scroll-content {
-  padding-top: .5rem;
+.c-progress {
+  margin-top: 4rem;
+  margin-bottom: 3.5rem;
 }
 .setting-icon {
   @include icon;

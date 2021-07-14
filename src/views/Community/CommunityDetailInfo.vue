@@ -1,39 +1,37 @@
 <template>
   <div class="page-view-content">
-    <div class="scroll-content">
-      <div class="community-detail-info">
-<!--        <div class="loading-bg" >-->
-<!--          <img src="~@/static/images/loading.gif" alt="" />-->
-<!--          <p class="font16">{{ $t("tip.loading") }}</p>-->
-<!--        </div>-->
-        <div class="community-info p-card" >
-          <img class="poster" :src="communityInfo.poster" alt="">
-          <i class="back-icon" @click="$router.back()"></i>
-          <div class="second-card">
-            <img class="large-logo" :src="communityInfo.icon" alt="" />
-            <div class="project-info text-left">
-              <div class="d-flex align-items-center">
-                <a class="font20 font-bold title icon-title official-link-icon m-0"
-                   :href="communityInfo.website"
-                   target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
-                <i class="v-line"></i>
-                <span>矿池余额：1000.00</span>
-              </div>
-              <div class="desc font14 mt-2"
-                   v-html="(communityInfo.description)"></div>
+    <div class="community-detail-info">
+      <!--        <div class="loading-bg" >-->
+      <!--          <img src="~@/static/images/loading.gif" alt="" />-->
+      <!--          <p class="font16">{{ $t("tip.loading") }}</p>-->
+      <!--        </div>-->
+      <div class="community-info p-card" >
+        <img class="poster" :src="communityInfo.poster" alt="">
+        <i class="back-icon" @click="$router.back()"></i>
+        <div class="second-card">
+          <img class="large-logo" :src="communityInfo.icon" alt="" />
+          <div class="project-info text-left">
+            <div class="d-flex align-items-center">
+              <a class="font20 font-bold title icon-title official-link-icon m-0"
+                 :href="communityInfo.website"
+                 target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
+              <i class="v-line"></i>
+              <span>矿池余额：1000.00</span>
             </div>
+            <div class="desc font14 mt-2"
+                 v-html="(communityInfo.description)"></div>
           </div>
         </div>
-        <div class="nav-box">
-          <div class="nav mr-5">
+      </div>
+      <div class="nav-box container">
+        <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
-          </div>
         </div>
-        <div class="card-container mt-4">
-          <component :is="tabOptions[activeTab].component"></component>
-        </div>
+      </div>
+      <div class="card-container mt-4">
+        <component :is="tabOptions[activeTab].component"></component>
       </div>
     </div>
   </div>
