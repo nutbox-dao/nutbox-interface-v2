@@ -93,7 +93,8 @@ export default {
 
 <style scoped lang="scss">
 .empty-card {
-  @include card
+  @include card;
+  flex: 1;
 }
 .view-top-header {
   align-items: center;

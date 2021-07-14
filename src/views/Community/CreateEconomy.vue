@@ -5,7 +5,7 @@
         {{ $t('community.createCommunity') }}
       </div>
     </div>
-    <div class="scroll-content mt-3">
+    <div class="mt-3">
       <div class="form">
         <div class="primary-line-title font-bold font20">
           {{ $t('community.yourCTokenId') }}
