@@ -11,8 +11,10 @@
 </template>
 
 <script>
+import MiningCard from '@/components/Community/MiningCard'
 export default {
-  name: 'DCrowdStaking'
+  name: 'DCrowdStaking',
+  components: { MiningCard }
 }
 </script>
 
