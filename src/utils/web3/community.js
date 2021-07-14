@@ -94,7 +94,7 @@ export const getMyCommunityInfo = async (update=false) => {
 export const getMyOpenedPools = async (update = false) => {
     return new Promise(async (resolve, reject) => {
         if (!update && store.state.web3.myPools){
-            resolve(store.state.myPools);
+            resolve(store.state.web3.myPools);
             return;
         }
         let stakingFactoryId = null
@@ -108,12 +108,11 @@ export const getMyOpenedPools = async (update = false) => {
             reject(e);
             return;
         }
-
        
         try{
             const contract = await getContract('StakingTemplate', stakingFactoryId)
             // get active pools
-            let pools = await Promise.all(new Array(10).toString().split(',').map((item, i) => contract.openedPools(i)))
+            let pools = await Promise.all((new Array(10).toString().split(',')).map((item, i) => contract.openedPools(i)))
             console.log(3214, pools);
             pools = pools.filter(pool => pool.hasActived)
             store.commit('web3/saveMyPools', pools)
@@ -235,7 +234,7 @@ export const addPool = async (form) => {
         }
         try{
             console.log(235, form.ratios, form.ratios.map(r => parseInt(r * 100)));
-            const tx = await contract.addPool(form.assetId, form.ratios.map(r => parseInt(r)))
+            const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
             await waitForTx(tx.hash)
             resolve(tx.hash)
         }catch (e) {

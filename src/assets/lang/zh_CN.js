@@ -354,7 +354,8 @@ module.exports = {
     rewardAmount: '分发数量',
     comfirmAdd:'确认添加',
     personal: '我注册的资产',
-    official: '官方提供的资产'
+    official: '官方提供的资产',
+    addPoolSuccess: '矿池已添加'
   },
   asset: {
     network: "网络",

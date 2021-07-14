@@ -171,11 +171,7 @@ export default {
   },
   async mounted () {
     getMyOpenedPools().then(pools => {
-      this.myPools = pools.map(pool => ({
-        name: pool.asset.name,
-        value: pool.poolRatio
-      }))
-      this.initChart()
+      this.initChart(pools)
       this.adding = false
     }).catch(e => {
       handleApiErrCode(e, (tip, param) => {
@@ -185,7 +181,6 @@ export default {
     this.assetLoading = true
     try{
       let assets = await getRegitryAssets()
-      console.log(123, assets)
       assets = assets.map(asset => {
         switch (asset.type) {
           case 'HomeChainAssetRegistry':
@@ -232,24 +227,19 @@ export default {
     this.assetLoading = false
   },
   methods: {
-    initChart () {
+    initChart (pools) {
       this.chart = echarts.init(document.getElementById('pie'))
-      this.setData()
+      this.setData(pools)
       this.chart.setOption(this.options)
     },
-    setData () {
+    setData (pools) {
       this.options.color = this.colorList
-      let data = [
-        { value: 100, name: this.form.name }
-        // { value: 20, name: 'PNUT-TSP LP' }
-        // { value: 20, name: 'PNUT-TSP1 LP' },
-        // { value: 30, name: 'TSP-TRC LP' },
-        // { value: 30, name: 'TSP-TRC2 LP' },
-        // { value: 30, name: 'TSP-TRC3 LP' },
-        // { value: 30, name: 'TSP-TRC4 LP' }
-      ]
-      this.options.series[0].data = data
-      this.form.ratios = data.map(item => {
+      const data = { value: 100, name: this.form.name }
+      this.myPools = pools.map(pool => ({name: pool.poolName, value: pool.poolRatio / 100}))
+      this.myPools.push(data)
+      console.log(432, this.myPools);
+      this.options.series[0].data = this.myPools
+      this.form.ratios = this.myPools.map(item => {
         return item.value
       })
     },
@@ -289,6 +279,14 @@ export default {
       try {
         this.adding = true
         const hash = await addPool(this.form)
+        this.$bvToast.toast(this.$t('community.addPoolSuccess'), {
+          title: this.$t('tip.deployFactorySuccess'),
+          variant: 'success'
+        })
+        try{
+          await getMyOpenedPools(true)
+          this.$router.back();
+        }catch(e){}
       } catch (e) {
         handleApiErrCode(e, (info, para) => {
           this.$bvToast.toast(info, para)
