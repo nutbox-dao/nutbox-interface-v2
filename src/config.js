@@ -16,8 +16,8 @@ export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-// export const BACKEND_API_URL = "http://localhost:3000"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
