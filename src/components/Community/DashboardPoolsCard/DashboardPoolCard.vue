@@ -3,20 +3,20 @@
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
         <div class="card-single-icon">
-          <img class="icon1" :src="pool.asset.icon" alt="">
+<!--          <img class="icon1" :src="pool.asset.icon" alt="">-->
         </div>
         <div class="title-text font20 font-bold ml-2">
-          <span>{{ pool.poolName }}</span>
+          <span>{{ pool.poolName || '--' }}</span>
         </div>
       </div>
       <div class="h-line mt-4 mb-3"></div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.userCount') }}</span>
-        <div class="info">{{ pool.stakerCount }}</div>
+<!--        <div class="info">{{ pool.stakerCount }}</div>-->
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.totalDeposit') }}</span>
-        <div class="info">{{ pool.totalStakedAmount }}</div>
+<!--        <div class="info">{{ pool.totalStakedAmount }}</div>-->
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.hasMined') }}</span>
@@ -26,6 +26,7 @@
         <span class="name">APY</span>
         <b-input type="number" class="apy-input" step="0.01" placeholder="请输入"></b-input>
       </div>
+      <button class="primary-btn" :disabled="true">Confirm</button>
     </div>
   </div>
 </template>
