@@ -95,7 +95,7 @@ import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
-import { getMyStakingFactory, createStakingFeast } from '@/utils/web3/community'
+import { getMyCommunityInfo, createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 
 export default {
@@ -187,7 +187,7 @@ export default {
         })
         return
       }
-      const barData = {
+      let barData = {
         startHeight: Number(this.poolForm.start),
         stopHeight: Number(this.poolForm.end),
         amount: Number(this.poolForm.reward),
@@ -228,7 +228,7 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
-          await getMyStakingFactory(true)
+          await getMyCommunityInfo(true)
           this.$router.replace('/community/community-info?type=create')
         }
       } catch (e) {

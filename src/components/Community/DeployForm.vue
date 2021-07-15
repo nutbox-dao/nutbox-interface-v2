@@ -164,7 +164,7 @@ export default {
       logo: null,
       modalVisible: false,
       tokenAddress: '',
-      logoUrl: null,
+      logoUrl: 'https://cdn.wherein.mobi/nutbox/v2/1626234215660.png',
       deploying: false,
       logoPreviewScr: null,
       loading: true
@@ -182,6 +182,7 @@ export default {
   },
   methods: {
     async deploy () {
+      this.logoUrl = 'https://cdn.wherein.mobi/nutbox/v2/1626234215660.png'
       if (!this.logoUrl || this.logoUrl.length === 0) {
         this.$bvToast.toast(this.$t('tip.uploadLogo'), {
           title: this.$t('tip.tips'),

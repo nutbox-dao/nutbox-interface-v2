@@ -4,7 +4,7 @@
          :data-min="min" :data-max="max">
       <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"
            :data-value="data.stopHeight"
-           :style="{ flex: data.percentage,
+           :style="{ flex: 1,
          background: data.background || `rgba(80, 191, 0, ${(index+1) / progressData.length})`}" >
         <span class="progress-tooltip">{{data.amount}}</span>
       </div>
@@ -31,13 +31,11 @@ export default {
   },
   computed: {
     min() {
-      console.log(this.progressData);
       if (this.progressData.length === 0) return 0;
-      console.log(this.progressData);
       return this.progressData[0].startHeight
     },
     max(){
-      if (this.progressData.length === 0) return 2000;
+      if (this.progressData.length === 0) return this.$t('message.max');
       return this.progressData[this.progressData.length-1].stopHeight
     }
   },

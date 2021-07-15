@@ -12,11 +12,13 @@ export function get (url, params) {
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
+      console.log('network err', err);
       if (err.response){
         reject(err.response.status)
         return;
+      }else{
+        reject(500)
       }
-      reject(err)
     })
   })
 }
@@ -30,7 +32,7 @@ export function post (url, params) {
         reject(err.response.status)
         return;
       }
-      reject(err)
+      reject(500)
     })
   })
 }
@@ -44,7 +46,7 @@ export function put (url, params) {
         reject(err.response.status)
         return;
       }
-      reject(err)
+      reject(500)
     })
   })
 }

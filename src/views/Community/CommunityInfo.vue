@@ -256,13 +256,17 @@ export default {
     this.isEdit = !!this.type;
     try{
       const communityInfo = await getMyCommunityInfo();
+      console.log(444, communityInfo);
       if (!communityInfo) {
         // Havn't create feast
         this.noCommunity = true;
         return;
       }
       this.canEdit = true
-      if (!communityInfo.name) return;
+      if (!communityInfo.name) {
+        this.form.id = communityInfo.id
+        return;
+      }
       this.form = communityInfo;
     }catch(e){
       console.log(666, e);
@@ -350,6 +354,7 @@ export default {
       return false;
     },
     async showTips() {
+      console.log(this.form);
       if (this.valideInfos()) {
         this.showSignatureTip = true;
       }
