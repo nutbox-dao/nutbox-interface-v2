@@ -31,9 +31,13 @@ export default {
   },
   computed: {
     min() {
-      return this.progressData[0].start
+      console.log(this.progressData);
+      if (this.progressData.length === 0) return 0;
+      console.log(this.progressData);
+      return this.progressData[0].startHeight
     },
     max(){
+      if (this.progressData.length === 0) return 2000;
       return this.progressData[this.progressData.length-1].stopHeight
     }
   },

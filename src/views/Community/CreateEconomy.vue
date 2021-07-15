@@ -59,8 +59,7 @@
           <p style="margin:0;">
             {{ $t('community.currentBlock') }}{{blockNum}}
           </p>
-          <Progress :min="progressData.length>0?progressData[0].start:0"
-                    :is-edit="progressData.length>0"
+          <Progress :is-edit="progressData.length>0"
                     @delete="deleteData"
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
@@ -162,6 +161,7 @@ export default {
     },
     deleteData () {
       this.progressData.pop()
+      this.updateProgressColor()
       if (this.progressData.length === 0) {
         this.poolForm.start = this.blockNum
       } else {
@@ -189,16 +189,24 @@ export default {
       }
       const barData = {
         startHeight: Number(this.poolForm.start),
-        stopHeight: this.poolForm.end === 'max' ? this.maxBlock : Number(this.poolForm.end),
+        stopHeight: Number(this.poolForm.end),
         amount: Number(this.poolForm.reward),
-        percentage: this.poolForm.end === 'max' ? 1e8 : Number(this.poolForm.end) - Number(this.poolForm.start)
+        percentage: Number(this.poolForm.end) - Number(this.poolForm.start)
       }
       this.progressData.push(barData)
+      this.updateProgressColor()
       // if (this.progressData.length > 2) return
       this.poolForm.start = Number(barData.stopHeight) + 1
       this.poolForm.end = ''
       this.poolForm.reward = ''
       console.log(this.progressData)
+    },
+    updateProgressColor () {
+      const count = this.progressData.length
+      this.progressData = this.progressData.map((pd, i) => ({
+        ...pd,
+        background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
+      }))
     },
     async confirmDeploy () {
       this.form.poolData = this.progressData

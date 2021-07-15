@@ -305,7 +305,7 @@ export const getDistributionEras = async (update=false) => {
             distri = distri.map((item, i) => ({
                 percentage: item.stopHeight - item.startHeight,
                 amount: item.amount.toString() / (10 ** decimal),
-                start: item.startHeight.toString(),
+                startHeight: item.startHeight.toString(),
                 stopHeight: item.stopHeight.toString(),
                 background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
             }))

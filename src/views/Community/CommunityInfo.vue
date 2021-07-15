@@ -230,8 +230,8 @@ export default {
         name: "",
         website: "",
         description: "",
-        icon: "",
-        poster: "",
+        icon: "https://cdn.wherein.mobi/nutbox/v2/1626234215660.png",
+        poster: "https://cdn.wherein.mobi/nutbox/v2/1626234205789.png",
         pools: [],
       },
       logoPreviewSrc: "",
@@ -262,6 +262,7 @@ export default {
         return;
       }
       this.canEdit = true
+      if (!communityInfo.name) return;
       this.form = communityInfo;
     }catch(e){
       console.log(666, e);
