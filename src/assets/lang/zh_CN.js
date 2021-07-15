@@ -365,7 +365,10 @@ module.exports = {
     setting: '设置',
     updatePools: "调整矿池数据",
     addPool: '添加矿池',
-    noPools:'还没有创建矿池'
+    noPools:'还没有创建矿池',
+    userCount: "质押用户数",
+    totalDeposit: "总质押数",
+    hasMined: "已挖Token"
   },
   asset: {
     network: "网络",

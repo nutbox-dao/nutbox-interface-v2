@@ -9,7 +9,7 @@ import { waitForTx } from './ethers'
 import {
     createWatcher
   } from '@makerdao/multicall'
-import { getCToken } from './asset'
+import { getCToken, getRegitryAssets } from './asset'
 
 /**
  * Get community admin's staking factory id
@@ -130,8 +130,28 @@ export const getMyOpenedPools = async (update = false) => {
             let pools = await Promise.all((new Array(10).toString().split(',')).map((item, i) => contract.openedPools(i)))
             console.log(3214, pools);
             pools = pools.filter(pool => pool.hasActived)
-            store.commit('web3/saveMyPools', pools)
-            resolve(pools);
+            
+            try{
+                // get pool asset info
+                const myAsset = await getRegitryAssets()
+                console.log('myasset', myAsset);
+                let idToIndex = {}
+                myAsset.map((a, i) => idToIndex[a.asset] = i)
+                console.log(idToIndex);
+                pools = pools.map(pool => ({
+                    pid: pool.pid,
+                    poolName:pool.name,
+                    poolRatio: pool.poolRatio,
+                    stakerCount: pool.stakerCount,
+                    stakingPair: pool.stakingPair,
+                    totalStakingAmount: pool.totalStakingAmount,
+                    asset: myAsset[idToIndex[pool.stakingPair]],
+                }))
+                store.commit('web3/saveMyPools', pools)
+                resolve(pools);
+            }catch(e) {
+                reject(e);
+            }
         }catch(e) {
             reject(errCode.BLOCK_CHAIN_ERR)
             return;

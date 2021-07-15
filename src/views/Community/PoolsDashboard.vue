@@ -25,14 +25,19 @@
       </div>
     </div>
     <template v-else>
-      <div class="nav-box" ref="navBox">
+      <!-- <div class="nav-box" ref="navBox">
         <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
         </div>
       </div>
-      <component :is="tabOptions[activeTab].component"></component>
+      <component :is="tabOptions[activeTab].component"></component> -->
+        <div class="row">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.pid">
+            <DashboardPoolCard :pool="pool"/>
+          </div>
+      </div>
     </template>
     <b-modal
       v-model="noCommunity"
@@ -61,10 +66,11 @@ import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
 import { getMyOpenedPools, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
+import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'
 
 export default {
   name: 'PoolsDashboard',
-  components: { Progress, CrowdLoanPool },
+  components: { Progress, CrowdLoanPool, DashboardPoolCard },
   data () {
     return {
       activeTab: 0,
@@ -107,7 +113,6 @@ export default {
         })
       }
     }
-    
   }
 }
 </script>
