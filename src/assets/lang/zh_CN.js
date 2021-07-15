@@ -262,7 +262,8 @@ module.exports = {
     needPoster: "请上传社区封面",
     completeCommunityInfoSuccess: "社区信息更新成功",
     wrongSubstrateAddress:"请输入正确的 {type} 地址",
-    ratioError: "矿池分润比例总和应为100"
+    ratioError: "矿池分润比例总和应为100",
+    wrongApy: "请输入正确的APY"
   },
   vote: {
     upvote: "点赞",
@@ -338,6 +339,7 @@ module.exports = {
     inputName: "请输入社区名字",
     inputLink: "请输入社区官网链接",
     inputDesc: "请输入一段社区的介绍",
+    inputApy: "请输入年化收益率",
     uploadLogo: "上传Logo",
     picTip: "建议尺寸 {size} ，小于2M，支持jpg、png、jpeg格式",
     uploadPoster: "上传封面",

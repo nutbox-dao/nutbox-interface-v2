@@ -385,6 +385,7 @@ export const registerNominateAsset = async (form) => {
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
+      console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         addressToHex(form.nodeAddress).substr(2) // node address

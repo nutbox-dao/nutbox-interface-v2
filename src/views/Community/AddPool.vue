@@ -181,6 +181,7 @@ export default {
     this.assetLoading = true
     try{
       let assets = await getRegitryAssets()
+      console.log('my assets', assets);
       assets = assets.map(asset => {
         switch (asset.type) {
           case 'HomeChainAssetRegistry':

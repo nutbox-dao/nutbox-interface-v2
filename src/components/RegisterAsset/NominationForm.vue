@@ -98,10 +98,11 @@ export default {
       }
       try{
         this.registring = true
+        this.form.chainId = parseInt(this.networkIndex) + 2;
         const tx = await registerNominateAsset(this.form)
         // update cache
         await getRegitryAssets(true)
-         this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
+        this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })

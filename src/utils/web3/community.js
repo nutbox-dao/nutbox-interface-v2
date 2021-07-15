@@ -140,11 +140,11 @@ export const getMyOpenedPools = async (update = false) => {
                 console.log(idToIndex);
                 pools = pools.map(pool => ({
                     pid: pool.pid,
-                    poolName:pool.name,
+                    poolName:pool.poolName,
                     poolRatio: pool.poolRatio,
                     stakerCount: pool.stakerCount,
                     stakingPair: pool.stakingPair,
-                    totalStakingAmount: pool.totalStakingAmount,
+                    totalStakedAmount: pool.totalStakedAmount,
                     asset: myAsset[idToIndex[pool.stakingPair]],
                 }))
                 store.commit('web3/saveMyPools', pools)
@@ -361,7 +361,6 @@ export const getDistributionEras = async (update=false) => {
         try{
             const count = await contract.numberOfDistributionEras()
             let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => contract.distributionEras(i)))
-            console.log('distribution', distri);
             distri = distri.map((item, i) => ({
                 percentage: item.stopHeight - item.startHeight,
                 amount: item.amount.toString() / (10 ** decimal),
@@ -369,7 +368,7 @@ export const getDistributionEras = async (update=false) => {
                 stopHeight: item.stopHeight.toString(),
                 background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
             }))
-            console.log('contrrrr', distri);
+            console.log('distribituions', distri);
             store.commit('web3/saveDistributions', distri)
             resolve(distri)
         }catch(e){
