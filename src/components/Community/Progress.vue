@@ -6,7 +6,7 @@
            :data-value="data.stopHeight"
            :style="{ flex: 1,
          background: data.background || `rgba(80, 191, 0, ${(index+1) / progressData.length})`}" >
-        <span class="progress-tooltip">{{data.amount}}</span>
+        <span class="progress-tooltip" :style="{color: (blockNum >= data.startHeight && blockNum < data.stopHeight) ? '#FF5000' : '#50BF00'}">{{data.amount}}</span>
       </div>
     </div>
     <i v-if="isEdit" class="delete-icon" @click="$emit('delete')"></i>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Progress',
   props: {
@@ -30,6 +32,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('web3',['blockNum']),
     min() {
       if (this.progressData.length === 0) return 0;
       return this.progressData[0].startHeight
