@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 10" :key="i">
+      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 3" :key="i">
         <StakePoolCard/>
       </div>
     </div>

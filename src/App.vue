@@ -327,6 +327,7 @@ export default {
       })
     },
     pageScroll (e) {
+      if (this.navBoxEl.length === 0) return
       if (e.target.scrollTop > this.navBoxEl[0].offsetTop) {
         this.navBoxEl[0].classList.add('fixed-nav-box')
       } else {

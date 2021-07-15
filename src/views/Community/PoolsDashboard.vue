@@ -16,14 +16,14 @@
         </button>
       </div>
     </div>
-    <div v-if="stakingPools.length===0"
-         class="empty-card d-flex flex-column justify-content-center">
-      <div class="empty-bg">
-        <img src="~@/static/images/empty-data.png" alt="" />
-        <p>No ongoing auction</p>
-      </div>
-    </div>
-    <template v-else>
+<!--    <div v-if="stakingPools.length===0"-->
+<!--         class="empty-card d-flex flex-column justify-content-center">-->
+<!--      <div class="empty-bg">-->
+<!--        <img src="~@/static/images/empty-data.png" alt="" />-->
+<!--        <p>No ongoing auction</p>-->
+<!--      </div>-->
+<!--    </div>-->
+    <template>
       <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
 
       <div class="nav-box" ref="navBox">
@@ -95,7 +95,7 @@ export default {
     })
     // const assets = await getRegitryAssets()
     const myPools = await getMyOpenedPools()
-    
+
   }
 }
 </script>
