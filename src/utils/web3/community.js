@@ -247,11 +247,14 @@ export const addPool = async (form) => {
             reject(e)
             return
         }
-        const contract = await getContract('StakingTemplate', stakingFactoryId)
-        if (!contract) {
-            reject(errCode.CONTRACT_CREATE_FAIL)
-            return;
+        let contract;
+        try{
+            contract = await getContract('StakingTemplate', stakingFactoryId, false)
+        }catch(e) {
+            reject(e);
+            return
         }
+        
         try{
             console.log(235, form.ratios, form.ratios.map(r => parseInt(r * 100)));
             const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
@@ -261,6 +264,43 @@ export const addPool = async (form) => {
             console.log(542, e);
             reject(errCode.BLOCK_CHAIN_ERR)
         }
+    })
+}
+
+/**
+ * Update Pools ratios
+ * @param {*} form 
+ * @returns 
+ */
+export const updatePoolsRatio = async (form) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e){
+            reject(e)
+            return
+        }
+        let contract;
+        try{
+            contract = await getContract('StakingTemplate', stakingFactoryId, false)
+        }catch(e){
+            reject(e);
+            return;
+        }
+        try{
+            console.log(form);
+            const tx = await contract.setPoolRatios(form.map(val => val*100))
+            await waitForTx(tx.hash)
+            resolve(tx.hash)
+        }catch(e) {
+            reject(errCode.CONTRACT_CREATE_FAIL)
+        }
+
     })
 }
 

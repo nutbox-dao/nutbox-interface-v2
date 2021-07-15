@@ -360,6 +360,7 @@ module.exports = {
     personal: '我注册的资产',
     official: '官方提供的资产',
     addPoolSuccess: '矿池已添加',
+    updatePoolSuccess: '矿池已更新',
     dashboard: "仪表盘",
     setting: '设置',
     updatePools: "调整矿池数据",

@@ -20,6 +20,7 @@ export default {
     watcher: {},
     cTokens: {},
     distributions: null,
+    readonlyProvider: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -70,6 +71,9 @@ export default {
     },
     saveDistributions: (state, distributions) =>{
       state.distributions = distributions
+    },
+    saveReadonlyProvider: (state, readonlyProvider) => {
+      state.readonlyProvider = readonlyProvider
     }
   },
   getters: {

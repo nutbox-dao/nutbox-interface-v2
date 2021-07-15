@@ -20,52 +20,6 @@
           <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
         </div>
         <b-form class="custom-form pool-form">
-          <b-form-group id="input-group-1"
-                        :label="$t('asset.stakingAsset')"
-                        label-for="input-1">
-            <Dropdown :menu-options="concatAddressOptions"
-                      :loading="assetLoading"
-                      :selected-key="selectedKey"
-                      :selected-item="selectedAddressData"
-                      @setSelectedData="setSelectedData">
-              <template v-slot:empty0>
-                <div class="text-center">
-                  <div class="custom-control" style="line-height: 1.5rem">
-                    {{ $t('asset.notRegister') }}
-                    <router-link to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
-                  </div>
-                </div>
-              </template>
-              <template v-slot:drop-item="slotProps">
-                <img class="prefix-icon" :src="slotProps.item.icon" alt="">
-                <div class="flex-full d-flex flex-column">
-                  <span>{{slotProps.item.symbol}}</span>
-                  <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
-                </div>
-              </template>
-            </Dropdown>
-            <div class="flex-between-center mt-1">
-              <div class="text-left text-grey-light ">
-                <span v-show="form.assetId && isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
-                <span v-show="form.assetId && !isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
-              </div>
-              <router-link class="text-right" to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
-            </div>
-          </b-form-group>
-          <div class="row">
-            <b-form-group class="col-md-6"
-                          id="input-group-2"
-                          :label="$t('asset.poolName')"
-                          label-for="input-2">
-              <b-form-input
-                id="input-2"
-                v-model="form.name"
-                :placeholder="$t('asset.inputPoolName')"
-                @input="inputChange"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </div>
           <b-form-group id="input-group-2"
                         :label="$t('asset.poolRatios')">
             <div class="ratios-box">
@@ -84,9 +38,9 @@
           </b-form-group>
           <div class="row">
             <div class="col-md-5">
-              <button class="primary-btn" @click="confirmAdd" :disabled="adding">
-                <b-spinner small type="grow" v-show="adding" />
-                {{ $t('asset.add') }}
+              <button class="primary-btn" @click="confirmUpdate" :disabled="updating">
+                <b-spinner small type="grow" v-show="updating" />
+                {{ $t('asset.update') }}
               </button>
             </div>
           </div>
@@ -100,10 +54,7 @@
 import * as echarts from 'echarts/core'
 import debounce from 'lodash.debounce'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
-import { getRegitryAssets } from '@/utils/web3/asset'
-import { DELEGATION_CHAINID_TO_NAME, CROWDLOAN_CHAINID_TO_NAME, VALIDATOR_CHAINID_TO_NAME } from '@/config'
-import { stanfiAddress } from '@/utils/commen/account'
-import { addPool, getMyOpenedPools } from '@/utils/web3/community'
+import { updatePoolsRatio, getMyOpenedPools } from '@/utils/web3/community'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -112,7 +63,7 @@ export default {
   data () {
     return {
       isHomeChainAsset: true,
-      adding: true,
+      updating: true,
       myPools:[],
       colorList: ['#FF7366', '#7CBF4D', '#70ACFF', '#FFE14D', '#CC85FF', '#FF9500', '#00C7D9', '#9D94FF', '#FF73AD'],
       options: {
@@ -172,59 +123,12 @@ export default {
   async mounted () {
     getMyOpenedPools().then(pools => {
       this.initChart(pools)
-      this.adding = false
+      this.updating = false
     }).catch(e => {
       handleApiErrCode(e, (tip, param) => {
         this.$bvToast.toast(tip, param)
       })
     })
-    this.assetLoading = true
-    try{
-      let assets = await getRegitryAssets()
-      assets = assets.map(asset => {
-        switch (asset.type) {
-          case 'HomeChainAssetRegistry':
-            return {
-              icon: asset.icon,
-              name: asset.name,
-              symbol: asset.symbol,
-              asset: asset.asset,
-              isHomeChainAsset: true
-            }
-          case 'SteemHiveDelegateAssetRegistry':
-            return {
-              icon: asset.icon,
-              name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
-              symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
-              asset: asset.asset,
-              isHomeChainAsset: false
-            }
-          case 'SubstrateCrowdloanAssetRegistry':
-            return {
-              icon: asset.icon,
-              name: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
-              symbol: CROWDLOAN_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.crowdloan') + ':' + asset.paraId + '-' + asset.trieIndex,
-              asset: asset.asset,
-              isHomeChainAsset: false
-            }
-          case 'SubstrateNominateAssetRegistry':
-            return {
-              icon: asset.icon,
-              name: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
-              symbol: VALIDATOR_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.validator') + ':' + stanfiAddress(asset.validatorAccount),
-              asset: asset.asset,
-              isHomeChainAsset: false
-            }
-        }
-      })
-      this.concatAddressOptions[0].items = assets
-    }catch(e) {
-      handleApiErrCode(e, (tip, param) => {
-        this.$bvToast.toast(tip, param)
-      })
-    }
-    
-    this.assetLoading = false
   },
   methods: {
     initChart (pools) {
@@ -234,10 +138,7 @@ export default {
     },
     setData (pools) {
       this.options.color = this.colorList
-      const data = { value: 100, name: this.form.name }
       this.myPools = pools.map(pool => ({name: pool.poolName, value: pool.poolRatio / 100}))
-      this.myPools.push(data)
-      console.log(432, this.myPools);
       this.options.series[0].data = this.myPools
       this.form.ratios = this.myPools.map(item => {
         return item.value
@@ -247,21 +148,11 @@ export default {
       this.options.series[0].data.map((item, index) => {
         item.value = this.form.ratios[index]
       })
-      this.options.series[0].data[this.options.series[0].data.length - 1].name = this.form.name
       this.chart.setOption(this.options)
     }, 1500),
-    setSelectedData (data) {
-      this.selectedAddressData = data
-      this.isHomeChainAsset = data.isHomeChainAsset
-      this.form.assetId = data.asset
-    },
     checkInput () {
       let tipStr = ''
-      if (!this.form.assetId) {
-        tipStr = this.$t('asset.selectStakingAsset')
-      } else if (!this.form.name) {
-        tipStr = this.$t('asset.inputPoolName')
-      }else if(this.form.ratios.reduce((t, r) => t+parseInt(r * 100),0) != 10000){
+      if(this.form.ratios.reduce((t, r) => t+parseInt(r * 100),0) != 10000){
         tipStr = this.$t('tip.ratioError')
       } else {
         return true
@@ -272,15 +163,15 @@ export default {
       })
       console.log(tipStr)
     },
-    async confirmAdd () {
+    async confirmUpdate () {
       if (!this.checkInput()) return
       
-      // add pool
+      // update pool
       try {
-        this.adding = true
-        const hash = await addPool(this.form)
-        this.$bvToast.toast(this.$t('community.addPoolSuccess'), {
-          title: this.$t('tip.deployFactorySuccess'),
+        this.updating = true
+        const hash = await updatePoolsRatio(this.form.ratios)
+        this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {
+          title: this.$t('tip.success'),
           variant: 'success'
         })
         try{
@@ -292,7 +183,7 @@ export default {
           this.$bvToast.toast(info, para)
         })
       } finally {
-        this.adding = false
+        this.updating = false
       }
     }
   }

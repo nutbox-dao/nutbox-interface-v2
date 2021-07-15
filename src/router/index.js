@@ -28,6 +28,7 @@ import DeployToken from '../views/Community/DeployToken'
 import CreateEconomy from '@/views/Community/CreateEconomy'
 import PoolsDashboard from '@/views/Community/PoolsDashboard'
 import AddPool from '@/views/Community/AddPool'
+import UpdatePool from '@/views/Community/UpdatePool'
 import Register from '@/views/RegisterAsset/Register'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
@@ -178,6 +179,10 @@ const routes = [
       {
         path: 'add-pool',
         component: AddPool
+      },
+      {
+        path: 'update-pool',
+        component: UpdatePool
       },
       {
         path: 'community-info',

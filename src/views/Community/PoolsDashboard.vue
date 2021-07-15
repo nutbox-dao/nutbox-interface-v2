@@ -9,7 +9,7 @@
           <i class="setting-icon"></i>
           <span>{{ $t('community.setting') }}</span>
         </button>
-        <button class="outline-btn" v-show="stakingPools.length > 1">{{ $t('community.updatePools') }}</button>
+        <button class="outline-btn" v-show="stakingPools.length > 1" @click="$router.push('/community/update-pool')">{{ $t('community.updatePools') }}</button>
         <button @click="$router.push('/community/add-pool')">
           <i class="add-icon"></i>
           <span>{{ $t('community.addPool') }}</span>
