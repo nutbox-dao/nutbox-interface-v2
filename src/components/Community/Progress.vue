@@ -21,14 +21,6 @@ export default {
       type: String,
       default: '#F6F7F9'
     },
-    min: {
-      type: [String, Number],
-      default: 0
-    },
-    max: {
-      type: [String, Number],
-      default: 'Max'
-    },
     progressData: {
       type: Array,
     },
@@ -36,7 +28,15 @@ export default {
       type: Boolean,
       default: false
     }
-  }
+  },
+  computed: {
+    min() {
+      return this.progressData[0].start
+    },
+    max(){
+      return this.progressData[this.progressData.length-1].stopHeight
+    }
+  },
 }
 </script>
 

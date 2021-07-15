@@ -20,17 +20,17 @@ import {
 import { errCode, RPC_NODE } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0x63DEEA94B4ADb98447d3FAA36853122BFb388Cc0",
-  "HomeChainAssetRegistry": "0xCe5690AD4562413847dad15Fc0c154A8E68e048C",
-  "SteemHiveDelegateAssetRegistry": "0x0304706D48F1B98e25aaD71Ae73B9CE9934AA7a1",
-  "SubstrateCrowdloanAssetRegistry": "0x141E7D99ae1438F79640414Ba25EB598CA962663",
-  "SubstrateNominateAssetRegistry": "0x6F5d4AdC3a0c5A30c763C148315A0fb11984B047",
-  "ERC20AssetHandler": "0x8246B3cF4325bAA0c5f7EE8460Dc1997bbd59B8e",
+  "RegistryHub": "0xF963f7a5Cc1debF151627311584Ac7cF7F38aD5c",
+  "HomeChainAssetRegistry": "0x4e219decC9F0657Ea299F07Ef366Bc564e48dfDA",
+  "SteemHiveDelegateAssetRegistry": "0x4C2309079DeF23b8c146e01E5660AF5EfF81D17a",
+  "SubstrateCrowdloanAssetRegistry": "0x8B1cdE6DD1Faf328FBcbd6698C86B2F078a2CEb5",
+  "SubstrateNominateAssetRegistry": "0x101559faB5466820ffF96eA2009b25e3ECb1088d",
+  "ERC20AssetHandler": "0x3E8059E2124d3E28A0D055b884650a7A7c25557c",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0xEb0b3F0888e98b848e3f0ce97b883446722411fe",
-  "Executor": "0x543012c315947F542D2c771cFCd383FF3869F285",
-  "Bridge": "0x9103ae8D36B2fF098944017eaC4406b1B64cF43D",
-  "StakingFactory": "0xfdE61A2AbaCe2B05a3E28025Bcbf43e768DA2E4D"
+  "TrustlessAssetHandler": "0x4068050bCfB14471e60392E6EB723CcC464867B0",
+  "Executor": "0x0750C05B18c753E1f21CC11a7Dc595dB9156da91",
+  "Bridge": "0x9FadA9f7194CBf3538D384614597ccFe8EB82B4a",
+  "StakingFactory": "0x6F38855cddba3916c67C8DF8e82605d8cbCA6b8a"
 }
 
 export const erc20Address = '0x31DB9e2c1276356874c94C7648990a898DC3FA8B'
@@ -98,8 +98,9 @@ export const getContract = async function (contractName, address, onlyRead=false
       if (!(await setupNetwork())) {
         console.log('Wrong chain Id', store.state.web3.chainId);
         // chainId is wrong
-        reject(errCode.WRONG_CHAIN_ID);
-        return;
+        // TODO
+        // reject(errCode.WRONG_CHAIN_ID);
+        // return;
       }
     }
 

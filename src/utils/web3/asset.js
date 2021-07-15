@@ -118,6 +118,48 @@ export const getRegitryAssets = async (update = false) => {
 }
 
 /**
+ * Get community ctoken info
+ * @param {*} update 
+ * @returns 
+ */
+export const getCToken = async (communityId, update=false) => {
+  return new Promise(async (resolve, reject) => {
+    let cTokens = store.state.web3.cTokens
+    if (!update && cTokens[communityId]){
+      resolve(cTokens[communityId])
+      return;
+    }
+    let contract;
+    let registerHub;
+    try{
+      contract = await getContract('StakingTemplate', communityId)
+      registerHub = await getContract('RegistryHub')
+    }catch(e){
+      reject(e)
+      return
+    }
+
+    try{
+      const assetId = await contract.rewardAsset()
+      const tokenAddress = await registerHub.getHomeLocation(assetId);
+      try{
+        const cToken = await getERC20Info(tokenAddress)
+        cTokens[assetId] = cToken
+        store.commit('web3/saveCTokens', cTokens)
+        resolve(cToken)
+      }catch(e){
+        reject(e);
+        return
+      }
+    }catch(e){
+      console.log(e);
+      reject(errCode.BLOCK_CHAIN_ERR)
+      return;
+    }
+  })
+}
+
+/**
  * get asset meta data
  * @param {String} id asset id 
  * @param {String} assetType asset contract address

@@ -2,30 +2,29 @@
   <div class="page-view-content">
     <div class="view-top-header row">
       <div class="col-md-6 text-left">
-        <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">Your Staking pools</div>
+        <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">{{ $t('community.dashboard') }}</div>
       </div>
       <div class="col-md-6 btn-group">
         <button class="outline-btn" @click="$router.push('/community/community-info')">
           <i class="setting-icon"></i>
-          <span>Setting</span>
+          <span>{{ $t('community.setting') }}</span>
         </button>
-        <button class="outline-btn" v-show="stakingPools.length > 0">Update Pool Rations</button>
+        <button class="outline-btn" v-show="stakingPools.length > 0">{{ $t('community.updatePools') }}</button>
         <button @click="$router.push('/community/add-pool')">
           <i class="add-icon"></i>
-          <span>Add Pool</span>
+          <span>{{ $t('community.addPool') }}</span>
         </button>
       </div>
     </div>
-<!--    <div v-if="stakingPools.length===0"-->
-<!--         class="empty-card d-flex flex-column justify-content-center">-->
-<!--      <div class="empty-bg">-->
-<!--        <img src="~@/static/images/empty-data.png" alt="" />-->
-<!--        <p>No ongoing auction</p>-->
-<!--      </div>-->
-<!--    </div>-->
-    <template>
-      <Progress :min="progressData[0].start" max="Max" :progress-data="progressData"></Progress>
-
+     <Progress :progress-data="progressData"></Progress>
+    <div v-if="stakingPools.length===0"
+         class="empty-card d-flex flex-column justify-content-center">
+      <div class="empty-bg">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>{{ $t('community.noPools') }}</p>
+      </div>
+    </div>
+    <template v-else>
       <div class="nav-box" ref="navBox">
         <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
@@ -59,7 +58,9 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
-import { getMyOpenedPools, getMyCommunityInfo } from '@/utils/web3/community'
+import { getMyOpenedPools, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { handleApiErrCode } from '../../utils/helper'
+import { errCode } from '../../config'
 
 export default {
   name: 'PoolsDashboard',
@@ -76,9 +77,9 @@ export default {
       stakingPools: [],
       noCommunity: false,
       progressData: [
-        { percentage: '10', amount: 200, start: 1001, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
-        { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
-        { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
+        { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
+        // { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
+        // { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
       ]
     }
   },
@@ -88,14 +89,25 @@ export default {
     }
   },
   async mounted () {
-    getMyCommunityInfo().then(com => {
-      if (!com){
-        this.noCommunity = true
+    try{
+      getMyCommunityInfo()
+      getDistributionEras().then(dist => {
+        this.progressData = dist
+      }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
+      // const assets = await getRegitryAssets()
+      const myPools = await getMyOpenedPools()
+      console.log('my pools', myPools);
+      this.stakingPools = myPools
+    }catch(e){
+      if (e === errCode.NO_STAKING_FACTORY){
+        this.noCommunity = true;
+      }else {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
       }
-    })
-    // const assets = await getRegitryAssets()
-    const myPools = await getMyOpenedPools()
-
+    }
+    
   }
 }
 </script>

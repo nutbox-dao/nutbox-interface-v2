@@ -161,14 +161,25 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.blockChainError')
   } else if(code === errCode.CONTRACT_CREATE_FAIL){
     tipStr = $t('error.blockChainError')
-  } else if (code === errCode.SIGNATURE_FAILED) {
+  } else if(code === errCode.USER_CANCEL_SIGNING){
+    tipStr = $t('error.cancelSigning')
+  } else if(code == errCode.NOT_CONNECT_METAMASK){
+    tipStr = $t('error.notConnectWallet')
+  } else if (code == errCode.UNLOCK_METAMASK) {
+    tipStr = $t('error.unlockWallet')
+  } else if (code == errCode.WRONG_CHAIN_ID) {
+    tipStr = $t('error.wrongChainId')
+  }
+  
+  
+  else if (code === errCode.SIGNATURE_FAILED) {
     tipStr = $t('error.signatureFailed')
   } else if (code === errCode.INVALID_NONCE) {
     tipStr = $t('error.signatureFailed')
   } else if (code === errCode.DB_ERROR || code == errCode.SERVER_ERR) {
     tipStr = $t('error.serveError')
-  } else if (code === errCode.USER_CANCEL_SIGNING){
-    tipStr = $t('error.cancelSigning')
+  } else {
+    tipStr = $t('error.unknow')
   }
   toast(tipStr, {
     title: $t('tip.error'),

@@ -317,7 +317,11 @@ module.exports = {
     networkError: "网络错误",
     noStakingFactory: "您还没有创建社区",
     blockChainError: "合约调用错误",
-    cancelSigning: '签名取消'
+    cancelSigning: '签名取消',
+    unknow:"未知错误",
+    notConnectWallet: '未链接钱包',
+    unlockWallet: '请解锁钱包',
+    wrongChainId: '钱包网络选择错误'
   },
   community: {
     community: '社区',
@@ -355,7 +359,12 @@ module.exports = {
     comfirmAdd:'确认添加',
     personal: '我注册的资产',
     official: '官方提供的资产',
-    addPoolSuccess: '矿池已添加'
+    addPoolSuccess: '矿池已添加',
+    dashboard: "仪表盘",
+    setting: '设置',
+    updatePools: "调整矿池数据",
+    addPool: '添加矿池',
+    noPools:'还没有创建矿池'
   },
   asset: {
     network: "网络",
