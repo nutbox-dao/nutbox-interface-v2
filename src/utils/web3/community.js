@@ -2,7 +2,7 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, updatePoolInfo } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
@@ -244,7 +244,7 @@ export const completeCommunityInfo = async (form, type) => {
             resolve(res)
         }catch(e) {
             console.log('Insert community info failed', e);
-            reject(500)
+            reject(e)
         }
     })
 
@@ -325,12 +325,68 @@ export const updatePoolsRatio = async (form) => {
 }
 
 /**
+ * Update Pool APY to backend
+ * @param {*} pool 
+ */
+export const updatePoolApy = async (pool, apy) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e){
+            reject(e)
+            return
+        }
+
+        let nonce = await getNonce()
+        const userId = store.state.web3.account
+        nonce = nonce ? nonce + 1 : 1
+        
+        pool['communityId'] = stakingFactoryId;
+        pool['pid'] = parseInt(pool.pid)
+        pool['stakerCount'] = parseInt(pool.stakerCount)
+        pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
+        pool['apy'] = apy
+        console.log(pool);
+        const originMessage = JSON.stringify(pool)
+        let signature = ''
+        try{
+            signature = await signMessage(originMessage + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
+        const params = {
+            userId,
+            infoStr: originMessage,
+            nonce,
+            signature
+        }
+        try{
+            const res = await updatePoolInfo(params)
+            // update nonce in storage
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            reject(e)
+        }
+
+    })
+}
+
+/**
  * Get cToken distribuitons eras
  * @param {*} update 
  */
 export const getDistributionEras = async (update=false) => {
     return new Promise(async (resolve, reject) => {
-        const distribuitons = store.state.web3.distribuitons;
+        const distribuitons = store.state.web3.distributions;
         if (!update && distribuitons) {
             resolve(distribuitons)
         }

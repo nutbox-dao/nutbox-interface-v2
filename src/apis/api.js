@@ -70,7 +70,7 @@ export const getExportContributionInfo = async (params) => post(CROWD_LOAN_API_U
  */
 export const getDashboardSummary = async (params) => post(CROWD_LOAN_API_URL + '/crowdloan/summary', params)
 
-// ============================================ backend ============================================ 
+// ============================================ backend v2 ============================================ 
 
 export const getAllCommunities = async () => get(BACKEND_API_URL + '/community/get')
 
@@ -85,3 +85,5 @@ export const insertToken = async (params) => post(BACKEND_API_URL + '/token/inse
 export const getAllTokens = async () => get(BACKEND_API_URL + '/token/get')
 
 export const getNonce = async (accountId) => get(BACKEND_API_URL + '/user/getnonce', {userId: accountId})
+
+export const updatePoolInfo = async (params) => put(BACKEND_API_URL + '/pool/update', params)
