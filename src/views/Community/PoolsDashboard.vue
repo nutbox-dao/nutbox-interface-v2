@@ -63,7 +63,8 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
-import { getMyOpenedPools, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
 import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'

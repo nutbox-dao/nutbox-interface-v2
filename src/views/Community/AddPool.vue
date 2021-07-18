@@ -103,7 +103,7 @@ import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { DELEGATION_CHAINID_TO_NAME, CROWDLOAN_CHAINID_TO_NAME, VALIDATOR_CHAINID_TO_NAME } from '@/config'
 import { stanfiAddress } from '@/utils/commen/account'
-import { addPool, getMyOpenedPools } from '@/utils/web3/community'
+import { addPool, getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {

@@ -1,6 +1,7 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
-import {  getMyCommunityInfo, getNonce, getMyOpenedPools } from './community'
+import {  getMyCommunityInfo, getNonce } from './community'
+import { getMyOpenedPools } from './pool'
 
 /**
  * Get metamask accounts
