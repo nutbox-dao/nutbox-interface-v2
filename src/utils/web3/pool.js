@@ -157,3 +157,60 @@ export const updatePoolsRatio = async (form) => {
 
     })
 }
+
+
+/**
+ * Update Pool APY to backend
+ * @param {*} pool 
+ */
+ export const updatePoolApy = async (pool, apy) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e){
+            reject(e)
+            return
+        }
+
+        let nonce = await getNonce()
+        const userId = store.state.web3.account
+        nonce = nonce ? nonce + 1 : 1
+        
+        pool['communityId'] = stakingFactoryId;
+        pool['pid'] = parseInt(pool.pid)
+        pool['stakerCount'] = parseInt(pool.stakerCount)
+        pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
+        pool['apy'] = apy
+        console.log(pool);
+        const originMessage = JSON.stringify(pool)
+        let signature = ''
+        try{
+            signature = await signMessage(originMessage + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
+        const params = {
+            userId,
+            infoStr: originMessage,
+            nonce,
+            signature
+        }
+        try{
+            const res = await updatePoolInfo(params)
+            // update nonce in storage
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            reject(e)
+        }
+
+    })
+}

@@ -2,7 +2,7 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, updatePoolInfo } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
@@ -174,7 +174,7 @@ export const completeCommunityInfo = async (form, type) => {
             resolve(res)
         }catch(e) {
             console.log('Insert community info failed', e);
-            reject(500)
+            reject(e)
         }
     })
 
@@ -186,7 +186,7 @@ export const completeCommunityInfo = async (form, type) => {
  */
 export const getDistributionEras = async (update=false) => {
     return new Promise(async (resolve, reject) => {
-        const distribuitons = store.state.web3.distribuitons;
+        const distribuitons = store.state.web3.distributions;
         if (!update && distribuitons) {
             resolve(distribuitons)
         }

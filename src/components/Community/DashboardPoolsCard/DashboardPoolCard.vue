@@ -37,6 +37,8 @@
 <script>
 import { getCToken } from '@/utils/web3/asset'
 import { mapState } from 'vuex'
+import { handleApiErrCode } from '@/utils/helper'
+import { updatePoolApy } from '@/utils/web3/pool'
 
 export default {
   name: 'DashboardPoolCard',
@@ -65,6 +67,25 @@ export default {
           title: this.$t('tip.tips'),
           variant: 'info'
         })
+        return;
+      }
+      console.log(123, this.pool);
+      try{
+        this.updating = true
+        await updatePoolApy(this.pool, parseFloat(this.apy))
+        this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        // 如果有本地的矿池数据，则更新本地矿池数据
+        
+
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally{
+        this.updating = false
       }
     }
   },
