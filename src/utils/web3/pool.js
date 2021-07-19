@@ -2,7 +2,7 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity } from '@/apis/api'
+import { updatePoolInfo } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
@@ -10,7 +10,7 @@ import {
     createWatcher
   } from '@makerdao/multicall'
 import { getCToken, getRegitryAssets } from './asset'
-import { getMyStakingFactory } from './community'
+import { getMyStakingFactory, getNonce } from './community'
 
 
 /**

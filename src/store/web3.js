@@ -21,6 +21,7 @@ export default {
     cTokens: {},
     distributions: null,
     readonlyProvider: null,
+    allPools: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -74,6 +75,9 @@ export default {
     },
     saveReadonlyProvider: (state, readonlyProvider) => {
       state.readonlyProvider = readonlyProvider
+    },
+    saveAllPools: (state, allPools) => {
+      state.allPools = allPools
     }
   },
   getters: {

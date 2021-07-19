@@ -43,7 +43,7 @@ import { updatePoolApy } from '@/utils/web3/pool'
 export default {
   name: 'DashboardPoolCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId']),
+    ...mapState('web3', ['stakingFactoryId', 'allPools']),
     totalDeposited() {
       return this.pool.totalStakedAmount / this.decimal
     }
@@ -78,7 +78,19 @@ export default {
           variant: 'success'
         })
         // 如果有本地的矿池数据，则更新本地矿池数据
-        
+        if (this.allPools){
+          for (const i=0; i < this.pool.length; i++){
+            let foundPool = false
+            if (this.allPools[i].communityId === this.stakingFactoryId && this.allPools[i].pid === this.pool.pid){
+              foundPool = true
+              this.allPools[i].apy = this.apy
+            }
+          }
+          if (!foundPool){
+            this.allPools.push(this.pool)
+          }
+          this.$store.commit('web3/saveAllPools', this.allPools)
+        }
 
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
