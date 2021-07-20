@@ -100,6 +100,7 @@ export const Transaction_config = {
  */
  export const errCode = {
   NO_STAKING_FACTORY: 101,
+  ASSET_ID_ERROR: 102,
   BLOCK_CHAIN_ERR: 351,
   CONTRACT_CREATE_FAIL: 352,
   USER_CANCEL_SIGNING: 353,

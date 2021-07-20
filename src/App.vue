@@ -165,8 +165,11 @@ import { stanfiAddress } from './utils/commen/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
 import { setupNetwork, test, chainChanged } from './utils/web3/web3'
-import { changeAccount } from './utils/web3/account'
+import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
+import { getAllCommunities } from '@/utils/web3/community'
+import { getAllPools } from '@/utils/web3/pool'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   data () {
@@ -191,6 +194,7 @@ export default {
     ]),
     ...mapState('polkadot', ['clCommunitys']),
     ...mapState(['lang']),
+    ...mapState('web3', ['allCommunities']),
     isAdmin () {
       if (!this.clCommunitys || !this.projects) return false
       const isCrowdloanAdmin = this.clCommunitys?.indexOf(this.account?.address) !== -1
@@ -333,6 +337,22 @@ export default {
       } else {
         this.navBoxEl[0].classList.remove('fixed-nav-box')
       }
+    },
+    // BSC data
+    async fetchData () {
+      if (!this.allCommunities) {
+        try{
+          this.loading = true
+          getAllCommunities()
+          getAllPools()
+        }catch(e){
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param)
+          })
+        }finally{
+          this.loading = false
+        }
+      }
     }
   },
   watch: {
@@ -352,6 +372,11 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY))
+
+    // BSC data
+    this.fetchData();
+
+    // polkadot data
     this.getCommunitys()
     this.getCrowdstacking()
     // const scrollEl = document.getElementsByClassName('scroll-content')
@@ -375,7 +400,7 @@ export default {
     try {
       setupNetwork()
       chainChanged()
-      changeAccount()
+      accountChanged()
       subBlockNum()
     } catch (e) {
       console.log(533, e)
@@ -386,14 +411,12 @@ export default {
       console.log('Is mobile device')
       this.$store.commit('polkadot/saveAccount', null)
     }
-    // 获取众贷和验证者投票卡片
-    this.getCommunitys()
-    this.getCrowdstacking()
+
     // 初始化apis
     initApis()
     this.isConnectingPolkadot = false
 
-    // 从钱包加载账号
+    // 从钱包加载波卡账号
     loadPolkadotAccounts()
   }
 }

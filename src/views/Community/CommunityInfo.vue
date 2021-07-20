@@ -215,6 +215,7 @@ import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
+  getAllCommunities
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 
@@ -369,7 +370,8 @@ export default {
             title: this.$t("tip.tips"),
             variant: "success",
           });
-          await sleep(3);
+          await getAllCommunities(true)
+          await sleep(1);
           this.$router.push("/community/pool-dashboard");
       } catch (e) {
           const handleRes = handleApiErrCode(e, (info, params) => {

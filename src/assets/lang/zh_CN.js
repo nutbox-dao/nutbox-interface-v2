@@ -51,6 +51,7 @@ module.exports = {
     blog: '博客',
     changeSteemNode: 'steem节点(可选)',
     contractAddr: '合约地址',
+    search:'搜索',
 
     dashboard: "仪表盘",
     contributions: "我的投票",
@@ -370,7 +371,12 @@ module.exports = {
     noPools:'还没有创建矿池',
     userCount: "质押用户数",
     totalDeposit: "总质押数",
-    hasMined: "已挖Token"
+    totalDepositDollor: "总质押金额",
+    hasMined: "已挖Token",
+    more: '更多',
+    join: '参与',
+    createYourCommunity: "创建你的社区",
+    communityDashboard: "管理你的社区"
   },
   asset: {
     network: "网络",
