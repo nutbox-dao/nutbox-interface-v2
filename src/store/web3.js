@@ -58,7 +58,7 @@ export default {
     saveNonce: (state, nonce) => {
       state.nonce = nonce
     },
-    saveCommunities: (state, communities) => {
+    saveAllCommunities: (state, communities) => {
       state.allCommunities = communities
     },
     saveMyPools: (state, myPools) => {
@@ -83,6 +83,21 @@ export default {
   getters: {
     isMainChain:(state) => {
       return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID)
+    },
+    communityCard: (state) => {
+      const allPools = state.allPools;
+      const allCommunities = state.allCommunities
+      if (!allPools || !allCommunities) return []
+      const cardInfo = allCommunities.map(c => {
+        const pools = allPools.filter(pool => pool.communityId === c.id)
+        return {
+          ...c,
+          assetLogos: pools.map(p => p.icon),
+          apys: pools.map(p => p.apy)
+        }
+      })
+      console.log(9872435, cardInfo);
+      return cardInfo
     }
   }
 }

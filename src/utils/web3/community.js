@@ -2,14 +2,14 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, updatePoolInfo } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
 import {
     createWatcher
   } from '@makerdao/multicall'
-import { getCToken, getRegitryAssets } from './asset'
+import { getCToken } from './asset'
 
 /**
  * Get community admin's staking factory id
@@ -84,6 +84,25 @@ export const getMyCommunityInfo = async (update=false) => {
             }
         }catch(e){
             store.commit('web3/saveCommunityInfo', null)
+            reject(e)
+        }
+    })
+}
+
+/**
+ * get all community infos
+ */
+export const getAllCommunities = async (update=false) => {
+    return new Promise(async  (resolve, reject) => {
+        if (!update && store.state.web3.allCommunities && store.state.web3.allCommunities.length > 0) {
+            resolve(store.state.allCommunities)
+            return;
+        }
+        try{
+            const communities = await gac()
+            store.commit('web3/saveAllCommunities', communities)
+            resolve(communities)
+        }catch(e){
             reject(e)
         }
     })

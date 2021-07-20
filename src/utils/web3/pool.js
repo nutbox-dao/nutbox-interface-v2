@@ -2,7 +2,7 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { updatePoolInfo } from '@/apis/api'
+import { updatePoolInfo, getAllPools as gap } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
@@ -12,6 +12,28 @@ import {
 import { getCToken, getRegitryAssets } from './asset'
 import { getMyStakingFactory, getNonce } from './community'
 
+
+/**
+ * Get all pools that user have upload to backend
+ * @returns 
+ */
+export const getAllPools = async () => {
+    return new Promise(async (resolve, reject) => {
+        const poolsCache = store.state.web3.allPools
+        if (poolsCache) {
+            resolve(poolsCache)
+            return;
+        }
+        try{
+            const allPools = await gap()
+            store.commit('web3/saveAllPools', allPools)
+            resolve(allPools)
+        }catch(e) {
+            reject(e)
+            return
+        }
+    })
+}
 
 /**
  * Get opened pools of community

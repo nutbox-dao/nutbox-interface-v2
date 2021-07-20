@@ -16,7 +16,10 @@ export const getAccounts = async () => {
     return accounts
 }
 
-export const changeAccount = async () => {
+/**
+ * Monitor BSC account change event
+ */
+export const accountChanged = async () => {
     const metamask = await getEthWeb()
     metamask.on('accountsChanged', (accounts) => {
         console.log('Changed accounts', accounts);

@@ -7,15 +7,15 @@
       </div>
       <div class="col-md-8 btn-group">
         <button v-if="communityId"
-                @click="$router.push('/community/pool-dashboard')">Manage Your Community</button>
+                @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button>
         <button v-else @click="$router.push('/community/create-economy')">
           <i class="add-icon"></i>
-          <span>Create Your Own Staking Economy</span>
+          <span>{{ $t('community.createYourCommunity') }}</span>
         </button>
       </div>
     </div>
     <b-input-group class="search-input">
-      <b-form-input placeholder="Search"></b-form-input>
+      <b-form-input :placeholder="$t('message.search')"></b-form-input>
       <template #append>
         <i class="search-icon"></i>
       </template>
@@ -25,12 +25,12 @@
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
     <template v-else>
-      <div class="empty-bg" v-if="allCommunities && allCommunities.length === 0">
+      <div class="empty-bg" v-if="communityCard && communityCard.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>{{ $t("tip.noContribuitons") }}</p>
       </div>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of allCommunities" :key="index">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of communityCard" :key="index">
           <CommunityCard :card-info="cItem"/>
         </div>
       </div>
@@ -40,9 +40,8 @@
 
 <script>
 import CommunityCard from '@/components/Community/CommunityCard'
-import { mapState } from 'vuex'
-import { getAllCommunities } from '@/apis/api'
-import { getMyCommunityInfo } from '@/utils/web3/community'
+import { mapGetters, mapState } from 'vuex'
+import { getMyCommunityInfo, getAllCommunities } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '@/config'
 
@@ -56,28 +55,33 @@ export default {
   },
   computed: {
     ...mapState({
-      userEconomy: state => state.community.userEconomy,
       allCommunities: state => state.web3.allCommunities,
       communityId: state => state.web3.stakingFactoryId
-    })
+    }),
+    ...mapGetters('web3', ['communityCard']),
   },
   mounted () {
-    this.fetchData()
     getMyCommunityInfo().catch(e => {
       if (e === errCode.NO_STAKING_FACTORY) return;
       handleApiErrCode(e, (tip, param) => {
         this.$bvToast.toast(tip, param)
       })
     })
+    this.fetchData()
   },
   methods: {
     async fetchData () {
       if (!this.allCommunities) {
-        this.loading = true
-        // const userStakingId = await getMyStakingFactory()
-        const allCommunities = await getAllCommunities()
-        this.$store.commit('web3/saveCommunities', allCommunities)
-        this.loading = false
+        try{
+          this.loading = true
+          await getAllCommunities()
+        }catch(e){
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param)
+          })
+        }finally{
+          this.loading = false
+        }
       }
     }
   }

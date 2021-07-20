@@ -69,7 +69,6 @@ export default {
         })
         return;
       }
-      console.log(123, this.pool);
       try{
         this.updating = true
         await updatePoolApy(this.pool, parseFloat(this.apy))
@@ -78,9 +77,9 @@ export default {
           variant: 'success'
         })
         // 如果有本地的矿池数据，则更新本地矿池数据
+        let foundPool = false
         if (this.allPools){
           for (const i=0; i < this.pool.length; i++){
-            let foundPool = false
             if (this.allPools[i].communityId === this.stakingFactoryId && this.allPools[i].pid === this.pool.pid){
               foundPool = true
               this.allPools[i].apy = this.apy
