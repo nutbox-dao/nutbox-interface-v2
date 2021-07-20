@@ -4,6 +4,7 @@
   position: relative;
   .poster{
     @include card-poster-bg(6.2rem);
+    min-height: 6.2rem;
     background-color: white;
   }
   .large-poster{
