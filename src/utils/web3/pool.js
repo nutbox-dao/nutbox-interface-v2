@@ -17,15 +17,16 @@ import { getMyStakingFactory, getNonce } from './community'
  * Get all pools that user have upload to backend
  * @returns 
  */
-export const getAllPools = async () => {
+export const getAllPools = async (update=false) => {
     return new Promise(async (resolve, reject) => {
         const poolsCache = store.state.web3.allPools
-        if (poolsCache) {
+        if (!update && poolsCache) {
             resolve(poolsCache)
             return;
         }
         try{
             const allPools = await gap()
+            console.log('update all pools', allPools);
             store.commit('web3/saveAllPools', allPools)
             resolve(allPools)
         }catch(e) {
@@ -208,7 +209,6 @@ export const updatePoolsRatio = async (form) => {
         pool['stakerCount'] = parseInt(pool.stakerCount)
         pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
         pool['apy'] = apy
-        console.log(pool);
         const originMessage = JSON.stringify(pool)
         let signature = ''
         try{

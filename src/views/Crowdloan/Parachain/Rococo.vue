@@ -215,7 +215,7 @@ export default {
         this.status = this.getFundInfo && this.getFundInfo.status;
         return;
       };
-      const res = await getOnshowingCrowdloanCard({ relaychain: "rococo" });
+      const res = await getOnshowingCrowdloanCard("rococo");
       loadFunds(res)
       const para = res.filter(c => parseInt(c.para.paraId) === this.paraId)
       this.status = para.length > 0 ? para.status : 'Completed'

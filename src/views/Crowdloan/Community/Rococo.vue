@@ -98,7 +98,7 @@ export default {
   },
   async created() {
     if (this.communityInfo) return;
-    const res = await getOnshowingComCRCard({ relaychain: "rococo" });
+    const res = await getOnshowingComCRCard("rococo");
     loadFunds(res)
   },
 };

@@ -58,7 +58,7 @@ export default {
     if (this.showingCard() && this.showingCard().length > 0) {
       return
     };
-    const res = await getOnshowingCrowdloanCard({ relaychain: 'kusama' })
+    const res = await getOnshowingCrowdloanCard('kusama')
     // 缓存数据
     loadFunds(res)
   }

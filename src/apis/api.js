@@ -42,7 +42,7 @@ export const postContribution = async (params) => post(CROWD_LOAN_API_URL + '/co
  * 获取要展示的卡片信息
  * relaychain： ‘rococo'
  */
-export const getOnshowingCrowdloanCard = async (params) => post(CROWD_LOAN_API_URL + '/crowdloan/live', params)
+export const getOnshowingCrowdloanCard = async (relaychain) => post(CROWD_LOAN_API_URL + '/crowdloan/live', {relaychain})
 
 /**
  * 获取个人界面的contribution记录

@@ -10,7 +10,7 @@
           <img class="poster" :src="communityInfo.poster" alt="">
           <i class="back-icon" @click="$router.back()"></i>
           <div class="second-card">
-            <img class="large-logo" :src="communityInfo.iconUrl" alt="" />
+            <img class="large-logo" :src="communityInfo.icon" alt="" />
             <div class="project-info text-left">
               <div class="d-flex align-items-center">
                 <a class="font20 font-bold title icon-title official-link-icon m-0"
@@ -20,9 +20,7 @@
                 <span>矿池余额：1000.00</span>
               </div>
               <div class="desc font14 mt-2"
-                   v-html="(communityInfo.description &&
-                   (communityInfo.description[lang] ||
-                   communityInfo.description['zh-CN']))"></div>
+                   v-html="(communityInfo.description)"></div>
             </div>
           </div>
         </div>
@@ -34,7 +32,12 @@
           </div>
         </div>
         <div class="card-container mt-4">
-          <component :is="tabOptions[activeTab].component"></component>
+          <component :is="tabOptions[activeTab].component"
+            :crowdloanPools='crowdloanPools'
+            :crowdstakingPools='crowdstakingPools'
+            :delegatePools='delegatePools'
+            :erc20Pools='erc20Pools'>
+          </component>
         </div>
       </template>
     </div>
@@ -42,10 +45,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import { getMyCommunityInfo, getOnshowingCrowdloanCard as getOnshowingComCRCard } from '@/apis/api'
-import { stanfiAddress } from '@/utils/commen/account'
-import { loadFunds } from '@/utils/kusama/crowdloan'
+import { mapGetters } from 'vuex'
 import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
 
@@ -58,7 +58,7 @@ export default {
   props: {},
   data () {
     return {
-      communityNominatorId: null,
+      communityId: null,
       activeTab: 0,
       tabOptions: [
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
@@ -69,37 +69,35 @@ export default {
     }
   },
   computed: {
-    ...mapState('kusama', ['showingCrowdloan']),
-    ...mapGetters('kusama', ['showingCard']),
-    ...mapState(['lang']),
-    crowdloanInfo () {
-      const id = stanfiAddress(this.$route.query.id || '15VdT2AoEvdwjLtevCipjdYYj32kN8HZLjJtR8U3EXSQXRZL')
-      if (this.showingCard && this.showingCard.length > 0) {
-        return this.showingCard.filter(
-          (a) => stanfiAddress(a.community.communityId) === id
-        )
-      }
-      return []
+    ...mapGetters('web3', ['communityById']),
+    communityInfo(){
+      const com = this.communityById(this.communityId)
+      console.log(245, com);
+      return com
     },
-    communityInfo () {
-      return this.crowdloanInfo.length > 0 && this.crowdloanInfo[0].community
+    pools(){
+      return this.communityInfo.pools
+    },
+    crowdloanPools() {
+      return this.pools ? this.pools.filter(p => p.type=='SubstrateCrowdloanAssetRegistry') : []
+    },
+    crowdstakingPools() {
+      return this.pools ? this.pools.filter(p => p.type=='SubstrateNominateAssetRegistry') : []
+    },
+    delegatePools(){
+      return this.pools ? this.pools.filter(p => p.type=='SteemHiveDelegateAssetRegistry') : []
+    },
+    erc20Pools(){
+      return this.pools ? this.pools.filter(p => p.type=='HomeChainAssetRegistry') : []
     }
   },
   mounted () {
-    const nominator = stanfiAddress(this.$route.params.nominatorId)
-    if (nominator) {
-      this.communityNominatorId = nominator
-    }
+    this.communityId = this.$route.query.id
+    console.log(2345, this.communityId);
   },
   async created () {
-    if (this.communityInfo) return
-    const res = await getOnshowingComCRCard({ relaychain: 'kusama' })
-    loadFunds(res)
   },
   methods: {
-    async getCommunityInfo () {
-      this.communityInfo = await getMyCommunityInfo(this.$route.query.id)
-    }
   }
 }
 </script>

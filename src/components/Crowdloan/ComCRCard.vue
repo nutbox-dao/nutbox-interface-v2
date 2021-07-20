@@ -5,12 +5,12 @@
     </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img :src="crowdloan.para.iconUrl" alt="" />
+        <img :src="crowdloan.icon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span @click="toParaChain">{{ crowdloan.para.paraName }}</span>
-          <i class="link-icon" @click="toParaChain"></i>
+          <span>{{ crowdloan.poolName }}</span>
+          <i class="link-icon"></i>
         </div>
       </div>
 
@@ -36,17 +36,6 @@
         <span class="name"> {{ $t('cl.contributed') }} </span>
         <div class="info">
           <RaisedLabel :fund="getFundInfo" :relaychain='chain' :isBalance="true" />
-        </div>
-      </div>
-      <div class="project-info-container">
-        <span class="name"> {{ $t('cl.rewards') }} </span>
-        <div class="info">
-          <RewardToken
-            :icon="token.icon"
-            :token="token.name"
-            v-for="(token, idx) in rewardTokens"
-            :key="idx"
-          />
         </div>
       </div>
     </div>
@@ -87,8 +76,7 @@
         :communityId="communityId"
         :fund="getFundInfo"
         :relaychain='chain'
-        :paraName="crowdloan.para.paraName"
-        :communityNominatorId="communityNominatorId"
+        :paraName="crowdloan.poolName"
         @hideContribute="showContribute = false"
       />
     </b-modal>
@@ -112,7 +100,6 @@ import TipWithdraw from "@/components/Commen/TipWithdraw";
 import ContributorsLabel from "@/components/Commen/ContributorsLabel";
 import RaisedLabel from "@/components/Commen/RaisedLabel";
 import { calStatus } from "@/utils/commen/crowdloan";
-import RewardToken from "@/components/Commen/RewardToken";
 import { formatCountdown } from "@/utils/helper"
 
 export default {
@@ -126,13 +113,6 @@ export default {
   props: {
     crowdloan: {
       type: Object,
-    },
-    chain: {
-      type: String
-    },
-    communityNominatorId: {
-      type: String,
-      default: null
     }
   },
   components: {
@@ -140,12 +120,8 @@ export default {
     TipWithdraw,
     ContributorsLabel,
     RaisedLabel,
-    RewardToken,
   },
   methods: {
-    toParaChain() {
-      this.$router.push('/crowdloan/' + this.chain + '/parachain/' + this.crowdloan.para.paraId)
-    }
   },
   watch: {
     async currentBlockNum(newValue, _) {
@@ -170,8 +146,11 @@ export default {
   },
   computed: {
     ...mapState(["lang"]),
+    chain(){
+      return this.crowdloan.chainId == 2 ? 'polkadot' : 'kusama'
+    },
     getFundInfo() {
-      return this.fundInfo(this.paraId);
+      return this.fundInfo(this.crowdloan.paraId);
     },
     isConnected(){
      return this.$store.state[this.chain].isConnected
@@ -189,22 +168,10 @@ export default {
       return this.$store.getters[this.chain+'/cardInfo']
     },
     paraId() {
-      return parseInt(this.crowdloan.para.paraId);
+      return parseInt(this.crowdloan.paraId);
     },
     communityId() {
-      return this.crowdloan.community.communityId;
-    },
-    rewardTokens() {
-      if (this.crowdloan) {
-        let rewards = this.crowdloan.para.reward.concat(
-          this.crowdloan.community.reward
-        );
-        if (rewards.length > 3){
-          rewards = rewards.slice(0, 3)
-        }
-        return rewards
-      }
-      return [];
+      return this.crowdloan.communityAccount;
     },
     leasePeriod() {
       try {

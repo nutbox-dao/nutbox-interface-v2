@@ -1,60 +1,48 @@
 <template>
   <div class="row">
+    <div class="loading-bg" v-if="loading">
+      <img src="~@/static/images/loading.gif" alt="" />
+      <p class="font16">{{ $t("tip.loading") }}</p>
+    </div>
     <div
+      v-else
       class="col-xl-4 col-md-6 mb-4"
-      v-for="(crowdloan, idx) of crowdloanInfo"
+      v-for="(pool, idx) of crowdloanPools"
       :key="idx"
     >
-      <ComCRCard :crowdloan="crowdloan" :communityNominatorId='communityNominatorId' chain="kusama"/>
+      <ComCRCard :crowdloan="pool"/>
     </div>
   </div>
 </template>
 
 <script>
-import CrowdloanCard from '@/components/Crowdloan/CrowdloanCard'
-import { mapGetters, mapState } from 'vuex'
-import { stanfiAddress } from '@/utils/commen/account'
-import { getOnshowingCrowdloanCard as getOnshowingComCRCard } from '@/apis/api'
-import { loadFunds } from '@/utils/kusama/crowdloan'
 import ComCRCard from '@/components/Crowdloan/ComCRCard'
+import { getOnshowingCrowdloanCard } from '@/apis/api'
+import { loadFunds as loadKusamaFunds } from '@/utils/kusama/crowdloan'
+import { loadFunds as loadPolkadotFunds } from '@/utils/polkadot/crowdloan'
 
 export default {
   name: 'DCrowdLoan',
   components: { ComCRCard },
-  props: {},
-  data () {
+  data() {
     return {
-      communityNominatorId: null
+      loading: true
     }
   },
-  computed: {
-    ...mapState('kusama', ['showingCrowdloan']),
-    ...mapGetters('kusama', ['showingCard']),
-    ...mapState(['lang']),
-    crowdloanInfo () {
-      const id = stanfiAddress(this.$route.query.id || '15VdT2AoEvdwjLtevCipjdYYj32kN8HZLjJtR8U3EXSQXRZL')
-      if (this.showingCard && this.showingCard.length > 0) {
-        return this.showingCard.filter(
-          (a) => stanfiAddress(a.community.communityId) === id
-        )
-      }
-      return []
-    },
-    communityInfo () {
-      return this.crowdloanInfo.length > 0 && this.crowdloanInfo[0].community
+  props: {
+    crowdloanPools:{
+      type: Array
     }
   },
   mounted () {
-    const nominator = stanfiAddress(this.$route.params.nominatorId)
-    if (nominator) {
-      this.communityNominatorId = nominator
+    if (!this.$store.state.kusama.clProjectFundInfos || this.$store.state.kusama.clProjectFundInfos.length === 0){
+      getOnshowingCrowdloanCard('kusama').then(loadKusamaFunds)
     }
+    if (!this.$store.state.polkadot.clProjectFundInfos || this.$store.state.polkadot.clProjectFundInfos.length === 0) {
+      getOnshowingCrowdloanCard('polkadot').then(loadPolkadotFunds)
+    }
+    this.loading = false
   },
-  async created () {
-    // if (this.communityInfo) return
-    // const res = await getOnshowingComCRCard({ relaychain: 'kusama' })
-    // loadFunds(res)
-  }
 }
 </script>
 

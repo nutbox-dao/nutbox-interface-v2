@@ -112,6 +112,7 @@ export const subscribeFundInfo = async (crowdloanCard) => {
   }
 }
 
+// Get contribution details
 // 此过程最慢，使用异步加载的方式
 export const handleContributors = async (api, funds) => {
   try {

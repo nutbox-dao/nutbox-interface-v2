@@ -88,7 +88,7 @@ export default {
   },
   async created () {
     if (this.communityInfo) return
-    const res = await getOnshowingComCRCard({ relaychain: 'kusama' })
+    const res = await getOnshowingComCRCard('kusama')
     loadFunds(res)
   }
 }

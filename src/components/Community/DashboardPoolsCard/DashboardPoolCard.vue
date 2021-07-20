@@ -38,7 +38,8 @@
 import { getCToken } from '@/utils/web3/asset'
 import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
-import { updatePoolApy } from '@/utils/web3/pool'
+import { updatePoolApy, getAllPools } from '@/utils/web3/pool'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: 'DashboardPoolCard',
@@ -52,7 +53,7 @@ export default {
     return {
       decimal: 10,
       updating: false,
-      apy: 0
+      apy: null
     }
   },
   props: {
@@ -72,25 +73,15 @@ export default {
       try{
         this.updating = true
         await updatePoolApy(this.pool, parseFloat(this.apy))
+        console.log(2, this.allPools);
+        // 更新本地矿池数据
+        await sleep(1)
+        const aa = await getAllPools(true)
+        console.log(3, this.allPools);
         this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
-        // 如果有本地的矿池数据，则更新本地矿池数据
-        let foundPool = false
-        if (this.allPools){
-          for (const i=0; i < this.pool.length; i++){
-            if (this.allPools[i].communityId === this.stakingFactoryId && this.allPools[i].pid === this.pool.pid){
-              foundPool = true
-              this.allPools[i].apy = this.apy
-            }
-          }
-          if (!foundPool){
-            this.allPools.push(this.pool)
-          }
-          this.$store.commit('web3/saveAllPools', this.allPools)
-        }
-
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -101,6 +92,12 @@ export default {
     }
   },
   async mounted () {
+    if (this.allPools){
+        const p = this.allPools.filter(pool => pool.pid === this.pool.pid)
+        if (p.length > 0){
+          this.apy = p[0].apy
+        }
+      }
     const cToken = await getCToken(this.stakingFactoryId)
     this.decimal = cToken.decimal
   },

@@ -49,7 +49,7 @@ export default {
     ...mapGetters('rococo', ['showingCard']),
   },
   async created() {
-    const res = await getOnshowingCrowdloanCard({relaychain:"rococo"})
+    const res = await getOnshowingCrowdloanCard("rococo")
     await subscribeKusamaFundInfo(res);
   },
 };

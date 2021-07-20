@@ -88,6 +88,7 @@ export default {
       const allPools = state.allPools;
       const allCommunities = state.allCommunities
       if (!allPools || !allCommunities) return []
+      console.log('allpools', allPools);
       const cardInfo = allCommunities.map(c => {
         const pools = allPools.filter(pool => pool.communityId === c.id)
         return {
@@ -96,8 +97,18 @@ export default {
           apys: pools.map(p => p.apy)
         }
       })
-      console.log(9872435, cardInfo);
       return cardInfo
-    }
+    },
+    communityById: (state) => (communityId) => {
+      if (!state.allCommunities || !state.allPools) return {}
+      let community = state.allCommunities.filter(c => c.id === communityId)
+      const pools = state.allPools.filter(p => p.communityId === communityId)
+      if (!community || community.length === 0){
+        return {}
+      }
+      community = community[0]
+      community.pools = pools
+      return community
+    },
   }
 }
