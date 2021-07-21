@@ -29,6 +29,10 @@ function createChildKey(trieIndex) {
   );
 }
 
+/**
+ * Subscribe crowdloan info from relaychain
+ * @param {*} crowdloanCard 
+ */
 export const subscribeFundInfo = async (crowdloanCard) => {
   let unsubFund = store.state.kusama.subFund
   if (unsubFund) {
@@ -38,7 +42,7 @@ export const subscribeFundInfo = async (crowdloanCard) => {
   } else {
     store.commit('kusama/saveLoadingFunds', true)
   }
-  let paraId = crowdloanCard.map(c => parseInt(c.para.paraId))
+  let paraId = crowdloanCard.map(c => parseInt(c.paraId))
   paraId = [...new Set(paraId)]
   const api = await getApi()
   try {
@@ -67,7 +71,6 @@ export const subscribeFundInfo = async (crowdloanCard) => {
             raised,
             trieIndex
           } = fund
-          console.log('index', pId, trieIndex.toNumber());
           const [status, statusIndex] = await calStatus('kusama', end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
           let contributions = []
           // 如果有缓存，先直接用已经缓存的contribution数据
@@ -93,11 +96,8 @@ export const subscribeFundInfo = async (crowdloanCard) => {
         })
       }))
       funds = funds.sort((a, b) => a.statusIndex - b.statusIndex)
-      const idsSort = funds.map(f => f.paraId)
       if (funds.length > 0) {
-        const showingcrowdloanCard = crowdloanCard.filter(c => idsSort.indexOf(parseInt(c.para.paraId)) !== -1).sort((a, b) => idsSort.indexOf(parseInt(a.para.paraId)) - idsSort.indexOf(parseInt(b.para.paraId)))
         store.commit('kusama/saveClProjectFundInfos', funds)
-        store.commit('kusama/saveShowingCrowdloan', showingcrowdloanCard)
         // 异步加载投票数据
         handleContributors(api, funds)
       } else {
@@ -136,17 +136,20 @@ export const handleContributors = async (api, funds) => {
   }
 }
 
+/**
+ * 
+ * @param {*} res 
+ */
 export function loadFunds(res) {
   let funds = [];
   // 预先展示服务器请求的数据
-  for (const crowdloan of res) {
-    const fund = crowdloan.para
+  for (const fund of res) {
     funds.push({
       paraId: parseInt(fund.paraId),
-      status: fund.status,
+      status: fund.statusStr,
       statusIndex: fund.statusIndex,
       cap: new BN(fund.cap),
-      end: new BN(fund.end),
+      end: new BN(fund.endBlock),
       firstPeriod: new BN(fund.firstPeriod),
       lastPeriod: new BN(fund.lastPeriod),
       raised: new BN(fund.raised),
@@ -154,11 +157,7 @@ export function loadFunds(res) {
       funds: [],
     });
   }
-  // 调整显示顺序
-  const idsSort = funds.map(f => f.paraId)
-  const showingcrowdloanCard = res.filter(c => idsSort.indexOf(parseInt(c.para.paraId)) !== -1).sort((a, b) => idsSort.indexOf(parseInt(a.para.paraId)) - idsSort.indexOf(parseInt(b.para.paraId)))
   store.commit("kusama/saveClProjectFundInfos", funds);
-  store.commit("kusama/saveShowingCrowdloan", showingcrowdloanCard);
   store.commit("kusama/saveLoadingFunds", false)
   subscribeFundInfo(res)
 }

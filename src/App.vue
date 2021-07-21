@@ -21,10 +21,10 @@
                 <i id="community-icon" class="menu-icon" />
                 <span>{{ $t("cs.community") }}</span>
               </b-nav-item>
-              <b-nav-item to="/crowdloan">
+              <!-- <b-nav-item to="/crowdloan">
                 <i id="farming-icon" class="menu-icon" />
                 <span>{{ $t("cl.crowdloan") }}</span>
-              </b-nav-item>
+              </b-nav-item> -->
               <b-nav-item to="/crowdstaking" router-tag="div">
                 <i id="stake-icon" class="menu-icon" />
                 <span>{{ $t("cs.crowdstaking") }}</span>

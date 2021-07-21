@@ -89,3 +89,5 @@ export const getNonce = async (accountId) => get(BACKEND_API_URL + '/user/getnon
 export const updatePoolInfo = async (params) => put(BACKEND_API_URL + '/pool/update', params)
 
 export const getAllPools = async () => get(BACKEND_API_URL + '/pool/getAll')
+
+export const getAllParachain = async () => get(BACKEND_API_URL + '/parachain/getall')

@@ -26,16 +26,20 @@ function createChildKey(trieIndex) {
   );
 }
 
-export const subscribeFundInfo = async (crowdloanCard) => {
-  let unsubFund = store.state.rococo.subFund
+/**
+ * Subscribe crowdloan info from relaychain
+ * @param {*} crowdloanCard 
+ */
+ export const subscribeFundInfo = async (crowdloanCard) => {
+  let unsubFund = store.state.polkadot.subFund
   if (unsubFund) {
     try {
       unsubFund()
     } catch (e) {}
   } else {
-    store.commit('rococo/saveLoadingFunds', true)
+    store.commit('polkadot/saveLoadingFunds', true)
   }
-  let paraId = crowdloanCard.map(c => parseInt(c.para.paraId))
+  let paraId = crowdloanCard.map(c => parseInt(c.paraId))
   paraId = [...new Set(paraId)]
   const api = await getApi()
   try {
@@ -49,14 +53,13 @@ export const subscribeFundInfo = async (crowdloanCard) => {
           continue
         }
         unwrapedFunds[i] = unwrapedFunds[i].unwrap()
-        unwrapedFunds[i].paraId = pId
+        unwrapedFunds[i].pId = pId
       }
+      const storedFunds = [...store.state.polkadot.clProjectFundInfos]
       funds = await Promise.all(unwrapedFunds.map(fund => {
-        console.log('fund', fund);
-        return new Promise(async(res)=>{
-          const pId = fund.paraId;
-          const unwrapedFund = fund
+        return new Promise(async (res) => {
           const {
+            pId,
             cap,
             depositor,
             end,
@@ -64,20 +67,16 @@ export const subscribeFundInfo = async (crowdloanCard) => {
             lastPeriod,
             raised,
             trieIndex
-          } = unwrapedFund
-          console.log('index', pId, trieIndex.toNumber());
-          // const childKey = createChildKey(trieIndex)
-          // const keys = await api.rpc.childstate.getKeys(childKey, '0x')
-          // const ss58keys = keys.map(k => encodeAddress(k, 0))
-          // const values = await Promise.all(keys.map(k => api.rpc.childstate.getStorage(childKey, k)))
-          // const contributions = values.map((v, idx) => ({
-          //   contributor: ss58keys[idx],
-          //   amount: BN(api.createType('(Balance, Vec<u8>)', v.unwrap())[0]),
-          //   memo: api.createType('(Balance, Vec<u8>)', v.unwrap())[1].toHuman()
-          // }))
-
-          
+          } = fund
           const [status, statusIndex] = await calStatus('polkadot', end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
+          let contributions = []
+          // 如果有缓存，先直接用已经缓存的contribution数据
+          if (storedFunds && storedFunds.length > 0) {
+            const f = storedFunds.filter(a => a.paraId === pId)
+            if (f && f.length > 0) {
+              contributions = f[0].funds || []
+            }
+          }
           res({
             paraId: pId,
             status,
@@ -93,74 +92,81 @@ export const subscribeFundInfo = async (crowdloanCard) => {
           })
         })
       }))
-      // for (let i = 0; i < unwrapedFunds.length; i++) {
-      //   const fund = unwrapedFunds[i]
-      //   const pId = paraId[i]
-      //   if (!fund.toJSON()) {
-      //     continue
-      //   }
-      //   unwrapedFunds[i].paraId = pId
-      //   const unwrapedFund = fund.unwrap()
-      //   const {
-      //     deposit,
-      //     cap,
-      //     depositor,
-      //     end,
-      //     firstPeriod,
-      //     lastPeriod,
-      //     raised,
-      //     trieIndex
-      //   } = unwrapedFund
-      //   console.log('index', pId, trieIndex.toNumber());
-      //   const childKey = createChildKey(trieIndex)
-      //   const keys = await api.rpc.childstate.getKeys(childKey, '0x')
-      //   const ss58keys = keys.map(k => encodeAddress(k, 0))
-      //   const values = await Promise.all(keys.map(k => api.rpc.childstate.getStorage(childKey, k)))
-      //   const contributions = values.map((v, idx) => ({
-      //     contributor: ss58keys[idx],
-      //     amount: BN(api.createType('(Balance, Vec<u8>)', v.unwrap())[0]),
-      //     memo: api.createType('(Balance, Vec<u8>)', v.unwrap())[1].toHuman()
-      //   }))
-      //   const [status, statusIndex] = await calStatus('polkadot', end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
-      //   funds.push({
-      //     paraId: pId,
-      //     status,
-      //     statusIndex,
-      //     cap: new BN(cap),
-      //     depositor,
-      //     end: new BN(end),
-      //     firstPeriod: new BN(firstPeriod),
-      //     lastPeriod: new BN(lastPeriod),
-      //     raised: new BN(raised),
-      //     trieIndex,
-      //     funds: contributions
-      //   })
-      // }
       funds = funds.sort((a, b) => a.statusIndex - b.statusIndex)
-      const idsSort = funds.map(f => f.paraId)
       if (funds.length > 0) {
-        const showingcrowdloanCard = crowdloanCard.filter(c => idsSort.indexOf(parseInt(c.para.paraId)) !== -1).sort((a, b) => idsSort.indexOf(parseInt(a.para.paraId)) - idsSort.indexOf(parseInt(b.para.paraId)))
-        store.commit('rococo/saveClProjectFundInfos', funds)
-        store.commit('rococo/saveShowingCrowdloan', showingcrowdloanCard)
+        store.commit('polkadot/saveClProjectFundInfos', funds)
+        // 异步加载投票数据
+        handleContributors(api, funds)
       } else {
-        store.commit('rococo/saveSubFund', null);
+        store.commit('polkadot/saveSubFund', null);
       }
-      store.commit('rococo/saveLoadingFunds', false)
+      store.commit('polkadot/saveLoadingFunds', false)
     }));
-    store.commit('rococo/saveSubFund', unsubFund);
+    store.commit('polkadot/saveSubFund', unsubFund);
   } catch (e) {
-    console.error('error', e);
-    store.commit('rococo/saveLoadingFunds', false)
+    console.log('error', e);
+    store.commit('polkadot/saveLoadingFunds', false)
   }
 }
 
 
 
+// Get contribution details
+// 此过程最慢，使用异步加载的方式
+export const handleContributors = async (api, funds) => {
+  try {
+    const updateFunds = await Promise.all(funds.map(fund => {
+      return new Promise(async (res) => {
+        const childKey = createChildKey(fund.trieIndex)
+        const keys = await api.rpc.childstate.getKeys(childKey, '0x')
+        const ss58keys = keys.map(k => encodeAddress(k, 0))
+        const values = await Promise.all(keys.map(k => api.rpc.childstate.getStorage(childKey, k)))
+        const contributions = values.map((v, idx) => ({
+          contributor: ss58keys[idx],
+          amount: BN(api.createType('(Balance, Vec<u8>)', v.unwrap())[0]),
+        }))
+        fund.funds = contributions || []
+        res(fund)
+      })
+    }))
+    store.commit('polkadot/saveClProjectFundInfos', updateFunds)
+  } catch (e) {
+    console.log(4523, e);
+  }
+}
+
+/**
+ * 
+ * @param {*} res 
+ */
+export function loadFunds(res) {
+  let funds = [];
+  // 预先展示服务器请求的数据
+  for (const fund of res) {
+    funds.push({
+      paraId: parseInt(fund.paraId),
+      status: fund.statusStr,
+      statusIndex: fund.statusIndex,
+      cap: new BN(fund.cap),
+      end: new BN(fund.endBlock),
+      firstPeriod: new BN(fund.firstPeriod),
+      lastPeriod: new BN(fund.lastPeriod),
+      raised: new BN(fund.raised),
+      trieIndex: new BN(fund.trieIndex),
+      funds: [],
+    });
+  }
+  // 调整显示顺序
+  store.commit("polkadot/saveClProjectFundInfos", funds);
+  store.commit("polkadot/saveLoadingFunds", false)
+  subscribeFundInfo(res)
+}
+
 export const withdraw = async (paraId, toast, callback) => {
-   await w('rococo', paraId, toast, callback)
+   await w('polkadot', paraId, toast, callback)
 }
 
 
 export const contribute = async (paraId, amount, communityId, childId, trieIndex, toast, callback) => {
-    await c('rococo', paraId, amount, communityId, childId, trieIndex, toast, callback)
+    await c('polkadot', paraId, amount, communityId, childId, trieIndex, toast, callback)
 }

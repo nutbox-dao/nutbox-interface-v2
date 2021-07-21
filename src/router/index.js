@@ -41,7 +41,7 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    redirect: '/crowdloan'
+    redirect: '/community'
   },
   {
     path: '/wallet',
@@ -69,49 +69,6 @@ const routes = [
         component: RococoWallet
       }
     ]
-  },
-  {
-    path: '/crowdloan',
-    name: 'crowdloan',
-    component: Crowdloan,
-    redirect: '/crowdloan/kusama',
-    children: [
-      {
-        path: 'kusama',
-        name: 'kusama',
-        component: KusamaCrowdloan
-      },
-      {
-        path: 'polkadot',
-        name: 'polkadot',
-        component: PolkadotCrowdloan
-      },
-      {
-        path: 'rococo',
-        name: 'rococo',
-        component: RococoCrowdloan
-      }
-    ]
-  },
-  {
-    path: '/crowdloan/rococo/community/:communityid/:nominatorId',
-    component: RococoCommunity
-  },
-  {
-    path: '/crowdloan/kusama/community/:communityid',
-    component: KusamaCommunity
-  },
-  {
-    path: '/crowdloan/kusama/community/:communityid/:nominatorId',
-    component: KusamaCommunity
-  },
-  {
-    path: '/crowdloan/rococo/parachain/:paraid',
-    component: RococoParachain
-  },
-  {
-    path: '/crowdloan/kusama/parachain/:paraid',
-    component: KusamaParachain
   },
   {
     path: '/crowdstaking',

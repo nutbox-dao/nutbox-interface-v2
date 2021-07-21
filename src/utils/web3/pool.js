@@ -2,7 +2,7 @@ import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
-import { updatePoolInfo, getAllPools as gap } from '@/apis/api'
+import { updatePoolInfo, getAllPools as gap, getAllParachain as getAP } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
@@ -11,6 +11,8 @@ import {
   } from '@makerdao/multicall'
 import { getCToken, getRegitryAssets } from './asset'
 import { getMyStakingFactory, getNonce } from './community'
+import { loadFunds as loadKusamaFunds } from '../kusama/crowdloan'
+import { loadFunds as loadPolkadotFunds } from '../polkadot/crowdloan'
 
 
 /**
@@ -234,5 +236,29 @@ export const updatePoolsRatio = async (form) => {
             reject(e)
         }
 
+    })
+}
+
+/**
+ * Get All parachain from backend
+ */
+export const getAllParachain = async (update=false) => {
+    return new Promise(async (resolve, reject) => {
+        const allParachian = store.state.allParachain
+        if (!update && allParachian){
+            resolve(allParachian)
+            return;
+        }
+        try{
+            const res = await getAP()
+            const kusamaCL = res.filter(r => r.chainId === 3)
+            const polkadotCL = res.filter(r => r.chainId === 2)
+            loadKusamaFunds(kusamaCL)
+            // loadPolkadotFunds(polkadotCL)
+            store.commit('saveAllParachain', res)
+            resolve(res)
+        }catch(e){
+            reject(e)
+        }
     })
 }

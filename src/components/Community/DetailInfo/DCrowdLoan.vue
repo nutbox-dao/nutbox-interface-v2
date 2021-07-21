@@ -20,6 +20,8 @@ import ComCRCard from '@/components/Crowdloan/ComCRCard'
 import { getOnshowingCrowdloanCard } from '@/apis/api'
 import { loadFunds as loadKusamaFunds } from '@/utils/kusama/crowdloan'
 import { loadFunds as loadPolkadotFunds } from '@/utils/polkadot/crowdloan'
+import { getAllParachain } from '@/utils/web3/pool'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DCrowdLoan',
@@ -35,13 +37,12 @@ export default {
     }
   },
   mounted () {
-    if (!this.$store.state.kusama.clProjectFundInfos || this.$store.state.kusama.clProjectFundInfos.length === 0){
-      getOnshowingCrowdloanCard('kusama').then(loadKusamaFunds)
-    }
-    if (!this.$store.state.polkadot.clProjectFundInfos || this.$store.state.polkadot.clProjectFundInfos.length === 0) {
-      getOnshowingCrowdloanCard('polkadot').then(loadPolkadotFunds)
-    }
-    this.loading = false
+    getAllParachain().then(() => {
+      this.loading = false
+    }).catch(e => {
+      this.loading = false
+      
+    })
   },
 }
 </script>

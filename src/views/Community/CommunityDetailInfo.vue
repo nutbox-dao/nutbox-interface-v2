@@ -17,7 +17,7 @@
                    :href="communityInfo.website"
                    target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
                 <i class="v-line"></i>
-                <span>矿池余额：1000.00</span>
+                <!-- <span>矿池余额：1000.00</span> -->
               </div>
               <div class="desc font14 mt-2"
                    v-html="(communityInfo.description)"></div>
