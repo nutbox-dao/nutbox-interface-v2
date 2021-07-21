@@ -191,3 +191,28 @@ export const getLeasePeriod = async (relaychain) => {
   store.commit(relaychain + '/saveClLeasePeriod', leasePeriod)
   return leasePeriod
 }
+
+/**
+ * Sort pools use status of parachain
+ * @param {*} pools crowdloan pools
+ * @param {*} parachains all parachains
+ */
+export const sortPoolCard = (pools, parachains) => {
+  const poolsStatus = pools.map(pool => {
+    const para = parachains.filter(para => pool.chainId === para.chainId && pool.paraId === para.paraId)
+    if (para.length === 0){
+      return {
+        ...pool,
+        statusStr: PARA_STATUS.COMPLETED,
+        statusIndex: 2
+      }
+    }else{
+      return {
+        ...pool,
+        statusStr: para[0].statusStr,
+        statusIndex: para[0].statusIndex
+      }
+    }
+  })
+  return poolsStatus.sort((a, b) => a.statusIndex - b.statusIndex)
+}

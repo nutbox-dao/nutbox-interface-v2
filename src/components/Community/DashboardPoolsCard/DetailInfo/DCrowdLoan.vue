@@ -7,7 +7,7 @@
     <div
       v-else
       class="col-xl-4 col-md-6 mb-4"
-      v-for="(pool, idx) of crowdloanPools"
+      v-for="(pool, idx) of sortedPools"
       :key="idx"
     >
       <ComCRCard :crowdloan="pool"/>
@@ -17,18 +17,17 @@
 
 <script>
 import ComCRCard from '@/components/Crowdloan/ComCRCard'
-import { getOnshowingCrowdloanCard } from '@/apis/api'
-import { loadFunds as loadKusamaFunds } from '@/utils/kusama/crowdloan'
-import { loadFunds as loadPolkadotFunds } from '@/utils/polkadot/crowdloan'
 import { getAllParachain } from '@/utils/web3/pool'
 import { mapState } from 'vuex'
+import { sortPoolCard } from '@/utils/commen/crowdloan'
 
 export default {
   name: 'DCrowdLoan',
   components: { ComCRCard },
   data() {
     return {
-      loading: true
+      loading: true,
+      sortedPools:[],
     }
   },
   props: {
@@ -36,12 +35,29 @@ export default {
       type: Array
     }
   },
+  computed: {
+    ...mapState({
+      allParachain: state => state.allParachain
+    }),
+    data (){
+      const { crowdloanPools, allParachain } = this
+      return { crowdloanPools, allParachain }
+    }
+  },
+  watch: {
+    data(newValue, oldValue) {
+      const { crowdloanPools, allParachain } = newValue
+      this.sortPoolCard = sortPoolCard(crowdloanPools, allParachain)
+    }
+  },
   mounted () {
-    getAllParachain().then(() => {
+    // get parachian info from backend
+    getAllParachain().then((res) => {
+      this.sortedPools = sortPoolCard(this.crowdloanPools, this.allParachain)
       this.loading = false
     }).catch(e => {
       this.loading = false
-      
+
     })
   },
 }
