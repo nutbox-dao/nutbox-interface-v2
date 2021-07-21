@@ -10,20 +10,20 @@
       v-for="(pool, idx) of sortedPools"
       :key="idx"
     >
-      <ComCRCard :crowdloan="pool"/>
+      <CrowdloanCard :crowdloan="pool"/>
     </div>
   </div>
 </template>
 
 <script>
-import ComCRCard from '@/components/Crowdloan/ComCRCard'
+import CrowdloanCard from '@/components/Crowdloan/CrowdloanCard'
 import { getAllParachain } from '@/utils/web3/pool'
 import { mapState } from 'vuex'
 import { sortPoolCard } from '@/utils/commen/crowdloan'
 
 export default {
   name: 'DCrowdLoan',
-  components: { ComCRCard },
+  components: { CrowdloanCard },
   data() {
     return {
       loading: true,
