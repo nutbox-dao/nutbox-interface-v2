@@ -49,13 +49,15 @@ import { mapGetters } from 'vuex'
 import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
 import DDelegate from '@/components/Community/DetailInfo/DDelegate'
+import DNominate from '@/components/Community/DetailInfo/DNominate'
 
 export default {
   name: 'CommunityDetailInfo',
   components: {
     DCrowdLoan,
     DCrowdStaking,
-    DDelegate
+    DDelegate,
+    DNominate
   },
   props: {},
   data () {
@@ -66,36 +68,36 @@ export default {
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
         { name: 'Crowdstaking', component: 'DCrowdStaking', chain: '' },
         { name: 'Delegate', component: 'DDelegate', chain: '' },
-        { name: 'Nominate', component: '', chain: '' }
+        { name: 'Nominate', component: 'DNominate', chain: '' }
       ]
     }
   },
   computed: {
     ...mapGetters('web3', ['communityById']),
-    communityInfo(){
+    communityInfo () {
       const com = this.communityById(this.communityId)
-      console.log(245, com);
+      console.log(245, com)
       return com
     },
-    pools(){
+    pools () {
       return this.communityInfo.pools
     },
-    crowdloanPools() {
-      return this.pools ? this.pools.filter(p => p.type=='SubstrateCrowdloanAssetRegistry') : []
+    crowdloanPools () {
+      return this.pools ? this.pools.filter(p => p.type == 'SubstrateCrowdloanAssetRegistry') : []
     },
-    crowdstakingPools() {
-      return this.pools ? this.pools.filter(p => p.type=='SubstrateNominateAssetRegistry') : []
+    crowdstakingPools () {
+      return this.pools ? this.pools.filter(p => p.type == 'SubstrateNominateAssetRegistry') : []
     },
-    delegatePools(){
-      return this.pools ? this.pools.filter(p => p.type=='SteemHiveDelegateAssetRegistry') : []
+    delegatePools () {
+      return this.pools ? this.pools.filter(p => p.type == 'SteemHiveDelegateAssetRegistry') : []
     },
-    erc20Pools(){
-      return this.pools ? this.pools.filter(p => p.type=='HomeChainAssetRegistry') : []
+    erc20Pools () {
+      return this.pools ? this.pools.filter(p => p.type == 'HomeChainAssetRegistry') : []
     }
   },
   mounted () {
     this.communityId = this.$route.query.id
-    console.log(2345, this.communityId);
+    console.log(2345, this.communityId)
   },
   async created () {
   },

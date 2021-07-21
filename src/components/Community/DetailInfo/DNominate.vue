@@ -1,5 +1,5 @@
 <template>
-  <div class="staking-block">
+  <div class="nominate-block">
     <div class="loading-bg" v-if="!isConnected">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
@@ -13,7 +13,7 @@
       <div class="cards-container">
         <div class="row">
           <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
-            <DStakingCard :crowdstaking="card"/>
+            <DNominateCard :crowdstaking="card"/>
           </div>
         </div>
       </div>
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import DStakingCard from '@/components/Community/DetailInfo/Cards/DStakingCard'
+import DNominateCard from '@/components/Community/DetailInfo/Cards/DNominateCard'
 import { mapState } from 'vuex'
 
 export default {
   name: 'DCrowdStaking',
   components: {
-    DStakingCard
+    DNominateCard
   },
   computed: {
     ...mapState('polkadot', ['isConnected', 'crowdstakings'])

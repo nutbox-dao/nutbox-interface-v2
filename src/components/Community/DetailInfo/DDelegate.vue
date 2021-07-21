@@ -1,5 +1,5 @@
 <template>
-  <div class="k-page delegate-page">
+  <div class="delegate-block">
     <div class="loading-bg" v-if="isLoading">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
