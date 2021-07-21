@@ -15,7 +15,7 @@ export default {
   background-color: white;
   position: fixed;
   top: 0;
-  left: 240px;
+  left: 12rem;
   bottom: 0;
   right: 0;
 }
@@ -23,6 +23,7 @@ export default {
   .blog-frame {
     position: absolute;
     left: 0!important;
+    top: 3.6rem!important;
   }
 }
 </style>

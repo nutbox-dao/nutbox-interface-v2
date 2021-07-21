@@ -48,12 +48,14 @@
 import { mapGetters } from 'vuex'
 import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
+import DDelegate from '@/components/Community/DetailInfo/DDelegate'
 
 export default {
   name: 'CommunityDetailInfo',
   components: {
     DCrowdLoan,
-    DCrowdStaking
+    DCrowdStaking,
+    DDelegate
   },
   props: {},
   data () {
@@ -63,7 +65,7 @@ export default {
       tabOptions: [
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
         { name: 'Crowdstaking', component: 'DCrowdStaking', chain: '' },
-        { name: 'Delegate', component: '', chain: '' },
+        { name: 'Delegate', component: 'DDelegate', chain: '' },
         { name: 'Nominate', component: '', chain: '' }
       ]
     }
