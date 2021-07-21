@@ -13,10 +13,7 @@
       <div class="cards-container">
         <div class="row">
           <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
-            <CrowdStakingCard
-              :is-community="true"
-              :crowdstaking="card"
-            />
+            <DStakingCard :crowdstaking="card"/>
           </div>
         </div>
       </div>
@@ -25,13 +22,13 @@
 </template>
 
 <script>
-import CrowdStakingCard from '@/components/CrowdStaking/CrowdStakingCard'
+import DStakingCard from '@/components/Community/DetailInfo/Cards/DStakingCard'
 import { mapState } from 'vuex'
 
 export default {
   name: 'DCrowdStaking',
   components: {
-    CrowdStakingCard
+    DStakingCard
   },
   computed: {
     ...mapState('polkadot', ['isConnected', 'crowdstakings'])

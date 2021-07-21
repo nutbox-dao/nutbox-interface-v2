@@ -1,6 +1,6 @@
 <template>
   <div class="multi-card">
-    <div v-if="!isCommunity" class="card-link-top-box">
+    <div class="card-link-top-box">
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="crowdstaking.community.iconUrl" alt="" />
@@ -18,17 +18,6 @@
       </div>
     </div>
     <div class="c-card">
-      <div class="card-top-box" v-if="isCommunity">
-        <div class="card-title-box flex-start-center">
-          <div class="card-single-icon">
-            <img class="icon1" :src="crowdstaking.project.iconUrl" alt="">
-          </div>
-          <div class="title-text font20 font-bold ml-2">
-            <span>{{ crowdstaking.project.projectName }}</span>
-          </div>
-        </div>
-        <div class="h-line mt-4 mb-3"></div>
-      </div>
       <div class="desc">
         {{ crowdstaking.community.description[lang] }}
       </div>
@@ -104,10 +93,6 @@ export default {
     };
   },
   props: {
-    isCommunity: {
-      type: Boolean,
-      default: false
-    },
     crowdstaking: {
       type: Object,
     },
