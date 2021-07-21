@@ -3,25 +3,13 @@ import VueRouter from 'vue-router'
 
 import Blog from '../views/Blog/Blog'
 import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
-import Crowdloan from '../views/Crowdloan/Crowdloan'
-import PolkadotCrowdloan from '../views/Crowdloan/Polkadot'
-import KusamaCrowdloan from '../views/Crowdloan/Kusama'
-import RococoCrowdloan from '../views/Crowdloan/Rococo'
 import Wallet from '../views/Wallet/Wallet'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
 import SteemWallet from '../views/Wallet/Steem'
 import RococoWallet from '../views/Wallet/Rococo'
-import Admin from '../views/Admin/Admin'
-import PolkadotAdmin from '../views/Admin/Polkadot'
-import KusamaAdmin from '../views/Admin/Kusama'
 import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
 import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
-import RococoAdmin from '../views/Admin/Rococo'
-import RococoCommunity from '../views/Crowdloan/Community/Rococo'
-import KusamaCommunity from '../views/Crowdloan/Community/Kusama'
-import RococoParachain from '../views/Crowdloan/Parachain/Rococo'
-import KusamaParachain from '../views/Crowdloan/Parachain/Kusama'
 import CommunityIndex from '../views/Community/Index'
 import Community from '../views/Community/Community'
 import DeployToken from '../views/Community/DeployToken'
@@ -90,24 +78,6 @@ const routes = [
   {
     path: '/blog',
     component: Blog
-  },
-  {
-    path: '/admin',
-    component: Admin,
-    children: [
-      {
-        path: '',
-        component: PolkadotAdmin
-      },
-      {
-        path: 'kusama',
-        component: KusamaAdmin
-      },
-      {
-        path: 'rococo',
-        component: RococoAdmin
-      }
-    ]
   },
   {
     path: '/community',
