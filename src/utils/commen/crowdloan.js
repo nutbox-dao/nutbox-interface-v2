@@ -192,9 +192,9 @@ export const getLeasePeriod = async (relaychain) => {
  * @param {*} pools crowdloan pools
  * @param {*} parachains all parachains
  */
-export const sortPoolCard = (pools, parachains) => {
+export const sortCRPoolCard = (pools, parachains) => {
   if (!pools || !parachains) return [];
-  const poolsStatus = pools.map(pool => {
+  const poolsStatus = pools.filter(pool => pool.type === 'SubstrateCrowdloanAssetRegistry').map(pool => {
     const para = parachains.filter(para => pool.chainId === para.chainId && pool.paraId === para.paraId)
     if (para.length === 0){
       return {

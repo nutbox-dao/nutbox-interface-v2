@@ -213,7 +213,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.statusStr || this.crowdloan.statusStr
+    this.status = this.getFundInfo.status || this.crowdloan.statusStr
   }
 }
 </script>
