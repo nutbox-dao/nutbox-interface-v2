@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Blog from '../views/Blog/Blog'
 import CrowdIndex from '../views/CrowdStaking/Index'
 import Wallet from '../views/Wallet/Wallet'
+import BSCWallet from '../views/Wallet/BSC'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
 import SteemWallet from '../views/Wallet/Steem'
@@ -35,9 +36,14 @@ const routes = [
   },
   {
     path: '/wallet',
-    redirect: '/wallet/polkadot',
+    redirect: '/wallet/bsc',
     component: Wallet,
     children: [
+      {
+        path: 'bsc',
+        name: 'BSCWallet', 
+        component: BSCWallet
+      },
       {
         path: 'polkadot',
         name: 'PolkadotWallet',
@@ -45,7 +51,7 @@ const routes = [
       },
       {
         path: 'kusama',
-        name: 'KusamaWallet',
+        name: 'PolkadotWallet',
         component: KusamaWallet
       },
       {
