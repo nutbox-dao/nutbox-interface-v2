@@ -209,17 +209,10 @@ export default {
       } catch (e) {
         return '0.0%'
       }
-    },
-    contributions () {
-      try {
-        return this.getFundInfo.funds.length
-      } catch (e) {
-        return 0
-      }
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status
+    this.status = this.getFundInfo.statusStr || this.crowdloan.statusStr
   }
 }
 </script>

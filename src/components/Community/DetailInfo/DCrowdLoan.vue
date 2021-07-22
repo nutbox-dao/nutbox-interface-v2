@@ -47,7 +47,7 @@ export default {
   watch: {
     data (newValue, oldValue) {
       const { crowdloanPools, allParachain } = newValue
-      this.sortPoolCard = sortPoolCard(crowdloanPools, allParachain)
+      this.sortedPools = sortPoolCard(crowdloanPools, allParachain)
     }
   },
   mounted () {
