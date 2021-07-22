@@ -10,13 +10,15 @@
                      @click="changeAccount(item)">
       <template>
         <div class="flex-between-center">
-          <Identicon class="ident-icon" :size="40" theme="polkadot" :value="item.address"/>
-          <div class="account-info ml-2">
-            <div class="font-bold">
-              {{ item.meta ? item.meta.name : "" }}
-            </div>
-            <div class="address">
-              {{ item.address | formatUserAddress }}
+          <div class="d-flex align-items-center">
+            <Identicon class="ident-icon" :size="40" theme="polkadot" :value="item.address"/>
+            <div class="account-info ml-2">
+              <div class="font-bold">
+                {{ item.meta ? item.meta.name : "" }}
+              </div>
+              <div class="address">
+                {{ item.address | formatUserAddress }}
+              </div>
             </div>
           </div>
           <img class="ml-3" v-if="item.address === (account && account.address)"
