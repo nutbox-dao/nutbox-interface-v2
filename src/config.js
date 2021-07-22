@@ -39,9 +39,7 @@ export const NUTBOX_REMARK_TYPE = {
   magic: 'Text',      // 默认为nutbox
   op: 'u8',           // 0为crowdloan， 1为crowdstaking
   trieIndex: 'Option<u8>', // crowdloan 才有该字段
-  communityId: 'Text',      // 通过哪个社区操作的
-  projectId: 'Option<Text>', // 平行链项目方管理id，crowdloan时该字段为空
-  nominatorId: 'Option<Text>' // 推荐人id
+  communityId: "AccountId",      // 通过哪个社区操作的
 }
 
 // Phala推荐机制 remark

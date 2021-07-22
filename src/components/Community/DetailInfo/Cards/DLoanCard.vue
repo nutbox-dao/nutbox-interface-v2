@@ -101,6 +101,7 @@ import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus } from '@/utils/commen/crowdloan'
 import { formatCountdown } from '@/utils/helper'
+import { stanfiAddress } from '@/utils/commen/account'
 
 export default {
   data () {
@@ -171,7 +172,7 @@ export default {
       return parseInt(this.crowdloan.paraId)
     },
     communityId () {
-      return this.crowdloan.communityAccount
+      return stanfiAddress(this.crowdloan.communityAccount)
     },
     leasePeriod () {
       try {

@@ -167,6 +167,6 @@ export const withdraw = async (paraId, toast, callback) => {
 }
 
 
-export const contribute = async (paraId, amount, communityId, childId, trieIndex, toast, callback) => {
-    await c('polkadot', paraId, amount, communityId, childId, trieIndex, toast, callback)
+export const contribute = async (paraId, amount, communityId, trieIndex, toast, callback) => {
+    await c('polkadot', paraId, amount, communityId, trieIndex, toast, callback)
 }

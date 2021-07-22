@@ -54,15 +54,10 @@ export const withdraw = async (relaychain, paraId, toast, callback) => {
 }
 
 
-export const contribute = async (relaychain, paraId, amount, communityId, childId, trieIndex, toast, callback) => {
+export const contribute = async (relaychain, paraId, amount, communityId, trieIndex, toast, callback) => {
   const api = store.state[relaychain].api
   const from = store.state.polkadot.account && store.state.polkadot.account.address
   communityId = stanfiAddress(communityId)
-  childId = stanfiAddress(childId)
-  if (from === childId) {
-    // 填写自己的地址无效
-    childId = null
-  }
   if (!from) {
     return false
   }
@@ -73,7 +68,7 @@ export const contribute = async (relaychain, paraId, amount, communityId, childI
   const contributeTx = api.tx.crowdloan.contribute(paraId, amount, null)
   if (communityId) {
     let trans = []
-    const remark = createCrowdloanRemark(api, trieIndex, communityId, childId)
+    const remark = createCrowdloanRemark(api, trieIndex, communityId)
     const remarkTx = api.tx.system.remarkWithEvent(remark)
     trans.push(contributeTx)
     trans.push(remarkTx)
