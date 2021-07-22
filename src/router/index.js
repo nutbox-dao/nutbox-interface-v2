@@ -2,14 +2,14 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Blog from '../views/Blog/Blog'
-import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
+import CrowdIndex from '../views/CrowdStaking/Index'
 import Wallet from '../views/Wallet/Wallet'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
 import SteemWallet from '../views/Wallet/Steem'
 import RococoWallet from '../views/Wallet/Rococo'
-import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
-import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
+import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
+import CrowdLoan from '../views/CrowdStaking/CrowdLoan'
 import CommunityIndex from '../views/Community/Index'
 import Community from '../views/Community/Community'
 import DeployToken from '../views/Community/DeployToken'
@@ -22,6 +22,8 @@ import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
 import CommunityInfo from '@/views/Community/CommunityInfo'
 import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
+import CrowdDelegate from '@/views/CrowdStaking/CrowdDelegate'
+import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 
 Vue.use(VueRouter)
 
@@ -60,18 +62,28 @@ const routes = [
   },
   {
     path: '/crowdstaking',
-    component: CrowdStaking,
+    component: CrowdIndex,
     redirect: '/crowdstaking/polkadot',
     children: [
       {
         path: 'kusama',
         name: 'kusama',
-        component: KusamaCrowdstaking
+        component: CrowdLoan
       },
       {
         path: 'polkadot',
         name: 'polkadot',
-        component: PolkadotCrowdstaking
+        component: CrowdStaking
+      },
+      {
+        path: 'delegate',
+        name: 'delegate',
+        component: CrowdDelegate
+      },
+      {
+        path: 'nominate',
+        name: 'nominate',
+        component: CrowdNominate
       }
     ]
   },

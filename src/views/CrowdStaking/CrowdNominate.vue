@@ -1,5 +1,5 @@
 <template>
-  <div class="k-page crowdstaking-page">
+  <div class="nominate-block">
     <div class="loading-bg" v-if="!isConnected">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
@@ -12,10 +12,8 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="card, idx of crowdstakings" :key="idx">
-            <CrowdStakingCard
-              :crowdstaking="card"
-            />
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
+            <CrowdNominateCard :crowdstaking="card"/>
           </div>
         </div>
       </div>
@@ -24,18 +22,18 @@
 </template>
 
 <script>
-import CrowdStakingCard from "../../components/CrowdStaking/CrowdStakingCard";
-import { mapState } from "vuex";
+import CrowdNominateCard from '@/components/CrowdStaking/CrowdNominateCard'
+import { mapState } from 'vuex'
 
 export default {
-  name: "Home",
+  name: 'CrowdNominate',
   components: {
-    CrowdStakingCard,
+    CrowdNominateCard
   },
   computed: {
-    ...mapState('polkadot',["isConnected", 'crowdstakings']),
-  },
-};
+    ...mapState('polkadot', ['isConnected', 'crowdstakings'])
+  }
+}
 </script>
 
 <style lang="scss" scoped>
