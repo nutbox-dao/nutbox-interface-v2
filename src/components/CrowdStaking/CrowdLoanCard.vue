@@ -21,22 +21,6 @@
       </div>
     </div>
     <div class="c-card">
-      <div class="status-container text-right">
-        <span :class="status">{{ $t('cl.'+status) }}</span>
-      </div>
-      <div class="card-title-box flex-start-center">
-        <div class="card-single-icon mr-2">
-          <img :src="crowdloan.icon" alt="" />
-        </div>
-        <div class="card-link-title-text">
-          <div class="title-text font20 font-bold link-title">
-            <span>{{ crowdloan.poolName }}</span>
-            <i class="link-icon"></i>
-          </div>
-        </div>
-
-      </div>
-      <div class="h-line mt-4 mb-2"></div>
       <div class="detail-info-box">
         <div class="project-info-container">
           <span class="name"> {{ $t('cl.leasePeriod') }} </span>
@@ -241,7 +225,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status
+    this.status = this.getFundInfo.status || this.crowdloan.statusStr
   }
 }
 </script>

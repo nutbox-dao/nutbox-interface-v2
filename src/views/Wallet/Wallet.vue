@@ -1,13 +1,13 @@
 <template>
   <div class="page-view-content wallet">
     <div class="page-view-title">{{ this.$t("wallet.wallet") }}</div>
-    <div class="page-view-subtitle">Choose asset type</div>
+    <!-- <div class="page-view-subtitle">Choose asset type</div> -->
     <div class="nav-box container" ref="navBox">
       <div class="nav mr-5">
-        <router-link to="/wallet/polkadot" exact>Polkadot</router-link>
+        <router-link to="/wallet/bsc" exact>BSC</router-link>
+        <router-link to="/wallet/polkadot">Polkadot</router-link>
         <router-link to="/wallet/kusama">Kusama</router-link>
         <router-link to="/wallet/steem">Steem</router-link>
-        <router-link v-if="isDebug" to="/wallet/rococo">Rococo</router-link>
       </div>
       <component :is="$route.name"></component>
     </div>
@@ -16,27 +16,23 @@
 </template>
 
 <script>
-import { DEBUG } from '@/config'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import BSCAccount from '@/components/Accounts/BSCAccount'
+
 export default {
   name: 'Wallet',
   components: {
     PolkadotWallet: PolkadotAccount,
-    SteemWallet: SteemAccount
-  },
-  data () {
-    return {
-      showLogout: false,
-      isDebug: DEBUG
-    }
+    SteemWallet: SteemAccount,
+    BSCWallet: BSCAccount
   },
   computed: {
   },
   methods: {
   },
   mounted () {
-    console.log(this.$route)
+    console.log(this.$route.name)
   }
 }
 </script>

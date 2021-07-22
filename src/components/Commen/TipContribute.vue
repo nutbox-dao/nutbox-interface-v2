@@ -32,17 +32,6 @@
           <span class="text-right">{{ symbol }}</span>
         </div>
       </div>
-      <div class="input-group-box">
-        <div class="label">{{ $t('cl.nominator')}}</div>
-        <div class="input-bg flex-between-center">
-          <input
-            type="text"
-            v-model="inputNonimator"
-            :placeholder="$t('cl.inputNominator')"
-          />
-          <span class="text-grey text-right" style="opacity: 0.4">{{ $t('cl.optional') }}</span>
-        </div>
-      </div>
       <button class="primary-btn" @click="confirm" :disabled="isComtribution">
         <b-spinner small type="grow" v-show="isComtribution"></b-spinner>{{ $t('cl.confirm') }}
       </button>
@@ -69,7 +58,6 @@ export default {
   data() {
     return {
       inputAmount: "",
-      inputNonimator: "",
       isComtribution: false,
     };
   },
@@ -134,20 +122,6 @@ export default {
       const res = reg.test(this.inputAmount);
       if (!res) {
         this.$bvToast.toast("Input error!", {
-          title: this.$t('tip.tips'),
-          autoHideDelay: 5000,
-          variant: "warning", // info success danger
-        });
-        return false;
-      }
-      // check nominator address
-      this.inputNonimator = this.inputNonimator?.trim()
-      if (
-        this.inputNonimator &&
-        this.inputNonimator.length > 0 &&
-        this.inputNonimator != stanfiAddress(this.inputNonimator, POLKADTO_ADDRESS_FORMAT_CODE[this.relaychain])
-      ) {
-        this.$bvToast.toast(this.$t('tip.inputAddressType',{relaychain: this.relaychain.toUpperCase()}), {
           title: this.$t('tip.tips'),
           autoHideDelay: 5000,
           variant: "warning", // info success danger
@@ -220,7 +194,6 @@ export default {
           this.paraId,
           parseFloat(this.inputAmount),
           this.communityId,
-          this.inputNonimator,
           trieIndex,
           (info, param) => {
             this.$bvToast.toast(info, param);
@@ -240,11 +213,6 @@ export default {
         this.isComtribution = false;
       }
     },
-  },
-  mounted() {
-    if (this.communityNominatorId) {
-      this.inputNonimator = stanfiAddress(this.communityNominatorId, 2)
-    }
   },
 };
 </script>

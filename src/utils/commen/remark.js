@@ -1,22 +1,20 @@
 // 创建nutbox推荐人remark
-export const createCrowdloanRemark = (api, trieIndex, communityId, nominatorId) => {
+export const createCrowdloanRemark = (api, trieIndex, communityId) => {
   const remark = api.createType('NutboxRemark', {
     magic: 'nutbox',
     op: 0,
     trieIndex,
-    communityId,
-    nominatorId,
+    communityId
   })
   return api.createType('Bytes', remark.toHex())
 }
 
-export const createCrowdstakingRemark = (api, communityId, projectId, nominatorId) => {
+export const createCrowdstakingRemark = (api, communityId, projectId) => {
     const remark = api.createType('NutboxRemark', {
         magic: 'nutbox',
         op: 1,
         communityId,
-        projectId,
-        nominatorId
+        projectId
     })
     return api.createType('Bytes', remark.toHex())
 }

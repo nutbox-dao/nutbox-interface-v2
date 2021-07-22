@@ -101,6 +101,7 @@ import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus } from '@/utils/commen/crowdloan'
 import { formatCountdown } from '@/utils/helper'
+import { stanfiAddress } from '@/utils/commen/account'
 
 export default {
   data () {
@@ -171,7 +172,7 @@ export default {
       return parseInt(this.crowdloan.paraId)
     },
     communityId () {
-      return this.crowdloan.communityAccount
+      return stanfiAddress(this.crowdloan.communityAccount)
     },
     leasePeriod () {
       try {
@@ -209,17 +210,10 @@ export default {
       } catch (e) {
         return '0.0%'
       }
-    },
-    contributions () {
-      try {
-        return this.getFundInfo.funds.length
-      } catch (e) {
-        return 0
-      }
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status
+    this.status = this.getFundInfo.status || this.crowdloan.statusStr
   }
 }
 </script>
