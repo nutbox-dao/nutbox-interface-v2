@@ -47,7 +47,7 @@ export const subNominators = async () => {
   // const {validators} = await api.derive.staking.overview()
 
   store.commit('polkadot/saveLoadingStaking', true)
-// 获取用户投票的情况
+  // 获取用户投票的情况
   const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
     if (!nominators.toJSON()) {
       store.commit('polkadot/saveNominators', [])

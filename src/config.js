@@ -38,6 +38,7 @@ export const POLKADTO_ADDRESS_FORMAT_CODE = {
 export const NUTBOX_REMARK_TYPE = {
   magic: 'Text',      // 默认为nutbox
   op: 'u8',           // 0为crowdloan， 1为crowdstaking
+  stakingAddress: 'Text',  // address on bsc
   trieIndex: 'Option<u8>', // crowdloan 才有该字段
   communityId: "AccountId",      // 通过哪个社区操作的
 }

@@ -1,7 +1,4 @@
 import Cookie from 'vue-cookies'
-import {
-  LOCALE_KEY
-} from '../config'
 
 export default {
   namespaced: true,
