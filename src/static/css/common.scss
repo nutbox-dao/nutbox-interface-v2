@@ -53,6 +53,11 @@ ponsived {
   border-radius: .8rem;
   font-size: .8rem;
   font-weight: bold;
+  &.outline-btn {
+    background: white;
+    border: 1px solid var(--primary-custom);
+    box-shadow: none;
+  }
 }
 .primary-btn-outline {
   background-color: white;

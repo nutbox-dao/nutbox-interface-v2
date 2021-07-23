@@ -62,7 +62,6 @@
 
 <script>
 import Progress from '@/components/Community/Progress'
-import CrowdLoanPool from '@/components/Community/StakingPools/CrowdLoanPool'
 import { getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
 import { getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper'
@@ -71,12 +70,12 @@ import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/Dashboa
 
 export default {
   name: 'PoolsDashboard',
-  components: { Progress, CrowdLoanPool, DashboardPoolCard },
+  components: { Progress, DashboardPoolCard },
   data () {
     return {
       activeTab: 0,
       tabOptions: [
-        { name: 'Crowdloan', component: 'CrowdLoanPool', chain: '' },
+        { name: 'Crowdloan', component: '', chain: '' },
         { name: 'Crowdstaking', component: '', chain: '' },
         { name: 'Delegate', component: '', chain: '' },
         { name: 'Nominate', component: '', chain: '' }

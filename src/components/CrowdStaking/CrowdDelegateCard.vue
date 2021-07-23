@@ -35,8 +35,8 @@
       <div class="btn-row mb-4">
         <span class="value"> 0.001 </span>
         <div class="right-box">
-          <button class="outline-btn">-</button>
-          <button class="outline-btn">+</button>
+          <button class="outline-btn" @click="showModal=true">-</button>
+          <button class="outline-btn" @click="showModal=true">+</button>
         </div>
       </div>
       <div class="detail-info-box">
@@ -50,26 +50,42 @@
         </div>
       </div>
     </div>
+
+    <b-modal
+      v-model="showModal"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <DelegateModal/>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { vestsToSteem } from '@/utils/steem/steem'
+import DelegateModal from '@/components/CrowdStaking/TipBoxes/DelegateModal'
 export default {
   name: 'DDelegateCard',
+  components: {
+    DelegateModal
+  },
   props: {
     card: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   watch: {
     'card.totalStakedAmount': async (val, oldVal) => {
       this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
-    },
+    }
   },
   data () {
     return {
-      tvl: 0
+      tvl: 0,
+      showModal: true
     }
   }
 }
