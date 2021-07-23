@@ -17,7 +17,7 @@
           <span class="name">{{ $t('asset.stakingAsset') }}</span>
           <div class="info flex-start-center">
             <span v-if="cardInfo.assetLogos.length === 0">--</span>
-            <img v-else class="info-icon" :src="icon" v-for="(icon, index) in cardInfo.assetLogos" :key="index" alt="">
+            <img v-else class="info-icon" :src="icon" v-for="(icon, index) in new Set(cardInfo.assetLogos)" :key="index" alt="">
             <!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
             <!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
           </div>

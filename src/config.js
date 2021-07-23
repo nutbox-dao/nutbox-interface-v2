@@ -1,10 +1,36 @@
 
+/** =========================================== Normal ======================================================*/
 // 调试模式
 export const DEBUG = false
 
 export const LOCALE_KEY = 'localeLanguage'
+// nutbox backend server
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000"
 
-// polkadot
+export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
+
+/**
+ * ERROR CODE DEFINE
+ */
+ export const errCode = {
+  NO_STAKING_FACTORY: 101,
+  ASSET_ID_ERROR: 102,
+  BLOCK_CHAIN_ERR: 351,
+  CONTRACT_CREATE_FAIL: 352,
+  USER_CANCEL_SIGNING: 353,
+  NOT_CONNECT_METAMASK: 354,
+  UNLOCK_METAMASK: 355,
+  WRONG_CHAIN_ID: 356,
+
+  SIGNATURE_FAILED: 451,
+  INVALID_NONCE: 452,
+  DB_ERROR: 453,
+  SERVER_ERR: 500,
+}
+
+
+/** ========================================== polkadot ====================================================*/
 export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io"
 export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io"
 // export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.nutbox.io"
@@ -14,12 +40,6 @@ export const CROWD_STAKING_API_URL = "https://crowdstaking-api.nutbox.io"
 // export const CROWD_STAKING_API_URL = "http://localhost:3200"
 export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io"
 // export const CROWD_LOAN_API_URL = "http://localhost:3000"
-
-// nutbox backend server
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-export const BACKEND_API_URL = "http://localhost:3000"
-
-export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
 export const PARA_STATUS = {
   ACTIVE: "Active",
@@ -50,7 +70,26 @@ export const PhalaCrowdloanReferrerRemark = {
   "referrer": "AccountId",
   "referrerHash": "Bytes"
 }
-/** ==========================================================================================================*/
+
+/**============================================== steem  ==============================================*/
+
+// steem node storage
+export const STEEM_CONF_KEY = 'steemNodeKey'
+// delegate fee
+export const STEEM_STAKE_FEE = 1
+// official fee account
+export const STEEM_FEE_ACCOUNT = ''
+
+// Steem Config
+export const STEEM_API_URLS = [
+  process.env.STEEM_API_URL || 'https://api.steemitdev.com',
+  'https://cn.steems.top',
+  'https://api.steemit.com',
+  'https://api.justyy.com',
+  'https://aksaiapi.wherein.mobi'
+]
+
+/** =============================================BSC=============================================================*/
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
@@ -94,26 +133,7 @@ export const Transaction_config = {
   gasLimit: 1000000000
 }
 
-/**
- * ERROR CODE DEFINE
- */
- export const errCode = {
-  NO_STAKING_FACTORY: 101,
-  ASSET_ID_ERROR: 102,
-  BLOCK_CHAIN_ERR: 351,
-  CONTRACT_CREATE_FAIL: 352,
-  USER_CANCEL_SIGNING: 353,
-  NOT_CONNECT_METAMASK: 354,
-  UNLOCK_METAMASK: 355,
-  WRONG_CHAIN_ID: 356,
-
-  SIGNATURE_FAILED: 451,
-  INVALID_NONCE: 452,
-  DB_ERROR: 453,
-  SERVER_ERR: 500,
-}
-
-export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
+export const MultiAddress = process.env.MultiAddress
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,

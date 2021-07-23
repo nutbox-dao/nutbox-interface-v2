@@ -3,23 +3,23 @@
     <div class="card-link-top-box">
       <div class="flex-start-center">
         <div class="card-link-icons">
-          <img class="icon1" src="~@/static/images/logo_small.png" alt="" />
-          <img class="icon2" src="~@/static/images/logo_small.png" alt="" />
+          <img class="icon1" :src="card.communityIcon" alt="" />
+          <img class="icon2" :src="card.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
           <div class="link-title">
-            <span>Community Name</span>
+            <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
           <div class="link-title">
-            <span>代理挖矿</span>
+            <span>{{ card.poolName }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="c-card">
       <div class="text-left mt-3">
-        <span style="color: #717376;" class="font-bold">PNUT </span>
+        <span style="color: #717376;" class="font-bold">{{ card.tokenSymbol + ' '}}</span>
         <span style="color: #BDBFC2">EARNED</span>
       </div>
       <div class="btn-row">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="text-left mt-3 mb-1">
-        <span style="color: #717376;" class="font-bold">STEEM POWER</span>
+        <span style="color: #717376;" class="font-bold">{{ card.assetType == 'sp' ? 'STEEM POWER' : 'HIVE POWER'}}</span>
         <span style="color: #BDBFC2"> STAKED</span>
       </div>
       <div class="btn-row mb-4">
@@ -57,7 +57,12 @@
 <script>
 
 export default {
-  name: 'DStakingCard',
+  name: 'DDelegateCard',
+  props: {
+    card: {
+      type: Object,
+    },
+  },
   data () {
     return {
     }

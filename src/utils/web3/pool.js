@@ -262,3 +262,15 @@ export const getAllParachain = async (update=false) => {
         }
     })
 }
+
+/** 
+ * monitor all pool real time data stored in db
+ */
+export const monitorAllPoolData = async () => {
+    try{
+        const pools = await getAllPools(true)
+        
+    }catch(e){
+
+    }
+}

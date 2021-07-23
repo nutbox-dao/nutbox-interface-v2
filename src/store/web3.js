@@ -64,8 +64,8 @@ export default {
     saveMyPools: (state, myPools) => {
       state.myPools = myPools
     },
-    saveWatcher: (state, param) => {
-      state.watcher[param.name] = param.watcher
+    saveWatcher: (state, watcher) => {
+      state.watcher = watcher
     },
     saveCTokens: (state, cTokens) => {
       state.cTokens = cTokens
