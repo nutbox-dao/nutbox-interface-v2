@@ -73,9 +73,9 @@ export default {
       activeTab: 0,
       tabOptions: [
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
-        { name: 'Crowdstaking', component: 'DCrowdStaking', chain: '' },
+        { name: 'Nominate', component: 'DCrowdStaking', chain: '' },
         { name: 'Delegate', component: 'DDelegate', chain: '' },
-        { name: 'Nominate', component: 'DNominate', chain: '' }
+        { name: 'Deposite', component: 'DNominate', chain: '' }
       ]
     }
   },
