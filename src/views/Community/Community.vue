@@ -14,12 +14,12 @@
         </button>
       </div>
     </div>
-    <b-input-group class="search-input">
+    <!-- <b-input-group class="search-input">
       <b-form-input :placeholder="$t('message.search')"></b-form-input>
       <template #append>
         <i class="search-icon"></i>
       </template>
-    </b-input-group>
+    </b-input-group> -->
     <div class="loading-bg" v-if="loading">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
@@ -91,6 +91,7 @@ export default {
 <style scoped lang="scss">
 .view-top-header {
   align-items: flex-end;
+  margin-bottom: 2.4rem;
 }
 .search-input {
   background: white;
