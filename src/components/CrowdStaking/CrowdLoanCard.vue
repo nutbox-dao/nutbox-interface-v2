@@ -6,16 +6,16 @@
       </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
-          <img class="icon1" src="~@/static/images/logo_small.png" alt="" />
-          <img class="icon2" src="~@/static/images/logo_small.png" alt="" />
+          <img class="icon1" :src="crowdloan.communityIcon" alt="" />
+          <img class="icon2" :src="crowdloan.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title">
-            <span>Community Name</span>
+          <div class="link-title" @click="$router.push('/community/detail-info?id='+crowdloan.communityId)">
+            <span>{{ crowdloan.communityName }}</span>
             <i class="link-icon"></i>
           </div>
           <div class="link-title">
-            <span>Project Name</span>
+            <span>{{ crowdloan.poolName }}</span>
           </div>
         </div>
       </div>
@@ -191,6 +191,10 @@ export default {
       } catch (e) {
         return '0'
       }
+    },
+    communityIcon (){
+      const communityId = this.crowdloan.communityId;
+
     },
     countDown () {
       try {

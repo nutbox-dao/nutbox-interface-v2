@@ -1,22 +1,28 @@
 <template>
   <div class="page-view-content crowdstaking">
     <div class="page-view-title">{{$t("cs.crowdstaking") }}</div>
-      <div class="nav-box container">
-        <div class="nav">
-          <router-link to="/crowdstaking/kusama">Crowdloan</router-link>
-          <router-link to="/crowdstaking/polkadot">Nominate</router-link>
-          <router-link to="/crowdstaking/delegate">Delegate</router-link>
-          <router-link to="/crowdstaking/nominate">Deposite</router-link>
-          <div class="center-blank"></div>
+      <div class="loading-bg" v-if="loading">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
       </div>
-      <component :is='$route.name'/>
-    </div>
+      <template v-else>
+        <div class="nav-box container">
+          <div class="nav">
+            <router-link to="/crowdstaking/crowdloan">Crowdloan</router-link>
+            <router-link to="/crowdstaking/nominate">Nominate</router-link>
+            <router-link to="/crowdstaking/delegate">Delegate</router-link>
+            <router-link to="/crowdstaking/deposite">Deposite</router-link>
+            <div class="center-blank"></div>
+        </div>
+        <component :is='$route.name'/>
+      </div>
     <router-view></router-view>
+      </template>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import BSCAccount from '@/components/Accounts/BSCAccount'
@@ -24,31 +30,26 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 export default {
   name: "Home",
   computed: {
-    ...mapState('polkadot',["projectFundInfos", "symbol", "isConnected", 'balance', 'crowdstakings']),
+    ...mapState('web3',["communityCard"]),
     funds() {
       const fundInfos = this.getFundInfos();
       return fundInfos || [];
     },
   },
+  computed: {
+    loading() {
+      return this.communityCard === null
+    }
+  },
   components: {
-    polkadot: PolkadotAccount,
-    kusama: PolkadotAccount,
+    crowdloan: PolkadotAccount,
+    nominate: PolkadotAccount,
     delegate: SteemAccount,
-    nominate: BSCAccount
+    deposite: BSCAccount
   },
   methods: {
-    ...mapGetters('polkadot',["getFundInfos", "paraIds"]),
-    ...mapMutations('polkadot',[
-      "saveProjectStatus",
-      "saveProjectName",
-      "saveCommunityName",
-      'saveCrowdstakings',
-      'saveCommunitys',
-      'saveProjects'
-    ]),
   },
   created () {
-
   },
 };
 </script>

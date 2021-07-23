@@ -69,16 +69,16 @@ const routes = [
   {
     path: '/crowdstaking',
     component: CrowdIndex,
-    redirect: '/crowdstaking/polkadot',
+    redirect: '/crowdstaking/crowdloan',
     children: [
       {
-        path: 'kusama',
-        name: 'kusama',
+        path: 'crowdloan',
+        name: 'crowdloan',
         component: CrowdLoan
       },
       {
-        path: 'polkadot',
-        name: 'polkadot',
+        path: 'nominate',
+        name: 'nominate',
         component: CrowdStaking
       },
       {
@@ -87,8 +87,8 @@ const routes = [
         component: CrowdDelegate
       },
       {
-        path: 'nominate',
-        name: 'nominate',
+        path: 'deposite',
+        name: 'deposite',
         component: CrowdNominate
       }
     ]
