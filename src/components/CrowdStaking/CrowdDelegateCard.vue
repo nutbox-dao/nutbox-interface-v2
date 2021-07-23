@@ -7,7 +7,7 @@
           <img class="icon2" :src="card.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title">
+          <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
             <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
@@ -42,20 +42,19 @@
       <div class="detail-info-box">
         <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">--</div>
+          <div class="info">{{ tvl }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">13.0%</div>
+          <div class="info">{{ card.apy.toFixed(2) }}%</div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-
+import { vestsToSteem } from '@/utils/steem/steem'
 export default {
   name: 'DDelegateCard',
   props: {
@@ -63,8 +62,14 @@ export default {
       type: Object,
     },
   },
+  watch: {
+    'card.totalStakedAmount': async (val, oldVal) => {
+      this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
+    },
+  },
   data () {
     return {
+      tvl: 0
     }
   }
 }
