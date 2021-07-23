@@ -30,6 +30,7 @@
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
           </div>
+          <component :is='wallet'></component>
         </div>
         <div class="card-container mt-4">
           <component :is="tabOptions[activeTab].component"
@@ -50,6 +51,9 @@ import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
 import DDelegate from '@/components/Community/DetailInfo/DDelegate'
 import DNominate from '@/components/Community/DetailInfo/DNominate'
+import BSCAccount from '@/components/Accounts/BSCAccount'
+import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import SteemAccount from '@/components/Accounts/SteemAccount'
 
 export default {
   name: 'CommunityDetailInfo',
@@ -57,7 +61,10 @@ export default {
     DCrowdLoan,
     DCrowdStaking,
     DDelegate,
-    DNominate
+    DNominate,
+    BSCAccount,
+    PolkadotAccount,
+    SteemAccount
   },
   props: {},
   data () {
@@ -78,6 +85,20 @@ export default {
       const com = this.communityById(this.communityId)
       console.log(245, com)
       return com
+    },
+    wallet () {
+      switch (this.activeTab) {
+        case 0: 
+          return 'PolkadotAccount';
+        case 1:
+          return 'PolkadotAccount'
+        case 2:
+          return 'SteemAccount';
+        case 3:
+          return 'BSCAccount'
+        default:
+          break;
+      }
     },
     pools () {
       return this.communityInfo.pools

@@ -33,10 +33,6 @@
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("message.blog") }}</span>
               </b-nav-item>
-              <b-nav-item to="/admin" v-if="isAdmin">
-                <i id="admin-icon" class="menu-icon" />
-                <span>{{ $t("message.admin") }}</span>
-              </b-nav-item>
             </b-nav>
             <div class="bottom">
               <div class="links">
@@ -143,25 +139,13 @@
 </template>
 
 <script>
-import Clipboard from 'clipboard'
 import { LOCALE_KEY } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
 import { mapState, mapMutations } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
-import { getCommunitys, getCrowdstacking } from '@/apis/api'
 import {
-  getBalance as getPolkadotBalance,
   loadAccounts as loadPolkadotAccounts
 } from './utils/polkadot/account'
-import { getBalance as getKusamaBalance } from './utils/kusama/account'
-import { getBalance as getRococoBalance } from './utils/rococo/account'
-import {
-  subBonded,
-  subNominators,
-  getValidatorsInfo
-} from './utils/polkadot/staking'
-import { subBonded as subKusamaBonded } from './utils/kusama/staking'
-import { stanfiAddress } from './utils/commen/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
 import { setupNetwork, test, chainChanged } from './utils/web3/web3'
@@ -195,13 +179,6 @@ export default {
     ...mapState('polkadot', ['clCommunitys']),
     ...mapState(['lang']),
     ...mapState('web3', ['allCommunities']),
-    isAdmin () {
-      if (!this.clCommunitys || !this.projects) return false
-      const isCrowdloanAdmin = this.clCommunitys?.indexOf(this.account?.address) !== -1
-      const isCrowdstakingAdmin = this.projects?.indexOf(this.account?.address) !== -1
-      const res = isCrowdloanAdmin || isCrowdstakingAdmin
-      return res
-    },
     address () {
       if (this.$store.state.web3.account) {
         return this.formatUserAddress(this.$store.state.web3.account, false)
@@ -244,91 +221,6 @@ export default {
         const end = address.slice(-6)
         return `${start}...${end}`
       }
-    },
-    copyAddress (a) {
-      var clipboard = new Clipboard('#avatar')
-      clipboard.on('success', (e) => {
-        clipboard.destroy()
-        this.$bvToast.toast(this.$t('tip.copyAddress', { address: this.formatUserAddress(this.account.address) }), {
-          title: this.$t('tip.clipboard'),
-          autoHideDelay: 5000,
-          variant: 'info' // info success danger
-        })
-      })
-      clipboard.on('error', (e) => {
-        clipboard.destroy
-      })
-    },
-    changeAccount (acc) {
-      if (!this.isConnected) return
-      if (this.$route.path === '/admin') {
-        // 调到主页去
-        this.$router.push('/crowdloan')
-      }
-      this.saveAccount(acc)
-      getPolkadotBalance(acc)
-      getKusamaBalance(acc)
-      DEBUG && getRococoBalance(acc)
-      subKusamaBonded()
-      subBonded()
-      subNominators()
-      this.getCommunitys()
-      this.getCrowdstacking()
-    },
-    showError (err) {
-      this.$bvToast.toast(err, {
-        title: 'MFund',
-        autoHideDelay: 5000,
-        variant: 'danger'
-      })
-    },
-    getCommunitys () {
-      // 获取支持平行链项目的社区信息  -   kusama
-      getCommunitys().then((res) => {
-        const ccc = res.map((r) => stanfiAddress(r.communityId))
-        this.saveClCommunitys(ccc)
-        this.$store.commit('rococo/saveClCommunitys', ccc)
-        this.$store.commit('kusama/saveClCommunitys', ccc)
-      })
-    },
-
-    getCrowdstacking () {
-      // 获取验证者节点投票卡片信息 --- polkadot
-      getCrowdstacking().then((res) => {
-        const crowdstaking = res.map(({ community, project, nominatorCount, relaychain }) => ({
-          community: {
-            ...community,
-            communityId: stanfiAddress(community.communityId)
-          },
-          project: {
-            ...project,
-            projectId: stanfiAddress(project.projectId),
-            validators: project.validators.map((v) => stanfiAddress(v))
-          },
-          nominatorCount,
-          relaychain
-        }))
-        this.saveCrowdstakings(crowdstaking)
-        this.saveCommunitys(
-          crowdstaking.map(({ community }) => community.communityId)
-        )
-        const polkadotcs = crowdstaking.filter(c => c.relaychain === 'polkadot')
-        const kusamacs = crowdstaking.filter(c => c.relaychain === 'kusama')
-        this.saveCrowdstakings(polkadotcs)
-        this.$store.commit('kusama/saveCrowdstakings', kusamacs)
-        // this.saveCommunitys(
-        //   crowdstaking.map(({ community }) => community.communityId)
-        // );
-        // 所有注册的projectid
-        this.saveProjects(crowdstaking.map(({ project }) => project.projectId))
-        // 波卡验证者
-        let validators = polkadotcs.map(({ project }) => project.validators)
-        validators = validators.reduce((t, v) => t.concat(...v), [])
-        validators = [...new Set(validators)]
-        getValidatorsInfo(validators)
-        // kusama验证者
-        // TODO
-      })
     },
     pageScroll (e) {
       if (this.navBoxEl.length === 0) return
@@ -376,24 +268,7 @@ export default {
     // BSC data
     this.fetchData();
 
-    // polkadot data
-    this.getCommunitys()
-    this.getCrowdstacking()
-    // const scrollEl = document.getElementsByClassName('scroll-content')
-    // console.log(scrollEl)
     this.navBoxEl = document.getElementsByClassName('nav-box')
-    // console.log(navBox[0].classList)
-    //
-    // scrollEl[0].addEventListener('scroll', (e) => {
-    //   // console.log(e)
-    //   console.log(navBox[0].offsetTop, e.target.scrollTop)
-    //   if (e.target.scrollTop > navBox[0].offsetTop) {
-    //     navBox[0].classList.add('fixed-nav-box')
-    //   } else {
-    //     navBox[0].classList.remove('fixed-nav-box')
-    //   }
-    // })
-    // console.log(scrollEl[0].scrollHeight)
   },
   async created () {
     // bsc related
