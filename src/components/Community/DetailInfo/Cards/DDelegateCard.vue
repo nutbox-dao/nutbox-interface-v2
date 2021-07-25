@@ -27,8 +27,8 @@
     <div class="btn-row mb-4">
       <span class="value"> 0.001 </span>
       <div class="right-box">
-        <button class="outline-btn">-</button>
-        <button class="outline-btn">+</button>
+        <button class="outline-btn" @click="showModal=true">-</button>
+        <button class="outline-btn" @click="showModal=true">+</button>
       </div>
     </div>
     <div class="detail-info-box">
@@ -41,16 +41,27 @@
         <div class="info">13.0%</div>
       </div>
     </div>
-
+    <b-modal
+      v-model="showModal"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <DDelegateModal @close="showModal=false"/>
+    </b-modal>
   </div>
 </template>
 
 <script>
-
+import DDelegateModal from '@/components/Community/DetailInfo/Modal/DDelegateModal'
 export default {
   name: 'DStakingCard',
+  components: { DDelegateModal },
   data () {
     return {
+      showModal: false
     }
   }
 }
