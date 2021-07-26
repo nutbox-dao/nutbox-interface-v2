@@ -10,8 +10,9 @@
           <div class="nav">
             <router-link to="/crowdstaking/crowdloan">Crowdloan</router-link>
             <router-link to="/crowdstaking/nominate">Nominate</router-link>
-            <router-link to="/crowdstaking/delegate">Delegate</router-link>
             <router-link to="/crowdstaking/deposite">Deposite</router-link>
+            <router-link to="/crowdstaking/steem-delegate">Steem Delegate</router-link>
+            <router-link to="/crowdstaking/hive-delegate">Hive Delegate</router-link>
             <div class="center-blank"></div>
         </div>
         <component :is='$route.name'/>
@@ -24,6 +25,7 @@
 <script>
 import { mapState } from "vuex";
 import SteemAccount from '@/components/Accounts/SteemAccount'
+import HiveAccount from '@/components/Accounts/HiveAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import BSCAccount from '@/components/Accounts/BSCAccount'
 
@@ -44,7 +46,8 @@ export default {
   components: {
     crowdloan: PolkadotAccount,
     nominate: PolkadotAccount,
-    delegate: SteemAccount,
+    'steem-delegate': SteemAccount,
+    'hive-delegate': HiveAccount,
     deposite: BSCAccount
   },
   methods: {

@@ -26,7 +26,7 @@ import CrowdDelegateCard from '@/components/CrowdStaking/CrowdDelegateCard'
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'CrowdDelegate',
+  name: 'HiveDelegate',
   components: {
     CrowdDelegateCard
   },

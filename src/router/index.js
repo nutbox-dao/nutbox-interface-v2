@@ -23,7 +23,8 @@ import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
 import CommunityInfo from '@/views/Community/CommunityInfo'
 import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
-import CrowdDelegate from '@/views/CrowdStaking/CrowdDelegate'
+import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
+import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 
 Vue.use(VueRouter)
@@ -82,9 +83,14 @@ const routes = [
         component: CrowdStaking
       },
       {
-        path: 'delegate',
-        name: 'delegate',
-        component: CrowdDelegate
+        path: 'steem-delegate',
+        name: 'steem-delegate',
+        component: SteemDelegate
+      },
+      {
+        path: 'hive-delegate',
+        name: 'hive-delegate',
+        component: HiveDelegate
       },
       {
         path: 'deposite',

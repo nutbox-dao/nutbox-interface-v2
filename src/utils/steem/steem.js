@@ -25,6 +25,12 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
+/**
+ * Harvest airdrop 
+ * @param {*} steem 
+ * @param {*} tron 
+ * @returns 
+ */
 export async function custom_json (steem, tron) {
   const custom_json = {
     nutbox_op: 'airdrop',

@@ -201,6 +201,7 @@ export default {
     ]),
     ...mapMutations('polkadot', ['saveClCommunitys']),
     ...mapActions('steem', ['setVestsToSteem']),
+    ...mapActions('hive', ['setVestsToHive']),
     gotoOfficial () {
       test()
       // window.open('https://nutbox.io', '_blank')
@@ -283,6 +284,7 @@ export default {
     }
     // get steem vests ratio
     this.setVestsToSteem()
+    this.setVestsToHive()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {

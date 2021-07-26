@@ -13,7 +13,7 @@
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
       <!-- <b-button variant="primary" @click="unlock"> -->
       {{
-        type == "STEEM" ? $t("wallet.connectSteem") : $t("wallet.connectTron")
+        btnName
       }}
     </b-button>
   </div>
@@ -27,7 +27,8 @@ export default {
   name: "ConnectWalletBtn",
   data() {
     return {
-      isConnecting:false
+      isConnecting:false,
+      btnName: ''
     };
   },
   props: {
@@ -55,6 +56,15 @@ export default {
         this.isConnecting= false;
       }
     },
+  },
+  mounted () {
+    switch(this.type){
+      case 'STEEM':
+        this.btnName = this.$t("wallet.connectSteem")
+        break;
+      case 'HIVE':
+        this.btnName = this.$t("wallet.connectTron")
+    }
   },
 };
 </script>

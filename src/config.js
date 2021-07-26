@@ -89,6 +89,20 @@ export const STEEM_API_URLS = [
   'https://aksaiapi.wherein.mobi'
 ]
 
+/**============================================== hive  ==============================================*/
+// hive node storage
+export const HIVE_CONF_KEY = 'hiveNodeKey'
+// delegate fee
+export const HIVE_STAKE_FEE = 1
+// official fee account
+export const HIVE_GAS_ACCOUNT = 'nutbox.gas'
+
+// Hive Config
+export const HIVE_API_URLS = [
+  'https://api.hive.blog'
+]
+
+
 /** =============================================BSC=============================================================*/
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE

@@ -163,6 +163,7 @@ export default {
     },
   },
   mounted () {
+    console.log(1659954, window.hive_keychain);
   },
 }
 </script>

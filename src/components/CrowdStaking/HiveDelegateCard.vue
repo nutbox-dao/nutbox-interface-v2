@@ -29,10 +29,10 @@
         </div>
       </div>
       <div class="text-left mt-3 mb-1">
-        <span style="color: #717376;" class="font-bold">{{ card.assetType == 'sp' ? 'STEEM POWER' : 'HIVE POWER'}}</span>
+        <span style="color: #717376;" class="font-bold">HIVE POWER</span>
         <span style="color: #BDBFC2"> DELEGATED</span>
       </div>
-      <div class="btn-row mb-4" v-if="steemLogin">
+      <div class="btn-row mb-4" v-if="hiveLogin">
         <span class="value"> 0.001 </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
@@ -41,8 +41,9 @@
       </div>
       <ConnectWalletBtn
           class="op-bottom"
-          v-if="!steemLogin"
-          @steemLogin="showSteemLogin = true"
+          v-if="!hiveLogin"
+          type='HIVE'
+          @hiveLogin="showHiveLogin = true"
         />
       <div class="detail-info-box">
         <div class="project-info-container">
@@ -66,13 +67,13 @@
     >
       <DelegateModal :operate='operate' :card='card' @hideDelegateMask="showModal=false"/>
     </b-modal>
-    <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
+    <Login type='HIVE' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
 </template>
 
 <script>
 import { vestsToSteem } from '@/utils/steem/steem'
-import DelegateModal from '@/components/CrowdStaking/TipBoxes/DelegateModal'
+import DelegateModal from '@/components/CrowdStaking/TipBoxes/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'

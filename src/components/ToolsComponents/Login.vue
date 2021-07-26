@@ -47,6 +47,12 @@ export default {
       canDismissTip: true,
     };
   },
+  props: {
+    type: {
+      type: String,
+      default: 'STEEM'
+    },
+  },
   components: {
     TipMessage,
   },
