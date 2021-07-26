@@ -166,9 +166,9 @@ export const getVestingShares = async (username) => {
   return staked - delegated
 }
 
-export const getDelegateFromSteem = async (account) => {
+export const getDelegateFromSteem = async (account, targetAccount) => {
   try {
-    const res = await steem.api.getVestingDelegationsAsync(account, STEEM_MINE_ACCOUNT, 1)
+    const res = await steem.api.getVestingDelegationsAsync(account, targetAccount, 1)
     if (!res || res.length === 0){
       return 0;
     }

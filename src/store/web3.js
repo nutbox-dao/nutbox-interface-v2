@@ -22,6 +22,8 @@ export default {
     distributions: null,
     readonlyProvider: null,
     allPools: null,
+    // user deposit data
+    depositDatas: {}
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -78,6 +80,9 @@ export default {
     },
     saveAllPools: (state, allPools) => {
       state.allPools = allPools
+    },
+    saveDepositedDatas: (state, depositDatas) => {
+      state.depositDatas = depositDatas
     }
   },
   getters: {

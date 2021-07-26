@@ -2,28 +2,28 @@
   <b-dropdown v-if="isLogin" class="c-dropdown" right>
     <template #button-content>
       <div class="account-dropdown-btn flex-between-center">
-        <span>{{account}}</span>
+        <span>{{steemAccount}}</span>
         <i class="dropdown-icon ml-3"></i>
       </div>
     </template>
-    <b-dropdown-item class="text-center" @click="logoutSteem">Logout</b-dropdown-item>
+    <b-dropdown-item class="text-center" @click="clearSteemAccount">{{ $t('message.logout') }}</b-dropdown-item>
   </b-dropdown>
   <div v-else></div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   name: 'SteemAccount',
-  data () {
-    return {
-      isLogin: true,
-      account: 'Test'
+  computed: {
+    ...mapState('steem',['steemAccount']),
+    isLogin() {
+      return this.steemAccount
     }
   },
   methods: {
-    logoutSteem () {
-      this.isLogin = false
-    }
+    ...mapMutations('steem', ['clearSteemAccount'])
   }
 }
 </script>

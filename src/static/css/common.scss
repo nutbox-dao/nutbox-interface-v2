@@ -75,6 +75,11 @@ ponsived {
   cursor: pointer;
 }
 
+.hover-blue:hover {
+  cursor: pointer;
+  color: var(--link)
+}
+
 .flex-between-center {
   display: flex;
   justify-content: space-between;

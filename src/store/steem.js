@@ -1,5 +1,14 @@
 import Cookie from 'vue-cookies'
-import { SP_DELEGATE_DECIMAL } from '@/constant'
+import {
+  SP_DELEGATE_DECIMAL
+} from '@/constant'
+import {
+  vestsToSteem,
+  getAccountInfo,
+  getSteemBalance,
+  getSbdBalance,
+  getVestingShares
+} from '@/utils/steem/steem'
 
 export default {
   namespaced: true,
@@ -16,7 +25,7 @@ export default {
      * this is the amount store in contract
      */
     depositedVestsInt: {},
-    
+
   },
   mutations: {
     // steem
@@ -40,7 +49,7 @@ export default {
 
     // pool info 
     saveDepositedVestsInt: (state, depositedVestsInt) => {
-      state.depositedVestsInt =depositedVestsInt
+      state.depositedVestsInt = depositedVestsInt
     }
   },
   getters: {
@@ -51,6 +60,50 @@ export default {
     depositedSP: state => (account) => {
       return parseFloat(state.depositedVestsInt[account] * 1e-6 * state.vestsToSteem).toFixed(6)
     }
+  },
+  actions: {
+    setVestsToSteem({
+      commit
+    }) {
+      vestsToSteem(1).then((res) => {
+        commit('saveVestsToSteem', res)
+      })
+    },
+
+    getSteem({
+      commit,
+      state
+    }) {
+      getSteemBalance(state.steemAccount).then((steem) => {
+        commit('saveSteemBalance', steem)
+      })
+    },
+
+    getVests({
+      commit,
+      state
+    }) {
+    getVestingShares(state.steemAccount).then((vests) => {
+        commit('saveVestsBalance', vests)
+      })
+    },
+    async initializeSteemAccount({
+      commit
+    }, steemAccount) {
+      try {
+        const account = await getAccountInfo(steemAccount)
+        const steem = parseFloat(account.balance)
+        const sbd = parseFloat(account.sbd_balance)
+        const vests = parseFloat(account.vesting_shares) - parseFloat(account.delegated_vesting_shares)
+        commit('saveSteemBalance', steem)
+        commit('saveVestsBalance', vests)
+        commit('saveSteemAccount', steemAccount)
+        return true
+      } catch (err) {
+        // console.error('initializeSteemAccount Fail:', err.message)
+        return false
+      }
+    },
   }
-   
+
 }

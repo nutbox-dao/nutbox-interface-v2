@@ -1,4 +1,5 @@
 import { getProvider } from './ethers'
+import { getWeb3 } from './web3'
 
 
 /**
@@ -13,4 +14,12 @@ export const signMessage = async (message) => {
         message
     )
     return signature
+}
+
+/**
+ * Convert hex to string
+ * @param {*} hex 
+ */
+export const hexToString = (hex) => {
+    return getWeb3().utils.hexToUtf8(hex)
 }

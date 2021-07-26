@@ -25,20 +25,25 @@
       <div class="btn-row">
         <span class="value"> 0.001 </span>
         <div class="right-box">
-          <button class="primary-btn m-0">Harvest</button>
+          <button class="primary-btn m-0">{{ $t('message.withdraw') }}</button>
         </div>
       </div>
       <div class="text-left mt-3 mb-1">
         <span style="color: #717376;" class="font-bold">{{ card.assetType == 'sp' ? 'STEEM POWER' : 'HIVE POWER'}}</span>
-        <span style="color: #BDBFC2"> STAKED</span>
+        <span style="color: #BDBFC2"> DELEGATED</span>
       </div>
-      <div class="btn-row mb-4">
+      <div class="btn-row mb-4" v-if="steemLogin">
         <span class="value"> 0.001 </span>
         <div class="right-box">
-          <button class="outline-btn" @click="showModal=true">-</button>
-          <button class="outline-btn" @click="showModal=true">+</button>
+          <button class="outline-btn" @click="decrease">-</button>
+          <button class="outline-btn" @click="increase">+</button>
         </div>
       </div>
+      <ConnectWalletBtn
+          class="op-bottom"
+          v-if="!steemLogin"
+          @steemLogin="showSteemLogin = true"
+        />
       <div class="detail-info-box">
         <div class="project-info-container">
           <span class="name"> TVL </span>
@@ -59,18 +64,25 @@
       hide-footer
       no-close-on-backdrop
     >
-      <DelegateModal/>
+      <DelegateModal :operate='operate' :card='card' @hideDelegateMask="showModal=false"/>
     </b-modal>
+    <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
 </template>
 
 <script>
 import { vestsToSteem } from '@/utils/steem/steem'
 import DelegateModal from '@/components/CrowdStaking/TipBoxes/DelegateModal'
+import { mapState } from 'vuex'
+import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
+import Login from '@/components/ToolsComponents/Login'
+
 export default {
   name: 'DDelegateCard',
   components: {
-    DelegateModal
+    DelegateModal,
+    ConnectWalletBtn,
+    Login
   },
   props: {
     card: {
@@ -82,12 +94,30 @@ export default {
       this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
     }
   },
+  computed: {
+    ...mapState('steem', ['steemAccount']),
+    steemLogin() {
+      return !!this.steemAccount
+    }
+  },
   data () {
     return {
       tvl: 0,
-      showModal: true
+      showModal: false,
+      operate: 'add',
+      showSteemLogin: false
     }
-  }
+  },
+  methods: {
+    increase() {
+      this.operate = 'add'
+      this.showModal = true
+    },
+    decrease(){
+      this.operate ='minus'
+      this.showModal = true
+    }
+  },
 }
 </script>
 

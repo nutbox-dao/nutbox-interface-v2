@@ -141,7 +141,7 @@
 <script>
 import { LOCALE_KEY } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import {
   loadAccounts as loadPolkadotAccounts
@@ -200,6 +200,7 @@ export default {
       'saveAccount'
     ]),
     ...mapMutations('polkadot', ['saveClCommunitys']),
+    ...mapActions('steem', ['setVestsToSteem']),
     gotoOfficial () {
       test()
       // window.open('https://nutbox.io', '_blank')
@@ -280,6 +281,8 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
+    // get steem vests ratio
+    this.setVestsToSteem()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {
