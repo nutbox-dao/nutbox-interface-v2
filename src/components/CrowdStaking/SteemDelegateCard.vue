@@ -73,7 +73,7 @@
 
 <script>
 import { vestsToSteem } from '@/utils/steem/steem'
-import DelegateModal from '@/components/CrowdStaking/TipBoxes/SteemDelegateModal'
+import DelegateModal from '@/components/ToolsComponents/SteemDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
