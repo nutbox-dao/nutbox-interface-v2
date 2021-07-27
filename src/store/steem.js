@@ -100,7 +100,7 @@ export default {
         commit('saveSteemAccount', steemAccount)
         return true
       } catch (err) {
-        // console.error('initializeSteemAccount Fail:', err.message)
+        console.error('initializeSteemAccount Fail:', err.message)
         return false
       }
     },

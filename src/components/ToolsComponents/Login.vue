@@ -92,12 +92,12 @@ export default {
         async function (res) {
           if (res.success === true) {
             const ress = await that.$store.dispatch(
-              this.type === 'STEEM' ? 'steem/initializeSteemAccount' : 'hive/initializeHiveAccount',
+              that.type === 'STEEM' ? 'steem/initializeSteemAccount' : 'hive/initializeHiveAccount',
               res.data.username
             );
             if (!ress) {
               that.tipTitle = that.$t("error.error");
-              that.tipMessage = that.$t("error." + this.type.toLowerCase() + "LoginFail");
+              that.tipMessage = that.$t("error." + that.type.toLowerCase() + "LoginFail");
               that.showMessage = true;
               that.isLoging = false;
               return;
@@ -110,7 +110,7 @@ export default {
               that.showMessage = true;
             } else {
               that.tipTitle = that.$t("error.error");
-              that.tipMessage = that.$t("error." + this.type.toLowerCase() + "LoginFail");
+              that.tipMessage = that.$t("error." + that.type.toLowerCase() + "LoginFail");
               that.showMessage = true;
             }
           }

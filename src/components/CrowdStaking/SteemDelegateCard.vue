@@ -98,6 +98,7 @@ export default {
   computed: {
     ...mapState('steem', ['steemAccount']),
     steemLogin() {
+      console.log(46525, this.steemAccount);
       return !!this.steemAccount
     }
   },
