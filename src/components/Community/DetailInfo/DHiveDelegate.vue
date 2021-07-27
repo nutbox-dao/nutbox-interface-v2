@@ -12,8 +12,8 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of 2" :key="idx">
-            <DDelegateCard />
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of hiveDelegatePools" :key="idx">
+            <DDelegateCard :card='card'/>
           </div>
         </div>
       </div>
@@ -22,20 +22,43 @@
 </template>
 
 <script>
-import DDelegateCard from '@/components/Community/DetailInfo/Cards/DDelegateCard'
+import DDelegateCard from '@/components/Community/DetailInfo/Cards/DHiveDelegateCard'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'DDelegate',
   components: {
     DDelegateCard
   },
+  props: {
+    hiveDelegatePools: {
+      type: Array
+    },
+  },
+  computed: {
+    ...mapState({
+      allPools: state => state.web3.allPools,
+      hiveAccount: state => state.hive.hiveAccount
+    }),
+    loading () {
+      return this.allPools === null
+    }
+  },
   data () {
     return {
       isLoading: false,
       delegateDataList: ['']
     }
-  }
-
+  },
+  methods: {
+    ...mapActions('hive', ['getVests', 'getHive'])
+  },
+  mounted () {
+    if(this.hiveAccount && this.hiveAccount.length > 0){
+      this.getVests();
+      this.getHive();
+    }
+  },
 }
 </script>
 

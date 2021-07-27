@@ -83,6 +83,7 @@ export default {
       state
     }) {
     getVestingShares(state.hiveAccount).then((vests) => {
+        console.log(2525, vests);
         commit('saveVestsBalance', vests)
       })
     },

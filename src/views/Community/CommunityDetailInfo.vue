@@ -36,7 +36,8 @@
           <component :is="tabOptions[activeTab].component"
             :crowdloanPools='crowdloanPools'
             :crowdstakingPools='crowdstakingPools'
-            :delegatePools='delegatePools'
+            :steemDelegatePools='steemDelegatePools'
+            :hiveDelegatePools='hiveDelegatePools'
             :erc20Pools='erc20Pools'>
           </component>
         </div>
@@ -49,22 +50,26 @@
 import { mapGetters } from 'vuex'
 import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
-import DDelegate from '@/components/Community/DetailInfo/DDelegate'
+import DSteemDelegate from '@/components/Community/DetailInfo/DSteemDelegate'
+import DHiveDelegate from '@/components/Community/DetailInfo/DHiveDelegate'
 import DNominate from '@/components/Community/DetailInfo/DNominate'
 import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
+import HiveAccount from '@/components/Accounts/HiveAccount'
 
 export default {
   name: 'CommunityDetailInfo',
   components: {
     DCrowdLoan,
     DCrowdStaking,
-    DDelegate,
+    DSteemDelegate,
+    DHiveDelegate,
     DNominate,
     BSCAccount,
     PolkadotAccount,
-    SteemAccount
+    SteemAccount,
+    HiveAccount
   },
   props: {},
   data () {
@@ -74,8 +79,9 @@ export default {
       tabOptions: [
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
         { name: 'Nominate', component: 'DCrowdStaking', chain: '' },
-        { name: 'Delegate', component: 'DDelegate', chain: '' },
-        { name: 'Deposite', component: 'DNominate', chain: '' }
+        { name: 'Deposite', component: 'DNominate', chain: '' },
+        { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
+        { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' }
       ]
     }
   },
@@ -93,9 +99,11 @@ export default {
         case 1:
           return 'PolkadotAccount'
         case 2:
-          return 'SteemAccount';
+          return 'BSCAccount';
         case 3:
-          return 'BSCAccount'
+          return 'SteemAccount';
+        case 4:
+          return 'HiveAccount'
         default:
           break;
       }
@@ -109,8 +117,11 @@ export default {
     crowdstakingPools () {
       return this.pools ? this.pools.filter(p => p.type == 'SubstrateNominateAssetRegistry') : []
     },
-    delegatePools () {
-      return this.pools ? this.pools.filter(p => p.type == 'SteemHiveDelegateAssetRegistry') : []
+    steemDelegatePools () {
+      return this.pools ? this.pools.filter(p => p.type == 'SteemHiveDelegateAssetRegistry' && p.assetType == 'sp') : []
+    },
+    hiveDelegatePools () {
+      return this.pools ? this.pools.filter(p => p.type == 'SteemHiveDelegateAssetRegistry' && p.assetType == 'hp') : []
     },
     erc20Pools () {
       return this.pools ? this.pools.filter(p => p.type == 'HomeChainAssetRegistry') : []

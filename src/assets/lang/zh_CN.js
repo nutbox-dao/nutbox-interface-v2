@@ -172,6 +172,7 @@ module.exports = {
     creaseDelegation: "增加代理",
     increaseDelegation: "减少代理",
     getSp: "获取 SP",
+    getHp: "获取 HP",
     get: '获取',
   },
   farm: {

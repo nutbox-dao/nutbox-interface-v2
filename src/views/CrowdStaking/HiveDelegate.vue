@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapState({
       allPools: state => state.web3.allPools,
-      steemAccount: state => state.steem.steemAccount
+      hiveAccount: state => state.hive.hiveAccount
     }),
     delegateCards () {
       return this.allPools? this.allPools.filter(p => p.type === "SteemHiveDelegateAssetRegistry" && p.assetType === 'hp') : []
@@ -43,12 +43,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('steem', ['getVests', 'getSteem'])
+    ...mapActions('hive', ['getVests', 'getHive'])
   },
   mounted () {
-    if(this.steemAccount && this.steemAccount.length > 0){
+    if(this.hiveAccount && this.hiveAccount.length > 0){
       this.getVests();
-      this.getSteem();
+      this.getHive();
     }
   },
 }

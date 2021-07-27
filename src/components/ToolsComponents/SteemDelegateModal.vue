@@ -18,7 +18,7 @@
                 ? $t("stake.creaseDelegation")
                 : $t("stake.increaseDelegation")
             }}</span>
-        <span class="text-right">{{ $t('wallet.balance') }}: {{ operate === 'add' ? formHP : formDepositedHP }}</span>
+        <span class="text-right">{{ $t('wallet.balance') }}: {{ operate === 'add' ? formSP : formDepositedSP }}</span>
       </div>
       <div class="input-box flex-between-center">
         <input style="flex: 1"
@@ -38,8 +38,8 @@
       <button class="primary-btn" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("message.confirm") }}</button>
     </div>
-    <div class="text-center mb-2 mt-4 hover-blue" @click="getHp">{{ $t("stake.getHp") }}</div>
-    <div class="text-center text-grey-light font14">{{ $t("message.delegatecharge") }}： {{ fee }} HIVE</div>
+    <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div>
+    <div class="text-center text-grey-light font14">{{ $t("message.delegatecharge") }}： {{ fee }} STEEM</div>
   </div>
 
 </template>
@@ -48,7 +48,8 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { formatBalance } from '@/utils/helper';
 import { hexToString } from '@/utils/web3/utils'
-import { getDelegateFromHive, hiveDelegation } from '@/utils/hive/hive'
+import { STEEM_GAS_ACCOUNT } from '@/config'
+import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
 
 export default {
 
@@ -60,14 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('hive', ['hiveAccount', 'hiveBalance', 'vestsToHive', 'vestsBalance']),
+    ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance']),
     ...mapState('web3', ['depositDatas', 'account']),
-    ...mapGetters('hive', ['hpBalance']),
-    formHP(){
-      return formatBalance(this.hpBalance);
+    ...mapGetters('steem', ['spBalance']),
+    formSP(){
+      return formatBalance(this.spBalance);
     },
-    formDepositedHP(){
-      return formatBalance(this.hiveBalance)
+    formDepositedSP(){
+      return formatBalance(this.depositDatas[this.card.asset])
     }
   },
   props: {
@@ -80,18 +81,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions('hive', ['getVests','getHive']),
-    ...mapMutations('hive', ['saveHiveBalance', 'saveVestsBalance']),
+    ...mapActions('steem', ['getVests','getSteem']),
+    ...mapMutations('steem', ['saveSteemBalance', 'saveVestsBalance']),
     hide() {
       if (this.loading) return;
       this.$emit("hideDelegateMask");
     },
     fillMax(){
         this.delegatevalue =
-        this.operate === "add" ? this.hpBalance : this.depositDatas[this.card.asset];
+        this.operate === "add" ? this.spBalance : this.depositDatas[this.card.asset];
     },
     checkDelegateFee() {
-      if (this.hiveBalance >= 1){
+      if (this.steemBalance >= 1){
         return true;
       }
       this.$bvToast.toast(this.$t('error.delegateeroor'), {
@@ -113,9 +114,9 @@ export default {
       return res;
     },
     async confirm(){
-      let hp = 0;
+      let sp = 0;
       this.loading = true;
-      const haveDelegated = await getDelegateFromHive(this.hiveAccount, hexToString(this.card.agentAccount))
+      const haveDelegated = await getDelegateFromSteem(this.steemAccount, hexToString(this.card.agentAccount))
       if (haveDelegated < 0) {
         this.$bvToast.toast(this.$t('error.delegateerror'), {
           title:this.$t('error.pleaseRetry'),
@@ -126,29 +127,29 @@ export default {
       }
       console.log('delegated', haveDelegated);
       if (this.operate = 'add') {
-        hp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue)
+        sp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue)
       } else {
-        hp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue)
-        hp = hp < 0 ? 0 : hp
+        sp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue)
+        sp = sp < 0 ? 0 : sp
       }
-      this.delegateHp(hp);
+      this.delegateSp(sp);
     },
-    async delegateHp(hp) {
+    async delegateSp(sp) {
       try{
-        hp = parseFloat(hp)
-        if ((hp !== 0 && !this.checkInputValue()) || !(await this.checkAddress()) || !this.checkDelegateFee()){
+        sp = parseFloat(sp)
+        if ((sp !== 0 && !this.checkInputValue()) || !(await this.checkAddress()) || !this.checkDelegateFee()){
           return;
         }
-        const amount = parseFloat(hp / this.vestsToHive).toFixed(6);
-        const res = await hiveDelegation(
-          this.hiveAccount,
+        const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
+        const res = await steemDelegation(
+          this.steemAccount,
           hexToString(this.card.agentAccount),
           amount,
           this.account
         )
         if (res.success === true){
           this.getVest();
-          this.getHive();
+          this.getSteem();
 
         }
       }catch(e){
@@ -157,8 +158,8 @@ export default {
         this.loading = false
       }
     },
-    getHp() {
-      window.open("https://blocktrades.us/en/trade", "_blank");
+    getSp() {
+      window.open("https://steemit.com/", "_blank");
     },
   },
   mounted () {
