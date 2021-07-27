@@ -3,12 +3,10 @@
     <b-button
       class="login-btn"
       variant="primary"
-      :style="'width:'+width+'px;'"
+      style="width:90%"
       @click="unlock"
       :disabled="isConnecting"
-      v-if="
-        !steemAccount || steemAccount.length === 0
-      "
+      v-if="showBtn"
     >
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
       <!-- <b-button variant="primary" @click="unlock"> -->
@@ -42,18 +40,26 @@ export default {
     }
   },
   computed: {
-    ...mapState(["steemAccount"]),
+    ...mapState('steem', ["steemAccount"]),
+    ...mapState('hive', ['hiveAccount']),
+    showBtn(){
+      switch (this.type){
+        case 'STEEM':
+          return !this.steemAccount || this.steemAccount.length === 0 
+        case 'HIVE':
+          return !this.hiveAccount || this.hiveAccount.length === 0
+        default:
+          return true
+      }
+    }
   },
   methods: {
     async unlock() {
       if (this.type === "STEEM") {
         this.$emit("steemLogin");
-      } else {
+      } else if (this.type === 'HIVE') {
         // loading
-        this.$emit("tronLogin");
-        this.isConnecting = true;
-        await sleep(4);
-        this.isConnecting= false;
+        this.$emit("hiveLogin");
       }
     },
   },
@@ -63,7 +69,7 @@ export default {
         this.btnName = this.$t("wallet.connectSteem")
         break;
       case 'HIVE':
-        this.btnName = this.$t("wallet.connectTron")
+        this.btnName = this.$t("wallet.connectHive")
     }
   },
 };

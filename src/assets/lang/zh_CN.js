@@ -2,6 +2,7 @@ module.exports = {
   message: {
     userlogin: '用户登录',
     steemAccoutPlaceHolder: '请输入Steem用户名',
+    hiveAccountPlaceHolder: '请输入Hive用户名',
     login: '登录',
     loging: '登录中...',
     delegatemine: '代理挖矿',
@@ -70,6 +71,7 @@ module.exports = {
     swap: '跨链转账',
     connectSteem: "链接Steem钱包",
     connectTron: "链接波场钱包",
+    connectHive: "链接Hive钱包",
     swapSubTitle: "及时、安全的将资产转移到波场网络",
     install: "立即安装",
     transfer: "转账",
@@ -304,6 +306,7 @@ module.exports = {
     unlockKeychain: '请解锁Steem Keychain',
     unlockWallet: '请解锁波场钱包',
     steemLoginFail: 'Steem登录失败',
+    hiveLoginFail: 'Hive登录失败',
     illegalTronAddress: '无效的波场地址',
     inputError: '输入值无效',
     inputOverflow: '输入超过最大值',

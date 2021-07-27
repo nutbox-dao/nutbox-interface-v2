@@ -19,6 +19,7 @@ export default {
   computed: {
     ...mapState('hive',['hiveAccount']),
     isLogin() {
+      return true
       return this.hiveAccount
     }
   },

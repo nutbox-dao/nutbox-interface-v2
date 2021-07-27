@@ -89,8 +89,8 @@ export default {
         // update cache
         await getRegitryAssets(true)
         console.log(13487, hash);
-        this.$bvToast.toast(this.$t('registryAssetSuccess'), {
-          title: this.$t('tip.seccuss'),
+        this.$bvToast.toast(this.$t('tip.registryAssetSuccess'), {
+          title: this.$t('tip.success'),
           variant: 'success'
         })
         this.form = {

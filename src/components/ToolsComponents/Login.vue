@@ -4,11 +4,11 @@
       <div class="login">
         <p>{{ this.$t("message.userlogin") }}</p>
         <div class="account-box">
-          <span class="keychain" @click="getKeychain"/>
+          <span class="keychain" :style="keychainLogo" @click="getKeychain"/>
           <b-input
             class="mb-2 mr-sm-2 mb-sm-0 input"
-            :placeholder="$t('message.steemAccoutPlaceHolder')"
-            v-model="steemAccount"
+            :placeholder="type === 'STEEM' ? $t('message.steemAccoutPlaceHolder') : $t('message.hiveAccountPlaceHolder')"
+            v-model="account"
           ></b-input>
         </div>
         <b-button variant="primary" class="login-btn" @click="login" :disabled="isLoging">
@@ -40,7 +40,7 @@ export default {
     return {
       loginBtnText: "",
       isLoging: false,
-      steemAccount: "",
+      account: "",
       tipTitle: "",
       tipMessage: "",
       showMessage: false,
@@ -53,15 +53,31 @@ export default {
       default: 'STEEM'
     },
   },
+  computed: {
+    keychainLogo() {
+      if (this.type === 'STEEM'){
+        return {
+          backgroundImage: 'url('+ require('@/static/images/keychain.png') +')'
+        }
+      }else{
+        return {
+          backgroundImage: 'url('+ require('@/static/images/hive-keychain.png') +')'
+        }
+      }
+    }
+  },
   components: {
     TipMessage,
   },
   methods: {
     getKeychain() {
-      window.open('https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm','_blank')
+      const url = this.type === 'STEEM' 
+      ? 'https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm'
+      : 'https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep?hl=zh-CN'
+      window.open(url,'_blank')
     },
     login() {
-      if (this.steemAccount.length === 0){
+      if (this.account.length === 0){
         return;
       }
       const message = `nutbox_login-${Math.floor(
@@ -69,19 +85,19 @@ export default {
       )}`;
       this.isLoging = true;
       const that = this;
-      steem_keychain.requestSignBuffer(
-        this.steemAccount,
+      (this.type === 'STEEM' ? steem_keychain : hive_keychain).requestSignBuffer(
+        this.account,
         message,
         "Active",
         async function (res) {
           if (res.success === true) {
             const ress = await that.$store.dispatch(
-              "steem/initializeSteemAccount",
+              this.type === 'STEEM' ? 'steem/initializeSteemAccount' : 'hive/initializeHiveAccount',
               res.data.username
             );
             if (!ress) {
               that.tipTitle = that.$t("error.error");
-              that.tipMessage = that.$t("error.steemLoginFail");
+              that.tipMessage = that.$t("error." + this.type.toLowerCase() + "LoginFail");
               that.showMessage = true;
               that.isLoging = false;
               return;
@@ -94,7 +110,7 @@ export default {
               that.showMessage = true;
             } else {
               that.tipTitle = that.$t("error.error");
-              that.tipMessage = that.$t("error.steemLoginFail");
+              that.tipMessage = that.$t("error." + this.type.toLowerCase() + "LoginFail");
               that.showMessage = true;
             }
           }
@@ -135,7 +151,8 @@ export default {
   background-color: var(--background);
   margin-right: 2px;
   border-radius:16px 0 0 16px;
-  background-image: url('~@/static/images/keychain.png');
+  // background-image: url('~@/static/images/keychain.png');
+  background-size: 80% 80%;
   background-repeat: no-repeat;
   background-position: center;
 }

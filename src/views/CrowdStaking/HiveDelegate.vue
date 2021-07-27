@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import CrowdDelegateCard from '@/components/CrowdStaking/CrowdDelegateCard'
+import CrowdDelegateCard from '@/components/CrowdStaking/HiveDelegateCard'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -36,7 +36,7 @@ export default {
       steemAccount: state => state.steem.steemAccount
     }),
     delegateCards () {
-      return this.allPools? this.allPools.filter(p => p.type === "SteemHiveDelegateAssetRegistry") : []
+      return this.allPools? this.allPools.filter(p => p.type === "SteemHiveDelegateAssetRegistry" && p.assetType === 'hp') : []
     },
     loading () {
       return this.allPools === null

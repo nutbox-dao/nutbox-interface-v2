@@ -11,6 +11,7 @@ import rococo from './rococo'
 import web3 from './web3'
 import community from '@/store/community'
 import steem from './steem'
+import hive from './hive'
 
 Vue.use(Vuex)
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     rococo,
     web3,
     community,
-    steem
+    steem,
+    hive
   }
 })

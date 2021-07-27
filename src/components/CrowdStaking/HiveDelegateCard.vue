@@ -4,7 +4,7 @@
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
-          <img class="icon2" :src="card.icon" alt="" />
+          <img class="icon2" src="~@/static/images/hive-logo.png" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
           <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
@@ -67,12 +67,12 @@
     >
       <DelegateModal :operate='operate' :card='card' @hideDelegateMask="showModal=false"/>
     </b-modal>
-    <Login type='HIVE' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
+    <Login type='HIVE' v-if="showHiveLogin" @hideMask="showHiveLogin = false" />
   </div>
 </template>
 
 <script>
-import { vestsToSteem } from '@/utils/steem/steem'
+import { vestsToHive } from '@/utils/hive/hive'
 import DelegateModal from '@/components/CrowdStaking/TipBoxes/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
@@ -92,13 +92,13 @@ export default {
   },
   watch: {
     'card.totalStakedAmount': async (val, oldVal) => {
-      this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
+      this.tvl = await vestsToHive(this.card.totalStakedAmount * 1e-6)
     }
   },
   computed: {
-    ...mapState('steem', ['steemAccount']),
-    steemLogin() {
-      return !!this.steemAccount
+    ...mapState('hive', ['hiveAccount']),
+    hiveLogin() {
+      return !!this.hiveAccount
     }
   },
   data () {
@@ -106,7 +106,7 @@ export default {
       tvl: 0,
       showModal: false,
       operate: 'add',
-      showSteemLogin: false
+      showHiveLogin: false
     }
   },
   methods: {

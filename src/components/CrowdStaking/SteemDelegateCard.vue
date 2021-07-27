@@ -4,7 +4,7 @@
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
-          <img class="icon2" :src="card.icon" alt="" />
+          <img class="icon2" src="~@/static/images/tokens/steem.png" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
           <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
