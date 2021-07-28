@@ -2,21 +2,21 @@
   <div class="c-card">
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img class="icon1" :src="crowdstaking.project.iconUrl" alt="" />
+        <img class="icon1" :src="card.project.iconUrl" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span>{{ crowdstaking.project.projectName }}</span>
+          <span>{{ card.project.projectName }}</span>
         </div>
       </div>
 
     </div>
     <div class="h-line mt-4 mb-2"></div>
     <div class="desc">
-      {{ crowdstaking.community.description[lang] }}
+      {{ card.community.description[lang] }}
     </div>
     <div class="validator-container">
-      <div class="validator" v-for="v in crowdstaking.project.validators" :key="v">
+      <div class="validator" v-for="v in card.project.validators" :key="v">
         {{ v | formatValidatorAdd }}
       </div>
     </div>
@@ -33,7 +33,7 @@
       </template>
       <div class="project-info-container">
         <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
+        <div class="info">{{ tvl | amountForm(4)}} ({{card.project.validators.length}})</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
@@ -50,7 +50,7 @@
       no-close-on-backdrop
     >
       <TipNominator
-        :crowdstaking="crowdstaking"
+        :crowdstaking="card"
         @hideNominate="showNominate = false"
       />
     </b-modal>
@@ -64,7 +64,7 @@
       no-close-on-backdrop
     >
       <TipBondAndNominator
-        :crowdstaking="crowdstaking"
+        :crowdstaking="card"
         @hideBondAndNominate="showBondAndNominator = false"
       />
     </b-modal>
@@ -87,7 +87,7 @@ export default {
     }
   },
   props: {
-    crowdstaking: {
+    card: {
       type: Object
     },
     symbol: {
@@ -123,9 +123,16 @@ export default {
       'allValidatorInfosInOurDB'
     ]),
     ...mapState(['lang']),
+    ...mapState('web3', ['pendingRewards']),
+    pendingReward(){
+      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
+      if(!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal
+      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+    },
     // 用户已经投了该项目的节点
     nominated () {
-      const val = this.crowdstaking.project.validators.map((tcd) =>
+      const val = this.card.project.validators.map((tcd) =>
         stanfiAddress(tcd)
       )
       return (
@@ -137,7 +144,7 @@ export default {
       if (this.allValidatorInfosInOurDB.length === 0) {
         return 0
       }
-      const total = this.crowdstaking.project.validators.reduce(
+      const total = this.card.project.validators.reduce(
         (t, v) =>
           t.add(new BN(this.allValidatorInfosInOurDB[v].total.toString())),
         new BN(0)

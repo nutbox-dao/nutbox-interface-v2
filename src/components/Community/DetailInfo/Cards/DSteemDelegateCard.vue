@@ -15,7 +15,7 @@
       <span style="color: #BDBFC2">EARNED</span>
     </div>
     <div class="btn-row">
-      <span class="value"> 0.001 </span>
+      <span class="value"> {{ pendingReward }} </span>
       <div class="right-box">
         <button class="primary-btn m-0">{{ $t('message.withdraw') }}</button>
       </div>
@@ -87,6 +87,13 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount']),
+    ...mapState('web3',['pendingRewards']),
+    pendingReward(){
+      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
+      if(!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal
+      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+    },
     steemLogin() {
       console.log(46525, this.steemAccount);
       return !!this.steemAccount

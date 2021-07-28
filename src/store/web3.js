@@ -23,7 +23,9 @@ export default {
     readonlyProvider: null,
     allPools: null,
     // user deposit data
-    depositDatas: {}
+    depositDatas: {},
+    // all pending reward got by multicall
+    pendingRewards:{}
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -83,6 +85,9 @@ export default {
     },
     saveDepositedDatas: (state, depositDatas) => {
       state.depositDatas = depositDatas
+    },
+    savePendingRewards: (state, pendingRewards) => {
+      state.pendingRewards = pendingRewards
     }
   },
   getters: {

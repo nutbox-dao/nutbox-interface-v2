@@ -5,15 +5,15 @@
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
     <template v-else>
-      <div v-if="crowdstakings.length > 0"></div>
+      <div v-if="erc20Pools.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
-            <DStakingCard :crowdstaking="card"/>
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of erc20Pools" :key="idx">
+            <DStakingCard :card="card"/>
           </div>
         </div>
       </div>
@@ -29,6 +29,11 @@ export default {
   name: 'DCrowdStaking',
   components: {
     DStakingCard
+  },
+  props: {
+    erc20Pools: {
+      type: Array,
+    },
   },
   computed: {
     ...mapState('polkadot', ['isConnected', 'crowdstakings'])

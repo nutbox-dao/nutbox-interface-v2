@@ -152,7 +152,7 @@ import { setupNetwork, test, chainChanged } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
-import { getAllPools } from '@/utils/web3/pool'
+import { getAllPools, monitorPendingRewards } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -203,7 +203,8 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     gotoOfficial () {
-      test()
+      // test()
+      monitorPendingRewards()
       // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {
@@ -238,7 +239,7 @@ export default {
         try{
           this.loading = true
           getAllCommunities()
-          getAllPools()
+          monitorPendingRewards()
         }catch(e){
           handleApiErrCode(e, (tip, param) => {
             this.$bvToast.toast(tip, param)

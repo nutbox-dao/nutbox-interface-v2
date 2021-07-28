@@ -2,153 +2,145 @@
   <div class="c-card">
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img class="icon1" :src="crowdstaking.project.iconUrl" alt="" />
+        <img class="icon1" :src="card.icon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span>{{ crowdstaking.project.projectName }}</span>
+          <span>{{ card.poolName }}</span>
         </div>
       </div>
-
     </div>
-    <div class="h-line mt-4 mb-2"></div>
-    <div class="desc">
-      {{ crowdstaking.community.description[lang] }}
+    <div class="text-left mt-3">
+      <span style="color: #717376;" class="font-bold">{{ card.tokenSymbol + ' ' }}</span>
+      <span style="color: #BDBFC2">EARNED</span>
     </div>
-    <div class="validator-container">
-      <div class="validator" v-for="v in crowdstaking.project.validators" :key="v">
-        {{ v | formatValidatorAdd }}
+    <div class="btn-row">
+      <span class="value"> {{ pendingReward }} </span>
+      <div class="right-box">
+        <button class="primary-btn m-0">{{ $t('message.withdraw') }}</button>
       </div>
     </div>
+    <div class="text-left mt-3 mb-1">
+      <span style="color: #717376;" class="font-bold">{{ card.symbol }}</span>
+      <span style="color: #BDBFC2"> STAKED</span>
+    </div>
+    <div class="btn-row mb-4" v-if="approved">
+      <span class="value"> 0.001 </span>
+      <div class="right-box">
+        <button class="outline-btn" @click="decrease">-</button>
+        <button class="outline-btn" @click="increase">+</button>
+      </div>
+    </div>
+    <div v-else>
+      
+    </div>
+    
     <div class="detail-info-box">
-      <template v-if="isConnected">
-        <button
-          class="primary-btn"
-          @click="nominate"
-          :disabled="nominated || loadingStaking"
-        >
-          <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-          >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
-        </button>
-      </template>
       <div class="project-info-container">
         <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
+        <div class="info">--</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
         <div class="info">13.0%</div>
       </div>
     </div>
-
     <b-modal
-      v-model="showNominate"
+      v-model="showModal"
       modal-class="custom-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      <TipNominator
-        :crowdstaking="crowdstaking"
-        @hideNominate="showNominate = false"
-      />
-    </b-modal>
-
-    <b-modal
-      v-model="showBondAndNominator"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <TipBondAndNominator
-        :crowdstaking="crowdstaking"
-        @hideBondAndNominate="showBondAndNominator = false"
-      />
+      <DelegateModal :operate='operate' :card='card' @hideDelegateMask="showModal=false"/>
     </b-modal>
   </div>
 </template>
 
 <script>
-import TipBondAndNominator from '@/components/CrowdStaking/TipBoxes/TipBondAndNominator'
-import TipNominator from '@/components/CrowdStaking/TipBoxes/TipNominator'
-import { mapState } from 'vuex'
-import { stanfiAddress } from '@/utils/commen/account'
-import BN from 'bn.js'
+import { vestsToSteem } from '@/utils/steem/steem'
+import DelegateModal from '@/components/ToolsComponents/SteemDelegateModal'
+import { mapState, mapGetters } from 'vuex'
+import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
+import Login from '@/components/ToolsComponents/Login'
 
 export default {
-  name: 'DStakingCard',
-  data () {
-    return {
-      showNominate: false,
-      showBondAndNominator: false
-    }
+  name: 'DDelegateCard',
+  components: {
+    DelegateModal,
+    ConnectWalletBtn,
+    Login
   },
   props: {
-    crowdstaking: {
+    card: {
       type: Object
-    },
-    symbol: {
-      type: String,
-      default: 'Kusama'
     }
   },
-  filters: {
-    formatValidatorAdd: function (add) {
-      return add.slice(0, 3) + '...' + add.slice(-3)
-    }
-  },
-  components: {
-    TipBondAndNominator,
-    TipNominator
-  },
-  methods: {
-    async nominate () {
-      if (this.bonded) {
-        this.showNominate = true
-      } else {
-        this.showBondAndNominator = true
-      }
+  watch: {
+    'card.totalStakedAmount': async (val, oldVal) => {
+      this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
     }
   },
   computed: {
-    ...mapState('polkadot', [
-      'isConnected',
-      'lang',
-      'bonded',
-      'nominators',
-      'loadingStaking',
-      'allValidatorInfosInOurDB'
-    ]),
-    ...mapState(['lang']),
-    // 用户已经投了该项目的节点
-    nominated () {
-      const val = this.crowdstaking.project.validators.map((tcd) =>
-        stanfiAddress(tcd)
-      )
-      return (
-        this.nominators.filter(({ address }) => val.indexOf(address) !== -1)
-          .length === val.length
-      )
+    ...mapState('steem', ['steemAccount']),
+    ...mapState('web3', ['pendingRewards']),
+    pendingReward(){
+      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
+      if(!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal
+      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
     },
-    tvl () {
-      if (this.allValidatorInfosInOurDB.length === 0) {
-        return 0
-      }
-      const total = this.crowdstaking.project.validators.reduce(
-        (t, v) =>
-          t.add(new BN(this.allValidatorInfosInOurDB[v].total.toString())),
-        new BN(0)
-      )
-      return total.toString() / 1e10
+    steemLogin() {
+      console.log(46525, this.steemAccount);
+      return !!this.steemAccount
+    },
+    approved(){
+      return true
     }
   },
-  mounted () {}
+  data () {
+    return {
+      tvl: 0,
+      showModal: false,
+      operate: 'add',
+      showSteemLogin: false
+    }
+  },
+  methods: {
+    increase() {
+      this.operate = 'add'
+      this.showModal = true
+    },
+    decrease(){
+      this.operate ='minus'
+      this.showModal = true
+    }
+  },
+  mounted () {
+    console.log(235, this.card);;
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+.btn-row {
+  @include c-flex-between-center;
+  .value {
+    font-size: 1.2rem;
+    font-weight: bolder;
+  }
+  .right-box {
+    width: 6rem;
+    @include c-flex-between-center;
+  }
+  .outline-btn {
+    background-color: white;
+    border: 1px solid var(--primary-custom);
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: .8rem;
+  }
+}
 </style>

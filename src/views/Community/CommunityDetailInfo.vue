@@ -78,8 +78,8 @@ export default {
       activeTab: 0,
       tabOptions: [
         { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
-        { name: 'Nominate', component: 'DCrowdStaking', chain: '' },
-        { name: 'Deposite', component: 'DNominate', chain: '' },
+        { name: 'Deposite', component: 'DCrowdStaking', chain: '' },
+        { name: 'Nominate', component: 'DNominate', chain: '' },
         { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
         { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' }
       ]

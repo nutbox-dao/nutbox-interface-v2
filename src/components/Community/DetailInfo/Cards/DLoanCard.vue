@@ -5,11 +5,11 @@
     </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img :src="crowdloan.icon" alt="" />
+        <img :src="card.icon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span>{{ crowdloan.poolName }}</span>
+          <span>{{ card.poolName }}</span>
           <i class="link-icon"></i>
         </div>
       </div>
@@ -76,7 +76,7 @@
         :communityId="communityId"
         :fund="getFundInfo"
         :relaychain='chain'
-        :paraName="crowdloan.poolName"
+        :paraName="card.poolName"
         @hideContribute="showContribute = false"
       />
     </b-modal>
@@ -112,7 +112,7 @@ export default {
     }
   },
   props: {
-    crowdloan: {
+    card: {
       type: Object
     }
   },
@@ -147,11 +147,18 @@ export default {
   },
   computed: {
     ...mapState(['lang']),
+    ...mapState('web3', ['pendingRewards']),
+    pendingReward(){
+      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
+      if(!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal
+      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+    },
     chain () {
-      return this.crowdloan.chainId == 2 ? 'polkadot' : 'kusama'
+      return this.card.chainId == 2 ? 'polkadot' : 'kusama'
     },
     getFundInfo () {
-      return this.fundInfo(this.crowdloan.paraId)
+      return this.fundInfo(this.card.paraId)
     },
     isConnected () {
       return this.$store.state[this.chain].isConnected
@@ -169,10 +176,10 @@ export default {
       return this.$store.getters[this.chain + '/cardInfo']
     },
     paraId () {
-      return parseInt(this.crowdloan.paraId)
+      return parseInt(this.card.paraId)
     },
     communityId () {
-      return stanfiAddress(this.crowdloan.communityAccount)
+      return stanfiAddress(this.card.communityAccount)
     },
     leasePeriod () {
       try {
@@ -213,7 +220,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status || this.crowdloan.statusStr
+    this.status = this.getFundInfo.status || this.card.statusStr
   }
 }
 </script>

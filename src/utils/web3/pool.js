@@ -1,10 +1,9 @@
 import { getContract } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
-import { Transaction_config } from '@/config'
 import { updatePoolInfo, getAllPools as gap, getAllParachain as getAP } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config } from '../../config'
+import { errCode, Multi_Config, Transaction_config } from '@/config'
 import { waitForTx } from './ethers'
 import {
     createWatcher
@@ -266,11 +265,42 @@ export const getAllParachain = async (update=false) => {
 /** 
  * monitor all pool real time data stored in db
  */
-export const monitorAllPoolData = async () => {
+export const monitorUserStaked = async () => {
     try{
         const pools = await getAllPools(true)
         
     }catch(e){
 
     }
+}
+
+export const monitorPendingRewards = async () =>{
+    return new Promise(async (resolve, reject) => {
+        try{
+            const pools = await getAllPools(true)
+            console.log(6367, pools);
+            const watcher = createWatcher(pools.map(p => {
+                return {
+                    target: p.communityId,
+                    call: [
+                        'getUserPendingRewards(uint8,address)(uint256)',
+                        p.pid,
+                        store.state.web3.account
+                    ],
+                    returns:[
+                        [p.communityId + ':' + p.pid]
+                    ]
+                }
+            }), Multi_Config)
+            watcher.batch().subscribe(updates => {
+                console.log('Updates', updates);
+                store.commit('web3/savePendingRewards', updates)
+              });
+            watcher.start()
+            resolve()
+        }catch(e){
+            reject()
+            console.log('monitorPendingreward fail', e);
+        }
+    })
 }

@@ -147,7 +147,7 @@ export const Transaction_config = {
   gasLimit: 1000000000
 }
 
-export const MultiAddress = process.env.MultiAddress
+export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
