@@ -1,17 +1,23 @@
 <template>
-  <div class="row">
-    <div class="loading-bg" v-if="loading">
+  <div class="staking-block">
+    <div class="loading-bg" v-if="!isConnected">
       <img src="~@/static/images/loading.gif" alt="" />
-      <p class="font16">{{ $t("tip.loading") }}</p>
+      <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
-    <div
-      v-else
-      class="col-xl-4 col-md-6 mb-4"
-      v-for="(pool, idx) of sortedPools"
-      :key="idx"
-    >
-      <DLoanCard :crowdloan="pool"/>
-    </div>
+    <template v-else>
+      <div v-if="crowdloanPools.length > 0"></div>
+      <div class="empty-bg" v-else>
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p> {{ $t('tip.noProject') }} </p>
+      </div>
+      <div class="cards-container">
+        <div class="row">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdloanPools" :key="idx">
+            <DLoanCard :crowdloan="card"/>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -39,6 +45,7 @@ export default {
     ...mapState({
       allParachain: state => state.allParachain
     }),
+    ...mapState('polkadot', ['isConnected', 'crowdstakings']),
     data () {
       const { crowdloanPools, allParachain } = this
       return { crowdloanPools, allParachain }

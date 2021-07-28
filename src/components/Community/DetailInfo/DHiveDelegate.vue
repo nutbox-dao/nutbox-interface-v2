@@ -5,7 +5,7 @@
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
     <template v-else>
-      <div v-if="delegateDataList.length > 0"></div>
+      <div v-if="hiveDelegatePools.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
@@ -47,7 +47,6 @@ export default {
   data () {
     return {
       isLoading: false,
-      delegateDataList: ['']
     }
   },
   methods: {
