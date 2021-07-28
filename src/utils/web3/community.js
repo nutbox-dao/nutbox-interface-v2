@@ -24,7 +24,7 @@ export const getMyStakingFactory = async (update=false) => {
         }
         let contract;
         try{
-            contract = await getContract('StakingFactory', null, false)
+            contract = await getContract('StakingFactory', null)
         }catch(e){
             reject(e);
             return
@@ -127,7 +127,7 @@ export const createStakingFeast = async (form) => {
 
         let contract;
         try{
-            contract = await getContract('StakingFactory', null, false)
+            contract = await getContract('StakingFactory', null)
         }catch(e){
             reject(e);
             return;

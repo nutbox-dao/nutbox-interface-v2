@@ -25,7 +25,10 @@ export default {
     // user deposit data
     depositDatas: {},
     // all pending reward got by multicall
-    pendingRewards:{}
+    pendingRewards: {},
+    loadingPendingRewards: true,
+    approvements: {},
+    loadingApprovements: true
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -88,6 +91,15 @@ export default {
     },
     savePendingRewards: (state, pendingRewards) => {
       state.pendingRewards = pendingRewards
+    },
+    saveApprovements: (state, approvements) => {
+      state.approvements = approvements
+    },
+    saveLoadingPendingRewards: (state, loadingPendingRewards) => {
+      state.loadingPendingRewards = loadingPendingRewards
+    },
+    saveLoadingApprovements: (state, loadingApprovements) => {
+      state.loadingApprovements = loadingApprovements
     }
   },
   getters: {

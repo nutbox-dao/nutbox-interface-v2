@@ -81,7 +81,7 @@ export const getRegitryAssets = async (update = false) => {
     const account = store.state.web3.account
     let contract;
     try{
-      contract = await getContract('RegistryHub', null, false);
+      contract = await getContract('RegistryHub', null);
     }catch(e){
       reject(e);
       return
@@ -264,7 +264,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       // regitster asset
       let contract;
       try{
-        contract = await getContract('HomeChainAssetRegistry', null, false);
+        contract = await getContract('HomeChainAssetRegistry', null);
       }catch(e) {
         reject(e);
         return;
@@ -297,7 +297,7 @@ export const registerSteemHiveAsset = async (form) => {
   return new Promise(async (resolve, reject) => {
     let contract;
     try{
-      contract = await getContract('SteemHiveDelegateAssetRegistry', null, false);
+      contract = await getContract('SteemHiveDelegateAssetRegistry', null);
     }catch(e){
       reject(e);
       return;

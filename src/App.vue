@@ -152,7 +152,7 @@ import { setupNetwork, test, chainChanged } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
-import { getAllPools, monitorPendingRewards } from '@/utils/web3/pool'
+import { getAllPools, monitorPendingRewards, monitorApprovement } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -239,7 +239,10 @@ export default {
         try{
           this.loading = true
           getAllCommunities()
-          monitorPendingRewards()
+          getAllPools().then(res => {
+            monitorPendingRewards()
+            monitorApprovement()
+          })
         }catch(e){
           handleApiErrCode(e, (tip, param) => {
             this.$bvToast.toast(tip, param)
