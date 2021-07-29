@@ -238,7 +238,6 @@ export default {
       const data = { value: 100, name: this.form.name }
       this.myPools = pools.map(pool => ({name: pool.poolName, value: pool.poolRatio / 100}))
       this.myPools.push(data)
-      console.log(432, this.myPools);
       this.options.series[0].data = this.myPools
       this.form.ratios = this.myPools.map(item => {
         return item.value

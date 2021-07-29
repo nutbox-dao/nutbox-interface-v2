@@ -135,7 +135,6 @@ export const getVestingShares = async (username) => {
   const account = await getAccountInfo(username)
   const staked = parseFloat(account.vesting_shares)
   const delegated = parseFloat(account.delegated_vesting_shares)
-  console.log('vestingshares ', staked, delegated);
   return staked - delegated
 }
 

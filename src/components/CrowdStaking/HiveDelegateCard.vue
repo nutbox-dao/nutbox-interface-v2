@@ -101,6 +101,12 @@ export default {
     hiveLogin() {
       return !!this.hiveAccount
     },
+    pendingReward(){
+      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
+      if(!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal
+      return parseFloat(pendingBn.toString() / (10 ** decimal))
+    },
     staked(){
       const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
       if(!userStakingBn) return 0;

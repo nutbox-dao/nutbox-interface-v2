@@ -54,7 +54,7 @@ export const ASSET_LOGO_URL = {
     polkadot: {
 
     },
-    steem: 'https://cdn.wherein.mobi//nutbox/token/logo/steem.png',
-    hive: ''
+    steem: 'https://cdn.wherein.mobi/nutbox/token/logo/steem.png',
+    hive: 'https://cdn.wherein.mobi/nutbox/token/logo/hive-logo.png'
 
 }

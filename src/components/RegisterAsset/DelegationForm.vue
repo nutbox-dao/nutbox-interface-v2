@@ -75,7 +75,7 @@ export default {
       networkIndex: 0,
       networkOptions: [
         { name: 'Steem', icon: require('../../static/images/tokens/steem.png') },
-        { name: 'Hive', icon: require('../../static/images/tokens/dot.png') }
+        { name: 'Hive', icon: require('../../static/images/hive-logo.png') }
       ]
     }
   },
