@@ -8,7 +8,6 @@ import BSCWallet from '../views/Wallet/BSC'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
 import SteemWallet from '../views/Wallet/Steem'
-import RococoWallet from '../views/Wallet/Rococo'
 import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
 import CrowdLoan from '../views/CrowdStaking/CrowdLoan'
 import CommunityIndex from '../views/Community/Index'
@@ -59,11 +58,6 @@ const routes = [
         path: 'steem',
         name: 'SteemWallet',
         component: SteemWallet
-      },
-      {
-        path: 'rococo',
-        name: RococoWallet,
-        component: RococoWallet
       }
     ]
   },

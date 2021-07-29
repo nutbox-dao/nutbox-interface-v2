@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import Card from "@/components/ToolsComponents/Card";
 import TipTransfer from "./TipTransfer";
 import TipBond from "./TipBond";
 
@@ -84,7 +83,6 @@ export default {
     },
   },
   components: {
-    Card,
     TipTransfer,
     TipBond,
   },

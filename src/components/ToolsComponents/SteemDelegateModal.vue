@@ -18,7 +18,7 @@
                 ? $t("stake.creaseDelegation")
                 : $t("stake.increaseDelegation")
             }}</span>
-        <span class="text-right">{{ $t('wallet.balance') }}: {{ operate === 'add' ? formSP : formDepositedSP }}</span>
+        <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formSP : staked) | amountForm }}</span>
       </div>
       <div class="input-box flex-between-center">
         <input style="flex: 1"
@@ -46,7 +46,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { formatBalance } from '@/utils/helper';
 import { hexToString } from '@/utils/web3/utils'
 import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
 
@@ -61,14 +60,16 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance']),
-    ...mapState('web3', ['depositDatas', 'account']),
+    ...mapState('web3', ['userStakings', 'account']),
     ...mapGetters('steem', ['spBalance']),
     formSP(){
-      return formatBalance(this.spBalance);
+      return this.spBalance;
     },
-    formDepositedSP(){
-      return formatBalance(this.depositDatas[this.card.asset])
-    }
+    staked(){
+      const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
+      if(!userStakingBn) return 0;
+      return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
+    },
   },
   props: {
     operate: {

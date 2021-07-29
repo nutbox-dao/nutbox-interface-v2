@@ -69,26 +69,25 @@
       hide-footer
       no-close-on-backdrop
     >
-      <DelegateModal
+      <StakingHomeChainAssetModal
         :operate="operate"
         :card="card"
-        @hideDelegateMask="showModal = false"
+        @hideStakeMask="showModal = false"
       />
     </b-modal>
   </div>
 </template>
 
 <script>
-import { vestsToSteem } from "@/utils/steem/steem";
-import DelegateModal from "@/components/ToolsComponents/SteemDelegateModal";
-import { mapState, mapGetters } from "vuex";
+import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHomeChainAssetModal";
+import { mapState } from "vuex";
 import { approvePool } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
 
 export default {
   name: "DDelegateCard",
   components: {
-    DelegateModal,
+    StakingHomeChainAssetModal,
   },
   props: {
     card: {

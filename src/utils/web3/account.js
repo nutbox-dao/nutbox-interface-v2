@@ -1,7 +1,7 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce } from './community'
-import { getMyOpenedPools } from './pool'
+import { getMyOpenedPools, monitorPools } from './pool'
 
 /**
  * Get metamask accounts
@@ -28,5 +28,6 @@ export const accountChanged = async () => {
         getMyCommunityInfo(true)
         getMyOpenedPools(true)
         getNonce(true)
+        monitorPools()
     })
 }

@@ -179,39 +179,6 @@ module.exports = {
     farm: '流动性挖矿',
     stake: "储蓄",
     unStake: "减少储蓄",
-    tsp: {
-      tspMine: 'TSP挖矿',
-      yourTspAmount: '储蓄的TSP数量',
-      balanceOfTsp: 'TSP 余额',
-      tspMinlingFee: '挖矿手续费',
-      totalDepositTsp: '储蓄总量',
-      confirmDeposit: '确认储蓄',
-      addTspDeposit: '增加储蓄',
-      minusTspDeposit: '减少储蓄',
-      notEnoughFee: '手续费不足',
-    },
-    tsteem: {
-      tsteemMine: 'TSTEEM挖矿',
-      yourTsteemAmount: '储蓄的TSTEEM数量',
-      balanceOfTsteem: 'TSTEEM 余额',
-      tsteemMinlingFee: '挖矿手续费',
-      totalDepositTsteem: '储蓄总量',
-      confirmDeposit: '确认储蓄',
-      addTsteemDeposit: '增加储蓄',
-      minusTsteemDeposit: '减少储蓄',
-      notEnoughFee: '手续费不足',
-    },
-    tspLp: {
-      tspLPBalance: 'S-TSP-TRX 余额',
-      yourTSPLPAmount: '储蓄的S-TSP-TRX',
-      totalDepositTspLP: "储蓄总量",
-      totalTSP: 'TSP总量',
-    },
-    pnutLp: {
-      pnutLPBalance: 'S-PNUT-TRX 余额',
-      yourPNUTLPAmount: '储蓄的S-PNUT-TRX',
-      totalDepositPnutLP: '储蓄总量'
-    }
   },
   liquidStaking: {
     liquidStaking: '质押资产流动',
@@ -269,24 +236,6 @@ module.exports = {
     wrongSubstrateAddress:"请输入正确的 {type} 地址",
     ratioError: "矿池分润比例总和应为100",
     wrongApy: "请输入正确的APY"
-  },
-  vote: {
-    upvote: "点赞",
-    vote: "点赞帖子",
-    title: "支付PNUT,获得nutbox.mine点赞",
-    link: "帖子链接",
-    payPnut: "支付PNUT",
-    linkPlaceholder: "请填写需要点赞的帖子链接",
-    pnutPlaceholder: "请填写支付金额",
-    transfer: "转账",
-    voteRate: "PNUT - 10% 点赞",
-  },
-  nps: {
-    nps: '提案改善',
-    pass: '已通过',
-    pending: '待审核',
-    unpass: '未通过',
-    rolling: '正在投票'
   },
   error: {
     error: '错误',

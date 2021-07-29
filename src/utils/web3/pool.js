@@ -23,7 +23,8 @@ import {
   createWatcher
 } from '@makerdao/multicall'
 import {
-  getRegitryAssets
+  getRegitryAssets,
+  getAllTokenFromBackend
 } from './asset'
 import {
   getMyStakingFactory,
@@ -54,6 +55,7 @@ export const getAllPools = async (update = false) => {
       console.log('update all pools', allPools);
       store.commit('web3/saveAllPools', allPools);
       store.commit('web3/saveLoadingAllPools', false)
+
       resolve(allPools)
     } catch (e) {
       reject(e)
@@ -323,7 +325,7 @@ export const approvePool = async (pool) => {
 /** 
  * monitor users staking
  */
-export const monitorUserStaking = async () => {
+export const monitorUserStakings = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       const pools = await getAllPools()
@@ -403,7 +405,7 @@ export const monitorPendingRewards = async () => {
  * Monitor users token approvement
  * @returns 
  */
-export const monitorApprovement = async () => {
+export const monitorApprovements = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       let pools = await getAllPools()
@@ -475,4 +477,49 @@ export const monitorPoolTvls = async () => {
       reject()
     }
   })
+}
+
+/**
+ * Monitor users homechian token balance
+ */
+export const monitorUserBalances = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const allTokens = await getAllTokenFromBackend(true)
+      store.commit('web3/saveLoadingUserBalances', true)
+      const watcher = createWatcher(allTokens.map(token => ({
+        target: token.address,
+        call:[
+          'balanceOf(address)(uint256)',
+          store.state.web3.account
+        ],
+        returns:[
+          [token.address]
+        ]
+      })), Multi_Config)
+      watcher.batch().subscribe(updates => {
+        console.log('Updates balances', updates);
+        let userBalances = store.state.web3.userBalances
+        updates.map(u => {
+          userBalances[u.type] = u.value
+        })
+        store.commit('web3/saveLoadingUserBalances', false)
+        store.commit('web3/saveUserBanlances', {...userBalances})
+      })
+      watcher.start()
+    }catch(e){
+      reject()
+    }
+  })
+}
+
+/**
+ * Monitor pools data
+ */
+export const monitorPools = async () => {
+  monitorUserStakings()
+  monitorPendingRewards()
+  monitorApprovements()
+  monitorPoolTvls()
+  monitorUserBalances()
 }

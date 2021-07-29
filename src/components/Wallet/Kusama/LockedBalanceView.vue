@@ -36,9 +36,8 @@
 </template>
 
 <script>
-import Card from "@/components/ToolsComponents/Card";
 import TipUnbond from "./TipUnbond"
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: "BalanceView",
@@ -81,7 +80,6 @@ export default {
     },
   },
   components: {
-    Card,
     TipUnbond
   },
   methods: {

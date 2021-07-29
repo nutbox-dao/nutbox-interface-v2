@@ -152,7 +152,7 @@ import { setupNetwork, chainChanged } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
-import { getAllPools, monitorPendingRewards, monitorApprovement, monitorUserStaking, monitorPoolTvls } from '@/utils/web3/pool'
+import { getAllPools,monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -238,10 +238,7 @@ export default {
         this.loading = true
         getAllCommunities()
         getAllPools().then(res => {
-          monitorPendingRewards()
-          monitorApprovement()
-          monitorUserStaking()
-          monitorPoolTvls()
+          monitorPools()
         })
       }catch(e){
         handleApiErrCode(e, (tip, param) => {

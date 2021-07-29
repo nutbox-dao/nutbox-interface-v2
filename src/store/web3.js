@@ -29,12 +29,14 @@ export default {
     userStakings:{},
     approvements: {},
     totalStakings: {},
+    userBalances: {},
 
     // loading state
     loadingPendingRewards: true,
     loadingApprovements: true,
     loadingAllPools: true,
     loadingUserStakings: true,
+    loadingUserBalances: true,
 
   },
   mutations: {
@@ -119,8 +121,13 @@ export default {
     },
     saveTotalStakings: (state, totalStakings) => {
       state.totalStakings = totalStakings
+    },
+    saveUserBalances: (state, userBalances) => {
+      state.userBalances = userBalances
+    },
+    saveLoadingUserBalances: (state, loadingUserBalances) => {
+      state.loadingUserBalances = loadingUserBalances
     }
-
   },
   getters: {
     isMainChain:(state) => {
