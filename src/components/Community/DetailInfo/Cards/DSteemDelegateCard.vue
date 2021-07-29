@@ -40,7 +40,7 @@
     <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> TVL </span>
-        <div class="info">--</div>
+        <div class="info">{{ tvl | amountForm }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import { vestsToSteem } from '@/utils/steem/steem'
 import DelegateModal from '@/components/ToolsComponents/SteemDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
@@ -80,14 +79,9 @@ export default {
       type: Object
     }
   },
-  watch: {
-    'card.totalStakedAmount': async (val, oldVal) => {
-      this.tvl = await vestsToSteem(this.card.totalStakedAmount * 1e-6)
-    }
-  },
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
-    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'totalStakings']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -101,11 +95,15 @@ export default {
       const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
       if(!userStakingBn) return 0;
       return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
+    },
+    tvl() {
+      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if(!tvl) return 0;
+      return this.vestsToHive * (tvl.toString() / 1e6)
     }
   },
   data () {
     return {
-      tvl: 0,
       showModal: false,
       operate: 'add',
       showSteemLogin: false

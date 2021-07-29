@@ -28,6 +28,7 @@ export default {
     pendingRewards: {},
     userStakings:{},
     approvements: {},
+    totalStakings: {},
 
     // loading state
     loadingPendingRewards: true,
@@ -116,6 +117,9 @@ export default {
     saveUserStakings: (state, userStakings) => {
       state.userStakings = userStakings
     },
+    saveTotalStakings: (state, totalStakings) => {
+      state.totalStakings = totalStakings
+    }
 
   },
   getters: {

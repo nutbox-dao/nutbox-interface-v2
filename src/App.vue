@@ -148,11 +148,11 @@ import {
 } from './utils/polkadot/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
-import { setupNetwork, test, chainChanged } from './utils/web3/web3'
+import { setupNetwork, chainChanged } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
-import { getAllPools, monitorPendingRewards, monitorApprovement } from '@/utils/web3/pool'
+import { getAllPools, monitorPendingRewards, monitorApprovement, monitorUserStaking, monitorPoolTvls } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -163,7 +163,6 @@ export default {
       showMessage: false,
       accountsPop: false,
       screenWidth: document.body.clientWidth,
-      isConnectingPolkadot: true,
       navBoxEl: null
     }
   },
@@ -234,22 +233,22 @@ export default {
       }
     },
     // BSC data
-    async fetchData () {
-      if (!this.allCommunities) {
-        try{
-          this.loading = true
-          getAllCommunities()
-          getAllPools().then(res => {
-            monitorPendingRewards()
-            monitorApprovement()
-          })
-        }catch(e){
-          handleApiErrCode(e, (tip, param) => {
-            this.$bvToast.toast(tip, param)
-          })
-        }finally{
-          this.loading = false
-        }
+    async fetchBscData () {
+      try{
+        this.loading = true
+        getAllCommunities()
+        getAllPools().then(res => {
+          monitorPendingRewards()
+          monitorApprovement()
+          monitorUserStaking()
+          monitorPoolTvls()
+        })
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.loading = false
       }
     }
   },
@@ -270,10 +269,6 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY))
-
-    // BSC data
-    this.fetchData();
-
     this.navBoxEl = document.getElementsByClassName('nav-box')
   },
   async created () {
@@ -296,9 +291,11 @@ export default {
       this.$store.commit('polkadot/saveAccount', null)
     }
 
-    // 初始化apis
+    // BSC data
+    this.fetchBscData();
+
+    // init polkadot apis
     initApis()
-    this.isConnectingPolkadot = false
 
     // 从钱包加载波卡账号
     loadPolkadotAccounts()

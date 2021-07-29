@@ -48,7 +48,7 @@
       <div class="detail-info-box">
         <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl }}</div>
+          <div class="info">{{ tvl | amountForm }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import { vestsToHive } from '@/utils/hive/hive'
 import DelegateModal from '@/components/CrowdStaking/TipBoxes/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
@@ -90,14 +89,9 @@ export default {
       type: Object
     }
   },
-  watch: {
-    'card.totalStakedAmount': async (val, oldVal) => {
-      this.tvl = await vestsToHive(this.card.totalStakedAmount * 1e-6)
-    }
-  },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings']),
+    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'totalStakings']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -111,11 +105,15 @@ export default {
       const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
       if(!userStakingBn) return 0;
       return this.vestsToHive * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
+    },
+    tvl() {
+      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if(!tvl) return 0;
+      return this.vestsToHive * (tvl.toString() / 1e6)
     }
   },
   data () {
     return {
-      tvl: 0,
       showModal: false,
       operate: 'add',
       showHiveLogin: false

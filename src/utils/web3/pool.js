@@ -439,3 +439,40 @@ export const monitorApprovement = async () => {
     }
   })
 }
+
+
+/**
+ * Monitor all pools tvl
+ */
+export const monitorPoolTvls = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const pools = await getAllPools()
+      const watcher = createWatcher(pools.map(p => {
+        return {
+          target: p.communityId,
+          call: [
+            'getPoolTotalStakedAmount(uint8)(uint256)',
+            p.pid,
+          ],
+          returns: [
+            [p.communityId + ':' + p.pid]
+          ]
+        }
+      }), Multi_Config)
+      watcher.batch().subscribe(updates => {
+        console.log('Updates tvl', updates);
+        let totalStakings = store.state.web3.totalStakings
+        updates.map(u => {
+          totalStakings[u.type] = u.value
+        })
+        store.commit('web3/saveTotalStakings', {...totalStakings})
+      });
+      watcher.start()
+      resolve()
+    } catch (e) {
+      console.log('monitor total stakings fail', e);
+      reject()
+    }
+  })
+}
