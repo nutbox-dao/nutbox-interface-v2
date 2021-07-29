@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import DelegateModal from '@/components/CrowdStaking/TipBoxes/HiveDelegateModal'
+import DelegateModal from '@/components/ToolsComponents/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'

@@ -48,7 +48,6 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { formatBalance } from '@/utils/helper';
 import { hexToString } from '@/utils/web3/utils'
-import { STEEM_GAS_ACCOUNT } from '@/config'
 import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
 
 export default {
@@ -109,11 +108,15 @@ export default {
       const res =
         reg.test(this.delegatevalue) && parseFloat(this.delegatevalue) > 0;
       if (!res) {
-        this.showTip(this.$t("error.error"), this.$t("error.inputError"));
+        this.$bvToast.toast(this.$t('error.inputError'), {
+          title: this.$t("error.error"),
+          variant: 'info'
+        })
       }
       return res;
     },
     async confirm(){
+      if (!this.checkInputValue()) return;
       let sp = 0;
       this.loading = true;
       const haveDelegated = await getDelegateFromSteem(this.steemAccount, hexToString(this.card.agentAccount))
@@ -126,7 +129,7 @@ export default {
         return false
       }
       console.log('delegated', haveDelegated);
-      if (this.operate = 'add') {
+      if (this.operate === 'add') {
         sp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue)
       } else {
         sp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue)
@@ -137,7 +140,7 @@ export default {
     async delegateSp(sp) {
       try{
         sp = parseFloat(sp)
-        if ((sp !== 0 && !this.checkInputValue()) || !(await this.checkAddress()) || !this.checkDelegateFee()){
+        if ((sp !== 0 && !this.checkInputValue()) || !this.checkDelegateFee()){
           return;
         }
         const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
@@ -150,7 +153,6 @@ export default {
         if (res.success === true){
           this.getVest();
           this.getSteem();
-
         }
       }catch(e){
         console.log(52, e);

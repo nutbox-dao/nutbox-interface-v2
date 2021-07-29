@@ -25,7 +25,6 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
-
 export async function transferHive (from, to, amount, memo) {
   amount = parseFloat(amount).toFixed(3)
   const transOp = [
@@ -144,7 +143,7 @@ export const getDelegateFromHive = async (account, targetAccount) => {
     if (!res || res.length === 0){
       return 0;
     }
-    if (res[0].delegatee !== HIVE_MINE_ACCOUNT){
+    if (res[0].delegatee !== targetAccount){
       return 0;
     }
     const vests = parseFloat(res[0].vesting_shares.split(' ')[0])

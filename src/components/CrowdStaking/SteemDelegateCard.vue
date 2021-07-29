@@ -114,7 +114,6 @@ export default {
   },
   data () {
     return {
-      tvl: 0,
       showModal: false,
       operate: 'add',
       showSteemLogin: false

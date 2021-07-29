@@ -108,11 +108,15 @@ export default {
       const res =
         reg.test(this.delegatevalue) && parseFloat(this.delegatevalue) > 0;
       if (!res) {
-        this.showTip(this.$t("error.error"), this.$t("error.inputError"));
+        this.$bvToast.toast(this.$t('error.inputError'), {
+          title: this.$t("error.error"),
+          variant: 'info'
+        })
       }
       return res;
     },
     async confirm(){
+      if (!this.checkInputValue()) return;
       let hp = 0;
       this.loading = true;
       const haveDelegated = await getDelegateFromHive(this.hiveAccount, hexToString(this.card.agentAccount))
@@ -125,7 +129,7 @@ export default {
         return false
       }
       console.log('delegated', haveDelegated);
-      if (this.operate = 'add') {
+      if (this.operate === 'add') {
         hp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue)
       } else {
         hp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue)

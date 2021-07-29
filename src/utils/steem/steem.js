@@ -178,12 +178,13 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
     if (!res || res.length === 0){
       return 0;
     }
-    if (res[0].delegatee !== STEEM_MINE_ACCOUNT){
+    if (res[0].delegatee !== targetAccount){
       return 0;
     }
     const vests = parseFloat(res[0].vesting_shares.split(' ')[0])
     return await vestsToSteem(vests)
   } catch (e) {
+    console.log(e);
     return -1
   }
 }
