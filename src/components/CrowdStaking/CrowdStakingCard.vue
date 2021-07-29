@@ -23,7 +23,7 @@
         <span style="color: #BDBFC2">EARNED</span>
       </div>
       <div class="btn-row">
-        <span class="value"> {{ pendingReward }} </span>
+        <span class="value"> {{ pendingReward | amountForm }} </span>
         <div class="right-box">
           <button class="primary-btn m-0" :disabled="!approved">{{ $t('message.withdraw') }}</button>
         </div>
@@ -33,7 +33,7 @@
         <span style="color: #BDBFC2"> STAKED</span>
       </div>
       <div class="btn-row mb-4" v-if="approved">
-        <span class="value"> 0.001 </span>
+        <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
           <button class="outline-btn" @click="increase">+</button>
@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['pendingRewards', 'approvements', 'loadingPendingRewards', 'loadingApprovements']),
+    ...mapState('web3', ['pendingRewards', 'approvements', 'loadingApprovements', 'userStakings', 'loadingUserStakings']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -108,6 +108,12 @@ export default {
     approved(){
       return this.approvements[this.card.communityId + '-' + this.card.pid]
     },
+    staked(){
+      const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
+      if(!userStakingBn) return 0;
+      const decimal = this.card.decimal
+      return parseFloat(userStakingBn.toString() / (10 ** decimal))
+    }
   },
   data () {
     return {

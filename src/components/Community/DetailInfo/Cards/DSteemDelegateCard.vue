@@ -15,7 +15,7 @@
       <span style="color: #BDBFC2">EARNED</span>
     </div>
     <div class="btn-row">
-      <span class="value"> {{ pendingReward }} </span>
+      <span class="value"> {{ pendingReward | amountForm }} </span>
       <div class="right-box">
         <button class="primary-btn m-0">{{ $t('message.withdraw') }}</button>
       </div>
@@ -25,7 +25,7 @@
       <span style="color: #BDBFC2"> DELEGATED</span>
     </div>
     <div class="btn-row mb-4" v-if="steemLogin">
-      <span class="value"> 0.001 </span>
+      <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
       <div class="right-box">
         <button class="outline-btn" @click="decrease">-</button>
         <button class="outline-btn" @click="increase">+</button>
@@ -86,17 +86,21 @@ export default {
     }
   },
   computed: {
-    ...mapState('steem', ['steemAccount']),
-    ...mapState('web3',['pendingRewards']),
+    ...mapState('steem', ['steemAccount', 'vestsToSteem']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
       const decimal = this.card.tokenDecimal
-      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+      return parseFloat(pendingBn.toString() / (10 ** decimal))
     },
     steemLogin() {
-      console.log(46525, this.steemAccount);
       return !!this.steemAccount
+    },
+    staked(){
+      const userStakingBn = this.userStakings[this.card.communityId + '-' + this.card.pid]
+      if(!userStakingBn) return 0;
+      return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     }
   },
   data () {

@@ -66,6 +66,7 @@ export default {
       commit
     }) {
       vestsToSteem(1).then((res) => {
+        console.log('steem vests', res);
         commit('saveVestsToSteem', res)
       })
     },

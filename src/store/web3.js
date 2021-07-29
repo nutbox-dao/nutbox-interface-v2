@@ -26,12 +26,14 @@ export default {
     depositDatas: {},
     // all pending reward got by multicall
     pendingRewards: {},
+    userStakings:{},
     approvements: {},
 
     // loading state
     loadingPendingRewards: true,
     loadingApprovements: true,
     loadingAllPools: true,
+    loadingUserStakings: true,
 
   },
   mutations: {
@@ -107,7 +109,14 @@ export default {
     },
     saveLoadingAllPools: (state, loadingAllPools) => {
       state.loadingAllPools = loadingAllPools
-    }
+    },
+    saveLoadingUserStakings: (state, loadingUserStakings) => {
+      state.loadingUserStakings = loadingUserStakings
+    },
+    saveUserStakings: (state, userStakings) => {
+      state.userStakings = userStakings
+    },
+
   },
   getters: {
     isMainChain:(state) => {
