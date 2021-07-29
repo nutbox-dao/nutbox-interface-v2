@@ -1,20 +1,20 @@
 <template>
   <div class="k-page crowdstaking-page">
-    <div class="loading-bg" v-if="!isConnected">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
     <template v-else>
-      <div v-if="crowdstakings.length > 0"></div>
+      <div v-if="stakingCards.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="card, idx of crowdstakings" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="card, idx of stakingCards" :key="idx">
             <CrowdStakingCard
-              :crowdstaking="card"
+              :card="card"
             />
           </div>
         </div>
@@ -33,7 +33,13 @@ export default {
     CrowdStakingCard,
   },
   computed: {
-    ...mapState('polkadot',["isConnected", 'crowdstakings']),
+    ...mapState('web3', ['loadingAllPools', 'allPools']),
+    stakingCards() {
+      return this.allPools ? this.allPools.filter(pool => pool.type === 'HomeChainAssetRegistry') : []
+    }
+  },
+  mounted () {
+    console.log(235, this.allPools);
   },
 };
 </script>

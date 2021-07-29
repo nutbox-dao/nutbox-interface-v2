@@ -80,7 +80,7 @@ const routes = [
       {
         path: 'nominate',
         name: 'nominate',
-        component: CrowdStaking
+        component: CrowdNominate
       },
       {
         path: 'steem-delegate',
@@ -95,7 +95,7 @@ const routes = [
       {
         path: 'deposite',
         name: 'deposite',
-        component: CrowdNominate
+        component: CrowdStaking
       }
     ]
   },

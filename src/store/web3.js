@@ -26,9 +26,13 @@ export default {
     depositDatas: {},
     // all pending reward got by multicall
     pendingRewards: {},
-    loadingPendingRewards: true,
     approvements: {},
-    loadingApprovements: true
+
+    // loading state
+    loadingPendingRewards: true,
+    loadingApprovements: true,
+    loadingAllPools: true,
+
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -100,6 +104,9 @@ export default {
     },
     saveLoadingApprovements: (state, loadingApprovements) => {
       state.loadingApprovements = loadingApprovements
+    },
+    saveLoadingAllPools: (state, loadingAllPools) => {
+      state.loadingAllPools = loadingAllPools
     }
   },
   getters: {
@@ -121,6 +128,11 @@ export default {
       })
       return cardInfo
     },
+    /**
+     * Get community's info contains pools info
+     * @param {*} state 
+     * @returns 
+     */
     communityById: (state) => (communityId) => {
       if (!state.allCommunities || !state.allPools) return {}
       let community = state.allCommunities.filter(c => c.id === communityId)

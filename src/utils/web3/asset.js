@@ -264,7 +264,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       // regitster asset
       let contract;
       try{
-        contract = await getContract('HomeChainAssetRegistry', null);
+        contract = await getContract('HomeChainAssetRegistry', null, false);
       }catch(e) {
         reject(e);
         return;
@@ -297,7 +297,7 @@ export const registerSteemHiveAsset = async (form) => {
   return new Promise(async (resolve, reject) => {
     let contract;
     try{
-      contract = await getContract('SteemHiveDelegateAssetRegistry', null);
+      contract = await getContract('SteemHiveDelegateAssetRegistry', null, false);
     }catch(e){
       reject(e);
       return;

@@ -1,6 +1,6 @@
 <template>
   <div class="staking-block">
-    <div class="loading-bg" v-if="!isConnected">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
@@ -32,24 +32,26 @@ export default {
   components: { DLoanCard },
   data () {
     return {
-      loading: true,
       sortedPools: []
     }
   },
   props: {
     crowdloanPools: {
-      type: Array
+      type: Array,
+      default: []
     }
   },
   computed: {
     ...mapState({
-      allParachain: state => state.allParachain
+      allParachain: state => state.allParachain,
+      allPools: state => state.web3.allPools,
+      loadingAllPools: state => state.web3.loadingAllPools
     }),
     ...mapState('polkadot', ['isConnected', 'crowdstakings']),
     data () {
       const { crowdloanPools, allParachain } = this
       return { crowdloanPools, allParachain }
-    }
+    },
   },
   watch: {
     data (newValue, oldValue) {
@@ -61,9 +63,7 @@ export default {
     // get parachian info from backend
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.crowdloanPools, this.allParachain)
-      this.loading = false
     }).catch(e => {
-      this.loading = false
     })
   }
 }

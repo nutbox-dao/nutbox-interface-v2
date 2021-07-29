@@ -1,6 +1,6 @@
 <template>
   <div class="nominate-block">
-    <div class="loading-bg" v-if="!isConnected">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
@@ -31,7 +31,8 @@ export default {
     CrowdNominateCard
   },
   computed: {
-    ...mapState('polkadot', ['isConnected', 'crowdstakings'])
+    ...mapState('polkadot', ['crowdstakings']),
+    ...mapState('web3', ['loadingAllPools'])
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="delegate-block">
-    <div class="loading-bg" v-if="isLoading">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
@@ -32,22 +32,15 @@ export default {
   },
   props: {
     hiveDelegatePools: {
-      type: Array
+      type: Array,
+      default: []
     },
   },
   computed: {
     ...mapState({
-      allPools: state => state.web3.allPools,
-      hiveAccount: state => state.hive.hiveAccount
+      hiveAccount: state => state.hive.hiveAccount,
+      loadingAllPools: state => state.web3.loadingAllPools
     }),
-    loading () {
-      return this.allPools === null
-    }
-  },
-  data () {
-    return {
-      isLoading: false,
-    }
   },
   methods: {
     ...mapActions('hive', ['getVests', 'getHive'])

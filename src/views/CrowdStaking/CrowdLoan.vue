@@ -1,6 +1,6 @@
 <template>
   <div class="k-page crowdstaking-page">
-    <div class="loading-bg" v-if="loading">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
@@ -32,14 +32,14 @@ export default {
   components: { CrowdLoanCard },
   data () {
     return {
-      loading: true,
       sortedPools: []
     }
   },
   computed: {
     ...mapState({
       allParachain: state => state.allParachain,
-      allPools: state => state.web3.allPools
+      allPools: state => state.web3.allPools,
+      loadingAllPools: state => state.web3.loadingAllPools
     }),
     data () {
       const { allPools, allParachain } = this
@@ -56,9 +56,7 @@ export default {
     // get parachian info from backend
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.allPools, this.allParachain)
-      this.loading = false
     }).catch(e => {
-      this.loading = false
     })
   }
 }

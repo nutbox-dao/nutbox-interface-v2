@@ -52,7 +52,8 @@ export const getAllPools = async (update = false) => {
     try {
       const allPools = await gap()
       console.log('update all pools', allPools);
-      store.commit('web3/saveAllPools', allPools)
+      store.commit('web3/saveAllPools', allPools);
+      store.commit('web3/saveLoadingAllPools', false)
       resolve(allPools)
     } catch (e) {
       reject(e)
@@ -356,11 +357,11 @@ export const monitorPendingRewards = async () => {
       watcher.batch().subscribe(updates => {
         console.log('Updates', updates);
         store.commit('web3/saveLoadingPendingRewards', false)
-        let pendingRewards = {}
+        let pendingRewards = store.state.web3.pendingRewards
         updates.map(u => {
           pendingRewards[u.type] = u.value
         })
-        store.commit('web3/savePendingRewards', pendingRewards)
+        store.commit('web3/savePendingRewards', {...pendingRewards})
       });
       watcher.start()
       resolve()
@@ -395,12 +396,12 @@ export const monitorApprovement = async () => {
       watcher.batch().subscribe(updates => {
         console.log('Updates approve', updates);
         store.commit('web3/saveLoadingApprovements', false)
-        let approvements = {}
+        let approvements = store.state.web3.approvements
         updates.map(u => {
           approvements[u.type] = u.value
         })
         console.log('approvements', approvements);
-        store.commit('web3/saveApprovements', approvements)
+        store.commit('web3/saveApprovements', {...approvements})
       });
       watcher.start()
       resolve()

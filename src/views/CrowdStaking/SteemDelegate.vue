@@ -1,6 +1,6 @@
 <template>
   <div class="k-page crowdstaking-page">
-    <div class="loading-bg" v-if="loading">
+    <div class="loading-bg" v-if="loadingAllPools">
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
@@ -33,17 +33,15 @@ export default {
   computed: {
     ...mapState({
       allPools: state => state.web3.allPools,
-      steemAccount: state => state.steem.steemAccount
+      steemAccount: state => state.steem.steemAccount,
+      loadingAllPools: state => state.web3.loadingAllPools
     }),
     delegateCards () {
       return this.allPools? this.allPools.filter(p => p.type === "SteemHiveDelegateAssetRegistry" && p.assetType === 'sp') : []
     },
-    loading () {
-      return this.allPools === null
-    }
   },
   methods: {
-    ...mapActions('steem', ['getVests', 'getSteem'])
+    ...mapActions('steem', ['getVests', 'getSteem']),
   },
   mounted () {
     if(this.steemAccount && this.steemAccount.length > 0){
