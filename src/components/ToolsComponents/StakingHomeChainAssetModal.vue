@@ -67,7 +67,6 @@ export default {
     formBalance(){
       const balance = this.balance;
       const decimal = this.card.decimal;
-      console.log(23542,this.card.address, balance.toString());
       return parseFloat(balance.toString() / (10 ** decimal));
     },
     formStaked(){
