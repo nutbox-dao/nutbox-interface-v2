@@ -293,8 +293,6 @@ export default {
 
     // init polkadot apis
     initApis()
-
-    // 从钱包加载波卡账号
     loadPolkadotAccounts()
   }
 }

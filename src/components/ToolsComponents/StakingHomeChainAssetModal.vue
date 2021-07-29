@@ -55,20 +55,25 @@ export default {
     }
   },
   computed: {
-    ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance']),
-    ...mapState('web3', ['depositDatas', 'account']),
+    ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance', 'userBalances']),
+    ...mapState('web3', ['userBalances', 'userStakings', 'account']),
     ...mapGetters('steem', ['spBalance']),
     balance(){
-      return this.spBalance;
+      return this.userBalances[this.card.address] ?? 0
     },
     staked(){
-      
+      return this.userStakings[this.card.communityId + '-' + this.card.pid] ?? 0
     },
     formBalance(){
-
+      const balance = this.balance;
+      const decimal = this.card.decimal;
+      console.log(23542,this.card.address, balance.toString());
+      return parseFloat(balance.toString() / (10 ** decimal));
     },
     formStaked(){
-
+      const staked = this.staked;
+      const decimal = this.card.decimal;
+      return parseFloat(staked.toString() / (10 ** decimal))
     }
     
   },
@@ -128,32 +133,6 @@ export default {
         sp = sp < 0 ? 0 : sp
       }
       this.delegateSp(sp);
-    },
-    async delegateSp(sp) {
-      try{
-        sp = parseFloat(sp)
-        if ((sp !== 0 && !this.checkInputValue())){
-          return;
-        }
-        const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
-        const res = await steemDelegation(
-          this.steemAccount,
-          hexToString(this.card.agentAccount),
-          amount,
-          this.account
-        )
-        if (res.success === true){
-          this.getVest();
-          this.getSteem();
-        }
-      }catch(e){
-        console.log(52, e);
-      }finally{
-        this.loading = false
-      }
-    },
-    getSp() {
-      window.open("https://steemit.com/", "_blank");
     },
   },
   mounted () {

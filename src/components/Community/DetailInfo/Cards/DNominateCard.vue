@@ -127,7 +127,7 @@ export default {
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
-      const decimal = this.card.tokenDecimal
+      const decimal = this.card.decimal
       return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
     },
     // 用户已经投了该项目的节点
@@ -141,15 +141,7 @@ export default {
       )
     },
     tvl () {
-      if (this.allValidatorInfosInOurDB.length === 0) {
-        return 0
-      }
-      const total = this.card.project.validators.reduce(
-        (t, v) =>
-          t.add(new BN(this.allValidatorInfosInOurDB[v].total.toString())),
-        new BN(0)
-      )
-      return total.toString() / 1e10
+      
     }
   },
   mounted () {}

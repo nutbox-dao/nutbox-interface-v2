@@ -498,13 +498,13 @@ export const monitorUserBalances = async () => {
         ]
       })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates balances', updates);
         let userBalances = store.state.web3.userBalances
         updates.map(u => {
           userBalances[u.type] = u.value
         })
+        console.log('Updates balances', userBalances);
         store.commit('web3/saveLoadingUserBalances', false)
-        store.commit('web3/saveUserBanlances', {...userBalances})
+        store.commit('web3/saveUserBalances', {...userBalances})
       })
       watcher.start()
     }catch(e){
