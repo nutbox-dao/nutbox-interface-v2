@@ -129,6 +129,10 @@ export const getContract = async function (contractName, address, onlyRead=true)
  */
 export const isContractAddress = async (address) => {
   const provider = await getWeb3()
-  const res = await provider.eth.getCode(address)
-  return res
+  try{
+    const res = await provider.eth.getCode(address)
+    return res
+  }catch(e){
+    return false
+  }
 }

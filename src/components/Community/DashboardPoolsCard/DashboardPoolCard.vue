@@ -16,7 +16,7 @@
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.totalDeposit') }}</span>
-       <div class="info">{{ totalDeposited }}</div>
+       <div class="info">{{ totalDeposited | amountForm }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.hasMined') }}</span>
@@ -46,12 +46,12 @@ export default {
   computed: {
     ...mapState('web3', ['stakingFactoryId', 'allPools']),
     totalDeposited() {
-      return this.pool.totalStakedAmount / this.decimal
+      return this.pool.totalStakedAmount.toString() / (10 ** this.decimal)
     }
   },
   data() {
     return {
-      decimal: 10,
+      decimal: 1e18,
       updating: false,
       apy: null
     }

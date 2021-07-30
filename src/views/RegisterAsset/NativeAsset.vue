@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import { registerHomeChainAsset, getRegitryAssets, getERC20Info } from '@/utils/web3/asset'
+import { registerHomeChainAsset, getRegitryAssets } from '@/utils/web3/asset'
+import { isContractAddress } from "@/utils/web3/contract"
 import { handleApiErrCode } from '../../utils/helper';
 
 export default {
@@ -46,8 +47,8 @@ export default {
     async registry() {
       // validate token
       this.registring = true
-      const tokenInfo = await getERC20Info(this.tokenAddress)
-      if (!tokenInfo || !tokenInfo.name) {
+      const isContract = await isContractAddress(this.tokenAddress)
+      if (!isContract) {
         this.$bvToast.toast(this.$t('tip.notContractAddress'), {
           title: this.$t('tip.error'),
           variant: 'danger'
