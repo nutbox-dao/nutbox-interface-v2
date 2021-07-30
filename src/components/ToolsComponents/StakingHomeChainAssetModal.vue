@@ -113,7 +113,7 @@ export default {
       if (!this.checkInputValue()) return;
       this.loading = true;
       const decimal = new BN(10).pow(new BN(this.card.decimal))
-      const amount = new BN(this.stakingValue).mul(decimal)
+      const amount = new BN(Number(this.stakingValue)).mul(decimal)
       try{
         let res;
         let message;
@@ -128,7 +128,9 @@ export default {
           title: this.$t('tip.success'),
           variant: 'success'
         })
-        this.$emit("hideStakeMask");
+        setTimeout(() => {
+          this.$emit("hideStakeMask");
+        }, 2000);
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

@@ -470,8 +470,7 @@ export const monitorPendingRewards = async () => {
       let watchers = store.state.web3.watchers
       let watcher = watchers['pendingRewards']
       watcher && watcher.stop()
-      watcher = createWatcher(pools.map(p => {
-        return {
+      watcher = createWatcher(pools.map(p => ({
           target: p.communityId,
           call: [
             'getUserPendingRewards(uint8,address)(uint256)',
@@ -481,10 +480,9 @@ export const monitorPendingRewards = async () => {
           returns: [
             [p.communityId + '-' + p.pid]
           ]
-        }
-      }), Multi_Config)
+        })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates user pending rewards', updates);
+        console.log('Updates pending rewards', updates);
         store.commit('web3/saveLoadingPendingRewards', false)
         let pendingRewards = store.state.web3.pendingRewards
         updates.map(u => {
@@ -529,17 +527,16 @@ export const monitorApprovements = async () => {
         ]
       })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates approve', updates);
         store.commit('web3/saveLoadingApprovements', false)
         let approvements = store.state.web3.approvements
         updates.map(u => {
           approvements[u.type] = u.value
         })
-        console.log('approvements', approvements);
+        console.log('Updates approve', approvements);
         store.commit('web3/saveApprovements', {...approvements})
       });
       watcher.start()
-      watchers['approvements'] = watcher
+      watchers['Updates approve'] = watcher
       store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
