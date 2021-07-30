@@ -3,46 +3,35 @@
     <b-form class="custom-form c-form-label">
       <b-form-group
         id="input-group-name"
-        label="Token Name"
+        :label="$t('asset.tokenName')"
         label-for="input-name"
       >
         <b-form-input
           id="input-name"
           v-model="form.name"
-          placeholder="Please enter"
+          :placeholder="$t('asset.inputTokenName')"
         ></b-form-input>
       </b-form-group>
       <b-form-group
         id="input-group-symbol"
-        label="Token Symbol"
+        :label="$t('asset.tokenSymbol')"
         label-for="input-symbol"
       >
         <b-form-input
           id="input-symbol"
           v-model="form.symbol"
-          placeholder="Please enter"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        id="input-group-decimal"
-        label="Token Decimal"
-        label-for="input-decimal"
-      >
-        <b-form-input
-          id="input-decimal"
-          v-model="form.decimal"
-          placeholder="Please enter"
+          :placeholder="$t('asset.inputTokenSymbol')"
         ></b-form-input>
       </b-form-group>
       <b-form-group
         id="input-group-amount"
-        label="Distribution Amount"
+        :label="$t('asset.distributionAmount')"
         label-for="input-amount"
       >
         <b-form-input
           id="input-amount"
           v-model="form.totalSupply"
-          placeholder="Please enter"
+          :placeholder="$t('asset.inputDistributionAmount')"
         ></b-form-input>
       </b-form-group>
       <b-form-group label="Logo" label-for="logo" class="logo-form">
@@ -68,7 +57,7 @@
       </b-form-group>
       <button class="primary-btn" :disabled="(!deployBtnStatus) || deploying" @click="deploy">
         <b-spinner small type="grow" v-show="deploying" />
-        Deploy
+        {{ $t('asset.deploy') }}
       </button>
     </b-form>
     <b-modal
@@ -87,25 +76,21 @@
           @click="modalVisible = false"
         />
         <div class="c-modal-header text-center">
-          <div class="font20 font-bold">已部署资产成功</div>
-          <div class="font12 text-red">请确认信息并立即备份合约地址</div>
+          <div class="font20 font-bold">{{ $t('tip.deploySuccess') }}</div>
+          <div class="font12 text-red">{{ $t('tip.storeTokenAddress') }}</div>
         </div>
         <div class="h-line"></div>
         <div class="info-box">
           <div class="row-info">
-            <span class="label">Token Name</span>
+            <span class="label">{{ $t('asset.tokenName') }}</span>
             <span class="info">{{ form.name }}</span>
           </div>
           <div class="row-info">
-            <span class="label">Token Symbol</span>
+            <span class="label">{{ $t('asset.tokenSymbol') }}</span>
             <span class="info">{{ form.symbol }}</span>
           </div>
           <div class="row-info">
-            <span class="label">Token Decimal</span>
-            <span class="info">{{ form.decimal }}</span>
-          </div>
-          <div class="row-info">
-            <span class="label">Distribution Amount</span>
+            <span class="label">{{ $t('asset.distributionAmount') }}</span>
             <span class="info">{{ form.totalSupply }}</span>
           </div>
           <div class="row-info">
@@ -114,14 +99,14 @@
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
-              <span class="label">合约地址</span>
+              <span class="label">{{ $t('message.contractAddr') }}</span>
               <button
                 class="font14 copy-btn"
                 id='copy'
                 :data-clipboard-text="tokenAddress"
                 @click="copyAddress()"
               >
-                复制
+                {{ $t('message.copy') }}
               </button>
             </div>
             <div class="address copy-value">
@@ -130,7 +115,7 @@
           </div>
         </div>
 
-        <button class="primary-btn mt-4" @click="confirmDeploy">完成</button>
+        <button class="primary-btn mt-4" @click="confirmDeploy">{{ $t('message.complete') }}</button>
       </div>
     </b-modal>
   </div>
@@ -138,7 +123,6 @@
 
 <script>
 import { deployERC20 } from '@/utils/web3/asset'
-import Clipboard from 'clipboard'
 import { uploadImage } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
@@ -158,7 +142,7 @@ export default {
       form: {
         name: '',
         symbol: '',
-        decimal: '',
+        decimal: 18, // default 18
         totalSupply: ''
       },
       logo: null,
