@@ -45,7 +45,9 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { hexToString } from '@/utils/web3/utils'
+import { deposit, withdraw } from '@/utils/web3/pool'
+import { handleApiErrCode } from '../../utils/helper';
+import BN from 'bn.js'
 
 export default {
   data () {
@@ -86,18 +88,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('steem', ['getVests','getSteem']),
-    ...mapMutations('steem', ['saveSteemBalance', 'saveVestsBalance']),
+    
     hide() {
       if (this.loading) return;
       this.$emit("hideStakeMask");
     },
     fillMax(){
         this.stakingValue =
-        this.operate === "add" ? this.spBalance : this.depositDatas[this.card.asset];
-    },
-    async checkAddress() {
-      return true
+        this.operate === "add" ? this.formBalance : this.formStaked;
     },
     checkInputValue() {
       const reg = /^\d+(\.\d+)?$/;
@@ -113,25 +111,31 @@ export default {
     },
     async confirm(){
       if (!this.checkInputValue()) return;
-      let sp = 0;
       this.loading = true;
-      const haveDelegated = await getDelegateFromSteem(this.steemAccount, hexToString(this.card.agentAccount))
-      if (haveDelegated < 0) {
-        this.$bvToast.toast(this.$t('error.delegateerror'), {
-          title:this.$t('error.pleaseRetry'),
-          variant: 'info'
+      const decimal = new BN(10).pow(new BN(this.card.decimal))
+      const amount = new BN(this.stakingValue).mul(decimal)
+      try{
+        let res;
+        let message;
+        if (this.operate === 'add'){
+          res = await deposit(this.card.communityId, this.card.pid, amount)
+          message = this.$t('transaction.depositOk')
+        }else{
+          res = await withdraw(this.card.communityId, this.card.pid, amount)
+          message = this.$t('transaction.withdrawOk')
+        }
+        this.$bvToast.toast(message, {
+          title: this.$t('tip.success'),
+          variant: 'success'
         })
+        this.$emit("hideStakeMask");
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
         this.loading = false
-        return false
       }
-      console.log('delegated', haveDelegated);
-      if (this.operate === 'add') {
-        sp = parseFloat(haveDelegated) + parseFloat(this.stakingValue)
-      } else {
-        sp = parseFloat(haveDelegated) - parseFloat(this.stakingValue)
-        sp = sp < 0 ? 0 : sp
-      }
-      this.delegateSp(sp);
     },
   },
   mounted () {

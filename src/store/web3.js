@@ -17,7 +17,7 @@ export default {
     nonce: null,
     allCommunities: null,
     myPools: null,
-    watcher: {},
+    watchers: {},
     cTokens: {},
     distributions: null,
     readonlyProvider: null,
@@ -80,8 +80,8 @@ export default {
     saveMyPools: (state, myPools) => {
       state.myPools = myPools
     },
-    saveWatcher: (state, watcher) => {
-      state.watcher = watcher
+    saveWatchers: (state, watchers) => {
+      state.watchers = watchers
     },
     saveCTokens: (state, cTokens) => {
       state.cTokens = cTokens

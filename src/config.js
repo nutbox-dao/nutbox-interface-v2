@@ -143,7 +143,7 @@ export const NUTBOX_REGISTRY_ASSETS = [
 
 // sended transaction configs
 export const Transaction_config = {
-  gasPrice: 50000000,
+  gasPrice: 500000,
   gasLimit: 1000000000
 }
 

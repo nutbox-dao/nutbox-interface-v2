@@ -132,6 +132,7 @@ export default {
     staked() {
       const userStakingBn =
         this.userStakings[this.card.communityId + "-" + this.card.pid];
+        console.log(2356,userStakingBn);
       if (!userStakingBn) return 0;
       const decimal = this.card.decimal;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);

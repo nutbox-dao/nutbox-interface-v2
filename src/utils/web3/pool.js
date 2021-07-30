@@ -321,6 +321,98 @@ export const approvePool = async (pool) => {
   })
 }
 
+/**
+ * Deposit homechain asset
+ * @param {*} communityId  
+ * @param {*} pid 
+ * @param {*} amount formed amount can directly as a param of contract
+ */
+export const deposit = async (communityId, pid, amount) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e){
+      reject(e)
+      return;
+    }
+
+    try{
+      const tx = await contract.deposit(pid, store.state.web3.account, amount.toString(), Transaction_config)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e){
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
+}
+
+/**
+ * Withdraw deposit
+ * @param {*} communityId 
+ * @param {*} pid 
+ * @param {*} amount formed amount can directly as a param of contract
+ * @returns 
+ */
+export const withdraw = async (communityId, pid, amount) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e){
+      reject(e)
+      return;
+    }
+
+    try{
+      const tx = await contract.withdraw(pid, store.state.web3.account, amount.toString(), Transaction_config)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e){
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
+}
+
+/**
+ * Withdraw 
+ * @param {*} communityId 
+ * @param {*} pid 
+ */
+export const withdrawReward = async (communityId, pid) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e){
+      reject(e)
+      return;
+    }
+
+    try{
+      const tx = await contract.withdrawPoolRewards(pid, Transaction_config)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e){
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
+}
 
 /** 
  * monitor users staking
@@ -330,7 +422,10 @@ export const monitorUserStakings = async () => {
     try {
       const pools = await getAllPools()
       store.commit('web3/saveLoadingUserStakings', true)
-      const watcher = createWatcher(pools.map(p => {
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['userStakings']
+      watcher && watcher.stop()
+      watcher = createWatcher(pools.map(p => {
         return {
           target: p.communityId,
           call: [
@@ -339,7 +434,7 @@ export const monitorUserStakings = async () => {
             store.state.web3.account
           ],
           returns: [
-            [p.communityId + ':' + p.pid]
+            [p.communityId + '-' + p.pid]
           ]
         }
       }), Multi_Config)
@@ -353,6 +448,8 @@ export const monitorUserStakings = async () => {
         store.commit('web3/saveUserStakings', {...userStakings})
       });
       watcher.start()
+      watchers['userStakings'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
       console.log('monitorUserStaking fail', e);
@@ -370,7 +467,10 @@ export const monitorPendingRewards = async () => {
     try {
       const pools = await getAllPools()
       store.commit('web3/saveLoadingPendingRewards', true)
-      const watcher = createWatcher(pools.map(p => {
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['pendingRewards']
+      watcher && watcher.stop()
+      watcher = createWatcher(pools.map(p => {
         return {
           target: p.communityId,
           call: [
@@ -379,7 +479,7 @@ export const monitorPendingRewards = async () => {
             store.state.web3.account
           ],
           returns: [
-            [p.communityId + ':' + p.pid]
+            [p.communityId + '-' + p.pid]
           ]
         }
       }), Multi_Config)
@@ -393,6 +493,8 @@ export const monitorPendingRewards = async () => {
         store.commit('web3/savePendingRewards', {...pendingRewards})
       });
       watcher.start()
+      watchers['pendingRewards'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
       console.log('monitorPendingreward fail', e);
@@ -412,7 +514,10 @@ export const monitorApprovements = async () => {
       const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
       pools = pools.filter(pool => pool.type === "HomeChainAssetRegistry")
       store.commit('web3/saveLoadingApprovements', true)
-      const watcher = createWatcher(pools.map(pool => ({
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['approvements']
+      watcher && watcher.stop()
+      watcher = createWatcher(pools.map(pool => ({
         target: pool.address,
         call: [
           'allowance(address,address)(uint256)',
@@ -434,6 +539,8 @@ export const monitorApprovements = async () => {
         store.commit('web3/saveApprovements', {...approvements})
       });
       watcher.start()
+      watchers['approvements'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
       console.log('Monitor approvment fail', e);
@@ -450,7 +557,10 @@ export const monitorPoolTvls = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       const pools = await getAllPools()
-      const watcher = createWatcher(pools.map(p => {
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['poolTvls']
+      watcher && watcher.stop()
+      watcher = createWatcher(pools.map(p => {
         return {
           target: p.communityId,
           call: [
@@ -458,7 +568,7 @@ export const monitorPoolTvls = async () => {
             p.pid,
           ],
           returns: [
-            [p.communityId + ':' + p.pid]
+            [p.communityId + '-' + p.pid]
           ]
         }
       }), Multi_Config)
@@ -471,6 +581,8 @@ export const monitorPoolTvls = async () => {
         store.commit('web3/saveTotalStakings', {...totalStakings})
       });
       watcher.start()
+      watchers['poolTvls'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
       console.log('monitor total stakings fail', e);
@@ -487,7 +599,10 @@ export const monitorUserBalances = async () => {
     try{
       const allTokens = await getAllTokenFromBackend(true)
       store.commit('web3/saveLoadingUserBalances', true)
-      const watcher = createWatcher(allTokens.map(token => ({
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['userBalances']
+      watcher && watcher.stop()
+      watcher = createWatcher(allTokens.map(token => ({
         target: token.address,
         call:[
           'balanceOf(address)(uint256)',
@@ -507,6 +622,9 @@ export const monitorUserBalances = async () => {
         store.commit('web3/saveUserBalances', {...userBalances})
       })
       watcher.start()
+      watchers['userBalances'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
+      resolve()
     }catch(e){
       reject()
     }

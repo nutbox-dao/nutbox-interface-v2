@@ -166,6 +166,8 @@ module.exports = {
     withdrawOk: "赎回成功",
     nominateOk: "提名成功",
     transactionOk:"交易成功",
+    depositOk:"增加储蓄成功",
+    withdrawOk:'减少储蓄成功'
   },
   stake: {
     stake: '质押挖矿',

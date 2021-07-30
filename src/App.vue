@@ -154,6 +154,7 @@ import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
 import { getAllPools,monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
+import { hexToString } from '@/utils/web3/utils'
 
 export default {
   data () {
