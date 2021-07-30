@@ -1,6 +1,8 @@
 <template>
   <div class="page-view-content">
-    <div class="fixed-header page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
+    <div class="flex-between-center">
+      <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
+    </div>
     <div class="scroll-content">
       <div class="pool-card text-left">
         <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
@@ -224,7 +226,7 @@ export default {
         this.$bvToast.toast(tip, param)
       })
     }
-    
+
     this.assetLoading = false
   },
   methods: {
@@ -274,7 +276,7 @@ export default {
     },
     async confirmAdd () {
       if (!this.checkInput()) return
-      
+
       // add pool
       try {
         this.adding = true
