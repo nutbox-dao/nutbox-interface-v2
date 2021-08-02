@@ -80,6 +80,7 @@ export const getMyCommunityInfo = async (update=false) => {
                 resolve(communityInfo)
                 return;
             }else{
+                store.commit('web3/saveCommunityInfo', {})
                 resolve({id: stakingFactoryId})
             }
         }catch(e){
@@ -127,7 +128,7 @@ export const createStakingFeast = async (form) => {
 
         let contract;
         try{
-            contract = await getContract('StakingFactory', null)
+            contract = await getContract('StakingFactory', null, false)
         }catch(e){
             reject(e);
             return;

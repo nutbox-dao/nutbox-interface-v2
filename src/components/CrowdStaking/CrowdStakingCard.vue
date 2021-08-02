@@ -140,7 +140,7 @@ export default {
       const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
       if(!tvl) return 0;
       const decimal = this.card.decimal
-      return this.vestsToHive * (tvl.toString() / (10 ** decimal))
+      return (tvl.toString() / (10 ** decimal))
     }
   },
   data() {

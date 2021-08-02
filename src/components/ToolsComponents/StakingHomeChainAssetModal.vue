@@ -113,7 +113,8 @@ export default {
       if (!this.checkInputValue()) return;
       this.loading = true;
       const decimal = new BN(10).pow(new BN(this.card.decimal))
-      const amount = new BN(Number(this.stakingValue)).mul(decimal)
+      console.log(this.stakingValue);
+      const amount = new BN(Number(this.stakingValue * 1e6)).mul(decimal).divn(1e6)
       try{
         let res;
         let message;

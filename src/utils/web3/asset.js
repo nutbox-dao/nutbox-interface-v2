@@ -89,6 +89,7 @@ export const getRegitryAssets = async (update = false) => {
     try{
       const assetCount = await contract.registryCounter(account);
       if (assetCount === 0){
+        store.commit('web3/saveAllAssetsOfUser', [])
         resolve([])
         return;
       }

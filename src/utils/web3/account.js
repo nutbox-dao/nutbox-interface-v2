@@ -2,6 +2,7 @@ import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
+import { getRegitryAssets } from './asset.js'
 
 /**
  * Get metamask accounts
@@ -25,6 +26,9 @@ export const accountChanged = async () => {
         console.log('Changed accounts', accounts);
         store.commit('web3/saveAccount', accounts[0])
         store.commit('web3/saveStakingFactoryId', null)
+        store.commit('web3/saveMyPools', [])
+        store.commit('web3/saveAllAssetsOfUser', [])
+        getRegitryAssets(true)
         getMyCommunityInfo(true)
         getMyOpenedPools(true)
         getNonce(true)

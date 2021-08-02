@@ -38,7 +38,7 @@
 import { getCToken } from '@/utils/web3/asset'
 import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
-import { updatePoolApy, getAllPools } from '@/utils/web3/pool'
+import { updatePoolApy, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
 
 export default {
@@ -73,11 +73,10 @@ export default {
       try{
         this.updating = true
         await updatePoolApy(this.pool, parseFloat(this.apy))
-        console.log(2, this.allPools);
         // 更新本地矿池数据
         await sleep(1)
         const aa = await getAllPools(true)
-        console.log(3, this.allPools);
+        await monitorPools()
         this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'

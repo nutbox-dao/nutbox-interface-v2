@@ -90,6 +90,7 @@ export const getMyOpenedPools = async (update = false) => {
     try {
       contract = await getContract('StakingTemplate', stakingFactoryId, false);
     } catch (e) {
+      store.commit('web3/saveMyPools', [])
       reject(e);
       return;
     }
@@ -98,6 +99,7 @@ export const getMyOpenedPools = async (update = false) => {
       const poolCount = await contract.numberOfPools()
       if (poolCount === 0) {
         console.log('no pools');
+        store.commit('web3/saveMyPools', [])
         resolve([])
         return;
       }
@@ -163,6 +165,7 @@ export const addPool = async (form) => {
     try {
       const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
       await waitForTx(tx.hash)
+      // re monitor
       resolve(tx.hash)
     } catch (e) {
       console.log(542, e);
@@ -336,7 +339,15 @@ export const deposit = async (communityId, pid, amount) => {
       return;
     }
 
+    const a = await contract.getUserPendingRewards(0, store.state.web3.account)
+    const b = await contract.lastRewardBlock()
+    const c = await contract.openedPools(0)
+    console.log(235412, a.toString() / 1e18, b.toString(), c);
+
+  
+
     try{
+      console.log('deposit', communityId, pid, amount.toString());
       const tx = await contract.deposit(pid, store.state.web3.account, amount.toString(), Transaction_config)
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -631,9 +642,11 @@ export const monitorUserBalances = async () => {
  * Monitor pools data
  */
 export const monitorPools = async () => {
-  monitorUserStakings()
-  monitorPendingRewards()
-  monitorApprovements()
-  monitorPoolTvls()
-  monitorUserBalances()
+  await Promise.all([
+    monitorUserStakings(),
+    monitorPendingRewards(),
+    monitorApprovements(),
+    monitorPoolTvls(),
+    monitorUserBalances()
+  ])
 }

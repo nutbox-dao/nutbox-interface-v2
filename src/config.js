@@ -149,6 +149,8 @@ export const Transaction_config = {
 
 export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
 
+export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'
+
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
   multicallAddress: MultiAddress

@@ -3,7 +3,9 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE
+  RPC_NODE,
+  NUTAddress,
+  MultiAddress
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'
@@ -13,7 +15,6 @@ import {
 } from '@makerdao/multicall'
 
 import { getProvider } from './ethers'
-import  { contractAddress, erc20Address, multiAddress } from './contract'
 
 export const getWeb3 = () => {
   const web3  = new Web3(RPC_NODE)
@@ -156,7 +157,7 @@ export const testMulticall = async () => {
   }
 
   const watcher = createWatcher([{
-    target: erc20Address,
+    target: NUTAddress,
     call: [
       'balanceOf(address)(uint256)',
       store.state.web3.account
