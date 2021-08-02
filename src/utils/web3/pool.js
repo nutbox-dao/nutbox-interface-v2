@@ -163,7 +163,8 @@ export const addPool = async (form) => {
     }
 
     try {
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
+      console.log(6236, form.assetId, form.name);
+      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)), Transaction_config)
       await waitForTx(tx.hash)
       // re monitor
       resolve(tx.hash)

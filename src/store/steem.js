@@ -45,6 +45,8 @@ export default {
     clearSteemAccount(state) {
       state.steemAccount = null
       Cookie.remove('steemAccount')
+      state.steemBalance = 0
+      state.vestsBalance = 0
     },
 
     // pool info 
