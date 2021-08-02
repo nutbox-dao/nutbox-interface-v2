@@ -12,14 +12,12 @@
         </div>
       </div>
     </div>
-    <div class="btn-group">
-        <ConnectWalletBtn
-          class="op-bottom"
-          v-if="!steemLogin && type=='steem'"
-          type='STEEM'
-          @steemLogin="showSteemLogin = true"
-        />
-    </div>
+      <ConnectWalletBtn
+        class="op-bottom"
+        v-if="!steemLogin && type=='steem'"
+        type='STEEM'
+        @steemLogin="showSteemLogin = true"
+      />
     <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
   
