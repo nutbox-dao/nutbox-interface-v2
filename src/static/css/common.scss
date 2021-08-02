@@ -53,6 +53,9 @@ ponsived {
   border-radius: .8rem;
   font-size: .8rem;
   font-weight: bold;
+  &:hover {
+    background: #FFEB75;
+  }
   &.outline-btn {
     background: white;
     border: 1px solid var(--primary-custom);
