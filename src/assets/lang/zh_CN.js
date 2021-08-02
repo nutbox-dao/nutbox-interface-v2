@@ -5,60 +5,29 @@ module.exports = {
     hiveAccountPlaceHolder: '请输入Hive用户名',
     login: '登录',
     loging: '登录中...',
-    delegatemine: '代理挖矿',
-    spbalance: 'SP余额',
-    yourspdelegate: 'SP代理量',
     cancel: '取消',
     confirm: '确认',
 
-    sptotaldelegate: '代理总量',
-    totalpnut: 'PNUT总产量',
     apy: '年化收益率',
-    pnutprofits: 'PNUT收益',
     withdraw: '收获',
     balance: '余额',
     approveContract: "授权合约",
     max: '最大',
-    confirmconvert: '确认兑换',
-    servicecharge: '手续费',
     delegatecharge: '代理手续费',
-    atleastcharge: '最低收取',
-    convertrate: '兑换率',
     logout: '注销',
-    confirmdelegate: '确认代理',
-    delegatedsp: '已代理SP数量',
-    steembalance: 'STEEM余额',
-    sbdbalance: 'SBD余额',
-    tronbalance: '波场余额',
-    tsteembalance: 'TSTEEM余额',
-    tsbdbalance: 'TSBD余额',
-    pnutbalance: 'PNUT余额',
     input: '输入',
-    tips: "帮助信息",
     copy: '复制',
     complete: '完成',
 
-    setting: '设置',
-    admin: '管理员',
     whitePaper: '白皮书',
     nps: 'Nutbox提案系统',
-    userBook: '用户手册',
-    questions: '常见问题',
     contract: '合约地址',
-    swap: '交易对',
-    tools: '常用工具',
-    contact: '联系我们',
     docs: '文档',
     discord: 'Discord',
-    about: '关于',
     blog: '博客',
-    changeSteemNode: 'steem节点(可选)',
     contractAddr: '合约地址',
     search:'搜索',
-
     dashboard: "仪表盘",
-    contributions: "我的投票",
-
     language: '语言',
     zh: '中文',
     en: 'English',
@@ -70,11 +39,8 @@ module.exports = {
   },
   wallet: {
     wallet: '钱包',
-    swap: '跨链转账',
     connectSteem: "链接Steem钱包",
-    connectTron: "链接波场钱包",
     connectHive: "链接Hive钱包",
-    swapSubTitle: "及时、安全的将资产转移到波场网络",
     install: "立即安装",
     transfer: "转账",
     asset: "资产",
@@ -90,15 +56,11 @@ module.exports = {
     transferAmount: '转账金额',
     unbindAmount: '解绑金额'
   },
-  admin: {
-    admin: "管理员"
-  },
   cs: {
     crowdstaking: "质押投票",
     community: "社区",
     nominate: "投票",
     nominated: "已投票",
-    inputBondAmount: "Please Input ",
     bond: "绑定资金",
     available: "可绑定资金",
     bondAndNominate: " 绑定并投票",
@@ -123,10 +85,6 @@ module.exports = {
     hour: ' 小时 ',
     min: ' 分 ',
     sec: ' 秒 '
-  },
-  dashboard: {
-    export: "导出",
-    nominators: "提名人数"
   },
   cl: {
     crowdloan: "平行链插槽拍卖",
@@ -172,25 +130,13 @@ module.exports = {
     withdrawOk:'减少储蓄成功'
   },
   stake: {
-    stake: '质押挖矿',
     creaseDelegation: "增加代理",
     increaseDelegation: "减少代理",
     getSp: "获取 SP",
     getHp: "获取 HP",
     get: '获取',
-  },
-  farm: {
-    farm: '流动性挖矿',
     stake: "储蓄",
     unStake: "减少储蓄",
-  },
-  liquidStaking: {
-    liquidStaking: '质押资产流动',
-    title: "TSP 质押与赎回",
-    tsp: {
-      tspIsCirculatingSP: 'TSP为SP的等价物，TSP可享受SP同等的质押奖励，且TSP可交易',
-      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
-    }
   },
   tip: {
     approveSuccess:'授权成功',

@@ -5,8 +5,8 @@
       <div class="text-left font20 font-bold" >
         {{
             operate === "add"
-              ? $t("farm.stake")
-              : $t("farm.unStake")
+              ? $t("stake.stake")
+              : $t("stake.unStake")
           }}
       </div>
     </div>
@@ -15,8 +15,8 @@
       <div class="label flex-between-start">
         <span>{{
               operate === "add"
-                ? $t("farm.stake")
-                : $t("farm.unStake")
+                ? $t("stake.stake")
+                : $t("stake.unStake")
             }}</span>
         <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
       </div>
