@@ -3,7 +3,7 @@
     <div class="top flex-between-center">
       <img src="~@/static/images/logo_small.png" alt="" class="logo" />
       <div class="balance-right flex-full">
-        <div class="flex-between-center font-bold mb-1">
+        <div class="d-flex justify-content-between align-items-start font-bold mb-1">
           <div class="d-flex flex-column align-items-start">
             <div class="font16">STEEM POWER</div>
             <div class="font12 text-grey-light">STEEM</div>
