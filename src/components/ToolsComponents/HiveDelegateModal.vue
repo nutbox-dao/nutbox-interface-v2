@@ -35,7 +35,8 @@
       <button class="primary-btn outline-btn" @click="hide" :disabled='loading'>{{
             $t("message.cancel")
           }}</button>
-      <button class="primary-btn" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
+      <button class="primary-btn" @click="confirm" :disabled='loading'>
+        <b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("message.confirm") }}</button>
     </div>
     <div class="text-center mb-2 mt-4 hover-blue" @click="getHp">{{ $t("stake.getHp") }}</div>

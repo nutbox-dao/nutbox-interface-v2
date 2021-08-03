@@ -32,7 +32,8 @@
       <div class="btn-row">
         <span class="value"> {{ pendingReward | amountForm }} </span>
         <div class="right-box">
-          <button class="primary-btn m-0" :disabled="!approved">
+          <button class="primary-btn m-0" :disabled="!approved || isWithdrawing" @click="withdraw">
+            <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
             {{ $t("message.withdraw") }}
           </button>
         </div>
@@ -97,7 +98,7 @@
 <script>
 import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHomeChainAssetModal";
 import { mapState } from "vuex";
-import { approvePool } from "@/utils/web3/pool";
+import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
 
 export default {
@@ -148,6 +149,7 @@ export default {
       showModal: false,
       operate: "add",
       isApproving: false,
+      isWithdrawing: false
     };
   },
   methods: {
@@ -176,6 +178,18 @@ export default {
         this.isApproving = false;
       }
     },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    }
   },
 };
 </script>

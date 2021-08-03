@@ -47,7 +47,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   StakingFactory: 'StakingFactory.json',
   StakingTemplate: 'StakingTemplate.json',
   ERC20: 'ERC20.json',
-  SimpleERC20: 'SimpleERC20.json'
+  SimpleERC20: 'SimpleERC20.json',
+  MintableERC20: 'MintableERC20.json'
 }
 
 // Get contract Abi
