@@ -18,7 +18,14 @@
         type='STEEM'
         @steemLogin="showSteemLogin = true"
       />
+      <ConnectWalletBtn
+        class="op-bottom"
+        v-if="!hiveLogin && type=='hive'"
+        type='HIVE'
+        @hiveLogin="showHiveLogin = true"
+      />
     <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
+    <Login type='HIVE' v-if="showHiveLogin" @hideMask="showHiveLogin = false" />
   </div>
   
 </template>
@@ -26,6 +33,7 @@
 <script>
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
+import { mapState } from 'vuex'
 
 export default {
   name: 'WalletCard',
@@ -35,7 +43,8 @@ export default {
   },
   data() {
     return {
-      showSteemLogin: false
+      showSteemLogin: false,
+      showHiveLogin: false,
     }
   },
   props: {
@@ -57,9 +66,16 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      steemAccount: state => state.steem.steemAccount,
+      hiveAccount: state => state.hive.hiveAccount
+    }),
     steemLogin() {
       return !!this.steemAccount
     },
+    hiveLogin() {
+      return !!this.hiveAccount
+    }
   },
 }
 </script>

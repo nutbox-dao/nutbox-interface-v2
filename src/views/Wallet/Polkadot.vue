@@ -20,7 +20,7 @@
         />
       </div>
     </div>
-    <UserContributions class="mb-4">
+    <!-- <UserContributions class="mb-4">
       <template #title>
         <div class="card-title">{{ $t("wallet.contribution") }}</div>
       </template>
@@ -29,7 +29,7 @@
       <template #title>
         <div class="card-title">{{ $t("wallet.nomination") }}</div>
       </template>
-    </UserNominations>
+    </UserNominations> -->
   </div>
 </template>
 

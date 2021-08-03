@@ -8,6 +8,7 @@
         <router-link to="/wallet/polkadot">Polkadot</router-link>
         <router-link to="/wallet/kusama">Kusama</router-link>
         <router-link to="/wallet/steem">Steem</router-link>
+        <router-link to="/wallet/hive">Hive</router-link>
       </div>
       <component :is="$route.name"></component>
     </div>
@@ -17,6 +18,7 @@
 
 <script>
 import SteemAccount from '@/components/Accounts/SteemAccount'
+import HiveAccount from '@/components/Accounts/HiveAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import BSCAccount from '@/components/Accounts/BSCAccount'
 
@@ -25,7 +27,8 @@ export default {
   components: {
     PolkadotWallet: PolkadotAccount,
     SteemWallet: SteemAccount,
-    BSCWallet: BSCAccount
+    BSCWallet: BSCAccount,
+    HiveWallet: HiveAccount
   },
   computed: {
   },
