@@ -153,7 +153,7 @@ export const getCToken = async (communityId, update=false) => {
         return
       }
     }catch(e){
-      console.log(e);
+      console.log(8889, e);
       reject(errCode.BLOCK_CHAIN_ERR)
       return;
     }

@@ -27,7 +27,7 @@
     <template v-else>
       <div class="empty-bg" v-if="communityCard && communityCard.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t("tip.noContribuitons") }}</p>
+        <p>{{ $t("tip.noCommunities") }}</p>
       </div>
       <div class="row">
         <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of communityCard" :key="index">

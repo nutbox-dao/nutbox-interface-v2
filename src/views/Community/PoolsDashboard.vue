@@ -16,7 +16,10 @@
         </button>
       </div>
     </div>
-     <Progress :progress-data="progressData"></Progress>
+    <div>
+      {{ blockNum }}
+    </div>
+    <Progress :progress-data="progressData"></Progress>
     <div v-if="stakingPools.length===0"
          class="empty-card d-flex flex-column justify-content-center">
       <div class="empty-bg">
@@ -67,10 +70,14 @@ import { getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
 import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PoolsDashboard',
   components: { Progress, DashboardPoolCard },
+  computed: {
+    ...mapState('web3', ['blockNum'])
+  },
   data () {
     return {
       activeTab: 0,

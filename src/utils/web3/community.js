@@ -80,7 +80,7 @@ export const getMyCommunityInfo = async (update=false) => {
                 resolve(communityInfo)
                 return;
             }else{
-                store.commit('web3/saveCommunityInfo', {})
+                store.commit('web3/saveCommunityInfo', {id: stakingFactoryId})
                 resolve({id: stakingFactoryId})
             }
         }catch(e){
@@ -140,7 +140,6 @@ export const createStakingFeast = async (form) => {
             let distribution = form.poolData
             distribution = distribution.map(d => ({
                 amount: ethers.utils.parseUnits(d.amount.toString(), form.decimal),
-                hasPassed: false,
                 startHeight: d.startHeight,
                 stopHeight: d.stopHeight
             }))
@@ -228,6 +227,7 @@ export const getDistributionEras = async (update=false) => {
         try{
             contract = await getContract('StakingTemplate', stakingFactoryId)
             const cToken = await getCToken(stakingFactoryId)
+            console.log(776, cToken);
             decimal = cToken.decimal
         }catch(e){
             reject(e);
