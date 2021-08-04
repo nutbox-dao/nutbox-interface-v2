@@ -35,7 +35,7 @@
         <div class="card-container mt-4">
           <component :is="tabOptions[activeTab].component"
             :crowdloanPools='crowdloanPools'
-            :crowdstakingPools='crowdstakingPools'
+            :nominatePools='nominatePools'
             :steemDelegatePools='steemDelegatePools'
             :hiveDelegatePools='hiveDelegatePools'
             :erc20Pools='erc20Pools'>
@@ -114,7 +114,7 @@ export default {
     crowdloanPools () {
       return this.pools ? this.pools.filter(p => p.type == 'SubstrateCrowdloanAssetRegistry') : []
     },
-    crowdstakingPools () {
+    nominatePools () {
       return this.pools ? this.pools.filter(p => p.type == 'SubstrateNominateAssetRegistry') : []
     },
     steemDelegatePools () {

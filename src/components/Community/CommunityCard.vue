@@ -18,14 +18,12 @@
           <div class="info flex-start-center">
             <span v-if="cardInfo.assetLogos.length === 0">--</span>
             <img v-else class="info-icon" :src="icon" v-for="(icon, index) in new Set(cardInfo.assetLogos)" :key="index" alt="">
-            <!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
-            <!--          <img class="info-icon" src="~@/static/images/steem.svg" alt="">-->
           </div>
         </div>
-        <div class="project-info-container">
+        <!-- <div class="project-info-container">
           <span class="name">{{ $t('community.totalDepositDollor') }}</span>
           <div class="info">--</div>
-        </div>
+        </div> -->
         <div class="project-info-container">
           <span class="name">{{ $t('message.apy') }}</span>
           <div class="info">{{ apyRange }}</div>

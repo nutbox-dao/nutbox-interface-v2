@@ -127,6 +127,7 @@ export default {
   watch: {
     async currentBlockNum (newValue, _) {
       const fund = this.getFundInfo
+      if (!fund) return;
       const end = fund.end
       const raised = fund.raised
       const cap = fund.cap
@@ -158,7 +159,7 @@ export default {
       return this.card.chainId == 2 ? 'polkadot' : 'kusama'
     },
     getFundInfo () {
-      return this.fundInfo(this.card.paraId)
+      return this.fundInfo(this.card.paraId) ?? {}
     },
     isConnected () {
       return this.$store.state[this.chain].isConnected
@@ -220,7 +221,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status || this.card.statusStr
+    this.status = this.getFundInfo.status || this.card.statusStr || 'Completed'
   }
 }
 </script>

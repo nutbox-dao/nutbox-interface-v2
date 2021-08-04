@@ -18,10 +18,10 @@
         <span class="name">{{ $t('community.totalDeposit') }}</span>
        <div class="info">{{ totalDeposited | amountForm }}</div>
       </div>
-      <div class="project-info-container">
+      <!-- <div class="project-info-container">
         <span class="name">{{ $t('community.hasMined') }}</span>
-        <div class="info">10000000</div>
-      </div>
+        <div class="info">{{ minedToken | amountForm }}</div>
+      </div> -->
       <div class="project-info-container">
         <span class="name">APY</span>
         <b-input type="number" class="apy-input" v-model="apy" step="0.01" :placeholder="$t('community.inputApy')"></b-input>
@@ -40,11 +40,13 @@ import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
 import { updatePoolApy, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
+import BN from 'bn.js'
+import { getContract } from '@/utils/web3/contract'
 
 export default {
   name: 'DashboardPoolCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId', 'allPools']),
+    ...mapState('web3', ['stakingFactoryId', 'allPools', 'blockNum']),
     totalDeposited() {
       return this.pool.totalStakedAmount.toString() / (10 ** this.decimal)
     }
@@ -53,7 +55,19 @@ export default {
     return {
       decimal: 1e18,
       updating: false,
-      apy: null
+      apy: null,
+      minedToken: 0,
+      contract: {}
+    }
+  },
+  watch: {
+    async blockNum(newValue, oldValue) {
+      try{
+        const res = await this.contract.calculateReward(1, newValue)
+        this.minedToken = res.toString() / 1e18
+      }catch(e){
+        console.log('watch total mined token failed', e);
+      }
     }
   },
   props: {
@@ -99,6 +113,8 @@ export default {
       }
     const cToken = await getCToken(this.stakingFactoryId)
     this.decimal = cToken.decimal
+
+    this.contract = await getContract('StakingTemplate', this.stakingFactoryId)
   },
 }
 </script>

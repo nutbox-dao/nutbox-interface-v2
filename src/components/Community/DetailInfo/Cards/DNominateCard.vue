@@ -2,25 +2,17 @@
   <div class="c-card">
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img class="icon1" :src="card.project.iconUrl" alt="" />
+        <img class="icon1" :src="card.tokenIcon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span>{{ card.project.projectName }}</span>
+          <span>{{ card.poolName }}</span>
         </div>
       </div>
 
     </div>
     <div class="h-line mt-4 mb-2"></div>
-    <div class="desc">
-      {{ card.community.description[lang] }}
-    </div>
-    <div class="validator-container">
-      <div class="validator" v-for="v in card.project.validators" :key="v">
-        {{ v | formatValidatorAdd }}
-      </div>
-    </div>
-    <div class="detail-info-box">
+    <!-- <div class="detail-info-box">
       <template v-if="isConnected">
         <button
           class="primary-btn"
@@ -39,7 +31,7 @@
         <span class="name"> APY </span>
         <div class="info">13.0%</div>
       </div>
-    </div>
+    </div> -->
 
     <b-modal
       v-model="showNominate"
@@ -89,10 +81,6 @@ export default {
   props: {
     card: {
       type: Object
-    },
-    symbol: {
-      type: String,
-      default: 'Kusama'
     }
   },
   filters: {
@@ -130,21 +118,17 @@ export default {
       const decimal = this.card.decimal
       return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
     },
-    // 用户已经投了该项目的节点
-    nominated () {
-      const val = this.card.project.validators.map((tcd) =>
-        stanfiAddress(tcd)
-      )
-      return (
-        this.nominators.filter(({ address }) => val.indexOf(address) !== -1)
-          .length === val.length
-      )
+    symbol(){
+      console.log('');
+      return this.card
     },
     tvl () {
       
     }
   },
-  mounted () {}
+  mounted () {
+    console.log('nominate card', this.card);
+  }
 }
 </script>
 

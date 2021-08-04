@@ -60,6 +60,7 @@ export const getMyCommunityInfo = async (update=false) => {
         let stakingFactoryId = null
         try{
             stakingFactoryId = await getMyStakingFactory(update)
+            console.log('stakingFactoryId', stakingFactoryId);
             if (!stakingFactoryId) {
                 reject(errCode.NO_STAKING_FACTORY);
                 return;
@@ -76,10 +77,12 @@ export const getMyCommunityInfo = async (update=false) => {
         try{
             communityInfo = await gci(stakingFactoryId)
             if (communityInfo){
+                console.log('backend communityInfo', communityInfo);
                 store.commit('web3/saveCommunityInfo', communityInfo)
                 resolve(communityInfo)
                 return;
             }else{
+                console.log('first get communityInfo');
                 store.commit('web3/saveCommunityInfo', {id: stakingFactoryId})
                 resolve({id: stakingFactoryId})
             }
@@ -145,7 +148,6 @@ export const createStakingFeast = async (form) => {
             }))
             // call contract
             const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
-            console.log(333, res.hash);
             await waitForTx(res.hash)
             resolve(res.hash)
         }catch(e){

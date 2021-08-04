@@ -36,7 +36,6 @@ export default {
     },
   },
   computed: {
-    ...mapState('polkadot', ['crowdstakings']),
     ...mapState('web3', ['loadingAllPools'])
   }
 }
