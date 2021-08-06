@@ -160,13 +160,13 @@
             </div>
           </b-form-group>
           <b-form-group
-            v-if="!isEdit"
+            v-if="!isMintable"
             label-cols-md="2"
             content-cols-md="6"
             :label="$t('community.communityBalance')"
           >
             <b-form-input
-              :disabled="!isEdit"
+              :disabled="true"
               v-model="form.communityBalance"
               :placeholder="$t('community.communityBalance')"
             ></b-form-input>
@@ -304,6 +304,7 @@ import {
   getMyCommunityInfo,
   getAllCommunities,
 } from "@/utils/web3/community";
+import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState } from "vuex";
 
@@ -333,9 +334,10 @@ export default {
       canEdit: false,
       noCommunity: false,
       showSignatureTip: false,
-      showChargeTip: true,
+      showChargeTip: false,
       uploading: false,
       charging: false,
+      isMintable: true
     };
   },
   computed: {
@@ -363,6 +365,8 @@ export default {
         return;
       }
       this.form = communityInfo;
+      const cToken = await getCToken(communityInfo.id)
+      this.isMintable = cToken.isMintable
     } catch (e) {
       console.log(666, e);
       handleApiErrCode(e, (info, params) => {

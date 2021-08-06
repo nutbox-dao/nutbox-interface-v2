@@ -145,8 +145,8 @@ export const getCToken = async (communityId, update=false) => {
       const tokenAddress = await registerHub.getHomeLocation(assetId);
       try{
         const cToken = await getERC20Info(tokenAddress);
-        cTokens[assetId] = assetId
-        cTokens['isMintable'] = await registerHub.mintable(assetId);
+        cToken["assetId"] = assetId
+        cToken['isMintable'] = await registerHub.mintable(assetId);
         cTokens[assetId] = cToken
         store.commit('web3/saveCTokens', cTokens)
         resolve(cToken)
