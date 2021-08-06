@@ -12,7 +12,11 @@
         }}
       </div>
       <div v-if="!isEdit">
-        <button class="primary-btn pl-3 pr-3" :disabled="!canEdit" @click="type='edit'">
+        <button
+          class="primary-btn pl-3 pr-3"
+          :disabled="!canEdit"
+          @click="type = 'edit'"
+        >
           {{ $t("community.edit") }}
         </button>
       </div>
@@ -88,7 +92,12 @@
               </template>
               <template #file-name>
                 <div class="input-file-logo">
-                  <img class="logo-preview" v-if="logoPreviewSrc" :src="logoPreviewSrc" alt="">
+                  <img
+                    class="logo-preview"
+                    v-if="logoPreviewSrc"
+                    :src="logoPreviewSrc"
+                    alt=""
+                  />
                   <UploadLoading v-if="logoUploadLoading" />
                 </div>
               </template>
@@ -136,14 +145,34 @@
               </template>
               <template #file-name>
                 <div class="input-file-cover">
-                  <img class="cover-preview" v-if="coverPreviewSrc" :src="coverPreviewSrc" alt="">
-                  <UploadLoading v-if="coverUploadLoading"/>
+                  <img
+                    class="cover-preview"
+                    v-if="coverPreviewSrc"
+                    :src="coverPreviewSrc"
+                    alt=""
+                  />
+                  <UploadLoading v-if="coverUploadLoading" />
                 </div>
               </template>
             </b-form-file>
             <div class="font12 text-grey-light mt-1">
               {{ $t("community.picTip", { size: "1200*280" }) }}
             </div>
+          </b-form-group>
+          <b-form-group
+            v-if="!isEdit"
+            label-cols-md="2"
+            content-cols-md="6"
+            :label="$t('community.communityBalance')"
+          >
+            <b-form-input
+              :disabled="!isEdit"
+              v-model="form.communityBalance"
+              :placeholder="$t('community.communityBalance')"
+            ></b-form-input>
+            <b-button variant="primary" @click="showChargeTip = true">
+              {{ this.$t("community.charge") }}
+            </b-button>
           </b-form-group>
           <b-form-group
             v-if="isEdit"
@@ -158,6 +187,7 @@
         </b-form>
       </div>
     </div>
+    <!-- noCommunity tip -->
     <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
@@ -169,13 +199,70 @@
     >
       <div class="tip-modal">
         <div class="font20 font-bold text-center my-5">
-          {{ $t('community.noCommunity') }}
+          {{ $t("community.noCommunity") }}
         </div>
         <button class="primary-btn" @click="gotoCreate">
-          {{ $t('community.gotoCreate') }}
+          {{ $t("community.gotoCreate") }}
         </button>
       </div>
     </b-modal>
+    <!-- charge balance tip -->
+    <b-modal
+      v-model="showChargeTip"
+      modal-class="custom-modal"
+      size="sm"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center my-5">
+          {{ $t("community.communityCharge") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="label flex-between-start">
+            <span>{{ $t("community.charge") }}</span>
+            <span class="text-right"
+              >{{ $t("wallet.balance") }}:
+              {{ communityBalance | amountForm }}</span
+            >
+          </div>
+          <div class="input-box flex-between-center">
+            <input
+              style="flex: 1"
+              type="number"
+              v-model="chargeValue"
+              placeholder="0"
+            />
+            <div>
+              <button
+                class="primary-btn input-btn"
+                @click="fillMax"
+                :disabled="charging"
+              >
+                {{ $t("message.max") }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showChargeTip = false"
+            :disabled="charging"
+          >
+            <b-spinner small type="grow" v-show="charging" />
+            Cancel
+          </button>
+          <button class="primary-btn" @click="charge" :disabled="charging">
+            <b-spinner small type="grow" v-show="charging" />
+            {{ $t("community.confirmCharge") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    <!-- show signature tip -->
     <b-modal
       v-model="showSignatureTip"
       modal-class="custom-modal"
@@ -188,12 +275,12 @@
         <!-- <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/> -->
         <div class="my-5">
-          {{ $t('community.editTip') }}
+          {{ $t("community.editTip") }}
         </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t('community.sign') }}
+            {{ $t("community.sign") }}
           </button>
           <button
             class="primary-btn primary-btn-outline"
@@ -210,22 +297,24 @@
 </template>
 
 <script>
-import { uploadImage } from '@/utils/helper'
-import UploadLoading from '@/components/ToolsComponents/UploadLoading'
+import { uploadImage } from "@/utils/helper";
+import UploadLoading from "@/components/ToolsComponents/UploadLoading";
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
-  getAllCommunities
+  getAllCommunities,
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
+import { mapState } from "vuex";
 
 export default {
-  name: 'EditCommunityInfo',
+  name: "EditCommunityInfo",
   components: { UploadLoading },
-  data () {
+  data() {
     return {
       logo: null,
       coverImg: null,
+      chargeValue: 0,
       form: {
         id: "",
         name: "",
@@ -241,11 +330,16 @@ export default {
       coverUploadLoading: false,
       type: null,
       isEdit: false,
-      canEdit:false,
+      canEdit: false,
       noCommunity: false,
       showSignatureTip: false,
+      showChargeTip: true,
       uploading: false,
+      charging: false,
     };
+  },
+  computed: {
+    ...mapState("web3", ["communityBalance"]),
   },
   watch: {
     type(newValue, oldValue) {
@@ -255,7 +349,7 @@ export default {
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
-    try{
+    try {
       const communityInfo = await getMyCommunityInfo();
       console.log(444, communityInfo);
       if (!communityInfo) {
@@ -263,17 +357,17 @@ export default {
         this.noCommunity = true;
         return;
       }
-      this.canEdit = true
+      this.canEdit = true;
       if (!communityInfo.name) {
-        this.form.id = communityInfo.id
+        this.form.id = communityInfo.id;
         return;
       }
       this.form = communityInfo;
-    }catch(e){
+    } catch (e) {
       console.log(666, e);
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
+      handleApiErrCode(e, (info, params) => {
+        this.$bvToast.toast(info, params);
+      });
     }
   },
   methods: {
@@ -331,6 +425,8 @@ export default {
         this.form.poster = null;
       }
     },
+    fillMax() {},
+    charge() {},
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
       let tips = null;
@@ -365,16 +461,16 @@ export default {
         this.uploading = true;
         const resCode = await completeCommunityInfo(this.form, this.type);
 
-          // go to community dashboard
-          this.$bvToast.toast(this.$t("tip.completeCommunityInfoSuccess"), {
-            title: this.$t("tip.tips"),
-            variant: "success",
-          });
-          await getAllCommunities(true)
-          await sleep(1);
-          this.$router.push("/community/pool-dashboard");
+        // go to community dashboard
+        this.$bvToast.toast(this.$t("tip.completeCommunityInfoSuccess"), {
+          title: this.$t("tip.tips"),
+          variant: "success",
+        });
+        await getAllCommunities(true);
+        await sleep(1);
+        this.$router.push("/community/pool-dashboard");
       } catch (e) {
-          const handleRes = handleApiErrCode(e, (info, params) => {
+        const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
       } finally {

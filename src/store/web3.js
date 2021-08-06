@@ -30,6 +30,7 @@ export default {
     approvements: {},
     totalStakings: {},
     userBalances: {},
+    communityBalance: 1,
 
     // loading state
     loadingPendingRewards: true,
@@ -37,6 +38,7 @@ export default {
     loadingAllPools: true,
     loadingUserStakings: true,
     loadingUserBalances: true,
+    loadingCommunityBalance: true,
 
   },
   mutations: {
@@ -127,7 +129,14 @@ export default {
     },
     saveLoadingUserBalances: (state, loadingUserBalances) => {
       state.loadingUserBalances = loadingUserBalances
+    },
+    saveLoadingCommunityBalance: (state, loadingCommunityBalance) => {
+      state.loadingCommunityBalance = loadingCommunityBalance
+    },
+    saveCommunityBalance: (state, communityBalance) => {
+      state.communityBalance =communityBalance
     }
+
   },
   getters: {
     isMainChain:(state) => {

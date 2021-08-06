@@ -17,7 +17,7 @@
       </div>
     </div>
     <div>
-      <!-- {{ blockNum }} -->
+      {{ blockNum }} {{ communityBalance }}
     </div>
     <Progress :progress-data="progressData"></Progress>
     <div v-if="stakingPools.length===0"
@@ -76,7 +76,7 @@ export default {
   name: 'PoolsDashboard',
   components: { Progress, DashboardPoolCard },
   computed: {
-    ...mapState('web3', ['blockNum'])
+    ...mapState('web3', ['blockNum', 'communityBalance'])
   },
   data () {
     return {

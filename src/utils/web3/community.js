@@ -1,4 +1,4 @@
-import { getContract } from './contract'
+import { getContract, contractAddress } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
 import { Transaction_config } from '@/config'
@@ -10,6 +10,7 @@ import {
     createWatcher
   } from '@makerdao/multicall'
 import { getCToken } from './asset'
+import { community } from '../../assets/lang/zh_CN'
 
 /**
  * Get community admin's staking factory id
@@ -60,7 +61,6 @@ export const getMyCommunityInfo = async (update=false) => {
         let stakingFactoryId = null
         try{
             stakingFactoryId = await getMyStakingFactory(update)
-            console.log('stakingFactoryId', stakingFactoryId);
             if (!stakingFactoryId) {
                 reject(errCode.NO_STAKING_FACTORY);
                 return;
@@ -120,7 +120,9 @@ export const createStakingFeast = async (form) => {
     return new Promise(async(resolve, reject) => {
         try{
             const comId = await getMyStakingFactory()
+            console.log('comId');
             if (comId){
+                console.log('Can only register one community for an account');
                 reject(errCode.CONTRACT_CREATE_FAIL)
                 return;
             }
@@ -269,4 +271,61 @@ export const getNonce = async (update=false) => {
     nonce = await gn(account)
     store.commit('web3/saveNonce', nonce)
     return nonce
+}
+
+/**
+ * monityor Community balance
+ * If cToken of this community is not a mintable token, he may need to charge balance of community
+ */
+export const monitorCommunityBalance = async (communityInfo) => {
+    const cToken = await getCToken(communityInfo.id)
+    if (cToken.isMintable){
+        return;
+    }
+    return new Promise(async (resolve, reject) => {
+        try{
+          store.commit('web3/saveLoadingCommunityBalance', true)
+          let watchers = store.state.web3.watchers
+          let watcher = watchers['communityBalance']
+          watcher && watcher.stop()
+          watcher = createWatcher([
+              {
+                  target: contractAddress['ERC20AssetHandler'],
+                  call: [
+                    'getBalance(bytes32)(uint256)',
+                    ethers.utils.keccak256('0x' + communityInfo.id.substr(2) + cToken.assetId.substr(2) + "61646d696e")
+                  ],
+                  returns: [
+                      ['communityBalance']
+                  ]
+              }
+          ], Multi_Config)
+          watcher.batch().subscribe(updates => {
+            console.log('Updates community balance', communityBalance);
+            store.commit('web3/saveLoadingCommunityBalance', false)
+            store.commit('web3/saveCommunityBalance', updates[0]['communityBalance'])
+          })
+          watcher.start()
+          watchers['communityBalance'] = watcher
+          store.commit('web3/saveWatchers', {...watchers})
+          resolve()
+        }catch(e){
+          reject()
+        }
+      })
+}
+
+export const monitorCommunity = async () => {
+    let communityInfo;
+    try{
+        communityInfo = await getMyCommunityInfo(true)
+        if (!communityInfo) {
+            return;
+        }
+    }catch(e){
+        return;
+    }
+    await Promise.all([
+        monitorCommunityBalance(communityInfo)
+    ]).catch(console.error)
 }

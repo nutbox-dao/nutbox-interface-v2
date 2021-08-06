@@ -144,7 +144,9 @@ export const getCToken = async (communityId, update=false) => {
       const assetId = await contract.rewardAsset()
       const tokenAddress = await registerHub.getHomeLocation(assetId);
       try{
-        const cToken = await getERC20Info(tokenAddress)
+        const cToken = await getERC20Info(tokenAddress);
+        cTokens[assetId] = assetId
+        cTokens['isMintable'] = await registerHub.mintable(assetId);
         cTokens[assetId] = cToken
         store.commit('web3/saveCTokens', cTokens)
         resolve(cToken)
@@ -415,10 +417,10 @@ export const deployERC20 = async ({
   symbol,
   decimal,
   totalSupply
-}, isMintalbel) => {
+}, isMintable) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const abi = await getAbi(isMintalbel ? 'MintableERC20' : "SimpleERC20")
+      const abi = await getAbi(isMintable ? 'MintableERC20' : "SimpleERC20")
       const eth = await getProvider()
       const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
       const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,

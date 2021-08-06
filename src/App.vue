@@ -151,10 +151,9 @@ import { isMobile } from './utils/commen/util'
 import { setupNetwork, chainChanged } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities } from '@/utils/web3/community'
+import { getAllCommunities, monitorCommunity, getMyCommunityInfo } from '@/utils/web3/community'
 import { getAllPools,monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
-import { hexToString } from '@/utils/web3/utils'
 
 export default {
   data () {
@@ -240,7 +239,10 @@ export default {
         getAllCommunities()
         getAllPools().then(res => {
           monitorPools()
-        })
+        }).catch(console.error)
+        getMyCommunityInfo().then(res => {
+          monitorCommunity()
+        }).catch(console.error)
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

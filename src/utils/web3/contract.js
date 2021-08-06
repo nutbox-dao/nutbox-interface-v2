@@ -20,17 +20,17 @@ import {
 import { errCode, RPC_NODE } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0xA6604Cc17a59b6B2f4863Ca432912B719d13DDDa",
-  "HomeChainAssetRegistry": "0x309F01dEd11F548Ba887f92A18a623D40bB97c15",
-  "SteemHiveDelegateAssetRegistry": "0x64dd8c6DCeAcF23F472c49c95651e807A1140FCB",
-  "SubstrateCrowdloanAssetRegistry": "0x1aC1863ACaA272B6767182E4b1777aBA873d8498",
-  "SubstrateNominateAssetRegistry": "0x3AAc556fc218C9caD30B3b362507427875146501",
-  "ERC20AssetHandler": "0x4449F26078eA8b0FF3273554EE3784F831Bc9a27",
+  "RegistryHub": "0xb6F80d9E7AceDe7EA750b199CA9f37fC238f5cF9",
+  "HomeChainAssetRegistry": "0xd26E786C192C3c666a7442Af2E86A08A56a576b4",
+  "SteemHiveDelegateAssetRegistry": "0x466e31426f1eCb99b20Eb25D3966ea8130ffBe56",
+  "SubstrateCrowdloanAssetRegistry": "0xD362F80a65eaFAb742839dCf34A7650FAFd82e55",
+  "SubstrateNominateAssetRegistry": "0xaE874B590ad87561658175Cfa25067A9E1A51cEB",
+  "ERC20AssetHandler": "0x4704b06cD8BFf709CED3da5350e2b932ef3a4959",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0xcFE507Ac9FfeE074B892E9b4F41946f8F807B5aE",
-  "Executor": "0x318D7f1Acf8e66930716300b0Db7a8486034e50b",
-  "Bridge": "0x6810Cb8F0C60C1fe5a1715C5Ef1f7aB1A36f6FAb",
-  "StakingFactory": "0xb1bb028e928C220Ac0d9F65B240B957eb4Ea68Aa"
+  "TrustlessAssetHandler": "0xe511C4Dbd61E15abC3c68DA1eA0e26BEb605f8Db",
+  "Executor": "0x0f71a6B1544656f14EF3482f027555035516E238",
+  "Bridge": "0xdC0743800797Ba7eEb03978797CA27909dcc9120",
+  "StakingFactory": "0x421fc90aeACA20439D93B119369e35d21c27f026"
 }
 
 // contract file name

@@ -243,6 +243,7 @@ module.exports = {
     communityDesc: "社区介绍",
     communityLogo: "社区Logo",
     communityPoster: "社区封面",
+    communityBalance: "社区余额",
     commit: '提交',
     inputName: "请输入社区名字",
     inputLink: "请输入社区官网链接",
@@ -283,7 +284,10 @@ module.exports = {
     more: '更多',
     join: '参与',
     createYourCommunity: "创建你的社区",
-    communityDashboard: "管理你的社区"
+    communityDashboard: "管理你的社区",
+    charge: "充值",
+    communityCharge: "社区资金充值",
+    confirmCharge: "确认充值"
   },
   asset: {
     network: "网络",

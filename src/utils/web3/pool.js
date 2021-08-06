@@ -649,5 +649,5 @@ export const monitorPools = async () => {
     monitorApprovements(),
     monitorPoolTvls(),
     monitorUserBalances()
-  ])
+  ]).catch(console.error)
 }
