@@ -17,7 +17,7 @@
       </div>
     </div>
     <div>
-      {{ blockNum }} {{ communityBalance }}
+      {{ blockNum }} {{ communityBalance / 1e18 }}
     </div>
     <Progress :progress-data="progressData"></Progress>
     <div v-if="stakingPools.length===0"

@@ -380,16 +380,13 @@ export default {
     this.isEdit = !!this.type;
     try {
       const communityInfo = await getMyCommunityInfo();
-      console.log(444, communityInfo);
       if (!communityInfo) {
         // Havn't create feast
         this.noCommunity = true;
         return;
       }
       this.canEdit = true;
-      console.log(communityInfo.id);
       const cToken = await getCToken(communityInfo.id)
-      console.log('ctoken', cToken);
       this.isMintable = cToken.isMintable
       this.cTokenAddress = cToken.address
       if (!communityInfo.name) {
@@ -405,17 +402,6 @@ export default {
     }
   },
   methods: {
-    setFormInfo() {
-      this.form = {
-        name: "BML",
-        website: "http://www.bml.com",
-        introduction:
-          "Acala是全球首个去中心化开放式金融联盟、波卡生态金融中心。Acala是全球首个去中心化开放式金融联盟、波卡生态金融中心。",
-        logoUrl: "https://cdn.wherein.mobi/polkadot/token/logo/crab.png",
-        coverUrl:
-          "https://cdn.wherein.mobi/nutbox/slotauction/poster/BML-poster.png",
-      };
-    },
     async updateLogo(file) {
       if (!this.logo) return;
       this.logoUploadLoading = true;
@@ -476,7 +462,7 @@ export default {
       }
     },
     fillMax() {
-      this.chargeValue = this.communityBalance / 1e18
+      this.chargeValue = this.cTokenBalance
     },
     async charge() {
       try{
