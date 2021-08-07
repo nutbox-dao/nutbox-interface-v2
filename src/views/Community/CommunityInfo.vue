@@ -160,14 +160,14 @@
             </div>
           </b-form-group>
           <b-form-group
-            v-if="!isMintable"
+            v-if="!isMintable && !isEdit"
             label-cols-md="2"
             content-cols-md="6"
             :label="$t('community.communityBalance')"
           >
             <b-form-input
               :disabled="true"
-              v-model="form.communityBalance"
+              v-model="communityBalanceValue"
               :placeholder="$t('community.communityBalance')"
             ></b-form-input>
             <b-button variant="primary" @click="showChargeTip = true">
@@ -225,7 +225,7 @@
             <span>{{ $t("community.charge") }}</span>
             <span class="text-right"
               >{{ $t("wallet.balance") }}:
-              {{ communityBalance | amountForm }}</span
+              {{ cTokenBalance | amountForm }}</span
             >
           </div>
           <div class="input-box flex-between-center">
@@ -250,14 +250,23 @@
           <button
             class="primary-btn primary-btn-outline"
             @click="showChargeTip = false"
-            :disabled="charging"
+            :disabled="charging || approving"
           >
-            <b-spinner small type="grow" v-show="charging" />
-            Cancel
+            <b-spinner small type="grow" v-show="charging || approving" />
+            {{ $t('message.cancel') }}
           </button>
-          <button class="primary-btn" @click="charge" :disabled="charging">
+          <button class="primary-btn" @click="charge" :disabled="charging" v-if="ctokenApprovement">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("community.confirmCharge") }}
+          </button>
+          <button
+            v-else
+            class="primary-btn"
+            @click="approve"
+            :disabled="approving"
+          >
+            <b-spinner small type="grow" v-show="approving" />
+            {{ $t('message.approveContract') }}
           </button>
         </div>
       </div>
@@ -288,7 +297,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            Cancel
+            {{ $t('message.cancel') }}
           </button>
         </div>
       </div>
@@ -303,10 +312,13 @@ import {
   completeCommunityInfo,
   getMyCommunityInfo,
   getAllCommunities,
+  chargeCommunityBalance,
+  approveCommunityBalance
 } from "@/utils/web3/community";
 import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState } from "vuex";
+import BN from 'bn.js'
 
 export default {
   name: "EditCommunityInfo",
@@ -336,17 +348,32 @@ export default {
       showSignatureTip: false,
       showChargeTip: false,
       uploading: false,
+      approving:false,
       charging: false,
-      isMintable: true
+      isMintable: true,
+      cTokenAddress: '',
     };
   },
   computed: {
-    ...mapState("web3", ["communityBalance"]),
+    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement"]),
+    communityBalanceValue(){
+      if (this.communityBalance){
+        return this.communityBalance.toString() / 1e18
+      }else{
+        return 0;
+      }
+    },
+    cTokenBalance() {
+      if (!this.userBalances || !this.userBalances[this.cTokenAddress]) {
+        return 0;
+      }
+      return this.userBalances[this.cTokenAddress].toString() / 1e18
+    }
   },
   watch: {
     type(newValue, oldValue) {
       this.isEdit = !!newValue;
-    },
+    }
   },
   async mounted() {
     this.type = this.$route.query.type;
@@ -360,15 +387,18 @@ export default {
         return;
       }
       this.canEdit = true;
+      console.log(communityInfo.id);
+      const cToken = await getCToken(communityInfo.id)
+      console.log('ctoken', cToken);
+      this.isMintable = cToken.isMintable
+      this.cTokenAddress = cToken.address
       if (!communityInfo.name) {
         this.form.id = communityInfo.id;
         return;
       }
       this.form = communityInfo;
-      const cToken = await getCToken(communityInfo.id)
-      this.isMintable = cToken.isMintable
+      
     } catch (e) {
-      console.log(666, e);
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
       });
@@ -429,8 +459,54 @@ export default {
         this.form.poster = null;
       }
     },
-    fillMax() {},
-    charge() {},
+    async approve() {
+      try{
+        this.approving = true;
+        const hash = await approveCommunityBalance(this.cTokenAddress);
+        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+          title: this.$t('tip.success'),
+          variant:'success'
+        })
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.approving = false;
+      }
+    },
+    fillMax() {
+      this.chargeValue = this.communityBalance / 1e18
+    },
+    async charge() {
+      try{
+        this.charging = true;
+        if (Number(this.chargeValue) <= 0) {
+          this.$bvToast.toast(this.$t('error.inputError'), {
+            title: this.$t("tip.tips"),
+            autoHideDelay: 5000,
+            variant: "warning",
+          });
+          return;
+        }
+        const decimal = new BN(10).pow(new BN(18))
+        const amount = new BN(Number(this.chargeValue * 1e6)).mul(decimal).divn(1e6)
+        const hash = await chargeCommunityBalance(amount)
+        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        setTimeout(() => {
+          this.showChargeTip = false
+        }, 2000);
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.charging = false
+      }
+    },
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
       let tips = null;
@@ -470,7 +546,7 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
-        await getAllCommunities(true);
+        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true)])
         await sleep(1);
         this.$router.push("/community/pool-dashboard");
       } catch (e) {

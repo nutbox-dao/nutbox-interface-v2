@@ -10,7 +10,8 @@ import {
     createWatcher
   } from '@makerdao/multicall'
 import { getCToken } from './asset'
-import { community } from '../../assets/lang/zh_CN'
+import BN from 'bn.js'
+import { watch } from 'less'
 
 /**
  * Get community admin's staking factory id
@@ -76,10 +77,10 @@ export const getMyCommunityInfo = async (update=false) => {
         let communityInfo = null;
         try{
             communityInfo = await gci(stakingFactoryId)
-            if (communityInfo){
-                console.log('backend communityInfo', communityInfo);
-                store.commit('web3/saveCommunityInfo', communityInfo)
-                resolve(communityInfo)
+            if (communityInfo && communityInfo.length > 0){
+                console.log('backend communityInfo', communityInfo[0]);
+                store.commit('web3/saveCommunityInfo', communityInfo[0])
+                resolve(communityInfo[0])
                 return;
             }else{
                 console.log('first get communityInfo');
@@ -200,7 +201,71 @@ export const completeCommunityInfo = async (form, type) => {
             reject(e)
         }
     })
+}
 
+/**
+ * Charge community's balance
+ * Only non-mintable ctoken need to charge balance
+ * @param {*} amount 
+ */
+export const chargeCommunityBalance = async (amount) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        let contract = null
+        try{
+            stakingFactoryId = await getMyStakingFactory(false)
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+            contract = await getContract('StakingTemplate', stakingFactoryId, false);
+        }catch(e){
+            reject(e);
+            return;
+        }
+
+        try{
+            const tx = await contract.adminDepositReward(amount.toString(), Transaction_config);
+            await waitForTx(tx.hash);
+            resolve(tx.hash)
+        }catch(e){
+            console.log('Charging community balance Failed', e);
+            reject(errCode.BLOCK_CHAIN_ERR)
+            return;
+        }
+    })
+}
+
+/**
+ * Approve erc20handler to user users ctoken
+ * @param {*} address ctoken address
+ */
+export const approveCommunityBalance = async (address) => {
+    return new Promise(async (resolve, reject) => {
+        let contract;
+        try {
+          contract = await getContract('ERC20', address, false)
+        } catch (e) {
+          reject(e);
+          return;
+        }
+       
+        const erc20Handler = contractAddress['ERC20AssetHandler']
+        try{
+          new BN(10).pow(new BN(18 + 50))
+          const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(18 + 50)).toString(), Transaction_config)
+          await waitForTx(tx.hash)
+          resolve(tx.hash)
+        }catch(e){
+          if (e.code === 4001){
+              reject(errCode.USER_CANCEL_SIGNING)
+            }else {
+              reject(errCode.BLOCK_CHAIN_ERR)
+            }
+            console.log('Approve community banlance Fail', e);
+        }
+        
+    })
 }
 
 /**
@@ -278,6 +343,7 @@ export const getNonce = async (update=false) => {
  * If cToken of this community is not a mintable token, he may need to charge balance of community
  */
 export const monitorCommunityBalance = async (communityInfo) => {
+    console.log(0);
     const cToken = await getCToken(communityInfo.id)
     if (cToken.isMintable){
         return;
@@ -285,25 +351,49 @@ export const monitorCommunityBalance = async (communityInfo) => {
     return new Promise(async (resolve, reject) => {
         try{
           store.commit('web3/saveLoadingCommunityBalance', true)
+          store.commit('web3/saveLoadingApprovementCtoken', true)
           let watchers = store.state.web3.watchers
           let watcher = watchers['communityBalance']
+          console.log(1111111, cToken);
+          const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
           watcher && watcher.stop()
+          console.log(cToken.assetId, communityInfo.id);
+          console.log(ethers.utils.keccak256('0x' + communityInfo.id.substr(2) + cToken.assetId.substr(2) + "61646d696e"));
           watcher = createWatcher([
               {
-                  target: contractAddress['ERC20AssetHandler'],
-                  call: [
-                    'getBalance(bytes32)(uint256)',
-                    ethers.utils.keccak256('0x' + communityInfo.id.substr(2) + cToken.assetId.substr(2) + "61646d696e")
-                  ],
-                  returns: [
-                      ['communityBalance']
-                  ]
+                target: contractAddress['ERC20AssetHandler'],
+                call: [
+                'getBalance(bytes32)(uint256)',
+                ethers.utils.keccak256('0x' + communityInfo.id.substr(2) + cToken.assetId.substr(2) + "61646d696e")
+                ],
+                returns: [
+                    ['communityBalance']
+                ]
+              },
+              {
+                target: cToken.address,
+                call: [
+                    'allowance(address,address)(uint256)',
+                    store.state.web3.account,
+                    erc20HandlerAddress
+                ],
+                returns: [
+                    ['allowance', val => val / 1e18 > 1e10]
+                ]
               }
           ], Multi_Config)
-          watcher.batch().subscribe(updates => {
-            console.log('Updates community balance', communityBalance);
-            store.commit('web3/saveLoadingCommunityBalance', false)
-            store.commit('web3/saveCommunityBalance', updates[0]['communityBalance'])
+          watcher.subscribe(update => {
+            const type = update.type;
+            const value = update.value;
+            if (type === 'communityBalance'){
+                console.log('Updates community balance', update);
+                store.commit('web3/saveLoadingCommunityBalance', false)
+                store.commit('web3/saveCommunityBalance', value)
+            }else if (type === 'allowance'){
+                console.log('Updates community approvement', update);
+                store.commit('web3/saveLoadingApprovementCtoken', false)
+                store.commit('web3/saveCtokenApprovement', value)
+            }
           })
           watcher.start()
           watchers['communityBalance'] = watcher
@@ -312,7 +402,7 @@ export const monitorCommunityBalance = async (communityInfo) => {
         }catch(e){
           reject()
         }
-      })
+    })
 }
 
 export const monitorCommunity = async () => {

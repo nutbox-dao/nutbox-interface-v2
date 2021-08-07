@@ -240,9 +240,7 @@ export default {
         getAllPools().then(res => {
           monitorPools()
         }).catch(console.error)
-        getMyCommunityInfo().then(res => {
-          monitorCommunity()
-        }).catch(console.error)
+        monitorCommunity()
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

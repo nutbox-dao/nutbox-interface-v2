@@ -31,6 +31,7 @@ export default {
     totalStakings: {},
     userBalances: {},
     communityBalance: 1,
+    ctokenApprovement: false,
 
     // loading state
     loadingPendingRewards: true,
@@ -39,6 +40,7 @@ export default {
     loadingUserStakings: true,
     loadingUserBalances: true,
     loadingCommunityBalance: true,
+    loadingApprovementCtoken: true,
 
   },
   mutations: {
@@ -135,8 +137,13 @@ export default {
     },
     saveCommunityBalance: (state, communityBalance) => {
       state.communityBalance =communityBalance
+    },
+    saveLoadingApprovementCtoken: (state, loadingApprovementCtoken) => {
+      state.loadingApprovementCtoken = loadingApprovementCtoken
+    },
+    saveCtokenApprovement: (state, ctokenApprovement) => {
+      state.ctokenApprovement = ctokenApprovement
     }
-
   },
   getters: {
     isMainChain:(state) => {

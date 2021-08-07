@@ -123,6 +123,7 @@
 
 <script>
 import { deployERC20 } from '@/utils/web3/asset'
+import { monitorUserBalances } from '@/utils/web3/pool'
 import { uploadImage } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
@@ -188,6 +189,7 @@ export default {
         await insertToken(token)
         // update tokens cache
         await getAllTokens(true)
+        await monitorUserBalances()
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

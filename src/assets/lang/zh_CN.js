@@ -287,7 +287,8 @@ module.exports = {
     communityDashboard: "管理你的社区",
     charge: "充值",
     communityCharge: "社区资金充值",
-    confirmCharge: "确认充值"
+    confirmCharge: "确认充值",
+    chargeSuccess: "充值成功"
   },
   asset: {
     network: "网络",

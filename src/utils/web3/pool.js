@@ -534,7 +534,7 @@ export const monitorApprovements = async () => {
           erc20HandlerAddress
         ],
         returns: [
-          [pool.communityId + '-' + pool.pid, val => val / (10 ** pool.decimal) > 1e6]
+          [pool.communityId + '-' + pool.pid, val => val / (10 ** pool.decimal) > 1e10]
         ]
       })), Multi_Config)
       watcher.batch().subscribe(updates => {

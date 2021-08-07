@@ -57,9 +57,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance', 'userBalances']),
     ...mapState('web3', ['userBalances', 'userStakings', 'account']),
-    ...mapGetters('steem', ['spBalance']),
     balance(){
       return this.userBalances[this.card.address] ?? 0
     },
@@ -113,7 +111,6 @@ export default {
       if (!this.checkInputValue()) return;
       this.loading = true;
       const decimal = new BN(10).pow(new BN(this.card.decimal))
-      console.log(this.stakingValue);
       const amount = new BN(Number(this.stakingValue * 1e6)).mul(decimal).divn(1e6)
       try{
         let res;
