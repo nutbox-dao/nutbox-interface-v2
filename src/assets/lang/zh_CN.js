@@ -1,5 +1,5 @@
 module.exports = {
-  message: {
+  commen: {
     userlogin: '用户登录',
     steemAccoutPlaceHolder: '请输入Steem用户名',
     hiveAccountPlaceHolder: '请输入Hive用户名',

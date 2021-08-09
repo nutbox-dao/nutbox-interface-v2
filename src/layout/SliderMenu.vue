@@ -30,7 +30,7 @@
         </b-nav-item>
         <b-nav-item to="/blog">
           <p id="blog-icon" class="my-icon" />
-          <span>{{ $t("message.blog") }}</span>
+          <span>{{ $t("commen.blog") }}</span>
         </b-nav-item>
       </b-nav>
     </div>
@@ -60,7 +60,7 @@
           triggers="hover focus"
           placement="top"
         >
-          {{ $t("message.docs") }}
+          {{ $t("commen.docs") }}
         </b-popover>
         <a
           id="discord-icon"
@@ -105,7 +105,7 @@
               :icon="lang == 'en' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.en") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.en") }}</span>
           </b-dropdown-item>
           <b-dropdown-item @click="setLanguage('zh')">
             <b-icon
@@ -113,7 +113,7 @@
               :icon="lang == 'zh' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.zh") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.zh") }}</span>
           </b-dropdown-item>
           <b-dropdown-item @click="setLanguage('kr')">
             <b-icon
@@ -121,7 +121,7 @@
               :icon="lang == 'kr' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.kr") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.kr") }}</span>
           </b-dropdown-item>
           <b-dropdown-item @click="setLanguage('es')">
             <b-icon
@@ -129,7 +129,7 @@
               :icon="lang == 'es' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.es") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.es") }}</span>
           </b-dropdown-item>
           <b-dropdown-item @click="setLanguage('my')">
             <b-icon
@@ -137,7 +137,7 @@
               :icon="lang == 'my' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.my") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.my") }}</span>
           </b-dropdown-item>
           <b-dropdown-item @click="setLanguage('jp')">
             <b-icon
@@ -145,7 +145,7 @@
               :icon="lang == 'jp' ? 'check' : 'blank'"
               aria-hidden="true"
             ></b-icon>
-            <span style="font-size: 14px">{{ $t("message.jp") }}</span>
+            <span style="font-size: 14px">{{ $t("commen.jp") }}</span>
           </b-dropdown-item>
         </b-dd>
       </div>

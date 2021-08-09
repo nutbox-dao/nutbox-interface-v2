@@ -27,20 +27,20 @@
           placeholder="0"
         />
         <div>
-          <button class="primary-btn input-btn" @click="fillMax">{{ $t("message.max") }}</button>
+          <button class="primary-btn input-btn" @click="fillMax">{{ $t("commen.max") }}</button>
         </div>
       </div>
     </div>
     <div class="btn-group btn-group-2">
       <button class="primary-btn outline-btn" @click="hide" :disabled='loading'>{{
-            $t("message.cancel")
+            $t("commen.cancel")
           }}</button>
       <button class="primary-btn" @click="confirm" :disabled='loading'>
         <b-spinner small type="grow" v-show="loading"></b-spinner
-            >{{ $t("message.confirm") }}</button>
+            >{{ $t("commen.confirm") }}</button>
     </div>
     <div class="text-center mb-2 mt-4 hover-blue" @click="getHp">{{ $t("stake.getHp") }}</div>
-    <div class="text-center text-grey-light font14">{{ $t("message.delegatecharge") }}： {{ fee }} HIVE</div>
+    <div class="text-center text-grey-light font14">{{ $t("commen.delegatecharge") }}： {{ fee }} HIVE</div>
   </div>
 
 </template>

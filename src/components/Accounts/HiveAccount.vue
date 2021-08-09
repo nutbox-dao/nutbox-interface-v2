@@ -6,7 +6,7 @@
         <i class="dropdown-icon ml-3"></i>
       </div>
     </template>
-    <b-dropdown-item class="text-center" @click="clearHiveAccount">{{ $t('message.logout') }}</b-dropdown-item>
+    <b-dropdown-item class="text-center" @click="clearHiveAccount">{{ $t('commen.logout') }}</b-dropdown-item>
   </b-dropdown>
   <div v-else></div>
 </template>

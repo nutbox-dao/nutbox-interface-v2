@@ -17,7 +17,7 @@
     <div class="btn-row">
       <span class="value"> {{ pendingReward | amountForm }} </span>
       <div class="right-box">
-        <button class="primary-btn m-0">{{ $t('message.withdraw') }}</button>
+        <button class="primary-btn m-0">{{ $t('commen.withdraw') }}</button>
       </div>
     </div>
     <div class="text-left mt-3 mb-1">

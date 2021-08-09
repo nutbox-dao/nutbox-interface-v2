@@ -1,5 +1,5 @@
 module.exports = {
-  message: {
+  commen: {
     userlogin: 'Log Masuk Pengguna',
     steemAccoutPlaceHolder: 'Sila Masukkan ID Steem',
     login: 'Log Masuk',

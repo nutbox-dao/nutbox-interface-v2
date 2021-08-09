@@ -102,7 +102,7 @@
                 </div>
               </template>
             </b-form-file>
-            <div class="font12 text-grey-light mt-1">
+            <div class="font12 text-grey-light mt-1" v-if="isEdit">
               {{ $t("community.picTip", { size: "200*200" }) }}
             </div>
           </b-form-group>
@@ -155,7 +155,7 @@
                 </div>
               </template>
             </b-form-file>
-            <div class="font12 text-grey-light mt-1">
+            <div class="font12 text-grey-light mt-1" v-if="isEdit">
               {{ $t("community.picTip", { size: "1200*280" }) }}
             </div>
           </b-form-group>
@@ -243,7 +243,7 @@
                 @click="fillMax"
                 :disabled="charging"
               >
-                {{ $t("message.max") }}
+                {{ $t("commen.max") }}
               </button>
             </div>
           </div>
@@ -255,7 +255,7 @@
             :disabled="charging || approving"
           >
             <b-spinner small type="grow" v-show="charging || approving" />
-            {{ $t('message.cancel') }}
+            {{ $t('commen.cancel') }}
           </button>
           <button class="primary-btn" @click="charge" :disabled="charging" v-if="ctokenApprovement">
             <b-spinner small type="grow" v-show="charging" />
@@ -268,7 +268,7 @@
             :disabled="approving"
           >
             <b-spinner small type="grow" v-show="approving" />
-            {{ $t('message.approveContract') }}
+            {{ $t('commen.approveContract') }}
           </button>
         </div>
       </div>
@@ -299,7 +299,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t('message.cancel') }}
+            {{ $t('commen.cancel') }}
           </button>
         </div>
       </div>

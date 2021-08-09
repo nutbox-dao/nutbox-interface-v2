@@ -15,7 +15,7 @@
       </div>
     </div>
     <!-- <b-input-group class="search-input">
-      <b-form-input :placeholder="$t('message.search')"></b-form-input>
+      <b-form-input :placeholder="$t('commen.search')"></b-form-input>
       <template #append>
         <i class="search-icon"></i>
       </template>
