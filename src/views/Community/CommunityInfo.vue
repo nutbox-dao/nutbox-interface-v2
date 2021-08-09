@@ -162,17 +162,19 @@
           <b-form-group
             v-if="!isMintable && !isEdit"
             label-cols-md="2"
-            content-cols-md="6"
+            content-cols-md="8"
             :label="$t('community.communityBalance')"
           >
-            <b-form-input
-              :disabled="true"
-              v-model="communityBalanceValue"
-              :placeholder="$t('community.communityBalance')"
-            ></b-form-input>
-            <b-button variant="primary" @click="showChargeTip = true">
-              {{ this.$t("community.charge") }}
-            </b-button>
+            <div class="d-flex">
+              <b-form-input
+                :disabled="true"
+                v-model="communityBalanceValue"
+                :placeholder="$t('community.communityBalance')"
+              ></b-form-input>
+              <button class="primary-btn ml-2" style="width: 8rem" @click="showChargeTip = true">
+                {{ this.$t("community.charge") }}
+              </button>
+            </div>
           </b-form-group>
           <b-form-group
             v-if="isEdit"
@@ -217,7 +219,7 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <div class="font20 font-bold text-center my-5">
+        <div class="font20 font-bold text-center mb-4">
           {{ $t("community.communityCharge") }}
         </div>
         <div class="input-group-box mb-4">
@@ -235,9 +237,9 @@
               v-model="chargeValue"
               placeholder="0"
             />
-            <div>
+            <div class="ml-2">
               <button
-                class="primary-btn input-btn"
+                class="primary-btn"
                 @click="fillMax"
                 :disabled="charging"
               >
@@ -394,7 +396,7 @@ export default {
         return;
       }
       this.form = communityInfo;
-      
+
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);

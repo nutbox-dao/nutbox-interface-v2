@@ -175,7 +175,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .tip-modal {
   position: relative;
   max-height: 80vh;
