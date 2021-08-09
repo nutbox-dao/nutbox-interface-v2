@@ -21,7 +21,8 @@ import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
-import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME } from "../../config";
+import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME, Multi_Config } from "../../config";
+import { aggregate } from '@makerdao/multicall'
 
 /**
  * Judge asset wheather Homechain assets
@@ -225,16 +226,37 @@ export const getERC20Info = async (address) => {
     }
     try{
       const tokens = await getAllTokenFromBackend()
-      let infos = await Promise.all([contract.name(), contract.symbol(), contract.decimals()])
+      let infos = await aggregate([{
+        target: address,
+        call: ['name()(string)'],
+        returns: [
+          ['name']
+        ]
+      },{
+        target: address,
+        call: ['symbol()(string)'],
+        returns: [
+          ['symbol']
+        ]
+      },{
+        target: address,
+        call:[
+          'decimals()(uint8)'
+        ],
+        returns: [
+          ['decimals']
+        ]
+      }], Multi_Config)
+
       const tokenFromBackend = tokens?.filter(token => token.address === address)
       let icon = null
       if (tokenFromBackend && tokenFromBackend.length > 0) {
         icon = tokenFromBackend[0].icon
       }
       resolve({
-        name: infos[0],
-        symbol: infos[1],
-        decimal: infos[2],
+        name: infos?.results?.transformed?.name,
+        symbol: infos?.results?.transformed?.symbol,
+        decimal: infos?.results?.transformed?.decimals,
         address,
         icon
       })

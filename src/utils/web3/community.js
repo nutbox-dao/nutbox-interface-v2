@@ -6,11 +6,11 @@ import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
 import { waitForTx } from './ethers'
 import {
-    createWatcher
+    createWatcher,
+    aggregate
   } from '@makerdao/multicall'
 import { getCToken } from './asset'
 import BN from 'bn.js'
-import { watch } from 'less'
 
 /**
  * Get community admin's staking factory id
@@ -316,6 +316,7 @@ export const getDistributionEras = async (update=false) => {
             store.commit('web3/saveDistributions', distri)
             resolve(distri)
         }catch(e){
+            console.log('getDistributionEras', e);
             reject(e);
             return
         }
