@@ -78,7 +78,7 @@ export const STEEM_CONF_KEY = 'steemNodeKey'
 // delegate fee
 export const STEEM_STAKE_FEE = 1
 // official fee account
-export const STEEM_GAS_ACCOUNT = 'nutbox.gas'
+export const STEEM_GAS_ACCOUNT = 'walnut.gas'
 
 // Steem Config
 export const STEEM_API_URLS = [

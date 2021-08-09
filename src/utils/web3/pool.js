@@ -13,8 +13,7 @@ import {
 } from './utils'
 import {
   errCode,
-  Multi_Config,
-  Transaction_config
+  Multi_Config
 } from '@/config'
 import {
   waitForTx
@@ -164,7 +163,7 @@ export const addPool = async (form) => {
 
     try {
       console.log(6236, form.assetId, form.name);
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)), Transaction_config)
+      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
       await waitForTx(tx.hash)
       // re monitor
       resolve(tx.hash)
@@ -309,7 +308,7 @@ export const approvePool = async (pool) => {
       const erc20Handler = contractAddress['ERC20AssetHandler']
       try{
         new BN(10).pow(new BN(pool.decimal + 50))
-        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString(), Transaction_config)
+        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString())
         await waitForTx(tx.hash)
         resolve(tx.hash)
       }catch(e){
@@ -349,7 +348,7 @@ export const deposit = async (communityId, pid, amount) => {
 
     try{
       console.log('deposit', communityId, pid, amount.toString());
-      const tx = await contract.deposit(pid, store.state.web3.account, amount.toString(), Transaction_config)
+      const tx = await contract.deposit(pid, store.state.web3.account, amount.toString())
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -381,7 +380,7 @@ export const withdraw = async (communityId, pid, amount) => {
     }
 
     try{
-      const tx = await contract.withdraw(pid, store.state.web3.account, amount.toString(), Transaction_config)
+      const tx = await contract.withdraw(pid, store.state.web3.account, amount.toString())
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -411,7 +410,7 @@ export const withdrawReward = async (communityId, pid) => {
     }
 
     try{
-      const tx = await contract.withdrawPoolRewards(pid, Transaction_config)
+      const tx = await contract.withdrawPoolRewards(pid)
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){

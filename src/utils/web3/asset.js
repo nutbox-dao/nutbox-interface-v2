@@ -18,9 +18,6 @@ import {
   waitForTx
 } from './ethers'
 import {
-  Transaction_config
-} from '@/config'
-import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
@@ -276,8 +273,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       try {
         console.log(assetAddress);
         const tx = await contract.registerAsset(
-          '0x', assetAddress, '0x',
-          Transaction_config
+          '0x', assetAddress, '0x'
         )
         await waitForTx(tx.hash)
         resolve(tx.hash)
@@ -315,8 +311,7 @@ export const registerSteemHiveAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
         web3.utils.stringToHex(form.account).substr(2)
       const tx = await contract.registerAsset(
-        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
-        Transaction_config
+        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName)
       )
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -357,7 +352,7 @@ export const registerCrowdloanAsset = async (form) => {
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
         name: form.assetName,
         endingBlock: form.endingBlock
-      })), Transaction_config)
+      })))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -393,7 +388,7 @@ export const registerNominateAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         addressToHex(form.nodeAddress).substr(2) // node address
   
-      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName), Transaction_config)
+      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -423,8 +418,7 @@ export const deployERC20 = async ({
       const abi = await getAbi(isMintable ? 'MintableERC20' : "SimpleERC20")
       const eth = await getProvider()
       const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
-      const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account,
-        Transaction_config)
+      const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account)
       await contract.deployed()
       resolve(contract.address)
     } catch (e) {

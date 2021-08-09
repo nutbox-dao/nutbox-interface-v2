@@ -1,7 +1,6 @@
 import { getContract, contractAddress } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
-import { Transaction_config } from '@/config'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config } from '../../config'
@@ -150,7 +149,7 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
+            const res = await contract.createStakingFeast(assetId, distribution)
             await waitForTx(res.hash)
             resolve(res.hash)
         }catch(e){
@@ -225,7 +224,7 @@ export const chargeCommunityBalance = async (amount) => {
         }
 
         try{
-            const tx = await contract.adminDepositReward(amount.toString(), Transaction_config);
+            const tx = await contract.adminDepositReward(amount.toString());
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -253,7 +252,7 @@ export const approveCommunityBalance = async (address) => {
         const erc20Handler = contractAddress['ERC20AssetHandler']
         try{
           new BN(10).pow(new BN(18 + 50))
-          const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(18 + 50)).toString(), Transaction_config)
+          const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(18 + 50)).toString())
           await waitForTx(tx.hash)
           resolve(tx.hash)
         }catch(e){
