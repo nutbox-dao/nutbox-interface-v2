@@ -2,12 +2,12 @@
   <transition name="fade">
     <div class="mask" @click.self="hideMask">
       <div class="login">
-        <p>{{ this.$t("message.userlogin") }}</p>
+        <p>{{ this.$t("commen.userlogin") }}</p>
         <div class="account-box">
           <span class="keychain" :style="keychainLogo" @click="getKeychain"/>
           <b-input
             class="mb-2 mr-sm-2 mb-sm-0 input"
-            :placeholder="type === 'STEEM' ? $t('message.steemAccoutPlaceHolder') : $t('message.hiveAccountPlaceHolder')"
+            :placeholder="type === 'STEEM' ? $t('commen.steemAccoutPlaceHolder') : $t('commen.hiveAccountPlaceHolder')"
             v-model="account"
           ></b-input>
         </div>
@@ -124,7 +124,7 @@ export default {
     },
   },
   async mounted() {
-    this.loginBtnText = this.$t("message.login");
+    this.loginBtnText = this.$t("commen.login");
   },
 };
 </script>

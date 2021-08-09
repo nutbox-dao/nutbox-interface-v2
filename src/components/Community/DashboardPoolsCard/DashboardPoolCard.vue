@@ -28,7 +28,7 @@
       </div>
       <button class="primary-btn" :disabled="updating" @click="confirm">
         <b-spinner small type="grow" v-show="updating" />
-        {{ $t('message.confirm') }}
+        {{ $t('commen.confirm') }}
       </button>
     </div>
   </div>

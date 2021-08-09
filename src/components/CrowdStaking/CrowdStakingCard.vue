@@ -34,7 +34,7 @@
         <div class="right-box">
           <button class="primary-btn m-0" :disabled="!approved || isWithdrawing" @click="withdraw">
             <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
-            {{ $t("message.withdraw") }}
+            {{ $t("commen.withdraw") }}
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@
             type="grow"
             v-show="isApproving || loadingApprovements"
           ></b-spinner>
-          {{ $t("message.approveContract") }}
+          {{ $t("commen.approveContract") }}
         </b-button>
       </template>
 

@@ -25,7 +25,7 @@
           <div class="info">--</div>
         </div> -->
         <div class="project-info-container">
-          <span class="name">{{ $t('message.apy') }}</span>
+          <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apyRange }}</div>
         </div>
         <button class="primary-btn"

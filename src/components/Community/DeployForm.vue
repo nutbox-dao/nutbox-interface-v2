@@ -99,14 +99,14 @@
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
-              <span class="label">{{ $t('message.contractAddr') }}</span>
+              <span class="label">{{ $t('commen.contractAddr') }}</span>
               <button
                 class="font14 copy-btn"
                 id='copy'
                 :data-clipboard-text="tokenAddress"
                 @click="copyAddress()"
               >
-                {{ $t('message.copy') }}
+                {{ $t('commen.copy') }}
               </button>
             </div>
             <div class="address copy-value">
@@ -115,7 +115,7 @@
           </div>
         </div>
 
-        <button class="primary-btn mt-4" @click="confirmDeploy">{{ $t('message.complete') }}</button>
+        <button class="primary-btn mt-4" @click="confirmDeploy">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
   </div>

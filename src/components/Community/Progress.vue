@@ -38,7 +38,7 @@ export default {
       return this.progressData[0].startHeight
     },
     max(){
-      if (this.progressData.length === 0) return this.$t('message.max');
+      if (this.progressData.length === 0) return this.$t('commen.max');
       return this.progressData[this.progressData.length-1].stopHeight
     }
   },
