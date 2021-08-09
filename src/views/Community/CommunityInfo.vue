@@ -170,7 +170,8 @@
                 :disabled="true"
                 v-model="communityBalanceValue"
                 :placeholder="$t('community.communityBalance')"
-              ></b-form-input>
+              >
+              </b-form-input>
               <button class="primary-btn ml-2" style="width: 8rem" @click="showChargeTip = true">
                 {{ this.$t("community.charge") }}
               </button>
@@ -360,7 +361,7 @@ export default {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement"]),
     communityBalanceValue(){
       if (this.communityBalance){
-        return this.communityBalance.toString() / 1e18
+        return (this.communityBalance.toString() / 1e18).toFixed(6)
       }else{
         return 0;
       }
