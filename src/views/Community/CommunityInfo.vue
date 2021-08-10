@@ -166,12 +166,15 @@
             :label="$t('community.communityBalance')"
           >
             <div class="d-flex">
-              <b-form-input
-                :disabled="true"
-                v-model="communityBalanceValue"
-                :placeholder="$t('community.communityBalance')"
-              >
-              </b-form-input>
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  v-model="communityBalanceValue"
+                  :placeholder="$t('community.communityBalance')"
+                >
+                </b-form-input>
+                <span class="c-append">DOT</span>
+              </div>
               <button class="primary-btn ml-2" style="width: 8rem" @click="showChargeTip = true">
                 {{ this.$t("community.charge") }}
               </button>

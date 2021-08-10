@@ -60,3 +60,13 @@
   position: absolute;
   margin: 0;
 }
+.c-input-group {
+  @include c-flex-between-center;
+  background: #F6F7F9;
+  border-radius: .8rem;
+  flex: 1;
+  .c-append {
+    padding: 0 .8rem;
+    white-space: nowrap;
+  }
+}
