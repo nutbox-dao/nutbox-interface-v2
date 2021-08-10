@@ -42,7 +42,7 @@
             <div class="col-md-5">
               <button class="primary-btn" @click="confirmUpdate" :disabled="updating">
                 <b-spinner small type="grow" v-show="updating" />
-                {{ $t('asset.update') }}
+                {{ $t('commen.update') }}
               </button>
             </div>
           </div>

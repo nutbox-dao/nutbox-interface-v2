@@ -24,6 +24,7 @@
     <div class="mt-3">
       <div class="community-info-card text-left">
         <div class="title font-bold">{{ $t("community.communityInfo") }}</div>
+        <!-- community name -->
         <b-form class="custom-form pl-md-3">
           <b-form-group
             label-cols-md="2"
@@ -36,6 +37,7 @@
               :placeholder="$t('community.inputName')"
             ></b-form-input>
           </b-form-group>
+          <!-- community link -->
           <b-form-group
             label-cols-md="2"
             content-cols-md="5"
@@ -47,6 +49,7 @@
               :placeholder="$t('community.inputLink')"
             ></b-form-input>
           </b-form-group>
+          <!-- community description -->
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
@@ -59,6 +62,7 @@
               rows="5"
             ></b-form-textarea>
           </b-form-group>
+          <!-- community logo -->
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
@@ -106,6 +110,7 @@
               {{ $t("community.picTip", { size: "200*200" }) }}
             </div>
           </b-form-group>
+          <!-- community poster -->
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
@@ -159,6 +164,7 @@
               {{ $t("community.picTip", { size: "1200*280" }) }}
             </div>
           </b-form-group>
+          <!-- community balance -->
           <b-form-group
             v-if="!isMintable && !isEdit"
             label-cols-md="2"
@@ -177,6 +183,45 @@
               </button>
             </div>
           </b-form-group>
+          <!-- community dev address -->
+          <b-form-group
+            v-if="!isEdit"
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.devAddress')"
+          >
+            <div class="d-flex">
+              <b-form-input
+                :disabled="true"
+                v-model="devAddress"
+                :placeholder="$t('community.devAddress')"
+              >
+              </b-form-input>
+              <button class="primary-btn ml-2" style="width: 8rem" @click="showDevAddressTip = true">
+                {{ this.$t("commen.update") }}
+              </button>
+            </div>
+          </b-form-group>
+          <!-- community dev ratio -->
+          <b-form-group
+            v-if="!isEdit"
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.devRatio')"
+          >
+            <div class="d-flex">
+              <b-form-input
+                :disabled="true"
+                v-model="devRatio"
+                :placeholder="0.00"
+              >
+              </b-form-input>
+              <button class="primary-btn ml-2" style="width: 8rem" @click="showDevRatioTip = true">
+                {{ this.$t("commen.update") }}
+              </button>
+            </div>
+          </b-form-group>
+          <!-- commit button -->
           <b-form-group
             v-if="isEdit"
             label-cols-md="2"
@@ -194,7 +239,7 @@
     <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
-      size="sm"
+      size="m"
       centered
       hide-header
       hide-footer
@@ -213,7 +258,7 @@
     <b-modal
       v-model="showChargeTip"
       modal-class="custom-modal"
-      size="sm"
+      size="m"
       centered
       hide-header
       hide-footer
@@ -270,6 +315,88 @@
           >
             <b-spinner small type="grow" v-show="approving" />
             {{ $t('commen.approveContract') }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
+        <!-- dev address tip -->
+    <b-modal
+      v-model="showDevAddressTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center mb-4">
+          {{ $t("community.devAddress") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <input
+              style="flex: 1"
+              type="text"
+              v-model="inputDevAddress"
+              :placeholder="$t('community.devAddress')"
+            />
+          </div>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showDevAddressTip = false"
+            :disabled="updatingAddress"
+          >
+            <b-spinner small type="grow" v-show="updatingAddress" />
+            {{ $t('commen.cancel') }}
+          </button>
+          <button class="primary-btn" @click="updateAddress" :disabled="updatingAddress">
+            <b-spinner small type="grow" v-show="charging" />
+            {{ $t("commen.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
+       <!-- dev dev ratio tip -->
+    <b-modal
+      v-model="showDevRatioTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center mb-4">
+          {{ $t("community.devRatio") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <input
+              style="flex: 1"
+              type="number"
+              :step="0.01"
+              :max="100"
+              v-model="inputDevRatio"
+              :placeholder="$t('community.devRatio')"
+            />
+          </div>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showDevRatioTip = false"
+            :disabled="updatingDevRatio"
+          >
+            <b-spinner small type="grow" v-show="updatingDevRatio" />
+            {{ $t('commen.cancel') }}
+          </button>
+          <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
+            <b-spinner small type="grow" v-show="updatingDevRatio" />
+            {{ $t("commen.confirm") }}
           </button>
         </div>
       </div>
@@ -350,11 +477,15 @@ export default {
       noCommunity: false,
       showSignatureTip: false,
       showChargeTip: false,
+      showDevAddressTip: false,
+      showDevRatioTip: false,
       uploading: false,
       approving:false,
       charging: false,
       isMintable: true,
       cTokenAddress: '',
+      updatingAddress: false,
+      updatingDevRatio: false
     };
   },
   computed: {
@@ -495,6 +626,12 @@ export default {
       }finally{
         this.charging = false
       }
+    },
+    updateAddress(){
+
+    },
+    updateDevRatio() {
+
     },
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;

@@ -88,7 +88,7 @@
             <div class="col-md-5">
               <button class="primary-btn" @click="confirmAdd" :disabled="adding">
                 <b-spinner small type="grow" v-show="adding" />
-                {{ $t('asset.add') }}
+                {{ $t('commen.add') }}
               </button>
             </div>
           </div>
