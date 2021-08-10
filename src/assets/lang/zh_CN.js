@@ -293,7 +293,8 @@ module.exports = {
     chargeSuccess: "充值成功",
     devAddress: "社区基金地址",
     devRatio: '社区抽成比例',
-    inputDevRatio: '请输入0-100的数字'
+    inputDevRatio: '请输入0-100的数字',
+    inputDevAddress: '请输入社区基金地址'
   },
   asset: {
     network: "网络",

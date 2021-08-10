@@ -179,7 +179,7 @@
                   :placeholder="$t('community.communityBalance')"
                 >
                 </b-form-input>
-                <span class="c-append">DOT</span>
+                <span class="c-append">{{ cToken.symbol }}</span>
               </div>
               <button class="primary-btn ml-2" style="width: 8rem" @click="showChargeTip = true">
                 {{ this.$t("community.charge") }}
@@ -194,12 +194,14 @@
             :label="$t('community.devAddress')"
           >
             <div class="d-flex">
-              <b-form-input
-                :disabled="true"
-                v-model="devAddress"
-                :placeholder="$t('community.devAddress')"
-              >
-              </b-form-input>
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  :placeholder="devAddress || $t('community.devAddress')"
+                >
+                </b-form-input>
+                <span></span>
+              </div>
               <button class="primary-btn ml-2" style="width: 8rem" @click="showDevAddressTip = true">
                 {{ this.$t("commen.update") }}
               </button>
@@ -213,12 +215,15 @@
             :label="$t('community.devRatio')"
           >
             <div class="d-flex">
-              <b-form-input
-                :disabled="true"
-                v-model="devRatio"
-                :placeholder="0.00"
-              >
-              </b-form-input>
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  type="number"
+                  :placeholder="(devRatio / 100).toFixed(2).toString()"
+                >
+                </b-form-input>
+                <span class="c-append">%</span>
+              </div>
               <button class="primary-btn ml-2" style="width: 8rem" @click="showDevRatioTip = true">
                 {{ this.$t("commen.update") }}
               </button>
@@ -238,6 +243,7 @@
         </b-form>
       </div>
     </div>
+    <!------------------------------------------- tips --------------------------------------------->
     <!-- noCommunity tip -->
     <b-modal
       v-model="noCommunity"
@@ -340,9 +346,8 @@
           <div class="input-box flex-between-center">
             <input
               style="flex: 1"
-              type="text"
               v-model="inputDevAddress"
-              :placeholder="$t('community.devAddress')"
+              :placeholder="$t('community.inputDevAddress')"
             />
           </div>
         </div>
@@ -362,7 +367,7 @@
         </div>
       </div>
     </b-modal>
-       <!-- dev dev ratio tip -->
+       <!-- dev ratio tip -->
     <b-modal
       v-model="showDevRatioTip"
       modal-class="custom-modal"
@@ -378,14 +383,17 @@
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
+            <div class="c-input-group">
             <input
               style="flex: 1"
-              type="number"
               :step="0.01"
               :max="100"
+              type="number"
               v-model="inputDevRatio"
-              :placeholder="$t('community.devRatio')"
+              :placeholder="$t('community.inputDevRatio')"
             />
+            <span class="c-append">%</span>
+            </div>
           </div>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
@@ -461,6 +469,8 @@ export default {
       logo: null,
       coverImg: null,
       chargeValue: 0,
+      inputDevAddress: '',
+      inputDevRatio: '',
       form: {
         id: "",
         name: "",
@@ -485,6 +495,7 @@ export default {
       uploading: false,
       approving:false,
       charging: false,
+      cToken: {},
       isMintable: true,
       cTokenAddress: '',
       updatingAddress: false,
@@ -492,7 +503,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement"]),
+    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
     communityBalanceValue(){
       if (this.communityBalance){
         return (this.communityBalance.toString() / 1e18).toFixed(6)
@@ -509,8 +520,9 @@ export default {
   },
   watch: {
     type(newValue, oldValue) {
+      // type : null , create, edit
       this.isEdit = !!newValue;
-    }
+    },
   },
   async mounted() {
     this.type = this.$route.query.type;
@@ -524,6 +536,7 @@ export default {
       }
       this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
+      this.cToken = cToken
       this.isMintable = cToken.isMintable
       this.cTokenAddress = cToken.address
       if (!communityInfo.name) {

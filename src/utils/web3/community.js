@@ -151,6 +151,7 @@ export const createStakingFeast = async (form) => {
             // call contract
             const res = await contract.createStakingFeast(assetId, distribution)
             await waitForTx(res.hash)
+            await monitorCommunity()
             resolve(res.hash)
         }catch(e){
             console.log('Create Staking Feast Failed', e);
@@ -339,17 +340,18 @@ export const getNonce = async (update=false) => {
 }
 
 /**
- * monityor Community balance
+ * monityor Community balance and allowance
  * If cToken of this community is not a mintable token, he may need to charge balance of community
  */
 export const monitorCommunityBalance = async (communityInfo) => {
-    console.log(0);
-    const cToken = await getCToken(communityInfo.id)
-    if (cToken.isMintable){
-        return;
-    }
+    
     return new Promise(async (resolve, reject) => {
         try{
+            const cToken = await getCToken(communityInfo.id)
+            if (cToken.isMintable){
+                resolve();
+                return;
+            }
           store.commit('web3/saveLoadingCommunityBalance', true)
           store.commit('web3/saveLoadingApprovementCtoken', true)
           let watchers = store.state.web3.watchers
@@ -387,11 +389,9 @@ export const monitorCommunityBalance = async (communityInfo) => {
             const value = update.value;
             if (type === 'communityBalance'){
                 console.log('Updates community balance', update);
-                store.commit('web3/saveLoadingCommunityBalance', false)
                 store.commit('web3/saveCommunityBalance', value)
             }else if (type === 'allowance'){
                 console.log('Updates community approvement', update);
-                store.commit('web3/saveLoadingApprovementCtoken', false)
                 store.commit('web3/saveCtokenApprovement', value)
             }
           })
@@ -400,7 +400,65 @@ export const monitorCommunityBalance = async (communityInfo) => {
           store.commit('web3/saveWatchers', {...watchers})
           resolve()
         }catch(e){
-          reject()
+          reject(e)
+        }finally{
+            store.commit('web3/saveLoadingCommunityBalance', false)
+            store.commit('web3/saveLoadingApprovementCtoken', false)
+        }
+    })
+}
+
+/**
+ * Monitor community dev address and dev ratio
+ * @param {*} communityInfo 
+ * @returns 
+ */
+export const monitorCommunityDevInfo = async (communityInfo) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            store.commit('web3/saveLoadingDevInfo', true);
+            let watchers = store.state.web3.watchers
+            let watcher = watchers['devInfo']
+            watcher && watcher.stop()
+            watcher = createWatcher([
+                {
+                    target: communityInfo.id,
+                    call: [
+                        'getDev()(address)'
+                    ],
+                    returns: [
+                        ['devAddress']
+                    ]
+                },
+                {
+                    target: communityInfo.id,
+                    call: [
+                        'getDevRewardRatio()(uint16)'
+                    ],
+                    returns: [
+                        ['devRatio']
+                    ]
+                }
+            ], Multi_Config)
+            watcher.subscribe(update => {
+                const type = update.type;
+                const value = update.value;
+                if (type === 'devAddress'){
+                    console.log('update dev address', value);
+                    store.commit('web3/saveDevAddress', value)
+                }else if(type === 'devRatio'){
+                    console.log('update dev ratio', value);
+                    store.commit('web3/saveDevRatio', value)
+                }
+            })
+            watcher.start()
+            watchers['devInfo'] = watcher
+            store.commit('web3/saveWatchers', {...watchers})
+            resolve()
+        }catch(e){
+            reject(e);
+        }finally{
+            store.commit('web3/saveLoadingDevInfo', false);
         }
     })
 }
@@ -416,6 +474,7 @@ export const monitorCommunity = async () => {
         return;
     }
     await Promise.all([
-        monitorCommunityBalance(communityInfo)
+        monitorCommunityBalance(communityInfo),
+        monitorCommunityDevInfo(communityInfo)
     ]).catch(console.error)
 }

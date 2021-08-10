@@ -279,6 +279,8 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
+    // BSC data
+    this.fetchBscData();
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
@@ -288,9 +290,6 @@ export default {
       console.log('Is mobile device')
       this.$store.commit('polkadot/saveAccount', null)
     }
-
-    // BSC data
-    this.fetchBscData();
 
     // init polkadot apis
     initApis()

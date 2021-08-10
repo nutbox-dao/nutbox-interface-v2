@@ -24,7 +24,7 @@ export default {
     allPools: null,
     // user deposit data
     depositDatas: {},
-    // all pending reward got by multicall
+    // multicall get data
     pendingRewards: {},
     userStakings:{},
     approvements: {},
@@ -32,6 +32,8 @@ export default {
     userBalances: {},
     communityBalance: 1,
     ctokenApprovement: false,
+    devAddress: '',
+    devRatio: 0,
 
     // loading state
     loadingPendingRewards: true,
@@ -41,6 +43,7 @@ export default {
     loadingUserBalances: true,
     loadingCommunityBalance: true,
     loadingApprovementCtoken: true,
+    loadingDevInfo: true
 
   },
   mutations: {
@@ -143,6 +146,15 @@ export default {
     },
     saveCtokenApprovement: (state, ctokenApprovement) => {
       state.ctokenApprovement = ctokenApprovement
+    },
+    saveLoadingDevInfo: (state, loadingDevInfo) => {
+      state.loadingDevInfo = loadingDevInfo
+    },
+    saveDevAddress: (state, devAddress) => {
+      state.devAddress = devAddress
+    },
+    saveDevRatio: (state, devRatio) => {
+      state.devRatio = devRatio
     }
   },
   getters: {

@@ -95,7 +95,7 @@ import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
-import { getMyCommunityInfo, createStakingFeast } from '@/utils/web3/community'
+import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 
 export default {
@@ -228,7 +228,6 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
-          await getMyCommunityInfo(true)
           this.$router.replace('/community/community-info?type=create')
         }
       } catch (e) {
