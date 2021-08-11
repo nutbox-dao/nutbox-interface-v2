@@ -233,7 +233,8 @@ module.exports = {
     notConnectWallet: '未链接钱包',
     unlockWallet: '请解锁钱包',
     wrongChainId: '钱包网络选择错误',
-    wrongETHAddress: "地址错误"
+    wrongETHAddress: "地址错误",
+    wrongInputDevRatio: "请输入0-100的数字"
   },
   community: {
     community: '社区',

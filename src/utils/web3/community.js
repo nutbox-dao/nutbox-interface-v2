@@ -315,6 +315,10 @@ export const setDevAddress = async (address) => {
  */
  export const setDevRatio = async (ratio) => {
     return new Promise(async (resolve, reject) => {
+        if (ratio < 0 || ratio > 10000){
+            reject(errCode.WRONG_INPUT_DEV_RATIO)
+            return;
+        } 
         let stakingFactoryId = null
         let contract = null
         try{

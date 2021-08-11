@@ -665,7 +665,24 @@ export default {
       }
     },
     async updateDevRatio() {
-
+      try{
+        this.updatingDevRatio = true
+        const r = parseInt(parseFloat(this.inputDevRatio) * 100)
+        await setDevRatio(r)
+         this.$bvToast.toast(this.$t(),{
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        setTimeout(() => {
+          this.showDevRatioTip = false
+        }, 1000)
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.updatingDevRatio = false
+      }
     },
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
