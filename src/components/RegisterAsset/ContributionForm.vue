@@ -82,7 +82,8 @@
 import { registerCrowdloanAsset, getRegitryAssets } from "@/utils/web3/asset";
 import { isPositiveInt } from "@/utils/helper";
 import { stanfiAddress } from "@/utils/commen/account";
-import { handleApiErrCode } from '../../utils/helper';
+import { handleApiErrCode } from '@/utils/helper';
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: "NominationForm",
@@ -101,9 +102,11 @@ export default {
       networkOptions: [
         {
           name: "Polkadot",
-          icon: require("../../static/images/tokens/dot.png"),
+          icon: ASSET_LOGO_URL.polkadot.icon
         },
-        { name: "Kusuma", icon: require("../../static/images/tokens/ksm.png") },
+        { name: "Kusuma", 
+          icon: ASSET_LOGO_URL.kusama.icon
+        }
       ],
     };
   },

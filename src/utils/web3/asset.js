@@ -201,7 +201,7 @@ export const getAssetMetadata = async (id, assetType) => {
       }
       break;
     case 'SubstrateNominateAssetRegistry':
-      icon = '';
+      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]].icon;
       meta = {
         chainId: meta[0],
         validatorAccount:meta[1],

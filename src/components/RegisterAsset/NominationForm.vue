@@ -62,6 +62,7 @@
 import { stanfiAddress } from '@/utils/commen/account'
 import { registerNominateAsset, getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: 'NominationForm',
@@ -75,8 +76,8 @@ export default {
       },
       networkIndex: 0,
       networkOptions: [
-        { name: 'Polkadot', icon: require('../../static/images/tokens/dot.png') },
-        { name: 'Kusuma', icon: require('../../static/images/tokens/ksm.png') }
+        { name: 'Polkadot', icon: ASSET_LOGO_URL.polkadot.icon},
+        { name: 'Kusuma', icon: ASSET_LOGO_URL.kusama.icon }
       ]
     }
   },

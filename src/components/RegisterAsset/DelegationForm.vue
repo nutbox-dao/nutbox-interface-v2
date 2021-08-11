@@ -61,6 +61,7 @@
 <script>
 import { registerSteemHiveAsset, getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: 'DelegationForm',
@@ -74,8 +75,8 @@ export default {
       },
       networkIndex: 0,
       networkOptions: [
-        { name: 'Steem', icon: require('../../static/images/tokens/steem.png') },
-        { name: 'Hive', icon: require('../../static/images/hive-logo.png') }
+        { name: 'Steem', icon: ASSET_LOGO_URL.steem },
+        { name: 'Hive', icon: ASSET_LOGO_URL.hive }
       ]
     }
   },

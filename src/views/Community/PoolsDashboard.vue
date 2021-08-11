@@ -16,9 +16,9 @@
         </button>
       </div>
     </div>
-    <div>
+    <!-- <div>
       {{ blockNum }} {{ communityBalance / 1e18 }}
-    </div>
+    </div> -->
     <Progress :progress-data="progressData"></Progress>
     <div v-if="stakingPools.length===0"
          class="empty-card d-flex flex-column justify-content-center">

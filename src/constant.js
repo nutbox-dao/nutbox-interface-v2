@@ -42,6 +42,7 @@ export const MAX_NOMINATE_VALIDATOR = 16
  */
 export const ASSET_LOGO_URL = {
     kusama:{
+        icon: 'https://cdn.wherein.mobi/polkadot/logo/kusama.png',
         2006: 'https://cdn.wherein.mobi/polkadot/token/logo/crab.png',
         2012: 'https://cdn.wherein.mobi/polkadot/token/logo/crust.png',
         2004: 'https://cdn.wherein.mobi/polkadot/token/logo/khala.png',
@@ -52,7 +53,7 @@ export const ASSET_LOGO_URL = {
         2024: 'https://cdn.wherein.mobi/polkadot/token/logo/gens.png',
     },
     polkadot: {
-
+        icon: 'https://cdn.wherein.mobi/polkadot/logo/polkadot.png',
     },
     steem: 'https://cdn.wherein.mobi/nutbox/token/logo/steem.png',
     hive: 'https://cdn.wherein.mobi/nutbox/token/logo/hive-logo.png'

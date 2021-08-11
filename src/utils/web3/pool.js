@@ -240,6 +240,7 @@ export const updatePoolApy = async (pool, apy) => {
     pool['stakerCount'] = parseInt(pool.stakerCount)
     pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
     pool['apy'] = apy
+    console.log('pool', pool);
     const originMessage = JSON.stringify(pool)
     let signature = ''
     try {
