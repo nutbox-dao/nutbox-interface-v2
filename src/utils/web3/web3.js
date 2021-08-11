@@ -92,7 +92,7 @@ export const chainChanged = async () => {
   metamask.on('chainChanged', (chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
-    getProvider()
+    getProvider(true)
     // window.location.reload()
   })
 }
@@ -103,7 +103,7 @@ export const chainChanged = async () => {
  */
 export const isUnlocked = async () => {
   const metamask = await getEthWeb()
-  return metamask._metamask.isUnlocked()
+  return await metamask._metamask.isUnlocked()
 }
 
 /**

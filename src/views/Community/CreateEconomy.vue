@@ -170,7 +170,7 @@ export default {
       this.end = ''
     },
     max () {
-      this.poolForm.end = 'max'
+      this.poolForm.end = this.maxBlock
     },
     confirmAdd () {
       if (parseInt(this.poolForm.start) <= this.blockNum) {

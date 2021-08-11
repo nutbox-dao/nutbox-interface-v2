@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
 import { getEthWeb } from './web3'
 import store from '@/store'
-import { RPC_NODE } from '../../config'
+import { RPC_NODE } from '@/config'
+import { sleep } from '@/utils/helper'
 
 /**
  * Get metamask provider
