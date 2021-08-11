@@ -232,7 +232,8 @@ module.exports = {
     unknow:"未知错误",
     notConnectWallet: '未链接钱包',
     unlockWallet: '请解锁钱包',
-    wrongChainId: '钱包网络选择错误'
+    wrongChainId: '钱包网络选择错误',
+    wrongETHAddress: "地址错误"
   },
   community: {
     community: '社区',

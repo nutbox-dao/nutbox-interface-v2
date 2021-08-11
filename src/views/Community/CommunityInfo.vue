@@ -454,7 +454,9 @@ import {
   getMyCommunityInfo,
   getAllCommunities,
   chargeCommunityBalance,
-  approveCommunityBalance
+  approveCommunityBalance,
+  setDevAddress,
+  setDevRatio
 } from "@/utils/web3/community";
 import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
@@ -643,10 +645,26 @@ export default {
         this.charging = false
       }
     },
-    updateAddress(){
-
+    async updateAddress(){
+      try{
+        this.updatingAddress = true
+        await setDevAddress(this.inputDevAddress)
+        this.$bvToast.toast(this.$t(),{
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        setTimeout(() => {
+          this.showDevAddressTip = false
+        }, 1000)
+      }catch(e){
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.updatingAddress = false
+      }
     },
-    updateDevRatio() {
+    async updateDevRatio() {
 
     },
     valideInfos() {

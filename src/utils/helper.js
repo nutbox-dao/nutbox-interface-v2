@@ -169,6 +169,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.unlockWallet')
   } else if (code == errCode.WRONG_CHAIN_ID) {
     tipStr = $t('error.wrongChainId')
+  } else if (code == errCode.WRONG_ETH_ADDRESS) {
+    tipStr = $t('error.wrongETHAddress')
   }
   
   

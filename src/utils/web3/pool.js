@@ -19,6 +19,7 @@ import {
   waitForTx
 } from './ethers'
 import {
+  aggregate,
   createWatcher
 } from '@makerdao/multicall'
 import {
@@ -104,7 +105,7 @@ export const getMyOpenedPools = async (update = false) => {
       }
       // get active pools
       let pools = await Promise.all((new Array(10).toString().split(',')).map((item, i) => contract.openedPools(i)))
-      console.log(3214, pools);
+
       pools = pools.filter(pool => pool.hasActived)
 
       try {

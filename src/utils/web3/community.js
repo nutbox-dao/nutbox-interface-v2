@@ -11,6 +11,7 @@ import {
   } from '@makerdao/multicall'
 import { getCToken } from './asset'
 import BN from 'bn.js'
+import { getWeb3 } from './web3'
 
 /**
  * Get community admin's staking factory id
@@ -265,6 +266,78 @@ export const approveCommunityBalance = async (address) => {
             console.log('Approve community banlance Fail', e);
         }
         
+    })
+}
+
+/**
+ * Update dev address
+ * @param {*} address 
+ * @returns 
+ */
+export const setDevAddress = async (address) => {
+    return new Promise(async (resolve, reject) => {
+        const web3 = getWeb3()
+        console.log(address);
+        if (!web3.utils.isAddress(address)){
+            reject(errCode.WRONG_ETH_ADDRESS)
+            return;
+        }
+        let stakingFactoryId = null
+        let contract = null
+        try{
+            stakingFactoryId = await getMyStakingFactory(false)
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+            contract = await getContract('StakingTemplate', stakingFactoryId, false);
+        }catch(e){
+            reject(e);
+            return;
+        }
+
+        try{
+            const tx = await contract.setDev(address);
+            await waitForTx(tx.hash);
+            resolve(tx.hash)
+        }catch(e){
+            console.log('Set community address Failed', e);
+            reject(errCode.BLOCK_CHAIN_ERR)
+            return;
+        }
+    })
+}
+
+/**
+ * Update dev ratio
+ * @param {int} ratio 0-10000
+ * @returns 
+ */
+ export const setDevRatio = async (ratio) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        let contract = null
+        try{
+            stakingFactoryId = await getMyStakingFactory(false)
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+            contract = await getContract('StakingTemplate', stakingFactoryId, false);
+        }catch(e){
+            reject(e);
+            return;
+        }
+
+        try{
+            const tx = await contract.setDevRewardRatio(ratio);
+            await waitForTx(tx.hash);
+            resolve(tx.hash)
+        }catch(e){
+            console.log('Set community address Failed', e);
+            reject(errCode.BLOCK_CHAIN_ERR)
+            return;
+        }
     })
 }
 
