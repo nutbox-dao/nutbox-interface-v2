@@ -539,6 +539,7 @@ export default {
       this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
       this.cToken = cToken
+      console.log('ctoken', cToken);
       this.isMintable = cToken.isMintable
       this.cTokenAddress = cToken.address
       if (!communityInfo.name) {

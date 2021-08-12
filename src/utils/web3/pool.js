@@ -37,6 +37,7 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
+import { Transaction_config } from '../../config'
 
 
 /**
@@ -391,7 +392,7 @@ export const withdraw = async (communityId, pid, amount) => {
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
-      console.log('Deposit Fail', e);
+      console.log('Withdraw Fail', e);
     }
   })
 }
@@ -412,7 +413,8 @@ export const withdrawReward = async (communityId, pid) => {
     }
 
     try{
-      const tx = await contract.withdrawPoolRewards(pid)
+      console.log(communityId, pid);
+      const tx = await contract.withdrawPoolRewards(pid, Transaction_config)
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -421,7 +423,7 @@ export const withdrawReward = async (communityId, pid) => {
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
-      console.log('Deposit Fail', e);
+      console.log('Withdraw reward Fail', e);
     }
   })
 }

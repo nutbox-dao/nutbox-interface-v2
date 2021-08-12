@@ -94,7 +94,7 @@
 import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
-import { getRegitryAssets } from '@/utils/web3/asset'
+import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
 import { MaxBlockNum } from '@/constant'
@@ -109,6 +109,7 @@ export default {
       assets: null,
       deploying: false,
       maxBlock: MaxBlockNum,
+      isMint: false,
       concatAddressOptions: [
         {
           categoryName: 'personal',
@@ -135,9 +136,6 @@ export default {
     }
   },
   computed: {
-    isMint () {
-      return true
-    },
     ...mapState({
       userDeployTokens: state => state.web3.allAssetsOfUser,
       blockNum: state => state.web3.blockNum
@@ -159,6 +157,9 @@ export default {
     setSelectedData (data) {
       this.selectedAddressData = data
       this.form.assetId = data.asset
+      isMintableAsset(data.asset).then(res => {
+        this.isMint = res
+      })
     },
     deleteData () {
       this.progressData.pop()

@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import store from '@/store'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config } from '../../config'
+import { errCode, Multi_Config, Transaction_config } from '../../config'
 import { waitForTx } from './ethers'
 import {
     createWatcher,
@@ -32,6 +32,7 @@ export const getMyStakingFactory = async (update=false) => {
             return
         }
         const account = store.state.web3.account
+        console.log('account', account);
         let stakingFactoryId = null
         try{
             const count = await contract.stakingFeastCounter(account)
@@ -125,7 +126,7 @@ export const createStakingFeast = async (form) => {
     return new Promise(async(resolve, reject) => {
         try{
             const comId = await getMyStakingFactory()
-            console.log('comId');
+            console.log('comId', comId);
             if (comId){
                 console.log('Can only register one community for an account');
                 reject(errCode.CONTRACT_CREATE_FAIL)
@@ -154,7 +155,7 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const res = await contract.createStakingFeast(assetId, distribution)
+            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)

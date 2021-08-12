@@ -5,7 +5,8 @@ import {
   BSC_CHAIN_ID,
   RPC_NODE,
   NUTAddress,
-  MultiAddress
+  MultiAddress,
+  Multi_Config
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'
@@ -152,30 +153,15 @@ export const test = async () => {
 }
 
 export const testMulticall = async () => {
-  const config = {
-    rpcUrl: RPC_NODE,
-    multicallAddress: multiAddress
-  }
-
   const watcher = createWatcher([{
-    target: NUTAddress,
+    target: '0xbA4218Da36D2269B4aD36934b08872B370D9e63D',
     call: [
-      'balanceOf(address)(uint256)',
-      store.state.web3.account
+      'isMintable()(bool)'
     ],
     returns: [
-      ['TC_BALANCE', val => val / 10 ** 18]
+      ['TC_BALANCE']
     ]
-  },{
-    target: contractAddress['RegistryHub'],
-    call: [
-      'registryCounter(address)(uint8)',
-      store.state.web3.account
-    ],
-    returns: [
-      ['REGISTRY_COUNTER']
-    ]
-  }], config)
+  }], Multi_Config)
 
 
   // watcher.subscribe(update => {

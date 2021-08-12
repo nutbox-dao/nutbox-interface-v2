@@ -148,7 +148,7 @@ import {
 } from './utils/polkadot/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
-import { setupNetwork, chainChanged } from './utils/web3/web3'
+import { setupNetwork, chainChanged, test } from './utils/web3/web3'
 import { accountChanged } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity, getMyCommunityInfo } from '@/utils/web3/community'
@@ -202,8 +202,7 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     gotoOfficial () {
-      // test()
-      monitorPendingRewards()
+      test()
       // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {

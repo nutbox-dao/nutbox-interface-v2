@@ -161,6 +161,27 @@ export const getCToken = async (communityId, update=false) => {
 }
 
 /**
+ * Query token if mintable
+ * @param {*} assetId 
+ */
+export const isMintableAsset = async (assetId) => {
+  return new Promise(async (resolve, reject) => {
+    let registerHub;
+    try{
+      registerHub = await getContract('RegistryHub')
+    }catch(e){
+      reject(e)
+      return
+    }
+    try{
+      resolve(await registerHub.mintable(assetId));
+    }catch(e){
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+  })
+}
+
+/**
  * get asset meta data
  * @param {String} id asset id 
  * @param {String} assetType asset contract address
