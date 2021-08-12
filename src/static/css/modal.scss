@@ -11,6 +11,15 @@
     background: #F6F7F9;
     margin: 1rem -1.2rem;
   }
+  .close-btn {
+    position: absolute;
+    right: 1.2rem;
+    width: 1rem;
+    height: 1rem;
+  }
+  .btn-group-2 {
+    @include c-grid-repeat(2, .4rem)
+  }
 }
 
 .tip-modal {

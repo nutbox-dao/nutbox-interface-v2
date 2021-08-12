@@ -1,5 +1,8 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span :class="'Active'">{{ $t('cl.Active') }}</span>
+    </div>
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
         <div class="card-single-icon">
