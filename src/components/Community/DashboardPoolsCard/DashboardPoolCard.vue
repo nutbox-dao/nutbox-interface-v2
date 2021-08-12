@@ -57,12 +57,13 @@ export default {
       updating: false,
       apy: null,
       minedToken: 0,
-      contract: {}
+      contract: null
     }
   },
   watch: {
     async blockNum(newValue, oldValue) {
       try{
+        if (!this.contract) return;
         const res = await this.contract.calculateReward(1, newValue)
         this.minedToken = res.toString() / 1e18
       }catch(e){

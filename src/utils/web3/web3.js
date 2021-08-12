@@ -26,6 +26,7 @@ export const getWeb3 = () => {
  * @returns 
  */
 export const setupNetwork = async () => {
+  await connectMetamask();
   const eth = await getEthWeb()
   const chainId = parseInt(BSC_CHAIN_ID)
   try {

@@ -97,6 +97,7 @@ import { mapState } from 'vuex'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
+import { MaxBlockNum } from '@/constant'
 
 export default {
   name: 'CreateEconomy',
@@ -107,7 +108,7 @@ export default {
       selectedAddressData: {},
       assets: null,
       deploying: false,
-      maxBlock: 999999999999999,
+      maxBlock: MaxBlockNum,
       concatAddressOptions: [
         {
           categoryName: 'personal',

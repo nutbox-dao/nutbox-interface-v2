@@ -437,7 +437,6 @@ export const monitorCommunityBalance = async (communityInfo) => {
           store.commit('web3/saveLoadingApprovementCtoken', true)
           let watchers = store.state.web3.watchers
           let watcher = watchers['communityBalance']
-          console.log(1111111, cToken);
           const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
           watcher && watcher.stop()
           console.log(cToken.assetId, communityInfo.id);

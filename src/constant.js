@@ -15,6 +15,8 @@ export const TIME_PERIOD = {
     MONTH: 2592000,
 }
 
+export const MaxBlockNum = 999999999999999
+
 export const POLKADOT_RELAYCHAIN_SYMBOL = {
     polkadot: 'DOT',
     kusama: 'KSM',

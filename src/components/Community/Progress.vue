@@ -15,6 +15,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { MaxBlockNum } from '@/constant'
 
 export default {
   name: 'Progress',
@@ -38,7 +39,7 @@ export default {
       return this.progressData[0].startHeight
     },
     max(){
-      if (this.progressData.length === 0) return this.$t('commen.max');
+      if (this.progressData.length === 0 || this.progressData[this.progressData.length-1].stopHeight >= MaxBlockNum) return this.$t('commen.max');
       return this.progressData[this.progressData.length-1].stopHeight
     }
   },

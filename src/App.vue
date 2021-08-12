@@ -259,6 +259,15 @@ export default {
     }
   },
   async mounted () {
+    // bsc related
+    try {
+      setupNetwork()
+      chainChanged()
+      accountChanged()
+      subBlockNum()
+    } catch (e) {
+      console.log(533, e)
+    }
     const _this = this
     window.onresize = () => {
       return (() => {
@@ -270,15 +279,6 @@ export default {
     this.navBoxEl = document.getElementsByClassName('nav-box')
   },
   async created () {
-    // bsc related
-    try {
-      setupNetwork()
-      chainChanged()
-      accountChanged()
-      subBlockNum()
-    } catch (e) {
-      console.log(533, e)
-    }
     // BSC data
     this.fetchBscData();
     // get steem vests ratio
