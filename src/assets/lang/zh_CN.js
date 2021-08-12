@@ -296,7 +296,8 @@ module.exports = {
     devAddress: "社区基金地址",
     devRatio: '社区抽成比例',
     inputDevRatio: '请输入0-100的数字',
-    inputDevAddress: '请输入社区基金地址'
+    inputDevAddress: '请输入社区基金地址',
+    publishPool: "发布矿池"
   },
   asset: {
     network: "网络",

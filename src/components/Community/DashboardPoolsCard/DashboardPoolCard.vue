@@ -28,7 +28,7 @@
       </div>
       <button class="primary-btn" :disabled="updating" @click="confirm">
         <b-spinner small type="grow" v-show="updating" />
-        {{ $t('commen.confirm') }}
+        {{ published ? $t('commen.update') : $t('community.publishPool')}}
       </button>
     </div>
   </div>
@@ -40,7 +40,6 @@ import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
 import { updatePoolApy, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
-import BN from 'bn.js'
 import { getContract } from '@/utils/web3/contract'
 
 export default {
@@ -57,7 +56,8 @@ export default {
       updating: false,
       apy: null,
       minedToken: 0,
-      contract: null
+      contract: null,
+      published: false
     }
   },
   watch: {
@@ -106,10 +106,12 @@ export default {
     }
   },
   async mounted () {
+    this.apy = null
     if (this.allPools){
         const p = this.allPools.filter(pool => pool.pid === this.pool.pid)
         if (p.length > 0){
           this.apy = p[0].apy
+          this.published = true
         }
       }
     const cToken = await getCToken(this.stakingFactoryId)

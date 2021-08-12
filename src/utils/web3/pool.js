@@ -465,7 +465,7 @@ export const monitorUserStakings = async () => {
       resolve()
     } catch (e) {
       console.log('monitorUserStaking fail', e);
-      reject()
+      reject(e)
     }
   })
 }
@@ -508,7 +508,7 @@ export const monitorPendingRewards = async () => {
       resolve()
     } catch (e) {
       console.log('monitorPendingreward fail', e);
-      reject()
+      reject(e)
     }
   })
 }
@@ -553,7 +553,7 @@ export const monitorApprovements = async () => {
       resolve()
     } catch (e) {
       console.log('Monitor approvment fail', e);
-      reject()
+      reject(e)
     }
   })
 }
@@ -595,7 +595,7 @@ export const monitorPoolTvls = async () => {
       resolve()
     } catch (e) {
       console.log('monitor total stakings fail', e);
-      reject()
+      reject(e)
     }
   })
 }
@@ -635,7 +635,7 @@ export const monitorUserBalances = async () => {
       store.commit('web3/saveWatchers', {...watchers})
       resolve()
     }catch(e){
-      reject()
+      reject(e)
     }
   })
 }

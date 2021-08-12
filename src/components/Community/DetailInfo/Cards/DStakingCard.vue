@@ -59,7 +59,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
-        <div class="info">13.0%</div>
+        <div class="info">{{ card.apy.toFixed(2) }}%</div>
       </div>
     </div>
     <b-modal

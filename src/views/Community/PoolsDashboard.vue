@@ -20,28 +20,27 @@
       {{ blockNum }} {{ communityBalance / 1e18 }}
     </div> -->
     <Progress :progress-data="progressData"></Progress>
-    <div v-if="stakingPools.length===0"
-         class="empty-card d-flex flex-column justify-content-center">
-      <div class="empty-bg">
-        <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t('community.noPools') }}</p>
-      </div>
+    <div class="loading-bg" v-if="loadingPool">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
     <template v-else>
-      <!-- <div class="nav-box" ref="navBox">
-        <div class="nav mr-5">
-            <span v-for="(item, index) of tabOptions" :key="index"
-                  :class="activeTab===index?'active':''"
-                  @click="activeTab = index">{{item.name}}</span>
+      <div v-if="stakingPools && stakingPools.length===0"
+          class="empty-card d-flex flex-column justify-content-center">
+        <div class="empty-bg">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t('community.noPools') }}</p>
         </div>
       </div>
-      <component :is="tabOptions[activeTab].component"></component> -->
-        <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.pid">
-            <DashboardPoolCard :pool="pool"/>
-          </div>
-      </div>
+      <template v-else>
+          <div class="row">
+            <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.pid">
+              <DashboardPoolCard :pool="pool"/>
+            </div>
+        </div>
+      </template>
     </template>
+
     <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
@@ -89,6 +88,7 @@ export default {
       ],
       stakingPools: [],
       noCommunity: false,
+      loadingPool: true,
       progressData: [
         // { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
         // { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
@@ -103,6 +103,7 @@ export default {
   },
   async mounted () {
     try{
+      this.loadingPool = true
       getMyCommunityInfo()
       getDistributionEras().then(dist => {
         this.progressData = dist
@@ -119,6 +120,8 @@ export default {
           this.$bvToast.toast(tip, param)
         })
       }
+    }finally{
+      this.loadingPool = false
     }
   }
 }
