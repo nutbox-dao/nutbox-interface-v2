@@ -43,6 +43,7 @@ export const getMyStakingFactory = async (update=false) => {
                 return;
             }
         }catch(e){
+            console.log('Get staking feast record fail', e);
             reject(errCode.BLOCK_CHAIN_ERR)
             return;
         }
@@ -67,6 +68,7 @@ export const getMyCommunityInfo = async (update=false) => {
                 return;
             }
         }catch(e){
+            console.log('Get my staking factory fail', e);
             reject(e);
             return;
         }
@@ -88,6 +90,7 @@ export const getMyCommunityInfo = async (update=false) => {
                 resolve({id: stakingFactoryId})
             }
         }catch(e){
+            console.log('Get community info from backend fail', e);
             store.commit('web3/saveCommunityInfo', null)
             reject(e)
         }
@@ -108,6 +111,7 @@ export const getAllCommunities = async (update=false) => {
             store.commit('web3/saveAllCommunities', communities)
             resolve(communities)
         }catch(e){
+            console.log('Get all community fail', e);
             reject(e)
         }
     })

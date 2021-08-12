@@ -185,6 +185,7 @@ export const handleApiErrCode = (code, toast) => {
   } else {
     tipStr = $t('error.unknow')
   }
+  printCallStack()
   toast(tipStr, {
     title: $t('tip.error'),
     variant: 'danger'
@@ -199,4 +200,14 @@ export const handleApiErrCode = (code, toast) => {
 export const isPositiveInt = (str) => {
   const r = /^\d+$/
   return r.test(str)
+}
+
+
+function printCallStack() {
+  var i = 0;
+  var fun = arguments.callee;
+  do {
+  fun = fun.arguments.callee.caller;
+  console.log(++i + ': ' + fun);
+  } while (fun);
 }
