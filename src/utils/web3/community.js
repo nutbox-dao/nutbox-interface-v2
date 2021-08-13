@@ -378,7 +378,6 @@ export const getDistributionEras = async (update=false) => {
         try{
             contract = await getContract('StakingTemplate', stakingFactoryId)
             const cToken = await getCToken(stakingFactoryId)
-            console.log(776, cToken);
             decimal = cToken.decimal
         }catch(e){
             reject(e);
@@ -403,6 +402,42 @@ export const getDistributionEras = async (update=false) => {
             reject(e);
             return
         }
+    })
+}
+
+/**
+ * 
+ * @param {*} communities 
+ * @returns 
+ */
+ export const fetchAllCommunityDistributions = async (communities) => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try{
+            stakingFactoryId = await getMyStakingFactory()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY);
+                return;
+            }
+        }catch(e){
+            reject(e);
+            return;
+        }
+        const dis = await aggregate([
+            {
+                target: stakingFactoryId,
+                call: [
+                    'distributionEras(uint8)(uint256,uint256,uint256)',
+                    0
+                ],
+                returns: [
+                    ['amount'],
+                    ['startHeight'],
+                    ['stopHeight']
+                ]
+            }
+        ], Multi_Config)
+        console.log({dis});
     })
 }
 

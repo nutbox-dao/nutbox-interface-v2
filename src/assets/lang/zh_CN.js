@@ -297,7 +297,8 @@ module.exports = {
     devRatio: '社区抽成比例',
     inputDevRatio: '请输入0-100的数字',
     inputDevAddress: '请输入社区基金地址',
-    publishPool: "发布矿池"
+    publishPool: "发布矿池",
+    unPublished: "未发布"
   },
   asset: {
     network: "网络",
@@ -319,6 +320,7 @@ module.exports = {
     notDeploy:"还没有Token？",
     deployOne:"部署一个",
     deploy: '部署',
+    deployYourToken: '部署一个Token',
     notRegister: "还没有注册资产？",
     registerOne:"注册新资产",
     inputAccount:"请输入您的账号",

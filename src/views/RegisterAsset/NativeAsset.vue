@@ -22,7 +22,7 @@
           </div>
         </div>
       </b-form-group>
-      <button class="primary-btn" @click="registry" :disabled='registring'>
+      <button class="primary-btn" @click="registry" :disabled='registring || !canRegister'>
         <b-spinner small type="grow" v-show="registring" />
         {{ $t('asset.register') }}
       </button>
@@ -42,6 +42,11 @@ export default {
       tokenAddress: null,
       registring: false
     };
+  },
+  computed: {
+    canRegister() {
+      return this.tokenAddress && this.tokenAddress.length > 0 
+    }
   },
   methods: {
     async registry() {
@@ -65,6 +70,7 @@ export default {
           })
           // update assets cache
           await getRegitryAssets(true)
+          this.tokenAddress = ''
         }else{
           this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
             title: this.$t('tip.error'),

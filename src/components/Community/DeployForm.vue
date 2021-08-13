@@ -135,7 +135,7 @@ export default {
   props: {
     isMintable: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data () {

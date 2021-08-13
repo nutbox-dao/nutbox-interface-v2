@@ -1,7 +1,7 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
-      <span :class="'Active'">{{ $t('cl.Active') }}</span>
+      <span v-show="!published" :class="'Completed'">{{ $t('community.unPublished') }}</span>
     </div>
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
@@ -91,6 +91,7 @@ export default {
       try{
         this.updating = true
         await updatePoolApy(this.pool, parseFloat(this.apy))
+        this.published = true;
         // 更新本地矿池数据
         await sleep(1)
         const aa = await getAllPools(true)

@@ -2,28 +2,26 @@
   <div class="page-view-content">
       <div class="view-top-header mb-4">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
-        Deploy Your Own Token
+        {{ $t('asset.deployYourToken') }}
       </div>
     </div>
-    <!-- <div class="page-view-title">Deploy Your Own Token</div>
-    <div class="page-view-subtitle">Choose token type you want deploy</div>
-    <div class="page-back-text-icon font20 mt-4" @click="$router.back()">commuity</div> -->
     <div class="tab-card">
-      <div class="tabs tabs-2 font16">
-        <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span>
-        <span :class="activeTab===1?'active':''" @click="activeTab=1">Mintable ERC20</span>
+      <div class="tabs tabs- font16">
+        <!-- <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span>
+        <span :class="activeTab===0?'active':''" @click="activeTab=0">Mintable ERC20</span> -->
+        <p></p>
       </div>
       <div class="h-line"></div>
       <div class="text-left form-box">
         <div class="warning-tip" v-if="activeTab===1">
           <i class="warning-icon"></i>
           <div class="tip-text flex-full font12">
-            Mintable ERC20 means your token contract has supported mint() and burn(),
-            that means your can assign a contract the mining role permission to mint your token to a
+            Mintable ERC20 means your token contract has supported mint() and burn() method,
+            that means you can assign a contract the mining role permission to mint your token to a
             specific address, also burn them from a specific address.
           </div>
         </div>
-        <DeployForm :isMintable="activeTab===1"/>
+        <DeployForm :isMintable="activeTab===0"/>
       </div>
     </div>
   </div>
