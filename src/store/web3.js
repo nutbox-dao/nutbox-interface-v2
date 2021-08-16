@@ -1,5 +1,6 @@
 import Cookie from 'vue-cookies'
 import { BSC_CHAIN_ID } from '@/config'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   namespaced: true,
@@ -171,7 +172,12 @@ export default {
         const pools = allPools.filter(pool => pool.communityId === c.id)
         return {
           ...c,
-          assetLogos: pools.map(p => p.icon),
+          assetLogos: pools.map(p => {
+            if (p.type === 'SubstrateCrowdloanAssetRegistry'){
+              return p.chainId === 2 ? ASSET_LOGO_URL.polkadot.icon : ASSET_LOGO_URL.kusama.icon
+            }
+            return p.icon;
+          }),
           apys: pools.map(p => p.apy)
         }
       })
