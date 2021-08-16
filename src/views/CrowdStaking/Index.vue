@@ -8,11 +8,11 @@
       <template v-else>
         <div class="nav-box container">
           <div class="nav">
-            <router-link to="/crowdstaking/crowdloan">Crowdloan</router-link>
-            <router-link to="/crowdstaking/nominate">Nominate</router-link>
             <router-link to="/crowdstaking/deposite">Deposite</router-link>
             <router-link to="/crowdstaking/steem-delegate">Steem Delegate</router-link>
             <router-link to="/crowdstaking/hive-delegate">Hive Delegate</router-link>
+            <router-link to="/crowdstaking/nominate">Nominate</router-link>
+            <router-link to="/crowdstaking/crowdloan">Crowdloan</router-link>
             <div class="center-blank"></div>
         </div>
         <component :is='$route.name'/>

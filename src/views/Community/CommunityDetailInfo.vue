@@ -77,11 +77,11 @@ export default {
       communityId: null,
       activeTab: 0,
       tabOptions: [
-        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
-        { name: 'Nominate', component: 'DNominate', chain: '' },
         { name: 'Deposite', component: 'DCrowdStaking', chain: '' },
         { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
-        { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' }
+        { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' },
+        { name: 'Nominate', component: 'DNominate', chain: '' },
+        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' }
       ]
     }
   },
@@ -95,15 +95,15 @@ export default {
     wallet () {
       switch (this.activeTab) {
         case 0: 
-          return 'PolkadotAccount';
-        case 1:
-          return 'PolkadotAccount'
-        case 2:
           return 'BSCAccount';
+        case 1:
+          return 'SteemAccount'
+        case 2:
+          return 'HiveAccount';
         case 3:
-          return 'SteemAccount';
+          return 'PolkadotAccount';
         case 4:
-          return 'HiveAccount'
+          return 'PolkadotAccount'
         default:
           break;
       }
