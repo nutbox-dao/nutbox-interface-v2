@@ -166,7 +166,8 @@ export default {
       const allCommunities = state.allCommunities
       if (!allPools || !allCommunities) return []
       console.log('allpools', allPools);
-      const cardInfo = allCommunities.map(c => {
+      const cardInfo = allCommunities.filter(c => parseInt(c.firstBlock) <= parseInt(state.blockNum))
+      .map(c => {
         const pools = allPools.filter(pool => pool.communityId === c.id)
         return {
           ...c,
@@ -192,5 +193,9 @@ export default {
       community.pools = pools
       return community
     },
+    poolCards: (state) => {
+      const showingPools = state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum));
+      return showingPools;
+    }
   }
 }

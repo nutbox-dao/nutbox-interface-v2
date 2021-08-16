@@ -23,7 +23,7 @@
 
 <script>
 import CrowdDelegateCard from '@/components/CrowdStaking/HiveDelegateCard'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'HiveDelegate',
@@ -32,12 +32,12 @@ export default {
   },
   computed: {
     ...mapState({
-      allPools: state => state.web3.allPools,
       hiveAccount: state => state.hive.hiveAccount,
       loadingAllPools: state => state.web3.loadingAllPools
     }),
+    ...mapGetters('web3', ['poolCards']),
     delegateCards () {
-      return this.allPools? this.allPools.filter(p => p.type === "SteemHiveDelegateAssetRegistry" && p.assetType === 'hp') : []
+      return this.poolCards? this.poolCards.filter(p => p.type === "SteemHiveDelegateAssetRegistry" && p.assetType === 'hp') : []
     },
   },
   methods: {

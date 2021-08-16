@@ -24,7 +24,7 @@
 <script>
 import CrowdLoanCard from '@/components/CrowdStaking/CrowdLoanCard'
 import { getAllParachain } from '@/utils/web3/pool'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
 
 export default {
@@ -38,24 +38,24 @@ export default {
   computed: {
     ...mapState({
       allParachain: state => state.allParachain,
-      allPools: state => state.web3.allPools,
       loadingAllPools: state => state.web3.loadingAllPools
     }),
+    ...mapGetters('web3', ['poolCards']),
     data () {
-      const { allPools, allParachain } = this
-      return { allPools, allParachain }
+      const { poolCards, allParachain } = this
+      return { poolCards, allParachain }
     }
   },
   watch: {
     data (newValue, oldValue) {
-      const { allPools, allParachain } = newValue
-      this.sortCRPoolCard = sortCRPoolCard(allPools, allParachain)
+      const { poolCards, allParachain } = newValue
+      this.sortedPools = sortCRPoolCard(poolCards, allParachain)
     }
   },
   mounted () {
     // get parachian info from backend
     getAllParachain().then((res) => {
-      this.sortedPools = sortCRPoolCard(this.allPools, this.allParachain)
+      this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
     }).catch(e => {
     })
   }

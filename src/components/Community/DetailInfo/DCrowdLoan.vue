@@ -44,7 +44,6 @@ export default {
   computed: {
     ...mapState({
       allParachain: state => state.allParachain,
-      allPools: state => state.web3.allPools,
       loadingAllPools: state => state.web3.loadingAllPools
     }),
     ...mapState('polkadot', ['isConnected', 'crowdstakings']),

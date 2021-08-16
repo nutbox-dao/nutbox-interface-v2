@@ -6,10 +6,10 @@
       </div>
     </div>
     <div class="tab-card">
-      <div class="tabs tabs- font16">
-        <!-- <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span>
-        <span :class="activeTab===0?'active':''" @click="activeTab=0">Mintable ERC20</span> -->
-        <p></p>
+      <div class="tabs tabs-2 font16">
+        <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span>
+        <span :class="activeTab===1?'active':''" @click="activeTab=1">Mintable ERC20</span>
+        <!-- <p></p> -->
       </div>
       <div class="h-line"></div>
       <div class="text-left form-box">
@@ -21,7 +21,7 @@
             specific address, also burn them from a specific address.
           </div>
         </div>
-        <DeployForm :isMintable="activeTab===0"/>
+        <DeployForm :isMintable="activeTab===1"/>
       </div>
     </div>
   </div>

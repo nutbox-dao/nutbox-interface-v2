@@ -32,7 +32,6 @@ export default {
   },
   computed: {
   ...mapState({
-    allPools: state => state.web3.allPools,
     steemAccount: state => state.steem.steemAccount,
     loadingAllPools: state => state.web3.loadingAllPools
   }),

@@ -25,7 +25,7 @@
 
 <script>
 import CrowdStakingCard from "../../components/CrowdStaking/CrowdStakingCard";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -33,13 +33,14 @@ export default {
     CrowdStakingCard,
   },
   computed: {
-    ...mapState('web3', ['loadingAllPools', 'allPools']),
+    ...mapState('web3', ['loadingAllPools']),
+    ...mapGetters('web3', ['poolCards']),
     stakingCards() {
-      return this.allPools ? this.allPools.filter(pool => pool.type === 'HomeChainAssetRegistry') : []
+      return this.poolCards ? this.poolCards.filter(pool => pool.type === 'HomeChainAssetRegistry') : []
     }
   },
   mounted () {
-    console.log(235, this.allPools);
+    console.log(235, this.poolCards);
   },
 };
 </script>

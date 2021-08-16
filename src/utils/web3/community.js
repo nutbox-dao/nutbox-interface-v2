@@ -176,6 +176,13 @@ export const completeCommunityInfo = async (form, type) => {
         let nonce = await getNonce()
         const userId = store.state.web3.account
         nonce = nonce ? nonce + 1 : 1
+        try{
+            const distri = await getDistributionEras()
+            form.firstBlock = distri[0].startHeight
+        }catch(e){
+            reject(e);
+            return
+        } 
         const originMessage = JSON.stringify(form)
         let signature = ''
         try{

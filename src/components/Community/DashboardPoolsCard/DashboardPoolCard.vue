@@ -39,7 +39,7 @@
 
 <script>
 import { getCToken } from '@/utils/web3/asset'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
 import { updatePoolApy, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
@@ -48,7 +48,8 @@ import { getContract } from '@/utils/web3/contract'
 export default {
   name: 'DashboardPoolCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId', 'allPools', 'blockNum']),
+    ...mapState('web3', ['stakingFactoryId', 'blockNum']),
+    ...mapGetters('web3', ['poolCards']),
     totalDeposited() {
       return this.pool.totalStakedAmount.toString() / (10 ** this.decimal)
     }
@@ -111,13 +112,13 @@ export default {
   },
   async mounted () {
     this.apy = null
-    if (this.allPools){
-        const p = this.allPools.filter(pool => pool.pid === this.pool.pid)
-        if (p.length > 0){
-          this.apy = p[0].apy
-          this.published = true
-        }
+    if (this.poolCards){
+      const p = this.poolCards.filter(pool => pool.pid === this.pool.pid)
+      if (p.length > 0){
+        this.apy = p[0].apy
+        this.published = true
       }
+    }
     const cToken = await getCToken(this.stakingFactoryId)
     this.decimal = cToken.decimal
 
