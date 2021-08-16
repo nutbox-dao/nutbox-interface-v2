@@ -23,7 +23,7 @@ export default {
     ...mapState(['lang']),
     
     percent() {
-      if (!this.fund) return '0%';
+      if (!this.fund || Object.keys(this.fund).length === 0) return '0%';
       return (
         this.fund.cap.isZero()
         ? "100.00%"

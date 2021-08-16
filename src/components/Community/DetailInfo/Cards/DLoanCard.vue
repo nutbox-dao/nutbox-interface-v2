@@ -159,7 +159,7 @@ export default {
       return this.card.chainId == 2 ? 'polkadot' : 'kusama'
     },
     getFundInfo () {
-      return this.fundInfo(this.card.paraId) ?? {}
+      return this.fundInfo(this.card.paraId)
     },
     isConnected () {
       return this.$store.state[this.chain].isConnected
@@ -221,7 +221,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status || this.card.statusStr || 'Completed'
+    this.status = this.getFundInfo?.status || this.card.statusStr || 'Completed'
   }
 }
 </script>
