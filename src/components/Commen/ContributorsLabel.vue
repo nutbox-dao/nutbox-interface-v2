@@ -4,7 +4,7 @@
       {{ percent + " " }}
     </span>
     <span>
-      {{ " " + fund && fund.funds.length + " " }}
+      {{ " " + (fund ? fund.funds.length : 0) + " " }}
     </span>
     <span class="text-grey-light"> {{ lang === 'en' ? 'Contributors' : '人投票' }} </span>
   </div>
@@ -23,7 +23,7 @@ export default {
     ...mapState(['lang']),
     
     percent() {
-      if (!this.fund) return;
+      if (!this.fund) return '0%';
       return (
         this.fund.cap.isZero()
         ? "100.00%"

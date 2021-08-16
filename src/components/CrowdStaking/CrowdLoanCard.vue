@@ -132,6 +132,7 @@ export default {
   watch: {
     async currentBlockNum (newValue, _) {
       const fund = this.getFundInfo
+      if(!fund) return;
       const end = fund.end
       const raised = fund.raised
       const cap = fund.cap
@@ -229,7 +230,7 @@ export default {
     }
   },
   mounted () {
-    this.status = this.getFundInfo.status || this.crowdloan.statusStr
+    this.status = this.getFundInfo?.status || this.crowdloan.statusStr
   }
 }
 </script>
