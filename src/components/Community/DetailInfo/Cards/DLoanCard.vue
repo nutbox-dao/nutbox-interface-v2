@@ -16,6 +16,21 @@
 
     </div>
     <div class="h-line mt-4 mb-2"></div>
+    <div class="text-left mt-3">
+      <span style="color: #717376" class="font-bold">{{
+        card.tokenSymbol + " "
+      }}</span>
+      <span style="color: #bdbfc2">EARNED</span>
+    </div>
+    <div class="btn-row">
+      <span class="value"> {{ pendingReward | amountForm }} </span>
+      <div class="right-box">
+        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+          <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+          {{ $t("commen.withdraw") }}
+        </button>
+      </div>
+    </div>
     <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.leasePeriod') }} </span>
@@ -100,15 +115,17 @@ import TipWithdraw from '@/components/Commen/TipWithdraw'
 import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus } from '@/utils/commen/crowdloan'
-import { formatCountdown } from '@/utils/helper'
+import { formatCountdown, handleApiErrCode } from '@/utils/helper'
 import { stanfiAddress } from '@/utils/commen/account'
+import { withdrawReward } from "@/utils/web3/pool";
 
 export default {
   data () {
     return {
       showContribute: false,
       showWithdraw: false,
-      status: 'Completed'
+      status: 'Completed',
+      isWithdrawing: false
     }
   },
   props: {
@@ -123,6 +140,18 @@ export default {
     RaisedLabel
   },
   methods: {
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    }
   },
   watch: {
     async currentBlockNum (newValue, _) {
@@ -228,4 +257,22 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+.btn-row {
+  @include c-flex-between-center;
+  .value {
+    font-size: 1.2rem;
+    font-weight: bolder;
+  }
+  .right-box {
+    width: 6rem;
+    @include c-flex-between-center;
+  }
+  .outline-btn {
+    background-color: white;
+    border: 1px solid var(--primary-custom);
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: 0.8rem;
+  }
+}
 </style>
