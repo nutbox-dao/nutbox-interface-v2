@@ -70,7 +70,7 @@ const routes = [
   {
     path: '/crowdstaking',
     component: CrowdIndex,
-    redirect: '/crowdstaking/crowdloan',
+    redirect: '/crowdstaking/deposite',
     children: [
       {
         path: 'crowdloan',
