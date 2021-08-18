@@ -44,7 +44,8 @@ export default {
     loadingUserBalances: true,
     loadingCommunityBalance: true,
     loadingApprovementCtoken: true,
-    loadingDevInfo: true
+    loadingDevInfo: true,
+    loadingCommunity: true,
 
   },
   mutations: {
@@ -156,6 +157,9 @@ export default {
     },
     saveDevRatio: (state, devRatio) => {
       state.devRatio = devRatio
+    },
+    saveLoadingCommunity: (state, loadingCommunity) => {
+      state.loadingCommunity = loadingCommunity
     }
   },
   getters: {

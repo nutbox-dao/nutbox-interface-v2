@@ -24,6 +24,7 @@ export const getMyStakingFactory = async (update=false) => {
             resolve(id);
             return;
         }
+        store.commit('web3/saveLoadingCommunity', true);
         let contract;
         try{
             contract = await getContract('StakingFactory', null)
@@ -32,7 +33,6 @@ export const getMyStakingFactory = async (update=false) => {
             return
         }
         const account = store.state.web3.account
-        console.log('account', account);
         let stakingFactoryId = null
         try{
             const count = await contract.stakingFeastCounter(account)
@@ -40,6 +40,7 @@ export const getMyStakingFactory = async (update=false) => {
                 stakingFactoryId = await contract.stakingFeastRecord(account, 0)
             }else{
                 store.commit('web3/saveStakingFactoryId', null)
+                store.commit('web3/saveLoadingCommunity', false);
                 resolve(null);
                 return;
             }
@@ -49,6 +50,7 @@ export const getMyStakingFactory = async (update=false) => {
             return;
         }
         console.log('community', stakingFactoryId);
+        store.commit('web3/saveLoadingCommunity', false);
         store.commit('web3/saveStakingFactoryId', stakingFactoryId)
         resolve(stakingFactoryId)
     })
