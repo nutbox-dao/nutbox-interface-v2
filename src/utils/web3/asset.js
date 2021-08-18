@@ -463,7 +463,7 @@ export const deployERC20 = async ({
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
       contract.on('CreateNewERC20', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable);
-        if (store.state.web3.account == _creator, name === _name, symbol === _symbol, isMintable == _isMintable){
+        if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
           resolve(_tokenAddress)
           return;
         }
