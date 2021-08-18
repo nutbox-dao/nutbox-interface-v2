@@ -458,18 +458,15 @@ export const deployERC20 = async ({
 }, isMintable) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const abi = await getAbi(isMintable ? 'MintableERC20' : "SimpleERC20")
-      const eth = await getProvider()
-      const factory = new ethers.ContractFactory(abi.abi, abi.bytecode, eth.getSigner())
-      if (isMintable) {
-        const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), contractAddress['StakingFactory'])
-        await contract.deployed()
-        resolve(contract.address)
-      }else {
-        const contract = await factory.deploy(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account)
-        await contract.deployed()
-        resolve(contract.address)
-      }
+      const contract = await getContract('ERC20Factory', null, false)
+      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
+      contract.on('CreateNewERC20', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
+        console.log(_tokenAddress, _name, _symbol, _isMintable);
+        if (store.state.web3.account == _creator, name === _name, symbol === _symbol, isMintable == _isMintable){
+          resolve(_tokenAddress)
+          return;
+        }
+      })
     } catch (e) {
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)
