@@ -75,6 +75,7 @@ export const getRegitryAssets = async (update = false) => {
     let assets = store.state.web3.allAssetsOfUser
     if (!update && assets) {
       resolve(assets)
+      return;
     }
     const account = store.state.web3.account
     let contract;
