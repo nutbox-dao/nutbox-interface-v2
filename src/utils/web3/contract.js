@@ -84,13 +84,11 @@ export const getContract = async function (contractName, address, onlyRead=true)
       }
     }
     // wheather get account
-    if (!store.state.web3.account && !onlyRead) {
-      const accounts = await getAccounts()
-      if (accounts === []) {
-        console.log('Please unlock wallet');
-        reject(errCode.UNLOCK_METAMASK)
-        return
-      }
+    const account = await getAccounts();
+    if (!account && !onlyRead) {
+      console.log('Please unlock wallet');
+      reject(errCode.UNLOCK_METAMASK)
+      return
     }
     // Wheather connect to BSC network
     if (!store.getters['web3/isMainChain'] && !onlyRead) {

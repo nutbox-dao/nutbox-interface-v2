@@ -9,9 +9,12 @@ import { getRegitryAssets } from './asset.js'
  * @returns all accounts
  */
 export const getAccounts = async () => {
+    if (store.state.web3.account) {
+        return store.state.web3.account;
+    }
     const metamask = await getEthWeb()
     const accounts = await metamask.request({ method: 'eth_requestAccounts' })
-    let account = store.state.web3.account || accounts[0]
+    let account = accounts[0]
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
     return accounts
