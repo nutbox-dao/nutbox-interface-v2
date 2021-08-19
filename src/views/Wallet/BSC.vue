@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xl-4 col-md-6 mb-4 ">
       <div v-for="(v, k, i) in ctokenBalances" :key="i" class="wallet-card">
-        <div class="top flex-between-center" v-if="v.balance.toString().length > 0">
+        <div class="top flex-between-center" v-if="v.balance.toString().length > 15">
           <img :src="v.logo" alt="" class="logo" />
           <div class="balance-right flex-full">
             <div class="d-flex justify-content-between align-items-start font-bold">
