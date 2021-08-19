@@ -32,7 +32,7 @@ export const getMyStakingFactory = async (update=false) => {
             reject(e);
             return
         }
-        const account = store.state.web3.account
+        const account = await getAccounts();
         let stakingFactoryId = null
         try{
             const count = await contract.stakingFeastCounter(account)
@@ -176,7 +176,7 @@ export const createStakingFeast = async (form) => {
 export const completeCommunityInfo = async (form, type) => {
     return new Promise(async (resolve, reject) => {
         let nonce = await getNonce()
-        const userId = store.state.web3.account
+        const userId = await getAccounts();
         nonce = nonce ? nonce + 1 : 1
         try{
             const distri = await getDistributionEras()
@@ -456,7 +456,7 @@ export const getDistributionEras = async (update=false) => {
  */
 export const getNonce = async (update=false) => {
     let nonce = store.state.web3.nonce
-    const account = store.state.web3.account
+    const account = await getAccounts();
     if (!update && nonce) {
         return nonce
     }
@@ -484,6 +484,7 @@ export const monitorCommunityBalance = async (communityInfo) => {
           let watcher = watchers['communityBalance']
           const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
           watcher && watcher.stop()
+          const account = await getAccounts();
           console.log(cToken.assetId, communityInfo.id);
           console.log(ethers.utils.keccak256('0x' + communityInfo.id.substr(2) + cToken.assetId.substr(2) + "61646d696e"));
           watcher = createWatcher([
@@ -501,7 +502,7 @@ export const monitorCommunityBalance = async (communityInfo) => {
                 target: cToken.address,
                 call: [
                     'allowance(address,address)(uint256)',
-                    store.state.web3.account,
+                    account,
                     erc20HandlerAddress
                 ],
                 returns: [

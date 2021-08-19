@@ -8,6 +8,7 @@ import {
   getAllPools as gap,
   getAllParachain as getAP
 } from '@/apis/api'
+import { getAccounts } from '@/utils/web3/account'
 import {
   signMessage
 } from './utils'
@@ -233,7 +234,7 @@ export const updatePoolApy = async (pool, apy) => {
     }
 
     let nonce = await getNonce()
-    const userId = store.state.web3.account
+    const userId = await getAccounts();
     nonce = nonce ? nonce + 1 : 1
 
     pool['communityId'] = stakingFactoryId;
@@ -341,8 +342,8 @@ export const deposit = async (communityId, pid, amount) => {
       reject(e)
       return;
     }
-
-    const a = await contract.getUserPendingRewards(0, store.state.web3.account)
+    const account = await getAccounts();
+    const a = await contract.getUserPendingRewards(0, account)
     const b = await contract.lastRewardBlock()
     const c = await contract.openedPools(0)
     console.log(235412, a.toString() / 1e18, b.toString(), c);
@@ -351,7 +352,7 @@ export const deposit = async (communityId, pid, amount) => {
 
     try{
       console.log('deposit', communityId, pid, amount.toString());
-      const tx = await contract.deposit(pid, store.state.web3.account, amount.toString())
+      const tx = await contract.deposit(pid, account, amount.toString())
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -383,7 +384,8 @@ export const withdraw = async (communityId, pid, amount) => {
     }
 
     try{
-      const tx = await contract.withdraw(pid, store.state.web3.account, amount.toString())
+      const account = await getAccounts();
+      const tx = await contract.withdraw(pid, account, amount.toString())
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -439,13 +441,14 @@ export const monitorUserStakings = async () => {
       let watchers = store.state.web3.watchers
       let watcher = watchers['userStakings']
       watcher && watcher.stop()
+      const account = await getAccounts();
       watcher = createWatcher(pools.map(p => {
         return {
           target: p.communityId,
           call: [
             'getUserStakedAmount(uint8,address)(uint256)',
             p.pid,
-            store.state.web3.account
+            account
           ],
           returns: [
             [p.communityId + '-' + p.pid]
@@ -484,12 +487,13 @@ export const monitorPendingRewards = async () => {
       let watchers = store.state.web3.watchers
       let watcher = watchers['pendingRewards']
       watcher && watcher.stop()
+      const account = await getAccounts();
       watcher = createWatcher(pools.map(p => ({
           target: p.communityId,
           call: [
             'getUserPendingRewards(uint8,address)(uint256)',
             p.pid,
-            store.state.web3.account
+            account
           ],
           returns: [
             [p.communityId + '-' + p.pid]
@@ -529,11 +533,12 @@ export const monitorApprovements = async () => {
       let watchers = store.state.web3.watchers
       let watcher = watchers['approvements']
       watcher && watcher.stop()
+      const account = await getAccounts();
       watcher = createWatcher(pools.map(pool => ({
         target: pool.address,
         call: [
           'allowance(address,address)(uint256)',
-          store.state.web3.account,
+          account,
           erc20HandlerAddress
         ],
         returns: [
@@ -613,11 +618,12 @@ export const monitorUserBalances = async () => {
       let watchers = store.state.web3.watchers
       let watcher = watchers['userBalances']
       watcher && watcher.stop()
+      const account = await getAccounts();
       watcher = createWatcher(allTokens.map(token => ({
         target: token.address,
         call:[
           'balanceOf(address)(uint256)',
-          store.state.web3.account
+          account
         ],
         returns:[
           [token.address]

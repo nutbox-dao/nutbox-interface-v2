@@ -4,8 +4,6 @@ import {
 import {
   BSC_CHAIN_ID,
   RPC_NODE,
-  NUTAddress,
-  MultiAddress,
   Multi_Config
 } from '@/config'
 import Web3 from "web3"
