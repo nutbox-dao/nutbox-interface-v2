@@ -1,6 +1,6 @@
 <template>
   <div class="d-form">
-    <b-form class="custom-form">
+    <div class="custom-form">
       <b-form-group
         id="input-group-0"
         :label="$t('asset.network')"
@@ -73,7 +73,7 @@
         <b-spinner small type="grow" v-show="registring" />
         {{ $t("asset.register") }}
       </button>
-    </b-form>
+    </div>
     <!-- <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div> -->
   </div>
 </template>
@@ -104,7 +104,7 @@ export default {
           name: "Polkadot",
           icon: ASSET_LOGO_URL.polkadot.icon
         },
-        { name: "Kusuma", 
+        { name: "Kusuma",
           icon: ASSET_LOGO_URL.kusama.icon
         }
       ],

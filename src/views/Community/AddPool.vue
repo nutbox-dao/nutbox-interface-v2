@@ -21,7 +21,7 @@
         <div class="divide-box">
           <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
         </div>
-        <b-form class="custom-form pool-form">
+        <div class="custom-form pool-form">
           <b-form-group id="input-group-1"
                         :label="$t('asset.stakingAsset')"
                         label-for="input-1">
@@ -92,7 +92,7 @@
               </button>
             </div>
           </div>
-        </b-form>
+        </div>
       </div>
     </div>
   </div>

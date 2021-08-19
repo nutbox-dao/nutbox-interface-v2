@@ -21,7 +21,7 @@
         <div class="divide-box">
           <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
         </div>
-        <b-form class="custom-form pool-form">
+        <div class="custom-form pool-form">
           <b-form-group id="input-group-2"
                         :label="$t('asset.poolRatios')">
             <div class="ratios-box">
@@ -46,7 +46,7 @@
               </button>
             </div>
           </div>
-        </b-form>
+        </div>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="d-form">
-    <b-form class="custom-form">
+    <div class="custom-form">
       <b-form-group id="input-group-0"
                     :label="$t('asset.network')"
                     label-for="dropdown-1">
@@ -53,7 +53,7 @@
         <b-spinner small type="grow" v-show="registring" />
         {{ $t('asset.register') }}
         </button>
-    </b-form>
+    </div>
     <!-- <div class="text-grey-light font16 mt-3">Assetld:0x1242222xshjdh32721</div> -->
   </div>
 </template>

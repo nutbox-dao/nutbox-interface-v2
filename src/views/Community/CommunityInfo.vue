@@ -25,7 +25,7 @@
       <div class="community-info-card text-left">
         <div class="title font-bold">{{ $t("community.communityInfo") }}</div>
         <!-- community name -->
-        <b-form class="custom-form pl-md-3">
+        <div class="custom-form pl-md-3">
           <b-form-group
             label-cols-md="2"
             content-cols-md="5"
@@ -240,7 +240,7 @@
               {{ $t("community.commit") }}
             </button>
           </b-form-group>
-        </b-form>
+        </div>
       </div>
     </div>
     <!------------------------------------------- tips --------------------------------------------->
