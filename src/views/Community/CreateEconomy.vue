@@ -63,19 +63,19 @@
                     @delete="deleteData"
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">{{ $t('community.startBlock') }}</span>
+            <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
             <b-input placeholder="输入起始区块高度" :disabled="progressData.length>0"
                      v-model="poolForm.start"></b-input>
           </div>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">{{ $t('community.stopBlock') }}</span>
+            <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full" placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
               <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
             </b-input-group>
           </div>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold mr-3">{{ $t('community.rewardAmount') }}</span>
+            <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
             <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
           </div>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"

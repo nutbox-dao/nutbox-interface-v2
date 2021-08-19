@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form class="custom-form c-form-label">
+    <div class="custom-form c-form-label">
       <b-form-group
         id="input-group-name"
         :label="$t('asset.tokenName')"
@@ -59,7 +59,7 @@
         <b-spinner small type="grow" v-show="deploying" />
         {{ $t('asset.deploy') }}
       </button>
-    </b-form>
+    </div>
     <b-modal
       v-model="modalVisible"
       modal-class="custom-modal"

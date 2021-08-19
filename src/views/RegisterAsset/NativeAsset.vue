@@ -1,6 +1,6 @@
 <template>
   <div class="tab-card">
-    <b-form class="custom-form text-left">
+    <div class="custom-form text-left">
       <b-form-group
         id="input-group-1"
         :label="$t('asset.homeLocation')"
@@ -26,7 +26,7 @@
         <b-spinner small type="grow" v-show="registring" />
         {{ $t('asset.register') }}
       </button>
-    </b-form>
+    </div>
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     canRegister() {
-      return this.tokenAddress && this.tokenAddress.length > 0 
+      return this.tokenAddress && this.tokenAddress.length > 0
     }
   },
   methods: {
@@ -85,7 +85,7 @@ export default {
       }finally{
         this.registring = false
       }
-      
+
     }
   },
   mounted () {

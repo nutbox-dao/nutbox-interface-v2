@@ -64,6 +64,7 @@ export default {
   width: 1.2rem;
   height: 1.2rem;
   margin-left: .2rem;
+  border-radius: 1.2rem;
 }
 .desc {
   margin-bottom: 1rem;
