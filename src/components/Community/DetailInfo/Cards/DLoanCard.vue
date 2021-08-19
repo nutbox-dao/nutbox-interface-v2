@@ -55,28 +55,33 @@
       </div>
     </div>
     <div class="text-center">
-      <button
-        class="primary-btn"
-        :disabled="!isConnected"
-        v-show="status === 'Active'"
-        @click="showContribute = true"
-      >
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.contribute") }}
+      <button v-if="!!countDown" disabled='true' class="primary-btn">
+        {{ countDown }}
       </button>
-      <button
-        class="primary-btn"
-        :disabled="!isConnected"
-        v-show="status === 'Retired'"
-        @click="showWithdraw = true"
-      >
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.withdraw") }}
-      </button>
-      <button class="primary-btn" disabled v-show="status === 'Completed'">
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.completed") }}
-      </button>
+      <template v-else>  
+        <button
+          class="primary-btn"
+          :disabled="!isConnected"
+          v-show="status === 'Active'"
+          @click="showContribute = true"
+        >
+          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          {{ $t("cl.contribute") }}
+        </button>
+        <button
+          class="primary-btn"
+          :disabled="!isConnected"
+          v-show="status === 'Retired'"
+          @click="showWithdraw = true"
+        >
+          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          {{ $t("cl.withdraw") }}
+        </button>
+        <button class="primary-btn" disabled v-show="status === 'Completed'">
+          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          {{ $t("cl.completed") }}
+        </button>
+      </template>
     </div>
     <!-- <ConnectWallet v-else /> -->
     <b-modal
@@ -116,6 +121,7 @@ import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus } from '@/utils/commen/crowdloan'
 import { formatCountdown, handleApiErrCode } from '@/utils/helper'
+import { BLOCK_SECOND } from "@/constant"
 import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
 
@@ -177,7 +183,7 @@ export default {
   },
   computed: {
     ...mapState(['lang']),
-    ...mapState('web3', ['pendingRewards']),
+    ...mapState('web3', ['pendingRewards', 'blockNum']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -228,7 +234,7 @@ export default {
       try {
         if (!this.getFundInfo) return
         const end = parseInt(this.getFundInfo.end)
-        return formatCountdown(end, this.currentBlockNum)
+        return formatCountdown(end, this.currentBlockNum, BLOCK_SECOND)
       } catch (e) {
         console.error('err', e)
         return 'Loading'
@@ -247,6 +253,10 @@ export default {
       } catch (e) {
         return '0.0%'
       }
+    },
+    countDown (){
+      if (!this.card?.firstBlock) return;
+      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
     }
   },
   mounted () {

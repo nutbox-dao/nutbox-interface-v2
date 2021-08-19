@@ -12,6 +12,7 @@ import {
 import { getCToken } from './asset'
 import BN from 'bn.js'
 import { getWeb3 } from './web3'
+import { getAccounts } from '@/utils/web3/account'
 
 /**
  * Get community admin's staking factory id

@@ -24,19 +24,26 @@
       <span style="color: #717376;" class="font-bold">HIVE POWER</span>
       <span style="color: #BDBFC2"> DELEGATED</span>
     </div>
-    <div class="btn-row mb-4" v-if="hiveLogin">
-      <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
-      <div class="right-box">
-        <button class="outline-btn" @click="decrease">-</button>
-        <button class="outline-btn" @click="increase">+</button>
+
+    <b-button
+        variant="primary" :disabled='true' v-if="!!countDown">
+        {{ countDown }}
+    </b-button>
+    <template v-else>
+      <div class="btn-row mb-4" v-if="hiveLogin">
+        <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
+        <div class="right-box">
+          <button class="outline-btn" @click="decrease">-</button>
+          <button class="outline-btn" @click="increase">+</button>
+        </div>
       </div>
-    </div>
-   <ConnectWalletBtn
-    class="op-bottom"
-    v-if="!hiveLogin"
-    type='HIVE'
-    @hiveLogin="showHiveLogin = true"
-  />
+    <ConnectWalletBtn
+      class="op-bottom"
+      v-if="!hiveLogin"
+      type='HIVE'
+      @hiveLogin="showHiveLogin = true"
+    />
+  </template>
     <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> {{ tvl | amountForm }} </span>
@@ -62,11 +69,11 @@
 </template>
 
 <script>
-import { vestsToHive } from '@/utils/hive/hive'
 import DDelegateModal from '@/components/ToolsComponents/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
+import { formatCountdown } from '@/utils/helper'
 
 export default {
   name: 'DDelegateCard',
@@ -82,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'totalStakings']),
+    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'totalStakings', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -101,6 +108,10 @@ export default {
       const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
       if(!tvl) return 0;
       return this.vestsToHive * (tvl.toString() / 1e6)
+    },
+    countDown () {
+      if (!this.card?.firstBlock) return;
+      return formatCountdown(this.card.firstBlock, this.blockNum, 3);
     }
   },
   data () {

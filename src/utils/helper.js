@@ -1,6 +1,5 @@
 import {
-  TIME_PERIOD,
-  BLOCK_SECOND
+  TIME_PERIOD
 } from "@/constant"
 import {
   $t
@@ -84,13 +83,13 @@ export function getDateString(now, timezone, extra = 0) {
   return now.toISOString().replace('T', ' ').substring(0, 19)
 }
 
-// 竞拍倒计时
-export function formatCountdown(end, currentBlockNum) {
+// 倒计时
+export function formatCountdown(end, currentBlockNum, blockInterval) {
   try {
-    if (!end || !currentBlockNum) return 'Loading'
+    if (!end || !currentBlockNum) return null;
     const diff = end - parseInt(currentBlockNum);
     if (diff > 0) {
-      const secs = diff * BLOCK_SECOND;
+      const secs = diff * blockInterval;
       const month = Math.floor(secs / TIME_PERIOD["MONTH"]);
       const day = Math.floor(
         (secs % TIME_PERIOD["MONTH"]) / TIME_PERIOD["DAY"]

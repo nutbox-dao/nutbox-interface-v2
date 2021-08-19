@@ -42,14 +42,14 @@
       <b-button
         variant="primary"
         @click="approve"
-        :disabled="isApproving || loadingApprovements"
+        :disabled="isApproving || loadingApprovements || !!countDown"
       >
         <b-spinner
           small
           type="grow"
           v-show="isApproving || loadingApprovements"
         ></b-spinner>
-        {{ $t("commen.approveContract") }}
+        {{ countDown ? countDown : $t("commen.approveContract") }}
       </b-button>
     </template>
     <div class="detail-info-box">
@@ -83,7 +83,7 @@
 import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHomeChainAssetModal";
 import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
-import { handleApiErrCode } from "@/utils/helper";
+import { handleApiErrCode, formatCountdown } from "@/utils/helper";
 
 export default {
   name: "DDelegateCard",
@@ -103,7 +103,8 @@ export default {
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings"
+      "totalStakings",
+      "blockNum"
     ]),
     pendingReward() {
       const pendingBn =
@@ -127,6 +128,13 @@ export default {
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    //if community not start, show count down time
+    countDown () {
+      if (!this.card?.firstBlock){
+        return null;
+      }
+      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
     }
   },
   data() {
@@ -176,7 +184,9 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(this.card);
+  },
 };
 </script>
 
