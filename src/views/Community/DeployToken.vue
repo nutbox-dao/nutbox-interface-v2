@@ -6,8 +6,8 @@
       </div>
     </div>
     <div class="tab-card">
-      <div class="tabs tabs-2 font16">
-        <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span>
+      <div class="tabs tabs-1 font16">
+        <!-- <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span> -->
         <span :class="activeTab===1?'active':''" @click="activeTab=1">Mintable ERC20</span>
         <!-- <p></p> -->
       </div>
@@ -34,7 +34,7 @@ export default {
   components: { DeployForm },
   data () {
     return {
-      activeTab: 0
+      activeTab: 1
     }
   }
 }
