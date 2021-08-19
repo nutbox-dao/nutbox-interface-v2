@@ -17,7 +17,7 @@ export const getAccounts = async () => {
     let account = accounts[0]
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
-    return accounts
+    return accounts[0]
 }
 
 /**

@@ -35,6 +35,7 @@ export default {
     ctokenApprovement: false,
     devAddress: '',
     devRatio: 0,
+    ctokenBalances: {},
 
     // loading state
     loadingPendingRewards: true,
@@ -46,6 +47,7 @@ export default {
     loadingApprovementCtoken: true,
     loadingDevInfo: true,
     loadingCommunity: true,
+    loadingCtokenBalances: true,
 
   },
   mutations: {
@@ -160,6 +162,12 @@ export default {
     },
     saveLoadingCommunity: (state, loadingCommunity) => {
       state.loadingCommunity = loadingCommunity
+    },
+    saveLoadingCtokenBalances: (state, loadingCtokenBalances) => {
+      state.loadingCtokenBalances = loadingCtokenBalances
+    },
+    saveCtokenBalances: (state, ctokenBalances) => {
+      state.ctokenBalances = ctokenBalances
     }
   },
   getters: {

@@ -107,12 +107,13 @@ export const getMyCommunityInfo = async (update=false) => {
 export const getAllCommunities = async (update=false) => {
     return new Promise(async  (resolve, reject) => {
         if (!update && store.state.web3.allCommunities && store.state.web3.allCommunities.length > 0) {
-            resolve(store.state.allCommunities)
+            resolve(store.state.web3.allCommunities)
             return;
         }
         try{
             const communities = await gac()
             store.commit('web3/saveAllCommunities', communities)
+            console.log(2, communities);
             resolve(communities)
         }catch(e){
             console.log('Get all community fail', e);

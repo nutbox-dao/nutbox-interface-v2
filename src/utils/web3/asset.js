@@ -1,12 +1,17 @@
 import {
   getContract,
-  getAbi,
   contractAddress
 } from "./contract";
 import store from '@/store'
 import {
+  createWatcher,
+  aggregate
+} from '@makerdao/multicall'
+import {
   addressToHex
 } from '@/utils/commen/account'
+import { getAllCommunities } from '@/utils/web3/community'
+import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
 } from "ethers";
@@ -14,7 +19,6 @@ import {
   getWeb3
 } from './web3'
 import {
-  getProvider,
   waitForTx
 } from './ethers'
 import {
@@ -22,7 +26,6 @@ import {
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME, Multi_Config } from "../../config";
-import { aggregate } from '@makerdao/multicall'
 
 /**
  * Judge asset wheather Homechain assets
@@ -497,6 +500,58 @@ export const getAllTokenFromBackend = async (update = false) => {
       resolve(allTokens)
     } catch (e) {
       reject(500)
+    }
+  })
+}
+
+/**
+ * monitor all ctoken balance of user
+ * used in wallet
+ */
+export const monitorCtokenBalance = async (update = false) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let ctokenBalances = store.state.web3.ctokenBalances
+      if (ctokenBalances.length > 0 && !update){
+        resolve();
+        return;
+      }
+      const allCommunities = await getAllCommunities()
+      let watchers = store.state.web3.watchers
+      let watcher = watchers['ctoken']
+      store.commit('web3/saveLoadingCtokenBalances', true)
+      watcher && watcher.stop()
+      const account = await getAccounts();
+      watcher = createWatcher(allCommunities.map(c => ({
+        target: c.ctoken,
+        call:[
+          'balanceOf(address)(uint256)',
+          account
+        ],
+        returns:[
+          [c.ctoken]
+        ]
+      })), Multi_Config)
+      watcher.batch().subscribe(updates => {
+        updates.map(u => {
+          const t = allCommunities.filter(c => c.ctoken === u.type)[0]
+          ctokenBalances[u.type] = {
+            logo: t.tokenIcon,
+            balance: u.value,
+            name: t.tokenName,
+            symbol: t.tokenSymbol
+          }
+        })
+        console.log('Updates ctoken balances', ctokenBalances);
+        store.commit('web3/saveLoadingCtokenBalances', false)
+        store.commit('web3/saveCtokenBalances', {...ctokenBalances})
+      })
+      watcher.start()
+      watchers['ctoken'] = watcher
+      store.commit('web3/saveWatchers', {...watchers})
+      resolve()
+    }catch (e) {
+      reject(e);
     }
   })
 }
