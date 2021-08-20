@@ -92,8 +92,7 @@ export function blockTime(start, end) {
   console.log(start, end);
   if (start === end) return $t('commen.now')
   const diff = (end - start) * BLOCK_SECOND
-  console.log(getDateString(null, null, diff));
-  return getDateString(null, null, diff)
+  return getDateString(null, null, diff) + ' UTC'
 }
 
 // 倒计时

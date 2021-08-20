@@ -20,7 +20,7 @@
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
                   {{ $t('asset.notRegister') }}
-                  <router-link to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
+                  <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
                 </div>
               </div>
             </template>
@@ -41,7 +41,7 @@
             <div class="" style="line-height: 1.5rem">
               {{ $t('asset.notRegister') }}
               <router-link class="text-primary"
-                           to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
+                           to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </div>
         </div>
@@ -157,7 +157,6 @@ export default {
   async mounted () {
     this.assets = await getRegitryAssets()
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
-    console.log(234, this.concatAddressOptions[0].items)
     this.assetLoading = false
     this.poolForm.start = this.blockNum + 100
     this.startTime = blockTime(0, 100)
@@ -182,12 +181,10 @@ export default {
     },
     startChange(e){
       const value = e.target.value;
-      console.log(value);
       this.startTime = blockTime(this.blockNum, value)
     },
     stopChange(e){
       const value = e.target.value;
-      console.log(value);
       this.stopTime = blockTime(this.blockNum, value)
     },
     max () {
@@ -220,7 +217,6 @@ export default {
       this.poolForm.start = Number(barData.stopHeight) + 1
       this.poolForm.end = ''
       this.poolForm.reward = ''
-      console.log(this.progressData)
     },
     updateProgressColor () {
       const count = this.progressData.length
@@ -231,7 +227,6 @@ export default {
     },
     async confirmDeploy () {
       this.form.poolData = this.progressData
-      console.log(this.form.assetId, this.form.poolData);
       if (!this.form.assetId || this.form.poolData.length === 0) {
         this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
           title: this.$t('tip.tips'),
@@ -317,7 +312,8 @@ export default {
   }
   .block-tip{
     color: red;
-    padding-top: -2rem;
+    margin-left: .5rem;
+    font-size: .8rem;
   }
 }
 

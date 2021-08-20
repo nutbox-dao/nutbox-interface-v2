@@ -307,6 +307,7 @@ module.exports = {
     network: "网络",
     native: "主链资产",
     foreign:"跨链资产",
+    registerCtokenTitle: '注册您的社区资产',
     registerTitle: '注册您的专属资产',
     yourSteemAccount: "你的Steem/Hive账号",
     assetName: "为该资产取个名字",

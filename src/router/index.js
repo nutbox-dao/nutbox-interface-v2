@@ -19,6 +19,7 @@ import PoolsDashboard from '@/views/Community/PoolsDashboard'
 import AddPool from '@/views/Community/AddPool'
 import UpdatePool from '@/views/Community/UpdatePool'
 import Register from '@/views/RegisterAsset/Register'
+import RegisterCtoken from '@/views/RegisterAsset/RegisterCtoken'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
 import CommunityInfo from '@/views/Community/CommunityInfo'
@@ -138,6 +139,10 @@ const routes = [
       {
         path: 'community-info',
         component: CommunityInfo
+      },
+      {
+        path: 'register-ctoken',
+        component: RegisterCtoken,
       },
       {
         path: 'register',

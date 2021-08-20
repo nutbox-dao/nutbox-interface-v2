@@ -1,6 +1,6 @@
 <template>
   <div class="page-view-content">
-      <div class="view-top-header mb-4">
+    <div class="view-top-header mb-4" v-if="!noTitle">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
         {{ $t('asset.deployYourToken') }}
       </div>
@@ -32,6 +32,12 @@ import DeployForm from '@/components/Community/DeployForm'
 export default {
   name: 'Deploy',
   components: { DeployForm },
+  props: {
+    noTitle: {
+      type: Boolean,
+      default: false
+    },
+  },
   data () {
     return {
       activeTab: 1
