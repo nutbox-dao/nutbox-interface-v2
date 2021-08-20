@@ -18,7 +18,7 @@
           </div>
           <div class="custom-control" style="line-height: 1.5rem">
             {{ $t('asset.notDeploy') }}
-            <router-link to="/community/deploy-token">{{ $t('asset.deployOne') }}</router-link>
+            <a @click="showDeploy = true">{{ $t('asset.deployOne') }}</a>
           </div>
         </div>
       </b-form-group>
@@ -40,7 +40,8 @@ export default {
   data() {
     return {
       tokenAddress: null,
-      registring: false
+      registring: false,
+      showDeploy: false
     };
   },
   computed: {
@@ -102,7 +103,6 @@ export default {
 .tab-card {
   @include card(2.4rem 1.2rem, white, hidden, auto);
   max-width: 500px;
-  min-height: 27rem;
   margin: auto;
 }
 </style>

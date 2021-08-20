@@ -7,21 +7,18 @@
     </div>
     <!-- <div class="page-view-subtitle">Choose asset type</div> -->
     <div class="scroll-content" style="padding-top:3rem;">
-        <NativeAsset :noDeploy='true'/>
-        <DeployToken :noTitle='true'/>
+        <NativeAsset/>
     </div>
   </div>
 </template>
 
 <script>
 import NativeAsset from './NativeAsset.vue'
-import DeployToken from '@/views/Community/DeployToken'
 
 export default {
   name: "RegisterCtoken",
   components: {
-    NativeAsset,
-    DeployToken
+    NativeAsset
   },
 };
 </script>
