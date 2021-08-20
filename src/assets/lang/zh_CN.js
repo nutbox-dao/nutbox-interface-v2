@@ -269,6 +269,8 @@ module.exports = {
     tokenEra: "资产分发策略",
     currentBlock: '当前区块高度:',
     startBlock:'起始区块',
+    inputStopBlock: '输入结束区块高度',
+    inputBlockReward: '输入区间每区块奖励',
     stopBlock:'结束区块',
     rewardAmount: '分发数量',
     comfirmAdd:'确认添加',

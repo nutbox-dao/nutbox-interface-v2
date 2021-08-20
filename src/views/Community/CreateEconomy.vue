@@ -70,14 +70,20 @@
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
             <b-input-group class="d-flex flex-between-center">
-              <b-input class="flex-full" placeholder="输入结束区块高度" v-model="poolForm.end"></b-input>
+              <b-input class="flex-full"  :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
               <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
             </b-input-group>
           </div>
+          <span class="block-tip">
+            {{ startTime }}
+          </span>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
-            <b-input placeholder="输入该区间的奖励金额" v-model="poolForm.reward"></b-input>
+            <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
           </div>
+          <span class="block-tip">
+            {{ stopTime }}
+          </span>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
                   @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
         </div>
@@ -110,6 +116,8 @@ export default {
       deploying: false,
       maxBlock: MaxBlockNum,
       isMint: false,
+      startTime: '',
+      stopTime: '',
       concatAddressOptions: [
         {
           categoryName: 'personal',
@@ -295,6 +303,10 @@ export default {
     span {
       white-space: nowrap;
     }
+  }
+  .block-tip{
+    color: red;
+    padding-top: -2rem;
   }
 }
 
