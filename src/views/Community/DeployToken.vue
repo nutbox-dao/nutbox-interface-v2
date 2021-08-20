@@ -6,12 +6,12 @@
       </div>
     </div>
     <div class="tab-card">
-      <div class="tabs tabs-1 font16">
+      <div class="tabs tabs-1 font16 mb-3">
         <!-- <span :class="activeTab===0?'active':''" @click="activeTab=0">ERC20</span> -->
         <span :class="activeTab===1?'active':''" @click="activeTab=1">Mintable ERC20</span>
         <!-- <p></p> -->
       </div>
-      <div class="h-line"></div>
+<!--      <div class="h-line"></div>-->
       <div class="text-left form-box">
         <div class="warning-tip" v-if="activeTab===1">
           <i class="warning-icon"></i>
@@ -55,7 +55,7 @@ export default {
 .warning-tip {
   background: #FFF4E5;
   border-radius: .4rem;
-  padding: .4rem .8rem;
+  padding: .6rem .8rem;
   display: flex;
   align-items: flex-start;
   margin-bottom: .8rem;
