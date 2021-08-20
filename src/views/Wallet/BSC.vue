@@ -1,6 +1,24 @@
 <template>
   <div class="row">
     <div class="col-xl-4 col-md-6 mb-4 ">
+      <div class="wallet-card">
+        <div class="top flex-between-center">
+          <img src="~@/static/images/copy.svg" alt="" class="logo" />
+          <div class="balance-right flex-full">
+            <div class="d-flex justify-content-between align-items-start font-bold">
+              <div class="d-flex flex-column align-items-start justify-content-between">
+                <div class="font16">BNB</div>
+                <div class="font12 text-grey-light">
+                  <span>
+                    BNB
+                  </span>
+                </div>
+              </div>
+              <span class="font16">{{ balance.toString() | amountForm }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-for="(v, k, i) in ctokenBalances" :key="i" class="wallet-card">
         <div class="top flex-between-center" v-if="v.balance.toString().length > 15">
           <img :src="v.logo" alt="" class="logo" />
@@ -29,13 +47,14 @@
 </template>
 
 <script>
-import { monitorCtokenBalance } from '@/utils/web3/asset'
+import { monitorCtokenBalance, getBalance } from '@/utils/web3/asset'
 import { mapState } from 'vuex'
 
 export default {
    name: 'BSCWallet',
   data() {
     return {
+      balance: 0
     };
   },
   computed: {
@@ -72,8 +91,10 @@ export default {
       })
     }
   },
-  mounted () {
+  async mounted () {
     monitorCtokenBalance(true);
+    const balance = await getBalance()
+    this.balance = balance.toString() / 1e18
   },
 };
 </script>

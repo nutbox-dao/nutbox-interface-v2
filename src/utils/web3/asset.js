@@ -3,6 +3,7 @@ import {
   contractAddress
 } from "./contract";
 import store from '@/store'
+import {  getProvider } from './ethers'
 import {
   createWatcher,
   aggregate
@@ -554,4 +555,14 @@ export const monitorCtokenBalance = async (update = false) => {
       reject(e);
     }
   })
+}
+
+/**
+ * get home chain balance
+ * @returns 
+ */
+export const getBalance = async () => {
+  const provider = await getProvider()
+  const account = await getAccounts()
+  return await provider.getBalance(account);
 }

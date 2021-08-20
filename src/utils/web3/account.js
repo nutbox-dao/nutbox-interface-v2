@@ -2,7 +2,7 @@ import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce, monitorCommunity } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
-import { getRegitryAssets } from './asset.js'
+import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 
 /**
  * Get metamask accounts
@@ -37,6 +37,7 @@ export const accountChanged = async () => {
         }).catch(console.error)
         getMyOpenedPools(true)
         getNonce(true)
+        monitorCtokenBalance(true)
         monitorPools()
     })
 }
