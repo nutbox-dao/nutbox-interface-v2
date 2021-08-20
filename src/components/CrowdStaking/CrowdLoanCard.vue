@@ -122,7 +122,6 @@ import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus } from '@/utils/commen/crowdloan'
 import { formatCountdown, handleApiErrCode } from '@/utils/helper'
-import { BLOCK_SECOND } from "@/constant"
 import { withdrawReward } from "@/utils/web3/pool";
 
 export default {
@@ -238,7 +237,7 @@ export default {
       try {
         if (!this.getFundInfo) return
         const end = parseInt(this.getFundInfo.end)
-        return formatCountdown(end, this.currentBlockNum, BLOCK_SECOND)
+        return formatCountdown(end, this.currentBlockNum, 6)
       } catch (e) {
         console.error('err', e)
         return 'Loading'

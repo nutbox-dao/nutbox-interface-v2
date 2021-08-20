@@ -20,6 +20,7 @@ module.exports = {
     input: '输入',
     copy: '复制',
     complete: '完成',
+    now: '现在',
 
     whitePaper: '白皮书',
     nps: 'Nutbox提案系统',

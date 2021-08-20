@@ -64,26 +64,26 @@
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
-            <b-input placeholder="输入起始区块高度" :disabled="progressData.length>0"
+            <b-input @keyup="startChange($event)" placeholder="输入起始区块高度" :disabled="progressData.length>0"
                      v-model="poolForm.start"></b-input>
-          </div>
-          <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
-            <b-input-group class="d-flex flex-between-center">
-              <b-input class="flex-full"  :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
-              <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
-            </b-input-group>
           </div>
           <span class="block-tip">
             {{ startTime }}
           </span>
           <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
-            <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
+            <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
+            <b-input-group class="d-flex flex-between-center">
+              <b-input class="flex-full" @keyup="stopChange($event)"  :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+              <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
+            </b-input-group>
           </div>
           <span class="block-tip">
             {{ stopTime }}
           </span>
+          <div class="flex-between-center c-input-group">
+            <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
+            <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
+          </div>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
                   @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
         </div>
@@ -102,7 +102,7 @@ import Dropdown from '@/components/ToolsComponents/Dropdown'
 import { mapState } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
-import { handleApiErrCode } from '../../utils/helper'
+import { handleApiErrCode, blockTime } from '../../utils/helper'
 import { MaxBlockNum } from '@/constant'
 
 export default {
@@ -159,7 +159,8 @@ export default {
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     console.log(234, this.concatAddressOptions[0].items)
     this.assetLoading = false
-    this.poolForm.start = this.blockNum + 1
+    this.poolForm.start = this.blockNum + 100
+    this.startTime = blockTime(0, 100)
   },
   methods: {
     setSelectedData (data) {
@@ -178,6 +179,16 @@ export default {
         this.poolForm.start = this.progressData[this.progressData.length - 1].stopHeight
       }
       this.end = ''
+    },
+    startChange(e){
+      const value = e.target.value;
+      console.log(value);
+      this.startTime = blockTime(this.blockNum, value)
+    },
+    stopChange(e){
+      const value = e.target.value;
+      console.log(value);
+      this.stopTime = blockTime(this.blockNum, value)
     },
     max () {
       this.poolForm.end = this.maxBlock

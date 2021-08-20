@@ -1,5 +1,6 @@
 import {
-  TIME_PERIOD
+  TIME_PERIOD,
+  BLOCK_SECOND
 } from "@/constant"
 import {
   $t
@@ -79,8 +80,20 @@ export const formatUserAddress = (address, long = true) => {
 export function getDateString(now, timezone, extra = 0) {
   now = now || new Date()
   const offset = timezone != null ? timezone * 60 : 0
-  now = new Date(now.getTime() + (offset + extra) * 60 * 1000)
+  now = new Date(now.getTime() + (offset + extra) * 1000)
   return now.toISOString().replace('T', ' ').substring(0, 19)
+}
+
+// block time 
+export function blockTime(start, end) {
+  start = parseInt(start)
+  end = parseInt(end)
+  if (start > end) return '';
+  console.log(start, end);
+  if (start === end) return $t('commen.now')
+  const diff = (end - start) * BLOCK_SECOND
+  console.log(getDateString(null, null, diff));
+  return getDateString(null, null, diff)
 }
 
 // 倒计时
