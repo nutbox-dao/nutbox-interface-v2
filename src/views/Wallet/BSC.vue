@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-xl-4 col-md-6 mb-4 ">
+    <div class="col-xl-4 col-md-6 mb-4">
       <div class="wallet-card">
         <div class="top flex-between-center">
           <img src="~@/static/images/copy.svg" alt="" class="logo" />
@@ -19,7 +19,9 @@
           </div>
         </div>
       </div>
-      <div v-for="(v, k, i) in ctokenBalances" :key="i" class="wallet-card">
+    </div>
+    <div class="col-xl-4 col-md-6 mb-4 " v-for="(v, k, i) in ctokenBalances" :key="i">
+      <div  class="wallet-card">
         <div class="top flex-between-center" v-if="v.balance.toString().length > 15">
           <img :src="v.logo" alt="" class="logo" />
           <div class="balance-right flex-full">
