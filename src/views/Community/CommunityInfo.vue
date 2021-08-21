@@ -457,7 +457,8 @@ import {
   chargeCommunityBalance,
   approveCommunityBalance,
   setDevAddress,
-  setDevRatio
+  setDevRatio,
+  monitorCommunity
 } from "@/utils/web3/community";
 import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
@@ -537,6 +538,7 @@ export default {
         this.noCommunity = true;
         return;
       }
+      this.form = communityInfo;
       this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
       this.cToken = cToken
@@ -547,7 +549,6 @@ export default {
         this.form.id = communityInfo.id;
         return;
       }
-      this.form = communityInfo;
 
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
@@ -723,7 +724,7 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
-        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true)])
+        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true), monitorCommunity()])
         await sleep(1);
         this.$router.push("/community/pool-dashboard");
       } catch (e) {

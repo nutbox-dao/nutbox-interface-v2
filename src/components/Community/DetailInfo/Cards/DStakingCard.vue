@@ -39,17 +39,21 @@
       </div>
     </div>
     <template v-else>
+      <b-button variant="primary" v-if="!!countDown" :disabled='true'>
+        {{ countDown }}
+      </b-button>
       <b-button
+      v-else
         variant="primary"
         @click="approve"
-        :disabled="isApproving || loadingApprovements || !!countDown"
+        :disabled="isApproving || loadingApprovements"
       >
         <b-spinner
           small
           type="grow"
           v-show="isApproving || loadingApprovements"
         ></b-spinner>
-        {{ countDown ? countDown : $t("commen.approveContract") }}
+        {{ $t("commen.approveContract") }}
       </b-button>
     </template>
     <div class="detail-info-box">

@@ -217,6 +217,8 @@ export default {
       this.poolForm.start = Number(barData.stopHeight) + 1
       this.poolForm.end = ''
       this.poolForm.reward = ''
+      this.stopTime = blockTime(this.blockNum, 0)
+      this.startTime = blockTime(this.blockNum, this.poolForm.start)
     },
     updateProgressColor () {
       const count = this.progressData.length
