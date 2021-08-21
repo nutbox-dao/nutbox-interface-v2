@@ -77,11 +77,11 @@ const assetType = (address) => {
 export const getRegitryAssets = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     let assets = store.state.web3.allAssetsOfUser
-    if (!update && assets) {
+    if (!update && assets && Object.keys(assets).length > 0) {
       resolve(assets)
       return;
     }
-    const account = store.state.web3.account
+    const account = await getAccounts()
     let contract;
     try{
       contract = await getContract('RegistryHub', null);
@@ -98,7 +98,6 @@ export const getRegitryAssets = async (update = false) => {
       }
       // get register assets
       assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
-
       // get assets contract and type
       const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
       assets = assets.map((asset, index) => ({
@@ -307,8 +306,6 @@ function checkAssetIfRegister(assetId){
  */
 export const registerHomeChainAsset = async (assetAddress) => {
   return new Promise(async (resolve, reject) => {
-    // validate asset address
-
       // regitster asset
       let contract;
       try{
@@ -465,8 +462,8 @@ export const deployERC20 = async ({
     try {
       const contract = await getContract('ERC20Factory', null, false)
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
-      contract.on('CreateNewERC20', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
-        console.log(_tokenAddress, _name, _symbol, _isMintable);
+      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
+        console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
         if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
           resolve(_tokenAddress)
           return;

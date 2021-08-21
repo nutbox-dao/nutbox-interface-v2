@@ -89,8 +89,8 @@ export function blockTime(start, end) {
   start = parseInt(start)
   end = parseInt(end)
   if (start > end) return '';
-  console.log(start, end);
   if (start === end) return $t('commen.now')
+  if (end - start > 9999999999) return "";
   const diff = (end - start) * BLOCK_SECOND
   return getDateString(null, null, diff) + ' UTC'
 }
@@ -99,7 +99,7 @@ export function blockTime(start, end) {
 export function formatCountdown(end, currentBlockNum, blockInterval) {
   try {
     if (!end || !currentBlockNum) return null;
-    const diff = end - parseInt(currentBlockNum);
+    const diff = parseInt(end) - parseInt(currentBlockNum);
     if (diff > 0) {
       const secs = diff * blockInterval;
       const month = Math.floor(secs / TIME_PERIOD["MONTH"]);

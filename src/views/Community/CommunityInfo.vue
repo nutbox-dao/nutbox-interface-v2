@@ -48,6 +48,7 @@
               v-model="form.website"
               :placeholder="$t('community.inputLink')"
             ></b-form-input>
+            <span>{{ $t('cl.optional') }}</span>
           </b-form-group>
           <!-- community description -->
           <b-form-group
@@ -690,8 +691,6 @@ export default {
       let tips = null;
       if (!name || name.length === 0) {
         tips = this.$t("tip.needName");
-      } else if (!website || website.length === 0) {
-        tips = this.$t("tip.needWebsit");
       } else if (!description || description.length === 0) {
         tips = this.$t("tip.needDescription");
       } else if (!icon || icon.length === 0) {

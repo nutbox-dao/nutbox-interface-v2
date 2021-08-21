@@ -20,7 +20,7 @@
             <div class="custom-control" style="line-height: 1.5rem">
               {{ $t('asset.notDeploy') }}
               <span class="text-primary" style="cursor: pointer"
-                    @click="showDeploy = true">{{ $t('asset.deployOne') }}</span>
+                    @click="showDeploy = !showDeploy">{{ $t('asset.deployOne') }}</span>
             </div>
           </div>
         </b-form-group>
@@ -41,7 +41,7 @@
             specific address, also burn them from a specific address.
           </div>
         </div>
-        <DeployForm :isMintable="activeTab===1"/>
+        <DeployForm :isMintable="true" @deployed="deployed"/>
       </div>
     </div>
   </div>
@@ -69,6 +69,10 @@ export default {
     }
   },
   methods: {
+    deployed(address){
+      this.showDeploy = false;
+      this.tokenAddress = address
+    },
     async registry() {
       // validate token
       this.registring = true
@@ -91,6 +95,7 @@ export default {
           // update assets cache
           await getRegitryAssets(true)
           this.tokenAddress = ''
+          this.$router.go(-1);
         }else{
           this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
             title: this.$t('tip.error'),

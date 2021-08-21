@@ -8,8 +8,9 @@
       >
         <b-form-input
           id="input-name"
+          @keyup="nameFilled"
           v-model="form.name"
-          :placeholder="$t('asset.inputTokenName')"
+          placeholder='e.g. "Bitcoin", "Ethereum"'
         ></b-form-input>
       </b-form-group>
       <b-form-group
@@ -19,8 +20,9 @@
       >
         <b-form-input
           id="input-symbol"
+          @keyup="symbolFilled"
           v-model="form.symbol"
-          :placeholder="$t('asset.inputTokenSymbol')"
+          placeholder='e.g. "BTC", "ETH"'
         ></b-form-input>
       </b-form-group>
       <b-form-group
@@ -166,6 +168,17 @@ export default {
     }
   },
   methods: {
+    nameFilled() {
+      if (this.form.name.length > 20) {
+        this.form.name = this.form.name.slice(0, 20)
+      }
+    },
+    symbolFilled(){
+      if (this.form.symbol.length > 6){
+        this.form.symbol = this.form.symbol.slice(0, 6)
+      }
+        this.form.symbol = this.form.symbol.toUpperCase()
+    },
     async deploy () {
       if (!this.logoUrl || this.logoUrl.length === 0) {
         this.$bvToast.toast(this.$t('tip.uploadLogo'), {
@@ -250,7 +263,10 @@ export default {
       })
     },
     confirmDeploy () {
-      this.$router.replace('/community/register/native?tokenAddress=' + this.tokenAddress)
+      console.log(this.modalVisible);
+      this.modalVisible = false;
+      console.log(this.modalVisible);
+      this.$emit('deployed', this.tokenAddress);
     }
   }
 }

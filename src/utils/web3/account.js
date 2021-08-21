@@ -8,8 +8,8 @@ import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
  * Get metamask accounts
  * @returns all accounts
  */
-export const getAccounts = async () => {
-    if (store.state.web3.account) {
+export const getAccounts = async (update=false) => {
+    if (store.state.web3.account && !update) {
         return store.state.web3.account;
     }
     const metamask = await getEthWeb()

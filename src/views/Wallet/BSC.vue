@@ -3,7 +3,7 @@
     <div class="col-xl-4 col-md-6 mb-4">
       <div class="wallet-card">
         <div class="top flex-between-center">
-          <img src="~@/static/images/copy.svg" alt="" class="logo" />
+          <img src="~@/static/images/tokens/bnb.png" alt="" class="logo" />
           <div class="balance-right flex-full">
             <div class="d-flex justify-content-between align-items-start font-bold">
               <div class="d-flex flex-column align-items-start justify-content-between">

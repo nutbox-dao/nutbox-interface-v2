@@ -149,7 +149,7 @@ import {
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
 import { setupNetwork, chainChanged, test } from './utils/web3/web3'
-import { accountChanged } from './utils/web3/account'
+import { accountChanged, getAccounts } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } from '@/utils/web3/community'
 import { getAllPools,monitorPools } from '@/utils/web3/pool'
@@ -261,15 +261,7 @@ export default {
     }
   },
   async mounted () {
-    // bsc related
-    try {
-      setupNetwork()
-      chainChanged()
-      accountChanged()
-      subBlockNum()
-    } catch (e) {
-      console.log(533, e)
-    }
+
     const _this = this
     window.onresize = () => {
       return (() => {
@@ -281,6 +273,16 @@ export default {
     this.navBoxEl = document.getElementsByClassName('nav-box')
   },
   async created () {
+    // bsc related
+    await getAccounts(true)
+    try {
+      setupNetwork()
+      chainChanged()
+      accountChanged()
+      subBlockNum()
+    } catch (e) {
+      console.log(533, e)
+    }
     // BSC data
     this.fetchBscData();
     // get steem vests ratio

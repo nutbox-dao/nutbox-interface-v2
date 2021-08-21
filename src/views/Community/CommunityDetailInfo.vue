@@ -16,7 +16,7 @@
                 <a class="font20 font-bold title icon-title official-link-icon m-0"
                    :href="communityInfo.website"
                    target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
-                <i class="v-line"></i>
+                <i class="v-line" v-show="communityInfo.website && communityInfo.website.length > 4"></i>
                 <!-- <span>矿池余额：1000.00</span> -->
               </div>
               <div class="desc font14 mt-2"
@@ -89,7 +89,7 @@ export default {
     ...mapGetters('web3', ['communityById']),
     communityInfo () {
       const com = this.communityById(this.communityId)
-      console.log(245, com)
+      console.log('communityInfo', com)
       return com
     },
     wallet () {

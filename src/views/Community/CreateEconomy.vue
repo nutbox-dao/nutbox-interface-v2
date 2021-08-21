@@ -20,7 +20,7 @@
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
                   {{ $t('asset.notRegister') }}
-                  <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
+                  <router-link to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
                 </div>
               </div>
             </template>
@@ -41,7 +41,7 @@
             <div class="" style="line-height: 1.5rem">
               {{ $t('asset.notRegister') }}
               <router-link class="text-primary"
-                           to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
+                           to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
             </div>
           </div>
         </div>
