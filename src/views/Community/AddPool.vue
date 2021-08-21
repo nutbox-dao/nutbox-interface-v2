@@ -64,6 +64,7 @@
                 v-model="form.name"
                 :placeholder="$t('asset.inputPoolName')"
                 @input="inputChange"
+                @keyup="poolNameChange"
                 required
               ></b-form-input>
             </b-form-group>
@@ -244,6 +245,11 @@ export default {
       this.form.ratios = this.myPools.map(item => {
         return item.value
       })
+    },
+    poolNameChange() {
+      if(this.form.name.length > 16){
+        this.form.name = this.form.name.slice(0, 16)
+      }
     },
     inputChange: debounce(function () {
       this.options.series[0].data.map((item, index) => {
