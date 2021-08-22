@@ -333,7 +333,7 @@ export const approvePool = async (pool) => {
  * @param {*} pid 
  * @param {*} amount formed amount can directly as a param of contract
  */
-export const deposit = async (communityId, pid, amount) => {
+export const deposit = async (communityId, pid, amount, boundAccount) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
@@ -343,16 +343,13 @@ export const deposit = async (communityId, pid, amount) => {
       return;
     }
     const account = await getAccounts();
-    const a = await contract.getUserPendingRewards(0, account)
-    const b = await contract.lastRewardBlock()
-    const c = await contract.openedPools(0)
-    console.log(235412, a.toString() / 1e18, b.toString(), c);
-
-  
+    if (!boundAccount){
+      boundAccount = account
+    }
 
     try{
       console.log('deposit', communityId, pid, amount.toString());
-      const tx = await contract.deposit(pid, account, amount.toString())
+      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount)
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
