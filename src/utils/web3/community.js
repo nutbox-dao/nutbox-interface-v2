@@ -181,7 +181,7 @@ export const completeCommunityInfo = async (form, type) => {
         const userId = await getAccounts();
         nonce = nonce ? nonce + 1 : 1
         try{
-            const distri = await getDistributionEras()
+            const distri = await getDistributionEras(true)
             form.firstBlock = distri[0].startHeight
         }catch(e){
             reject(e);
