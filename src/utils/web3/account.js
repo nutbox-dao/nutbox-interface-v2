@@ -1,6 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
-import {  getMyCommunityInfo, getNonce, monitorCommunity } from './community'
+import {  getMyCommunityInfo, getNonce, monitorCommunity, getDistributionEras } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 
@@ -37,6 +37,7 @@ export const accountChanged = async () => {
         }).catch(console.error)
         getMyOpenedPools(true)
         getNonce(true)
+        getDistributionEras(true)
         monitorCtokenBalance(true)
         monitorPools()
     })
