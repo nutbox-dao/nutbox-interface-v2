@@ -39,7 +39,7 @@
                   >
                 </div>
               </div>
-              <span class="font16">{{ v.balance.toString() / 1e18 }}</span>
+              <span class="font16">{{ (v.balance.toString() / 1e18) | amountForm }}</span>
             </div>
           </div>
         </div>
