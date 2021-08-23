@@ -174,6 +174,17 @@ export default {
     isMainChain:(state) => {
       return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID)
     },
+    // Get tourist step of user
+    createState: (state) => {
+      // if loading, do not show tourist
+      if (state.loadingCommunity){
+        return 0;
+      }
+      if (state.communityInfo.name){
+        
+      }
+
+    },
     communityCard: (state) => {
       const allPools = state.allPools;
       const allCommunities = state.allCommunities
