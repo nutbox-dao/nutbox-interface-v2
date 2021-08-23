@@ -41,6 +41,15 @@ module.exports = {
     es: 'Español',
     jp: '日本語'
   },
+  tutorial:{
+    createProcess: '创建流程',
+    step0: '步骤0：注册资产',
+    step1: '步骤1：选择资产 & 设置分发比例',
+    step2: '步骤2：完善社区资料',
+    step3: '步骤3：创建矿池',
+    demoVideo: '示例视频',
+    getStart: '现在开始'
+  },
   wallet: {
     wallet: '钱包',
     connectSteem: "链接Steem钱包",
