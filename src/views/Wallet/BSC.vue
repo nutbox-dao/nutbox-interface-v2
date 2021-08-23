@@ -20,9 +20,9 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4 col-md-6 mb-4 " v-for="(v, k, i) in ctokenBalances" :key="i">
+    <div class="col-xl-4 col-md-6 mb-4 " v-show="v.balance.toString() > 14" v-for="(v, k, i) in ctokenBalances" :key="i">
       <div  class="wallet-card">
-        <div class="top flex-between-center" v-if="v.balance.toString().length > 15">
+        <div class="top flex-between-center">
           <img :src="v.logo" alt="" class="logo" />
           <div class="balance-right flex-full">
             <div class="d-flex justify-content-between align-items-start font-bold">
