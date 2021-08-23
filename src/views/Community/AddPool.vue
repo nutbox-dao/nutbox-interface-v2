@@ -6,21 +6,6 @@
     <div class="scroll-content">
       <div class="pool-card text-left">
         <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
-        <div class="row">
-          <div class="col-lg-6 col-md-7">
-            <div id="pie"></div>
-          </div>
-          <div class="col-lg-6 col-md-5 legend-box">
-            <div class="legend-info" v-for="(item, index) of options.series[0].data" :key="index">
-              <span class="circle" :style="{'border-color': colorList[index]}"></span>
-              <span class="name">{{ item.name||'--' }}</span>
-              <span class="value">{{ item.value }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="divide-box">
-          <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
-        </div>
         <div class="custom-form pool-form">
           <b-form-group id="input-group-1"
                         :label="$t('asset.stakingAsset')"
@@ -91,6 +76,21 @@
                 <b-spinner small type="grow" v-show="adding" />
                 {{ $t('commen.add') }}
               </button>
+            </div>
+          </div>
+        </div>
+        <div class="divide-box">
+          <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
+        </div>
+         <div class="row">
+          <div class="col-lg-6 col-md-7">
+            <div id="pie"></div>
+          </div>
+          <div class="col-lg-6 col-md-5 legend-box">
+            <div class="legend-info" v-for="(item, index) of options.series[0].data" :key="index">
+              <span class="circle" :style="{'border-color': colorList[index]}"></span>
+              <span class="name">{{ item.name||'--' }}</span>
+              <span class="value">{{ item.value }}</span>
             </div>
           </div>
         </div>
@@ -371,7 +371,7 @@ export default {
 }
 
 .pool-form {
-  padding: 1rem 1.2rem 0;
+  padding: 1rem 1.2rem 1.2rem;
 
   .ratios-box {
     display: flex;

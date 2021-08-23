@@ -9,6 +9,7 @@ module.exports = {
     confirm: '确认',
     add: '新增',
     update: '更新',
+    crowdstaking: "质押挖矿",
 
     apy: '年化收益率',
     withdraw: '收获',

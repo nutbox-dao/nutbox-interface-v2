@@ -27,6 +27,7 @@
         <div class="nav-box container">
           <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
+                  v-show="showTab(index)"
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item.name}}</span>
           </div>
@@ -134,6 +135,20 @@ export default {
   async created () {
   },
   methods: {
+    showTab (index) {
+      switch(index) {
+        case 0:
+          return this.erc20Pools.length > 0
+        case 1:
+          return this.steemDelegatePools.length > 0
+        case 2: 
+          return this.hiveDelegatePools.length > 0
+        case 3:
+          return this.nominatePools.length > 0
+        case 4:
+          return this.crowdloanPools.length > 0
+      }
+    }
   }
 }
 </script>

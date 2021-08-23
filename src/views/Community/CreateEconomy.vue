@@ -104,6 +104,7 @@ import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
 import { MaxBlockNum } from '@/constant'
+import { OfficialAssets } from '@/config'
 
 export default {
   name: 'CreateEconomy',
@@ -125,7 +126,7 @@ export default {
         },
         {
           categoryName: 'official',
-          items: []
+          items: OfficialAssets
         }
       ],
       assetLoading: true,
@@ -156,6 +157,7 @@ export default {
   },
   async mounted () {
     this.assets = await getRegitryAssets()
+    console.log({assets: this.assets});
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     this.assetLoading = false
     this.poolForm.start = this.blockNum + 100
