@@ -128,7 +128,7 @@
         @hideMask="showMessage = false"
       />
       <div class="page-container">
-        <div class="scroll-content" v-on:scroll="pageScroll" ref="scrollContent">
+        <div class="scroll-content" ref="scrollContent">
           <div class="container">
             <router-view></router-view>
           </div>
@@ -152,7 +152,7 @@ import { setupNetwork, chainChanged, test } from './utils/web3/web3'
 import { accountChanged, getAccounts } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } from '@/utils/web3/community'
-import { getAllPools,monitorPools } from '@/utils/web3/pool'
+import { getAllPools, monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -162,8 +162,7 @@ export default {
       tipTitle: '',
       showMessage: false,
       accountsPop: false,
-      screenWidth: document.body.clientWidth,
-      navBoxEl: null
+      screenWidth: document.body.clientWidth
     }
   },
   computed: {
@@ -226,14 +225,6 @@ export default {
         return `${start}...${end}`
       }
     },
-    pageScroll (e) {
-      if (this.navBoxEl.length === 0) return
-      if (e.target.scrollTop > this.navBoxEl[0].offsetTop) {
-        this.navBoxEl[0].classList.add('fixed-nav-box')
-      } else {
-        this.navBoxEl[0].classList.remove('fixed-nav-box')
-      }
-    },
     // BSC data
     async fetchBscData () {
       try{
@@ -270,7 +261,6 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY))
-    this.navBoxEl = document.getElementsByClassName('nav-box')
   },
   async created () {
     // bsc related

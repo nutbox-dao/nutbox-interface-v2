@@ -165,6 +165,10 @@
     align-items: center;
     margin: 1.5rem 0;
     height: auto;
+    background-color: #f6f7f9;
+    position: sticky;
+    top: -1px;
+    z-index: 99;
   }
   .fixed-nav-box {
     position: fixed;
@@ -255,5 +259,10 @@
 @media (min-width: 960px) {
   #sidebar-menu {
     display: block!important;
+  }
+}
+@media (max-width: 960px) {
+  .page-container .page-view-content {
+    padding: 0;
   }
 }

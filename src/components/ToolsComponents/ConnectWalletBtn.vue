@@ -45,7 +45,7 @@ export default {
     showBtn(){
       switch (this.type){
         case 'STEEM':
-          return !this.steemAccount || this.steemAccount.length === 0 
+          return !this.steemAccount || this.steemAccount.length === 0
         case 'HIVE':
           return !this.hiveAccount || this.hiveAccount.length === 0
         default:
@@ -76,9 +76,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.connect-wallet {
-  z-index: 999;
-}
 button {
   margin-top: 24px;
   width: 272px;

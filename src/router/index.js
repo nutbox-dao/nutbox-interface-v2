@@ -27,6 +27,7 @@ import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
 import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
 import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
+import Tutorials from '@/views/Community/Tutorials'
 
 Vue.use(VueRouter)
 
@@ -43,7 +44,7 @@ const routes = [
     children: [
       {
         path: 'bsc',
-        name: 'BSCWallet', 
+        name: 'BSCWallet',
         component: BSCWallet
       },
       {
@@ -111,6 +112,10 @@ const routes = [
       {
         path: '/',
         component: Community
+      },
+      {
+        path: 'tutorials',
+        component: Tutorials
       },
       {
         path: 'detail-info',
