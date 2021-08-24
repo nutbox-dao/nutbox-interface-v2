@@ -131,8 +131,15 @@ export default {
   mounted () {
     this.communityId = this.$route.query.id
     console.log(2345, this.communityId)
-  },
-  async created () {
+    if (this.showTab(0)){
+      this.activeTab = 0
+    } else if (this.showTab(1)){
+      this.activeTab = 1
+    } else if (this.showTab(2)) {
+      this.activeTab = 2
+    } else if (this.showTab(3)) {
+      this.activeTab = 3
+    }
   },
   methods: {
     showTab (index) {

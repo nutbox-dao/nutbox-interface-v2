@@ -8,7 +8,7 @@
       <div class="col-md-8 btn-group" v-show="!loadingCommunity">
         <button v-if="communityId"
                 @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button>
-        <button v-else @click="$router.push('/community/create-economy')">
+        <button v-else @click="$router.push('/community/tutorials')">
           <i class="add-icon"></i>
           <span>{{ $t('community.createYourCommunity') }}</span>
         </button>
@@ -61,6 +61,11 @@ export default {
     }),
     ...mapGetters('web3', ['communityCard']),
   },
+  watch: {
+    loadingCommunity(newValue, oldValue) {
+      console.log('loadingCommunity', newValue);
+    }
+  },
   mounted () {
     getMyCommunityInfo().catch(e => {
       if (e === errCode.NO_STAKING_FACTORY) return;
@@ -68,11 +73,13 @@ export default {
         this.$bvToast.toast(tip, param)
       })
     })
+    console.log(12341);
     this.fetchData()
   },
   methods: {
     async fetchData () {
       if (!this.allCommunities) {
+        console.log(this.allCommunities);
         try{
           this.loading = true
           await getAllCommunities()

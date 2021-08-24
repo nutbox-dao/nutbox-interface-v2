@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import store from '@/store'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config, Transaction_config } from '../../config'
+import { errCode, Multi_Config, Transaction_config, GasTimes, GasLimit } from '../../config'
 import { waitForTx } from './ethers'
 import {
     createWatcher,
@@ -161,7 +161,12 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
+            const gas = await contract.estimateGas.createStakingFeast(assetId, distribution)
+            const res = await contract.createStakingFeast(assetId, distribution,
+                {
+                  gasPrice: gas * GasTimes,
+                  gasLimit: GasLimit
+                })
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
@@ -244,7 +249,12 @@ export const chargeCommunityBalance = async (amount) => {
         }
 
         try{
-            const tx = await contract.adminDepositReward(amount.toString());
+            const gas = await contract.estimateGas.adminDepositReward(amount.toString())
+            const tx = await contract.adminDepositReward(amount.toString(),
+            {
+              gasPrice: gas * GasTimes,
+              gasLimit: GasLimit
+            });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -315,7 +325,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDev(address);
+            const gas = await contract.estimateGas.setDev(address);
+            const tx = await contract.setDev(address,
+                {
+                  gasPrice: gas * GasTimes,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -352,7 +367,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDevRewardRatio(ratio);
+            const gas = await contract.estimateGas.setDevRewardRatio(ratio)
+            const tx = await contract.setDevRewardRatio(ratio,
+                {
+                  gasPrice: gas * GasTimes,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){

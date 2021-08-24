@@ -11,25 +11,25 @@
       <div class="content-container">
         <div class="title font24">
           <div class="circle"></div>
-          <div class="text">Create Process</div>
+          <div class="text">{{ $t('tutorial.createProcess') }}</div>
         </div>
         <div class="steps-box mt-4">
           <div class="step-item">
-            <div class="s-card">Step0：Resister Asset</div>
+            <div class="s-card">{{ $t('tutorial.step0') }}</div>
           </div>
           <div class="step-item">
-            <div class="s-card">Step1：Choose asset & Set distribution strategy</div>
+            <div class="s-card">{{ $t('tutorial.step1') }}</div>
           </div>
           <div class="step-item">
-            <div class="s-card">Step2：Fill in community info</div>
+            <div class="s-card">{{ $t('tutorial.step2') }}</div>
           </div>
           <div class="step-item">
-            <div class="s-card">Step3：Create staking pool </div>
+            <div class="s-card">{{ $t('tutorial.step3') }}</div>
           </div>
         </div>
         <div class="title font24 mt-5">
           <div class="circle"></div>
-          <div class="text">Demo Video</div>
+          <div class="text">{{ $t('tutorial.demoVideo') }}</div>
         </div>
         <div class="video-box mt-4">
           <video id="video" width="100%" controls @canplay="canPlay">
@@ -38,16 +38,15 @@
             Your browser does not support HTML video.
           </video>
           <div class="video-mask text-center" v-if="!playing">
-            <div class="font32 font-bold">Watch Demo Video</div>
+            <div class="font32 font-bold">{{ $t('tutorial.watchVideo') }}</div>
             <i class="play-icon" @click="play"></i>
             <div class="tip1 font12">
-              In this video, we will walk you through the staking pool generation process,
-              from start to finish. It takes less than 5 minutes.
+              {{ $t('tutorial.videoTip1', {min: 5}) }}
             </div>
-            <div class="tip2 font12">Click on the play button to start the video</div>
+            <div class="tip2 font12">{{ $t('tutorial.videoTip2') }}</div>
           </div>
         </div>
-        <button class="primary-btn mt-4">Get Started</button>
+        <button class="primary-btn mt-4" @click="$router.replace('/community/create-economy')">{{ $t('tutorial.getStart') }}</button>
       </div>
     </div>
   </div>
