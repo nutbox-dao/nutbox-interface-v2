@@ -33,6 +33,8 @@ export const getMyStakingFactory = async (update=false) => {
             reject(e);
             return
         }
+        const registerHub = await getContract('RegistryHub', null)
+
         const account = await getAccounts();
         let stakingFactoryId = null
         try{
@@ -130,7 +132,6 @@ export const createStakingFeast = async (form) => {
     return new Promise(async(resolve, reject) => {
         try{
             const comId = await getMyStakingFactory()
-            console.log('comId', comId);
             if (comId){
                 console.log('Can only register one community for an account');
                 reject(errCode.CONTRACT_CREATE_FAIL)
@@ -150,6 +151,7 @@ export const createStakingFeast = async (form) => {
         }
         
         try{
+            console.log(543, form.assetId);
             // make params
             const assetId = form.assetId
             let distribution = form.poolData

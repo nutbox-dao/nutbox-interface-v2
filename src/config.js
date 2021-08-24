@@ -148,6 +148,28 @@ export const Transaction_config = {
   gasLimit: 10000000
 }
 
+// Register by nutbox 
+export const OfficialAssets = [
+  {
+    name: 'NUT',
+    symbol: 'NUT',
+    asset: '0xec9f2c163346c3eeb6e14a718ad780a6b75ea9afb1b0a18c0d5a94cffde8e366',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/nut.png'
+  },
+  {
+    name: 'WBNB',
+    symbol: 'WBNB',
+    asset: '0x5f54be7b77630ac5a539705d38e0ea00bed06f3c6d2fff334855440d18296b7f',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
+  },
+  {
+    name: 'WETH',
+    symbol: 'WETH',
+    asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+  }
+]
+
 // test network
 // export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
 // export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'

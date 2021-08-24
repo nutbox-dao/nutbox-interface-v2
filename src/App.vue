@@ -27,7 +27,7 @@
               </b-nav-item> -->
               <b-nav-item to="/crowdstaking" router-tag="div">
                 <i id="stake-icon" class="menu-icon" />
-                <span>{{ $t("cs.crowdstaking") }}</span>
+                <span>{{ $t("commen.crowdstaking") }}</span>
               </b-nav-item>
               <b-nav-item to="/blog">
                 <i id="blog-icon" class="menu-icon" />
