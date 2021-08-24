@@ -33,6 +33,14 @@ export const getReadonlyProvider = () => {
 }
 
 /**
+ * get price
+ */
+export const getGasPrice = async () => {
+    const provider = await getProvider()
+    return await provider.getGasPrice()
+}
+
+/**
  * Wait for the transaction comfirmed
  * @param {*} hash 
  */
