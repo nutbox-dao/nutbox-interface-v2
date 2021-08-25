@@ -145,8 +145,11 @@ export const NUTBOX_REGISTRY_ASSETS = [
 // sended transaction configs
 export const Transaction_config = {
   gasPrice: 100000000,
-  gasLimit: 10000000
+  gasLimit: GasLimit
 }
+
+export const GasTimes = 1000;
+export const GasLimit = 5000000
 
 // Register by nutbox 
 export const OfficialAssets = [

@@ -3,8 +3,8 @@ import { ethers } from 'ethers'
 import store from '@/store'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config, Transaction_config } from '../../config'
-import { waitForTx } from './ethers'
+import { errCode, Multi_Config, GasLimit } from '../../config'
+import { waitForTx, getGasPrice } from './ethers'
 import {
     createWatcher,
     aggregate
@@ -161,7 +161,8 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
+            const gas = await getGasPrice()
+            const res = await contract.createStakingFeast(assetId, distribution)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
@@ -244,7 +245,12 @@ export const chargeCommunityBalance = async (amount) => {
         }
 
         try{
-            const tx = await contract.adminDepositReward(amount.toString());
+            const gas = await getGasPrice()
+            const tx = await contract.adminDepositReward(amount.toString(),
+            {
+              gasPrice: gas,
+              gasLimit: GasLimit
+            });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -315,7 +321,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDev(address);
+            const gas = await getGasPrice()
+            const tx = await contract.setDev(address,
+                {
+                  gasPrice: gas,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -352,7 +363,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDevRewardRatio(ratio);
+            const gas = await getGasPrice()
+            const tx = await contract.setDevRewardRatio(ratio,
+                {
+                  gasPrice: gas,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){

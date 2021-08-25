@@ -20,13 +20,19 @@ import {
   getWeb3
 } from './web3'
 import {
-  waitForTx
+  waitForTx,
+  getGasPrice
 } from './ethers'
 import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
-import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME, Multi_Config } from "../../config";
+import { errCode,
+   CROWDLOAN_CHAINID_TO_NAME,
+    DELEGATION_CHAINID_TO_NAME,
+    Multi_Config,
+    GasLimit
+    } from "../../config";
 
 /**
  * Judge asset wheather Homechain assets
@@ -317,8 +323,13 @@ export const registerHomeChainAsset = async (assetAddress) => {
 
       try {
         console.log(assetAddress);
+        const gas = await getGasPrice()
         const tx = await contract.registerAsset(
-          '0x', assetAddress, '0x'
+          '0x', assetAddress, '0x',
+          {
+            gasPrice: gas,
+            gasLimit: GasLimit
+          }
         )
         await waitForTx(tx.hash)
         resolve(tx.hash)
@@ -355,8 +366,13 @@ export const registerSteemHiveAsset = async (form) => {
         web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
         web3.utils.stringToHex(form.account).substr(2)
+      const gas = await getGasPrice()
       const tx = await contract.registerAsset(
-        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName)
+        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        }
       )
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -393,11 +409,15 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
-  
+      const gas = await getGasPrice()
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
         name: form.assetName,
         endingBlock: form.endingBlock
-      })))
+      })),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -432,8 +452,12 @@ export const registerNominateAsset = async (form) => {
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         addressToHex(form.nodeAddress).substr(2) // node address
-  
-      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName))
+      const gas = await getGasPrice()
+      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -461,10 +485,18 @@ export const deployERC20 = async ({
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20Factory', null, false)
-      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
+      const gas = await contract.estimateGas.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
+      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
+      store.state.web3.account, 
+      isMintable, 
+      {
+        gasPrice: gas * 500,
+        gasLimit: 10000000
+      });
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
         if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
+          contract.removeAllListeners('ERC20TokenCreated')
           resolve(_tokenAddress)
           return;
         }

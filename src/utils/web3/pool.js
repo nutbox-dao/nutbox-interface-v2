@@ -17,7 +17,8 @@ import {
   Multi_Config
 } from '@/config'
 import {
-  waitForTx
+  waitForTx,
+  getGasPrice
 } from './ethers'
 import {
   aggregate,
@@ -38,7 +39,7 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { Transaction_config } from '../../config'
+import { GasLimit } from '../../config'
 
 
 /**
@@ -166,7 +167,12 @@ export const addPool = async (form) => {
 
     try {
       console.log(6236, form.assetId, form.name);
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
+      const gas = await getGasPrice()
+      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       // re monitor
       resolve(tx.hash)
@@ -204,7 +210,12 @@ export const updatePoolsRatio = async (form) => {
     }
     try {
       console.log(form);
-      const tx = await contract.setPoolRatios(form.map(val => val * 100))
+      const gas = await getGasPrice()
+      const tx = await contract.setPoolRatios(form.map(val => val * 100),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -311,8 +322,12 @@ export const approvePool = async (pool) => {
      
       const erc20Handler = contractAddress['ERC20AssetHandler']
       try{
-        new BN(10).pow(new BN(pool.decimal + 50))
-        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString())
+        const gas = await getGasPrice()
+        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString(),
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
         await waitForTx(tx.hash)
         resolve(tx.hash)
       }catch(e){
@@ -349,7 +364,12 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
 
     try{
       console.log('deposit', communityId, pid, amount.toString());
-      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount)
+      const gas = await getGasPrice()
+      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount,
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -382,7 +402,12 @@ export const withdraw = async (communityId, pid, amount) => {
 
     try{
       const account = await getAccounts();
-      const tx = await contract.withdraw(pid, account, amount.toString())
+      const gas = await getGasPrice()
+      const tx = await contract.withdraw(pid, account, amount.toString(),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -413,7 +438,12 @@ export const withdrawReward = async (communityId, pid) => {
 
     try{
       console.log(communityId, pid);
-      const tx = await contract.withdrawPoolRewards(pid, Transaction_config)
+      const gas = await getGasPrice()
+      const tx = await contract.withdrawPoolRewards(pid,
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){

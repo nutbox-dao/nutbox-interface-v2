@@ -43,12 +43,15 @@ module.exports = {
   },
   tutorial:{
     createProcess: '创建流程',
-    step0: '步骤0：注册资产',
-    step1: '步骤1：选择资产 & 设置分发比例',
-    step2: '步骤2：完善社区资料',
-    step3: '步骤3：创建矿池',
-    demoVideo: '示例视频',
-    getStart: '现在开始'
+    step0: '步骤0：注册社区资产',
+    step1: '步骤1：选择资产并设置分发策略',
+    step2: '步骤2：填写社区信息',
+    step3: '步骤3：创建staking pool',
+    demoVideo: '演示视频',
+    getStart: '开始创建',
+    watchVideo: "观看演示视频",
+    videoTip1: "{min} 分钟创建属于自己的staking pool",
+    videoTip2: "点击播放按钮开始观看"
   },
   wallet: {
     wallet: '钱包',
@@ -136,7 +139,7 @@ module.exports = {
     broadcasting: "正在广播交易",
     inBlock: "交易已上链",
     contributeOk: "投票成功",
-    withdrawOk: "赎回成功",
+    redeemOk: "赎回成功",
     nominateOk: "提名成功",
     transactionOk:"交易成功",
     depositOk:"增加储蓄成功",
