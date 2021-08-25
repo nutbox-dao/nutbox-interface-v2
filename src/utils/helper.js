@@ -184,6 +184,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.wrongETHAddress')
   } else if (code == errCode.WRONG_INPUT_DEV_RATIO) {
     tipStr = $t('error.wrongInputDevRatio')
+  } else if (code == errCode.NOT_A_TOKEN_CONTRACT) {
+    tipStr = $t('error.notTokenContract')
   }
   
   

@@ -247,7 +247,8 @@ module.exports = {
     unlockWallet: 'Please unlock Wallet',
     wrongChainId: 'Wrong ChainID',
     wrongETHAddress: "Wrong ETH Address",
-    wrongInputDevRatio: "Please input number between 0-100"
+    wrongInputDevRatio: "Please input number between 0-100",
+    notTokenContract: "The address you input is not a ERC20 contract address."
   },
   community: {
     community: 'Community',
@@ -329,7 +330,7 @@ module.exports = {
     tokenName: 'Token Name',
     tokenSymbol: 'Token Symblo',
     distributionAmount: 'Distribution amount',
-    inputHomeLocation: "Please input ERC20 loaction",
+    inputHomeLocation: "Please input ERC20 address",
     inputTokenName: "Please input token name",
     inputTokenSymbol: "Please input token symbol",
     inputDistributionAmount: "Please input distribution amount",
@@ -338,7 +339,7 @@ module.exports = {
     deploy: 'Deploy',
     deployYourToken: 'Deploy one token',
     notRegister: "No registered asset yet？",
-    registerOne:"Register new asset",
+    registerOne:"Register one",
     registerCAsset: "Register community asset",
     inputAccount:"Please input your account",
     inputAssetName:"Please input asset name",

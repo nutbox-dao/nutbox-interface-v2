@@ -20,7 +20,7 @@
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
                   {{ $t('asset.notRegister') }}
-                  <router-link to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
+                  <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
                 </div>
               </div>
             </template>
@@ -35,13 +35,13 @@
 <!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
-              <div v-show="isMint">* This is a mintable token</div>
-              <div v-show="!isMint">* This is not a mintable token</div>
+              <!-- <div v-show="isMint">* This is a mintable token</div>
+              <div v-show="!isMint">* This is not a mintable token</div> -->
             </div>
             <div class="" style="line-height: 1.5rem">
               {{ $t('asset.notRegister') }}
               <router-link class="text-primary"
-                           to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
+                           to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
 <!--            </button>-->
           </div>
           <p style="margin:0;">
-            {{ $t('community.currentBlock') }}{{blockNum}}
+            {{ $t('community.currentBlock') }} {{blockNum}}
           </p>
           <Progress :is-edit="progressData.length>0"
                     @delete="deleteData"

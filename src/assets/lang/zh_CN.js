@@ -248,7 +248,8 @@ module.exports = {
     unlockWallet: '请解锁钱包',
     wrongChainId: '钱包网络选择错误',
     wrongETHAddress: "地址错误",
-    wrongInputDevRatio: "请输入0-100的数字"
+    wrongInputDevRatio: "请输入0-100的数字",
+    notTokenContract: "您输入的地址不是一个ERC20地址"
   },
   community: {
     community: '社区',

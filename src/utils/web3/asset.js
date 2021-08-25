@@ -87,13 +87,13 @@ export const getRegitryAssets = async (update = false) => {
       resolve(assets)
       return;
     }
-    const account = await getAccounts()
+    const account = '0xda815eb57D1A54a8f901918D782dE63A1eE1b9A4'// await getAccounts()
     let contract;
     try{
       contract = await getContract('RegistryHub', null);
     }catch(e){
       reject(e);
-      return
+      return 
     }
     try{
       const assetCount = await contract.registryCounter(account);
@@ -104,6 +104,7 @@ export const getRegitryAssets = async (update = false) => {
       }
       // get register assets
       assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
+
       // get assets contract and type
       const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
       assets = assets.map((asset, index) => ({
@@ -113,7 +114,6 @@ export const getRegitryAssets = async (update = false) => {
       }));
       // get metadata of assets
       const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-    
       assets = assets.map((asset, index) => ({
         ...asset,
         ...metadatas[index]
@@ -197,8 +197,8 @@ export const isMintableAsset = async (assetId) => {
  * @param {String} assetType asset contract address
  */
 export const getAssetMetadata = async (id, assetType) => {
-  
   let contract;
+  console.log(453, id, assetType);
   try{
     contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
   }catch(e){
@@ -206,7 +206,9 @@ export const getAssetMetadata = async (id, assetType) => {
     return;
   }
   if (assetType === 'HomeChainAssetRegistry') {
+    console.log(14,id);
     const homeLocation = await contract.getHomeLocation(id)
+    console.log({homeLocation});
     return await getERC20Info(homeLocation)
   }
   let meta = await contract.idToMetadata(id)
@@ -321,8 +323,16 @@ export const registerHomeChainAsset = async (assetAddress) => {
         return;
       }
 
+      // if address a token address
+      try{
+        const erc20 = await getContract('ERC20', assetAddress)
+        const name = await erc20.name()
+      }catch(e){
+        reject(errCode.NOT_A_TOKEN_CONTRACT)
+        return;
+      }
+
       try {
-        console.log(assetAddress);
         const gas = await getGasPrice()
         const tx = await contract.registerAsset(
           '0x', assetAddress, '0x',
