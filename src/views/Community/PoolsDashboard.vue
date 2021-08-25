@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content">
+    <Step :current-step="3"></Step>
     <div class="view-top-header row">
       <div class="col-md-6 text-left">
         <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">{{ $t('community.dashboard') }}</div>
@@ -70,10 +71,11 @@ import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
 import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'
 import { mapState } from 'vuex'
+import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: 'PoolsDashboard',
-  components: { Progress, DashboardPoolCard },
+  components: { Progress, DashboardPoolCard, Step },
   computed: {
     ...mapState('web3', ['blockNum', 'communityBalance'])
   },

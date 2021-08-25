@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content">
+    <Step :current-step="2"></Step>
     <div class="mb-3 flex-between-center" style="height: 2.4rem">
       <div
         class="page-back-text-icon font20"
@@ -464,10 +465,11 @@ import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState } from "vuex";
 import BN from 'bn.js'
+import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: "EditCommunityInfo",
-  components: { UploadLoading },
+  components: { UploadLoading, Step },
   data() {
     return {
       logo: null,
