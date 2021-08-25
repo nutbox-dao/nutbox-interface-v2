@@ -1,6 +1,6 @@
 <template>
   <div class="page-view-content">
-    <Step :current-step="1"></Step>
+    <Step v-show="createState !== 0" :current-step="createState"></Step>
     <div class="flex-between-center">
       <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
     </div>
@@ -110,6 +110,7 @@ import { stanfiAddress } from '@/utils/commen/account'
 import { addPool, getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import Step from '@/components/ToolsComponents/Step'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AddPool',
@@ -173,6 +174,9 @@ export default {
       ],
       assetLoading: true,
     }
+  },
+  computed: {
+    ...mapGetters('web3', ['createState'])
   },
   async mounted () {
     getMyOpenedPools().then(pools => {

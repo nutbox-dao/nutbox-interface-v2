@@ -1,6 +1,6 @@
 <template>
   <div class="page-view-content">
-    <Step :current-step="3"></Step>
+    <Step v-show="createState !== 0 && !loadingPool" :current-step="createState"></Step>
     <div class="view-top-header row">
       <div class="col-md-6 text-left">
         <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">{{ $t('community.dashboard') }}</div>
@@ -11,7 +11,7 @@
           <span>{{ $t('community.setting') }}</span>
         </button>
         <button class="outline-btn" v-show="stakingPools.length > 1" @click="$router.push('/community/update-pool')">{{ $t('community.updatePools') }}</button>
-        <button @click="$router.push('/community/add-pool')">
+        <button v-show="createState === 0 || createState === 3" @click="$router.push('/community/add-pool')">
           <i class="add-icon"></i>
           <span>{{ $t('community.addPool') }}</span>
         </button>
@@ -70,14 +70,15 @@ import { getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
 import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: 'PoolsDashboard',
   components: { Progress, DashboardPoolCard, Step },
   computed: {
-    ...mapState('web3', ['blockNum', 'communityBalance'])
+    ...mapState('web3', ['blockNum', 'communityBalance']),
+    ...mapGetters('web3', ['createState'])
   },
   data () {
     return {

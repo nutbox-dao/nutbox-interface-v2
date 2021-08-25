@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content">
+    <Step :current-step="1"></Step>
     <div class="view-top-header mb-4">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
         {{ $t('community.createCommunity') }}
@@ -99,16 +100,17 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
 import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
+import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: 'CreateEconomy',
-  components: { Progress, Dropdown },
+  components: { Progress, Dropdown, Step },
   data () {
     return {
       selectedKey: 'name',
@@ -148,7 +150,8 @@ export default {
     ...mapState({
       userDeployTokens: state => state.web3.allAssetsOfUser,
       blockNum: state => state.web3.blockNum
-    })
+    }),
+    ...mapGetters('web3', ['createState'])
   },
   watch: {
     userDeployTokens (val) {

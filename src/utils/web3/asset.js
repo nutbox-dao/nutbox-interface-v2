@@ -87,7 +87,7 @@ export const getRegitryAssets = async (update = false) => {
       resolve(assets)
       return;
     }
-    const account = '0xda815eb57D1A54a8f901918D782dE63A1eE1b9A4'// await getAccounts()
+    const account = await getAccounts()
     let contract;
     try{
       contract = await getContract('RegistryHub', null);

@@ -1,6 +1,6 @@
 <template>
   <div class="page-view-content">
-    <Step :current-step="2"></Step>
+    <Step v-show="showStep" :current-step="2"></Step>
     <div class="mb-3 flex-between-center" style="height: 2.4rem">
       <div
         class="page-back-text-icon font20"
@@ -463,7 +463,7 @@ import {
 } from "@/utils/web3/community";
 import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import BN from 'bn.js'
 import Step from "@/components/ToolsComponents/Step";
 
@@ -505,11 +505,13 @@ export default {
       isMintable: true,
       cTokenAddress: '',
       updatingAddress: false,
-      updatingDevRatio: false
+      updatingDevRatio: false,
+      showStep: false
     };
   },
   computed: {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
+    ...mapGetters('web3', ['createState']),
     communityBalanceValue(){
       if (this.communityBalance){
         return (this.communityBalance.toString() / 1e18).toFixed(6)
@@ -540,7 +542,8 @@ export default {
         this.noCommunity = true;
         return;
       }
-      this.form = communityInfo;
+      this.form = {...communityInfo};
+      if (!communityInfo.name) this.showStep = true;
       this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
       this.cToken = cToken

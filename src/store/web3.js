@@ -183,13 +183,14 @@ export default {
       if (state.myPools && state.myPools.length > 0){
         return 0
       }
-      if (state.communityInfo.name){
+      if (state.communityInfo?.name){
         return 3
       }
       if (state.stakingFactoryId){
         return 2
+      }else{
+        return 1
       }
-      return 1
     },
     communityCard: (state) => {
       const allPools = state.allPools;

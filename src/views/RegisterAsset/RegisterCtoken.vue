@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content register">
+    <Step :current-step="1"></Step>
     <div class="view-top-header mb-2">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
         {{ $t('asset.registerCtokenTitle') }}
@@ -14,11 +15,13 @@
 
 <script>
 import NativeAsset from './NativeAsset.vue'
+import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: "RegisterCtoken",
   components: {
-    NativeAsset
+    NativeAsset,
+    Step
   },
 };
 </script>
