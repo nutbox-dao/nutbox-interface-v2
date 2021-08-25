@@ -49,7 +49,7 @@ module.exports = {
     step3: 'Step3: Create staking pool',
     demoVideo: 'Demo Video',
     getStart: 'Get Started',
-    watchVideo: "Watche Demo Video",
+    watchVideo: "Watch Demo Video",
     videoTip1: "In this video, we will walk you through the staking pool generation process, from start to finish. It takes less than {min} minutes.",
     videoTip2: "Click on the play button to start the video"
   },
