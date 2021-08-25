@@ -149,7 +149,7 @@ export const Transaction_config = {
 }
 
 export const GasTimes = 1000;
-export const GasLimit = 1000000
+export const GasLimit = 5000000
 
 // Register by nutbox 
 export const OfficialAssets = [

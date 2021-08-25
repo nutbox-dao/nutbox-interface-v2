@@ -33,7 +33,7 @@
         </div>
         <div class="video-box mt-4">
           <video id="video" width="100%" controls @canplay="canPlay">
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            <source src="https://cdn.wherein.mobi/nutbox-v2/video/1629821598092785.mp4" type="video/mp4">
             <!--          <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">-->
             Your browser does not support HTML video.
           </video>

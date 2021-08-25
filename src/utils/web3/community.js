@@ -162,11 +162,7 @@ export const createStakingFeast = async (form) => {
             }))
             // call contract
             const gas = await getGasPrice()
-            const res = await contract.createStakingFeast(assetId, distribution,
-                {
-                  gasPrice: gas,
-                  gasLimit: GasLimit
-                })
+            const res = await contract.createStakingFeast(assetId, distribution)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
