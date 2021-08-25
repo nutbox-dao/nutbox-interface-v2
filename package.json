@@ -1,5 +1,5 @@
 {
-  "name": "nutbox-interface-v0.2",
+  "name": "nutbox-interface-v2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,10 +9,13 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "@polkadot/api": "^4.9.2",
-    "@polkadot/extension-dapp": "^0.37.2",
-    "@polkadot/ui-keyring": "^0.76.1",
-    "@polkadot/vue-identicon": "^0.76.1",
+    "@hiveio/hive-js": "^1.0.0",
+    "@makerdao/multicall": "^0.12.0",
+    "@polkadot/api": "^5.5.2",
+    "@polkadot/apps-config": "^0.95.1",
+    "@polkadot/extension-dapp": "^0.39.3",
+    "@polkadot/ui-keyring": "^0.85.1",
+    "@polkadot/vue-identicon": "^0.85.1",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "bn.js": "^5.2.0",
@@ -21,14 +24,17 @@
     "core-js": "^3.6.5",
     "csv-exportor": "^1.0.2",
     "dotenv": "^8.2.0",
+    "echarts": "^5.1.1",
+    "ethers": "^5.4.2",
+    "lodash.debounce": "^4.0.8",
     "polkadot": "^1.0.0",
     "steem": "^0.7.11",
-    "tronweb": "^3.2.6",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
     "vue-i18n": "^8.17.3",
     "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "web3": "^1.5.0"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.11.5",

@@ -1,258 +1,217 @@
 <template>
-  <div class="c-card">
-    <div class="card-title-box flex-start-center">
-      <div class="icons">
-        <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
-        <img class="icon1" :src="crowdstaking.community.iconUrl" alt="" />
+  <div class="multi-card">
+    <div class="card-link-top-box">
+      <div class="flex-start-center">
+        <div class="card-link-icons">
+          <img class="icon1" :src="card.communityIcon" alt="" />
+          <img class="icon2" :src="card.icon" alt="" />
+        </div>
+        <div class="card-link-title-text font20 font-bold">
+          <div
+            class="link-title"
+            @click="
+              $router.push('/community/detail-info?id=' + card.communityId)
+            "
+          >
+            <span>{{ card.communityName }}</span>
+            <i class="link-icon"></i>
+          </div>
+          <div class="link-title">
+            <span>{{ card.poolName }}</span>
+          </div>
+        </div>
       </div>
-      <div class="title-text font20 font-bold">
-        <span>{{
-          crowdstaking.community.communityName
+    </div>
+    <div class="c-card">
+      <div class="text-left mt-3">
+        <span style="color: #717376" class="font-bold">{{
+          card.tokenSymbol + " "
         }}</span>
-        <img src="~@/static/images/close.svg" alt="" />
-        <span>{{ crowdstaking.project.projectName }}</span>
+        <span style="color: #bdbfc2">EARNED</span>
       </div>
-    </div>
-    <div class="h-line"></div>
-
-    <div class="desc">
-      {{ crowdstaking.community.description }}
-    </div>
-
-    <div class="validator-container">
-      <div class="validator" v-for="v in crowdstaking.project.validators" :key="v">
-        {{ v | formatValidatorAdd }}
+      <div class="btn-row">
+        <span class="value"> {{ pendingReward | amountForm }} </span>
+        <div class="right-box">
+          <button class="primary-btn m-0" :disabled="!approved || isWithdrawing" @click="withdraw">
+            <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+            {{ $t("commen.withdraw") }}
+          </button>
+        </div>
       </div>
-    </div>
-
-    <template v-if="isConnected">
-      <button
-        class="primary-btn"
-        @click="nominate"
-        :disabled="nominated || loadingStaking"
-      >
-        <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-        >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
-      </button>
-    </template>
-    <div class="detail-info-box">
-      <div class="project-info-container">
-        <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
+      <div class="text-left mt-3 mb-1">
+        <span style="color: #717376" class="font-bold">{{ card.symbol }}</span>
+        <span style="color: #bdbfc2"> STAKED</span>
       </div>
-      <div class="project-info-container">
-        <span class="name"> APY </span>
-        <div class="info">13.0%</div>
+      <div class="btn-row mb-4" v-if="approved">
+        <span class="value">
+          {{ (loadingUserStakings ? 0 : staked) | amountForm }}
+        </span>
+        <div class="right-box">
+          <button class="outline-btn" @click="decrease">-</button>
+          <button class="outline-btn" @click="increase">+</button>
+        </div>
+      </div>
+      <template v-else>
+        <b-button
+          variant="primary"
+          @click="approve"
+          :disabled="isApproving || loadingApprovements"
+        >
+          <b-spinner
+            small
+            type="grow"
+            v-show="isApproving || loadingApprovements"
+          ></b-spinner>
+          {{ $t("commen.approveContract") }}
+        </b-button>
+      </template>
+
+      <div class="detail-info-box">
+        <div class="project-info-container">
+          <span class="name"> TVL </span>
+          <div class="info">{{ tvl | amountForm }}</div>
+        </div>
+        <div class="project-info-container">
+          <span class="name"> APY </span>
+          <div class="info">{{ card.apy.toFixed(2) }}%</div>
+        </div>
       </div>
     </div>
 
     <b-modal
-      v-model="showNominate"
+      v-model="showModal"
       modal-class="custom-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      <TipNominator
-        :crowdstaking="crowdstaking"
-        @hideNominate="showNominate = false"
-      />
-    </b-modal>
-
-    <b-modal
-      v-model="showBondAndNominator"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <TipBondAndNominator
-        :crowdstaking="crowdstaking"
-        @hideBondAndNominate="showBondAndNominator = false"
+      <StakingHomeChainAssetModal
+        :operate="operate"
+        :card="card"
+        @hideStakeMask="showModal = false"
       />
     </b-modal>
   </div>
 </template>
 
 <script>
-import TipBondAndNominator from "./TipBoxes/TipBondAndNominator";
-import TipNominator from "./TipBoxes/TipNominator";
+import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHomeChainAssetModal";
 import { mapState } from "vuex";
-import { stanfiAddress } from "@/utils/polkadot/polkadot";
-import BN from "bn.js";
+import { approvePool, withdrawReward } from "@/utils/web3/pool";
+import { handleApiErrCode } from "@/utils/helper";
 
 export default {
-  data() {
-    return {
-      showNominate: false,
-      showBondAndNominator: false,
-    };
+  name: "DDelegateCard",
+  components: {
+    StakingHomeChainAssetModal,
   },
   props: {
-    crowdstaking: {
+    card: {
       type: Object,
-    },
-    symbol: {
-      type: String,
-      default: "Kusama",
-    },
-  },
-  filters: {
-    formatValidatorAdd: function(add) {
-      return add.slice(0,3) + '...' + add.slice(-3);
-    }
-  },
-  components: {
-    TipBondAndNominator,
-    TipNominator,
-  },
-  methods: {
-    async nominate() {
-      if (this.bonded) {
-        this.showNominate = true;
-      } else {
-        this.showBondAndNominator = true;
-      }
     },
   },
   computed: {
-    ...mapState("polkadot", [
-      "isConnected",
-      "lang",
-      "bonded",
-      "nominators",
-      "loadingStaking",
-      "allValidatorInfosInOurDB",
+    ...mapState("web3", [
+      "pendingRewards",
+      "approvements",
+      "loadingApprovements",
+      "userStakings",
+      "loadingUserStakings",
+      "totalStakings"
     ]),
-    ...mapState(["lang"]),
-    // 用户已经投了该项目的节点
-    nominated() {
-      const val = this.crowdstaking.project.validators.map((tcd) =>
-        stanfiAddress(tcd)
-      );
-      return (
-        this.nominators.filter(({ address }) => val.indexOf(address) !== -1)
-          .length === val.length
-      );
+    pendingReward() {
+      const pendingBn =
+        this.pendingRewards[this.card.communityId + "-" + this.card.pid];
+      if (!pendingBn) return 0;
+      const decimal = this.card.tokenDecimal;
+      return parseFloat(pendingBn.toString() / 10 ** decimal).toFixed(3);
+    },
+    approved() {
+      return this.approvements[this.card.communityId + "-" + this.card.pid];
+    },
+    staked() {
+      const userStakingBn =
+        this.userStakings[this.card.communityId + "-" + this.card.pid];
+      if (!userStakingBn) return 0;
+      const decimal = this.card.decimal;
+      return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
-      if (this.allValidatorInfosInOurDB.length === 0) {
-        return 0;
-      }
-      const total = this.crowdstaking.project.validators.reduce(
-        (t, v) =>
-          t.add(new BN(this.allValidatorInfosInOurDB[v].total.toString())),
-        new BN(0)
-      );
-      return total.toString() / 1e10;
-    },
+      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if(!tvl) return 0;
+      const decimal = this.card.decimal
+      return (tvl.toString() / (10 ** decimal))
+    }
   },
-  mounted() {},
+  data() {
+    return {
+      showModal: false,
+      operate: "add",
+      isApproving: false,
+      isWithdrawing: false
+    };
+  },
+  methods: {
+    increase() {
+      this.operate = "add";
+      this.showModal = true;
+    },
+    decrease() {
+      this.operate = "minus";
+      this.showModal = true;
+    },
+    // Approve contract
+    async approve() {
+      try {
+        this.isApproving = true;
+        const hash = await approvePool(this.card);
+        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isApproving = false;
+      }
+    },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    }
+  },
 };
 </script>
 
-<style lang="less">
-.c-card {
-  width: 100%;
-  border-radius: 1.4rem;
-  margin-bottom: 12px;
-  overflow: hidden;
-  border: none;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
-  position: relative;
-  padding: 2.2rem 1.2rem;
-  background-color: white;
-  .primary-btn {
-    width: 100%;
+<style lang="scss" scoped>
+@import "src/static/css/card/common-card";
+.btn-row {
+  @include c-flex-between-center;
+  .value {
+    font-size: 1.2rem;
+    font-weight: bolder;
   }
-  .status-container {
-    position: absolute;
-    right: 0;
-    top: 0;
-    img {
-      width: 3.4rem;
-      height: 3.4rem;
-    }
+  .right-box {
+    width: 6rem;
+    @include c-flex-between-center;
   }
-  .card-title-box {
-    .icons {
-      position: relative;
-      margin-right: 2.4rem;
-      img {
-        width: 2rem;
-        height: 2rem;
-      }
-      .icon2 {
-        position: absolute;
-        left: 1.8rem;
-        border: 1px solid #e3e5e8;
-        border-radius: 1rem;
-      }
-      .icon1 {
-        position: relative;
-        left: 0;
-        border: 1px solid #e3e5e8;
-        box-shadow: 0px 4px 12px 4px rgba(0, 0, 0, 0.05);
-        border-radius: 1rem;
-      }
-    }
-    .title-text {
-      display: flex;
-      justify-items: center;
-      align-items: center;
-    }
-  }
-  .h-line {
-    width: 1.6rem;
-    height: 0.2rem;
-    background: var(--primary-custom);
-    margin-top: 1.6rem;
-    margin-bottom: 0.8rem;
-    border-radius: 4px;
-  }
-  .desc{
-    text-align: left;
-    color: var(--primary-text);
-    margin: 16px 0px;
-    height: 42px;
-    overflow: hidden;
-  }
-  .validator-container{
-    display: flex;
-    align-content: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-    .validator {
-      background-color: var(--background);
-      margin: 4px 6px;
-      padding: 4px 10px;
-      border-radius: 8px;
-    }
-  }
-  .detail-info-box {
-    margin-top: 1.2rem;
-    margin-bottom: 0 !important;
-    .project-info-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-top: 0.6rem;
-      margin-bottom: 0;
-      .name {
-        flex: 1;
-        text-align: left;
-        color: rgba(189, 191, 194, 1);
-        font-weight: bold;
-      }
-      .info {
-        // flex: 0.8;
-        text-align: right;
-        font-weight: 500;
-      }
-    }
+  .outline-btn {
+    background-color: white;
+    border: 1px solid var(--primary-custom);
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: 0.8rem;
   }
 }
 </style>

@@ -7,13 +7,17 @@
       @click="hide"
     />
     <div class="tip-contribute">
-      <div class="text-center mb-4 font20">
+      <div class="text-center mb-4 font20 font-bold">
         {{ $t("wallet.unBond") }}
       </div>
       <div class="input-group-box">
-        <div class="label">{{ $t("wallet.balance") }}: {{ locked / 1e10 | amountForm(4) }} DOT</div>
-        <div class="flex-between-center">
-          <input type="number" v-model="inputAmount" />
+        <div class="label">{{ $t("wallet.unbindAmount") }}</div>
+        <div class="bind-input">
+          <div class="balance flex-between-center">
+            <span>{{ $t("wallet.balance") }}</span>
+            <span class="text-right">{{ locked / 1e10 | amountForm(4) }} DOT</span>
+          </div>
+          <input type="number" v-model="inputAmount" :placeholder="$t('wallet.inputAmount')" class="font24"/>
         </div>
       </div>
       <button class="primary-btn" @click="confirm" :disabled="isUnBonding">
@@ -111,56 +115,21 @@ export default {
 };
 </script>
 
-<style lang="less">
-.tip-modal {
-  position: relative;
-  .close-btn {
-    position: absolute;
-    right: 0;
-    width: 1rem;
-    height: 1rem;
-  }
-  .primary-btn {
-    width: 100%;
-    margin-top: 1rem;
-  }
-  .big {
-    background-image: linear-gradient(
-      to right,
-      var(--primary-custom),
-      var(--primary-custom)
-    );
-    background-size: 90% 50%;
-    background-repeat: no-repeat;
-    background-position-y: bottom;
-    background-position-x: 50%;
+<style lang="less" scoped>
+.bind-input {
+  background: rgba(246, 247, 249, 1);
+  border-radius: .8rem;
+  .balance {
+    padding: .8rem .8rem 0;
+    color: #717376;
+    font-size: .7rem;
   }
 }
 .bondInfo {
   text-align: left;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
-.input-group-box {
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-  input {
-    flex: 1;
-    border: none;
-    background: rgba(246, 247, 249, 1);
-    font-size: 0.8rem;
-    height: 2.4rem;
-    padding: 0.4rem 0.8rem;
-    box-sizing: border-box;
-    border-radius: 0.8rem;
-    margin-right: 1rem;
-  }
-  span {
-    display: inline-block;
-    min-width: 5rem;
-  }
-}
-.label {
-  text-align: left;
-  margin-bottom: 12px;
+.primary-btn {
+  margin-bottom: .6rem;
 }
 </style>

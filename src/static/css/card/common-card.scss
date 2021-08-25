@@ -1,0 +1,147 @@
+.multi-card {
+  @include card(0, transparent);
+  @include c-col-flex-between-center;
+}
+.c-card {
+  @include card;
+  @include c-col-flex-between-center;
+  .h-line {
+    @include line(2rem, .2rem, .2rem);
+  }
+  .desc{
+    color: var(--primary-text);
+    margin: .8rem 0;
+    text-align: left;
+    @include text-multi-line(2);
+  }
+  .primary-btn {
+    margin-top: 1rem;
+  }
+}
+.card-single-icon img{
+  @include card-icon;
+  @include coin-shadow;
+  border: 1px solid white;
+}
+.card-icons {
+  position: relative;
+  margin-right: 2.4rem;
+  img {
+    @include card-icon;
+    @include coin-shadow;
+    border: 1px solid white;
+  }
+  .icon2 {
+    position: absolute;
+    left: 2.4rem;
+  }
+  .icon1 {
+    position: relative;
+    left: 0;
+  }
+}
+.card-title-text {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+.card-link-top-box {
+  border-top-left-radius: 1.4rem;
+  border-top-right-radius: 1.4rem;
+  background-image: linear-gradient(to bottom, #ffffff, #F6F7F9);
+  padding: .8rem 1.2rem 2.2rem;
+  overflow: hidden;
+}
+.card-link-icons {
+  display: flex;
+  align-items: flex-end;
+  width: 3.5rem;
+  margin-right: .4rem;
+  img {
+    border: 1px solid white;
+  }
+  .icon1 {
+    @include card-icon;
+  }
+  .icon2 {
+    margin-left: -1rem;
+    @include card-icon(1.8rem, 1.8rem);
+  }
+}
+.card-link-title-text {
+  flex: 1;
+  overflow: hidden;
+  .link-title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    span {
+      @include text-multi-line;
+      text-align: left;
+      margin-right: .4rem;
+    }
+    .link-icon {
+      @include icon(.8rem, .8rem);
+      min-width: .8rem;
+      background-image: url("~@/static/images/link-icon.png");
+    }
+  }
+}
+.more-text-icon {
+  padding-right: .8rem;
+  background-image: url("~@/static/images/right-arrow.svg");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: .6rem .6rem;
+  color: #717376;
+}
+.validator-container{
+  display: flex;
+  flex-wrap: wrap;
+  .validator {
+    background-color: var(--background);
+    margin: .2rem .3rem;
+    padding: .2rem .5rem;
+    border-radius: .4rem;
+    color: #BDBFC2;
+  }
+}
+
+.project-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+  .name {
+    flex: 1;
+    text-align: left;
+    color: rgba(189, 191, 194, 1);
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: .4rem;
+  }
+  .info {
+    text-align: right;
+    font-weight: 500;
+  }
+}
+
+.status-container {
+  span {
+    border: 1px solid;
+    padding: .1rem .3rem;
+    border-radius: 2rem;
+  }
+  .Active {
+    color: rgba(80, 191, 0, 1);
+    background: rgba(80, 191, 0, .05);
+  }
+  .Retired {
+    color: rgba(248, 182, 42, 1);
+    background: rgba(248, 182, 42, .05);
+  }
+  .Completed {
+    color: rgba(255, 91, 77, 1);
+    background: rgba(255, 91, 77, .05);
+  }
+}

@@ -1,5 +1,5 @@
 module.exports = {
-    message: {
+    commen: {
       userlogin: 'ユーザーログイン',
       steemAccoutPlaceHolder: 'STEEMユーザー名を入れて',
       login: 'ログイン',

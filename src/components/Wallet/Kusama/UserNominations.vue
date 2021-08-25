@@ -4,15 +4,14 @@
       <img src="~@/static/images/loading.gif" alt="" />
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
-
-    <div class="empty-bg" v-if="!loadingStaking && nominators.length === 0">
-      <img src="~@/static/images/empty-data.png" alt="" />
-      <p>{{ $t("tip.noNominations") }}</p>
-    </div>
-
-    <div v-show="nominators.length > 0">
-      <b-card class="table-card">
-        <b-table
+    <template v-else>
+      <div class="table-card">
+        <slot name="title"></slot>
+        <div class="empty-bg" v-if="nominators.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t("tip.noNominations") }}</p>
+        </div>
+        <b-table v-show="nominators.length > 0"
           :items="nominators"
           :fields="fields"
           thead-tr-class="th-cell"
@@ -31,86 +30,64 @@
             />
           </template>
         </b-table>
-      </b-card>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import Identicon from "@polkadot/vue-identicon";
+import { mapState } from 'vuex'
+import Identicon from '@polkadot/vue-identicon'
 
 export default {
-  name: "UserContributions",
+  name: 'UserContributions',
   props: {
     chain: {
       type: String,
-      default: "polkadot",
-    },
+      default: 'kusama'
+    }
   },
   computed: {
     ...mapState(['account']),
-    ...mapState('polkadot', ["nominators", "loadingStaking"]),
+    ...mapState('kusama', ['nominators', 'loadingStaking'])
   },
   components: {
-    Identicon,
+    Identicon
   },
-  data() {
+  data () {
     return {
-      fields: [],
-    };
+      fields: []
+    }
   },
   methods: {},
-  async mounted() {
+  async mounted () {
     this.fields = [
-      { key: "icon", label: "", class: "text-right" },
+      { key: 'icon', label: '', class: 'text-right' },
       {
-        key: "nick",
-        label: this.$t("validator.validator"),
-        class: "text-left",
+        key: 'nick',
+        label: this.$t('validator.validator'),
+        class: 'text-left'
       },
       {
-        key: "otherStake",
-        label: this.$t("validator.otherStake"),
-        class: "text-right",
+        key: 'otherStake',
+        label: this.$t('validator.otherStake'),
+        class: 'text-right'
       },
       {
-        key: "ownStake",
-        label: this.$t("validator.ownStake"),
-        class: "text-right",
+        key: 'ownStake',
+        label: this.$t('validator.ownStake'),
+        class: 'text-right'
       },
       {
-        key: "commission",
-        label: this.$t("validator.commission"),
-        class: "text-right",
-      },
-    ];
-  },
-};
-</script>
-
-<style lang="less" scoped>
-.table-card {
-  border-radius: 1.4rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
-  border: none;
-  .card-body {
-    padding: 0;
-    margin: 1rem;
-    overflow: auto;
+        key: 'commission',
+        label: this.$t('validator.commission'),
+        class: 'text-right'
+      }
+    ]
   }
 }
+</script>
 
-.Active {
-  color: rgba(80, 191, 0, 1);
-}
-.Retired {
-  color: rgba(248, 182, 42, 1);
-}
-.Completed {
-  color: rgba(255, 91, 77, 1);
-}
-.change-page-box {
-  margin: 1rem auto;
-}
+<style lang="scss" scoped>
+@import "src/static/css/card/table-card";
 </style>

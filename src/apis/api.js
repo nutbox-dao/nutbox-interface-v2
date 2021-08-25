@@ -1,24 +1,33 @@
 import {
   get,
-  post
+  post,
+  put
 } from './axios'
 import {
   CROWD_STAKING_API_URL,
-  CROWD_LOAN_API_URL
+  CROWD_LOAN_API_URL,
+  BACKEND_API_URL
 } from '../config'
 
-// crowdstaking
+// ============================================ crowdstaking ============================================ 
+/**
+ * 获取所有的投票的卡片
+ * @returns 
+ */
 export const getCrowdstacking = async () => post(CROWD_STAKING_API_URL + '/crowdstaking/find/all')
 
-export const getDarshboardCard = async (param) => post(CROWD_STAKING_API_URL + '/crowdstaking/find/summary', param)
-
+/**
+ * 获取要导出的投票数据
+ * @param {*} param {relaychain, communityId, projectId}
+ * @returns 
+ */
 export const getNominationSummary = async (param) => post(CROWD_STAKING_API_URL + '/crowdstaking/find/nominations', param)
 
 
-// crowdloan
+// ============================================ crowdloan ============================================ 
 
 // 获取所有注册的社区信息
-export const getCommnunitys = async () => post(CROWD_LOAN_API_URL + '/community/all')
+export const getCommunitys = async () => post(CROWD_LOAN_API_URL + '/community/all')
 /**
  * 上传contribution数据
  * params：
@@ -33,7 +42,7 @@ export const postContribution = async (params) => post(CROWD_LOAN_API_URL + '/co
  * 获取要展示的卡片信息
  * relaychain： ‘rococo'
  */
-export const getOnshowingCrowdloanCard = async (params) => post(CROWD_LOAN_API_URL + '/crowdloan/live', params)
+export const getOnshowingCrowdloanCard = async (relaychain) => post(CROWD_LOAN_API_URL + '/crowdloan/live', {relaychain})
 
 /**
  * 获取个人界面的contribution记录
@@ -60,3 +69,25 @@ export const getExportContributionInfo = async (params) => post(CROWD_LOAN_API_U
  * relaychain: 'rococo'
  */
 export const getDashboardSummary = async (params) => post(CROWD_LOAN_API_URL + '/crowdloan/summary', params)
+
+// ============================================ backend v2 ============================================ 
+
+export const getAllCommunities = async () => get(BACKEND_API_URL + '/community/get')
+
+export const getMyCommunityInfo = async (communityId) => get(BACKEND_API_URL + '/community/get', {id: communityId})
+
+export const insertCommunity = async (params) => post(BACKEND_API_URL + '/community/insert', params)
+
+export const updateCommunity = async (params) => put(BACKEND_API_URL + '/community/update', params)
+
+export const insertToken = async (params) => post(BACKEND_API_URL + '/token/insert', params)
+
+export const getAllTokens = async () => get(BACKEND_API_URL + '/token/get')
+
+export const getNonce = async (accountId) => get(BACKEND_API_URL + '/user/getnonce', {id: accountId})
+
+export const updatePoolInfo = async (params) => put(BACKEND_API_URL + '/pool/update', params)
+
+export const getAllPools = async () => get(BACKEND_API_URL + '/pool/getAll')
+
+export const getAllParachain = async () => get(BACKEND_API_URL + '/parachain/getall')

@@ -1,0 +1,61 @@
+.p-card {
+  @include card(0);
+  @include c-col-flex-between-center;
+  position: relative;
+  .poster{
+    @include card-poster-bg(6.2rem);
+    min-height: 6.2rem;
+    background-color: white;
+  }
+  .large-poster{
+    @include card-poster-bg(9.6rem);
+  }
+  .logo {
+    @include card-icon;
+    position: absolute;
+    top: -2rem;
+    left: 1.2rem;
+    border: 1px solid white;
+  }
+  .large-logo {
+    @include card-icon(3.6rem, 3.6rem);
+    position: absolute;
+    border: 1px solid white;
+    left: 1.2rem;
+    top: -1.2rem;
+  }
+  .second-card {
+    @include card(1.2rem, white, none)
+  }
+  .project-info {
+    margin-left: 4.2rem;
+    .desc {
+      text-align: justify;
+    }
+  }
+  .official-link-title {
+
+  }
+  .icon-title {
+    padding-right: 1.8rem;
+    background-position: right center;
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+    text-align: left;
+    color: #242629;
+    width: fit-content;
+    margin-bottom: .8rem;
+    &.official-link-icon{
+      background-image: url("~@/static/images/official-link.png");
+    }
+    &.link-icon {
+      background-image: url("~@/static/images/auctionPlanLink.png");
+    }
+  }
+}
+@media (max-width: 500px) {
+  .project-info {
+    margin-left: 0!important;
+    margin-top: 1.6rem;
+  }
+}

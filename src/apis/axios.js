@@ -12,7 +12,13 @@ export function get (url, params) {
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
-      reject(err.data)
+      console.log('network err', err);
+      if (err.response){
+        reject(err.response.status)
+        return;
+      }else{
+        reject(500)
+      }
     })
   })
 }
@@ -22,7 +28,25 @@ export function post (url, params) {
     axios.post(url, params).then(res => {
       resolve(res.data)
     }).catch(err => {
-      reject(err.data)
+      if (err.response){
+        reject(err.response.status)
+        return;
+      }
+      reject(500)
+    })
+  })
+}
+
+export function put (url, params) {
+  return new Promise((resolve, reject) => {
+    axios.put(url, params).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      if (err.response){
+        reject(err.response.status)
+        return;
+      }
+      reject(500)
     })
   })
 }

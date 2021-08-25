@@ -1,27 +1,13 @@
-import {
-  web3Accounts,
-  web3Enable,
-  web3FromSource
-} from '@polkadot/extension-dapp'
 
 import BN from "bn.js"
 import store from "@/store"
 
 import {
   getApi,
-  stanfiAddress,
-  token2Uni
 } from './kusama'
 import {
   $t
 } from '@/i18n'
-
-export const injectAccount = async (account) => {
-  const injected = await web3FromSource(account.meta.source)
-  const api = await getApi()
-  api.setSigner(injected.signer)
-  return api
-}
 
 export const getBalance = async () => {
   const api = await getApi()
@@ -72,7 +58,7 @@ export const getBalance = async () => {
  * @param {Number} amount 转账数目 单位为ksm
  */
 export const transfer = async (to, amount, toast, callback) => {
-  const api = injectAccount(store.state.polkadot.account)
+  const api = await getApi()
   const decimal = new BN(12)
   const from = store.state.polkadot.account.address
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
@@ -106,8 +92,8 @@ export const bond = async (amount, toast, callback) => {
   if (!from) {
     reject('no account')
   }
-  const api = await injectAccount(store.state.polkadot.account)
-  const uni = api.createType('Compact<BalanceOf>', token2Uni(amount))
+  const api = await getApi()
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(6))))
   const bonded = store.state.kusama.bonded
   console.log('bonded', bonded);
   const bondTx = bonded ? api.tx.staking.bondExtra(uni) : api.tx.staking.bond(from, uni, {
@@ -143,8 +129,8 @@ export const unBond = async (amount, toast, callback) => {
   if (!from) {
     reject('no account')
   }
-  const api = await injectAccount(store.state.polkadot.account)
-  const uni = api.createType('Compact<BalanceOf>', token2Uni(amount))
+  const api = await getApi()
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(6))))
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   console.log('unbond');
   const unsub = await api.tx.staking.unbond(uni).signAndSend(from, {

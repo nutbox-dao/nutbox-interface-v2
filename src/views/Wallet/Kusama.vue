@@ -1,29 +1,38 @@
 <template>
   <div class="ksm-wallet">
     <div class="ksm-wallet">
-      <p class="item-title">
-        {{ $t("wallet.asset") }}
-      </p>
-      <div class="balance-box">
-        <BalanceView
-          name="KSM"
-          :balances="available / 1e12"
-          desc="KSM"
-          :logo="ksmLogo"
-          :transfer="true"
-        />
-        <LockedBalanceView
-          name="KSM"
-          :balances="locked / 1e12"
-          desc="Locked KSM"
-          :logo="ksmLogo"
-          :transfer="true"
-        />
+      <div class="balance-box row">
+        <div class="col-xl-4 col-md-6 mb-4">
+          <BalanceView
+            name="KSM"
+            :balances="available / 1e12"
+            desc="KSM"
+            :logo="ksmLogo"
+            :transfer="true"
+          />
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4">
+          <LockedBalanceView
+            name="KSM"
+            :balances="locked / 1e12"
+            desc="Locked KSM"
+            :logo="ksmLogo"
+            :transfer="true"
+          />
+        </div>
       </div>
-      <p class="item-title">
-        {{ $t("wallet.contribution") }}
-      </p>
-      <UserContributions />
+      <!-- <UserContributions class="mb-4">
+        <template #title>
+          <div class="card-title">
+            {{ $t("wallet.contribution") }}
+          </div>
+        </template>
+      </UserContributions>
+      <UserNominations>
+        <template #title>
+          <div class="card-title">{{ $t("wallet.nomination") }}</div>
+        </template>
+      </UserNominations> -->
     </div>
   </div>
 </template>
@@ -32,6 +41,7 @@
 import BalanceView from "@/components/Wallet/Kusama/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Kusama/LockedBalanceView";
 import UserContributions from "@/components/Wallet/Kusama/UserContributions";
+import UserNominations from "@/components/Wallet/Kusama/UserNominations"
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -48,24 +58,11 @@ export default {
     BalanceView,
     UserContributions,
     LockedBalanceView,
+    UserNominations
   },
   async mounted() {},
 };
 </script>
 
-<style lang="less" scoped>
-.ksm-wallet {
-  margin-top: 20px;
-  .balance-box {
-    display: flex;
-    align-content: left;
-    // z-index: 1;
-    // justify-content: space-between;
-    flex-wrap: wrap;
-    > div {
-      margin-top: 24px;
-      margin-right: 24px;
-    }
-  }
-}
+<style lang="scss" scoped>
 </style>

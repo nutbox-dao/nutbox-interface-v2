@@ -1,7 +1,7 @@
 import {
   web3Accounts,
   web3Enable,
-  web3FromSource
+  web3FromSourc
 } from '@polkadot/extension-dapp'
 import keyring from '@polkadot/ui-keyring';
 
@@ -17,12 +17,15 @@ import {
 import {
   getBalance as getKusamaBalance
 } from '../kusama/account'
+import {
+  getBalance as getRococoBalance
+} from '../rococo/account'
 
 import {
   getApi,
-  stanfiAddress,
-  token2Uni
 } from './polkadot'
+import { stanfiAddress } from '@/utils/commen/account'
+import { DEBUG } from  '@/config'
 import {
   $t
 } from '@/i18n'
@@ -47,20 +50,12 @@ export const loadAccounts = async () => {
     store.commit('polkadot/saveAccount', account)
     getBalance(account)
     getKusamaBalance(account)
+    DEBUG && getRococoBalance(account)
     subNominators()
     subBonded()
-    // inject
-    await injectAccount(account)
   } catch (e) {
-    console.error('get all accounts fail:', e);
+    // console.error('get all accounts fail:', e);
   }
-}
-
-export const injectAccount = async (account) => {
-  const injected = await web3FromSource(account.meta.source)
-  const api = await getApi()
-  api.setSigner(injected.signer)
-  return api
 }
 
 export const getBalance = async (account) => {
@@ -113,11 +108,15 @@ export const getBalance = async (account) => {
  * @param {Number} amount 转账数目 单位为dot
  */
 export const transfer = async (to, amount, toast, callback) => {
-  const api = await injectAccount(store.state.polkadot.account)
+  const from = store.state.polkadot.account && store.state.polkadot.account.address
+  if (!from){
+    reject('no account')
+  }
+  const api = await getApi()
   const decimal = new BN(10)
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
-  const unsub = await api.tx.balances.transfer(to, amount).signAndSend(store.state.polkadot.account.address, {
+  const unsub = await api.tx.balances.transfer(to, amount).signAndSend(from, {
     nonce
   }, ({
     status,
@@ -146,8 +145,8 @@ export const bond = async (amount, toast, callback) => {
   if (!from) {
     reject('no account')
   }
-  const api = await injectAccount(store.state.polkadot.account)
-  const uni = api.createType('Compact<BalanceOf>', token2Uni(amount))
+  const api = await getApi()
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(4))))
   const bonded = store.state.polkadot.bonded
   const bondTx = bonded ? api.tx.staking.bondExtra(uni) : api.tx.staking.bond(from, uni, {
     Staked: null
@@ -182,8 +181,8 @@ export const bond = async (amount, toast, callback) => {
   if (!from) {
     reject('no account')
   }
-  const api = await injectAccount(store.state.polkadot.account)
-  const uni = api.createType('Compact<BalanceOf>', token2Uni(amount))
+  const api = await getApi()
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(4))))
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   console.log('unbond');
   const unsub = await api.tx.staking.unbond(uni).signAndSend(from, {

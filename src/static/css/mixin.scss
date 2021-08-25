@@ -1,0 +1,71 @@
+@mixin icon($w: 1rem, $h: 1rem) {
+  width: $w;
+  min-width: $w;
+  height: $h;
+  min-height: $h;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+@mixin c-flex-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@mixin c-col-flex-between-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+@mixin card($pd: 1.2rem, $bg:white, $overflow: hidden, $h: 100%) {
+  width: 100%;
+  height: $h;
+  border-radius: 1.4rem;
+  overflow: $overflow;
+  border: none;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
+  position: relative;
+  background: $bg;
+  padding: $pd;
+}
+@mixin coin-shadow($x: 0, $y: 8px, $b:16px, $s: 4px) {
+  box-shadow: $x $y $b $s rgba(0, 0, 0, 0.05);
+}
+@mixin card-icon($w: 2.8rem, $h: 2.8rem) {
+  width: $w;
+  height: $h;
+  border-radius: $w;
+  @include coin-shadow()
+}
+@mixin c-grid-repeat($count: 1, $gap: 0) {
+  display: grid;
+  gap: $gap;
+  grid-template-columns: repeat($count, 1fr);
+}
+@mixin text-multi-line($line:1) {
+  word-break: break-word;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+@mixin line($w: 100%, $h: 1px, $br: 0, $color: var(--primary-custom)) {
+  width: $w;
+  height: $h;
+  background: $color;
+  border-radius: $br;
+}
+@mixin card-poster-bg($h: 6.2rem, $br: 1.4rem 1.4rem 0 0) {
+  border-radius: $br ;
+  height: $h;
+  max-height: $h;
+  object-fit: cover;
+}
+@mixin single-color-bg($size: 0 0, $position: center, $color: var(--primary-custom)) {
+  background-repeat: no-repeat;
+  background-image: linear-gradient(to right, $color, $color);
+  background-size: $size;
+  background-position: $position;
+}

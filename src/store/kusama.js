@@ -1,7 +1,4 @@
-import Cookie from 'vue-cookies'
-import {
-  LOCALE_KEY
-} from '../config'
+
 
 export default {
   namespaced: true,
@@ -25,7 +22,7 @@ export default {
     // projectIds
     projects: [],
     crowdstakings: [],
-    loadingStaking: true,
+    loadingStaking: false,
     totalStaked: 0,
     locked: 0,
     unLocking: 0,
@@ -33,13 +30,13 @@ export default {
 
     //  crowdloan
     subFund: {},
-    auctionEnd: {},
-    showingCrowdloan: {},
+    auctionEnd: null,
+    showingCrowdloan: null,
     clCommunitys: [],
     loadingFunds: true,
     loadingContributions: true,
     clProjectFundInfos: [],
-    clLeasePeriod: {}
+    clLeasePeriod: null
   },
   mutations: {
     saveCommunitys: (state, communitys) => {
@@ -71,10 +68,6 @@ export default {
     },
     saveSubBonded: (state, subBonded) => {
       state.subBonded = subBonded
-    },
-    saveLang: (state, lang) => {
-      state.lang = lang;
-      Cookie.set(LOCALE_KEY, lang, '30d')
     },
     saveBonded: (state, bonded) => {
       state.bonded = bonded
@@ -115,7 +108,6 @@ export default {
       state.showingCrowdloan = crowdloans
     },
     saveClCommunitys: (state, clCommunitys) => {
-      console.log('clcom', clCommunitys);
       state.clCommunitys = clCommunitys
     },
     saveLoadingFunds: (state, loadingFunds) => {

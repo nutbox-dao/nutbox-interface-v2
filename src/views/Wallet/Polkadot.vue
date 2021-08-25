@@ -1,10 +1,7 @@
 <template>
   <div class="ksm-wallet">
-    <div class="ksm-wallet">
-      <p class="item-title">
-        {{ $t("wallet.asset") }}
-      </p>
-      <div class="balance-box">
+    <div class="balance-box row">
+      <div class="col-xl-4 col-md-6 mb-4">
         <BalanceView
           name="DOT"
           :balances="available / 1e10"
@@ -12,6 +9,8 @@
           :logo="dotLogo"
           :transfer="true"
         />
+      </div>
+      <div class="col-xl-4 col-md-6 mb-4">
         <LockedBalanceView
           name="DOT"
           :balances="locked / 1e10"
@@ -20,11 +19,17 @@
           :transfer="true"
         />
       </div>
-      <p class="item-title">
-        {{ $t("wallet.nomination") }}
-      </p>
-      <UserNominations />
     </div>
+    <!-- <UserContributions class="mb-4">
+      <template #title>
+        <div class="card-title">{{ $t("wallet.contribution") }}</div>
+      </template>
+    </UserContributions>
+    <UserNominations>
+      <template #title>
+        <div class="card-title">{{ $t("wallet.nomination") }}</div>
+      </template>
+    </UserNominations> -->
   </div>
 </template>
 
@@ -33,6 +38,7 @@ import BalanceView from "@/components/Wallet/Polkadot/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Polkadot/LockedBalanceView";
 import { mapState, mapGetters } from "vuex";
 import UserNominations from "@/components/Wallet/Polkadot/UserNominations";
+import UserContributions from "@/components/Wallet/Polkadot/UserContributions"
 
 export default {
   data() {
@@ -48,24 +54,12 @@ export default {
     BalanceView,
     UserNominations,
     LockedBalanceView,
+    UserContributions
   },
   async mounted() {},
 };
 </script>
 
 <style lang="less" scoped>
-.ksm-wallet {
-  margin-top: 20px;
-  .balance-box {
-    display: flex;
-    align-content: left;
-    // z-index: 1;
-    // justify-content: space-between;
-    flex-wrap: wrap;
-    > div {
-      margin-top: 24px;
-      margin-right: 24px;
-    }
-  }
-}
+
 </style>

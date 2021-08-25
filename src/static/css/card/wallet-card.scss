@@ -1,0 +1,28 @@
+.wallet-card {
+  @include card(1.2rem 0);
+  @include c-col-flex-between-center;
+  .top {
+    width: 100%;
+    @include single-color-bg(.2rem 1.4rem);
+    background-position: left center;
+    padding: 0 1.2rem;
+    margin-bottom: .8rem;
+  }
+  .logo {
+    @include card-icon;
+    margin-right: .4rem;
+  }
+  .desc {
+    color: var(--secondary-text);
+  }
+  .btn-group {
+    width: 100%;
+    padding: 0 1.2rem;
+    &.btn-group-1 {
+      @include c-grid-repeat(1, .4rem)
+    }
+    &.btn-group-2 {
+      @include c-grid-repeat(2, .4rem)
+    }
+  }
+}

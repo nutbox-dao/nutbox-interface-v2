@@ -3,19 +3,15 @@
     <b-button
       class="login-btn"
       variant="primary"
-      :style="'width:'+width+'px;'"
+      style="width:90%"
       @click="unlock"
       :disabled="isConnecting"
-      v-if="
-        type == 'STEEM'
-          ? !steemAccount || steemAccount.length === 0
-          : !isConnectTron
-      "
+      v-if="showBtn"
     >
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
       <!-- <b-button variant="primary" @click="unlock"> -->
       {{
-        type == "STEEM" ? $t("wallet.connectSteem") : $t("wallet.connectTron")
+        btnName
       }}
     </b-button>
   </div>
@@ -23,14 +19,14 @@
 
 <script>
 import { mapState } from "vuex";
-import { sleep } from '../../utils/helper'
-import { TRON_LINK_ADDR_NOT_FOUND } from '../../config'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: "ConnectWalletBtn",
   data() {
     return {
-      isConnecting:false
+      isConnecting:false,
+      btnName: ''
     };
   },
   props: {
@@ -44,36 +40,42 @@ export default {
     }
   },
   computed: {
-    ...mapState(["steemAccount", "tronAddress"]),
-    isConnectTron() {
-      return (
-        this.tronAddress &&
-        this.tronAddress.length > 0 &&
-        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.noTronLink &&
-        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.walletLocked
-      );
-    },
+    ...mapState('steem', ["steemAccount"]),
+    ...mapState('hive', ['hiveAccount']),
+    showBtn(){
+      switch (this.type){
+        case 'STEEM':
+          return !this.steemAccount || this.steemAccount.length === 0
+        case 'HIVE':
+          return !this.hiveAccount || this.hiveAccount.length === 0
+        default:
+          return true
+      }
+    }
   },
   methods: {
     async unlock() {
       if (this.type === "STEEM") {
         this.$emit("steemLogin");
-      } else {
+      } else if (this.type === 'HIVE') {
         // loading
-        this.$emit("tronLogin");
-        this.isConnecting = true;
-        await sleep(4);
-        this.isConnecting= false;
+        this.$emit("hiveLogin");
       }
     },
+  },
+  mounted () {
+    switch(this.type){
+      case 'STEEM':
+        this.btnName = this.$t("wallet.connectSteem")
+        break;
+      case 'HIVE':
+        this.btnName = this.$t("wallet.connectHive")
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.connect-wallet {
-  z-index: 999;
-}
 button {
   margin-top: 24px;
   width: 272px;

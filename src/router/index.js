@@ -2,19 +2,32 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Blog from '../views/Blog/Blog'
-import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
-import Crowdloan from '../views/Crowdloan/Crowdloan'
-import PolkadotCrowdloan from '../views/Crowdloan/Polkadot'
-import KusamaCrowdloan from '../views/Crowdloan/Kusama'
+import CrowdIndex from '../views/CrowdStaking/Index'
 import Wallet from '../views/Wallet/Wallet'
+import BSCWallet from '../views/Wallet/BSC'
 import PolkadotWallet from '../views/Wallet/Polkadot'
 import KusamaWallet from '../views/Wallet/Kusama'
-import Admin from '../views/Admin/Admin'
-import PolkadotAdmin from '../views/Admin/Polkadot'
-import KusamaAdmin from '../views/Admin/Kusama'
-import PolkadotCrowdstaking from '../views/CrowdStaking/Polkadot'
-import KusamaCrowdstaking from '../views/CrowdStaking/Kusama'
-
+import SteemWallet from '../views/Wallet/Steem'
+import HiveWallet from '../views/Wallet/Hive'
+import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
+import CrowdLoan from '../views/CrowdStaking/CrowdLoan'
+import CommunityIndex from '../views/Community/Index'
+import Community from '../views/Community/Community'
+import DeployToken from '../views/Community/DeployToken'
+import CreateEconomy from '@/views/Community/CreateEconomy'
+import PoolsDashboard from '@/views/Community/PoolsDashboard'
+import AddPool from '@/views/Community/AddPool'
+import UpdatePool from '@/views/Community/UpdatePool'
+import Register from '@/views/RegisterAsset/Register'
+import RegisterCtoken from '@/views/RegisterAsset/RegisterCtoken'
+import NativeAsset from '@/views/RegisterAsset/NativeAsset'
+import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
+import CommunityInfo from '@/views/Community/CommunityInfo'
+import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
+import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
+import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
+import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
+import Tutorials from '@/views/Community/Tutorials'
 
 Vue.use(VueRouter)
 
@@ -22,73 +35,140 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    redirect: '/crowdloan'
+    redirect: '/community'
   },
   {
-    path:'/wallet',
+    path: '/wallet',
+    redirect: '/wallet/bsc',
     component: Wallet,
     children: [
       {
-        path:'',
-        component: PolkadotWallet
-      },
-      {
-        path:'kusama',
-        component: KusamaWallet
-      }
-    ]
-  },
-  {
-    path: '/crowdloan',
-    name: 'crowdloan',
-    component: Crowdloan,
-    children: [
-      {
-        path: '',
-        name: 'kusama',
-        component: KusamaCrowdloan
+        path: 'bsc',
+        name: 'BSCWallet',
+        component: BSCWallet
       },
       {
         path: 'polkadot',
-        name: 'polkadot',
-        component: PolkadotCrowdloan
+        name: 'PolkadotWallet',
+        component: PolkadotWallet
+      },
+      {
+        path: 'kusama',
+        name: 'PolkadotWallet',
+        component: KusamaWallet
+      },
+      {
+        path: 'steem',
+        name: 'SteemWallet',
+        component: SteemWallet
+      },
+      {
+        path: 'hive',
+        name: 'HiveWallet',
+        component: HiveWallet
       }
     ]
   },
   {
     path: '/crowdstaking',
-    component: CrowdStaking,
+    component: CrowdIndex,
+    redirect: '/crowdstaking/deposite',
     children: [
       {
-        path: 'kusama',
-        name: 'kusama',
-        component: KusamaCrowdstaking
+        path: 'crowdloan',
+        name: 'crowdloan',
+        component: CrowdLoan
       },
       {
-        path: '',
-        name: 'polkadot',
-        component: PolkadotCrowdstaking
+        path: 'nominate',
+        name: 'nominate',
+        component: CrowdNominate
+      },
+      {
+        path: 'steem-delegate',
+        name: 'steem-delegate',
+        component: SteemDelegate
+      },
+      {
+        path: 'hive-delegate',
+        name: 'hive-delegate',
+        component: HiveDelegate
+      },
+      {
+        path: 'deposite',
+        name: 'deposite',
+        component: CrowdStaking
       }
     ]
   },
   {
     path: '/blog',
-    component: Blog,
+    component: Blog
   },
   {
-    path: '/admin',
-    component: Admin,
+    path: '/community',
+    component: CommunityIndex,
     children: [
       {
-        path: '',
-        component: PolkadotAdmin
+        path: '/',
+        component: Community
       },
       {
-        path: 'kusama',
-        component: KusamaAdmin
+        path: 'tutorials',
+        component: Tutorials
+      },
+      {
+        path: 'detail-info',
+        component: CommunityDetailInfo
+      },
+      {
+        path: 'deploy-token',
+        component: DeployToken
+      },
+      {
+        path: 'create-economy',
+        component: CreateEconomy
+      },
+      {
+        path: 'pool-dashboard',
+        component: PoolsDashboard
+      },
+      {
+        path: 'add-pool',
+        component: AddPool
+      },
+      {
+        path: 'update-pool',
+        component: UpdatePool
+      },
+      {
+        path: 'community-info',
+        component: CommunityInfo
+      },
+      {
+        path: 'register-ctoken',
+        component: RegisterCtoken,
+      },
+      {
+        path: 'register',
+        component: Register,
+        children: [
+          {
+            path: 'native',
+            component: NativeAsset,
+            props: route => ({
+              tokenAddress: route.query.tokenAddress
+            })
+          },
+          {
+            path: 'cross-chain-asset',
+            component: CrossChainAsset
+          }
+        ]
       }
     ]
   }
+
 ]
 
 const router = new VueRouter({

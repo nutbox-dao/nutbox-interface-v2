@@ -1,95 +1,44 @@
 <template>
-  <div class="wallet">
-    <h3>
-      {{ this.$t("wallet.wallet") }}
-    </h3>
-    <div class="nav">
-      <router-link to="/wallet" exact>Pokadot</router-link>
-      <router-link to="/wallet/kusama">Kusama</router-link>
+  <div class="page-view-content wallet">
+    <div class="page-view-title">{{ this.$t("wallet.wallet") }}</div>
+    <!-- <div class="page-view-subtitle">Choose asset type</div> -->
+    <div class="nav-box container" ref="navBox">
+      <div class="nav mr-5">
+        <router-link to="/wallet/bsc" exact>BSC</router-link>
+        <router-link to="/wallet/polkadot">Polkadot</router-link>
+        <router-link to="/wallet/kusama">Kusama</router-link>
+        <router-link to="/wallet/steem">Steem</router-link>
+        <router-link to="/wallet/hive">Hive</router-link>
+      </div>
+      <component :is="$route.name"></component>
     </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import SteemAccount from '@/components/Accounts/SteemAccount'
+import HiveAccount from '@/components/Accounts/HiveAccount'
+import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import BSCAccount from '@/components/Accounts/BSCAccount'
+
 export default {
-  name: "Wallet",
-  data() {
-    return {
-      showLogout: false,
-    };
+  name: 'Wallet',
+  components: {
+    PolkadotWallet: PolkadotAccount,
+    SteemWallet: SteemAccount,
+    BSCWallet: BSCAccount,
+    HiveWallet: HiveAccount
   },
   computed: {
   },
   methods: {
   },
-  mounted() {},
-};
+  mounted () {
+    console.log(this.$route.name)
+  }
+}
 </script>
 
 <style lang="less" scoped>
-.wallet {
-  .nav {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--dividers);
-    a {
-      border: 0;
-      font-size: 16px;
-      padding: 18px 28px 14px 28px;
-      color: #666;
-      box-sizing: border-box;
-      font-weight: 600;
-      line-height: 16px !important;
-    }
-    a:hover {
-      background: linear-gradient(
-        270deg,
-        rgba(227, 229, 232, 0) 0%,
-        rgba(227, 229, 232, 0.4) 100%
-      ) !important;
-      text-decoration: none;
-
-      font-weight: 300;
-      line-height: 16px;
-    }
-    .active {
-      color: var(--primary-text);
-      border-bottom: 3px solid var(--primary);
-    }
-    .steem-account {
-      height: 38px;
-      background-color: #ffffff;
-      box-shadow: 0px 10px 60px -5px rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
-      border: 0;
-      position: relative;
-      box-sizing: border-box;
-      font-size: 15px;
-      background-repeat: no-repeat;
-      background-position: center right;
-      p {
-        margin: 0;
-        line-height: 38px;
-        padding-left: 36px;
-        padding-right: 4px;
-        img{
-          margin-left: 16px;
-        }
-      }
-      button {
-        position: relative;
-        background-color:white;
-        top: 8px;
-        border: 0;
-        width: 100%;
-        padding: 8px 0px;
-        font-size: 15px;
-        box-sizing: border-box;
-
-      }
-    }
-  }
-}
 </style>

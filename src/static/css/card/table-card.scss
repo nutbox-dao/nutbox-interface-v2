@@ -1,0 +1,16 @@
+.table-card {
+  @include card;
+  .card-title {
+    text-align: left;
+    color: var(--primary-text);
+    font-size: 1rem;
+    line-height: 1rem;
+    font-weight: bold;
+    margin-bottom: 1.2rem;
+  }
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+

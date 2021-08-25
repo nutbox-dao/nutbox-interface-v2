@@ -1,5 +1,5 @@
 th,
-td {
+ponsived {
   white-space: nowrap;
   word-break: keep-all;
 }
@@ -45,17 +45,28 @@ td {
 
 .primary-btn {
   height: 2.4rem;
-  width: 13.5rem;
+  width: 100%;
   margin: 0 auto;
-  border: none;
+  border-color: transparent;
   background: var(--primary-custom);
   box-shadow: 0 8px 12px -4px rgba(255, 236, 136, 1);
   border-radius: .8rem;
   font-size: .8rem;
   font-weight: bold;
-
+  &:hover {
+    background: #FFEB75;
+  }
+  &.outline-btn {
+    background: white;
+    border: 1px solid var(--primary-custom);
+    box-shadow: none;
+  }
 }
-
+.primary-btn-outline {
+  background-color: white;
+  border: 1px solid var(--primary-custom);
+  box-shadow: none;
+}
 .primary-btn:disabled {
   background: rgba(227, 229, 232, 1);
   color: rgba(189, 191, 194, 1);
@@ -67,16 +78,30 @@ td {
   cursor: pointer;
 }
 
+.hover-blue:hover {
+  cursor: pointer;
+  color: var(--link)
+}
+
 .flex-between-center {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.flex-between-start {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .flex-start-center {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+.flex-full {
+  flex: 1;
 }
 
 .font56 {
@@ -123,7 +148,7 @@ td {
   font-size: .7rem;
 }
 
-.fon12 {
+.font12 {
   font-size: .6rem;
 }
 
@@ -141,6 +166,9 @@ td {
 
 .text-black {
   color: #242629;
+}
+.text-red {
+  color: #FF5040;
 }
 
 .carousel,
@@ -172,8 +200,8 @@ td {
 
 
 .empty-bg{
-  height: 7rem;
-  padding-top: 160px;
+  padding: 4rem;
+  text-align: center;
   img{
     height: 7rem;
   }
@@ -183,9 +211,15 @@ input,
 button {
   outline: none;
 }
-
+.btn {
+  padding: .6rem 1.2rem!important;
+}
 [role="button"] {
   outline: none;
+}
+.c-form-label label {
+  color: #717376;
+  margin-bottom: .4rem;
 }
 
 .dropdown {
@@ -195,43 +229,102 @@ button {
 .boder-bottom{
   border-bottom: 1px solid var(--dividers);
 }
-
-@media (min-width: 960px) {
-  .mobile-menu {
-    display: none !important;
-  }
-
-  .mobile-address {
-    display: none;
-  }
+h3 {
+  padding-top: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.8rem;
+  margin: 0 !important;
+}
+.spinner-grow {
+  margin-bottom: .1rem;
+  margin-right: .4rem;
+}
+input {
+  border: none;
+  outline: none;
+}
+input::-webkit-input-placeholder {
+  color: var(--disable);
 }
 
-@media (max-width: 960px) {
-  .pc-menu {
-    display: none !important;
-  }
-
-  .mobile-address {
-    display: block !important;
-  }
-
-  .menu-btn {
-    display: block !important;
-  }
-
-  .mobile-menu {
-    .nav-item {
-      min-width: 0;
-    }
-
-    .user-address .nav-link {
-      padding: 1px 8px;
-      border-radius: 8px;
-
-      img {
-        margin: auto;
-      }
-    }
-  }
+.mask {
+  z-index: 2000;
+  overflow: hidden;
+  display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
+.btn-primary {
+  font-size: 16px;
+  border-radius: 16px !important;
+  box-shadow: 0px 8px 12px -4px #ffec88;
+  border: 0px !important;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: var(--primary-text) !important;
+}
+
+.btn-primary:hover {
+  background: #ffeb75 !important;
+}
+.table thead th {
+  border-top: 0;
+}
+.table th, .table td {
+  white-space: nowrap;
+}
+.pagination li {
+  margin: 0 .2rem;
+}
+#mint-checkbox .custom-control-label {
+  line-height: 1.5rem;
+}
+#mint-checkbox .custom-control-label::before{
+  border-radius: 1rem;
+}
+#mint-checkbox .custom-control-label::after{
+  border-radius: 1rem;
+}
+.custom-file-input, .custom-file-label {
+  width: 100%!important;
+  height: 100%!important;
+  background-color: #F6F7F9!important;
+  border: 1px solid #E3E5E8!important;
+  padding: 0!important;
+  box-sizing: content-box;
+}
+.custom-file-label::after{
+  content: ''!important;
+  padding: 0!important;
+}
+.form-file-text {
+  width: 100%;
+  height: 100%;
+}
+.logo-form .custom-file {
+  width: 6rem;
+  height: 6rem;
+}
+.logo-form .custom-file-input, .logo-form .custom-file-label {
+  border-radius: 50%;
+}
+
+.cover-form .custom-file {
+  width: 100%;
+  height: 6rem;
+}
+
+.cover-form .custom-file-input, .cover-form .custom-file-label {
+  border-radius: .8rem;
+}
+@import "dropdown";

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/arrow/l</title>
+    <g id="notbox-v2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="deploy-asset" transform="translate(-336.000000, -156.000000)">
+            <g id="icon/arrow/l" transform="translate(336.000000, 156.000000)">
+                <rect id="Rectangle-55" fill="#D8D8D8" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                <path d="M9.30247857,12 L16.7206625,19.7902442 C17.0931125,20.1813745 17.0931125,20.815522 16.7206625,21.2066523 C16.3482125,21.5977826 15.7443518,21.5977826 15.3719018,21.2066523 L7.27933749,12.708204 C6.9068875,12.3170737 6.9068875,11.6829263 7.27933749,11.291796 L15.3719018,2.79334771 C15.7443518,2.40221743 16.3482125,2.40221743 16.7206625,2.79334771 C17.0931125,3.18447799 17.0931125,3.81862547 16.7206625,4.20975576 L9.30247857,12 L9.30247857,12 Z" id="Combined-Shape" fill="#242629"></path>
+            </g>
+        </g>
+    </g>
+</svg>
