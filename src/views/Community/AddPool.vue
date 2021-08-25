@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content">
+    <Step :current-step="1"></Step>
     <div class="flex-between-center">
       <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
     </div>
@@ -108,10 +109,11 @@ import { DELEGATION_CHAINID_TO_NAME, CROWDLOAN_CHAINID_TO_NAME, VALIDATOR_CHAINI
 import { stanfiAddress } from '@/utils/commen/account'
 import { addPool, getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
+import Step from '@/components/ToolsComponents/Step'
 
 export default {
   name: 'AddPool',
-  components: { Dropdown },
+  components: { Dropdown, Step },
   data () {
     return {
       isHomeChainAsset: true,

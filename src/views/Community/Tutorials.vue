@@ -152,7 +152,7 @@ export default {
     &::after {
       content: '';
       height: 100%;
-      border-left: .2rem dashed #efefef;
+      border-left: 2px dashed #efefef;
       position: absolute;
       left: .4rem;
       top: 2.4rem;
