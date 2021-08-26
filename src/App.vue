@@ -33,6 +33,10 @@
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("commen.blog") }}</span>
               </b-nav-item>
+              <b-nav-item to="/nps">
+                <i id="nps-icon" class="menu-icon" />
+                <span>{{ $t("nps.nps") }}</span>
+              </b-nav-item>
             </b-nav>
             <div class="bottom">
               <div class="links">

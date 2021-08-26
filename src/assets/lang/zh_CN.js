@@ -206,6 +206,14 @@ module.exports = {
     ratioError: "矿池分润比例总和应为100",
     wrongApy: "请输入正确的APY"
   },
+  nps: {
+    nps: '提案改善',
+    peanutNps: 'Peanut 提案改善',
+    pass: '已通过',
+    pending: '待审核',
+    unpass: '未通过',
+    rolling: '正在投票'
+  },
   error: {
     error: '错误',
     depositFail: '储蓄失败',
