@@ -114,12 +114,10 @@ export const getMyOpenedPools = async (update = false) => {
 
       try {
         // get pool asset info
-        const myAsset = await getRegitryAssets()
-        console.log('myasset', myAsset);
-        myAsset.concat(OfficialAssets);
+        let myAsset = await getRegitryAssets()
+        myAsset = myAsset.concat(OfficialAssets);
         let idToIndex = {}
         myAsset.map((a, i) => idToIndex[a.asset] = i)
-        console.log(idToIndex);
         pools = pools.map(pool => ({
           pid: pool.pid,
           poolName: pool.poolName,
