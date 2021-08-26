@@ -579,7 +579,7 @@ export const monitorCtokenBalance = async (update = false) => {
             symbol: t.tokenSymbol
           }
         })
-        console.log('Updates ctoken balances', ctokenBalances);
+        // console.log('Updates ctoken balances', ctokenBalances);
         store.commit('web3/saveLoadingCtokenBalances', false)
         store.commit('web3/saveCtokenBalances', {...ctokenBalances})
       })
