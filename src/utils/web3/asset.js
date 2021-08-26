@@ -205,9 +205,7 @@ export const getAssetMetadata = async (id, assetType) => {
     return;
   }
   if (assetType === 'HomeChainAssetRegistry') {
-    console.log(14,id);
     const homeLocation = await contract.getHomeLocation(id)
-    console.log({homeLocation});
     return await getERC20Info(homeLocation)
   }
   let meta = await contract.idToMetadata(id)

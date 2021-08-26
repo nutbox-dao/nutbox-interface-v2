@@ -14,7 +14,8 @@ import {
 } from './utils'
 import {
   errCode,
-  Multi_Config
+  Multi_Config,
+  OfficialAssets
 } from '@/config'
 import {
   waitForTx,
@@ -115,6 +116,7 @@ export const getMyOpenedPools = async (update = false) => {
         // get pool asset info
         const myAsset = await getRegitryAssets()
         console.log('myasset', myAsset);
+        myAsset.concat(OfficialAssets);
         let idToIndex = {}
         myAsset.map((a, i) => idToIndex[a.asset] = i)
         console.log(idToIndex);
@@ -166,7 +168,6 @@ export const addPool = async (form) => {
     }
 
     try {
-      console.log(6236, form.assetId, form.name);
       const gas = await getGasPrice()
       const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)),
       {
@@ -177,7 +178,7 @@ export const addPool = async (form) => {
       // re monitor
       resolve(tx.hash)
     } catch (e) {
-      console.log(542, e);
+      console.log('Create pool fail', e);
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })

@@ -160,6 +160,7 @@ export const OfficialAssets = [
     address: '0xf1D97c74ACce7DA7554e27D373265E6EFe21bd0a',
     symbol: 'NUT',
     asset: '0xec9f2c163346c3eeb6e14a718ad780a6b75ea9afb1b0a18c0d5a94cffde8e366',
+    decimal: 18,
     icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/nut.png'
   },
   {
@@ -167,12 +168,14 @@ export const OfficialAssets = [
     address: '0x64f525e92B614bA4f8d332910B11430DD487895b',
     symbol: 'WBNB',
     asset: '0x5f54be7b77630ac5a539705d38e0ea00bed06f3c6d2fff334855440d18296b7f',
+    decimal: 18,
     icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
   },
   {
     name: 'WETH',
     address: '0xa49B1eEC62c669b65D571536E221fB172a62C9F6',
     symbol: 'WETH',
+    decimal: 18,
     asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
     icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
   }
