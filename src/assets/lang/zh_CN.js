@@ -208,7 +208,7 @@ module.exports = {
   },
   nps: {
     nps: '提案改善',
-    peanutNps: 'Peanut 提案改善',
+    npsTemp: '以Peanut提案改善系统为例, Walnut提案系统正在开发中',
     pass: '已通过',
     pending: '待审核',
     unpass: '未通过',

@@ -207,7 +207,7 @@ module.exports = {
   },
   nps: {
     nps: 'Governance',
-    peanutNps: 'Peanut Governance',
+    npsTemp: "Showing peanut governance for example. Walnut governance is under developing.",
     pass: 'Passed',
     pending: 'Pending',
     unpass: 'Rejected',

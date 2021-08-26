@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content nps">
-    <div class="page-view-title">{{ this.$t("nps.peanutNps") }}</div>
-
+    <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
+    <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
     <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
       <div class="proposal">
         <p
