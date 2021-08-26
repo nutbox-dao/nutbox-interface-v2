@@ -411,6 +411,13 @@ input::-webkit-input-placeholder {
     min-width: 5rem;
   }
 }
+.cropper-modal .modal-content {
+  background-color: transparent;
+  border: transparent;
+}
+.cropper-modal .modal-body{
+  padding: 0;
+}
 #wallet-icon {
   background-image: url("./static/images/wallet.svg");
 }

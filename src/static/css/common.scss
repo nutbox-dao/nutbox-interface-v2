@@ -304,8 +304,9 @@ input::-webkit-input-placeholder {
   box-sizing: content-box;
 }
 .custom-file-label::after{
-  content: ''!important;
-  padding: 0!important;
+  display: none!important;
+  //content: ''!important;
+  //padding: 0!important;
 }
 .form-file-text {
   width: 100%;
@@ -323,7 +324,6 @@ input::-webkit-input-placeholder {
   width: 100%;
   height: 6rem;
 }
-
 .cover-form .custom-file-input, .cover-form .custom-file-label {
   border-radius: .8rem;
 }

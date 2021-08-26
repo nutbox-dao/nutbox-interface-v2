@@ -445,6 +445,32 @@
         </div>
       </div>
     </b-modal>
+    <b-modal
+      v-model="cropperModal"
+      modal-class="cropper-modal"
+      size="lg"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="cropper-container">
+        <vueCropper
+          ref="cropper"
+          :infoTrue="true"
+          :autoCrop="true"
+          :img="cropperImgSrc"
+          :fixedNumber="cropFixedNumber"
+          :autoCropWidth="cropImgSize[0]"
+          :fixed="true"
+          :centerBox="true"
+          outputType="png"
+        ></vueCropper>
+      </div>
+      <div class="crop-btn-group">
+        <button class="primary-btn" @click="onCancel">取消</button>
+        <button class="primary-btn" @click="completeCropAndUpload">完成</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -465,12 +491,13 @@ import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState, mapGetters } from "vuex";
 import BN from 'bn.js'
-import Step from "@/components/ToolsComponents/Step";
+import Step from '@/components/ToolsComponents/Step'
+import { VueCropper } from 'vue-cropper'
 
 export default {
-  name: "EditCommunityInfo",
-  components: { UploadLoading, Step },
-  data() {
+  name: 'EditCommunityInfo',
+  components: { UploadLoading, Step, VueCropper },
+  data () {
     return {
       logo: null,
       coverImg: null,
@@ -506,8 +533,12 @@ export default {
       cTokenAddress: '',
       updatingAddress: false,
       updatingDevRatio: false,
-      showStep: false
-    };
+      showStep: false,
+      cropperModal: false,
+      cropperImgSrc: '',
+      cropFixedNumber: [1, 1],
+      cropImgSize: [200, 200]
+    }
   },
   computed: {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
@@ -562,47 +593,77 @@ export default {
     }
   },
   methods: {
-    async updateLogo(file) {
-      if (!this.logo) return;
-      this.logoUploadLoading = true;
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (res) => {
-        this.logoPreviewSrc = res.target.result;
-      };
-      try {
-        this.form.icon = await uploadImage(this.logo);
-        this.logoUploadLoading = false;
-      } catch (e) {
-        this.$bvToast.toast(this.$t("tip.picUploadFail"), {
-          title: this.$t("tip.tips"),
-          autoHideDelay: 5000,
-          variant: "warning",
-        });
-        this.logo = null;
-        this.form.icon = null;
-        this.logoUploadLoading = false;
+    onCancel () {
+      this.cropperModal = false
+      if (this.logoUploadLoading) {
+        this.logo = null
+        this.logoUploadLoading = false
+      }
+      if (this.coverUploadLoading) {
+        this.coverImg = null
+        this.coverUploadLoading = false
       }
     },
-    async updateCover(file) {
-      if (!this.coverImg) return;
-      this.coverUploadLoading = true;
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+    completeCropAndUpload () {
+      this.cropperModal = false
+      this.$refs.cropper.getCropData((data) => {
+        if (this.logoUploadLoading) this.logoPreviewSrc = data
+        if (this.coverUploadLoading) this.coverPreviewSrc = data
+      })
+      this.$refs.cropper.getCropBlob(async (data) => {
+        if (this.logoUploadLoading) {
+          try {
+            this.form.icon = await uploadImage(data)
+            this.logoUploadLoading = false
+          } catch (e) {
+            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+              title: this.$t('tip.tips'),
+              autoHideDelay: 5000,
+              variant: 'warning'
+            })
+            this.logo = null
+            this.form.icon = null
+            this.logoUploadLoading = false
+          }
+        }
+        if (this.coverUploadLoading) {
+          try {
+            this.form.poster = await uploadImage(data)
+            this.coverUploadLoading = false
+          } catch (e) {
+            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+              title: this.$t('tip.tips'),
+              autoHideDelay: 5000,
+              variant: 'warning'
+            })
+            this.coverImg = null
+            this.form.poster = null
+          }
+        }
+      })
+    },
+    async updateLogo (file) {
+      if (!this.logo) return
+      this.logoUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = (res) => {
-        this.coverPreviewSrc = res.target.result;
-      };
-      try {
-        this.form.poster = await uploadImage(this.coverImg);
-        this.coverUploadLoading = false;
-      } catch (e) {
-        this.$bvToast.toast(this.$t("tip.picUploadFail"), {
-          title: this.$t("tip.tips"),
-          autoHideDelay: 5000,
-          variant: "warning",
-        });
-        this.coverImg = null;
-        this.form.poster = null;
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [1, 1]
+        this.cropImgSize = [200, 200]
+      }
+    },
+    async updateCover (file) {
+      if (!this.coverImg) return
+      this.coverUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [30, 7]
+        this.cropImgSize = [1200, 280]
       }
     },
     async approve() {
@@ -776,6 +837,36 @@ export default {
     transform: translate(-50%, -50%);
     font-size: 1rem;
     text-align: center;
+  }
+}
+.close-icon {
+  position: absolute;
+  right: -1.4rem;
+  top: -1.4rem;
+  @include icon(1.4rem, 1.4rem);
+  background-image: url("~@/static/images/circle-close.png");
+}
+.cropper-container {
+  height: 500px;
+  max-height: 100%;
+}
+.crop-btn-group {
+  padding: 1.2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  button {
+    box-shadow: none;
+    width: fit-content;
+    padding: 0 2rem;
+  }
+}
+@media (max-width: 576px) {
+  .close-icon {
+    top: auto;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 </style>
