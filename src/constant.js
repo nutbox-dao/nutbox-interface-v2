@@ -47,6 +47,7 @@ export const ASSET_LOGO_URL = {
         icon: 'https://cdn.wherein.mobi/polkadot/logo/kusama.png',
         2006: 'https://cdn.wherein.mobi/polkadot/token/logo/crab.png',
         2012: 'https://cdn.wherein.mobi/polkadot/token/logo/crust.png',
+        2013: 'https://cdn.wherein.mobi/polkadot/parachain/logo/sherpax.png',
         2004: 'https://cdn.wherein.mobi/polkadot/token/logo/khala.png',
         2001: 'https://cdn.wherein.mobi/polkadot/parachain/logo/bifrost.png',
         2007: 'https://cdn.wherein.mobi/shiden.png',
