@@ -198,7 +198,6 @@ export const isMintableAsset = async (assetId) => {
  */
 export const getAssetMetadata = async (id, assetType) => {
   let contract;
-  console.log(453, id, assetType);
   try{
     contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
   }catch(e){
@@ -206,9 +205,7 @@ export const getAssetMetadata = async (id, assetType) => {
     return;
   }
   if (assetType === 'HomeChainAssetRegistry') {
-    console.log(14,id);
     const homeLocation = await contract.getHomeLocation(id)
-    console.log({homeLocation});
     return await getERC20Info(homeLocation)
   }
   let meta = await contract.idToMetadata(id)

@@ -33,6 +33,10 @@
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("commen.blog") }}</span>
               </b-nav-item>
+              <b-nav-item to="/nps">
+                <i id="nps-icon" class="menu-icon" />
+                <span>{{ $t("nps.nps") }}</span>
+              </b-nav-item>
             </b-nav>
             <div class="bottom">
               <div class="links">
@@ -154,6 +158,7 @@ import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } from '@/utils/web3/community'
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
+import { generateNewHiveAccount } from '@/utils/steem/steem'
 
 export default {
   data () {
@@ -200,11 +205,10 @@ export default {
     ...mapMutations('polkadot', ['saveClCommunitys']),
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
-    gotoOfficial () {
+    async gotoOfficial () {
       // test()
-      console.log(1);
-      fetchAllCommunityDistributions()
-      console.log(2);
+      const account = await generateNewHiveAccount();
+      console.log(account);
       // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {

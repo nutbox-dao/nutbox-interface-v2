@@ -6,7 +6,7 @@
         <img class="logo" :src="cardInfo.icon" alt="">
         <div class="flex-between-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
-          <a :href="cardInfo.website" target="_blank">
+          <a :href="cardInfo.website" target="_blank" v-show="cardInfo.website">
             <div class="more-text-icon">{{ $t('community.more') }}</div>
           </a>
         </div>

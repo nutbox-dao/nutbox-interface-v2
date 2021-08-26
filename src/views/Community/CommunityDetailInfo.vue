@@ -78,7 +78,7 @@ export default {
       communityId: null,
       activeTab: 0,
       tabOptions: [
-        { name: 'Deposite', component: 'DCrowdStaking', chain: '' },
+        { name: 'Deposit', component: 'DCrowdStaking', chain: '' },
         { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
         { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' },
         { name: 'Nominate', component: 'DNominate', chain: '' },

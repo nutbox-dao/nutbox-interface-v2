@@ -9,6 +9,11 @@ import {
   BACKEND_API_URL
 } from '../config'
 
+// ============================================ NPS ============================================
+const API_URL ='https://service.nutbox.io'
+
+export const getProposal = async (params) => get(API_URL + '/nps/getProposal', params)
+
 // ============================================ crowdstaking ============================================ 
 /**
  * 获取所有的投票的卡片

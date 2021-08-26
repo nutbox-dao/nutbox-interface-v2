@@ -73,7 +73,6 @@ export default {
         this.$bvToast.toast(tip, param)
       })
     })
-    console.log(12341);
     this.fetchData()
   },
   methods: {

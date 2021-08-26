@@ -205,6 +205,14 @@ module.exports = {
     ratioError: "The total porpotion of Staking Pool is 100",
     wrongApy: "Please input correct APY"
   },
+  nps: {
+    nps: 'Governance',
+    npsTemp: "Showing peanut governance for example. Walnut governance is under developing.",
+    pass: 'Passed',
+    pending: 'Pending',
+    unpass: 'Rejected',
+    rolling: 'Voting'
+  },
   error: {
     error: 'Error',
     depositFail: 'Deposit Fail',

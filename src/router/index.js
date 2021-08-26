@@ -28,6 +28,7 @@ import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
 import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
+import Nps from '@/views/Nps/Nps'
 
 Vue.use(VueRouter)
 
@@ -104,6 +105,10 @@ const routes = [
   {
     path: '/blog',
     component: Blog
+  },
+  {
+    path: '/nps',
+    component: Nps
   },
   {
     path: '/community',
