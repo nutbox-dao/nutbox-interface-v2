@@ -56,7 +56,6 @@ export const getAllPools = async (update = false) => {
     }
     try {
       const allPools = await gap()
-      console.log('update all pools', allPools);
       store.commit('web3/saveAllPools', allPools);
       store.commit('web3/saveLoadingAllPools', false)
 
@@ -102,7 +101,6 @@ export const getMyOpenedPools = async (update = false) => {
     try {
       const poolCount = await contract.numberOfPools()
       if (poolCount === 0) {
-        console.log('no pools');
         store.commit('web3/saveMyPools', [])
         resolve([])
         return;
@@ -362,7 +360,6 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
     }
 
     try{
-      console.log('deposit', communityId, pid, amount.toString());
       const gas = await getGasPrice()
       const tx = await contract.deposit(pid, account, amount.toString(), boundAccount,
       {

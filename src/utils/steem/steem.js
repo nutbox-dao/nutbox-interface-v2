@@ -1,4 +1,5 @@
 import steem from 'steem'
+import { key_utils } from 'steem/lib/auth/ecc'
 import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
 import { sleep } from '../helper'
 
@@ -148,6 +149,7 @@ export async function vestsToSteem (vests) {
 
 export const getAccountInfo = async (account) => {
   const results = await steem.api.getAccountsAsync([account])
+  console.log(results[0]);
   if (results.length === 0) {
     return null
   } else {
@@ -196,3 +198,81 @@ export const getKeychain = async () => {
   await sleep(2)
   return window.steem_keychain
 }
+
+/**
+ * Generate a new hive account
+ */
+export const generateNewHiveAccount = async () => {
+  return new Promise(async (resolve, reject) => {
+    let account = null
+    try{
+      while(!account){
+        const num = Math.ceil(Math.random()*3998999) + 10000 
+        console.log(num);
+        account = 'hive-' + num;
+        if(!(await getAccountInfo(account))){
+          break;
+        }
+      }
+      resolve(account)
+    }catch(e){
+      reject(e)
+    }
+  })
+}
+
+/**
+ * generate main password
+ * @returns 
+ */
+export const generatePassword = () => {
+  return "P" + key_utils.get_random_key().toWif();
+}
+
+const generateAuth = (user, pass, type) => {
+  const key = auth.getPrivateKeys(user, pass, [type]);
+  const publicKey = auth.wifToPublic(Object.values(key)[0]);
+  if (type == "memo") {
+    return {
+      key: key,
+      auth: publicKey
+    };
+  } else {
+    return {
+      key: key,
+      auth: {
+        weight_threshold: 1,
+        account_auths: [],
+        key_auths: [[publicKey, 1]]
+      }
+    };
+  }
+};
+
+/**
+ * Genertate keys by password
+ * @param {*} username 
+ * @param {*} pass 
+ * @returns 
+ */
+export const generateKeys = (username, pass) => {
+  const owner = generateAuth(username, pass, "owner");
+  const active = generateAuth(username, pass, "active");
+  const posting = generateAuth(username, pass, "posting");
+  const memo = generateAuth(username, pass, "memo");
+
+  return {
+    key: {
+      owner: owner.key,
+      active: active.key,
+      posting: posting.key,
+      memo: memo.key
+    },
+    auth: {
+      owner: owner.auth,
+      active: active.auth,
+      posting: posting.auth,
+      memo: memo.auth
+    }
+  };
+};
