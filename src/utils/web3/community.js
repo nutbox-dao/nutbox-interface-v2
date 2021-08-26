@@ -86,7 +86,6 @@ export const getMyCommunityInfo = async (update=false) => {
         try{
             communityInfo = await gci(stakingFactoryId)
             if (communityInfo && communityInfo.length > 0){
-                console.log('backend communityInfo', communityInfo[0]);
                 store.commit('web3/saveCommunityInfo', communityInfo[0])
                 resolve(communityInfo[0])
                 return;
@@ -534,10 +533,10 @@ export const monitorCommunityBalance = async (communityInfo) => {
             const type = update.type;
             const value = update.value;
             if (type === 'communityBalance'){
-                console.log('Updates community balance', update);
+                // console.log('Updates community balance', update);
                 store.commit('web3/saveCommunityBalance', value)
             }else if (type === 'allowance'){
-                console.log('Updates community approvement', update);
+                // console.log('Updates community approvement', update);
                 store.commit('web3/saveCtokenApprovement', value)
             }
           })
@@ -590,10 +589,10 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
                 const type = update.type;
                 const value = update.value;
                 if (type === 'devAddress'){
-                    console.log('update dev address', value);
+                    // console.log('update dev address', value);
                     store.commit('web3/saveDevAddress', value)
                 }else if(type === 'devRatio'){
-                    console.log('update dev ratio', value);
+                    // console.log('update dev ratio', value);
                     store.commit('web3/saveDevRatio', value)
                 }
             })

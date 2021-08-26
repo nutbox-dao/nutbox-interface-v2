@@ -483,7 +483,7 @@ export const monitorUserStakings = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates user staking', updates);
+        // console.log('Updates user staking', updates);
         store.commit('web3/saveLoadingUserStakings', false)
         let userStakings = store.state.web3.userStakings
         updates.map(u => {
@@ -527,7 +527,7 @@ export const monitorPendingRewards = async () => {
           ]
         })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates pending rewards', updates);
+        // console.log('Updates pending rewards', updates);
         store.commit('web3/saveLoadingPendingRewards', false)
         let pendingRewards = store.state.web3.pendingRewards
         updates.map(u => {
@@ -578,7 +578,7 @@ export const monitorApprovements = async () => {
         updates.map(u => {
           approvements[u.type] = u.value
         })
-        console.log('Updates approve', approvements);
+        // console.log('Updates approve', approvements);
         store.commit('web3/saveApprovements', {...approvements})
       });
       watcher.start()
@@ -616,7 +616,7 @@ export const monitorPoolTvls = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates tvl', updates);
+        // console.log('Updates tvl', updates);
         let totalStakings = store.state.web3.totalStakings
         updates.map(u => {
           totalStakings[u.type] = u.value
@@ -661,7 +661,7 @@ export const monitorUserBalances = async () => {
         updates.map(u => {
           userBalances[u.type] = u.value
         })
-        console.log('Updates balances', userBalances);
+        // console.log('Updates balances', userBalances);
         store.commit('web3/saveLoadingUserBalances', false)
         store.commit('web3/saveUserBalances', {...userBalances})
       })

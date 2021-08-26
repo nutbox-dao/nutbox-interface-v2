@@ -112,7 +112,6 @@ export default {
   async mounted () {
     this.apy = null
     if (this.allPools){
-      console.log('pools', this.allPools);
       const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
       if (p.length > 0){
         this.apy = p[0].apy

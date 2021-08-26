@@ -42,7 +42,6 @@ export default {
       return this.communityCard === null
     },
     showStakingPool() {
-      console.log({poolCards: this.poolCards});
       return this.poolCards && this.poolCards.filter(p => p.type === 'HomeChainAssetRegistry').length > 0
     },
     showSteemPool() {
