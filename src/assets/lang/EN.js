@@ -203,11 +203,12 @@ module.exports = {
     completeCommunityInfoSuccess: "Community Information update successfully",
     wrongSubstrateAddress:"Please input correct {type} address",
     ratioError: "The total porpotion of Staking Pool is 100",
-    wrongApy: "Please input correct APY"
+    wrongApy: "Please input correct APY",
+    createBlogSuccess: "Create Blog Success!"
   },
   nps: {
     nps: 'Governance',
-    npsTemp: "Showing peanut governance for example. Walnut governance is under developing.",
+    npsTemp: "Show Peanut governance for example. Walnut governance is under develoment.",
     pass: 'Passed',
     pending: 'Pending',
     unpass: 'Rejected',
@@ -322,7 +323,13 @@ module.exports = {
     inputDevRatio: 'Please input number between 0-100',
     inputDevAddress: 'Input community devAddress',
     publishPool: "Publish Staking Pool",
-    unPublished: "UnPublished"
+    publishBlog: 'Publish Blog',
+    unPublished: "UnPublished",
+    communityBlog: 'Community Blog',
+    blogTag: 'Blog Tag',
+    createBlog: 'Create community blog',
+    createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
+    blogMainPassword: 'Password'
   },
   asset: {
     network: "Network",

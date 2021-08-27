@@ -58,6 +58,7 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
+import CommunityBlog from "@/views/Blog/CommunityBlog"
 
 export default {
   name: 'CommunityDetailInfo',
@@ -70,7 +71,8 @@ export default {
     BSCAccount,
     PolkadotAccount,
     SteemAccount,
-    HiveAccount
+    HiveAccount,
+    CommunityBlog
   },
   props: {},
   data () {
@@ -82,7 +84,8 @@ export default {
         { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
         { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' },
         { name: 'Nominate', component: 'DNominate', chain: '' },
-        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' }
+        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
+        { name: 'Blog', component: 'CommunityBlog' }
       ]
     }
   },
@@ -104,7 +107,7 @@ export default {
         case 3:
           return 'PolkadotAccount';
         case 4:
-          return 'PolkadotAccount'
+          return 'PolkadotAccount';
         default:
           break;
       }
@@ -130,7 +133,6 @@ export default {
   },
   mounted () {
     this.communityId = this.$route.query.id
-    console.log(2345, this.communityId)
     if (this.showTab(0)){
       this.activeTab = 0
     } else if (this.showTab(1)){
@@ -139,6 +141,8 @@ export default {
       this.activeTab = 2
     } else if (this.showTab(3)) {
       this.activeTab = 3
+    } else if(this.showTab(4)) {
+      this.activeTab = 4
     }
   },
   methods: {
@@ -154,6 +158,8 @@ export default {
           return this.nominatePools.length > 0
         case 4:
           return this.crowdloanPools.length > 0
+        case 5: 
+          return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
   }

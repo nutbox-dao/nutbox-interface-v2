@@ -231,6 +231,34 @@
               </button>
             </div>
           </b-form-group>
+          <!-- community blog -->
+          <b-form-group
+            v-if="!isEdit"
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.communityBlog')"
+          >
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  type="text"
+                  :placeholder="form.blogTag || $t('community.blogTag')"
+                >
+                </b-form-input>
+              </div>
+              <button class="primary-btn ml-2" v-if="state === 'create'" style="width: 8rem" @click="showBlogTip = true">
+                {{ $t('community.createBlog') }}
+              </button>
+              <button class="primary-btn ml-2" v-if="state === 'connectSteem'" style="width: 8rem" @click="showSteemLogin = true">
+                {{ $t('wallet.connectSteem') }}
+              </button>
+              <button class="primary-btn ml-2" v-if="state === 'publish'" style="width: 8rem" :disabled='publishingBlog' @click="publishBlog">
+                <b-spinner small type="grow" v-show="publishingBlog" />
+                {{ $t('community.publishBlog') }}
+              </button>
+            </div>
+          </b-form-group>
           <!-- commit button -->
           <b-form-group
             v-if="isEdit"
@@ -445,6 +473,7 @@
         </div>
       </div>
     </b-modal>
+    <!-- crop pic tip -->
     <b-modal
       v-model="cropperModal"
       modal-class="cropper-modal"
@@ -471,12 +500,59 @@
         <button class="primary-btn" @click="completeCropAndUpload">完成</button>
       </div>
     </b-modal>
+    <!-- create blog tip -->
+    <b-modal
+      v-model="showBlogTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center mb-4">
+          {{ $t("community.createBlog") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <p>
+              {{ $t('community.createBlogMemo') }}
+            </p>
+          </div>
+        </div>
+        <p>
+          <span>{{ $t('community.blogTag') }}:</span>
+          <span>{{ blogTag }}</span>
+        </p>
+        <p>
+          <span>{{ $t('community.blogMainPassword') }}:</span>
+          <span>{{ blogMainPassword }}</span>
+        </p>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showBlogTip = false"
+            :disabled="creatingBlog"
+          >
+            <b-spinner small type="grow" v-show="creatingBlog" />
+            {{ $t('commen.cancel') }}
+          </button>
+          <button class="primary-btn" @click="createBlog" :disabled="creatingBlog">
+            <b-spinner small type="grow" v-show="creatingBlog" />
+            {{ $t("commen.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
 </template>
 
 <script>
 import { uploadImage } from "@/utils/helper";
 import UploadLoading from "@/components/ToolsComponents/UploadLoading";
+import Login from '@/components/ToolsComponents/Login'
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
@@ -485,7 +561,8 @@ import {
   approveCommunityBalance,
   setDevAddress,
   setDevRatio,
-  monitorCommunity
+  monitorCommunity,
+  publishBlog
 } from "@/utils/web3/community";
 import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
@@ -493,10 +570,11 @@ import { mapState, mapGetters } from "vuex";
 import BN from 'bn.js'
 import Step from '@/components/ToolsComponents/Step'
 import { VueCropper } from 'vue-cropper'
+import { generateNewHiveAccount, generatePassword, createNewCommunity, setCommunityInfo, subscribeCommunity } from '@/utils/steem/steem'
 
 export default {
   name: 'EditCommunityInfo',
-  components: { UploadLoading, Step, VueCropper },
+  components: { UploadLoading, Step, VueCropper, Login },
   data () {
     return {
       logo: null,
@@ -512,6 +590,7 @@ export default {
         icon: "",
         poster: "",
         pools: [],
+        blogTag: ''
       },
       logoPreviewSrc: "",
       logoUploadLoading: false,
@@ -525,9 +604,12 @@ export default {
       showChargeTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
+      showBlogTip: false,
       uploading: false,
       approving:false,
       charging: false,
+      publishingBlog: false,
+      creatingBlog: false,
       cToken: {},
       isMintable: true,
       cTokenAddress: '',
@@ -537,12 +619,18 @@ export default {
       cropperModal: false,
       cropperImgSrc: '',
       cropFixedNumber: [1, 1],
-      cropImgSize: [200, 200]
+      cropImgSize: [200, 200],
+      blogTag: '',
+      blogMainPassword: '',
+      blogBtnName: '',
+      state: '',
+      showSteemLogin: false
     }
   },
   computed: {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
     ...mapGetters('web3', ['createState']),
+    ...mapState("steem", ['steemAccount']),
     communityBalanceValue(){
       if (this.communityBalance){
         return (this.communityBalance.toString() / 1e18).toFixed(6)
@@ -562,10 +650,23 @@ export default {
       // type : null , create, edit
       this.isEdit = !!newValue;
     },
+    steemAccount(newValue, oldValue) {
+      if (newValue && !oldValue) {
+        this.state = 'create'
+      }
+    }
   },
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
+    // create hive account
+    try{
+      this.blogTag = await generateNewHiveAccount()
+      this.blogMainPassword = generatePassword()
+    }catch(e) {
+      console.log('generateNewHiveAccount fail',e)
+    }
+    
     try {
       const communityInfo = await getMyCommunityInfo();
       if (!communityInfo) {
@@ -575,17 +676,25 @@ export default {
       }
       this.form = {...communityInfo};
       if (!communityInfo.name) this.showStep = true;
+      this.form.blogTag = communityInfo.blogTag;
+      if (this.form.blogTag){
+        this.state = ''
+      }else{
+        if(!this.steemAccount){
+          this.state = 'connectSteem'
+        }else{
+          this.state = 'create'
+        }
+      }
       this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
       this.cToken = cToken
-      console.log('ctoken', cToken);
       this.isMintable = cToken.isMintable
       this.cTokenAddress = cToken.address
       if (!communityInfo.name) {
         this.form.id = communityInfo.id;
         return;
       }
-
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
@@ -799,6 +908,55 @@ export default {
         });
       } finally {
         this.uploading = false;
+      }
+    },
+    async createBlog(){
+      try{
+        this.creatingBlog = true
+        // create new account
+        const res = await createNewCommunity(this.steemAccount, this.blogTag, this.blogMainPassword)
+        if(res && res.success){
+          // set community info
+          setCommunityInfo(this.steemAccount, this.blogTag, this.blogMainPassword, this.form.name, this.form.description)
+          // subscribe account
+          const res = await subscribeCommunity(this.steemAccount, this.blogTag)
+          if (res && res.success){
+            this.showBlogTip = false;
+            this.$bvToast.toast(this.$t('tip.createBlogSuccess'), {
+              title: this.$t('tip.success'),
+              variant: 'success'
+            })
+            // update
+            this.state = 'publish'
+            this.form.blogTag = this.blogTag
+          }else if(res && !res.success){
+            this.$bvToast.toast(res.message, {
+              title: res.error,
+              variant: 'error'
+            })
+          }
+        }
+      }catch(e){
+        console.log('create account fail', e);
+      }finally{
+        this.creatingBlog = false;
+      }
+    },
+    async publishBlog(){
+      try{
+        this.publishingBlog = true
+        await publishBlog(this.blogTag)
+        this.state = ''
+        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+      }catch(e){
+        handleApiErrCode(e, (info, params) => {
+          this.$bvToast.toast(info, params);
+        });
+      }finally{
+        this.publishingBlog = false
       }
     },
     gotoCreate() {

@@ -55,8 +55,8 @@ module.exports = {
   },
   wallet: {
     wallet: '钱包',
-    connectSteem: "链接Steem钱包",
-    connectHive: "链接Hive钱包",
+    connectSteem: "连接Steem钱包",
+    connectHive: "连接Hive钱包",
     install: "立即安装",
     transfer: "转账",
     asset: "资产",
@@ -204,7 +204,8 @@ module.exports = {
     completeCommunityInfoSuccess: "社区信息更新成功",
     wrongSubstrateAddress:"请输入正确的 {type} 地址",
     ratioError: "矿池分润比例总和应为100",
-    wrongApy: "请输入正确的APY"
+    wrongApy: "请输入正确的APY",
+    createBlogSuccess: "创建成功"
   },
   nps: {
     nps: '提案改善',
@@ -323,7 +324,14 @@ module.exports = {
     inputDevRatio: '请输入0-100的数字',
     inputDevAddress: '请输入社区基金地址',
     publishPool: "发布矿池",
-    unPublished: "未发布"
+    unPublished: "未发布",
+    publishBlog: '发布博客',
+    communityBlog: '社区博客',
+    blogTag: '社区标签',
+    createBlog: '创建社区博客',
+    createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
+    blogMainPassword: '主密码',
+    publishBlogSuccess: '博客发布成功'
   },
   asset: {
     network: "网络",
