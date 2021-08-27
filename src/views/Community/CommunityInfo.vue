@@ -521,14 +521,14 @@
             </p>
           </div>
         </div>
-        <p>
+        <div class="c-text-info">
           <span>{{ $t('community.blogTag') }}:</span>
-          <span>{{ blogTag }}</span>
-        </p>
-        <p>
+          <p>{{ blogTag }}</p>
+        </div>
+        <div class="c-text-info">
           <span>{{ $t('community.blogMainPassword') }}:</span>
-          <span>{{ blogMainPassword }}</span>
-        </p>
+          <p>{{ blogMainPassword }}</p>
+        </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button
             class="primary-btn primary-btn-outline"
@@ -604,7 +604,7 @@ export default {
       showChargeTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
-      showBlogTip: false,
+      showBlogTip: true,
       uploading: false,
       approving:false,
       charging: false,
@@ -666,7 +666,7 @@ export default {
     }catch(e) {
       console.log('generateNewHiveAccount fail',e)
     }
-    
+
     try {
       const communityInfo = await getMyCommunityInfo();
       if (!communityInfo) {

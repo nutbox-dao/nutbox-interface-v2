@@ -6,7 +6,7 @@
         <p class="font16">{{ $t("tip.loading") }}</p>
       </div>
       <template v-else>
-        <div class="community-info p-card" >
+        <div class="community-info p-card" v-if="activeTab!==5">
           <img class="poster" :src="communityInfo.poster" alt="">
           <i class="back-icon" @click="$router.back()"></i>
           <div class="second-card">
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="nav-box container">
+        <div class="nav-box container" :style="{position: activeTab===5?'fixed':'unset'}">
           <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   v-show="showTab(index)"
@@ -33,7 +33,7 @@
           </div>
           <component :is='wallet'></component>
         </div>
-        <div class="card-container mt-4">
+        <div class="card-container tab-container">
           <component :is="tabOptions[activeTab].component"
             :crowdloanPools='crowdloanPools'
             :nominatePools='nominatePools'
@@ -98,7 +98,7 @@ export default {
     },
     wallet () {
       switch (this.activeTab) {
-        case 0: 
+        case 0:
           return 'BSCAccount';
         case 1:
           return 'SteemAccount'
@@ -152,13 +152,13 @@ export default {
           return this.erc20Pools.length > 0
         case 1:
           return this.steemDelegatePools.length > 0
-        case 2: 
+        case 2:
           return this.hiveDelegatePools.length > 0
         case 3:
           return this.nominatePools.length > 0
         case 4:
           return this.crowdloanPools.length > 0
-        case 5: 
+        case 5:
           return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
@@ -169,6 +169,15 @@ export default {
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
 @import "src/static/css/card/poster-card";
+.community-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .tab-container {
+    flex: 1;
+    position: relative;
+  }
+}
 .p-card {
   .poster{
     @include card-poster-bg(12rem);
