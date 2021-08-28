@@ -604,7 +604,7 @@ export default {
       showChargeTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
-      showBlogTip: true,
+      showBlogTip: false,
       uploading: false,
       approving:false,
       charging: false,

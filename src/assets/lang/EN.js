@@ -143,6 +143,7 @@ module.exports = {
     nominateOk: "Nominate Success!",
     transactionOk:"Transaction Success!",
     depositOk:"Deposit Success",
+    withdrawOk:'Decrease Deposit Success!'
   },
   stake: {
     stake: 'Staking Mining',
@@ -328,8 +329,9 @@ module.exports = {
     communityBlog: 'Community Blog',
     blogTag: 'Blog Tag',
     createBlog: 'Create community blog',
-    createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
-    blogMainPassword: 'Password'
+    createBlogMemo: 'Your blog tag and private key are listed below. Please preserve them carefully. We do not provide custody services. The process of blog account creation will consume your 3 STEEM as services fee.',
+    blogMainPassword: 'Password',
+    publishBlogSuccess: 'Publish Blog Successs!'
   },
   asset: {
     network: "Network",

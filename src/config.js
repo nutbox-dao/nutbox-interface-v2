@@ -86,8 +86,8 @@ export const STEEM_GAS_ACCOUNT = 'walnut.gas'
 // Steem Config
 export const STEEM_API_URLS = [
   process.env.STEEM_API_URL ||
+  'https://api.steemitdev.com',
   'https://api.steemit.com',
-   'https://api.steemitdev.com',
   'https://cn.steems.top',
   'https://api.justyy.com',
   'https://aksaiapi.wherein.mobi'
