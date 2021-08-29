@@ -99,13 +99,13 @@ export async function hiveTransferVest (from, to, amount, address, fee) {
 }
 
 export async function getGlobalProperties () {
-  return new Promise(async resolve => {
-    const a = hive.api.getDynamicGlobalProperties((err, res) => {
+  return new Promise(async (resolve, reject) => {
+    hive.api.getDynamicGlobalProperties((err, res) => {
       if(err) {
         console.log('Hive getGlobalProperties err', err);
-        
-      }
-      resolve(res)
+        reject(err)
+      }else
+        resolve(res)
     })
   })
 }

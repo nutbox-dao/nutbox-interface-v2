@@ -132,9 +132,13 @@ export async function steemTransferVest (from, to, amount, address, fee) {
 
 export async function getGlobalProperties () {
   // return await steem.api.getDynamicGlobalPropertiesAsync()
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     const a = steem.api.getDynamicGlobalProperties((err, result) => {
-      resolve(result)
+      console.log('getGlobalProperties error', err);
+      if (err){
+        reject(err)
+      }else
+       resolve(result)
     })
   })
 }

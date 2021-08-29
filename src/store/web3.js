@@ -230,7 +230,7 @@ export default {
       return community
     },
     poolCards: (state) => {
-      const showingPools = state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum));
+      const showingPools = state.allPools ? state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum)) : [];
       return showingPools;
     }
   }

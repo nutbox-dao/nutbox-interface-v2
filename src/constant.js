@@ -53,7 +53,7 @@ export const ASSET_LOGO_URL = {
         2007: 'https://cdn.wherein.mobi/shiden.png',
         2013: 'https://cdn.wherein.mobi/polkadot/parachain/logo/sherpax.png',
         2018: 'https://cdn.wherein.mobi/polkadot/parachain/logo/subgame.png',
-        2024: 'https://cdn.wherein.mobi/polkadot/token/logo/gens.png',
+        2089: 'https://cdn.wherein.mobi/polkadot/token/logo/gens.png',
     },
     polkadot: {
         icon: 'https://cdn.wherein.mobi/polkadot/logo/polkadot.png',
