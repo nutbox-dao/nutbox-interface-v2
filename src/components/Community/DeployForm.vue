@@ -151,7 +151,7 @@ export default {
       logo: null,
       modalVisible: false,
       tokenAddress: '',
-      logoUrl: 'https://cdn.wherein.mobi/nutbox/v2/1626234215660.png',
+      logoUrl: '',
       deploying: false,
       logoPreviewScr: null,
       loading: true
