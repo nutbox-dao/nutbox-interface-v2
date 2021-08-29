@@ -39,7 +39,8 @@
             :nominatePools='nominatePools'
             :steemDelegatePools='steemDelegatePools'
             :hiveDelegatePools='hiveDelegatePools'
-            :erc20Pools='erc20Pools'>
+            :erc20Pools='erc20Pools'
+            :tag='communityInfo.blogTag'>
           </component>
         </div>
       </template>
