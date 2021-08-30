@@ -210,6 +210,13 @@ export default {
         })
         return
       }
+      if (parseInt(this.poolForm.reward) <= 0) {
+        this.$bvToast.toast(this.$t('tip.wrongRewardNum'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return
+      }
       let barData = {
         startHeight: Number(this.poolForm.start),
         stopHeight: Number(this.poolForm.end),

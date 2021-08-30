@@ -205,6 +205,7 @@ module.exports = {
     wrongSubstrateAddress:"Please input correct {type} address",
     ratioError: "The total porpotion of Staking Pool is 100",
     wrongApy: "Please input correct APY",
+    wrongRewardNum: "Please input correct rewards",
     createBlogSuccess: "Create Blog Success!"
   },
   nps: {

@@ -205,6 +205,7 @@ module.exports = {
     wrongSubstrateAddress:"请输入正确的 {type} 地址",
     ratioError: "矿池分润比例总和应为100",
     wrongApy: "请输入正确的APY",
+    wrongRewardNum: "请输入正确的奖励值",
     createBlogSuccess: "创建成功"
   },
   nps: {
