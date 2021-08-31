@@ -125,13 +125,13 @@ export default {
     },
     tabOptions () {
       return [
-      { name: this.$t('cs.deposit'), component: 'DCrowdStaking', chain: '' },
-      { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
-      { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
-      { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
-      { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' },
-      { name: this.$t('commen.blog'), component: 'CommunityBlog' }
-    ]
+        { name: this.$t('cs.deposit'), component: 'DCrowdStaking', chain: '' },
+        { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
+        { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
+        { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
+        { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' },
+        { name: this.$t('commen.blog'), component: 'CommunityBlog' }
+      ]
     }
   },
   mounted () {
