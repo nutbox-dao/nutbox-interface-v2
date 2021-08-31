@@ -79,15 +79,7 @@ export default {
   data () {
     return {
       communityId: null,
-      activeTab: 0,
-      tabOptions: [
-        { name: 'Deposit', component: 'DCrowdStaking', chain: '' },
-        { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
-        { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' },
-        { name: 'Nominate', component: 'DNominate', chain: '' },
-        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' },
-        { name: 'Blog', component: 'CommunityBlog' }
-      ]
+      activeTab: 0
     }
   },
   computed: {
@@ -130,6 +122,16 @@ export default {
     },
     erc20Pools () {
       return this.pools ? this.pools.filter(p => p.type == 'HomeChainAssetRegistry') : []
+    },
+    tabOptions () {
+      return [
+      { name: this.$t('cs.deposit'), component: 'DCrowdStaking', chain: '' },
+      { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
+      { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
+      { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
+      { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' },
+      { name: this.$t('commen.blog'), component: 'CommunityBlog' }
+    ]
     }
   },
   mounted () {

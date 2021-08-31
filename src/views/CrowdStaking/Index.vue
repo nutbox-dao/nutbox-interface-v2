@@ -8,11 +8,11 @@
       <template v-else>
         <div class="nav-box container">
           <div class="nav">
-            <router-link v-if="showStakingPool" to="/crowdstaking/deposite">Deposite</router-link>
-            <router-link v-if="showSteemPool" to="/crowdstaking/steem-delegate">Steem Delegate</router-link>
-            <router-link v-if="showHivePool" to="/crowdstaking/hive-delegate">Hive Delegate</router-link>
-            <router-link v-if="showNominatePool" to="/crowdstaking/nominate">Nominate</router-link>
-            <router-link v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">Crowdloan</router-link>
+            <router-link v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</router-link>
+            <router-link v-if="showSteemPool" to="/crowdstaking/steem-delegate">{{ $t('cs.steemDelegate') }}</router-link>
+            <router-link v-if="showHivePool" to="/crowdstaking/hive-delegate">{{ $t('cs.hiveDelegate') }}</router-link>
+            <router-link v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</router-link>
+            <router-link v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</router-link>
             <div class="center-blank"></div>
         </div>
         <component :is='$route.name'/>

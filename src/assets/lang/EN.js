@@ -74,6 +74,11 @@ module.exports = {
   },
   cs: {
     crowdstaking: "Crowdstaking",
+    deposit: "Deposit",
+    steemDelegate: 'Steem Delegate',
+    hiveDelegate: 'Hive Delegate',
+    crowdloan: 'Crowdloan',
+    nomination: 'Nominate',
     community: "Community",
     nominate: "Vote",
     nominated: "Voted",

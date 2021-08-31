@@ -74,6 +74,11 @@ module.exports = {
   },
   cs: {
     crowdstaking: "质押投票",
+    deposit: "质押挖矿",
+    steemDelegate: 'Steem代理',
+    hiveDelegate: 'Hive代理',
+    crowdloan: '平行链拍卖',
+    nomination: '验证者投票',
     community: "社区",
     nominate: "投票",
     nominated: "已投票",
