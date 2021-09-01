@@ -65,7 +65,7 @@
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
-            <b-input @keyup="startChange($event)" placeholder="输入起始区块高度" :disabled="progressData.length>0"
+            <b-input @keyup="startChange($event)" type="number" placeholder="输入起始区块高度" :disabled="progressData.length>0"
                      v-model="poolForm.start"></b-input>
           </div>
           <span class="block-tip">
@@ -74,7 +74,7 @@
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
             <b-input-group class="d-flex flex-between-center">
-              <b-input class="flex-full" @keyup="stopChange($event)"  :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+              <b-input class="flex-full" @keyup="stopChange($event)" type="number" :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
               <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
             </b-input-group>
           </div>
@@ -87,6 +87,9 @@
           </div>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
                   @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
+          <span v-show="progressData.length>=6" class="block-tip">
+            {{ $t('community.distributionLimit') }}
+          </span>
         </div>
         <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
           <b-spinner small type="grow" v-show="deploying" />
@@ -104,7 +107,7 @@ import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
-import { MaxBlockNum } from '@/constant'
+import { MaxBlockNum, MAX_DISTRIBUTION_COUNT } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from "@/components/ToolsComponents/Step";
 
@@ -160,11 +163,11 @@ export default {
   },
   async mounted () {
     this.assets = await getRegitryAssets()
+    this.poolForm.start = this.blockNum + 100
+    this.startTime = blockTime(0, 100)
     console.log({assets: this.assets});
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     this.assetLoading = false
-    this.poolForm.start = this.blockNum + 100
-    this.startTime = blockTime(0, 100)
   },
   methods: {
     setSelectedData (data) {
@@ -178,11 +181,13 @@ export default {
       this.progressData.pop()
       this.updateProgressColor()
       if (this.progressData.length === 0) {
-        this.poolForm.start = this.blockNum
+        this.poolForm.start = this.blockNum + 100
       } else {
         this.poolForm.start = this.progressData[this.progressData.length - 1].stopHeight
       }
-      this.end = ''
+      this.poolForm.end = ''
+      this.stopTime = blockTime(1, 0)
+      this.startTime = blockTime(this.blockNum, this.poolForm.start)
     },
     startChange(e){
       const value = e.target.value;

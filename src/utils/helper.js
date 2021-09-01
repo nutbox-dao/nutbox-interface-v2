@@ -88,6 +88,7 @@ export function getDateString(now, timezone, extra = 0) {
 export function blockTime(start, end) {
   start = parseInt(start)
   end = parseInt(end)
+  if (!start || !end) return '';
   if (start > end) return '';
   if (start === end) return $t('commen.now')
   if (end - start > 9999999999) return "";

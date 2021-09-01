@@ -6,6 +6,7 @@ export const POLKADOT_DECIMAL = 10
 export const KUSAMA_DECIMAL = 12
 export const ROCOCO_DECIMAL = 12
 export const SP_DELEGATE_DECIMAL = 6
+export const MAX_DISTRIBUTION_COUNT = 6
 
 export const TIME_PERIOD = {
     MINUTES:60,
@@ -51,9 +52,20 @@ export const ASSET_LOGO_URL = {
         2004: 'https://cdn.wherein.mobi/polkadot/token/logo/khala.png',
         2001: 'https://cdn.wherein.mobi/polkadot/parachain/logo/bifrost.png',
         2007: 'https://cdn.wherein.mobi/shiden.png',
+        2008: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2008.png',
+        2009: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2009.png',
         2013: 'https://cdn.wherein.mobi/polkadot/parachain/logo/sherpax.png',
+        2015: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2015.png',
+        2016: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2016.png',
         2018: 'https://cdn.wherein.mobi/polkadot/parachain/logo/subgame.png',
+        2077: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2077.png',
+        2084: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2084.png',
+        2085: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2085.png',
+        2086: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2086.png',
+        2087: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2087.png',
+        2088: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2088.png',
         2089: 'https://cdn.wherein.mobi/polkadot/token/logo/gens.png',
+        2090: 'https://cdn.wherein.mobi/polkadot/paralogo/k/2090.png'
     },
     polkadot: {
         icon: 'https://cdn.wherein.mobi/polkadot/logo/polkadot.png',

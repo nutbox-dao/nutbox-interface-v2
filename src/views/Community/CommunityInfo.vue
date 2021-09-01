@@ -797,7 +797,8 @@ export default {
     async charge() {
       try{
         this.charging = true;
-        if (Number(this.chargeValue) <= 0) {
+        const chargeValue = Number(this.chargeValue)
+        if (!chargeValue || chargeValue <= 0) {
           this.$bvToast.toast(this.$t('error.inputError'), {
             title: this.$t("tip.tips"),
             autoHideDelay: 5000,
@@ -865,8 +866,25 @@ export default {
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
       let tips = null;
+      if (website && website.length > 0) {
+        const regUrl = '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
+        const res = website.match(regUrl)
+        console.log({res});
+        if (!res) {
+          tips = this.$t("tip.needRightUrl")
+          this.$bvToast.toast(tips, {
+            title: this.$t("tip.tips"),
+            autoHideDelay: 5000,
+            variant: "warning",
+          });
+          return false;
+        }
+      }
+
       if (!name || name.length === 0) {
         tips = this.$t("tip.needName");
+      } else if(name && name.length > 16){
+        tips = this.$t("tip.communityNameLimit", {count: 16})
       } else if (!description || description.length === 0) {
         tips = this.$t("tip.needDescription");
       } else if (!icon || icon.length === 0) {

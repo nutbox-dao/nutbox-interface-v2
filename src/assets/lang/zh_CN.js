@@ -211,7 +211,9 @@ module.exports = {
     ratioError: "矿池分润比例总和应为100",
     wrongApy: "请输入正确的APY",
     wrongRewardNum: "请输入正确的奖励值",
-    createBlogSuccess: "创建成功"
+    createBlogSuccess: "创建成功",
+    communityNameLimit: "社区名字不能超过{count}个字",
+    needRightUrl: "请填写正确的网页链接"
   },
   nps: {
     nps: '提案改善',
@@ -337,7 +339,8 @@ module.exports = {
     createBlog: '创建社区博客',
     createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
     blogMainPassword: '主密码',
-    publishBlogSuccess: '博客发布成功'
+    publishBlogSuccess: '博客发布成功',
+    distributionLimit: '最多可以创建6个阶段的分发策略'
   },
   asset: {
     network: "网络",

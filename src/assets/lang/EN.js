@@ -211,7 +211,9 @@ module.exports = {
     ratioError: "The total porpotion of Staking Pool is 100",
     wrongApy: "Please input correct APY",
     wrongRewardNum: "Please input correct rewards",
-    createBlogSuccess: "Create Blog Success!"
+    createBlogSuccess: "Create Blog Success!",
+    communityNameLimit: 'The community name cannot exceed {count} words',
+    needRightUrl: 'Please input right url.'
   },
   nps: {
     nps: 'Governance',
@@ -290,7 +292,7 @@ module.exports = {
     noCommunity:"You have no community yet",
     gotoCreate:"Go to create now",
     editTip:"Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
-    sign: "Sign and upload the community information",
+    sign: "Sign and upload",
     createCommunity: "Create you exclusive staking economy",
     step1: 'Step 1',
     step2: 'Step 2',
@@ -323,7 +325,7 @@ module.exports = {
     communityDashboard: "Manage Your Community",
     charge: "Charge",
     communityCharge: "Community Charge",
-    confirmCharge: "Confirm Charfe",
+    confirmCharge: "Confirm Charge",
     chargeSuccess: "Charge success",
     devAddress: "Community fund address",
     devRatio: 'Community commision ratio',
@@ -334,10 +336,11 @@ module.exports = {
     unPublished: "UnPublished",
     communityBlog: 'Community Blog',
     blogTag: 'Blog Tag',
-    createBlog: 'Create community blog',
+    createBlog: 'Create blog',
     createBlogMemo: 'Your blog tag and private key are listed below. Please preserve them carefully. We do not provide custody services. The process of blog account creation will consume your 3 STEEM as services fee.',
     blogMainPassword: 'Password',
-    publishBlogSuccess: 'Publish Blog Successs!'
+    publishBlogSuccess: 'Publish Blog Successs!',
+    distributionLimit: 'Max distribution is 6'
   },
   asset: {
     network: "Network",
@@ -374,7 +377,7 @@ module.exports = {
     inputCommunityAddress: 'Please input community polkdot address',
     endingBlock: "Asset valid date",
     inputEndingBlock: "Please input the ending block height when the asset is invalid",
-    registerSteemTab: "Register TEEM/HIVE Steem binding asset",
+    registerSteemTab: "Register STEEM/HIVE binding asset",
     registerCrowdloanTab: "Register Polkadot/Kusma Crwodloan binding asset",
     registerValidatorTab: "Register olkadot/Kuama validaots node binding asset",
     validatorNodeAddress: "Validator node address",
