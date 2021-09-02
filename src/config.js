@@ -106,7 +106,6 @@ export const HIVE_API_URLS = [
   'https://api.hive.blog'
 ]
 
-
 /** =============================================BSC=============================================================*/
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
