@@ -256,7 +256,6 @@ export default {
     }
   },
   async mounted () {
-
     const _this = this
     window.onresize = () => {
       return (() => {
@@ -264,11 +263,18 @@ export default {
         _this.screenWidth = window.screenWidth
       })()
     }
-    this.setLanguage(localStorage.getItem(LOCALE_KEY))
+    this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
+
+    // BSC data
+    this.fetchBscData();
     // bsc related
-    await getAccounts(true)
+    try{
+      await getAccounts(true)
+    }catch (e){
+      console.log('Get accounts fail', e);
+    }
     try {
       setupNetwork()
       chainChanged()
@@ -277,8 +283,6 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
-    // BSC data
-    this.fetchBscData();
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
