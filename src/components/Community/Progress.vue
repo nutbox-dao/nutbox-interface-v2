@@ -2,7 +2,7 @@
   <div class="c-progress" :class="progressData.length>0?'mt-5':'mt-3'">
     <span class="progress-num-min" v-b-tooltip.hover :title="min">{{formatNum(min)}}</span>
     <span class="progress-num-max" v-b-tooltip.hover :title="max">{{formatNum(max)}}</span>
-    <span v-if="blockNum" class="current-block" :style="{left: `${(blockNum/max)*100}%`}">{{blockNum}}</span>
+    <span v-if="blockNum" class="current-block" v-show="progressData.length > 0 && blockNum>progressData[0].startHeight" :style="{left: `${(blockPosition)*100}%`}">{{blockNum}}</span>
     <div class="c-progress-container" :style="{background: trackColor}">
       <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"
            :style="{ flex: 1,
@@ -44,12 +44,30 @@ export default {
     max () {
       if (this.progressData.length === 0 || this.progressData[this.progressData.length - 1].stopHeight >= MaxBlockNum) return this.$t('commen.max')
       return this.progressData[this.progressData.length - 1].stopHeight
+    },
+    blockPosition() {
+      if (!this.progressData || this.progressData.length === 0){
+        return;
+      }
+      const block = this.blockNum
+      let index = 0
+      for (let i = 0; i< this.progressData.length; i++){
+        const p = this.progressData[i]
+        if (block > parseInt(p.startHeight) && block < parseInt(p.stopHeight)){
+          index = i
+          break;
+        }
+      }
+      const totalField = this.progressData.length
+      let position = index / parseFloat(totalField)
+      position = position + parseFloat(block - this.progressData[index].startHeight) / parseFloat(this.progressData[index].stopHeight - this.progressData[index].startHeight) / totalField
+      return position
     }
   },
   methods: {
     formatNum (num) {
       if (!this.isNumeric(num)) return 'Max'
-      return `${Math.floor(num / 100)}M`
+      return `${(num / 1e6).toFixed(2)}M`
     },
     isNumeric (val) {
       return val !== null && val !== '' && !isNaN(val)
