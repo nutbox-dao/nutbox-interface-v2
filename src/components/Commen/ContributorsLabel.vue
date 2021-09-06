@@ -4,7 +4,7 @@
       {{ percent + " " }}
     </span>
     <span>
-      {{ " " + (fund ? fund.funds.length : 0) + " " }}
+      {{ " " + (fund ? (fund.funds.count | 0): 0) + " " }}
     </span>
     <span class="text-grey-light"> {{ lang === 'en' ? 'Contributors' : '人投票' }} </span>
   </div>

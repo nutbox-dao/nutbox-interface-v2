@@ -259,7 +259,7 @@ export default {
     },
     contributions () {
       try {
-        return this.getFundInfo.funds.length
+        return this.getFundInfo.funds.count ?? 0
       } catch (e) {
         return 0
       }
