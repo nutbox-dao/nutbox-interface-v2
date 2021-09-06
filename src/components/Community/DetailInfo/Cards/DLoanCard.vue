@@ -38,7 +38,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.countDown') }} </span>
-        <div class="info">{{ countDown || "Loading" }}</div>
+        <div class="info">{{ countDownAuction || "Loading" }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.fund') }} </span>
@@ -229,7 +229,7 @@ export default {
         return '0'
       }
     },
-    countDown () {
+    countDownAuction () {
       try {
         if (!this.getFundInfo) return
         const end = parseInt(this.getFundInfo.end)
