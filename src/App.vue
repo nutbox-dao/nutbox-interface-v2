@@ -159,6 +159,7 @@ import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } f
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import { generateNewHiveAccount } from '@/utils/steem/steem'
+import '@/utils/web3/swap'
 
 export default {
   data () {
