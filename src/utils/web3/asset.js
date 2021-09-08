@@ -492,13 +492,13 @@ export const deployERC20 = async ({
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20Factory', null, false)
-      const gas = await contract.estimateGas.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
+      const gas = await getGasPrice()
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
       store.state.web3.account, 
       isMintable, 
       {
-        gasPrice: gas * 500,
-        gasLimit: 10000000
+        gasPrice: gas,
+        gasLimit: GasLimit
       });
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);

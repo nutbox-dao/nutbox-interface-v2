@@ -149,7 +149,6 @@ export const createStakingFeast = async (form) => {
         }
         
         try{
-            console.log(543, form.assetId);
             // make params
             const assetId = form.assetId
             let distribution = form.poolData
@@ -159,8 +158,7 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const gas = await getGasPrice()
-            const res = await contract.createStakingFeast(assetId, distribution)
+            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distribution)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
@@ -403,9 +401,11 @@ export const getDistributionEras = async (update=false) => {
 
         let contract;
         let decimal;
+        let rewardCalculator;
         try{
             contract = await getContract('StakingTemplate', stakingFactoryId)
             const cToken = await getCToken(stakingFactoryId)
+            rewardCalculator = await getContract('LinearCalculator');
             decimal = cToken.decimal
         }catch(e){
             reject(e);
@@ -413,18 +413,20 @@ export const getDistributionEras = async (update=false) => {
         }
 
         try{
-            const count = await contract.numberOfDistributionEras()
-            let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => contract.distributionEras(i)))
-            distri = distri.map((item, i) => ({
-                percentage: item.stopHeight - item.startHeight,
-                amount: item.amount.toString() / (10 ** decimal),
-                startHeight: item.startHeight.toString(),
-                stopHeight: item.stopHeight.toString(),
-                background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
-            }))
-            console.log('distribituions', distri);
-            store.commit('web3/saveDistributions', distri)
-            resolve(distri)
+            const rewardCalculatorAddress = await contract.rewardCalculator();
+            if (rewardCalculatorAddress == contractAddress['LinearCalculator']){
+                const count = await rewardCalculator.distributionCountMap(stakingFactoryId);
+                let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => rewardCalculator.distributionErasMap(stakingFactoryId, i)))
+                distri = distri.map((item, i) => ({
+                    percentage: item.stopHeight - item.startHeight,
+                    amount: item.amount.toString() / (10 ** decimal),
+                    startHeight: item.startHeight.toString(),
+                    stopHeight: item.stopHeight.toString(),
+                    background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
+                }))
+                store.commit('web3/saveDistributions', distri);
+                resolve(distri);
+            }
         }catch(e){
             console.log('getDistributionEras', e);
             reject(e);

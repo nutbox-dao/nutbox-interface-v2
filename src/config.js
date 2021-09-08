@@ -1,12 +1,12 @@
 import { contractAddress } from "./utils/web3/contract"
-/** =========================================== Normal ======================================================*/
+/** =================================== Normal =======================================*/
 // 调试模式
 export const DEBUG = false
 
 export const LOCALE_KEY = 'localeLanguage'
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-// export const BACKEND_API_URL = "http://localhost:3000"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
@@ -33,7 +33,7 @@ export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 }
 
 
-/** ========================================== polkadot ====================================================*/
+/** ====================================== polkadot ============================================*/
 export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io"
 export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io"
 // export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.nutbox.io"
@@ -74,7 +74,7 @@ export const PhalaCrowdloanReferrerRemark = {
   "referrerHash": "Bytes"
 }
 
-/**============================================== steem  ==============================================*/
+/**======================================= steem  ====================================*/
 
 // steem node storage
 export const STEEM_CONF_KEY = 'steemNodeKey'
@@ -93,7 +93,7 @@ export const STEEM_API_URLS = [
   'https://aksaiapi.wherein.mobi'
 ]
 
-/**============================================== hive  ==============================================*/
+/**===================================== hive  =======================================*/
 // hive node storage
 export const HIVE_CONF_KEY = 'hiveNodeKey'
 // delegate fee
@@ -106,7 +106,7 @@ export const HIVE_API_URLS = [
   'https://api.hive.blog'
 ]
 
-/** =============================================BSC=============================================================*/
+/** ==================================Main chain============================================*/
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
