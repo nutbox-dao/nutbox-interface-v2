@@ -413,7 +413,9 @@ export const getDistributionEras = async (update=false) => {
         }
 
         try{
+            console.log(1);
             const rewardCalculatorAddress = await contract.rewardCalculator();
+            console.log(2, rewardCalculatorAddress);
             if (rewardCalculatorAddress == contractAddress['LinearCalculator']){
                 const count = await rewardCalculator.distributionCountMap(stakingFactoryId);
                 let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => rewardCalculator.distributionErasMap(stakingFactoryId, i)))
