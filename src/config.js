@@ -5,7 +5,8 @@ export const DEBUG = false
 
 export const LOCALE_KEY = 'localeLanguage'
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "https://v2-api-test-moonbeam.nutbox.io"
 // export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
@@ -157,32 +158,32 @@ export const GasLimit = 5000000
 export const OfficialAssets = [
   {
     name: 'NUT',
-    address: '0xf1D97c74ACce7DA7554e27D373265E6EFe21bd0a',
+    address: '0x20E12eEcd08DEaCe043d4f565db60718602BA300',
     symbol: 'NUT',
-    asset: '0xec9f2c163346c3eeb6e14a718ad780a6b75ea9afb1b0a18c0d5a94cffde8e366',
+    asset: '0x1bb0baacf6cdc494fda78e20cfbc5c008e4f52b2927fcca76d1b16c5d004eb0e',
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
     icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/nut.png'
   },
-  {
-    name: 'WBNB',
-    address: '0x64f525e92B614bA4f8d332910B11430DD487895b',
-    symbol: 'WBNB',
-    asset: '0x5f54be7b77630ac5a539705d38e0ea00bed06f3c6d2fff334855440d18296b7f',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
-  },
+  // {
+  //   name: 'WBNB',
+  //   address: '0x64f525e92B614bA4f8d332910B11430DD487895b',
+  //   symbol: 'WBNB',
+  //   asset: '0x5f54be7b77630ac5a539705d38e0ea00bed06f3c6d2fff334855440d18296b7f',
+  //   contract: contractAddress['HomeChainAssetRegistry'],
+  //   decimal: 18,
+  //   type: "HomeChainAssetRegistry",
+  //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
+  // },
   {
     name: 'WETH',
-    address: '0xa49B1eEC62c669b65D571536E221fB172a62C9F6',
+    address: '0x46a5954257dFDdC69DFfC530485f23CADFF63A44',
     symbol: 'WETH',
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
-    asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
+    asset: '0x444d189977c0a3884862dd6c8cddc62b59503bf43f34ec6fa852f390443a572f',
     icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
   }
 ]
@@ -192,8 +193,11 @@ export const OfficialAssets = [
 // export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'
 
 // goerli network
-export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
-export const NUTAddress = '0x94AF51B6b03AD129c385323FC7500120f389d759'
+// export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
+// export const NUTAddress = '0x94AF51B6b03AD129c385323FC7500120f389d759'
+
+// moonriver network
+export const MultiAddress = '0xe4AA437A83666f35Ffb4c22d35274C14581a0d06'
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
