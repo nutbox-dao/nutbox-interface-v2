@@ -267,7 +267,7 @@ module.exports = {
     wrongInputDevRatio: "请输入0-100的数字",
     notTokenContract: "您输入的地址不是一个ERC20地址",
     transactionFail: '交易失败',
-    assetHasRegisterd: '资产已被其他用户注册'
+    assetHasRegisterd: '该资产已被注册'
   },
   community: {
     community: '社区',

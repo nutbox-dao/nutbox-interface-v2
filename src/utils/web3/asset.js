@@ -388,6 +388,8 @@ export const registerSteemHiveAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -432,6 +434,8 @@ export const registerCrowdloanAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -472,6 +476,8 @@ export const registerNominateAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
