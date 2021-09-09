@@ -4,6 +4,7 @@ import {
 import {
   BSC_CHAIN_ID,
   RPC_NODE,
+  CHAIN_NAME,
   Multi_Config
 } from '@/config'
 import Web3 from "web3"
@@ -33,7 +34,7 @@ export const setupNetwork = async () => {
       method: 'wallet_addEthereumChain',
       params: [{
         chainId: `0x${chainId.toString(16)}`,
-        chainName: 'Binance Smart Chain Mainnet',
+        chainName: CHAIN_NAME,
         nativeCurrency: {
           name: 'BNB',
           symbol: 'bnb',

@@ -338,6 +338,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
             gasLimit: GasLimit
           }
         )
+        console.log(2354 ,tx.hash);
         await waitForTx(tx.hash)
         resolve(tx.hash)
       } catch (e) {

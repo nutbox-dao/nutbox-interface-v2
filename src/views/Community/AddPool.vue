@@ -254,8 +254,8 @@ export default {
       })
     },
     poolNameChange() {
-      if(this.form.name.length > 16){
-        this.form.name = this.form.name.slice(0, 16)
+      if(this.form.name.length > 30){
+        this.form.name = this.form.name.slice(0, 30)
       }
     },
     inputChange: debounce(function () {

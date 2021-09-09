@@ -49,5 +49,7 @@ export const waitForTx = async (hash) => {
     console.log(`Waiting for tx: ${hash}...`)
     while (!await provider.getTransactionReceipt(hash)) {
         sleep(1000)
+        const c = await provider.getTransactionReceipt(hash)
+        console.log(5234,c);
     }
 }
