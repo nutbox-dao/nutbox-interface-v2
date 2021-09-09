@@ -338,12 +338,13 @@ export const registerHomeChainAsset = async (assetAddress) => {
             gasLimit: GasLimit
           }
         )
-        console.log(2354 ,tx.hash);
         await waitForTx(tx.hash)
         resolve(tx.hash)
       } catch (e) {
         if (e.code === 4001){
           reject(errCode.USER_CANCEL_SIGNING)
+        }else if (e === errCode.TRANSACTION_FAIL) {
+          reject(errCode.ASSET_EXIST)
         }else {
           reject(errCode.BLOCK_CHAIN_ERR)
         }
@@ -493,14 +494,6 @@ export const deployERC20 = async ({
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20Factory', null, false)
-      const gas = await getGasPrice()
-      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
-      store.state.web3.account, 
-      isMintable, 
-      {
-        gasPrice: gas,
-        gasLimit: GasLimit
-      });
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
         if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
@@ -509,6 +502,14 @@ export const deployERC20 = async ({
           return;
         }
       })
+      const gas = await getGasPrice()
+      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
+      store.state.web3.account, 
+      isMintable, 
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      });
     } catch (e) {
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)

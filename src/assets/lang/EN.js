@@ -249,7 +249,6 @@ module.exports = {
     inputOverflow: 'Input overflow',
     inputOutOfRange: "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
     inputLinkIllegal: "Please input correct link",
-    transferFail: "Transfer fail",
     notEnoughFee: 'Insufficient fee',
     insufficentPnut: "Insufficient Pnut",
     hasVoted: "Your post has been voted by nutbox.mine",
@@ -266,7 +265,9 @@ module.exports = {
     wrongChainId: 'Wrong ChainID',
     wrongETHAddress: "Wrong ETH Address",
     wrongInputDevRatio: "Please input number between 0-100",
-    notTokenContract: "The address you input is not a ERC20 contract address."
+    notTokenContract: "The address you input is not a ERC20 contract address.",
+    transactionFail: 'Transaction fail!',
+    assetHasRegisterd: 'Asset has been registered by someone.'
   },
   community: {
     community: 'Community',

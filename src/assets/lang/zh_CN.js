@@ -249,7 +249,6 @@ module.exports = {
     inputOverflow: '输入超过最大值',
     inputOutOfRange: "请输入{lowerPnutAmount}-{upperPnutAmount}的值",
     inputLinkIllegal: "请输入正确的链接",
-    transferFail: "转账失败",
     notEnoughFee: '手续费不足',
     insufficentPnut: "PNUT余额不足",
     hasVoted: "Nutbox已经点赞了您的帖子。",
@@ -266,7 +265,9 @@ module.exports = {
     wrongChainId: '钱包网络选择错误',
     wrongETHAddress: "地址错误",
     wrongInputDevRatio: "请输入0-100的数字",
-    notTokenContract: "您输入的地址不是一个ERC20地址"
+    notTokenContract: "您输入的地址不是一个ERC20地址",
+    transactionFail: '交易失败',
+    assetHasRegisterd: '资产已被其他用户注册'
   },
   community: {
     community: '社区',

@@ -175,7 +175,11 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.blockChainError')
   } else if(code === errCode.USER_CANCEL_SIGNING){
     tipStr = $t('error.cancelSigning')
-  } else if(code == errCode.NOT_CONNECT_METAMASK){
+  } else if(code === errCode.TRANSACTION_FAIL){
+    tipStr = $t('error.transactionFail')
+  } else if(code === errCode.ASSET_EXIST){
+    tipStr = $t('error.assetHasRegisterd')
+  }else if(code == errCode.NOT_CONNECT_METAMASK){
     tipStr = $t('error.notConnectWallet')
   } else if (code == errCode.UNLOCK_METAMASK) {
     tipStr = $t('error.unlockWallet')
