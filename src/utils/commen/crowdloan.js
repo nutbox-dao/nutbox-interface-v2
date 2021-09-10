@@ -1,5 +1,12 @@
 import BN from "bn.js"
 import store from "@/store"
+
+import {
+  u8aToHex,
+} from "@polkadot/util"
+import {
+  decodeAddress
+} from '@polkadot/util-crypto'
 import {
   DECIMAL
 } from '@/constant'
@@ -19,9 +26,133 @@ import {
 import {
   handelBlockState
 } from './transactionHandler'
-
 import { PARA_STATUS } from '@/config'
 import { waitApi } from "./api"
+import { createWsEndpoints } from '@polkadot/apps-config';
+
+/**
+ * Subscribe all crowdloan only excute one time
+ * @param {*} relaychain 
+ * @returns 
+ */
+export const subscribeAllFundInfo = async (relaychain) => {
+  let campaigns = store.state[relaychain].campaigns
+  if (campaigns) return campaigns;
+  const api = await waitApi(relaychain)
+  if (!api.query.crowdloan) return;
+  let endpoints = createWsEndpoints((key, value) => value || key);
+  const genesisHash = api.genesisHash.toHex()
+  endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHash === genesisHashRelay)
+  let paraIds = []
+  let tmp = []
+  // extract endpoints
+  for (let e of endpoints) {
+    if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
+      paraIds.push(e.paraId)
+      tmp.push(e)
+    }
+  }
+  endpoints = tmp
+  store.commit(relaychain + '/saveLoadingFunds', true)
+  try {
+    const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {
+      const bestBlockNumber = (await api.derive.chain.bestNumber()).toNumber()
+      let funds = []
+      let effectEndpoints = []
+      for (let i = 0; i < unwrapedFunds.length; i++) {
+        const fund = unwrapedFunds[i]
+        const pId = paraIds[i]
+        if (!fund.toJSON()) {
+          continue
+        }
+        effectEndpoints.push({
+          ...(unwrapedFunds[i].unwrap()),
+          ...endpoints[i],
+          pId
+        })
+      }
+      const storedFunds = [...store.state[relaychain].clProjectFundInfos]
+      funds = await Promise.all(effectEndpoints.map(fund => {
+        return new Promise(async (res) => {
+          const {
+            pId,
+            cap,
+            depositor,
+            end,
+            firstPeriod,
+            lastPeriod,
+            raised,
+            trieIndex
+          } = fund
+          const [status, statusIndex] = await calStatus(relaychain, end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
+          let contributions = []
+          // 如果有缓存，先直接用已经缓存的contribution数据
+          if (storedFunds && storedFunds.length > 0) {
+            const f = storedFunds.filter(a => a.paraId === pId)
+            if (f && f.length > 0) {
+              contributions = f[0].funds || []
+            }
+          }
+          res({
+            ...fund,
+            status,
+            statusIndex,
+            cap: new BN(cap),
+            depositor,
+            end: new BN(end),
+            firstPeriod: new BN(firstPeriod),
+            lastPeriod: new BN(lastPeriod),
+            raised: new BN(raised),
+            trieIndex,
+            funds: contributions
+          })
+        })
+      }))
+      funds = funds.sort((a, b) => a.statusIndex - b.statusIndex)
+      if (funds.length > 0) {
+        store.commit(relaychain + '/saveClProjectFundInfos', funds)
+        // 异步加载投票数据
+        handleContributors(relaychain, api, funds)
+      } else {
+        store.commit(relaychain + '/saveSubFund', null);
+      }
+      store.commit(relaychain + '/saveLoadingFunds', false)
+    }));
+    store.commit(relaychain + '/saveSubFund', unsubFund);
+  } catch (e) {
+    console.log('error', e);
+    store.commit(relaychain + '/saveLoadingFunds', false)
+  }
+}
+
+// Get contribution details
+export const handleContributors = async (relaychain, api, funds) => {
+  try {
+    let account = store.state.polkadot.account?.address
+    if (!account) return;
+    account = decodeAddress(account)
+    account = u8aToHex(account)
+    const updateFunds = await Promise.all(funds.map(fund => {
+      return new Promise(async (resolve, reject) => {
+        const pid = fund.paraId
+        // No need to request static data: crowdloan is not active
+        if (fund.statusIndex !== 1 && fund.funs && fund.funds.count) {
+          resolve(fund)
+        }
+        const contributions = await api.derive.crowdloan.contributions(pid)
+        const own = await  api.derive.crowdloan.ownContributions(pid, [account])
+        fund.funds = {
+          count: contributions.contributorsHex.length,
+          ownContribution: own[account]
+        }
+        resolve(fund)
+      })
+    }))
+    store.commit(relaychain + '/saveClProjectFundInfos', updateFunds)
+  } catch (e) {
+    console.log('Handle contributions fail', e);
+  }
+}
 
 export const withdraw = async (relaychain, paraId, toast, callback) => {
   const api = store.state[relaychain].api

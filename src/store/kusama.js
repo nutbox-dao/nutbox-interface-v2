@@ -36,7 +36,8 @@ export default {
     loadingFunds: true,
     loadingContributions: true,
     clProjectFundInfos: [],
-    clLeasePeriod: null
+    clLeasePeriod: null,
+    campaigns: null,// parachain's meta data
   },
   mutations: {
     saveCommunitys: (state, communitys) => {
@@ -122,6 +123,9 @@ export default {
     saveClProjectFundInfos: (state, funds) => {
       state.clProjectFundInfos = funds
     },
+    saveCampaigns: (state, campaigns) => {
+      state.campaigns = campaigns
+    }
   },
   getters: {
     available: (state) => {

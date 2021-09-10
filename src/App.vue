@@ -155,11 +155,10 @@ import { isMobile } from './utils/commen/util'
 import { setupNetwork, chainChanged, test } from './utils/web3/web3'
 import { accountChanged, getAccounts } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } from '@/utils/web3/community'
+import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
-import { generateNewHiveAccount } from '@/utils/steem/steem'
-import '@/utils/web3/swap'
+import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
 
 export default {
   data () {
@@ -207,9 +206,8 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     async gotoOfficial () {
+      subscribeAllFundInfo('kusama')
       // test()
-      const account = await generateNewHiveAccount();
-      console.log(account);
       // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {

@@ -33,18 +33,44 @@
           </b-dropdown-item>
         </b-dropdown>
       </b-form-group>
-      <b-form-group :label="$t('asset.parachainId')">
-        <b-form-input
-          v-model="form.paraId"
-          :placeholder="$t('asset.inputParachainId')"
-        ></b-form-input>
+      <b-form-group
+        id="input-group-0"
+        :label="$t('asset.parachainId')"
+        label-for="dropdown-1"
+      >
+        <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
+          <template #button-content>
+            <div class="c-dropdown-btn flex-between-center">
+              <div class="flex-full flex-start-center text-left">
+                <img v-show="Object.keys(selectParachain).length > 0" :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+selectParachain.paraId+'.png'" alt="" />
+                <span>{{ selectParachain.text }}</span>
+              </div>
+              <i class="dropdown-icon"></i>
+            </div>
+          </template>
+          <b-dropdown-item
+            v-for="(item, index) of onliningCrowdloan"
+            :key="index"
+            @click="selectParachain = item"
+          >
+            <template #default>
+              <div class="flex-between-center">
+                <div class="flex-full flex-start-center">
+                  <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+item.paraId+'.png'" alt="" />
+                  <span>{{ item.text }}</span>
+                </div>
+                <i class="selected-icon" v-if="selectParachain === item"></i>
+              </div>
+            </template>
+          </b-dropdown-item>
+        </b-dropdown>
       </b-form-group>
-      <b-form-group :label="$t('asset.trieIndex')">
+      <!-- <b-form-group :label="$t('asset.trieIndex')">
         <b-form-input
           v-model="form.trieIndex"
           :placeholder="$t('asset.inputTrieIndex')"
         ></b-form-input>
-      </b-form-group>
+      </b-form-group> -->
       <b-form-group :label="$t('asset.communityAddress')">
         <b-form-input
           v-model="form.communityAddress"
@@ -60,7 +86,7 @@
           :placeholder="$t('asset.inputAssetName')"
         ></b-form-input>
       </b-form-group>
-      <b-form-group
+      <!-- <b-form-group
         :label="$t('asset.endingBlock')"
         label-class="text-grey-light"
       >
@@ -68,8 +94,8 @@
           v-model="form.endingBlock"
           :placeholder="$t('asset.inputEndingBlock')"
         ></b-form-input>
-      </b-form-group>
-      <button class="primary-btn" @click="register" :disabled='registring'>
+      </b-form-group> -->
+      <button class="primary-btn" @click="register" :disabled='registring || !activeCrowdloan'>
         <b-spinner small type="grow" v-show="registring" />
         {{ $t("asset.register") }}
       </button>
@@ -84,12 +110,15 @@ import { isPositiveInt } from "@/utils/helper";
 import { stanfiAddress } from "@/utils/commen/account";
 import { handleApiErrCode } from '@/utils/helper';
 import { ASSET_LOGO_URL } from '@/constant'
+import { mapState } from 'vuex'
 
 export default {
   name: "NominationForm",
   data() {
     return {
       registring: false,
+      activeCrowdloan: false,
+      selectParachain: {},
       form: {
         chainId: "",
         paraId: "",
@@ -109,6 +138,24 @@ export default {
         }
       ],
     };
+  },
+  watch: {
+    networkIndex(newValue, oldValue) {
+      this.selectParachain = {}
+    }
+  },
+  computed: {
+    ...mapState({
+      polkadotFund: state => state.polkadot.clProjectFundInfos,
+      kusamaFund: state => state.kusama.clProjectFundInfos
+    }),
+    onliningCrowdloan (){
+      if (this.networkIndex === 0){
+        return this.polkadotFund.filter(f => f.statusIndex === 0)
+      }else {
+        return this.kusamaFund.filter(f => f.statusIndex === 0)
+      }
+    }
   },
   methods: {
     validateParams() {
@@ -138,12 +185,13 @@ export default {
       return false
     },
     async register() {
-      if (!this.validateParams()) {
-        return;
-      }
-      this.form.chainId = parseInt(this.networkIndex) + 2;
       try{
         this.registring = true;
+        if (!this.validateParams()) {
+          this.registring = false
+          return;
+        }
+        this.form.chainId = parseInt(this.networkIndex) + 2;
         const tx = await registerCrowdloanAsset(this.form);
         // update cache
         await getRegitryAssets(true)

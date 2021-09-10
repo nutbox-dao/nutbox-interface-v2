@@ -12,7 +12,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, idx) of sortedPools" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, idx) of sortedPools" :key="idx.toString()+pool.trieIndex">
             <CrowdLoanCard :card="pool"/>
           </div>
         </div>
@@ -57,6 +57,7 @@ export default {
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
     }).catch(e => {
+      console.log(e);
     })
   }
 }
