@@ -4,7 +4,7 @@
       <b-form-group
         id="input-group-0"
         :label="$t('asset.network')"
-        label-for="dropdown-1"
+        label-for="dropdown-0"
       >
         <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
           <template #button-content>
@@ -34,7 +34,7 @@
         </b-dropdown>
       </b-form-group>
       <b-form-group
-        id="input-group-0"
+        id="input-group-1"
         :label="$t('asset.parachainId')"
         label-for="dropdown-1"
       >
@@ -42,27 +42,37 @@
           <template #button-content>
             <div class="c-dropdown-btn flex-between-center">
               <div class="flex-full flex-start-center text-left">
-                <img v-show="Object.keys(selectParachain).length > 0" :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+selectParachain.paraId+'.png'" alt="" />
+                <img v-show="Object.keys(selectParachain).length > 0"
+                     :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+selectParachain.paraId+'.png'" alt="" />
                 <span>{{ selectParachain.text }}</span>
               </div>
               <i class="dropdown-icon"></i>
             </div>
           </template>
-          <b-dropdown-item
-            v-for="(item, index) of onliningCrowdloan"
-            :key="index"
-            @click="selectParachain = item"
-          >
-            <template #default>
-              <div class="flex-between-center">
-                <div class="flex-full flex-start-center">
-                  <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+item.paraId+'.png'" alt="" />
-                  <span>{{ item.text }}</span>
+          <template v-if="loading">
+            <div class="dropdown-menu-loading">
+              <img src="~@/static/images/loading.gif" alt="" />
+            </div>
+          </template>
+          <template v-else>
+            <div v-if="onliningCrowdloan.length === 0"
+                 class="text-center text-grey-light font12 my-2">当前没有进行中的众贷</div>
+            <b-dropdown-item
+              v-for="(item, index) of onliningCrowdloan"
+              :key="index"
+              @click="selectParachain = item"
+            >
+              <template #default>
+                <div class="flex-between-center">
+                  <div class="flex-full flex-start-center">
+                    <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+item.paraId+'.png'" alt="" />
+                    <span>{{ item.text }}</span>
+                  </div>
+                  <i class="selected-icon" v-if="selectParachain === item"></i>
                 </div>
-                <i class="selected-icon" v-if="selectParachain === item"></i>
-              </div>
-            </template>
-          </b-dropdown-item>
+              </template>
+            </b-dropdown-item>
+          </template>
         </b-dropdown>
       </b-form-group>
       <!-- <b-form-group :label="$t('asset.trieIndex')">
@@ -136,7 +146,7 @@ export default {
         { name: "Kusuma",
           icon: ASSET_LOGO_URL.kusama.icon
         }
-      ],
+      ]
     };
   },
   watch: {
@@ -147,7 +157,9 @@ export default {
   computed: {
     ...mapState({
       polkadotFund: state => state.polkadot.clProjectFundInfos,
-      kusamaFund: state => state.kusama.clProjectFundInfos
+      kusamaFund: state => state.kusama.clProjectFundInfos,
+      polkadotLoading: state => state.polkadot.loadingFunds,
+      kusamaLoading: state => state.kusama.loadingFunds
     }),
     onliningCrowdloan (){
       if (this.networkIndex === 0){
@@ -155,6 +167,9 @@ export default {
       }else {
         return this.kusamaFund.filter(f => f.statusIndex === 0)
       }
+    },
+    loading() {
+      return this.networkIndex===0?this.polkadotLoading:this.kusamaLoading
     }
   },
   methods: {
@@ -250,5 +265,11 @@ label {
     @include icon;
     background-image: url("~@/static/images/selected-gray.png");
   }
+}
+.dropdown-menu-loading {
+  background-color: #f6f7f9;
+  text-align: center;
+  padding: 0.5rem 0;
+  margin: -0.5rem 0;
 }
 </style>
