@@ -2,6 +2,7 @@ import {
   TIME_PERIOD,
   BLOCK_SECOND
 } from "@/constant"
+import CryptoJS from 'crypto'
 import {
   $t
 } from '@/i18n'
@@ -10,6 +11,12 @@ import {
   errCode
 } from "@/config"
 import axios from 'axios'
+
+var cryptoOptions = {
+  key: process.env.VUE_APP_CRYPTO_KEY,
+  iv: process.env.VUE_APP_CRYPTO_IV,
+  method: process.env.VUE_APP_CRYPTO_METHOD
+}
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -217,4 +224,18 @@ export const handleApiErrCode = (code, toast) => {
 export const isPositiveInt = (str) => {
   const r = /^\d+$/
   return r.test(str)
+}
+
+export function encrpty (string) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createCipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(string, 'utf8', 'hex')
+  return encrypted + cipheriv.final('hex')
+}
+
+export function decrypt (encryptedString) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createDecipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(encryptedString, 'hex', 'utf8')
+  return encrypted + cipheriv.final('utf8')
 }

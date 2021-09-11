@@ -3,7 +3,10 @@ module.exports = {
     userlogin: '用户登录',
     steemAccoutPlaceHolder: '请输入Steem用户名',
     hiveAccountPlaceHolder: '请输入Hive用户名',
-    login: '登录',
+    steemActiveKeyPlaceHolder: '请输入Steem活跃密钥',
+    hiveActiveKeyPlaceHolder: '请输入Hive活跃密钥',
+    login: '通过活跃密钥登录',
+    loginByKeychain: '通过Keychain登录',
     loging: '登录中...',
     cancel: '取消',
     confirm: '确认',
@@ -269,7 +272,11 @@ module.exports = {
     wrongInputDevRatio: "请输入0-100的数字",
     notTokenContract: "您输入的地址不是一个ERC20地址",
     transactionFail: '交易失败',
-    assetHasRegisterd: '该资产已被注册'
+    assetHasRegisterd: '该资产已被注册',
+    steemAccountEmpty: 'Steem帐号不能为空',
+    steemAccountActiveKeyEmpty: 'Steem帐号或活跃密钥不能为空',
+    hiveAccountEmpty: 'Hive帐号不能为空',
+    hiveAccountActiveKeyEmpty: 'Hive帐号或活跃密钥不能为空'
   },
   community: {
     community: '社区',

@@ -1,4 +1,5 @@
 import hive from '@hiveio/hive-js'
+import { auth } from '@hiveio/hive-js'
 import { HIVE_API_URLS, HIVE_CONF_KEY, HIVE_GAS_ACCOUNT, HIVE_STAKE_FEE } from '@/config.js'
 import { sleep } from '../helper'
 
@@ -167,4 +168,26 @@ export const getKeychain = async () => {
   }
   await sleep(2)
   return window.hive_keychain
+}
+
+/**
+ * Verify that the account and password match.
+ * @param {String} username hive account name.
+ * @param {String} privateKey hive active private key.
+ * @returns Boolean.
+ */
+ export const verifyNameAndKey = async function (username, privateKey) {
+  const accountInfo = await getAccountInfo(username)
+  const publicKey = accountInfo?.active?.key_auths[0][0]
+  if (!publicKey) {
+    return false
+  }
+
+  let res = false
+  try {
+    res = await auth.wifIsValid(privateKey, publicKey)
+  } catch (error) {
+    return false
+  }
+  return res
 }
