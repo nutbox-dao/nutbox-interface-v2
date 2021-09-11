@@ -213,7 +213,8 @@ module.exports = {
     wrongRewardNum: "Please input correct rewards",
     createBlogSuccess: "Create Blog Success!",
     communityNameLimit: 'The community name cannot exceed {count} words',
-    needRightUrl: 'Please input right url.'
+    needRightUrl: 'Please input right url.',
+    selectCowdloan: 'Please selecte a crowdloan project.'
   },
   nps: {
     nps: 'Governance',

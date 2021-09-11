@@ -39,7 +39,10 @@ export const subscribeAllFundInfo = async (relaychain) => {
   let campaigns = store.state[relaychain].campaigns
   if (campaigns) return campaigns;
   const api = await waitApi(relaychain)
-  if (!api.query.crowdloan) return;
+  if (!api.query.crowdloan) {
+    store.commit(relaychain + '/saveLoadingFunds', false)
+    return;
+  }
   let endpoints = createWsEndpoints((key, value) => value || key);
   const genesisHash = api.genesisHash.toHex()
   endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHash === genesisHashRelay)

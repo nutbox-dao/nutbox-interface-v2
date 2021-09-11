@@ -213,7 +213,8 @@ module.exports = {
     wrongRewardNum: "请输入正确的奖励值",
     createBlogSuccess: "创建成功",
     communityNameLimit: "社区名字不能超过{count}个字",
-    needRightUrl: "请填写正确的网页链接"
+    needRightUrl: "请填写正确的网页链接",
+    selectCowdloan: "请选择一个众贷项目"
   },
   nps: {
     nps: '提案改善',

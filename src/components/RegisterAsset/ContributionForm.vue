@@ -56,7 +56,7 @@
           </template>
           <template v-else>
             <div v-if="onliningCrowdloan.length === 0"
-                 class="text-center text-grey-light font12 my-2">当前没有进行中的众贷</div>
+                 class="text-center text-grey-light font12 my-2">{{ $t('tip.noProject') }}</div>
             <b-dropdown-item
               v-for="(item, index) of onliningCrowdloan"
               :key="index"
@@ -105,7 +105,7 @@
           :placeholder="$t('asset.inputEndingBlock')"
         ></b-form-input>
       </b-form-group> -->
-      <button class="primary-btn" @click="register" :disabled='registring || !activeCrowdloan'>
+      <button class="primary-btn" @click="register" :disabled='registring'>
         <b-spinner small type="grow" v-show="registring" />
         {{ $t("asset.register") }}
       </button>
@@ -127,7 +127,6 @@ export default {
   data() {
     return {
       registring: false,
-      activeCrowdloan: false,
       selectParachain: {},
       form: {
         chainId: "",
@@ -176,10 +175,8 @@ export default {
     validateParams() {
       const substrateAddressType = this.networkIndex === 0 ? 0 : 2;
       let tipStr = "";
-      if (!isPositiveInt(this.form.paraId)) {
-        tipStr = this.$t("asset.inputParachainId");
-      } else if (!isPositiveInt(this.form.trieIndex)) {
-        tipStr = this.$t("asset.inputTrieIndex");
+      if (Object.keys(this.selectParachain).length === 0) {
+        tipStr = this.$t('tip.selectCowdloan')
       } else if (
         !stanfiAddress(this.form.communityAddress, substrateAddressType) ||
         stanfiAddress(
@@ -207,6 +204,8 @@ export default {
           return;
         }
         this.form.chainId = parseInt(this.networkIndex) + 2;
+        this.form.paraId = this.selectParachain.paraId;
+        this.form.trieIndex = this.selectParachain.trieIndex;
         const tx = await registerCrowdloanAsset(this.form);
         // update cache
         await getRegitryAssets(true)
@@ -223,6 +222,9 @@ export default {
           endingBlock: "",
         }
         this.networkIndex = 0
+        setTimeout(() => {
+          this.$router.go(-1);
+        } , 1000)
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
