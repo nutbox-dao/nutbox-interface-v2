@@ -513,7 +513,6 @@ export const publishBlog = async (blogTag) => {
         }
         try{
             let res = await ubt(params);
-            // update nonce in storage
             store.commit('web3/saveNonce', nonce)
             resolve(res)
         }catch(e) {

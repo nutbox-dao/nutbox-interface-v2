@@ -522,6 +522,10 @@
           </div>
         </div>
         <div class="c-text-info">
+          <span>{{ $t('community.communityName') }}:</span>
+          <p>{{ form.name }}</p>
+        </div>
+        <div class="c-text-info">
           <span>{{ $t('community.blogTag') }}:</span>
           <p>{{ blogTag }}</p>
         </div>
@@ -539,6 +543,43 @@
             {{ $t('commen.cancel') }}
           </button>
           <button class="primary-btn" @click="createBlog" :disabled="creatingBlog">
+            <b-spinner small type="grow" v-show="creatingBlog" />
+            {{ $t("commen.confirm") }}
+          </button>
+        </div>
+      </div>
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center mb-4" style="margin-top:1.2rem">
+          {{ $t("community.bindBlog") }}
+        </div>
+         <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <p>
+              {{ $t('community.bindBlogMemo') }}
+            </p>
+          </div>
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <div class="c-input-group">
+            <input
+              style="flex: 1"
+              v-model="inputBlogTag"
+              :placeholder="$t('community.inputBlogTag')"
+            />
+            </div>
+          </div>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showBlogTip = false"
+            :disabled="creatingBlog"
+          >
+            <b-spinner small type="grow" v-show="creatingBlog" />
+            {{ $t('commen.cancel') }}
+          </button>
+          <button class="primary-btn" @click="bindBlog" :disabled="creatingBlog">
             <b-spinner small type="grow" v-show="creatingBlog" />
             {{ $t("commen.confirm") }}
           </button>
@@ -582,6 +623,7 @@ export default {
       chargeValue: 0,
       inputDevAddress: '',
       inputDevRatio: '',
+      inputBlogTag:'',
       form: {
         id: "",
         name: "",
@@ -928,6 +970,34 @@ export default {
         this.uploading = false;
       }
     },
+    async bindBlog() {
+      const reg = /^hive-[1-3]\d{3,6}$/
+      const res = reg.test(this.inputBlogTag)
+      if (!res){
+        this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
+          title: this.$t('tip.tips'),
+          variant:'warning'
+        })
+        return;
+      }
+      try{
+        this.creatingBlog = true
+        await publishBlog(this.inputBlogTag)
+        this.state = ''
+        this.form.blogTag = this.inputBlogTag;
+        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.showBlogTip = false
+      }catch(e){
+        handleApiErrCode(e, (info, params) => {
+          this.$bvToast.toast(info, params);
+        });
+      }finally{
+        this.creatingBlog = false;
+      }
+    },
     async createBlog(){
       try{
         this.creatingBlog = true
@@ -956,6 +1026,9 @@ export default {
         }
       }catch(e){
         console.log('create account fail', e);
+        handleApiErrCode(e, (info, params) => {
+          this.$bvToast.toast(info, params);
+        });
       }finally{
         this.creatingBlog = false;
       }

@@ -214,7 +214,8 @@ module.exports = {
     createBlogSuccess: "Create Blog Success!",
     communityNameLimit: 'The community name cannot exceed {count} words',
     needRightUrl: 'Please input right url.',
-    selectCowdloan: 'Please selecte a crowdloan project.'
+    selectCowdloan: 'Please selecte a crowdloan project.',
+    inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.'
   },
   nps: {
     nps: 'Governance',
@@ -342,7 +343,10 @@ module.exports = {
     createBlogMemo: 'Your blog tag and private key are listed below. Please preserve them carefully. We do not provide custody services. The process of blog account creation will consume your 3 STEEM as services fee.',
     blogMainPassword: 'Password',
     publishBlogSuccess: 'Publish Blog Successs!',
-    distributionLimit: 'Max distribution is 6'
+    distributionLimit: 'Max distribution is 6',
+    bindBlog: "Bind your community blog",
+    bindBlogMemo: 'Please input your steem community tag to bind.eg:hive-12345',
+    inputBlogTag: 'Please input your steem community tag'
   },
   asset: {
     network: "Network",

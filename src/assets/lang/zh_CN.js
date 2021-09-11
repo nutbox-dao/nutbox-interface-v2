@@ -214,7 +214,8 @@ module.exports = {
     createBlogSuccess: "创建成功",
     communityNameLimit: "社区名字不能超过{count}个字",
     needRightUrl: "请填写正确的网页链接",
-    selectCowdloan: "请选择一个众贷项目"
+    selectCowdloan: "请选择一个众贷项目",
+    inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。'
   },
   nps: {
     nps: '提案改善',
@@ -342,7 +343,10 @@ module.exports = {
     createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
     blogMainPassword: '主密码',
     publishBlogSuccess: '博客发布成功',
-    distributionLimit: '最多可以创建6个阶段的分发策略'
+    distributionLimit: '最多可以创建6个阶段的分发策略',
+    bindBlog: '绑定已有社区标签',
+    bindBlogMemo: '填写您的steem社区标签进行绑定。示例：hive-12345',
+    inputBlogTag: "请输入您的steem社区标签"
   },
   asset: {
     network: "网络",
