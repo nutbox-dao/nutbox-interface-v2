@@ -9,6 +9,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
+    "@hiveio/dhive": "^1.1.0",
     "@hiveio/hive-js": "^2.0.4",
     "@makerdao/multicall": "^0.12.0",
     "@pancakeswap/sdk": "^2.4.0",

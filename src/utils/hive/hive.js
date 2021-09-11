@@ -1,8 +1,10 @@
 import hive from '@hiveio/hive-js'
 import { auth } from '@hiveio/hive-js'
+const { Client } = require("@hiveio/dhive");
 import { HIVE_API_URLS, HIVE_CONF_KEY, HIVE_GAS_ACCOUNT, HIVE_STAKE_FEE } from '@/config.js'
 import { sleep } from '../helper'
 
+const client = new Client(["https://api.hive.blog", "https://api.hivekings.com", "https://anyx.io", "https://api.openhive.network"]);
 const hiveConf = window.localStorage.getItem(HIVE_CONF_KEY) || HIVE_API_URLS[0]
 window.localStorage.setItem(HIVE_CONF_KEY, hiveConf)
 hive.api.setOptions({ url: hiveConf })
@@ -101,13 +103,12 @@ export async function hiveTransferVest (from, to, amount, address, fee) {
 
 export async function getGlobalProperties () {
   return new Promise(async (resolve, reject) => {
-    hive.api.getDynamicGlobalProperties((err, res) => {
-      if(err) {
-        console.log('Hive getGlobalProperties err', err);
-        reject(err)
-      }else
-        resolve(res)
-    })
+    try{
+      const props = await client.database.getDynamicGlobalProperties();
+      resolve(props)
+    }catch(e) {
+      reject()
+    }
   })
 }
 
@@ -126,7 +127,7 @@ export async function vestsToHive (vests) {
 }
 
 export const getAccountInfo = async (account) => {
-  const results = await hive.api.getAccountsAsync([account])
+  const results = await client.database.getAccounts([account])
   if (results.length === 0) {
     return null
   } else {
@@ -148,7 +149,7 @@ export const getVestingShares = async (username) => {
 
 export const getDelegateFromHive = async (account, targetAccount) => {
   try {
-    const res = await hive.api.getVestingDelegationsAsync(account, targetAccount, 1)
+    const res = await client.database.getVestingDelegations(account, targetAccount, 1)
     if (!res || res.length === 0){
       return 0;
     }
@@ -156,6 +157,7 @@ export const getDelegateFromHive = async (account, targetAccount) => {
       return 0;
     }
     const vests = parseFloat(res[0].vesting_shares.split(' ')[0])
+    console.log(3245, vests);
     return await vestsToHive(vests)
   } catch (e) {
     return -1
