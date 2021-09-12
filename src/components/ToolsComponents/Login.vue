@@ -4,11 +4,11 @@
       <div class="login">
         <!-- keychain login -->
         <p>{{ this.$t("commen.userlogin") }}</p>
-        <div>
+        <div class="mt-5">
           <div class="account-box">
             <span class="keychain" :style="keychainLogo" @click="getKeychain" />
             <b-input
-              class="mb-2 mr-sm-2 mb-sm-0 input"
+              class="mr-sm-2 mb-sm-0 input"
               :placeholder="
                 type === 'STEEM'
                   ? $t('commen.steemAccoutPlaceHolder')
@@ -28,14 +28,14 @@
               type="grow"
               v-show="isLogingByKeyChain"
             ></b-spinner>
-            {{ this.loginByKeychainBtnText }}
+            {{ $t('commen.loginByKeychain') }}
           </b-button>
         </div>
         <!-- Active login -->
-        <div>
-          <div class="account-box">
+        <div style="margin-top: 2rem">
+          <div class="account-box mb-3">
             <b-input
-              class="mb-2 mr-sm-2 mb-sm-0 input-active"
+              class="mr-sm-2 mb-sm-0 input-active"
               :placeholder="type === 'STEEM' ? $t('commen.steemAccoutPlaceHolder') : $t('commen.hiveAccountPlaceHolder')"
               v-model="steemAccount"
             ></b-input>
@@ -255,15 +255,14 @@ export default {
 }
 .account-box {
   display: flex;
-  margin-top: 40px;
   .keychain {
-    width: 180px;
+    width: 8rem;
     height: 48px;
     background-color: var(--background);
     margin-right: 2px;
     border-radius: 16px 0 0 16px;
     // background-image: url('~@/static/images/keychain.png');
-    background-size: 80% 80%;
+    background-size: 80% auto;
     background-repeat: no-repeat;
     background-position: center;
   }
@@ -271,16 +270,21 @@ export default {
     background-color: var(--dividers);
     cursor: pointer;
   }
-  .input {
+  input {
     height: 48px;
     flex: 1;
     background: var(--background);
-    border-radius: 0 16px 16px 0;
     border: none;
+  }
+  .input {
+    border-radius: 0 16px 16px 0;
+  }
+  .input-active {
+    border-radius: 16px;
   }
 }
 .login-btn {
   width: 100%;
-  margin-top: 24px;
+  margin-top: 1rem;
 }
 </style>
