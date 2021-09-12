@@ -3,29 +3,21 @@
     <div class="card-link-top-box">
       <div class="flex-start-center">
         <div class="card-link-icons">
-          <img class="icon1" :src="crowdstaking.community.iconUrl" alt="" />
-          <img class="icon2" :src="crowdstaking.project.iconUrl" alt="" />
+          <img class="icon1" :src="nomination.communityIcon" alt="" />
+          <img class="icon2" :src="nomination.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title">
-            <span>{{crowdstaking.community.communityName }}</span>
+          <div class="link-title" @click="$router.push('/community/detail-info?id='+nomination.communityId)">
+            <span>{{ nomination.communityName }}</span>
             <i class="link-icon"></i>
           </div>
           <div class="link-title">
-            <span>{{ crowdstaking.project.projectName }}</span>
+            <span>{{ nomination.poolName }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="c-card">
-      <div class="desc">
-        {{ crowdstaking.community.description[lang] }}
-      </div>
-      <div class="validator-container">
-        <div class="validator" v-for="v in crowdstaking.project.validators" :key="v">
-          {{ v | formatValidatorAdd }}
-        </div>
-      </div>
       <div class="detail-info-box">
         <template v-if="isConnected">
           <button
@@ -39,11 +31,11 @@
         </template>
         <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm(4)}} ({{crowdstaking.project.validators.length}})</div>
+          <div class="info">{{ tvl | amountForm(4) }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">13.0%</div>
+          <div class="info">{{ nomination.apy.toFixed(2) }}%</div>
         </div>
       </div>
 
@@ -56,7 +48,7 @@
         no-close-on-backdrop
       >
         <TipNominator
-          :crowdstaking="crowdstaking"
+          :crowdstaking="nomination"
           @hideNominate="showNominate = false"
         />
       </b-modal>
@@ -70,7 +62,7 @@
         no-close-on-backdrop
       >
         <TipBondAndNominator
-          :crowdstaking="crowdstaking"
+          :crowdstaking="nomination"
           @hideBondAndNominate="showBondAndNominator = false"
         />
       </b-modal>
@@ -79,8 +71,8 @@
 </template>
 
 <script>
-import TipBondAndNominator from '@/components/CrowdStaking/TipBoxes/TipBondAndNominator'
-import TipNominator from '@/components/CrowdStaking/TipBoxes/TipNominator'
+import TipBondAndNominator from '@/components/Commen/TipBondAndNominator'
+import TipNominator from '@/components/Commen/TipNominator'
 import { mapState } from 'vuex'
 import { stanfiAddress } from '@/utils/commen/account'
 import BN from 'bn.js'
@@ -94,12 +86,8 @@ export default {
     }
   },
   props: {
-    crowdstaking: {
+    nomination: {
       type: Object
-    },
-    symbol: {
-      type: String,
-      default: 'Kusama'
     }
   },
   filters: {
@@ -129,30 +117,30 @@ export default {
       'loadingStaking',
       'allValidatorInfosInOurDB'
     ]),
+    ...mapState("web3", [
+      "pendingRewards",
+      "approvements",
+      "loadingApprovements",
+      "userStakings",
+      "loadingUserStakings",
+      "totalStakings",
+      "blockNum"
+    ]),
     ...mapState(['lang']),
     // 用户已经投了该项目的节点
     nominated () {
-      const val = this.crowdstaking.project.validators.map((tcd) =>
-        stanfiAddress(tcd)
-      )
-      return (
-        this.nominators.filter(({ address }) => val.indexOf(address) !== -1)
-          .length === val.length
-      )
+
     },
     tvl () {
-      if (this.allValidatorInfosInOurDB.length === 0) {
-        return 0
-      }
-      const total = this.crowdstaking.project.validators.reduce(
-        (t, v) =>
-          t.add(new BN(this.allValidatorInfosInOurDB[v].total.toString())),
-        new BN(0)
-      )
-      return total.toString() / 1e10
+      const tvl = this.totalStakings[this.nomination.communityId + '-' + this.nomination.pid]
+      if(!tvl) return 0;
+      const decimal = this.nomination.decimal
+      return (tvl.toString() / (10 ** decimal))
     }
   },
-  mounted () {}
+  mounted () {
+    console.log(this.nomination);
+  }
 }
 </script>
 

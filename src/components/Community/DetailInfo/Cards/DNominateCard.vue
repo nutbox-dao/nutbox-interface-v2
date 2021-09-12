@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import TipBondAndNominator from '@/components/CrowdStaking/TipBoxes/TipBondAndNominator'
-import TipNominator from '@/components/CrowdStaking/TipBoxes/TipNominator'
+import TipBondAndNominator from '@/components/Commen/TipBondAndNominator'
+import TipNominator from '@/components/Commen/TipNominator'
 import { mapState } from 'vuex'
 import { stanfiAddress } from '@/utils/commen/account'
 import BN from 'bn.js'
