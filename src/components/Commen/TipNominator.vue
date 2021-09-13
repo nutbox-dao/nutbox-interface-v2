@@ -9,16 +9,16 @@
     <div class="c-modal-header">
       <div class="text-center font20 font-bold" v-if="lang === 'en'">
         Nominate to<span class="big">
-          {{ crowdstaking.project.projectName + "'s" }} </span
+          {{ crowdstaking.poolName + "'s" }} </span
         >validators <br />
         through<span class="big">
-          {{ crowdstaking.community.communityName }} </span
+          {{ crowdstaking.communityName }} </span
         >community
       </div>
       <div class="text-center font20 font-bold" v-else>
-        通过<span class="big"> {{ crowdstaking.community.communityName }} </span
+        通过<span class="big"> {{ crowdstaking.communityName }} </span
         >社区<br />
-        为<span class="big"> {{ crowdstaking.project.projectName }} </span
+        为<span class="big"> {{ crowdstaking.poolName }} </span
         >的验证者节点投票<br />
       </div>
     </div>
@@ -33,7 +33,7 @@
         v-model="selected"
         name="flavour-2"
       >
-        <div v-for="item of availableNominators" :key="item.address">
+        <div v-for="item of nominators" :key="item.address">
           <b-form-checkbox class="checkbox-item" :value="item.address">
             <div class="checkbox-item-card">
               <span
@@ -81,7 +81,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { nominate } from "@/utils/polkadot/staking";
+import { nominate } from "@/utils/commen/crowdStaking";
 import { MAX_NOMINATE_VALIDATOR } from "@/constant";
 
 export default {
@@ -90,8 +90,8 @@ export default {
       selected: [],
       inputAmount: "",
       inputNonimator: "",
-      paraTokenSymbol: "",
       isNominating: false,
+      relayer: ''
     };
   },
   props: {
@@ -100,19 +100,30 @@ export default {
     },
   },
   computed: {
-    ...mapState('polkadot',["symbol", "balance", "bonded", "nominators"]),
+    ...mapState({
+      pNominators: state => state.polkadot.nominators,
+      pLoadingStaking: state => state.polkadot.loadingStaking,
+      kNominators: state => state.kusama.nominators,
+      kLoadingStaking: state => state.kusama.loadingStaking,
+    }),
+    nominators () {
+      return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
+    },
+    loadingStaking () {
+      return this.pNominators || this.kNominators
+    },
     ...mapState(['lang']),
-    availableNominators() {
-      return this.nominators.filter(
-        ({ address }) =>
-          this.crowdstaking.project.validators.indexOf(address) === -1
-      );
+    nominated() {
+      const userStakingBn =
+        this.userStakings[this.crowdstaking.communityId + "-" + this.crowdstaking.pid];
+      if (!userStakingBn) return 0;
+      const decimal = this.card.decimal;
+      return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     needToCancelValidators() {
+      return 1
       return (
-        this.availableNominators.length +
-        this.crowdstaking.project.validators.length -
-        MAX_NOMINATE_VALIDATOR
+        this.nominators.length >= MAX_NOMINATE_VALIDATOR && this.nominators.indexOf(this.crowdstaking.validatorAccount) === -1
       );
     },
     // 确认按钮是否可点击
@@ -132,13 +143,13 @@ export default {
     getNominateValidators() {
       if (this.needToCancelValidators > 0) {
         // 从用户选择的列表获取投票
-        return this.availableNominators
+        return this.nominators
           .filter(({ address }) => this.selected.indexOf(address) !== -1)
           .map(({ address }) => address)
           .concat(this.crowdstaking.project.validators);
       } else {
         // 直接拼接节点
-        return this.availableNominators
+        return this.nominators
           .map(({ address }) => address)
           .concat(this.crowdstaking.project.validators);
       }
@@ -171,7 +182,15 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.relayer = this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama'
+    console.log(235, 
+    this.$store.state.polkadot.totalStaked.toNumber(),
+    this.$store.state.polkadot.locked.toNumber(),
+    this.$store.state.polkadot.unLocking.toNumber(),
+    this.$store.state.polkadot.redeemable.toNumber(),
+    this.$store.state.polkadot.balance.toNumber());
+  },
 };
 </script>
 

@@ -2,7 +2,7 @@
   <div class="c-card">
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img class="icon1" :src="card.tokenIcon" alt="" />
+        <img class="icon1" :src="card.icon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">

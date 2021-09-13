@@ -38,7 +38,7 @@ export const DECIMAL = {
 }
 
 // 最大投票数
-export const MAX_NOMINATE_VALIDATOR = 16
+export const MAX_NOMINATE_VALIDATOR = 2
 
 /**
  * Parachain project logo url

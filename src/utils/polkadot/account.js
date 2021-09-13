@@ -80,6 +80,8 @@ export const getBalance = async (account) => {
     store.commit('polkadot/saveBalance', new BN(currentFree))
   })
 
+  // available balance = balance - total staked 
+  // total staked = locked + unloacking
   subLocked = await api.query.staking.ledger(store.state.polkadot.account.address, (locked) => {
     if (!locked.toJSON() || locked.toJSON().length === 0) {
       store.commit('polkadot/saveLocked', new BN(0))

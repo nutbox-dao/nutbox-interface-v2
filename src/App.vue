@@ -158,7 +158,7 @@ import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
-import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
+import { getMinNominatorBond } from '@/utils/commen/crowdStaking'
 
 export default {
   data () {
@@ -206,7 +206,7 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     async gotoOfficial () {
-      subscribeAllFundInfo('kusama')
+      getMinNominatorBond('polkadot')
       // test()
       // window.open('https://nutbox.io', '_blank')
     },
