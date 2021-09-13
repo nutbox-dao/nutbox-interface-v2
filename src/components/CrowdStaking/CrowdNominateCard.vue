@@ -26,7 +26,7 @@
             :disabled="nominated || loadingStaking"
           >
             <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-            >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
+            >{{ $t("cs.nominate") }}
           </button>
         </template>
         <div class="project-info-container">
@@ -127,10 +127,6 @@ export default {
       "blockNum"
     ]),
     ...mapState(['lang']),
-    // 用户已经投了该项目的节点
-    nominated () {
-
-    },
     tvl () {
       const tvl = this.totalStakings[this.nomination.communityId + '-' + this.nomination.pid]
       if(!tvl) return 0;
