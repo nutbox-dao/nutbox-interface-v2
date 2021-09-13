@@ -212,7 +212,7 @@ export default {
   mounted() {
     console.log(920, this.nomination);
     this.relayer = this.nomination.chainId === 2 ? 'polkadot' : 'kusama'
-    this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 12) + '...' + this.nomination.validatorAccount.slice(-12)
+    this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 16) + '......' + this.nomination.validatorAccount.slice(-12)
     getMinNominatorBond(this.relayer).then(res => {
       this.minNominatorsBond = res
     })
