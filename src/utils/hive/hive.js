@@ -10,7 +10,7 @@ const hiveConf = window.localStorage.getItem(HIVE_CONF_KEY) || HIVE_API_URLS[0]
 window.localStorage.setItem(HIVE_CONF_KEY, hiveConf)
 hive.api.setOptions({ url: hiveConf })
 
-function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
+async function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
   const hiveGas = HIVE_GAS_ACCOUNT
   const feeOperation = [
     'transfer',
