@@ -207,8 +207,8 @@ export default {
     ...mapActions('hive', ['setVestsToHive']),
     async gotoOfficial () {
       getAllValidators('polkadot')
-      // test()
-      // window.open('https://nutbox.io', '_blank')
+      test()
+      window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
@@ -293,8 +293,9 @@ export default {
     }
 
     // init polkadot apis
-    initApis()
-    loadPolkadotAccounts()
+    initApis().then(api => {
+      loadPolkadotAccounts()
+    })
   }
 }
 </script>

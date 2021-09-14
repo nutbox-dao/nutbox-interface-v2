@@ -152,8 +152,6 @@ export default {
   },
   methods: {
     nominate() {
-      this.showNominate = true;
-      return;
       if (this.minNominatorsBond.toNumber() <= this.locked.toNumber()) {
         this.showNominate = true;
       } else {
@@ -243,7 +241,6 @@ export default {
     }
   },
   mounted() {
-    console.log(920, this.nomination);
     this.relayer = this.nomination.chainId === 2 ? 'polkadot' : 'kusama'
     this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 16) + '......' + this.nomination.validatorAccount.slice(-12)
     getMinNominatorBond(this.relayer).then(res => {

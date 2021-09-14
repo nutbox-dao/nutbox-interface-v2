@@ -114,6 +114,7 @@ export const nominate = async (relayer, validators, communityId, projectId, toas
         try {
           handelBlockState(api, status, dispatchError, toast, callback, unsub)
         } catch (e) {
+          console.log(e);
           toast(e.message, {
             title: $t('tip.error'),
             variant: 'danger'

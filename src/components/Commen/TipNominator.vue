@@ -114,7 +114,6 @@ export default {
     },
     ...mapState(['lang']),
     needToCancelValidators() {
-      return 2
       return (
         this.nominators.length >= MAX_NOMINATE_VALIDATOR && this.nominators.indexOf(this.crowdstaking.validatorAccount) === -1
       );
@@ -135,28 +134,29 @@ export default {
     },
     getNominateValidators() {
       if (this.needToCancelValidators > 0) {
+        console.log(352,this.nominators, this.selected);
         // 从用户选择的列表获取投票
         return this.nominators
-          .filter(({ address }) => this.selected.indexOf(address) !== -1)
+          .filter(({ address }) => this.selected.indexOf(address) === -1)
           .map(({ address }) => address)
-          .concat(this.crowdstaking.project.validators);
+          .concat([this.crowdstaking.validatorAccount]);
       } else {
         // 直接拼接节点
         return this.nominators
           .map(({ address }) => address)
-          .concat(this.crowdstaking.project.validators);
+          .concat([this.crowdstaking.validatorAccount]);
       }
     },
     async confirm() {
       try {
         this.isNominating = true;
-        const { community, project } = this.crowdstaking;
         const validators = this.getNominateValidators();
         console.log("selecet validator", validators);
         await nominate(
+          this.relayer,
           validators,
-          community.communityId,
-          project.projectId,
+          this.crowdstaking.validatorAccount,
+          this.crowdstaking.validatorAccount,
           (info, param) => {
             this.$bvToast.toast(info, param);
           },
@@ -165,6 +165,7 @@ export default {
           }
         );
       } catch (e) {
+        console.log(e);
         this.$bvToast.toast(e.message, {
           title: this.$t("tip.error"),
           autoHideDelay: 5000,

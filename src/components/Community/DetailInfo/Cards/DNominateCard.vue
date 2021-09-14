@@ -140,8 +140,6 @@ export default {
   },
   methods: {
     nominate() {
-      this.showNominate = true;
-      return;
       if (this.minNominatorsBond.toNumber() <= this.locked.toNumber()) {
         this.showNominate = true;
       } else {
