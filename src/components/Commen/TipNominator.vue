@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-modal">
+  <div class="tip-modal" id="tip-nominator">
     <img
       class="close-btn"
       src="~@/static/images/close.svg"
@@ -29,7 +29,7 @@
       </p>
     <div v-if="needToCancelValidators > 0" class="list-box">
       <b-form-checkbox-group
-        id="checkbox-group-2"
+        class="list-checkbox"
         v-model="selected"
         name="flavour-2"
       >
@@ -177,7 +177,7 @@ export default {
   },
   mounted() {
     this.relayer = this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama'
-    console.log(235, 
+    console.log(235,
     this.$store.state.polkadot.totalStaked.toNumber(),
     this.$store.state.polkadot.locked.toNumber(),
     this.$store.state.polkadot.unLocking.toNumber(),
@@ -248,35 +248,6 @@ export default {
   width: 100%;
   display: flex;
   align-items: center;
-}
-.custom-control-label {
-  width: 100%;
-  &::before {
-    top: 50% !important;
-    transform: translateY(-50%);
-    left: -1.8rem !important;
-    width: 1.4rem !important;
-    height: 1.4rem !important;
-    border: none !important;
-    background-image: url("~@/static/images/no-check.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
-}
-input {
-  outline: none;
-}
-.custom-control {
-  padding-left: 2rem !important;
-}
-.custom-control-input {
-  width: 1.4rem !important;
-  height: 1.4rem !important;
-}
-.custom-control-input:checked ~ .custom-control-label::before {
-  background-image: url("~@/static/images/checked.png");
-  background-color: transparent !important;
 }
 .checkbox-item-card {
   background-color: #f6f7f9;
