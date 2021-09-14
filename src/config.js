@@ -101,7 +101,7 @@ export const HIVE_CONF_KEY = 'hiveNodeKey'
 // delegate fee
 export const HIVE_STAKE_FEE = 1
 // official fee account
-export const HIVE_GAS_ACCOUNT = 'nutbox.gas'
+export const HIVE_GAS_ACCOUNT = 'walnut.gas'
 
 // Hive Config
 export const HIVE_API_URLS = [

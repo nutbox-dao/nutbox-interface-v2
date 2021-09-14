@@ -58,7 +58,8 @@
           </span>
         </div>
         <div class="text-left mt-3 mb-1">
-          <span style="color: #bdbfc2">VALIDATOR ADDRESS</span>
+          <span style="color: #bdbfc2">VALIDATOR ADDRESS  </span>
+          <img @click="copyValidator" style="width:1rem;height:1rem;cursor: pointer;" src="~@/static/images/copy.svg" alt="">
         </div>
         <div class="btn-row bt-1 mb-1">
           <span>
@@ -155,7 +156,27 @@ export default {
         this.showBondAndNominator = true;
       }
     },
-    async withdraw() {},
+    copyValidator() {
+      const address = this.nomination.validatorAccount
+
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: this.formatValidatorAccount
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
+    },
+    async withdraw() {
+
+    },
   },
   computed: {
     ...mapState({
