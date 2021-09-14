@@ -514,35 +514,4 @@ input::-webkit-input-placeholder {
 #telegram-icon:hover {
   background-image: url("./static/images/telegram-hover.svg");
 }
-#tip-nominator {
-  .custom-control-label {
-    width: 100%;
-  }
-  .custom-control-label::before {
-    top: 50% !important;
-    transform: translateY(-50%);
-    left: -1.8rem !important;
-    width: 1.4rem !important;
-    height: 1.4rem !important;
-    border: none !important;
-    background-image: url("~@/static/images/no-check.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
-  input {
-    outline: none;
-  }
-  .custom-control {
-    padding-left: 2rem !important;
-  }
-  .custom-control-input {
-    width: 1.4rem !important;
-    height: 1.4rem !important;
-  }
-  .custom-control-input:checked ~ .custom-control-label::before {
-    background-image: url("~@/static/images/checked.png");
-    background-color: transparent !important;
-  }
-}
 </style>
