@@ -110,16 +110,9 @@ export default {
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
     },
     loadingStaking () {
-      return this.pNominators || this.kNominators
+      return this.pLoadingStaking || this.kLoadingStaking
     },
     ...mapState(['lang']),
-    nominated() {
-      const userStakingBn =
-        this.userStakings[this.crowdstaking.communityId + "-" + this.crowdstaking.pid];
-      if (!userStakingBn) return 0;
-      const decimal = this.card.decimal;
-      return parseFloat(userStakingBn.toString() / 10 ** decimal);
-    },
     needToCancelValidators() {
       return 1
       return (

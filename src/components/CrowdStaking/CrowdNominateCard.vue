@@ -121,6 +121,8 @@ import TipBondAndNominator from "@/components/Commen/TipBondAndNominator";
 import TipNominator from "@/components/Commen/TipNominator";
 import { mapState } from "vuex";
 import { getMinNominatorBond } from '@/utils/commen/crowdStaking'
+import { handleApiErrCode } from '@/utils/helper'
+import { withdrawReward } from '@/utils/web3/pool'
 
 export default {
   name: "CrowdNominateCard",
@@ -150,6 +152,8 @@ export default {
   },
   methods: {
     nominate() {
+      this.showNominate = true;
+      return;
       if (this.minNominatorsBond.toNumber() <= this.locked.toNumber()) {
         this.showNominate = true;
       } else {
@@ -158,7 +162,6 @@ export default {
     },
     copyValidator() {
       const address = this.nomination.validatorAccount
-
       navigator.clipboard.writeText(address).then(() => {
         this.$bvToast.toast(
           this.$t('tip.copyAddress', {
@@ -175,7 +178,16 @@ export default {
       })
     },
     async withdraw() {
-
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.nomination.communityId, this.nomination.pid)
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
     },
   },
   computed: {
@@ -199,7 +211,7 @@ export default {
       const userStakingBn =
         this.userStakings[this.nomination.communityId + "-" + this.nomination.pid];
       if (!userStakingBn) return 0;
-      const decimal = this.nomination.decimal;
+      const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
@@ -208,7 +220,7 @@ export default {
           this.nomination.communityId + "-" + this.nomination.pid
         ];
       if (!tvl) return 0;
-      const decimal = this.nomination.decimal;
+      const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return tvl.toString() / 10 ** decimal;
     },
     pendingReward() {

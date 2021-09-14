@@ -9,11 +9,7 @@ import {
   cryptoWaitReady
 } from "@polkadot/util-crypto"
 import BN from "bn.js"
-import store from "../../store"
-import {
-  subBonded,
-  subNominators
-} from './staking'
+import store from "@/store"
 import {
   getBalance as getKusamaBalance
 } from '../kusama/account'
@@ -51,8 +47,6 @@ export const loadAccounts = async () => {
     getBalance(account)
     getKusamaBalance(account)
     DEBUG && getRococoBalance(account)
-    subNominators()
-    subBonded()
   } catch (e) {
     // console.error('get all accounts fail:', e);
   }

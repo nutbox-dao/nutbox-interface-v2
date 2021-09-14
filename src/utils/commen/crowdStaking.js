@@ -71,6 +71,9 @@ export const subNominators = async (relayer) => {
         nick
       }
     })
+    infos = [{address: '13xZwV54UbBm6tZfJMBxkPH9LZLqDbq387w4R2qrii69Dgjg', nick:'test'},
+    {address: '13pndCL5D93GXZA6vuuHjvbnGSLYoaEMvTdrDQjSG7M3wYC7', nick: 'test2'}
+  ]
     // 获取用户投票的节点的详细信息
     // const currentEra = await api.query.staking.currentEra()
     // for (let i = 0; i<infos.length; i++){
