@@ -121,7 +121,7 @@ export default {
     },
     // 确认按钮是否可点击
     canNominate() {
-      if (this.needToCancelValidators) {
+      if (this.needToCancelValidators > 0) {
         return this.selected.length >= this.needToCancelValidators;
       } else {
         return true;

@@ -45,48 +45,48 @@ export const subNominators = async (relayer) => {
   store.commit(relayer + '/saveLoadingStaking', true)
   // 获取用户投票的情况
   const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
-    if (!nominators.toJSON()) {
-      store.commit(relayer + '/saveNominators', [])
-      store.commit(relayer + '/saveLoadingStaking', false)
-      return;
-    }
-    // 获取节点的昵称
-    let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
-    infos = infos.map(acc => {
-      let nick = ''
-      let address = stanfiAddress(acc.accountId)
-      if (acc.identity?.displayParent || acc.identity?.display){
-        if (acc.identity?.display && acc.identity?.displayParent){
-          nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
-        }else if(acc.identity?.display){
-          nick = acc.identity.display
-        }else{
-          nick = acc.identity.displayParent
-        }
-      }else{
-        nick = `${address.slice(0,16)}...${address.slice(-5)}`
-      }
-      return {
-        address: stanfiAddress(acc.accountId),
-        nick
-      }
-    })
-    infos = [{address: '13xZwV54UbBm6tZfJMBxkPH9LZLqDbq387w4R2qrii69Dgjg', nick:'test'},
-    {address: '13pndCL5D93GXZA6vuuHjvbnGSLYoaEMvTdrDQjSG7M3wYC7', nick: 'test2'}
+    // if (!nominators.toJSON()) {
+    //   store.commit(relayer + '/saveNominators', [])
+    //   store.commit(relayer + '/saveLoadingStaking', false)
+    //   return;
+    // }
+    // // 获取节点的昵称
+    // let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
+    // infos = infos.map(acc => {
+    //   let nick = ''
+    //   let address = stanfiAddress(acc.accountId)
+    //   if (acc.identity?.displayParent || acc.identity?.display){
+    //     if (acc.identity?.display && acc.identity?.displayParent){
+    //       nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
+    //     }else if(acc.identity?.display){
+    //       nick = acc.identity.display
+    //     }else{
+    //       nick = acc.identity.displayParent
+    //     }
+    //   }else{
+    //     nick = `${address.slice(0,16)}...${address.slice(-5)}`
+    //   }
+    //   return {
+    //     address: stanfiAddress(acc.accountId),
+    //     nick
+    //   }
+    // })
+    let infos = [{address: '11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ', nick:'test1'},
+    {address: '1A2ATy1FEu5yQ9ZzghPLsRckPQ7XLmq5MJQYcTvGnxGvCho', nick: 'test2'}
   ]
     // 获取用户投票的节点的详细信息
-    // const currentEra = await api.query.staking.currentEra()
-    // for (let i = 0; i<infos.length; i++){
-    //   const addr = infos[i].address
-    //   const validatorStake = await api.query.staking.erasStakers(currentEra.toString(), addr)
-    //   const validatorComissionRate = await api.query.staking.erasValidatorPrefs(currentEra.toString(), addr)
-    //   const validatorTotalStake = parseInt(validatorStake['total'].toString() / 1e10)
-    //   const validatorOwnStake = parseInt(validatorStake['own'].toString() / 1e10)
-    //   const validatorNominators = validatorStake['others'].toJSON()
-    //   infos[i]['otherStake'] = (validatorTotalStake - validatorOwnStake) + '(' + validatorNominators.length + ')'
-    //   infos[i]['ownStake'] = validatorOwnStake
-    //   infos[i]['commission'] = (validatorComissionRate['commission'].toString() / 10000000).toFixed(1) + '%'
-    // }
+    const currentEra = await api.query.staking.currentEra()
+    for (let i = 0; i<infos.length; i++){
+      const addr = infos[i].address
+      const validatorStake = await api.query.staking.erasStakers(currentEra.toString(), addr)
+      const validatorComissionRate = await api.query.staking.erasValidatorPrefs(currentEra.toString(), addr)
+      const validatorTotalStake = parseInt(validatorStake['total'].toString() / 1e10)
+      const validatorOwnStake = parseInt(validatorStake['own'].toString() / 1e10)
+      const validatorNominators = validatorStake['others'].toJSON()
+      infos[i]['otherStake'] = (validatorTotalStake - validatorOwnStake) + '(' + validatorNominators.length + ')'
+      infos[i]['ownStake'] = validatorOwnStake
+      infos[i]['commission'] = (validatorComissionRate['commission'].toString() / 10000000).toFixed(1) + '%'
+    }
     store.commit(relayer + '/saveLoadingStaking', false)
     store.commit(relayer + '/saveNominators', infos)
   })
