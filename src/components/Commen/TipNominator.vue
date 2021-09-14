@@ -187,7 +187,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .tip-modal {
   position: relative;
   max-height: 80vh;
@@ -249,6 +249,12 @@ export default {
   display: flex;
   align-items: center;
 }
+input {
+  outline: none;
+}
+.custom-control {
+  padding-left: 2rem !important;
+}
 .checkbox-item-card {
   background-color: #f6f7f9;
   border-radius: 16px;
@@ -276,6 +282,29 @@ export default {
     font-size: 0.7rem;
   }
 }
+/deep/ .custom-control-label {
+  width: 100%;
+}
+/deep/ .custom-control-label::before {
+  top: 50% !important;
+  transform: translateY(-50%);
+  left: -1.8rem !important;
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+  border: none !important;
+  background-image: url("~@/static/images/no-check.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+/deep/ .custom-control-input {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+}
+/deep/ .custom-control-input:checked ~ .custom-control-label::before {
+  background-image: url("~@/static/images/checked.png");
+  background-color: transparent !important;
+}
 @media (max-width: 320px) {
   .card-row {
     flex-direction: column;
@@ -290,4 +319,5 @@ export default {
     display: none;
   }
 }
+
 </style>
