@@ -11,26 +11,6 @@ import { waitApi } from "./api"
 import { stanfiAddress } from '@/utils/commen/account'
 import { createCrowdstakingRemark } from '@/utils/commen/remark'
 
-
-/**
- * 监听用户的绑定储蓄账户
- */
-export const subBonded = async (relayer) => {
-  let subBonded = store.state[relayer].subBonded
-  try {
-    subBonded()
-  } catch (e) {}
-  const api = await waitApi(relayer)
-  subBonded = await api.query.staking.bonded(store.state.polkadot.account.address, (bonded) => {
-    if (!bonded.toJSON()) {
-      store.commit(relayer + '/saveBonded', null)
-      return;
-    }
-    store.commit(relayer + '/saveBonded', bonded.toJSON())
-  })
-  store.commit(relayer + '/saveSubBonded', subBonded)
-}
-
 /**
  * 监听用户的投票节点
  */
@@ -41,8 +21,9 @@ export const subNominators = async (relayer) => {
   } catch (e) {}
   const api = await waitApi(relayer)
   // const {validators} = await api.derive.staking.overview()
-
-  store.commit(relayer + '/saveLoadingStaking', true)
+  if (!store.state[relayer].nominators){
+    store.commit(relayer + '/saveLoadingStaking', true)
+  }
   // 获取用户投票的情况
   const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
     // if (!nominators.toJSON()) {
@@ -71,7 +52,7 @@ export const subNominators = async (relayer) => {
     //     nick
     //   }
     // })
-    let infos = [{address: '11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ', nick:'test1'},
+    let infos = [{address: '11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ', nick:'11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ'},
     {address: '1A2ATy1FEu5yQ9ZzghPLsRckPQ7XLmq5MJQYcTvGnxGvCho', nick: 'test2'}
   ]
     // 获取用户投票的节点的详细信息

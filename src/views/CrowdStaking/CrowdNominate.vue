@@ -24,7 +24,7 @@
 <script>
 import CrowdNominateCard from '@/components/CrowdStaking/CrowdNominateCard'
 import { mapState, mapGetters } from 'vuex'
-import { subBonded, subNominators } from '@/utils/commen/crowdStaking'
+import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   name: 'CrowdNominate',
@@ -46,8 +46,6 @@ export default {
   },
   mounted () {
     // get parachian info from backend
-    subBonded('kusama')
-    subBonded('polkadot')
     subNominators('kusama')
     subNominators('polkadot')
   }

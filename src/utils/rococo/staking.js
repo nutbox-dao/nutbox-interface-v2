@@ -13,24 +13,6 @@ import {
   getTxPaymentInfo
 } from './rococo'
 import { stanfiAddress } from '@/utils/commen/account'
-/**
- * 监听用户的绑定储蓄账户
- */
-export const subBonded = async () => {
-  let subBonded = store.state.polkadot.subBonded
-  try {
-    subBonded()
-  } catch (e) {}
-  const api = await getApi()
-  subBonded = await api.query.staking.bonded(store.state.polkadot.account.address, (bonded) => {
-    if (!bonded.toJSON()) {
-      store.commit('rococo/saveBonded', null)
-      return;
-    }
-    store.commit('rococo/saveBonded', bonded.toJSON())
-  })
-  store.commit('rococo/saveSubBonded', subBonded)
-}
 
 /**
  * 监听用户的投票节点

@@ -114,7 +114,7 @@ export default {
     },
     ...mapState(['lang']),
     needToCancelValidators() {
-      return 1
+      return 2
       return (
         this.nominators.length >= MAX_NOMINATE_VALIDATOR && this.nominators.indexOf(this.crowdstaking.validatorAccount) === -1
       );

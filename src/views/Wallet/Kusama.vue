@@ -43,7 +43,7 @@ import LockedBalanceView from "@/components/Wallet/Kusama/LockedBalanceView";
 import UserContributions from "@/components/Wallet/Kusama/UserContributions";
 import UserNominations from "@/components/Wallet/Kusama/UserNominations"
 import { mapState, mapGetters } from "vuex";
-import { subBonded, subNominators } from '@/utils/commen/crowdStaking'
+import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   data() {
@@ -62,8 +62,7 @@ export default {
     UserNominations
   },
   async mounted() {
-    subBonded('kusama')
-    subNominators('polkkusamaadot')
+    subNominators('kusama')
   },
 };
 </script>
