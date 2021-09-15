@@ -50,6 +50,7 @@ export const PARA_STATUS = {
   ACTIVE: "Active",
   RETIRED: "Retired",
   COMPLETED: "Completed",
+  WINNER: "Winner",
   OTHER: "Other"
 }
 

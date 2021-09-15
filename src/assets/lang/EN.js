@@ -134,6 +134,7 @@ module.exports = {
     contributed: "My Contribution",
     myBalance: "Balance of {token}",
     Active: "Active",
+    Winner: "Winner",
     Retired: "Retired",
     Completed: "Completed",
     chain: "Chain",

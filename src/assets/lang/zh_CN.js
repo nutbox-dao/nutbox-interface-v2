@@ -137,6 +137,7 @@ module.exports = {
     contributed: "我的投票",
     myBalance: "我的 {token} 余额",
     Active: "众筹中",
+    Winner: "竞拍成功",
     Retired: "退款中",
     Completed: "众筹结束",
     chain: "平行链",

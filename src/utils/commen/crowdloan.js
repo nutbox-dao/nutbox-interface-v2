@@ -287,13 +287,16 @@ export const calStatus = async (relaychain, end, firstPeriod, lastPeriod, raised
   if (retiring) {
     status = PARA_STATUS.RETIRED
     statusIndex = 1
+  } else if (isWinner) {
+    status = PARA_STATUS.WINNER
+    statusIndex = 2
   } else {
     if (!(isCapped || isEnded || isWinner) && currentPeriod <= firstPeriod) {
       status = PARA_STATUS.ACTIVE
       statusIndex = 0
     } else {
       status = PARA_STATUS.COMPLETED
-      statusIndex = 2
+      statusIndex = 3
     }
   }
   return [status, statusIndex]
