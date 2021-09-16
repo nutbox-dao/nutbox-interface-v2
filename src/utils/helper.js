@@ -1,6 +1,7 @@
 import {
   TIME_PERIOD,
-  BLOCK_SECOND
+  BLOCK_SECOND,
+  PRICES_SYMBOL
 } from "@/constant"
 import CryptoJS from 'crypto'
 import {
@@ -11,6 +12,8 @@ import {
   errCode
 } from "@/config"
 import axios from 'axios'
+import { getPricesOnCEX } from '@/apis/api'
+import store from '@/store'
 
 var cryptoOptions = {
   key: process.env.VUE_APP_CRYPTO_KEY,
@@ -163,6 +166,19 @@ export const uploadImage = async (img) => {
       })
   })
 }
+
+export const getPrices = async () => {
+  let prices = await getPricesOnCEX()
+  prices = prices.filter(p => 
+    PRICES_SYMBOL.indexOf(p.symbol) !== -1
+  )
+  let res = {}
+  for (let p of prices) {
+    res[p.symbol] = p.price
+  }
+  store.commit('savePrices', res)
+}
+
 /**
  * Handle API err code
  * @param {*} code 

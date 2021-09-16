@@ -37,6 +37,10 @@ export const DECIMAL = {
     rococo: new BN(ROCOCO_DECIMAL)
 }
 
+export const PRICES_SYMBOL = [
+    'BNBUSDT','DOTUSDT','ETHUSDT', 'HIVEUSDT', 'STEEMUSDT', 'STEEMETH'
+]
+
 // 最大投票数
 export const MAX_NOMINATE_VALIDATOR = 16
 
