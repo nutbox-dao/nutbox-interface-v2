@@ -4,7 +4,7 @@
          <span>{{ showingAddress }}</span>
         </div>
         <div v-else>
-            <ConnectMetaMask style="width: 8rem"/>
+            <ConnectMetaMask style="width: 8rem;padding:.1rem .3rem;"/>
         </div>
     </div>
 </template>

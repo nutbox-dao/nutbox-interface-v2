@@ -3,7 +3,7 @@
       <b-button
       class="connect"
       variant="primary"
-      style="width:90%"
+      style="width:100%"
       @click="connect"
       :disabled="isConnecting"
     >
