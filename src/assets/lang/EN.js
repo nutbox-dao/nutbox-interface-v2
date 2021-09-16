@@ -3,7 +3,10 @@ module.exports = {
     userlogin: 'Login',
     steemAccoutPlaceHolder: 'Steem Account',
     hiveAccountPlaceHolder: 'Hive account',
+    steemActiveKeyPlaceHolder: 'Please input Steem active key',
+    hiveActiveKeyPlaceHolder: 'Please input Hive active key',
     login: 'Login',
+    loginByKeychain: 'Login by Keychain',
     loging: 'Logining...',
     cancel: 'Cancel',
     confirm: 'Confirm',
@@ -22,6 +25,7 @@ module.exports = {
     copy: 'Copy',
     complete: 'Complete',
     now: 'Now',
+    connectMetamask: 'Connect Wallet',
 
     whitePaper: 'White Paper',
     nps: 'Nutbox Proposal System',
@@ -271,7 +275,11 @@ module.exports = {
     wrongInputDevRatio: "Please input number between 0-100",
     notTokenContract: "The address you input is not a ERC20 contract address.",
     transactionFail: 'Transaction fail!',
-    assetHasRegisterd: 'Asset has been registered by someone.'
+    assetHasRegisterd: 'Asset has been registered by someone.',
+    steemAccountEmpty: 'Steem account missing',
+    steemAccountActiveKeyEmpty: 'Steem account or active key missing',
+    hiveAccountEmpty: 'Hive account missing',
+    hiveAccountActiveKeyEmpty: 'Hive accout or active key missing'
   },
   community: {
     community: 'Community',

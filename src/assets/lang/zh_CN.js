@@ -25,6 +25,7 @@ module.exports = {
     copy: '复制',
     complete: '完成',
     now: '现在',
+    connectMetamask: '连接钱包',
 
     whitePaper: '白皮书',
     nps: 'Nutbox提案系统',
