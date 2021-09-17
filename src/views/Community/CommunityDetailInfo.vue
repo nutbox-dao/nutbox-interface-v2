@@ -88,7 +88,6 @@ export default {
     ...mapGetters('web3', ['communityById']),
     communityInfo () {
       const com = this.communityById(this.communityId)
-      console.log('communityInfo', com)
       return com
     },
     wallet () {

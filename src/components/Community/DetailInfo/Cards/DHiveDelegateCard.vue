@@ -89,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'totalStakings', 'blockNum']),
+    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -105,7 +105,7 @@ export default {
       return this.vestsToHive * (userStakingBn.toString() / 1e6)
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      const tvl = this.card.totalStakedAmount
       if(!tvl) return 0;
       return this.vestsToHive * (tvl.toString() / 1e6)
     },

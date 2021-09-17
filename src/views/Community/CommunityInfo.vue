@@ -16,7 +16,7 @@
         <button
           class="primary-btn pl-3 pr-3"
           :disabled="!canEdit"
-          @click="type = 'edit'"
+          @click="clickEdit"
         >
           {{ $t("community.edit") }}
         </button>
@@ -701,13 +701,6 @@ export default {
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
-    // create hive account
-    try{
-      this.blogTag = await generateNewHiveAccount()
-      this.blogMainPassword = generatePassword()
-    }catch(e) {
-      console.log('generateNewHiveAccount fail',e)
-    }
 
     try {
       const communityInfo = await getMyCommunityInfo();
@@ -716,9 +709,17 @@ export default {
         this.noCommunity = true;
         return;
       }
+      this.canEdit = true;
       this.form = {...communityInfo};
       if (!communityInfo.name) this.showStep = true;
       this.form.blogTag = communityInfo.blogTag;
+          // create hive account
+      try{
+        this.blogTag = await generateNewHiveAccount()
+        this.blogMainPassword = generatePassword()
+      }catch(e) {
+        console.log('generateNewHiveAccount fail',e)
+      }
       if (this.form.blogTag){
         this.state = ''
       }else{
@@ -728,7 +729,6 @@ export default {
           this.state = 'create'
         }
       }
-      this.canEdit = true;
       const cToken = await getCToken(communityInfo.id)
       this.cToken = cToken
       this.isMintable = cToken.isMintable
@@ -792,6 +792,9 @@ export default {
           }
         }
       })
+    },
+    clickEdit () {
+      this.type = this.form.name ? 'edit' : 'create'
     },
     async updateLogo (file) {
       if (!this.logo) return

@@ -67,8 +67,8 @@ export default {
     async blockNum(newValue, oldValue) {
       try{
         if (!this.contract) return;
-        const res = await this.contract.calculateReward(1, newValue)
-        this.minedToken = res.toString() / 1e18
+        // const res = await this.contract.calculateReward(1, newValue)
+        // this.minedToken = res.toString() / 1e18
       }catch(e){
         console.log('watch total mined token failed', e);
       }
