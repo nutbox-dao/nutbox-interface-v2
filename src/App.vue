@@ -45,7 +45,7 @@
               <img src="~@/static/images/tokens/bnb.png" alt="">
               <div>{{ address || $t("wallet.wallet") }}</div>
             </div>
-            <b-nav-item-dropdown variant="text" class="m-0" id="setting-dropdown" right no-caret>
+            <b-nav-item-dropdown variant="text" class="setting-dropdown m-0" right no-caret>
               <template #button-content>
                 <i class="more-setting-icon"></i>
               </template>
