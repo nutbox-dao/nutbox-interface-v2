@@ -1,10 +1,10 @@
 <template>
   <div class="page-view-content">
-    <Step v-show="createState !== 0" :current-step="createState"></Step>
-    <div class="flex-between-center">
-      <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
-    </div>
-    <div class="scroll-content">
+    <div class="container scroll-content">
+      <div class="view-top-header">
+        <Step v-show="createState !== 0" :current-step="createState"></Step>
+        <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
+      </div>
       <div class="pool-card text-left">
         <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
         <div class="custom-form pool-form">
@@ -83,7 +83,7 @@
         <div class="divide-box">
           <div class="line-card-title">{{ $t('asset.poolInfo') }}</div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-lg-6 col-md-7">
             <div id="pie"></div>
           </div>
@@ -316,14 +316,10 @@ export default {
 
 <style scoped lang="scss">
 @import "src/static/css/form";
-
-.page-back-text-icon {
-  margin-bottom: 2.3rem;
-}
-
 .pool-card {
   @include card(1.6rem 0);
   height: auto;
+  margin-bottom: 3rem;
 
   .line-card-title {
     font-size: 1rem;

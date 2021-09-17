@@ -1,22 +1,19 @@
 <template>
   <div id="app">
     <div class="page-layout">
-      <div class="page-header flex-between-center" v-if="screenWidth < 960">
-        <div class="header-brand">
-          <img class="logo" src="./static/images/logo_small.png"
-               @click="gotoOfficial" alt="nutbox" />
-          <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>
-        </div>
-      </div>
-      <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<960">
-        <div class="menu-box">
-          <img class="menu-logo" src="./static/images/logo.png" @click="gotoOfficial" alt="nutbox"/>
-          <div class="menu-items">
-            <b-nav vertical align="center" class="top">
-              <b-nav-item to="/wallet" router-tag="div">
-                <i id="wallet-icon" class="menu-icon" />
-                <span>{{ address || $t("wallet.wallet") }}</span>
-              </b-nav-item>
+      <div class="page-header">
+        <b-navbar toggleable="lg">
+          <b-navbar-brand v-if="screenWidth < 960">
+            <img class="logo" src="./static/images/logo_small.png"
+                 @click="gotoOfficial" alt="nutbox" />
+            <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.nav-collapse/>
+          </b-navbar-brand >
+          <b-navbar-brand v-else to="/">
+            <img src="~@/static/images/logo.png" alt="" class="logo">
+          </b-navbar-brand>
+<!--          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>-->
+          <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav align="center" class="top">
               <b-nav-item to="/community">
                 <i id="community-icon" class="menu-icon" />
                 <span>{{ $t("cs.community") }}</span>
@@ -25,7 +22,7 @@
                 <i id="farming-icon" class="menu-icon" />
                 <span>{{ $t("cl.crowdloan") }}</span>
               </b-nav-item> -->
-              <b-nav-item to="/crowdstaking" router-tag="div">
+              <b-nav-item to="/crowdstaking">
                 <i id="stake-icon" class="menu-icon" />
                 <span>{{ $t("commen.crowdstaking") }}</span>
               </b-nav-item>
@@ -37,94 +34,166 @@
                 <i id="nps-icon" class="menu-icon" />
                 <span>{{ $t("nps.nps") }}</span>
               </b-nav-item>
-            </b-nav>
-            <div class="bottom">
-              <div class="links">
-                <a id="github-icon" href="https://github.com/nutbox-dao" target="_blank">
-                  <b-popover target="github-icon" triggers="hover focus" placement="top">
-                    Github
-                  </b-popover>
-                </a>
-                <a id="docs-icon" href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
-                  <b-popover target="docs-icon" triggers="hover focus" placement="top">
-                    {{ $t("commen.docs") }}
-                  </b-popover>
-                </a>
-                <a id="discord-icon" href="https://discord.com/invite/zPkMuGY" target="_blank">
-                  <b-popover target="discord-icon" triggers="hover focus" placement="top">
-                    Discord
-                  </b-popover>
-                </a>
-                <a id="telegram-icon" href="https://t.me/nutbox_defi" target="_blank">
-                  <b-popover target="telegram-icon" triggers="hover focus" placement="top">
-                    Telegram
-                  </b-popover>
-                </a>
-              </div>
-              <div class="h-line"></div>
-              <div class="settings">
-                <b-dropdown :no-flip="true" offset="50"
-                  id="language"
-                  :text="lang.toUpperCase()"
-                  size="sm"
-                  block
-                  dropup
-                  no-caret
-                >
-                  <b-dropdown-item @click="setLanguage('en')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'en' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.en") }}</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="setLanguage('zh')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'zh' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.zh") }}</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="setLanguage('kr')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'kr' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.kr") }}</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="setLanguage('es')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'es' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.es") }}</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="setLanguage('my')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'my' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.my") }}</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="setLanguage('jp')">
-                    <b-icon
-                      style="font-size: 20px"
-                      :icon="lang == 'jp' ? 'check' : 'blank'"
-                      aria-hidden="true"
-                    ></b-icon>
-                    <span style="font-size: 14px">{{ $t("commen.jp") }}</span>
-                  </b-dropdown-item>
-                </b-dropdown>
-              </div>
+              <b-nav-item to="/wallet">
+                <i id="wallet-icon" class="menu-icon" />
+                <span>{{ address || $t("wallet.wallet") }}</span>
+              </b-nav-item>
+            </b-navbar-nav>
+          </b-collapse>
+          <b-navbar-nav class="d-flex flex-row align-items-center header-right">
+            <div class="address-box">
+              <img src="~@/static/images/tokens/bnb.png" alt="">
+              <div>{{ address || $t("wallet.wallet") }}</div>
             </div>
-          </div>
-        </div>
-      </b-sidebar>
+            <b-nav-item-dropdown variant="text" class="m-0" id="setting-dropdown" right no-caret>
+              <template #button-content>
+                <i class="more-setting-icon"></i>
+              </template>
+              <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
+                <i class="dropdown-item-icon" id="github-icon"></i>
+                <span>Github</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
+                <i class="dropdown-item-icon" id="docs-icon"></i>
+                <span>{{ $t("commen.docs") }}</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://discord.com/invite/zPkMuGY" target="_blank">
+                <i class="dropdown-item-icon" id="discord-icon"></i>
+                <span>Discord</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://t.me/nutbox_defi" target="_blank">
+                <i class="dropdown-item-icon" id="telegram-icon"></i>
+                <span>Telegram</span>
+              </b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-navbar>
+      </div>
+
+<!--      <div class="page-header flex-between-center" v-if="screenWidth < 960">-->
+<!--        <div class="header-brand">-->
+<!--          <img class="logo" src="./static/images/logo_small.png"-->
+<!--               @click="gotoOfficial" alt="nutbox" />-->
+<!--          <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<960">-->
+<!--        <div class="menu-box">-->
+<!--          <img class="menu-logo" src="./static/images/logo.png" @click="gotoOfficial" alt="nutbox"/>-->
+<!--          <div class="menu-items">-->
+<!--            <b-nav vertical align="center" class="top">-->
+<!--              <b-nav-item to="/wallet" router-tag="div">-->
+<!--                <i id="wallet-icon" class="menu-icon" />-->
+<!--                <span>{{ address || $t("wallet.wallet") }}</span>-->
+<!--              </b-nav-item>-->
+<!--              <b-nav-item to="/community">-->
+<!--                <i id="community-icon" class="menu-icon" />-->
+<!--                <span>{{ $t("cs.community") }}</span>-->
+<!--              </b-nav-item>-->
+<!--              &lt;!&ndash; <b-nav-item to="/crowdloan">-->
+<!--                <i id="farming-icon" class="menu-icon" />-->
+<!--                <span>{{ $t("cl.crowdloan") }}</span>-->
+<!--              </b-nav-item> &ndash;&gt;-->
+<!--              <b-nav-item to="/crowdstaking" router-tag="div">-->
+<!--                <i id="stake-icon" class="menu-icon" />-->
+<!--                <span>{{ $t("commen.crowdstaking") }}</span>-->
+<!--              </b-nav-item>-->
+<!--              <b-nav-item to="/blog">-->
+<!--                <i id="blog-icon" class="menu-icon" />-->
+<!--                <span>{{ $t("commen.blog") }}</span>-->
+<!--              </b-nav-item>-->
+<!--              <b-nav-item to="/nps">-->
+<!--                <i id="nps-icon" class="menu-icon" />-->
+<!--                <span>{{ $t("nps.nps") }}</span>-->
+<!--              </b-nav-item>-->
+<!--            </b-nav>-->
+<!--            <div class="bottom">-->
+<!--              <div class="links">-->
+<!--                <a id="github-icon" href="https://github.com/nutbox-dao" target="_blank">-->
+<!--                  <b-popover target="github-icon" triggers="hover focus" placement="top">-->
+<!--                    Github-->
+<!--                  </b-popover>-->
+<!--                </a>-->
+<!--                <a id="docs-icon" href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">-->
+<!--                  <b-popover target="docs-icon" triggers="hover focus" placement="top">-->
+<!--                    {{ $t("commen.docs") }}-->
+<!--                  </b-popover>-->
+<!--                </a>-->
+<!--                <a id="discord-icon" href="https://discord.com/invite/zPkMuGY" target="_blank">-->
+<!--                  <b-popover target="discord-icon" triggers="hover focus" placement="top">-->
+<!--                    Discord-->
+<!--                  </b-popover>-->
+<!--                </a>-->
+<!--                <a id="telegram-icon" href="https://t.me/nutbox_defi" target="_blank">-->
+<!--                  <b-popover target="telegram-icon" triggers="hover focus" placement="top">-->
+<!--                    Telegram-->
+<!--                  </b-popover>-->
+<!--                </a>-->
+<!--              </div>-->
+<!--              <div class="h-line"></div>-->
+<!--              <div class="settings">-->
+<!--                <b-dropdown :no-flip="true" offset="50"-->
+<!--                  id="language"-->
+<!--                  :text="lang.toUpperCase()"-->
+<!--                  size="sm"-->
+<!--                  block-->
+<!--                  dropup-->
+<!--                  no-caret-->
+<!--                >-->
+<!--                  <b-dropdown-item @click="setLanguage('en')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'en' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.en") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                  <b-dropdown-item @click="setLanguage('zh')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'zh' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.zh") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                  <b-dropdown-item @click="setLanguage('kr')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'kr' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.kr") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                  <b-dropdown-item @click="setLanguage('es')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'es' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.es") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                  <b-dropdown-item @click="setLanguage('my')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'my' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.my") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                  <b-dropdown-item @click="setLanguage('jp')">-->
+<!--                    <b-icon-->
+<!--                      style="font-size: 20px"-->
+<!--                      :icon="lang == 'jp' ? 'check' : 'blank'"-->
+<!--                      aria-hidden="true"-->
+<!--                    ></b-icon>-->
+<!--                    <span style="font-size: 14px">{{ $t("commen.jp") }}</span>-->
+<!--                  </b-dropdown-item>-->
+<!--                </b-dropdown>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </b-sidebar>-->
       <TipMessage
         :showMessage="tipMessage"
         :title="tipTitle"
@@ -132,11 +201,10 @@
         @hideMask="showMessage = false"
       />
       <div class="page-container">
-        <div class="scroll-content" ref="scrollContent">
-          <div class="container">
-            <router-view></router-view>
-          </div>
-        </div>
+<!--        <div class="scroll-content" ref="scrollContent">-->
+<!--          <router-view></router-view>-->
+<!--        </div>-->
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -250,7 +318,7 @@ export default {
       this.screenWidth = val
     },
     '$route' (val) {
-      this.$refs.scrollContent.scrollTo({ top: 0 })
+      // this.$refs.scrollContent.scrollTo({ top: 0 })
     }
   },
   async mounted () {
@@ -309,19 +377,20 @@ $blue: #ffdb1b;
   --secondary-text: #717376;
   --disable: #bdbfc2;
   --dividers: #e3e5e8;
-  --background: #f6f7f9;
+  --background: #F5F6F8;
   --error: #ff5040;
   --success: #50bf00;
   --link: #408fff;
   --warning: #ff9500;
   --backgroud-state: #b37012;
 }
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap-vue/src/index.scss";
 @import "static/css/responsive";
 @import "static/css/common.scss";
 @import "static/css/layout";
-@import "~bootstrap/scss/bootstrap.scss";
-@import "~bootstrap-vue/src/index.scss";
 @import "static/css/modal";
+@import "static/css/dropdown";
 html,
 body {
   height: 100%;
@@ -372,7 +441,6 @@ input::-webkit-input-placeholder {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
 }
-
 .loading-bg {
   display: flex;
   align-content: center;
@@ -388,27 +456,6 @@ input::-webkit-input-placeholder {
     font-weight: 400;
     color: #bdbfc2;
     line-height: 22px;
-  }
-}
-#dropdown-1 .dropdown-toggle {
-  border-color: #F6F7F9;
-  background: #F6F7F9;
-  border-radius: .8rem;
-  outline: none;
-  &::after {
-    display: none;
-  }
-}
-#dropdown-1 .dropdown-menu {
-  width: 100%;
-  border-color: transparent;
-  border-radius: 1rem;
-  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.1);
-  .dropdown-item {
-    padding: .6rem 1.2rem;
-    &:hover {
-      background: rgba(255, 219, 38, 0.05);
-    }
   }
 }
 .c-tooltip {
@@ -482,7 +529,6 @@ input::-webkit-input-placeholder {
     background-image: url("./static/images/menu-icon-community-hover.svg");
   }
 }
-
 #justswap-icon {
   background-image: url("./static/images/just-swap.svg");
 }

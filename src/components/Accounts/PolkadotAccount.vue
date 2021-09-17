@@ -1,10 +1,8 @@
 <template>
-  <b-dropdown class="c-dropdown" right no-caret>
+  <b-dropdown class="account-dropdown" right no-caret>
     <template #button-content>
-      <div class="account-dropdown-btn flex-between-center">
-        <span class="ml-2">{{account && account.meta && account.meta.name | formatUserAddress}}</span>
-        <i class="dropdown-icon ml-3"></i>
-      </div>
+      <span>{{account && account.meta && account.meta.name | formatUserAddress}}</span>
+      <i class="dropdown-icon ml-3"></i>
     </template>
     <b-dropdown-item v-for="(item, index) of allAccounts ? allAccounts : []" :key="index"
                      @click="changeAccount(item)">
@@ -57,7 +55,7 @@ export default {
     changeAccount (acc) {
       console.log(acc.address);
       this.saveAccount(acc);
-      
+
       getPolkadotBalance(acc);
       getKusamaBalance(acc);
       subNominators('polkadot');

@@ -214,6 +214,10 @@ button {
 .btn {
   padding: .6rem 1.2rem!important;
 }
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
 [role="button"] {
   outline: none;
 }

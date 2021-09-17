@@ -13,9 +13,9 @@ export default {
 <style lang="scss" scoped>
 .blog-frame {
   background-color: white;
-  position: fixed;
-  top: 0;
-  left: 12rem;
+  position: absolute;
+  top: 3.8rem;
+  left: 0;
   bottom: 0;
   right: 0;
 }
