@@ -157,7 +157,7 @@ import { accountChanged, getAccounts } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
-import { handleApiErrCode, getPrices } from '@/utils/helper'
+import { handleApiErrCode, UpdateApysOfPool } from '@/utils/helper'
 
 export default {
   data () {
@@ -205,7 +205,6 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     async gotoOfficial () {
-      await getPrices()
       console.log(this.prices);
       // window.open('https://nutbox.io', '_blank')
     },
@@ -284,6 +283,8 @@ export default {
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
+
+    UpdateApysOfPool()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {

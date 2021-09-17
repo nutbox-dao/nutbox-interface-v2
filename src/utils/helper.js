@@ -12,7 +12,7 @@ import {
   errCode
 } from "@/config"
 import axios from 'axios'
-import { getPricesOnCEX } from '@/apis/api'
+import { getPricesOnCEX, getPricesOnDB, getAllPools, getAllCommunities } from '@/apis/api'
 import store from '@/store'
 
 var cryptoOptions = {
@@ -167,16 +167,98 @@ export const uploadImage = async (img) => {
   })
 }
 
-export const getPrices = async () => {
-  let prices = await getPricesOnCEX()
-  prices = prices.filter(p => 
+/**
+ * Update pools apy by polling
+ */
+export const UpdateApysOfPool = async () => {
+  // apy calculate:
+  // need token price, ctoken price, poolRatio, devRatio, currentblockreward, tvl
+  // a pool's apy = a year's reward / tvl
+  // = currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
+  // if tvl = 0 => apy = 0
+  // token price = 0 or ctoken price = 0 => apy = 0
+  const update = async () => {
+    try{
+      let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
+      let apys = {}
+      let temp = {}
+      for (let c of communities) {
+        temp[c.id] = c
+      }
+      communities = temp
+      const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
+      pools.map(pool => {
+        const key = pool.communityId + '-' + pool.pid
+        if (pool.totalStakedAmount === '0'){
+          pool.apy = pool.apy
+          return;
+        }
+        if (pool.poolRatio === 0){
+          return;
+        }
+        const com = communities[pool.communityId]
+        const ctokenAddress = com.ctoken
+        const ctokenPrice = price[ctokenAddress]
+        if (ctokenPrice === 0){
+          return;
+        }
+        const devRatio = com.rewardRatio
+        const rewardPerBlock = com.rewardPerBlock
+        const poolRatio = pool.poolRatio
+        if (pool.type === 'HomeChainAssetRegistry'){
+          const p = price[pool.address]
+          if (p === 0){
+            return
+          }
+          //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * p)
+          return;
+        }
+
+        if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
+          const steemPrice = parseFloat(price['STEEMETH'])
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * steemPrice)
+          return;
+        }
+        if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
+          const hivePrice = parseFloat(price['HIVEETH'])
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * hivePrice)
+          return;
+        }
+        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
+          const dotPrice = parseFloat(price['DOTETH'])
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * dotPrice)
+          return;
+        }
+        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
+          const ksmPrice = parseFloat(price['KSMETH'])
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * ksmPrice)
+          return;
+        }
+      })
+      store.commit('web3/saveAllPools', pools)
+    }catch(e) {
+      console.log('Update apys faile', e);
+    }
+    setTimeout(update, 10000)
+  }
+  update()
+}
+
+const getPrices = async () => {
+  // tokenPrices is against eth price
+  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getPricesOnDB()])
+  binancePrice = binancePrice.filter(p => 
     PRICES_SYMBOL.indexOf(p.symbol) !== -1
   )
   let res = {}
-  for (let p of prices) {
+  for (let p of binancePrice) {
     res[p.symbol] = p.price
   }
-  store.commit('savePrices', res)
+  for (let p of tokenPrices) {
+    res[p.address] = p.price
+  }
+  return res
 }
 
 /**

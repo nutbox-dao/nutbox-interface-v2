@@ -41,6 +41,7 @@ import {
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
 import { GasLimit } from '../../config'
+import { ethers } from 'ethers'
 
 
 /**
@@ -356,7 +357,7 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
     }
     const account = await getAccounts();
     if (!boundAccount){
-      boundAccount = account
+      boundAccount = ethers.utils.keccak256(account)
     }
 
     try{

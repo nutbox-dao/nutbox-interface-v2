@@ -182,7 +182,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lang']),
+    ...mapState(['lang', 'apys']),
     ...mapState('web3', ['pendingRewards', 'blockNum']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]

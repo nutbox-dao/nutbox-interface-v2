@@ -100,3 +100,5 @@ export const getAllPools = async () => get(BACKEND_API_URL + '/pool/getAll')
 export const getAllParachain = async () => get(BACKEND_API_URL + '/parachain/getall')
 
 export const getPricesOnCEX = async () => get('https://api.binance.com/api/v3/ticker/price')
+
+export const getPricesOnDB = async () => get(BACKEND_API_URL + '/token/getprices')

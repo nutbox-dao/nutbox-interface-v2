@@ -41,6 +41,7 @@ export const setupNetwork = async () => {
         // blockExplorerUrls: ['https://bscscan.com/'],
       }],
     })
+    store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
