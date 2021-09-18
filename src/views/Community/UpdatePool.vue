@@ -1,10 +1,11 @@
 <template>
   <div class="page-view-content">
-    <div class="flex-between-center">
-      <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
-    </div>
-    <div class="scroll-content">
-      <div class="pool-card text-left">
+    <div class="scroll-content container">
+      <div class="view-top-header">
+        <div class="page-back-text-icon font20 m-0"
+             @click="$router.back()">{{ $t('asset.addPool') }}</div>
+      </div>
+      <div class="pool-card text-left mb-5">
         <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
         <div class="row">
           <div class="col-lg-6 col-md-7">

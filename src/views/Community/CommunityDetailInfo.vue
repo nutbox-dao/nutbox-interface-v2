@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content">
     <div class="container scroll-content">
-      <div class="community-detail-info">
+      <div class="community-detail-info my-5">
         <div class="loading-bg" v-if="!communityInfo">
           <img src="~@/static/images/loading.gif" alt="" />
           <p class="font16">{{ $t("tip.loading") }}</p>
@@ -25,7 +25,8 @@
               </div>
             </div>
           </div>
-          <div class="nav-box nav-box-line" :style="{position: activeTab===5?'fixed':'unset'}">
+          <div class="nav-box nav-box-line my-4"
+               :style="{position: activeTab===5?'fixed':'unset'}">
             <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   v-show="showTab(index)"
@@ -177,8 +178,6 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
   .tab-container {
     flex: 1;
     position: relative;

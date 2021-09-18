@@ -8,7 +8,7 @@
     </div>
     <div class="side-page-view-content">
       <div class="container scroll-content">
-        <div class="view-top-header p-view-top-header">
+        <div class="view-top-header p-view-top-header flex-between-center">
           <div class="nav-box nav-box-bg">
             <div class="nav">
               <span v-for="(item, index) of tabOptions" :key="index"

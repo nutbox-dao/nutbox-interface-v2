@@ -5,7 +5,7 @@
         <Step v-show="createState !== 0" :current-step="createState"></Step>
         <div class="page-back-text-icon font20" @click="$router.back()">{{ $t('asset.addPool') }}</div>
       </div>
-      <div class="pool-card text-left">
+      <div class="pool-card text-left mb-5">
         <div class="line-card-title">{{ $t('asset.poolRatios') }}</div>
         <div class="custom-form pool-form">
           <b-form-group id="input-group-1"
@@ -319,8 +319,6 @@ export default {
 .pool-card {
   @include card(1.6rem 0);
   height: auto;
-  margin-bottom: 3rem;
-
   .line-card-title {
     font-size: 1rem;
     line-height: 1rem;

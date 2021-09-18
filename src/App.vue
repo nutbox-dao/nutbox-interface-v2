@@ -3,11 +3,13 @@
     <div class="page-layout">
       <div class="page-header">
         <b-navbar toggleable="lg">
-          <b-navbar-brand v-if="screenWidth < 960">
-            <img class="logo" src="./static/images/logo_small.png"
-                 @click="gotoOfficial" alt="nutbox" />
+          <div class="d-flex align-items-center" v-if="screenWidth < 960">
+            <b-navbar-brand to="/" class="m-0">
+              <img class="logo" src="./static/images/logo_small.png"
+                   @click="gotoOfficial" alt="nutbox" />
+            </b-navbar-brand >
             <img class="menu ml-2" src="./static/images/menu.png" alt=""  v-b-toggle.nav-collapse/>
-          </b-navbar-brand >
+          </div>
           <b-navbar-brand v-else to="/">
             <img src="~@/static/images/logo.png" alt="" class="logo">
           </b-navbar-brand>

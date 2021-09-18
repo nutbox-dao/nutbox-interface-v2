@@ -1,14 +1,15 @@
 <template>
   <div class="page-view-content nps">
     <div class="container scroll-content">
-      <div class="tip-box">
-        <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
-        <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
-      </div>
-      <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
-        <div class="proposal">
-          <p
-            style="
+      <div class="mb-5">
+        <div class="tip-box">
+          <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
+          <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
+        </div>
+        <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
+          <div class="proposal">
+            <p
+              style="
             width: 32px;
             height: 32px;
             border-radius: 16px;
@@ -16,40 +17,41 @@
             font-size: 14px;
             line-height: 32px;
           "
-          >
-            {{ index + 1 }}
-          </p>
-          <a
-            target="_blank"
-            :href="'https://blog.nutbox.io/@' + item.author"
-            style="width: 100px; text-align: left"
-          >
-            {{ item.author }}
-          </a>
-          <a
-            target="_blank"
-            :href="'https://blog.nutbox.io/@' + item.author + '/' + item.permlink"
-            style="
+            >
+              {{ index + 1 }}
+            </p>
+            <a
+              target="_blank"
+              :href="'https://blog.nutbox.io/@' + item.author"
+              style="width: 100px; text-align: left"
+            >
+              {{ item.author }}
+            </a>
+            <a
+              target="_blank"
+              :href="'https://blog.nutbox.io/@' + item.author + '/' + item.permlink"
+              style="
             flex: 1;
             text-align: left;
             font-weight: 500;
             border-radius: 8px;
           "
-          >
-            {{ item.title }}
-          </a>
-          <p
-            :class="item.status"
-            style="
+            >
+              {{ item.title }}
+            </a>
+            <p
+              :class="item.status"
+              style="
             font-size: 14px;
             font-weight: 600;
             line-height: 24px;
             padding: 0px 6px;
           "
-          >
-            <!--{{ new Date(item.timestamp+'Z') | timeFormat}} -->
-            {{ statusDesc(item.status) }}
-          </p>
+            >
+              <!--{{ new Date(item.timestamp+'Z') | timeFormat}} -->
+              {{ statusDesc(item.status) }}
+            </p>
+          </div>
         </div>
       </div>
     </div>

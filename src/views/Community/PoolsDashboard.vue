@@ -1,47 +1,50 @@
 <template>
   <div class="page-view-content">
-    <Step v-show="createState !== 0 && !loadingPool" :current-step="createState"></Step>
-    <div class="view-top-header row">
-      <div class="col-md-6 text-left">
-        <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">{{ $t('community.dashboard') }}</div>
-      </div>
-      <div class="col-md-6 btn-group">
-        <button class="outline-btn" @click="$router.push('/community/community-info')">
-          <i class="setting-icon"></i>
-          <span>{{ $t('community.setting') }}</span>
-        </button>
-        <button class="outline-btn" v-show="stakingPools.length > 1" @click="$router.push('/community/update-pool')">{{ $t('community.updatePools') }}</button>
-        <button v-show="createState === 0 || createState === 3" @click="$router.push('/community/add-pool')">
-          <i class="add-icon"></i>
-          <span>{{ $t('community.addPool') }}</span>
-        </button>
-      </div>
-    </div>
-    <!-- <div>
-      {{ blockNum }} {{ communityBalance / 1e18 }}
-    </div> -->
-    <Progress :progress-data="progressData"></Progress>
-    <div class="loading-bg" v-if="loadingPool">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t("tip.loading") }}</p>
-    </div>
-    <template v-else>
-      <div v-if="stakingPools && stakingPools.length===0"
-          class="empty-card d-flex flex-column justify-content-center">
-        <div class="empty-bg">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t('community.noPools') }}</p>
+    <div class="container scroll-content d-flex flex-column">
+      <div class="view-top-header">
+        <Step v-show="createState !== 0 && !loadingPool" :current-step="createState"></Step>
+        <div class="row">
+          <div class="col-md-6 text-left">
+            <div class="page-back-text-icon page-view-title" @click="$router.push('/community')">{{ $t('community.dashboard') }}</div>
+          </div>
+          <div class="col-md-6 c-btn-group text-right">
+            <button class="outline-btn" @click="$router.push('/community/community-info')">
+              <i class="setting-icon"></i>
+              <span>{{ $t('community.setting') }}</span>
+            </button>
+            <button class="outline-btn" v-show="stakingPools.length > 1" @click="$router.push('/community/update-pool')">{{ $t('community.updatePools') }}</button>
+            <button v-show="createState === 0 || createState === 3" @click="$router.push('/community/add-pool')">
+              <i class="add-icon"></i>
+              <span>{{ $t('community.addPool') }}</span>
+            </button>
+          </div>
         </div>
       </div>
+      <!-- <div>
+        {{ blockNum }} {{ communityBalance / 1e18 }}
+      </div> -->
+      <Progress :progress-data="progressData"></Progress>
+      <div class="loading-bg" v-if="loadingPool">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
+      </div>
       <template v-else>
+        <div v-if="stakingPools && stakingPools.length===0"
+             class="empty-card mb-5 d-flex flex-column justify-content-center">
+          <div class="empty-bg">
+            <img src="~@/static/images/empty-data.png" alt="" />
+            <p>{{ $t('community.noPools') }}</p>
+          </div>
+        </div>
+        <template v-else>
           <div class="row">
             <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.pid">
               <DashboardPoolCard :pool="pool"/>
             </div>
-        </div>
+          </div>
+        </template>
       </template>
-    </template>
-
+    </div>
     <b-modal
       v-model="noCommunity"
       modal-class="custom-modal"
@@ -132,7 +135,7 @@ export default {
 
 <style scoped lang="scss">
 .empty-card {
-  @include card;
+  @include card(1.2rem, white, none);
   flex: 1;
 }
 .view-top-header {
