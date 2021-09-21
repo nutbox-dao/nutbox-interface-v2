@@ -74,6 +74,7 @@
 .account-dropdown .dropdown-menu {
   border: transparent;
   border-radius: .8rem;
+  @include coin-shadow();
 }
 
 .setting-dropdown .dropdown-toggle:hover{
