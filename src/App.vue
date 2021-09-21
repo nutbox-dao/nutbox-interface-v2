@@ -36,16 +36,16 @@
                 <i id="nps-icon" class="menu-icon" />
                 <span>{{ $t("nps.nps") }}</span>
               </b-nav-item>
-              <b-nav-item to="/wallet">
+              <b-nav-item v-show="address" to="/wallet">
                 <i id="wallet-icon" class="menu-icon" />
-                <span>{{ address || $t("wallet.wallet") }}</span>
+                <span>{{ $t("wallet.wallet") }}</span>
               </b-nav-item>
             </b-navbar-nav>
           </b-collapse>
           <b-navbar-nav class="d-flex flex-row align-items-center header-right">
-            <div class="address-box">
+            <div class="address-box" @click="connect">
               <img src="~@/static/images/tokens/bnb.png" alt="">
-              <div>{{ address || $t("wallet.wallet") }}</div>
+              <div>{{ address || $t("commen.connectMetamask") }}</div>
             </div>
             <b-nav-item-dropdown variant="text" class="setting-dropdown m-0" right no-caret>
               <template #button-content>
@@ -246,9 +246,9 @@ export default {
       'account',
       'crowdstakings',
       'communitys',
-      'projects'
+      'projects',
+      'clCommunitys'
     ]),
-    ...mapState('polkadot', ['clCommunitys']),
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities']),
     address () {
@@ -282,6 +282,26 @@ export default {
       localStorage.setItem(LOCALE_KEY, lang)
       this.$store.commit('saveLang', lang)
       this.$i18n.locale = lang
+    },
+    connect() {
+      if (this.address) {
+        navigator.clipboard.writeText(this.$store.state.web3.account).then(() => {
+          this.$bvToast.toast(
+            this.$t('tip.copyAddress', {
+              address: this.formatUserAddress(this.address)
+            }),
+            {
+              title: this.$t('tip.clipboard'),
+              autoHideDelay: 5000,
+              variant: 'info' // info success danger
+            }
+          )
+        }, (e) => {
+          console.log(e)
+        })
+        return;
+      }
+      setupNetwork()
     },
     formatUserAddress (address, long = true) {
       if (!address) return 'Loading Account'
@@ -333,7 +353,6 @@ export default {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
-
     // BSC data
     this.fetchBscData();
     // bsc related
