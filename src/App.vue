@@ -203,9 +203,6 @@
         @hideMask="showMessage = false"
       />
       <div class="page-container">
-<!--        <div class="scroll-content" ref="scrollContent">-->
-<!--          <router-view></router-view>-->
-<!--        </div>-->
         <router-view></router-view>
       </div>
     </div>

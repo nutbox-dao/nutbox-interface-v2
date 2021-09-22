@@ -16,7 +16,9 @@ ponsived {
 .c-tr {
   border: 1px solid rgba(246, 247, 249, 1);
 }
-
+.c-tr td {
+  vertical-align: middle;
+}
 .c-tr:hover{
   background: rgba(255, 219, 38, 0.05) !important;
 }
@@ -217,6 +219,10 @@ button {
 .btn:focus {
   outline: none;
   box-shadow: none;
+}
+input:focus {
+  outline: none;
+  box-shadow: none!important;
 }
 [role="button"] {
   outline: none;

@@ -29,6 +29,7 @@ import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
 import Nps from '@/views/Nps/Nps'
+import CommunityTokens from '@/views/Community/CommunityTokens'
 
 Vue.use(VueRouter)
 
@@ -113,10 +114,17 @@ const routes = [
   {
     path: '/community',
     component: CommunityIndex,
+    redirect: '/community/community-list',
     children: [
       {
-        path: '/',
-        component: Community
+        path: 'community-list',
+        component: Community,
+        meta: { slideBar: true }
+      },
+      {
+        path: 'community-token',
+        component: CommunityTokens,
+        meta: { slideBar: true }
       },
       {
         path: 'tutorials',
@@ -152,7 +160,7 @@ const routes = [
       },
       {
         path: 'register-ctoken',
-        component: RegisterCtoken,
+        component: RegisterCtoken
       },
       {
         path: 'register',
