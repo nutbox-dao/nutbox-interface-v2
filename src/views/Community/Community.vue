@@ -2,7 +2,7 @@
   <div class="container scroll-content">
     <div class="view-top-header flex-between-center">
       <b-input-group class="search-input mr-3">
-        <b-form-input :placeholder="$t('commen.search')"></b-form-input>
+        <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
         <template #append>
           <i class="search-icon"></i>
         </template>
@@ -21,12 +21,12 @@
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
     <template v-else>
-      <div class="empty-bg" v-if="communityCard && communityCard.length === 0">
+      <div class="empty-bg" v-if="filterCommunities && filterCommunities.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>{{ $t("tip.noCommunities") }}</p>
       </div>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of communityCard" :key="index">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of filterCommunities" :key="index">
           <CommunityCard :card-info="cItem"/>
         </div>
       </div>
@@ -48,7 +48,8 @@ export default {
     return {
       loading: false,
       activeTab: 0,
-      tabOptions: ['All', 'Joined', 'Created', 'Other']
+      tabOptions: ['All', 'Joined', 'Created', 'Other'],
+      searchText: ''
     }
   },
   computed: {
@@ -58,6 +59,10 @@ export default {
       loadingCommunity: state => state.web3.loadingCommunity
     }),
     ...mapGetters('web3', ['communityCard']),
+    filterCommunities() {
+      if (!this.communityCard) return [];
+      return this.communityCard.filter(c => c.name.toLowerCase().includes(this.searchText.toLowerCase()))
+    }
   },
   watch: {
     loadingCommunity(newValue, oldValue) {
