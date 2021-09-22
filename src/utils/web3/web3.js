@@ -74,6 +74,7 @@ export const getEthWeb = async () => {
     await sleep(0.5)
     metamask = window.ethereum
   }
+  
   return metamask
 }
 
@@ -91,9 +92,11 @@ export const connectMetamask = async () => {
  * User changed chain
  */
 export const chainChanged = async () => {
+  
   const metamask = await getEthWeb()
+ 
   console.log('monitor chain id');
-  metamask.on('chainChanged', (chainId) => {
+  metamask.on('chainChanged', (chainId,n) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){

@@ -499,6 +499,7 @@ export const deployERC20 = async ({
 }, isMintable) => {
   return new Promise(async (resolve, reject) => {
     try {
+      debugger
       const contract = await getContract('ERC20Factory', null, false)
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);

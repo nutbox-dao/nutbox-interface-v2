@@ -18,6 +18,7 @@ import CreateEconomy from '@/views/Community/CreateEconomy'
 import PoolsDashboard from '@/views/Community/PoolsDashboard'
 import AddPool from '@/views/Community/AddPool'
 import UpdatePool from '@/views/Community/UpdatePool'
+import ProposalCreate from '@/views/Community/ProposalCreate'
 import Register from '@/views/RegisterAsset/Register'
 import RegisterCtoken from '@/views/RegisterAsset/RegisterCtoken'
 import NativeAsset from '@/views/RegisterAsset/NativeAsset'
@@ -29,6 +30,9 @@ import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
 import Nps from '@/views/Nps/Nps'
+import ProposalSpace from '@/views/Community/ProposalSpace'
+import Proposal from '@/views/Community/Proposal'
+import CommunityProposalConfig from '@/views/Community/CommunityProposalConfig'
 
 Vue.use(VueRouter)
 
@@ -170,6 +174,24 @@ const routes = [
             component: CrossChainAsset
           }
         ]
+      },
+      {
+        path: 'proposal-space/:key',
+        component: ProposalSpace
+        
+      },
+      {
+        path: 'proposal-space/:key/proposal',
+        component: Proposal
+        
+      },
+      {
+        path: 'proposal-space/:key/proposal-create',
+        component: ProposalCreate
+      },
+      {
+        path: 'community-proposal-config/:key',
+        component: CommunityProposalConfig
       }
     ]
   }

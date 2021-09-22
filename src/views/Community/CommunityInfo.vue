@@ -12,6 +12,16 @@
           $t("community.communityInfo")
         }}
       </div>
+      <div>
+        <button
+          class="primary-btn pl-3 pr-3"
+          @click="
+            $router.push(`/community/community-proposal-config/${form.id}`)
+          "
+        >
+          {{ $t("community.editProposalConfigBtn") }}
+        </button>
+      </div>
       <div v-if="!isEdit">
         <button
           class="primary-btn pl-3 pr-3"
@@ -49,7 +59,7 @@
               v-model="form.website"
               :placeholder="$t('community.inputLink')"
             ></b-form-input>
-            <span>{{ $t('cl.optional') }}</span>
+            <span>{{ $t("cl.optional") }}</span>
           </b-form-group>
           <!-- community description -->
           <b-form-group
@@ -183,7 +193,11 @@
                 </b-form-input>
                 <span class="c-append">{{ cToken.symbol }}</span>
               </div>
-              <button class="primary-btn ml-2" style="width: 8rem" @click="showChargeTip = true">
+              <button
+                class="primary-btn ml-2"
+                style="width: 8rem"
+                @click="showChargeTip = true"
+              >
                 {{ this.$t("community.charge") }}
               </button>
             </div>
@@ -204,7 +218,11 @@
                 </b-form-input>
                 <span></span>
               </div>
-              <button class="primary-btn ml-2" style="width: 8rem" @click="showDevAddressTip = true">
+              <button
+                class="primary-btn ml-2"
+                style="width: 8rem"
+                @click="showDevAddressTip = true"
+              >
                 {{ this.$t("commen.update") }}
               </button>
             </div>
@@ -226,7 +244,11 @@
                 </b-form-input>
                 <span class="c-append">%</span>
               </div>
-              <button class="primary-btn ml-2" style="width: 8rem" @click="showDevRatioTip = true">
+              <button
+                class="primary-btn ml-2"
+                style="width: 8rem"
+                @click="showDevRatioTip = true"
+              >
                 {{ this.$t("commen.update") }}
               </button>
             </div>
@@ -247,15 +269,31 @@
                 >
                 </b-form-input>
               </div>
-              <button class="primary-btn ml-2" v-if="state === 'create'" style="width: 8rem" @click="showBlogTip = true">
-                {{ $t('community.createBlog') }}
+              <button
+                class="primary-btn ml-2"
+                v-if="state === 'create'"
+                style="width: 8rem"
+                @click="showBlogTip = true"
+              >
+                {{ $t("community.createBlog") }}
               </button>
-              <button class="primary-btn ml-2" v-if="state === 'connectSteem'" style="width: 8rem" @click="showSteemLogin = true">
-                {{ $t('wallet.connectSteem') }}
+              <button
+                class="primary-btn ml-2"
+                v-if="state === 'connectSteem'"
+                style="width: 8rem"
+                @click="showSteemLogin = true"
+              >
+                {{ $t("wallet.connectSteem") }}
               </button>
-              <button class="primary-btn ml-2" v-if="state === 'publish'" style="width: 8rem" :disabled='publishingBlog' @click="publishBlog">
+              <button
+                class="primary-btn ml-2"
+                v-if="state === 'publish'"
+                style="width: 8rem"
+                :disabled="publishingBlog"
+                @click="publishBlog"
+              >
                 <b-spinner small type="grow" v-show="publishingBlog" />
-                {{ $t('community.publishBlog') }}
+                {{ $t("community.publishBlog") }}
               </button>
             </div>
           </b-form-group>
@@ -323,11 +361,7 @@
               placeholder="0"
             />
             <div class="ml-2">
-              <button
-                class="primary-btn"
-                @click="fillMax"
-                :disabled="charging"
-              >
+              <button class="primary-btn" @click="fillMax" :disabled="charging">
                 {{ $t("commen.max") }}
               </button>
             </div>
@@ -340,9 +374,14 @@
             :disabled="charging || approving"
           >
             <b-spinner small type="grow" v-show="charging || approving" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
-          <button class="primary-btn" @click="charge" :disabled="charging" v-if="ctokenApprovement">
+          <button
+            class="primary-btn"
+            @click="charge"
+            :disabled="charging"
+            v-if="ctokenApprovement"
+          >
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("community.confirmCharge") }}
           </button>
@@ -353,12 +392,12 @@
             :disabled="approving"
           >
             <b-spinner small type="grow" v-show="approving" />
-            {{ $t('commen.approveContract') }}
+            {{ $t("commen.approveContract") }}
           </button>
         </div>
       </div>
     </b-modal>
-        <!-- dev address tip -->
+    <!-- dev address tip -->
     <b-modal
       v-model="showDevAddressTip"
       modal-class="custom-modal"
@@ -388,16 +427,20 @@
             :disabled="updatingAddress"
           >
             <b-spinner small type="grow" v-show="updatingAddress" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
-          <button class="primary-btn" @click="updateAddress" :disabled="updatingAddress">
+          <button
+            class="primary-btn"
+            @click="updateAddress"
+            :disabled="updatingAddress"
+          >
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("commen.confirm") }}
           </button>
         </div>
       </div>
     </b-modal>
-       <!-- dev ratio tip -->
+    <!-- dev ratio tip -->
     <b-modal
       v-model="showDevRatioTip"
       modal-class="custom-modal"
@@ -414,15 +457,15 @@
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
             <div class="c-input-group">
-            <input
-              style="flex: 1"
-              :step="0.01"
-              :max="100"
-              type="number"
-              v-model="inputDevRatio"
-              :placeholder="$t('community.inputDevRatio')"
-            />
-            <span class="c-append">%</span>
+              <input
+                style="flex: 1"
+                :step="0.01"
+                :max="100"
+                type="number"
+                v-model="inputDevRatio"
+                :placeholder="$t('community.inputDevRatio')"
+              />
+              <span class="c-append">%</span>
             </div>
           </div>
         </div>
@@ -433,9 +476,13 @@
             :disabled="updatingDevRatio"
           >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
-          <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
+          <button
+            class="primary-btn"
+            @click="updateDevRatio"
+            :disabled="updatingDevRatio"
+          >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t("commen.confirm") }}
           </button>
@@ -468,7 +515,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
         </div>
       </div>
@@ -481,7 +528,8 @@
       centered
       hide-header
       hide-footer
-      no-close-on-backdrop>
+      no-close-on-backdrop
+    >
       <div class="cropper-container">
         <vueCropper
           ref="cropper"
@@ -517,20 +565,20 @@
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
             <p>
-              {{ $t('community.createBlogMemo') }}
+              {{ $t("community.createBlogMemo") }}
             </p>
           </div>
         </div>
         <div class="c-text-info">
-          <span>{{ $t('community.communityName') }}:</span>
+          <span>{{ $t("community.communityName") }}:</span>
           <p>{{ form.name }}</p>
         </div>
         <div class="c-text-info">
-          <span>{{ $t('community.blogTag') }}:</span>
+          <span>{{ $t("community.blogTag") }}:</span>
           <p>{{ blogTag }}</p>
         </div>
         <div class="c-text-info">
-          <span>{{ $t('community.blogMainPassword') }}:</span>
+          <span>{{ $t("community.blogMainPassword") }}:</span>
           <p>{{ blogMainPassword }}</p>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
@@ -540,33 +588,40 @@
             :disabled="creatingBlog"
           >
             <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
-          <button class="primary-btn" @click="createBlog" :disabled="creatingBlog">
+          <button
+            class="primary-btn"
+            @click="createBlog"
+            :disabled="creatingBlog"
+          >
             <b-spinner small type="grow" v-show="creatingBlog" />
             {{ $t("commen.confirm") }}
           </button>
         </div>
       </div>
       <div class="tip-modal">
-        <div class="font20 font-bold text-center mb-4" style="margin-top:1.2rem">
+        <div
+          class="font20 font-bold text-center mb-4"
+          style="margin-top: 1.2rem"
+        >
           {{ $t("community.bindBlog") }}
         </div>
-         <div class="input-group-box mb-4">
+        <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
             <p>
-              {{ $t('community.bindBlogMemo') }}
+              {{ $t("community.bindBlogMemo") }}
             </p>
           </div>
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
             <div class="c-input-group">
-            <input
-              style="flex: 1"
-              v-model="inputBlogTag"
-              :placeholder="$t('community.inputBlogTag')"
-            />
+              <input
+                style="flex: 1"
+                v-model="inputBlogTag"
+                :placeholder="$t('community.inputBlogTag')"
+              />
             </div>
           </div>
         </div>
@@ -577,23 +632,31 @@
             :disabled="creatingBlog"
           >
             <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
-          <button class="primary-btn" @click="bindBlog" :disabled="creatingBlog">
+          <button
+            class="primary-btn"
+            @click="bindBlog"
+            :disabled="creatingBlog"
+          >
             <b-spinner small type="grow" v-show="creatingBlog" />
             {{ $t("commen.confirm") }}
           </button>
         </div>
       </div>
     </b-modal>
-    <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
+    <Login
+      type="STEEM"
+      v-if="showSteemLogin"
+      @hideMask="showSteemLogin = false"
+    />
   </div>
 </template>
 
 <script>
 import { uploadImage } from "@/utils/helper";
 import UploadLoading from "@/components/ToolsComponents/UploadLoading";
-import Login from '@/components/ToolsComponents/Login'
+import Login from "@/components/ToolsComponents/Login";
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
@@ -603,27 +666,33 @@ import {
   setDevAddress,
   setDevRatio,
   monitorCommunity,
-  publishBlog
+  publishBlog,
 } from "@/utils/web3/community";
-import { getCToken } from "@/utils/web3/asset"
+import { getCToken } from "@/utils/web3/asset";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState, mapGetters } from "vuex";
-import BN from 'bn.js'
-import Step from '@/components/ToolsComponents/Step'
-import { VueCropper } from 'vue-cropper'
-import { generateNewHiveAccount, generatePassword, createNewCommunity, setCommunityInfo, subscribeCommunity } from '@/utils/steem/steem'
+import BN from "bn.js";
+import Step from "@/components/ToolsComponents/Step";
+import { VueCropper } from "vue-cropper";
+import {
+  generateNewHiveAccount,
+  generatePassword,
+  createNewCommunity,
+  setCommunityInfo,
+  subscribeCommunity,
+} from "@/utils/steem/steem";
 
 export default {
-  name: 'EditCommunityInfo',
+  name: "EditCommunityInfo",
   components: { UploadLoading, Step, VueCropper, Login },
-  data () {
+  data() {
     return {
       logo: null,
       coverImg: null,
       chargeValue: 0,
-      inputDevAddress: '',
-      inputDevRatio: '',
-      inputBlogTag:'',
+      inputDevAddress: "",
+      inputDevRatio: "",
+      inputBlogTag: "",
       form: {
         id: "",
         name: "",
@@ -632,7 +701,7 @@ export default {
         icon: "",
         poster: "",
         pools: [],
-        blogTag: ''
+        blogTag: "",
       },
       logoPreviewSrc: "",
       logoUploadLoading: false,
@@ -648,35 +717,41 @@ export default {
       showDevRatioTip: false,
       showBlogTip: false,
       uploading: false,
-      approving:false,
+      approving: false,
       charging: false,
       publishingBlog: false,
       creatingBlog: false,
       cToken: {},
       isMintable: true,
-      cTokenAddress: '',
+      cTokenAddress: "",
       updatingAddress: false,
       updatingDevRatio: false,
       showStep: false,
       cropperModal: false,
-      cropperImgSrc: '',
+      cropperImgSrc: "",
       cropFixedNumber: [1, 1],
       cropImgSize: [200, 200],
-      blogTag: '',
-      blogMainPassword: '',
-      blogBtnName: '',
-      state: '',
-      showSteemLogin: false
-    }
+      blogTag: "",
+      blogMainPassword: "",
+      blogBtnName: "",
+      state: "",
+      showSteemLogin: false,
+    };
   },
   computed: {
-    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
-    ...mapGetters('web3', ['createState']),
-    ...mapState("steem", ['steemAccount']),
-    communityBalanceValue(){
-      if (this.communityBalance){
-        return (this.communityBalance.toString() / 1e18).toFixed(6)
-      }else{
+    ...mapState("web3", [
+      "communityBalance",
+      "userBalances",
+      "ctokenApprovement",
+      "devAddress",
+      "devRatio",
+    ]),
+    ...mapGetters("web3", ["createState"]),
+    ...mapState("steem", ["steemAccount"]),
+    communityBalanceValue() {
+      if (this.communityBalance) {
+        return (this.communityBalance.toString() / 1e18).toFixed(6);
+      } else {
         return 0;
       }
     },
@@ -684,8 +759,8 @@ export default {
       if (!this.userBalances || !this.userBalances[this.cTokenAddress]) {
         return 0;
       }
-      return this.userBalances[this.cTokenAddress].toString() / 1e18
-    }
+      return this.userBalances[this.cTokenAddress].toString() / 1e18;
+    },
   },
   watch: {
     type(newValue, oldValue) {
@@ -694,14 +769,20 @@ export default {
     },
     steemAccount(newValue, oldValue) {
       if (newValue && !oldValue) {
-        this.state = 'create'
+        this.state = "create";
       }
-    }
+    },
   },
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
-
+    // create hive account
+    try {
+      this.blogTag = await generateNewHiveAccount();
+      this.blogMainPassword = generatePassword();
+    } catch (e) {
+      console.log("generateNewHiveAccount fail", e);
+    }
     try {
       const communityInfo = await getMyCommunityInfo();
       if (!communityInfo) {
@@ -709,30 +790,23 @@ export default {
         this.noCommunity = true;
         return;
       }
-      this.canEdit = true;
-      this.form = {...communityInfo};
+      this.form = { ...communityInfo };
       if (!communityInfo.name) this.showStep = true;
       this.form.blogTag = communityInfo.blogTag;
-          // create hive account
-      try{
-        this.blogTag = await generateNewHiveAccount()
-        this.blogMainPassword = generatePassword()
-      }catch(e) {
-        console.log('generateNewHiveAccount fail',e)
-      }
-      if (this.form.blogTag){
-        this.state = ''
-      }else{
-        if(!this.steemAccount){
-          this.state = 'connectSteem'
-        }else{
-          this.state = 'create'
+      if (this.form.blogTag) {
+        this.state = "";
+      } else {
+        if (!this.steemAccount) {
+          this.state = "connectSteem";
+        } else {
+          this.state = "create";
         }
       }
-      const cToken = await getCToken(communityInfo.id)
-      this.cToken = cToken
-      this.isMintable = cToken.isMintable
-      this.cTokenAddress = cToken.address
+      this.canEdit = true;
+      const cToken = await getCToken(communityInfo.id);
+      this.cToken = cToken;
+      this.isMintable = cToken.isMintable;
+      this.cTokenAddress = cToken.address;
       if (!communityInfo.name) {
         this.form.id = communityInfo.id;
         return;
@@ -744,179 +818,191 @@ export default {
     }
   },
   methods: {
-    onCancel () {
-      this.cropperModal = false
+    onCancel() {
+      this.cropperModal = false;
       if (this.logoUploadLoading) {
-        this.logo = null
-        this.logoUploadLoading = false
+        this.logo = null;
+        this.logoUploadLoading = false;
       }
       if (this.coverUploadLoading) {
-        this.coverImg = null
-        this.coverUploadLoading = false
+        this.coverImg = null;
+        this.coverUploadLoading = false;
       }
     },
-    completeCropAndUpload () {
-      this.cropperModal = false
+    completeCropAndUpload() {
+      this.cropperModal = false;
       this.$refs.cropper.getCropData((data) => {
-        if (this.logoUploadLoading) this.logoPreviewSrc = data
-        if (this.coverUploadLoading) this.coverPreviewSrc = data
-      })
+        if (this.logoUploadLoading) this.logoPreviewSrc = data;
+        if (this.coverUploadLoading) this.coverPreviewSrc = data;
+      });
       this.$refs.cropper.getCropBlob(async (data) => {
         if (this.logoUploadLoading) {
           try {
-            this.form.icon = await uploadImage(data)
-            this.logoUploadLoading = false
+            this.form.icon = await uploadImage(data);
+            this.logoUploadLoading = false;
           } catch (e) {
-            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-              title: this.$t('tip.tips'),
+            this.$bvToast.toast(this.$t("tip.picUploadFail"), {
+              title: this.$t("tip.tips"),
               autoHideDelay: 5000,
-              variant: 'warning'
-            })
-            this.logo = null
-            this.form.icon = null
-            this.logoUploadLoading = false
+              variant: "warning",
+            });
+            this.logo = null;
+            this.form.icon = null;
+            this.logoUploadLoading = false;
           }
         }
         if (this.coverUploadLoading) {
           try {
-            this.form.poster = await uploadImage(data)
-            this.coverUploadLoading = false
+            this.form.poster = await uploadImage(data);
+            this.coverUploadLoading = false;
           } catch (e) {
-            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-              title: this.$t('tip.tips'),
+            this.$bvToast.toast(this.$t("tip.picUploadFail"), {
+              title: this.$t("tip.tips"),
               autoHideDelay: 5000,
-              variant: 'warning'
-            })
-            this.coverImg = null
-            this.form.poster = null
+              variant: "warning",
+            });
+            this.coverImg = null;
+            this.form.poster = null;
           }
         }
-      })
+      });
     },
-    clickEdit () {
-      this.type = this.form.name ? 'edit' : 'create'
+
+    async updateLogo(file) {
+      if (!this.logo) return;
+      this.logoUploadLoading = true;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
     },
-    async updateLogo (file) {
-      if (!this.logo) return
-      this.logoUploadLoading = true
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
+    clickEdit() {
+      this.type = this.form.name ? "edit" : "create";
+    },
+    async updateLogo(file) {
+      if (!this.logo) return;
+      this.logoUploadLoading = true;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
       reader.onload = (res) => {
-        this.cropperImgSrc = res.target.result
-        this.cropperModal = true
-        this.cropFixedNumber = [1, 1]
-        this.cropImgSize = [200, 200]
-      }
+        this.cropperImgSrc = res.target.result;
+        this.cropperModal = true;
+        this.cropFixedNumber = [1, 1];
+        this.cropImgSize = [200, 200];
+      };
     },
-    async updateCover (file) {
-      if (!this.coverImg) return
-      this.coverUploadLoading = true
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
+    async updateCover(file) {
+      if (!this.coverImg) return;
+      this.coverUploadLoading = true;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onload = (res) => {
-        this.cropperImgSrc = res.target.result
-        this.cropperModal = true
-        this.cropFixedNumber = [30, 7]
-        this.cropImgSize = [1200, 280]
-      }
+        this.cropperImgSrc = res.target.result;
+        this.cropperModal = true;
+        this.cropFixedNumber = [30, 7];
+        this.cropImgSize = [1200, 280];
+      };
     },
     async approve() {
-      try{
+      try {
         this.approving = true;
         const hash = await approveCommunityBalance(this.cTokenAddress);
-        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
-          title: this.$t('tip.success'),
-          variant:'success'
-        })
-      }catch(e){
+        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+      } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
         this.approving = false;
       }
     },
     fillMax() {
-      this.chargeValue = this.cTokenBalance
+      this.chargeValue = this.cTokenBalance;
     },
     async charge() {
-      try{
+      try {
         this.charging = true;
-        const chargeValue = Number(this.chargeValue)
+        const chargeValue = Number(this.chargeValue);
         if (!chargeValue || chargeValue <= 0) {
-          this.$bvToast.toast(this.$t('error.inputError'), {
+          this.$bvToast.toast(this.$t("error.inputError"), {
             title: this.$t("tip.tips"),
             autoHideDelay: 5000,
             variant: "warning",
           });
           return;
         }
-        const decimal = new BN(10).pow(new BN(18))
-        const amount = new BN(Number(this.chargeValue * 1e6)).mul(decimal).divn(1e6)
-        const hash = await chargeCommunityBalance(amount)
-        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
+        const decimal = new BN(10).pow(new BN(18));
+        const amount = new BN(Number(this.chargeValue * 1e6))
+          .mul(decimal)
+          .divn(1e6);
+        const hash = await chargeCommunityBalance(amount);
+        this.$bvToast.toast(this.$t("community.chargeSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
         setTimeout(() => {
-          this.showChargeTip = false
+          this.showChargeTip = false;
         }, 2000);
-      }catch(e){
+      } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.charging = false
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.charging = false;
       }
     },
-    async updateAddress(){
-      try{
-        this.updatingAddress = true
-        await setDevAddress(this.inputDevAddress)
-        this.$bvToast.toast(this.$t(),{
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
+    async updateAddress() {
+      try {
+        this.updatingAddress = true;
+        await setDevAddress(this.inputDevAddress);
+        this.$bvToast.toast(this.$t(), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
         setTimeout(() => {
-          this.showDevAddressTip = false
-        }, 1000)
-      }catch(e){
+          this.showDevAddressTip = false;
+        }, 1000);
+      } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.updatingAddress = false
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.updatingAddress = false;
       }
     },
     async updateDevRatio() {
-      try{
-        this.updatingDevRatio = true
-        const r = parseInt(parseFloat(this.inputDevRatio) * 100)
-        await setDevRatio(r)
-         this.$bvToast.toast(this.$t(),{
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
+      try {
+        this.updatingDevRatio = true;
+        const r = parseInt(parseFloat(this.inputDevRatio) * 100);
+        await setDevRatio(r);
+        this.$bvToast.toast(this.$t(), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
         setTimeout(() => {
-          this.showDevRatioTip = false
-        }, 1000)
-      }catch(e){
+          this.showDevRatioTip = false;
+        }, 1000);
+      } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.updatingDevRatio = false
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.updatingDevRatio = false;
       }
     },
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
       let tips = null;
+      return true;
       if (website && website.length > 0) {
-        const regUrl = '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
-        const res = website.match(regUrl)
-        console.log({res});
+        const regUrl =
+          "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+        const res = website.match(regUrl);
+        console.log({ res });
         if (!res) {
-          tips = this.$t("tip.needRightUrl")
+          tips = this.$t("tip.needRightUrl");
           this.$bvToast.toast(tips, {
             title: this.$t("tip.tips"),
             autoHideDelay: 5000,
@@ -928,8 +1014,8 @@ export default {
 
       if (!name || name.length === 0) {
         tips = this.$t("tip.needName");
-      } else if(name && name.length > 16){
-        tips = this.$t("tip.communityNameLimit", {count: 16})
+      } else if (name && name.length > 16) {
+        tips = this.$t("tip.communityNameLimit", { count: 16 });
       } else if (!description || description.length === 0) {
         tips = this.$t("tip.needDescription");
       } else if (!icon || icon.length === 0) {
@@ -962,7 +1048,11 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
-        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true), monitorCommunity()])
+        await Promise.all([
+          getAllCommunities(true),
+          getMyCommunityInfo(true),
+          monitorCommunity(),
+        ]);
         await sleep(1);
         this.$router.push("/community/pool-dashboard");
       } catch (e) {
@@ -974,83 +1064,93 @@ export default {
       }
     },
     async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/
-      const res = reg.test(this.inputBlogTag)
-      if (!res){
-        this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
-          title: this.$t('tip.tips'),
-          variant:'warning'
-        })
+      const reg = /^hive-[1-3]\d{3,6}$/;
+      const res = reg.test(this.inputBlogTag);
+      if (!res) {
+        this.$bvToast.toast(this.$t("tip.inputRightBlogTag"), {
+          title: this.$t("tip.tips"),
+          variant: "warning",
+        });
         return;
       }
-      try{
-        this.creatingBlog = true
-        await publishBlog(this.inputBlogTag)
-        this.state = ''
+      try {
+        this.creatingBlog = true;
+        await publishBlog(this.inputBlogTag);
+        this.state = "";
         this.form.blogTag = this.inputBlogTag;
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-        this.showBlogTip = false
-      }catch(e){
+        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+        this.showBlogTip = false;
+      } catch (e) {
         handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
-      }finally{
+      } finally {
         this.creatingBlog = false;
       }
     },
-    async createBlog(){
-      try{
-        this.creatingBlog = true
+    async createBlog() {
+      try {
+        this.creatingBlog = true;
         // create new account
-        const res = await createNewCommunity(this.steemAccount, this.blogTag, this.blogMainPassword)
-        if(res && res.success){
+        const res = await createNewCommunity(
+          this.steemAccount,
+          this.blogTag,
+          this.blogMainPassword
+        );
+        if (res && res.success) {
           // set community info
-          setCommunityInfo(this.steemAccount, this.blogTag, this.blogMainPassword, this.form.name, this.form.description)
+          setCommunityInfo(
+            this.steemAccount,
+            this.blogTag,
+            this.blogMainPassword,
+            this.form.name,
+            this.form.description
+          );
           // subscribe account
-          const res = await subscribeCommunity(this.steemAccount, this.blogTag)
-          if (res && res.success){
+          const res = await subscribeCommunity(this.steemAccount, this.blogTag);
+          if (res && res.success) {
             this.showBlogTip = false;
-            this.$bvToast.toast(this.$t('tip.createBlogSuccess'), {
-              title: this.$t('tip.success'),
-              variant: 'success'
-            })
+            this.$bvToast.toast(this.$t("tip.createBlogSuccess"), {
+              title: this.$t("tip.success"),
+              variant: "success",
+            });
             // update
-            this.state = 'publish'
-            this.form.blogTag = this.blogTag
-          }else if(res && !res.success){
+            this.state = "publish";
+            this.form.blogTag = this.blogTag;
+          } else if (res && !res.success) {
             this.$bvToast.toast(res.message, {
               title: res.error,
-              variant: 'error'
-            })
+              variant: "error",
+            });
           }
         }
-      }catch(e){
-        console.log('create account fail', e);
+      } catch (e) {
+        console.log("create account fail", e);
         handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
-      }finally{
+      } finally {
         this.creatingBlog = false;
       }
     },
-    async publishBlog(){
-      try{
-        this.publishingBlog = true
-        await publishBlog(this.blogTag)
-        this.state = ''
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-      }catch(e){
+    async publishBlog() {
+      try {
+        this.publishingBlog = true;
+        await publishBlog(this.blogTag);
+        this.state = "";
+        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+      } catch (e) {
         handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);
         });
-      }finally{
-        this.publishingBlog = false
+      } finally {
+        this.publishingBlog = false;
       }
     },
     gotoCreate() {
