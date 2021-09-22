@@ -31,7 +31,10 @@ import Tutorials from '@/views/Community/Tutorials'
 import Nps from '@/views/Nps/Nps'
 import CommunityTokens from '@/views/Community/CommunityTokens'
 import CommunitySettingIndex from '@/views/CommunitySetting/Index'
-import AssetSetting from "@/views/CommunitySetting/AssetSetting";
+import AssetSetting from '@/views/CommunitySetting/AssetSetting'
+import StakingSetting from '@/views/CommunitySetting/StakingSetting'
+import SocialSetting from '@/views/CommunitySetting/SocialSetting'
+import VoteSetting from '@/views/CommunitySetting/VoteSetting'
 
 Vue.use(VueRouter)
 
@@ -185,22 +188,54 @@ const routes = [
   },
   {
     path: '/community-setting',
+    name: 'community-setting',
     component: CommunitySettingIndex,
     children: [
       {
         path: 'tutorials',
+        name: 'tutorials',
         component: Tutorials
       },
       {
         path: 'profile',
+        name: 'profile',
         component: CommunityInfo,
         meta: { slideBar: true }
       },
       {
         path: 'asset',
+        name: 'asset',
         component: AssetSetting,
         meta: { slideBar: true }
       },
+      {
+        path: 'staking',
+        name: 'staking',
+        component: StakingSetting,
+        meta: { slideBar: true }
+      },
+      {
+        path: 'social',
+        name: 'social',
+        component: SocialSetting,
+        meta: { slideBar: true }
+      },
+      {
+        path: 'vote',
+        name: 'vote',
+        component: VoteSetting,
+        meta: { slideBar: true }
+      },
+      {
+        path: 'update-pool',
+        name: 'update-pool',
+        component: UpdatePool
+      },
+      {
+        path: 'add-pool',
+        name: 'add-pool',
+        component: AddPool
+      }
     ]
   }
 ]

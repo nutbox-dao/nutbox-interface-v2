@@ -42,8 +42,16 @@ export default {
       isCreate: true
     }
   },
+  watch: {
+    '$route.name' () {
+      console.log(this.$route.name)
+    }
+  },
   mounted () {
-    this.$router.push(this.isCreate ? '/community-setting/profile' : '/community-setting/tutorials')
+    console.log(this.$route)
+    if (this.$route.name === 'community-setting') {
+      this.$router.push(this.isCreate ? '/community-setting/profile' : '/community-setting/tutorials')
+    }
   }
 }
 </script>
