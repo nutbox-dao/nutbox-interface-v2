@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/edit/m</title>
-    <g id="notbox-v2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Pool-dashboard" transform="translate(-893.000000, -98.000000)">
-            <g id="编组-23备份" transform="translate(881.000000, 82.000000)">
-                <g id="Group-2-Copy-111" transform="translate(12.000000, 16.000000)">
-                    <rect id="Rectangle-55" x="0" y="0" width="16" height="16"></rect>
-                    <path d="M9,2.57735027 L12.1961524,4.42264973 C12.8149546,4.77991532 13.1961524,5.44016936 13.1961524,6.15470054 L13.1961524,9.84529946 C13.1961524,10.5598306 12.8149546,11.2200847 12.1961524,11.5773503 L9,13.4226497 C8.38119785,13.7799153 7.61880215,13.7799153 7,13.4226497 L3.80384758,11.5773503 C3.18504542,11.2200847 2.80384758,10.5598306 2.80384758,9.84529946 L2.80384758,6.15470054 C2.80384758,5.44016936 3.18504542,4.77991532 3.80384758,4.42264973 L7,2.57735027 C7.61880215,2.22008468 8.38119785,2.22008468 9,2.57735027 Z" id="多边形" stroke="#242629" stroke-width="1.5"></path>
-                    <circle id="椭圆形" stroke="#242629" stroke-width="1.5" cx="8" cy="8" r="1.5"></circle>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/l/setup</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-Governance-proposal" transform="translate(-917.000000, -26.000000)">
+            <g id="菜单" transform="translate(337.500000, 0.000000)">
+                <g id="icon/setup/l" transform="translate(579.500000, 26.000000)">
+                    <rect id="Rectangle-20" x="0" y="0" width="24" height="24"></rect>
+                    <g id="Group-5" transform="translate(1.500000, 1.500000)" stroke="#242629" stroke-width="2">
+                        <path d="M10.5,1.15470054 L18.5932667,5.82735027 L18.5932667,15.1726497 L10.5,19.8452995 L2.40673326,15.1726497 L2.40673326,5.82735027 L10.5,1.15470054 Z" id="Polygon-3" transform="translate(10.500000, 10.500000) rotate(90.000000) translate(-10.500000, -10.500000) "></path>
+                        <circle id="Oval-2" cx="10.5" cy="10.5" r="3"></circle>
+                    </g>
                 </g>
             </g>
         </g>

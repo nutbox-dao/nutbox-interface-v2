@@ -3,7 +3,7 @@
     <div class="page-layout">
       <div class="page-header">
         <b-navbar toggleable="lg">
-          <div class="d-flex align-items-center" v-if="screenWidth < 960">
+          <div class="d-flex align-items-center" v-if="screenWidth < 992">
             <b-navbar-brand to="/" class="m-0">
               <img class="logo" src="./static/images/logo_small.png"
                    @click="gotoOfficial" alt="nutbox" />
@@ -17,7 +17,6 @@
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav align="center" class="top">
               <b-nav-item to="/community">
-                <i id="community-icon" class="menu-icon" />
                 <span>{{ $t("cs.community") }}</span>
               </b-nav-item>
               <!-- <b-nav-item to="/crowdloan">
@@ -25,20 +24,19 @@
                 <span>{{ $t("cl.crowdloan") }}</span>
               </b-nav-item> -->
               <b-nav-item to="/crowdstaking">
-                <i id="stake-icon" class="menu-icon" />
                 <span>{{ $t("commen.crowdstaking") }}</span>
               </b-nav-item>
               <b-nav-item to="/blog">
-                <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("commen.blog") }}</span>
               </b-nav-item>
               <b-nav-item to="/nps">
-                <i id="nps-icon" class="menu-icon" />
                 <span>{{ $t("nps.nps") }}</span>
               </b-nav-item>
               <b-nav-item v-show="address" to="/wallet">
-                <i id="wallet-icon" class="menu-icon" />
                 <span>{{ $t("wallet.wallet") }}</span>
+              </b-nav-item>
+              <b-nav-item to="/community-setting">
+                <i id="setting-icon" class="menu-icon" />
               </b-nav-item>
             </b-navbar-nav>
           </b-collapse>
@@ -491,63 +489,11 @@ input::-webkit-input-placeholder {
 .cropper-modal .modal-body{
   padding: 0;
 }
-#wallet-icon {
-  background-image: url("./static/images/wallet.svg");
-}
-#stake-icon {
-  background-image: url("./static/images/stake.svg");
-}
-#farming-icon {
-  background-image: url("./static/images/farming.svg");
-}
-#liquid-staking-icon {
-  background-image: url("./static/images/swap.svg");
-}
-#upvote-icon {
-  background-image: url("./static/images/upvote.svg");
-}
-#blog-icon {
-  background-image: url("./static/images/blog.svg");
-}
-#nps-icon {
-  background-image: url("./static/images/nps.svg");
-}
-#admin-icon {
-  background-image: url("./static/images/admin.svg");
-}
-#community-icon {
-  background-image: url("./static/images/menu-icon-community.svg");
+#setting-icon {
+  @include icon(1.2rem, 1.2rem);
+  background-image: url("~@/static/images/setting-icon.svg");
 }
 
-.active {
-  #wallet-icon {
-    background-image: url("./static/images/wallet-hover.svg");
-  }
-  #stake-icon {
-    background-image: url("./static/images/stake-hover.svg");
-  }
-  #farming-icon {
-    background-image: url("./static/images/farming-hover.svg");
-  }
-  #liquid-staking-icon {
-    background-image: url("./static/images/swap-hover.svg");
-  }
-  #upvote-icon {
-    background-image: url("./static/images/upvote-hover.svg");
-  }
-  #blog-icon {
-    background-image: url("./static/images/blog-hover.svg");
-  }
-  #nps-icon {
-    background-image: url("./static/images/nps-hover.svg");
-  }
-  #admin-icon {
-    background-image: url("./static/images/admin-hover.svg");
-  }
-  #community-icon {
-    background-image: url("./static/images/menu-icon-community-hover.svg");
-  }
-}
 #justswap-icon {
   background-image: url("./static/images/just-swap.svg");
 }

@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 .page-header {
-  position: fixed;
+  //position: fixed;
   z-index: 9;
   width: 100%;
   height: 3.8rem;
@@ -114,6 +114,11 @@
     text-align: left;
     width: fit-content;
   }
+  .page-title-line {
+    padding-left: 1.2rem;
+    @include single-color-bg(4px 1rem, left center);
+    width: fit-content;
+  }
   .scroll-content {
     height: 100%;
     overflow-y: scroll;
@@ -121,6 +126,7 @@
   .page-view-sidebar {
     width: 12rem;
     height: 100%;
+    margin-top: -3.8rem;
     position: absolute;
     z-index: 1;
     background: linear-gradient(153deg, #FFFFFF 0%, #FFFFFF 100%);
@@ -151,7 +157,6 @@
     flex: 1;
     position: relative;
     min-height: 100%;
-    padding-top: 3.8rem;
     display: flex;
     flex-direction: column;
   }
@@ -160,7 +165,8 @@
     flex: 1;
     position: relative;
     min-height: 100%;
-    padding: 3.8rem 0 0 12rem;
+    //padding: 3.8rem 0 0 12rem;
+    padding-left: 12rem;
     display: flex;
     flex-direction: column;
   }
@@ -224,11 +230,13 @@
   }
   .view-top-header {
     margin: 0 -1.5rem;
-    padding: 2rem 1.5rem 1.5rem;
-    position: sticky;
-    top: -2rem;
+    padding: 2rem 1.5rem 1rem;
+    top: -1.5rem;
     background-color: var(--background);
     z-index: 2;
+    &-sticky {
+      position: sticky;
+    }
     .c-btn-group {
       display: flex;
       gap: .4rem;
@@ -267,7 +275,7 @@
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 991px) {
   .page-header {
     height: auto;
     padding: 0 1.2rem;

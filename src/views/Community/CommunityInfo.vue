@@ -1,11 +1,11 @@
 <template>
-  <div class="page-view-content">
+  <div class="page-view-content" >
     <div class="scroll-content container">
       <div class="view-top-header">
         <Step v-show="showStep" :current-step="2"></Step>
         <div class="flex-between-center w-100">
           <div
-            class="page-back-text-icon font20"
+            class="font20" :class="$route.query.type==='create'?'page-back-text-icon':'page-title-line'"
             style="line-height: 1rem"
             @click="isEdit ? (type = null) : $router.back()"
           >
