@@ -3,7 +3,7 @@
     <div class="container scroll-content">
       <div class="view-top-header">
         <Step :current-step="1"></Step>
-        <div class="page-back-text-icon page-view-title" @click="$router.back()">
+        <div class="page-back-text-icon" @click="$router.back()">
           {{ $t('community.createCommunity') }}
         </div>
       </div>

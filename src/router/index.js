@@ -30,6 +30,8 @@ import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
 import Nps from '@/views/Nps/Nps'
 import CommunityTokens from '@/views/Community/CommunityTokens'
+import CommunitySettingIndex from '@/views/CommunitySetting/Index'
+import AssetSetting from "@/views/CommunitySetting/AssetSetting";
 
 Vue.use(VueRouter)
 
@@ -180,8 +182,27 @@ const routes = [
         ]
       }
     ]
+  },
+  {
+    path: '/community-setting',
+    component: CommunitySettingIndex,
+    children: [
+      {
+        path: 'tutorials',
+        component: Tutorials
+      },
+      {
+        path: 'profile',
+        component: CommunityInfo,
+        meta: { slideBar: true }
+      },
+      {
+        path: 'asset',
+        component: AssetSetting,
+        meta: { slideBar: true }
+      },
+    ]
   }
-
 ]
 
 const router = new VueRouter({
