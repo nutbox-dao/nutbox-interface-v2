@@ -229,7 +229,14 @@ module.exports = {
     pass: '已通过',
     pending: '待审核',
     unpass: '未通过',
-    rolling: '正在投票'
+    rolling: '正在投票',
+    title: '标题',
+    titleInputTip: '请填写提案标题',
+    startAndEndTime: '起止时间',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    details: '详情',
+    detailsInputTip: '请填写提案详情内容'
   },
   error: {
     error: '错误',

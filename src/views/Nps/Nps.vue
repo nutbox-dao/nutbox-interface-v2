@@ -6,6 +6,21 @@
           <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
           <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
         </div>
+        <div class="view-top-header flex-between-center">
+          <div class="nav-box nav-box-bg">
+            <div class="nav">
+            <span v-for="(item, index) of tabOptions" :key="index"
+                  :class="activeTab===index?'active':''"
+                  @click="activeTab = index">{{item}}</span>
+            </div>
+          </div>
+          <div class="c-btn-group">
+            <button @click="$router.push('/nps/create-proposal')">
+              <i class="add-icon"></i>
+              <span>Create Proposal</span>
+            </button>
+          </div>
+        </div>
         <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
           <div class="proposal">
             <p
@@ -68,6 +83,8 @@ export default {
   data() {
     return {
       proposalList: [],
+      tabOptions: ['ALL', 'Voting', 'Passed', 'Rejected'],
+      activeTab: 0
     };
   },
   filters: {
@@ -160,6 +177,16 @@ export default {
       border: 1px solid #408fff4d;
       color: var(--link);
     }
+  }
+}
+@media (max-width: 560px) {
+  .view-top-header {
+    flex-direction: column;
+    align-items: flex-end;
+    padding-bottom: 0;
+  }
+  .nav-box {
+    margin-bottom: .5rem;
   }
 }
 </style>

@@ -8,7 +8,7 @@
       >
         <b-form-input
           id="input-name"
-          @keyup="nameFilled"
+          maxlength="20"
           v-model="form.name"
           placeholder='e.g. "Bitcoin", "Ethereum"'
         ></b-form-input>
@@ -20,6 +20,7 @@
       >
         <b-form-input
           id="input-symbol"
+          maxlength="6"
           @keyup="symbolFilled"
           v-model="form.symbol"
           placeholder='e.g. "BTC", "ETH"'

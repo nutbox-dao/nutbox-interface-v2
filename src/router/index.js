@@ -35,6 +35,8 @@ import AssetSetting from '@/views/CommunitySetting/AssetSetting'
 import StakingSetting from '@/views/CommunitySetting/StakingSetting'
 import SocialSetting from '@/views/CommunitySetting/SocialSetting'
 import VoteSetting from '@/views/CommunitySetting/VoteSetting'
+import CreateProposal from '@/views/Nps/CreateProposal'
+import NpsIndex from '@/views/Nps/Index'
 
 Vue.use(VueRouter)
 
@@ -114,7 +116,18 @@ const routes = [
   },
   {
     path: '/nps',
-    component: Nps
+    component: NpsIndex,
+    redirect: '/nps/nps',
+    children: [
+      {
+        path: 'nps',
+        component: Nps
+      },
+      {
+        path: 'create-proposal',
+        component: CreateProposal
+      }
+    ]
   },
   {
     path: '/community',

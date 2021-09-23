@@ -70,3 +70,10 @@
     white-space: nowrap;
   }
 }
+.c-date-picker .b-form-datepicker {
+  height: 2.4rem;
+}
+/deep/ .c-date-picker .b-form-datepicker .dropdown-toggle {
+  background-color: transparent;
+  border: transparent;
+}
