@@ -292,6 +292,8 @@ module.exports = {
     community: '社区',
     percentage: '占比',
     communityInfo: '社区资料',
+    social: "社交",
+    pool: '矿池',
     edit:'编辑',
     create:'完善',
     communityName: "社区名字",
@@ -300,6 +302,7 @@ module.exports = {
     communityLogo: "社区Logo",
     communityPoster: "社区封面",
     communityBalance: "社区余额",
+    communityAsset: '社区资产',
     commit: '提交',
     inputName: "请输入社区名字",
     inputLink: "请输入社区官网链接",
@@ -366,6 +369,7 @@ module.exports = {
     inputBlogTag: "请输入您的steem社区标签"
   },
   asset: {
+    asset: "资产",
     network: "网络",
     native: "主链资产",
     foreign:"跨链资产",

@@ -33,7 +33,6 @@ export const getMyStakingFactory = async (update=false) => {
             reject(e);
             return
         }
-        const registerHub = await getContract('RegistryHub', null)
 
         const account = await getAccounts();
         let stakingFactoryId = null

@@ -192,9 +192,9 @@ export const OfficialAssets = [
 ]
 
 // test network
-// export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
+export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'      // on imac
 // export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'
-export const MultiAddress = '0x6F4892ed2092aFB21eA9936cF3CfbB61648529E0'    // on local mac book
+// export const MultiAddress = '0x6F4892ed2092aFB21eA9936cF3CfbB61648529E0'    // on local mac book
 
 // goerli network
 // export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'

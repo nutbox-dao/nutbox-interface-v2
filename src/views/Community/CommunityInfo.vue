@@ -170,7 +170,7 @@
               </div>
             </b-form-group>
             <!-- community balance -->
-            <b-form-group
+            <!-- <b-form-group
               v-if="!isMintable && !isEdit"
               label-cols-md="2"
               content-cols-md="8"
@@ -190,9 +190,9 @@
                   {{ this.$t("community.charge") }}
                 </button>
               </div>
-            </b-form-group>
+            </b-form-group> -->
             <!-- community dev address -->
-            <b-form-group
+            <!-- <b-form-group
               v-if="!isEdit"
               label-cols-md="2"
               content-cols-md="8"
@@ -211,9 +211,9 @@
                   {{ this.$t("commen.update") }}
                 </button>
               </div>
-            </b-form-group>
+            </b-form-group> -->
             <!-- community dev ratio -->
-            <b-form-group
+            <!-- <b-form-group
               v-if="!isEdit"
               label-cols-md="2"
               content-cols-md="8"
@@ -233,9 +233,9 @@
                   {{ this.$t("commen.update") }}
                 </button>
               </div>
-            </b-form-group>
+            </b-form-group> -->
             <!-- community blog -->
-            <b-form-group
+            <!-- <b-form-group
               v-if="!isEdit"
               label-cols-md="2"
               content-cols-md="8"
@@ -261,7 +261,7 @@
                   {{ $t('community.publishBlog') }}
                 </button>
               </div>
-            </b-form-group>
+            </b-form-group> -->
             <!-- commit button -->
             <b-form-group
               v-if="isEdit"
@@ -298,7 +298,7 @@
       </div>
     </b-modal>
     <!-- charge balance tip -->
-    <b-modal
+    <!-- <b-modal
       v-model="showChargeTip"
       modal-class="custom-modal"
       size="m"
@@ -361,9 +361,9 @@
           </button>
         </div>
       </div>
-    </b-modal>
+    </b-modal> -->
         <!-- dev address tip -->
-    <b-modal
+    <!-- <b-modal
       v-model="showDevAddressTip"
       modal-class="custom-modal"
       size="m"
@@ -400,9 +400,9 @@
           </button>
         </div>
       </div>
-    </b-modal>
+    </b-modal> -->
        <!-- dev ratio tip -->
-    <b-modal
+    <!-- <b-modal
       v-model="showDevRatioTip"
       modal-class="custom-modal"
       size="m"
@@ -445,7 +445,7 @@
           </button>
         </div>
       </div>
-    </b-modal>
+    </b-modal> -->
     <!-- show signature tip -->
     <b-modal
       v-model="showSignatureTip"
@@ -505,7 +505,7 @@
       </div>
     </b-modal>
     <!-- create blog tip -->
-    <b-modal
+    <!-- <b-modal
       v-model="showBlogTip"
       modal-class="custom-modal"
       size="m"
@@ -589,7 +589,7 @@
           </button>
         </div>
       </div>
-    </b-modal>
+    </b-modal> -->
     <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
 </template>
@@ -824,94 +824,94 @@ export default {
         this.cropImgSize = [1200, 280]
       }
     },
-    async approve() {
-      try{
-        this.approving = true;
-        const hash = await approveCommunityBalance(this.cTokenAddress);
-        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
-          title: this.$t('tip.success'),
-          variant:'success'
-        })
-      }catch(e){
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.approving = false;
-      }
-    },
-    fillMax() {
-      this.chargeValue = this.cTokenBalance
-    },
-    async charge() {
-      try{
-        this.charging = true;
-        const chargeValue = Number(this.chargeValue)
-        if (!chargeValue || chargeValue <= 0) {
-          this.$bvToast.toast(this.$t('error.inputError'), {
-            title: this.$t("tip.tips"),
-            autoHideDelay: 5000,
-            variant: "warning",
-          });
-          return;
-        }
-        const decimal = new BN(10).pow(new BN(18))
-        const amount = new BN(Number(this.chargeValue * 1e6)).mul(decimal).divn(1e6)
-        const hash = await chargeCommunityBalance(amount)
-        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
-        setTimeout(() => {
-          this.showChargeTip = false
-        }, 2000);
-      }catch(e){
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.charging = false
-      }
-    },
-    async updateAddress(){
-      try{
-        this.updatingAddress = true
-        await setDevAddress(this.inputDevAddress)
-        this.$bvToast.toast(this.$t(),{
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
-        setTimeout(() => {
-          this.showDevAddressTip = false
-        }, 1000)
-      }catch(e){
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.updatingAddress = false
-      }
-    },
-    async updateDevRatio() {
-      try{
-        this.updatingDevRatio = true
-        const r = parseInt(parseFloat(this.inputDevRatio) * 100)
-        await setDevRatio(r)
-         this.$bvToast.toast(this.$t(),{
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
-        setTimeout(() => {
-          this.showDevRatioTip = false
-        }, 1000)
-      }catch(e){
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }finally{
-        this.updatingDevRatio = false
-      }
-    },
+    // async approve() {
+    //   try{
+    //     this.approving = true;
+    //     const hash = await approveCommunityBalance(this.cTokenAddress);
+    //     this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+    //       title: this.$t('tip.success'),
+    //       variant:'success'
+    //     })
+    //   }catch(e){
+    //     handleApiErrCode(e, (tip, param) => {
+    //       this.$bvToast.toast(tip, param)
+    //     })
+    //   }finally{
+    //     this.approving = false;
+    //   }
+    // },
+    // fillMax() {
+    //   this.chargeValue = this.cTokenBalance
+    // },
+    // async charge() {
+    //   try{
+    //     this.charging = true;
+    //     const chargeValue = Number(this.chargeValue)
+    //     if (!chargeValue || chargeValue <= 0) {
+    //       this.$bvToast.toast(this.$t('error.inputError'), {
+    //         title: this.$t("tip.tips"),
+    //         autoHideDelay: 5000,
+    //         variant: "warning",
+    //       });
+    //       return;
+    //     }
+    //     const decimal = new BN(10).pow(new BN(18))
+    //     const amount = new BN(Number(this.chargeValue * 1e6)).mul(decimal).divn(1e6)
+    //     const hash = await chargeCommunityBalance(amount)
+    //     this.$bvToast.toast(this.$t('community.chargeSuccess'), {
+    //       title:this.$t('tip.success'),
+    //       variant: 'success'
+    //     })
+    //     setTimeout(() => {
+    //       this.showChargeTip = false
+    //     }, 2000);
+    //   }catch(e){
+    //     handleApiErrCode(e, (tip, param) => {
+    //       this.$bvToast.toast(tip, param)
+    //     })
+    //   }finally{
+    //     this.charging = false
+    //   }
+    // },
+    // async updateAddress(){
+    //   try{
+    //     this.updatingAddress = true
+    //     await setDevAddress(this.inputDevAddress)
+    //     this.$bvToast.toast(this.$t(),{
+    //       title:this.$t('tip.success'),
+    //       variant: 'success'
+    //     })
+    //     setTimeout(() => {
+    //       this.showDevAddressTip = false
+    //     }, 1000)
+    //   }catch(e){
+    //     handleApiErrCode(e, (tip, param) => {
+    //       this.$bvToast.toast(tip, param)
+    //     })
+    //   }finally{
+    //     this.updatingAddress = false
+    //   }
+    // },
+    // async updateDevRatio() {
+    //   try{
+    //     this.updatingDevRatio = true
+    //     const r = parseInt(parseFloat(this.inputDevRatio) * 100)
+    //     await setDevRatio(r)
+    //      this.$bvToast.toast(this.$t(),{
+    //       title:this.$t('tip.success'),
+    //       variant: 'success'
+    //     })
+    //     setTimeout(() => {
+    //       this.showDevRatioTip = false
+    //     }, 1000)
+    //   }catch(e){
+    //     handleApiErrCode(e, (tip, param) => {
+    //       this.$bvToast.toast(tip, param)
+    //     })
+    //   }finally{
+    //     this.updatingDevRatio = false
+    //   }
+    // },
     valideInfos() {
       const { name, website, description, icon, poster } = this.form;
       let tips = null;
@@ -977,86 +977,86 @@ export default {
         this.uploading = false;
       }
     },
-    async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/
-      const res = reg.test(this.inputBlogTag)
-      if (!res){
-        this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
-          title: this.$t('tip.tips'),
-          variant:'warning'
-        })
-        return;
-      }
-      try{
-        this.creatingBlog = true
-        await publishBlog(this.inputBlogTag)
-        this.state = ''
-        this.form.blogTag = this.inputBlogTag;
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-        this.showBlogTip = false
-      }catch(e){
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.creatingBlog = false;
-      }
-    },
-    async createBlog(){
-      try{
-        this.creatingBlog = true
-        // create new account
-        const res = await createNewCommunity(this.steemAccount, this.blogTag, this.blogMainPassword)
-        if(res && res.success){
-          // set community info
-          setCommunityInfo(this.steemAccount, this.blogTag, this.blogMainPassword, this.form.name, this.form.description)
-          // subscribe account
-          const res = await subscribeCommunity(this.steemAccount, this.blogTag)
-          if (res && res.success){
-            this.showBlogTip = false;
-            this.$bvToast.toast(this.$t('tip.createBlogSuccess'), {
-              title: this.$t('tip.success'),
-              variant: 'success'
-            })
-            // update
-            this.state = 'publish'
-            this.form.blogTag = this.blogTag
-          }else if(res && !res.success){
-            this.$bvToast.toast(res.message, {
-              title: res.error,
-              variant: 'error'
-            })
-          }
-        }
-      }catch(e){
-        console.log('create account fail', e);
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.creatingBlog = false;
-      }
-    },
-    async publishBlog(){
-      try{
-        this.publishingBlog = true
-        await publishBlog(this.blogTag)
-        this.state = ''
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-      }catch(e){
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.publishingBlog = false
-      }
-    },
+    // async bindBlog() {
+    //   const reg = /^hive-[1-3]\d{3,6}$/
+    //   const res = reg.test(this.inputBlogTag)
+    //   if (!res){
+    //     this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
+    //       title: this.$t('tip.tips'),
+    //       variant:'warning'
+    //     })
+    //     return;
+    //   }
+    //   try{
+    //     this.creatingBlog = true
+    //     await publishBlog(this.inputBlogTag)
+    //     this.state = ''
+    //     this.form.blogTag = this.inputBlogTag;
+    //     this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
+    //       title: this.$t('tip.success'),
+    //       variant: 'success'
+    //     })
+    //     this.showBlogTip = false
+    //   }catch(e){
+    //     handleApiErrCode(e, (info, params) => {
+    //       this.$bvToast.toast(info, params);
+    //     });
+    //   }finally{
+    //     this.creatingBlog = false;
+    //   }
+    // },
+    // async createBlog(){
+    //   try{
+    //     this.creatingBlog = true
+    //     // create new account
+    //     const res = await createNewCommunity(this.steemAccount, this.blogTag, this.blogMainPassword)
+    //     if(res && res.success){
+    //       // set community info
+    //       setCommunityInfo(this.steemAccount, this.blogTag, this.blogMainPassword, this.form.name, this.form.description)
+    //       // subscribe account
+    //       const res = await subscribeCommunity(this.steemAccount, this.blogTag)
+    //       if (res && res.success){
+    //         this.showBlogTip = false;
+    //         this.$bvToast.toast(this.$t('tip.createBlogSuccess'), {
+    //           title: this.$t('tip.success'),
+    //           variant: 'success'
+    //         })
+    //         // update
+    //         this.state = 'publish'
+    //         this.form.blogTag = this.blogTag
+    //       }else if(res && !res.success){
+    //         this.$bvToast.toast(res.message, {
+    //           title: res.error,
+    //           variant: 'error'
+    //         })
+    //       }
+    //     }
+    //   }catch(e){
+    //     console.log('create account fail', e);
+    //     handleApiErrCode(e, (info, params) => {
+    //       this.$bvToast.toast(info, params);
+    //     });
+    //   }finally{
+    //     this.creatingBlog = false;
+    //   }
+    // },
+    // async publishBlog(){
+    //   try{
+    //     this.publishingBlog = true
+    //     await publishBlog(this.blogTag)
+    //     this.state = ''
+    //     this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
+    //       title: this.$t('tip.success'),
+    //       variant: 'success'
+    //     })
+    //   }catch(e){
+    //     handleApiErrCode(e, (info, params) => {
+    //       this.$bvToast.toast(info, params);
+    //     });
+    //   }finally{
+    //     this.publishingBlog = false
+    //   }
+    // },
     gotoCreate() {
       this.$router.push("/community/create-economy");
     },

@@ -203,6 +203,7 @@ const routes = [
     path: '/community-setting',
     name: 'community-setting',
     component: CommunitySettingIndex,
+    redirect: '/community-setting/profile',
     children: [
       {
         path: 'tutorials',

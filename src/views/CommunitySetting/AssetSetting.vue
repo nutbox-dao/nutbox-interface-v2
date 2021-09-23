@@ -1,19 +1,19 @@
 <template>
   <div class="container scroll-content">
     <div class="view-top-header">
-      <div class="page-title-line font20 font-bold">社区Token</div>
+      <div class="page-title-line font20 font-bold">{{ $t('community.communityAsset') }}</div>
     </div>
     <div class="c-card">
       <div class="row">
         <div class="col-md-6 d-flex align-items-center">
-          <img class="token-icon" src="~@/static/images/tokens/dot.png" alt="">
+          <img class="token-icon" :src="cToken.icon" alt="">
           <div class="info d-flex flex-column align-items-start">
-            <div class="font32">DOT</div>
+            <div class="font32">{{ cToken.symbol }}</div>
             <div class="flex-start-center">
-              <span>dot</span>
-              <i class="copy-icon ml-2"></i>
+              <span>{{ cToken.name }}</span>
+              <i class="copy-icon ml-2" @click="copyAddress"></i>
             </div>
-            <div class="font24">200</div>
+            <div class="font24">--</div>
           </div>
         </div>
         <div class="col-md-6 c-mt-1">
@@ -269,10 +269,11 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio } from '@/utils/web3/community'
+import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo } from '@/utils/web3/community'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
 import AssetCard from '@/components/CommunitySetting/AssetCard'
+import { getCToken } from "@/utils/web3/asset"
 
 export default {
   name: 'Asset',
@@ -298,7 +299,8 @@ export default {
       charging: false,
       approving: false,
       updatingAddress: false,
-      updatingDevRatio: false
+      updatingDevRatio: false,
+      cToken: {}
     }
   },
   computed: {
@@ -346,6 +348,23 @@ export default {
       } finally {
         this.approving = false
       }
+    },
+    copyAddress(){
+      const address = this.cToken.address
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: address
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
     },
     fillMax () {
       this.chargeValue = this.cTokenBalance
@@ -419,7 +438,12 @@ export default {
         this.updatingDevRatio = false
       }
     }
-  }
+  },
+  async mounted () {
+    const communityInfo = await getMyCommunityInfo();
+    this.cToken = await getCToken(communityInfo.id)
+    console.log('my ctoken', this.cToken);
+  },
 }
 </script>
 
@@ -439,6 +463,7 @@ export default {
 .copy-icon {
   @include icon(.6rem, .6rem);
   background-image: url("~@/static/images/copy.svg");
+  cursor: pointer
 }
 .token-info-card {
   @include card(1.2rem 3rem, rgba(255, 219, 38, 0.05));

@@ -8,9 +8,9 @@
         </template>
       </b-input-group>
       <div class="c-btn-group" v-show="!loadingCommunity">
-        <button v-if="communityId"
-                @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button>
-        <button v-else @click="$router.push('/community/tutorials')">
+        <!-- <button v-if="communityId"
+                @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button> -->
+        <button v-if="!communityId" @click="$router.push('/community/tutorials')">
           <i class="add-icon"></i>
           <span>{{ $t('community.createYourCommunity') }}</span>
         </button>

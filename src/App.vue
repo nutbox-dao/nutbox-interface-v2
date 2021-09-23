@@ -35,7 +35,7 @@
               <b-nav-item v-show="address" to="/wallet">
                 <span>{{ $t("wallet.wallet") }}</span>
               </b-nav-item>
-              <b-nav-item to="/community-setting">
+              <b-nav-item to="/community-setting" v-show="stakingFactoryId && stakingFactoryId.length > 0">
                 <i id="setting-icon" class="menu-icon" />
               </b-nav-item>
             </b-navbar-nav>
@@ -245,7 +245,7 @@ export default {
       'clCommunitys'
     ]),
     ...mapState(['lang', 'prices']),
-    ...mapState('web3', ['allCommunities']),
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId']),
     address () {
       if (this.$store.state.web3.account) {
         return this.formatUserAddress(this.$store.state.web3.account, false)
