@@ -2,11 +2,13 @@
   <div class="page-view-content nps">
     <div class="container scroll-content">
       <div class="mb-5">
-        <div class="tip-box">
-          <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
-          <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
+        <div class="view-top-header">
+          <div class="tip-box">
+            <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
+            <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
+          </div>
         </div>
-        <div class="view-top-header flex-between-center">
+        <div class="view-top-header flex-between-center pt-2">
           <div class="nav-box nav-box-bg">
             <div class="nav">
             <span v-for="(item, index) of tabOptions" :key="index"
@@ -15,7 +17,7 @@
             </div>
           </div>
           <div class="c-btn-group">
-            <button @click="$router.push('/nps/create-proposal')">
+            <button @click="$router.push('create-proposal')">
               <i class="add-icon"></i>
               <span>Create Proposal</span>
             </button>
@@ -118,7 +120,6 @@ export default {
 <style lang="scss" scoped>
 .nps {
   .tip-box {
-    margin-top: 3rem;
     @include card(2rem 1.2rem, rgba(0, 0, 0, .2), hidden, fit-content);
     color: white;
   }

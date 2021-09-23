@@ -59,19 +59,19 @@ export default {
       loadingCommunity: state => state.web3.loadingCommunity
     }),
     ...mapGetters('web3', ['communityCard']),
-    filterCommunities() {
-      if (!this.communityCard) return [];
+    filterCommunities () {
+      if (!this.communityCard) return []
       return this.communityCard.filter(c => c.name.toLowerCase().includes(this.searchText.toLowerCase()))
     }
   },
   watch: {
-    loadingCommunity(newValue, oldValue) {
-      console.log('loadingCommunity', newValue);
+    loadingCommunity (newValue, oldValue) {
+      console.log('loadingCommunity', newValue)
     }
   },
   mounted () {
     getMyCommunityInfo().catch(e => {
-      if (e === errCode.NO_STAKING_FACTORY) return;
+      if (e === errCode.NO_STAKING_FACTORY) return
       handleApiErrCode(e, (tip, param) => {
         this.$bvToast.toast(tip, param)
       })
@@ -81,15 +81,15 @@ export default {
   methods: {
     async fetchData () {
       if (!this.allCommunities) {
-        console.log(this.allCommunities);
-        try{
+        console.log(this.allCommunities)
+        try {
           this.loading = true
           await getAllCommunities()
-        }catch(e){
+        } catch (e) {
           handleApiErrCode(e, (tip, param) => {
             this.$bvToast.toast(tip, param)
           })
-        }finally{
+        } finally {
           this.loading = false
         }
       }

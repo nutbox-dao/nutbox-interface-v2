@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import VerticalLayout from '@/layout/VerticalLayout'
+import HorizontalLayout from '@/layout/HorizontalLayout'
 import Blog from '../views/Blog/Blog'
 import CrowdIndex from '../views/CrowdStaking/Index'
 import Wallet from '../views/Wallet/Wallet'
@@ -37,217 +38,316 @@ import SocialSetting from '@/views/CommunitySetting/SocialSetting'
 import VoteSetting from '@/views/CommunitySetting/VoteSetting'
 import CreateProposal from '@/views/Nps/CreateProposal'
 import NpsIndex from '@/views/Nps/Index'
+import SpecifyCommunityStaking from '@/views/SpecifyCommunity/Staking'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'index',
-    redirect: '/community'
-  },
-  {
-    path: '/wallet',
-    redirect: '/wallet/bsc',
-    component: Wallet,
+    name: 'HorizontalLayout',
+    component: HorizontalLayout,
     children: [
       {
-        path: 'bsc',
-        name: 'BSCWallet',
-        component: BSCWallet
+        path: '/',
+        name: 'index',
+        redirect: '/community'
       },
       {
-        path: 'polkadot',
-        name: 'PolkadotWallet',
-        component: PolkadotWallet
-      },
-      {
-        path: 'kusama',
-        name: 'PolkadotWallet',
-        component: KusamaWallet
-      },
-      {
-        path: 'steem',
-        name: 'SteemWallet',
-        component: SteemWallet
-      },
-      {
-        path: 'hive',
-        name: 'HiveWallet',
-        component: HiveWallet
-      }
-    ]
-  },
-  {
-    path: '/crowdstaking',
-    component: CrowdIndex,
-    redirect: '/crowdstaking/deposite',
-    children: [
-      {
-        path: 'crowdloan',
-        name: 'crowdloan',
-        component: CrowdLoan
-      },
-      {
-        path: 'nominate',
-        name: 'nominate',
-        component: CrowdNominate
-      },
-      {
-        path: 'steem-delegate',
-        name: 'steem-delegate',
-        component: SteemDelegate
-      },
-      {
-        path: 'hive-delegate',
-        name: 'hive-delegate',
-        component: HiveDelegate
-      },
-      {
-        path: 'deposite',
-        name: 'deposite',
-        component: CrowdStaking
-      }
-    ]
-  },
-  {
-    path: '/blog',
-    component: Blog
-  },
-  {
-    path: '/nps',
-    component: NpsIndex,
-    redirect: '/nps/nps',
-    children: [
-      {
-        path: 'nps',
-        component: Nps
-      },
-      {
-        path: 'create-proposal',
-        component: CreateProposal
-      }
-    ]
-  },
-  {
-    path: '/community',
-    component: CommunityIndex,
-    redirect: '/community/community-list',
-    children: [
-      {
-        path: 'community-list',
-        component: Community,
-        meta: { slideBar: true }
-      },
-      {
-        path: 'community-token',
-        component: CommunityTokens,
-        meta: { slideBar: true }
-      },
-      {
-        path: 'tutorials',
-        component: Tutorials
-      },
-      {
-        path: 'detail-info',
-        component: CommunityDetailInfo
-      },
-      {
-        path: 'deploy-token',
-        component: DeployToken
-      },
-      {
-        path: 'create-economy',
-        component: CreateEconomy
-      },
-      {
-        path: 'pool-dashboard',
-        component: PoolsDashboard
-      },
-      {
-        path: 'add-pool',
-        component: AddPool
-      },
-      {
-        path: 'update-pool',
-        component: UpdatePool
-      },
-      {
-        path: 'community-info',
-        component: CommunityInfo
-      },
-      {
-        path: 'register-ctoken',
-        component: RegisterCtoken
-      },
-      {
-        path: 'register',
-        component: Register,
+        path: '/wallet',
+        redirect: '/wallet/bsc',
+        component: Wallet,
         children: [
           {
-            path: 'native',
-            component: NativeAsset,
-            props: route => ({
-              tokenAddress: route.query.tokenAddress
-            })
+            path: 'bsc',
+            name: 'BSCWallet',
+            component: BSCWallet
           },
           {
-            path: 'cross-chain-asset',
-            component: CrossChainAsset
+            path: 'polkadot',
+            name: 'PolkadotWallet',
+            component: PolkadotWallet
+          },
+          {
+            path: 'kusama',
+            name: 'PolkadotWallet',
+            component: KusamaWallet
+          },
+          {
+            path: 'steem',
+            name: 'SteemWallet',
+            component: SteemWallet
+          },
+          {
+            path: 'hive',
+            name: 'HiveWallet',
+            component: HiveWallet
+          }
+        ]
+      },
+      {
+        path: '/crowdstaking',
+        component: CrowdIndex,
+        redirect: '/crowdstaking/deposite',
+        children: [
+          {
+            path: 'crowdloan',
+            name: 'crowdloan',
+            component: CrowdLoan
+          },
+          {
+            path: 'nominate',
+            name: 'nominate',
+            component: CrowdNominate
+          },
+          {
+            path: 'steem-delegate',
+            name: 'steem-delegate',
+            component: SteemDelegate
+          },
+          {
+            path: 'hive-delegate',
+            name: 'hive-delegate',
+            component: HiveDelegate
+          },
+          {
+            path: 'deposite',
+            name: 'deposite',
+            component: CrowdStaking
+          }
+        ]
+      },
+      {
+        path: '/blog',
+        component: Blog
+      },
+      {
+        path: '/nps',
+        component: NpsIndex,
+        redirect: '/nps/nps',
+        children: [
+          {
+            path: 'nps',
+            component: Nps
+          },
+          {
+            path: 'create-proposal',
+            component: CreateProposal
+          }
+        ]
+      },
+      {
+        path: 'community',
+        component: CommunityIndex,
+        redirect: '/community/community-list',
+        children: [
+          {
+            path: 'community-list',
+            component: Community,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'community-token',
+            component: CommunityTokens,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'tutorials',
+            component: Tutorials
+          },
+          {
+            path: 'detail-info',
+            component: CommunityDetailInfo
+          },
+          {
+            path: 'deploy-token',
+            component: DeployToken
+          },
+          {
+            path: 'create-economy',
+            component: CreateEconomy
+          },
+          {
+            path: 'pool-dashboard',
+            component: PoolsDashboard
+          },
+          {
+            path: 'add-pool',
+            component: AddPool
+          },
+          {
+            path: 'update-pool',
+            component: UpdatePool
+          },
+          {
+            path: 'community-info',
+            component: CommunityInfo
+          },
+          {
+            path: 'register-ctoken',
+            component: RegisterCtoken
+          },
+          {
+            path: 'register',
+            component: Register,
+            children: [
+              {
+                path: 'native',
+                component: NativeAsset,
+                props: route => ({
+                  tokenAddress: route.query.tokenAddress
+                })
+              },
+              {
+                path: 'cross-chain-asset',
+                component: CrossChainAsset
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: '/community-setting',
+        name: 'community-setting',
+        component: CommunitySettingIndex,
+        children: [
+          {
+            path: 'tutorials',
+            name: 'tutorials',
+            component: Tutorials
+          },
+          {
+            path: 'profile',
+            name: 'profile',
+            component: CommunityInfo,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'asset',
+            name: 'asset',
+            component: AssetSetting,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'staking',
+            name: 'staking',
+            component: StakingSetting,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'social',
+            name: 'social',
+            component: SocialSetting,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'vote',
+            name: 'vote',
+            component: VoteSetting,
+            meta: { slideBar: true }
+          },
+          {
+            path: 'update-pool',
+            name: 'update-pool',
+            component: UpdatePool
+          },
+          {
+            path: 'add-pool',
+            name: 'add-pool',
+            component: AddPool
           }
         ]
       }
     ]
   },
   {
-    path: '/community-setting',
-    name: 'community-setting',
-    component: CommunitySettingIndex,
+    path: '/specify',
+    name: 'vertical-layout',
+    component: VerticalLayout,
+    redirect: '/specify/wallet',
     children: [
       {
-        path: 'tutorials',
-        name: 'tutorials',
-        component: Tutorials
-      },
-      {
-        path: 'profile',
-        name: 'profile',
-        component: CommunityInfo,
-        meta: { slideBar: true }
-      },
-      {
-        path: 'asset',
-        name: 'asset',
-        component: AssetSetting,
-        meta: { slideBar: true }
+        path: 'wallet',
+        redirect: 'wallet/bsc',
+        component: Wallet,
+        children: [
+          {
+            path: 'bsc',
+            name: 'BSCWallet',
+            component: BSCWallet
+          },
+          {
+            path: 'polkadot',
+            name: 'PolkadotWallet',
+            component: PolkadotWallet
+          },
+          {
+            path: 'kusama',
+            name: 'PolkadotWallet',
+            component: KusamaWallet
+          },
+          {
+            path: 'steem',
+            name: 'SteemWallet',
+            component: SteemWallet
+          },
+          {
+            path: 'hive',
+            name: 'HiveWallet',
+            component: HiveWallet
+          }
+        ]
       },
       {
         path: 'staking',
-        name: 'staking',
-        component: StakingSetting,
-        meta: { slideBar: true }
+        component: SpecifyCommunityStaking,
+        redirect: 'staking/deposite',
+        children: [
+          {
+            path: 'crowdloan',
+            name: 'crowdloan',
+            component: CrowdLoan
+          },
+          {
+            path: 'nominate',
+            name: 'nominate',
+            component: CrowdNominate
+          },
+          {
+            path: 'steem-delegate',
+            name: 'steem-delegate',
+            component: SteemDelegate
+          },
+          {
+            path: 'hive-delegate',
+            name: 'hive-delegate',
+            component: HiveDelegate
+          },
+          {
+            path: 'deposite',
+            name: 'deposite',
+            component: CrowdStaking
+          }
+        ]
       },
       {
-        path: 'social',
-        name: 'social',
-        component: SocialSetting,
-        meta: { slideBar: true }
+        path: 'blog',
+        component: Blog
       },
       {
-        path: 'vote',
-        name: 'vote',
-        component: VoteSetting,
-        meta: { slideBar: true }
-      },
-      {
-        path: 'update-pool',
-        name: 'update-pool',
-        component: UpdatePool
-      },
-      {
-        path: 'add-pool',
-        name: 'add-pool',
-        component: AddPool
+        path: 'nps',
+        component: NpsIndex,
+        redirect: 'nps/nps',
+        children: [
+          {
+            path: 'nps',
+            component: Nps
+          },
+          {
+            path: 'create-proposal',
+            component: CreateProposal
+          }
+        ]
       }
     ]
   }

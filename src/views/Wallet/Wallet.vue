@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content wallet">
+    <div class="page-view-title-v">{{ this.$t("wallet.wallet") }}</div>
     <div class="container scroll-content">
       <div class="view-top-header p-view-top-header flex-between-center">
         <div class="nav-box nav-box-bg" ref="navBox">
