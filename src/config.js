@@ -1,4 +1,4 @@
-import { contractAddress } from "./utils/web3/contract"
+import { contractAddress } from "@/utils/web3/contract"
 /** =================================== Normal =======================================*/
 // 调试模式
 export const DEBUG = false

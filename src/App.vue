@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { updateAllTokensFromBackend } from '@/utils/web3/asset'
+// import { updateAllTokensFromBackend } from '@/utils/web3/asset'
 export default {
   mounted () {
-    updateAllTokensFromBackend();
+    // updateAllTokensFromBackend();
   },
 }
 </script>

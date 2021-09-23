@@ -29,7 +29,7 @@ import {
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
-   CROWDLOAN_CHAINID_TO_NAME,
+    CROWDLOAN_CHAINID_TO_NAME,
     DELEGATION_CHAINID_TO_NAME,
     Multi_Config,
     GasLimit
