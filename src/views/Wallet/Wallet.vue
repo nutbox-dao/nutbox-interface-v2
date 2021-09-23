@@ -3,7 +3,7 @@
     <div class="container scroll-content">
       <div class="view-top-header p-view-top-header flex-between-center">
         <div class="nav-box nav-box-bg" ref="navBox">
-          <div class="nav mr-5">
+          <div class="nav">
             <router-link to="/wallet/bsc" exact>BSC</router-link>
             <router-link to="/wallet/polkadot">Polkadot</router-link>
             <router-link to="/wallet/kusama">Kusama</router-link>
@@ -25,15 +25,7 @@
           <b-dropdown-item to="/wallet/steem">Steem</b-dropdown-item >
           <b-dropdown-item to="/wallet/hive">Hive</b-dropdown-item >
         </b-dropdown>
-        <b-dropdown class="top-header-dropdown" right no-caret>
-          <template #button-content>
-            <span>{{tabOptions[activeTab]}}</span>
-            <i class="dropdown-icon ml-2"></i>
-          </template>
-          <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
-                           :class="activeTab===index?'active':''"
-                           @click="activeTab = index">{{item}}</b-dropdown-item>
-        </b-dropdown>
+        <component :is="$route.name"></component>
       </div>
 
       <router-view></router-view>
