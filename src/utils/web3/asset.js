@@ -3,11 +3,11 @@ import {
   contractAddress
 } from "./contract";
 import store from '@/store'
-import {  getProvider } from './ethers'
 import {
   createWatcher,
   aggregate
 } from '@makerdao/multicall'
+import { sleep } from '@/utils/helper'
 import {
   addressToHex
 } from '@/utils/commen/account'
@@ -21,7 +21,8 @@ import {
 } from './web3'
 import {
   waitForTx,
-  getGasPrice
+  getGasPrice,
+  getProvider
 } from './ethers'
 import {
   getAllTokens
@@ -32,7 +33,7 @@ import { errCode,
     DELEGATION_CHAINID_TO_NAME,
     Multi_Config,
     GasLimit
-    } from "../../config";
+} from "@/config";
 
 /**
  * Judge asset wheather Homechain assets
@@ -276,17 +277,29 @@ export const getERC20Info = async (address) => {
         returns: [
           ['decimals']
         ]
+      },{
+        target: address,
+        call: [
+          'totalSupply()(uint256)'
+        ],
+        returns: [
+          ['totalSupply']  
+        ]
       }], Multi_Config)
 
       const tokenFromBackend = tokens?.filter(token => token.address === address)
       let icon = null
+      let price = null
       if (tokenFromBackend && tokenFromBackend.length > 0) {
         icon = tokenFromBackend[0].icon
+        price = tokenFromBackend[0].price
       }
       resolve({
         name: infos?.results?.transformed?.name,
         symbol: infos?.results?.transformed?.symbol,
         decimal: infos?.results?.transformed?.decimals,
+        totalSupply: infos?.results?.transformed?.totalSupply,
+        price,
         address,
         icon
       })
@@ -547,6 +560,14 @@ export const getAllTokenFromBackend = async (update = false) => {
       reject(500)
     }
   })
+}
+
+/**update tokens info from db */
+export const updateAllTokensFromBackend = async () => {
+  while(true){
+    await getAllTokenFromBackend(true)
+    await sleep(10)
+  }
 }
 
 /**

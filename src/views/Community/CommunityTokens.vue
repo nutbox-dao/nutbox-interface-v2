@@ -4,11 +4,11 @@
       <div class="tabs">
         <span class="tab-item font16" :class="activeTab===index?'active':''"
               v-for="(item, index) of tabOptions" :key="index"
-              @click="activeTab=index">{{item}}</span>
+              @click="activeTab=index">{{ $t('asset.' + item) }}</span>
       </div>
       <div class="empty-bg" v-if="items.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
-        <p>暂无数据</p>
+        <p>{{ $t('asset.noTokens') }}</p>
       </div>
       <div class="table-box">
         <b-table v-show="items.length > 0"
@@ -45,7 +45,7 @@ export default {
   name: 'CommunityTokens',
   data () {
     return {
-      tabOptions: ['Market Cap', 'Price', 'Rewards'],
+      tabOptions: ['sortByCap', 'sortByPrice'],
       activeTab: 0,
       fields: [
         [
@@ -55,15 +55,6 @@ export default {
           { key: 'supply', label: 'Cirulating Coin Supply' },
           { key: 'cap', label: 'Markrt cap' },
           { key: 'action', label: '' }
-        ],
-        [
-          { key: 'coin', label: 'Coin' },
-          { key: 'creator', label: 'Creator' },
-          { key: 'price', label: 'Price' }
-        ],
-        [
-          { key: 'coin', label: 'Coin' },
-          { key: 'creator', label: 'Creator' }
         ]
       ],
       items: [
@@ -77,9 +68,12 @@ export default {
       ],
       currentPage: 1,
       totalRows: 0,
-      perPage: 7
+      perPage: 12
     }
-  }
+  },
+  mounted () {
+    
+  },
 }
 </script>
 

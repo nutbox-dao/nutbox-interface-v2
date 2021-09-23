@@ -146,8 +146,8 @@ import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
-import { getAllPools, monitorPools } from '@/utils/web3/pool'
-import { handleApiErrCode, UpdateApysOfPool } from '@/utils/helper'
+import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   data () {
@@ -252,6 +252,7 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
+    console.log('vertical layout');
   },
   async created () {
     // BSC data
@@ -273,6 +274,8 @@ export default {
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
+
+    UpdateApysOfPool()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {

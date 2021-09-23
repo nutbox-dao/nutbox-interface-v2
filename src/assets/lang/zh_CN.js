@@ -388,6 +388,7 @@ module.exports = {
     inputTokenSymbol: "请输入token符号",
     inputDistributionAmount: "请输入预挖数量",
     notDeploy:"还没有Token？",
+    noTokens: "还没有创建的社区token",
     deployOne:"部署一个",
     deploy: '部署',
     deployYourToken: '部署一个Token',
@@ -421,6 +422,8 @@ module.exports = {
     isHomeAsset: "主链资产",
     isForeignAsset: "跨链资产",
     poolName: '矿池名称',
-    inputPoolName: "请输入矿池名称"
+    inputPoolName: "请输入矿池名称",
+    sortByCap: '市值',
+    sortByPrice: '币价',
   }
 }

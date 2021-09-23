@@ -1,3 +1,5 @@
+//  Walnut page
+
 <template>
   <div class="page-layout">
     <div class="page-header-h">
@@ -29,7 +31,7 @@
             <b-nav-item v-show="address" to="/wallet">
               <span>{{ $t("wallet.wallet") }}</span>
             </b-nav-item>
-            <b-nav-item to="/community-setting">
+            <b-nav-item to="/community-setting" v-show="stakingFactoryId && stakingFactoryId.length > 0">
               <i id="setting-icon" class="menu-icon" />
             </b-nav-item>
           </b-navbar-nav>
@@ -89,8 +91,8 @@ import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
-import { getAllPools, monitorPools } from '@/utils/web3/pool'
-import { handleApiErrCode, UpdateApysOfPool } from '@/utils/helper'
+import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   name: 'VerticalLayout',
@@ -114,7 +116,7 @@ export default {
       'clCommunitys'
     ]),
     ...mapState(['lang', 'prices']),
-    ...mapState('web3', ['allCommunities']),
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId']),
     address () {
       if (this.$store.state.web3.account) {
         return this.formatUserAddress(this.$store.state.web3.account, false)
@@ -207,6 +209,7 @@ export default {
     }
   },
   async mounted () {
+    console.log('horizontallayout');
     const _this = this
     window.onresize = () => {
       return (() => {
