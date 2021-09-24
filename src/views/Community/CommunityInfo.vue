@@ -968,7 +968,7 @@ export default {
         });
         await Promise.all([getAllCommunities(true), getMyCommunityInfo(true), monitorCommunity()])
         await sleep(1);
-        this.$router.push("/community/pool-dashboard");
+        this.$router.replace("/community-setting/staking");
       } catch (e) {
         const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params);

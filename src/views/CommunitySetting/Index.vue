@@ -1,35 +1,59 @@
 <template>
   <div class="page-container">
-    <template v-if="$route.meta.slideBar">
-      <div class="page-view-sidebar">
-        <b-nav vertical>
-          <b-nav-item to="/community-setting/profile">{{ $t('community.communityInfo') }}</b-nav-item>
-          <b-nav-item to="/community-setting/asset">{{ $t('asset.asset') }}</b-nav-item>
-          <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
-          <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
-          <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
-        </b-nav>
-      </div>
-      <div class="side-page-view-content">
-        <div class="container">
-          <div class="view-top-header m-view-top-header flex-between-center">
-            <div class="nav-box nav-box-bg">
-              <div class="nav">
-                <b-nav-item to="/community-setting/profile">{{ $t('community.communityInfo') }}</b-nav-item>
-                <b-nav-item to="/community-setting/asset">{{ $t('asset.asset') }}</b-nav-item>
-                <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
-                <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
-                <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
+    <div class="loading-bg" v-if="loading">
+      <img src="~@/static/images/loading.gif" alt="" />
+      <p class="font16">{{ $t("tip.loading") }}</p>
+    </div>
+    <template v-else>
+      <template v-if="$route.meta.slideBar && createState === 0">
+        <div class="page-view-sidebar">
+          <b-nav vertical>
+            <b-nav-item to="/community-setting/profile">{{ $t('community.communityInfo') }}</b-nav-item>
+            <b-nav-item to="/community-setting/asset">{{ $t('asset.asset') }}</b-nav-item>
+            <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
+            <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
+            <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
+          </b-nav>
+        </div>
+        <div class="side-page-view-content">
+          <div class="container">
+            <div class="view-top-header m-view-top-header flex-between-center">
+              <div class="nav-box nav-box-bg">
+                <div class="nav">
+                  <b-nav-item to="/community-setting/profile">{{ $t('community.communityInfo') }}</b-nav-item>
+                  <b-nav-item to="/community-setting/asset">{{ $t('asset.asset') }}</b-nav-item>
+                  <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
+                  <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
+                  <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
+                </div>
               </div>
             </div>
           </div>
+          <router-view></router-view>
         </div>
+      </template>
+      <template v-else>
         <router-view></router-view>
+      </template>
+    </template>
+        <b-modal
+      v-model="noCommunity"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center my-5">
+          {{ $t("community.noCommunity") }}
+        </div>
+        <button class="primary-btn" @click="gotoCreate">
+          {{ $t("community.gotoCreate") }}
+        </button>
       </div>
-    </template>
-    <template v-else>
-      <router-view></router-view>
-    </template>
+    </b-modal>
   </div>
 </template>
 
@@ -48,13 +72,13 @@ import {
   monitorCommunity,
   publishBlog
 } from "@/utils/web3/community";
-import { getCToken } from "@/utils/web3/asset"
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapState, mapGetters } from "vuex";
 import BN from 'bn.js'
 import Step from '@/components/ToolsComponents/Step'
 import { VueCropper } from 'vue-cropper'
-import { generateNewHiveAccount, generatePassword, createNewCommunity, setCommunityInfo, subscribeCommunity } from '@/utils/steem/steem'
+import { createNewCommunity, setCommunityInfo, subscribeCommunity } from '@/utils/steem/steem'
+import { getMyOpenedPools } from '@/utils/web3/pool'
 
 export default {
   name: 'Index',
@@ -64,8 +88,8 @@ export default {
       noCommunity: false,
       cToken: {},
       cTokenAddress: '',
-      showStep: false,
       state: '',
+      loading: true
     }
   },
   computed: {
@@ -93,36 +117,14 @@ export default {
         this.noCommunity = true;
         return;
       }
-      this.canEdit = true;
-      this.form = {...communityInfo};
-      if (!communityInfo.name) this.showStep = true;
-      this.form.blogTag = communityInfo.blogTag;
-          // create hive account
-      try{
-        if (!this.form.blogTag){
-          this.blogTag = await generateNewHiveAccount()
-          this.blogMainPassword = generatePassword()
-        }
-      }catch(e) {
-        console.log('generateNewHiveAccount fail',e)
-      }
-      if (this.form.blogTag){
-        this.state = ''
-      }else{
-        if(!this.steemAccount){
-          this.state = 'connectSteem'
-        }else{
-          this.state = 'create'
-        }
-      }
-      const cToken = await getCToken(communityInfo.id)
-      this.cToken = cToken
-      this.isMintable = cToken.isMintable
-      this.cTokenAddress = cToken.address
+      const myPools = await getMyOpenedPools()
       if (!communityInfo.name) {
-        this.form.id = communityInfo.id;
-        return;
+        this.type = 'create'
+        this.$router.replace('/community-setting/profile?type=create')
+      }else if(this.createState === 3) {
+        this.$router.replace('/community-setting/add-pool')
       }
+      this.loading = false
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);

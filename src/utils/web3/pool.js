@@ -234,7 +234,7 @@ export const updatePoolsRatio = async (form) => {
  * Update Pool APY to backend
  * @param {*} pool 
  */
-export const updatePoolApy = async (pool, apy) => {
+export const publishPool = async (pool) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null
     try {
@@ -256,7 +256,6 @@ export const updatePoolApy = async (pool, apy) => {
     pool['pid'] = parseInt(pool.pid)
     pool['stakerCount'] = parseInt(pool.stakerCount)
     pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
-    pool['apy'] = apy
     console.log('pool', pool);
     const originMessage = JSON.stringify(pool)
     let signature = ''
@@ -698,10 +697,9 @@ export const monitorUserBalances = async () => {
       }
       communities = temp
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
-      for (let pool in pools){
+      for (let pool of pools){
         const key = pool.communityId + '-' + pool.pid
         if (pool.totalStakedAmount === '0'){
-          pool.apy = pool.apy
           return;
         }
         if (pool.poolRatio === 0){
