@@ -5,8 +5,8 @@ export const DEBUG = false
 
 export const LOCALE_KEY = 'localeLanguage'
 // nutbox backend server
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-export const BACKEND_API_URL = "http://localhost:3000"
+export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+// export const BACKEND_API_URL = "http://localhost:3000"
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
@@ -113,7 +113,7 @@ export const HIVE_API_URLS = [
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
-export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME 
+export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME
 
 /**
  * chainId on blockchain to chain name
@@ -157,7 +157,7 @@ export const Transaction_config = {
 export const GasTimes = 1000;
 export const GasLimit = 5000000
 
-// Register by nutbox 
+// Register by nutbox
 export const OfficialAssets = [
   {
     name: 'NUT',
