@@ -7,10 +7,10 @@
         </div>
         <div class="nav-box nav-box-line mt-3">
           <div class="nav">
-            <router-link to="/community/register/native" replace
+            <router-link to="/community-setting/register/native" replace
             >{{ $t('asset.native') }}</router-link
             >
-            <router-link to="/community/register/cross-chain-asset" replace
+            <router-link to="/community-setting/register/cross-chain-asset" replace
             >{{ $t('asset.foreign') }}</router-link
             >
           </div>

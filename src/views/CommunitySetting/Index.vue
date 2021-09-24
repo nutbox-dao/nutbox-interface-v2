@@ -5,7 +5,7 @@
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
     <template v-else>
-      <template v-if="$route.meta.slideBar && createState === 0">
+      <template v-if="createState === 0">
         <div class="page-view-sidebar">
           <b-nav vertical>
             <b-nav-item to="/community-setting/profile">{{ $t('community.communityInfo') }}</b-nav-item>

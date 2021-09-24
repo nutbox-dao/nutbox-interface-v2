@@ -182,27 +182,6 @@ const routes = [
           {
             path: 'community-info',
             component: CommunityInfo
-          },
-          {
-            path: 'register-ctoken',
-            component: RegisterCtoken
-          },
-          {
-            path: 'register',
-            component: Register,
-            children: [
-              {
-                path: 'native',
-                component: NativeAsset,
-                props: route => ({
-                  tokenAddress: route.query.tokenAddress
-                })
-              },
-              {
-                path: 'cross-chain-asset',
-                component: CrossChainAsset
-              }
-            ]
           }
         ]
       },
@@ -228,6 +207,29 @@ const routes = [
             name: 'asset',
             component: AssetSetting,
             meta: { slideBar: true }
+          },
+          {
+            path: 'register',
+            component: Register,
+            meta: { slideBar: true },
+            children: [
+              {
+                path: 'native',
+                component: NativeAsset,
+                props: route => ({
+                  tokenAddress: route.query.tokenAddress
+                })
+              },
+              {
+                path: 'cross-chain-asset',
+                component: CrossChainAsset
+              }
+            ]
+          },
+          {
+            path: 'register-ctoken',
+            name: 'register-ctoken',
+            component: RegisterCtoken,
           },
           {
             path: 'staking',

@@ -67,7 +67,17 @@ export default {
   methods: {
     formatNum (num) {
       if (!this.isNumeric(num)) return 'Max'
-      return `${(num / 1e6).toFixed(2)}M`
+      num = parseInt(num)
+      if (num < 1e5){
+        return num
+      }
+      if (num < 1e6){
+        return `${(num / 1e3).toFixed(2)}K`
+      }
+      if (num < 1e9) {
+        return `${(num / 1e6).toFixed(2)}M`
+      }
+      return `${(num / 1e9).toFixed(2)}G`
     },
     isNumeric (val) {
       return val !== null && val !== '' && !isNaN(val)

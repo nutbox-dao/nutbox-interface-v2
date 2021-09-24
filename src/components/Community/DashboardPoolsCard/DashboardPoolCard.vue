@@ -93,7 +93,6 @@ export default {
         this.published = true
       }
     }
-    console.log(this.pool);
   },
 }
 </script>

@@ -222,7 +222,7 @@ export const getAssetMetadata = async (id, assetType) => {
       }
       break;
     case 'SubstrateCrowdloanAssetRegistry':
-      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]][parseInt(meta[1])]
+      icon = 'https://cdn.wherein.mobi/polkadot/paralogo/' + (meta[0] === 2 ? 'p/' : 'k/') + meta[1] + '.png'
       meta = {
         chainId: meta[0],
         paraId: meta[1],

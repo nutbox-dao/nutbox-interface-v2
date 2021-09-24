@@ -11,6 +11,7 @@ import {
   errCode
 } from "@/config"
 import axios from 'axios'
+import store from '@/store'
 
 var cryptoOptions = {
   key: process.env.VUE_APP_CRYPTO_KEY,
@@ -68,6 +69,21 @@ export const formatBalance = function (value, digit = 3) {
     fraction = '.' + str.split('.')[1]
   }
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
+}
+
+export const formatPrice = function (value) {
+  if (!value) return '$0.000'
+  const ethPrice = store.state.ethPrice
+  value = value * ethPrice
+  const str =
+    Number(value).toFixed(3).toString()
+  let integer = str
+  let fraction = ''
+  if (str.includes('.')) {
+    integer = str.split('.')[0]
+    fraction = '.' + str.split('.')[1]
+  }
+  return '$' + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
 }
 
 export const formatUserAddress = (address, long = true) => {

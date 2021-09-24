@@ -700,16 +700,16 @@ export const monitorUserBalances = async () => {
       for (let pool of pools){
         const key = pool.communityId + '-' + pool.pid
         if (pool.totalStakedAmount === '0'){
-          return;
+          continue;
         }
         if (pool.poolRatio === 0){
-          return;
+          continue;
         }
         const com = communities[pool.communityId]
         const ctokenAddress = com.ctoken
         const ctokenPrice = price[ctokenAddress]
         if (ctokenPrice === 0){
-          return;
+          continue;
         }
         const devRatio = com.rewardRatio
         const rewardPerBlock = com.rewardPerBlock
@@ -717,32 +717,32 @@ export const monitorUserBalances = async () => {
         if (pool.type === 'HomeChainAssetRegistry'){
           const p = price[pool.address]
           if (p === 0){
-            return
+            continue
           }
           //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * p)
-          return;
+          continue;
         }
 
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
           const steemPrice = parseFloat(price['STEEMETH'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * steemPrice)
-          return;
+          continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
           const hivePrice = parseFloat(price['HIVEETH'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * hivePrice)
-          return;
+          continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
           const dotPrice = parseFloat(price['DOTETH'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * dotPrice)
-          return;
+          continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
           const ksmPrice = parseFloat(price['KSMETH'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * ksmPrice)
-          return;
+          continue;
         }
       }
       store.commit('web3/saveAllPools', pools)
@@ -770,6 +770,7 @@ const getPrices = async () => {
   for (let p of tokenPrices) {
     res[p.address] = p.price
   }
+  store.commit('savePrices', res)
   return res
 }
 
