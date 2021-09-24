@@ -250,7 +250,8 @@ const routes = [
           {
             path: 'update-pool',
             name: 'update-pool',
-            component: UpdatePool
+            component: UpdatePool,
+            meta: { slideBar: true }
           },
           {
             path: 'add-pool',
