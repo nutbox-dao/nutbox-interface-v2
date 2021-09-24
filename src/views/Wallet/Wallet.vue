@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content wallet">
-    <div class="page-view-title-v">{{ this.$t("wallet.wallet") }}</div>
     <div class="container scroll-content">
+      <div class="page-view-title-v">{{ $t("wallet.wallet") }}</div>
       <div class="view-top-header p-view-top-header flex-between-center">
         <div class="nav-box nav-box-bg" ref="navBox">
           <div class="nav">
@@ -14,7 +14,7 @@
         </div>
         <component :is="$route.name"></component>
       </div>
-      <div class="view-top-header m-view-top-header flex-between-center">
+      <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
         <b-dropdown class="top-header-dropdown" no-caret>
           <template #button-content>
             <span>{{$route.name}}</span>
@@ -28,7 +28,6 @@
         </b-dropdown>
         <component :is="$route.name"></component>
       </div>
-
       <router-view></router-view>
     </div>
   </div>

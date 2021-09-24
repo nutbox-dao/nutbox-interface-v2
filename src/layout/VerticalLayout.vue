@@ -1,13 +1,13 @@
 <template>
   <div class="page-layout">
-    <div class="page-header-v flex-between-center" v-if="screenWidth < 960">
+    <div class="page-header-v flex-between-center" v-if="screenWidth < 992">
       <div class="header-brand">
         <img class="logo" src="~@/static/images/logo_small.png"
              @click="gotoOfficial" alt="nutbox" />
         <img class="menu ml-2" src="~@/static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>
       </div>
     </div>
-    <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<960">
+    <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<992">
       <div class="menu-box">
         <img class="menu-logo" src="~@/static/images/logo.png" @click="gotoOfficial" alt="nutbox"/>
         <div class="menu-items">
@@ -123,11 +123,7 @@
       @hideMask="showMessage = false"
     />
     <div class="page-container page-container-v">
-      <div class="scroll-content" ref="scrollContent">
-        <div class="container">
-          <router-view></router-view>
-        </div>
-      </div>
+      <router-view></router-view>
     </div>
   </div>
 </template>

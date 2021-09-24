@@ -26,7 +26,7 @@
             </div>
             <component :is='$route.name'/>
           </div>
-          <div class="view-top-header m-view-top-header flex-between-center">
+          <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
             <b-dropdown class="top-header-dropdown" no-caret>
               <template #button-content>
                 <span>{{$route.name}}</span>

@@ -69,10 +69,18 @@
     padding: .2rem .5rem .2rem .2rem;
     margin-right: 1.8rem;
     cursor: pointer;
-    img {
-      width: 1.6rem;
+    .wallet-icon {
+      border: 1px solid var(--primary-custom);
+      border-radius: 50%;
       height: 1.6rem;
-      margin-right: .2rem;
+      width: 1.6rem;
+      padding: .2rem;
+      margin-right: .3rem;
+      &::after {
+        content: '';
+        @include icon;
+        background-image: url("~@/static/images/wallet.png");
+      }
     }
   }
   .more-setting-icon {
@@ -80,31 +88,56 @@
     background-image: url("~@/static/images/more-icon.svg");
   }
 }
-@media (min-width: 991px) {
-  .pc-logo {
-    display: block;
-  }
-  .m-logo {
-    display: none;
-  }
-}
-@media (max-width: 992px) {
-  .pc-logo {
-    display: none;
-  }
-  .m-logo {
-    display: block;
-  }
-  .page-header-h {
-    height: auto;
-    position: fixed;
-    padding: 0 1.2rem;
-  }
-  .page-container-h {
-    padding-top: 3.8rem;
-  }
-}
 .page-container-h {
+  .page-view-sidebar {
+    width: 12rem;
+    height: 100%;
+    margin-top: -3.8rem;
+    position: absolute;
+    z-index: 1;
+    background: linear-gradient(153deg, #FFFFFF 0%, #FFFFFF 100%);
+    padding-top: 3.8rem;
+    overflow-y: auto;
+    .nav {
+      margin-top: 2rem;
+    }
+    .nav-item {
+      margin: 0 1.2rem .4rem 1.2rem;
+    }
+    .nav-link {
+      height: 2.4rem;
+      border-radius: 2.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: .8rem;
+      color: #242629;
+      font-weight: normal;
+      &.active {
+        background-color: var(--primary-custom);
+      }
+    }
+  }
+  .side-page-view-content {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    min-height: 100%;
+    padding-left: 12rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-view-content {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-view-title-v {
+    display: none;
+  }
   .blog-frame {
     background-color: white;
     position: absolute;
@@ -120,5 +153,34 @@
       top: 3.6rem!important;
     }
   }
-
+}
+@media (min-width: 992px) {
+  .pc-logo {
+    display: block;
+  }
+  .m-logo {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .pc-logo {
+    display: none;
+  }
+  .m-logo {
+    display: block;
+  }
+  .page-header-h {
+    height: auto;
+    position: fixed;
+    padding: 0 1.2rem;
+  }
+  .page-container-h {
+    padding-top: 3.8rem;
+    .page-view-sidebar {
+      display: none;
+    }
+    .side-page-view-content {
+      padding-left: 0;
+    }
+  }
 }

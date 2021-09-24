@@ -1,13 +1,13 @@
 <template>
   <div class="container scroll-content">
     <div class="view-top-header flex-between-center">
-      <b-input-group class="search-input mr-3">
+      <b-input-group class="search-input">
         <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
         <template #append>
           <i class="search-icon"></i>
         </template>
       </b-input-group>
-      <div class="c-btn-group" v-show="!loadingCommunity">
+      <div class="c-btn-group" v-if="!loadingCommunity">
         <!-- <button v-if="communityId"
                 @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button> -->
         <button v-if="!communityId" @click="$router.push('/community/tutorials')">
@@ -104,7 +104,6 @@ export default {
   @include c-flex-between-center;
   border-radius: .6rem;
   height: 2.4rem;
-  max-width: 20rem;
   input {
     border: none;
     height: 2.4rem;
@@ -120,5 +119,15 @@ export default {
 .add-icon {
   @include icon(1.2rem, 1.2rem);
   background-image: url("~@/static/images/add-icon.svg");
+}
+@media (min-width: 960px) {
+  .search-input {
+    max-width: 20rem;
+  }
+}
+@media (max-width: 960px) {
+  .view-top-header {
+    padding-top: 0;
+  }
 }
 </style>
