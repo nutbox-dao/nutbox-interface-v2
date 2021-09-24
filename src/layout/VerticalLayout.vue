@@ -137,17 +137,6 @@ import { LOCALE_KEY } from '@/config'
 import TipMessage from '../components/ToolsComponents/TipMessage'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
-import {
-  loadAccounts as loadPolkadotAccounts
-} from '../utils/polkadot/account'
-import { initApis } from '@/utils/commen/api'
-import { isMobile } from '@/utils/commen/util'
-import { setupNetwork, chainChanged } from '@/utils/web3/web3'
-import { accountChanged, getAccounts } from '@/utils/web3/account'
-import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
-import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
-import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   data () {
@@ -217,23 +206,6 @@ export default {
         return `${start}...${end}`
       }
     },
-    // BSC data
-    async fetchBscData () {
-      try {
-        this.loading = true
-        getAllCommunities()
-        getAllPools().then(res => {
-          monitorPools()
-        }).catch(console.error)
-        monitorCommunity()
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.loading = false
-      }
-    }
   },
   watch: {
     screenWidth (val) {
@@ -243,49 +215,5 @@ export default {
       this.$refs.scrollContent.scrollTo({ top: 0 })
     }
   },
-  async mounted () {
-    const _this = this
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth
-        _this.screenWidth = window.screenWidth
-      })()
-    }
-    this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
-    console.log('vertical layout');
-  },
-  async created () {
-    // BSC data
-    this.fetchBscData()
-    // bsc related
-    try {
-      await getAccounts(true)
-    } catch (e) {
-      console.log('Get accounts fail', e)
-    }
-    try {
-      setupNetwork()
-      chainChanged()
-      accountChanged()
-      subBlockNum()
-    } catch (e) {
-      console.log(533, e)
-    }
-    // get steem vests ratio
-    this.setVestsToSteem()
-    this.setVestsToHive()
-
-    UpdateApysOfPool()
-
-    // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
-    if (isMobile()) {
-      console.log('Is mobile device')
-      this.$store.commit('polkadot/saveAccount', null)
-    }
-
-    // init polkadot apis
-    initApis()
-    loadPolkadotAccounts()
-  }
 }
 </script>

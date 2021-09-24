@@ -19,6 +19,7 @@ export default new Vuex.Store({
   state: {
     lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
     allParachain: null,
+    ethPrice: 0,
     prices: {},
     metamaskConnected: false,
     apys: {}
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     saveAllParachain:(state, allParachain) => {
       state.allParachain = allParachain
+    },
+    saveEthPrice: (state, ethPrice) => {
+      state.ethPrice = ethPrice
     },
     savePrices: (state, prices) => {
       state.prices = prices

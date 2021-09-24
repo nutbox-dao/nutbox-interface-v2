@@ -7,8 +7,7 @@ import {
   updatePoolInfo,
   getAllPools as gap,
   getAllParachain as getAP,
-  getPricesOnCEX,
-  getAllCommunities
+  getPricesOnCEX
 } from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
 import {
@@ -33,7 +32,8 @@ import {
 } from './asset'
 import {
   getMyStakingFactory,
-  getNonce
+  getNonce,
+  getAllCommunities
 } from './community'
 import {
   loadFunds as loadKusamaFunds
@@ -42,7 +42,7 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { GasLimit } from '../../config'
+import { GasLimit } from '@/config'
 import { ethers } from 'ethers'
 import {
   BLOCK_SECOND,
@@ -680,7 +680,7 @@ export const monitorUserBalances = async () => {
 
 
 /**
- * Update pools apy by polling
+ * Monitor pools apy by polling
  */
  export const UpdateApysOfPool = async () => {
   // apy calculate:
@@ -692,14 +692,13 @@ export const monitorUserBalances = async () => {
   const update = async () => {
     try{
       let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
-      let apys = {}
       let temp = {}
       for (let c of communities) {
         temp[c.id] = c
       }
       communities = temp
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
-      pools.map(pool => {
+      for (let pool in pools){
         const key = pool.communityId + '-' + pool.pid
         if (pool.totalStakedAmount === '0'){
           pool.apy = pool.apy
@@ -747,7 +746,7 @@ export const monitorUserBalances = async () => {
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * ksmPrice)
           return;
         }
-      })
+      }
       store.commit('web3/saveAllPools', pools)
     }catch(e) {
       console.log('Update apys faile', e);
@@ -759,12 +758,15 @@ export const monitorUserBalances = async () => {
 
 const getPrices = async () => {
   // tokenPrices is against eth price
-  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend(true)])
+  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend()])
   binancePrice = binancePrice.filter(p => 
     PRICES_SYMBOL.indexOf(p.symbol) !== -1
   )
   let res = {}
   for (let p of binancePrice) {
+    if (p.symbol === 'ETHUSDT'){
+      store.commit('saveEthPrice', parseFloat(p.price))
+    }
     res[p.symbol] = p.price
   }
   for (let p of tokenPrices) {
