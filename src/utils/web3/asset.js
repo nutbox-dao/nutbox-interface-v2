@@ -565,8 +565,8 @@ export const getAllTokenFromBackend = async (update = false) => {
 /**update tokens info from db */
 export const updateAllTokensFromBackend = async () => {
   while(true){
-    await getAllTokenFromBackend(true)
     await sleep(10)
+    await getAllTokenFromBackend(true)
   }
 }
 

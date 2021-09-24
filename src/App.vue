@@ -12,7 +12,7 @@ import { isMobile } from '@/utils/commen/util'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
+import { getAllCommunities, monitorCommunity, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import {
@@ -75,7 +75,6 @@ export default {
       })()
     }
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
-    updateAllTokensFromBackend();;
   },
   async created () {
     // BSC data
@@ -98,6 +97,8 @@ export default {
     this.setVestsToSteem()
     this.setVestsToHive()
 
+    updateAllTokensFromBackend();
+    updateAllCommunitiesFromBackend()
     UpdateApysOfPool()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址

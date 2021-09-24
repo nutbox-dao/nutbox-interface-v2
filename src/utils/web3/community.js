@@ -3,8 +3,9 @@ import { ethers } from 'ethers'
 import store from '@/store'
 import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config, GasLimit } from '../../config'
+import { errCode, Multi_Config, GasLimit } from '@/config'
 import { waitForTx, getGasPrice } from './ethers'
+import { sleep } from '@/utils/helper' 
 import {
     createWatcher,
     aggregate
@@ -119,6 +120,14 @@ export const getAllCommunities = async (update=false) => {
             reject(e)
         }
     })
+}
+
+/**update tokens info from db */
+export const updateAllCommunitiesFromBackend = async () => {
+    while(true){
+        await sleep(18)
+        await getAllCommunities(true)
+    }
 }
 
 /**
