@@ -13,22 +13,18 @@
               <span>{{ cToken.name }}</span>
               <i class="copy-icon ml-2" @click="copyAddress"></i>
             </div>
-            <div class="font24">--</div>
+            <div class="font24">${{ cToken.price * ethPrice | amountForm }}</div>
           </div>
         </div>
         <div class="col-md-6 c-mt-1">
           <div class="token-info-card">
             <div class="row-info">
-              <span>已释放量：</span>
-              <span>3.000.000 NUT</span>
+              <span>{{ $t('asset.totalSupply') }}：</span>
+              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)  | amountForm }} {{ cToken.symbol }}</span>
             </div>
             <div class="row-info">
-              <span>已释放量：</span>
-              <span>3.000.000 NUT</span>
-            </div>
-            <div class="row-info">
-              <span>已释放量：</span>
-              <span>3.000.000 NUT</span>
+              <span>{{ $t('asset.cap') }}：</span>
+              <span>${{ (cToken.price * ethPrice *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)) | amountForm}}</span>
             </div>
           </div>
         </div>
@@ -38,7 +34,7 @@
       <Progress :progress-data="progressData"></Progress>
       <div class="custom-form mt-5">
         <!-- community balance -->
-        <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
+        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
           <div class="d-flex">
             <div class="c-input-group">
               <b-form-input
@@ -62,7 +58,7 @@
             <div class="c-input-group">
               <b-form-input
                 :disabled="true"
-                :placeholder="$t('community.devAddress')"
+                :placeholder="devAddress || $t('community.devAddress')"
               >
               </b-form-input>
               <span></span>
@@ -79,7 +75,7 @@
               <b-form-input
                 :disabled="true"
                 type="number"
-                placeholder="0.000"
+                :placeholder="(devRatio / 100).toFixed(2).toString()"
               >
               </b-form-input>
               <span class="c-append">%</span>
@@ -93,25 +89,25 @@
 
     </div>
     <div class="view-top-header flex-between-center">
-      <div class="page-title-line font20 font-bold">注册资产</div>
+      <div class="page-title-line font20 font-bold">{{ $t('asset.native') }}</div>
       <div class="c-btn-group" >
-        <button @click="$router.push('/community/register/native')">
+        <button @click="$router.push('/community-setting/register/native')">
           <i class="add-icon"></i>
           <span>{{ $t('asset.registerOne') }}</span>
         </button>
       </div>
     </div>
     <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 5" :key="i">
-        <AssetCard logo="" symbol="DOT" address="xxxxx" balance="0.0000"/>
+      <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of homeAssets" :key="i">
+        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price * ethPrice" :type='asset.type' :chainId="asset.chainId"/>
       </div>
     </div>
     <div class="view-top-header">
-      <div class="page-title-line font20 font-bold">跨链资产</div>
+      <div class="page-title-line font20 font-bold">{{ $t('asset.foreign') }}</div>
     </div>
     <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="i of 5" :key="i">
-        <AssetCard logo="" symbol="DOT" address="xxxxx" balance="0.0000"/>
+      <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of foreignAssets" :key="i">
+        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price * ethPrice" :type='asset.type' :chainId="asset.chainId"/>
       </div>
     </div>
     <!-- charge balance tip -->
@@ -269,11 +265,13 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo } from '@/utils/web3/community'
+import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
 import AssetCard from '@/components/CommunitySetting/AssetCard'
 import { getCToken } from "@/utils/web3/asset"
+import { errCode } from '@/config'
 
 export default {
   name: 'Asset',
@@ -281,9 +279,7 @@ export default {
   data () {
     return {
       progressData: [
-        { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
-        { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
-        { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
+
       ],
       communityTokenInfo: {
         balance: '',
@@ -300,13 +296,18 @@ export default {
       approving: false,
       updatingAddress: false,
       updatingDevRatio: false,
-      cToken: {}
+      cToken: {},
+      isMintable: true,
+      assets: [],
+      homeAssets: [],
+      foreignAssets: []
     }
   },
   computed: {
     ...mapState('web3', ['communityBalance', 'userBalances', 'ctokenApprovement', 'devAddress', 'devRatio']),
     ...mapGetters('web3', ['createState']),
     ...mapState('steem', ['steemAccount']),
+    ...mapState(['ethPrice']),
     communityBalanceValue () {
       if (this.communityBalance) {
         return (this.communityBalance.toString() / 1e18).toFixed(6)
@@ -319,17 +320,6 @@ export default {
         return 0
       }
       return this.userBalances[this.cTokenAddress].toString() / 1e18
-    }
-  },
-  watch: {
-    type (newValue, oldValue) {
-      // type : null , create, edit
-      this.isEdit = !!newValue
-    },
-    steemAccount (newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.state = 'create'
-      }
     }
   },
   methods: {
@@ -441,8 +431,26 @@ export default {
   },
   async mounted () {
     const communityInfo = await getMyCommunityInfo();
+    try{
+      getDistributionEras().then(dist => {
+        this.progressData = dist
+      }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
+    }catch(e){
+      if (e === errCode.NO_STAKING_FACTORY){
+        this.noCommunity = true;
+      }else {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }
+    }
     this.cToken = await getCToken(communityInfo.id)
-    console.log('my ctoken', this.cToken);
+    this.isMintable = this.cToken.isMintable
+
+    this.assets = await getRegitryAssets()
+    this.homeAssets = this.assets.filter(a => a.type === 'HomeChainAssetRegistry')
+    this.foreignAssets = this.assets.filter(a => a.type !== 'HomeChainAssetRegistry')
+    console.log(this.assets);
   },
 }
 </script>

@@ -42,7 +42,7 @@
         </b-collapse>
         <b-navbar-nav class="d-flex flex-row align-items-center header-right">
           <div class="address-box" @click="connect">
-            <img src="~@/static/images/tokens/bnb.png" alt="">
+            <img src="~@/static/images/wallet.png" alt="">
             <div>{{ address || $t("commen.connectMetamask") }}</div>
           </div>
           <b-nav-item-dropdown variant="text" class="setting-dropdown m-0" right no-caret>
