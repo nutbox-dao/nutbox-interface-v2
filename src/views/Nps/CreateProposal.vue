@@ -11,29 +11,37 @@
         <b-form-group :label="$t('nps.startAndEndTime')" label-class="text-left font16">
           <div class="flex-between-center">
             <div class="c-input-group">
-              <b-form-input id="start-time-input" v-model="proposalForm.startTime"
-                            type="text" placeholder="YYYY-MM-DD" autocomplete="off"></b-form-input>
-              <div class="c-date-picker">
-                <b-form-datepicker v-model="proposalForm.startTime" button-only right
-                                   :locale="locale" aria-controls="start-time-input">
-                  <template #button-content>
-                    <i class="date-icon"></i>
-                  </template>
-                </b-form-datepicker>
-              </div>
+              <b-dropdown class="c-date-picker-dropdown" ref="startTimeDropdown">
+                <template #button-content>
+                  <span v-if="proposalForm.startTime" class="text-black">{{proposalForm.startTime}}</span>
+                  <span v-else style="color: #495057">{{ $t('nps.startTime')}}</span>
+                  <i class="date-icon ml-3"></i>
+                </template>
+                <template #default>
+                  <b-calendar hide-header hide-footer
+                              :locale="locale"
+                              v-model="proposalForm.startTime"
+                              @selected="$refs.startTimeDropdown.hide(true)"
+                              @context="onEndContext"></b-calendar>
+                </template>
+              </b-dropdown>
             </div>
             <div class="mx-2 text-grey-light"> - </div>
             <div class="c-input-group">
-              <b-form-input id="start-time-input" v-model="proposalForm.startTime"
-                            type="text" placeholder="YYYY-MM-DD" autocomplete="off"></b-form-input>
-              <div class="c-date-picker">
-                <b-form-datepicker v-model="proposalForm.startTime" button-only right
-                                   :locale="locale" aria-controls="start-time-input">
-                  <template #button-content>
-                    <i class="date-icon"></i>
-                  </template>
-                </b-form-datepicker>
-              </div>
+              <b-dropdown class="c-date-picker-dropdown" ref="startTimeDropdown" right>
+                <template #button-content>
+                  <span v-if="proposalForm.endTime" class="text-black">{{proposalForm.endTime}}</span>
+                  <span v-else style="color: #495057">{{ $t('nps.endTime')}}</span>
+                  <i class="date-icon ml-3"></i>
+                </template>
+                <template #default>
+                  <b-calendar hide-header hide-footer
+                              :locale="locale"
+                              v-model="proposalForm.endTime"
+                              @selected="$refs.startTimeDropdown.hide(true)"
+                              @context="onEndContext"></b-calendar>
+                </template>
+              </b-dropdown>
             </div>
           </div>
         </b-form-group>
@@ -59,17 +67,27 @@ export default {
     return {
       proposalForm: {
         title: '',
-        startTime: '2021-09-10',
+        startTime: '',
         endTime: '',
         detailInfo: ''
-      },
-      locale: window.localStorage.getItem(LOCALE_KEY) || 'en'
+      }
+    }
+  },
+  computed: {
+    locale () {
+      const setLocale = window.localStorage.getItem(LOCALE_KEY)
+      if (setLocale === 'kr') return 'ko-KR'
+      if (setLocale === 'my') return 'ms-MY'
+      if (setLocale === 'jp') return 'ja-JP'
+      return setLocale
     }
   },
   methods: {
-    onContext (ctx) {
-      console.log(ctx)
-      this.proposalForm.startTime = ctx.activeYMD
+    onStartContext (ctx) {
+      this.proposalForm.startTime = ctx.selectedYMD
+    },
+    onEndContext (ctx) {
+      this.proposalForm.endTime = ctx.selectedYMD
     }
   }
 }
@@ -87,7 +105,6 @@ export default {
 textarea {
   min-height: 14rem;
 }
-
 
 .date-icon {
   @include icon();
