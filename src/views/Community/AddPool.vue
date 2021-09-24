@@ -300,7 +300,7 @@ export default {
         })
         try{
           await getMyOpenedPools(true)
-          this.$router.back();
+          this.$router.replace('/community-setting/staking');
         }catch(e){}
       } catch (e) {
         handleApiErrCode(e, (info, para) => {

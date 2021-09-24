@@ -25,13 +25,9 @@
         <span class="name">{{ $t('community.hasMined') }}</span>
         <div class="info">{{ minedToken | amountForm }}</div>
       </div> -->
-      <div class="project-info-container">
-        <span class="name">APY</span>
-        <b-input type="number" class="apy-input" v-model="apy" step="0.01" :placeholder="$t('community.inputApy')"></b-input>
-      </div>
-      <button class="primary-btn" :disabled="updating" @click="confirm">
+      <button class="primary-btn" :disabled="updating" v-if='!published' @click="confirm">
         <b-spinner small type="grow" v-show="updating" />
-        {{ published ? $t('commen.update') : $t('community.publishPool')}}
+        {{ $t('community.publishPool')}}
       </button>
     </div>
   </div>
@@ -41,7 +37,7 @@
 import { getCToken } from '@/utils/web3/asset'
 import { mapState, mapGetters } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
-import { updatePoolApy, getAllPools, monitorPools } from '@/utils/web3/pool'
+import { publishPool, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
 import { getContract } from '@/utils/web3/contract'
 
@@ -57,21 +53,9 @@ export default {
     return {
       decimal: 1e18,
       updating: false,
-      apy: null,
       minedToken: 0,
       contract: null,
       published: false
-    }
-  },
-  watch: {
-    async blockNum(newValue, oldValue) {
-      try{
-        if (!this.contract) return;
-        // const res = await this.contract.calculateReward(1, newValue)
-        // this.minedToken = res.toString() / 1e18
-      }catch(e){
-        console.log('watch total mined token failed', e);
-      }
     }
   },
   props: {
@@ -81,16 +65,9 @@ export default {
   },
   methods: {
     async confirm() {
-      if (this.apy <= 0){
-        this.$bvToast.toast(this.$t('tip.wrongApy'), {
-          title: this.$t('tip.tips'),
-          variant: 'info'
-        })
-        return;
-      }
       try{
         this.updating = true
-        await updatePoolApy(this.pool, parseFloat(this.apy))
+        await publishPool(this.pool)
         this.published = true;
         // 更新本地矿池数据
         await sleep(1)
@@ -110,18 +87,13 @@ export default {
     }
   },
   async mounted () {
-    this.apy = null
     if (this.allPools){
       const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
       if (p.length > 0){
-        this.apy = p[0].apy
         this.published = true
       }
     }
-    const cToken = await getCToken(this.stakingFactoryId)
-    this.decimal = cToken.decimal
-
-    this.contract = await getContract('StakingTemplate', this.stakingFactoryId)
+    console.log(this.pool);
   },
 }
 </script>
