@@ -487,8 +487,10 @@
       hide-footer
       no-close-on-backdrop>
       <div class="cropper-container">
+        <canvas id="cropper-canvas"></canvas>
         <vueCropper
           ref="cropper"
+          :class="logoUploadLoading?'cropper-rounded-circle':''"
           :infoTrue="true"
           :autoCrop="true"
           :img="cropperImgSrc"
@@ -759,29 +761,58 @@ export default {
         this.coverUploadLoading = false
       }
     },
-    completeCropAndUpload () {
-      this.cropperModal = false
-      this.$refs.cropper.getCropData((data) => {
-        if (this.logoUploadLoading) this.logoPreviewSrc = data
-        if (this.coverUploadLoading) this.coverPreviewSrc = data
-      })
-      this.$refs.cropper.getCropBlob(async (data) => {
-        if (this.logoUploadLoading) {
-          try {
-            this.form.icon = await uploadImage(data)
-            this.logoUploadLoading = false
-          } catch (e) {
-            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-              title: this.$t('tip.tips'),
-              autoHideDelay: 5000,
-              variant: 'warning'
-            })
-            this.logo = null
-            this.form.icon = null
-            this.logoUploadLoading = false
-          }
+    clipCircleImg(imgSrc) {
+      return new Promise(resolve => {
+        const canvas = document.getElementById('cropper-canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = imgSrc
+        img.onload = () => {
+          console.log(img.width, img.height)
+          const cw = canvas.width = img.width
+          const ch = canvas.height = img.height
+          ctx.beginPath()
+          ctx.arc(cw / 2, ch / 2, ch / 2, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.clip()
+          ctx.drawImage(img, 0, 0)
         }
-        if (this.coverUploadLoading) {
+        const timer = setInterval(function () {
+          if (img.complete) {
+            clearInterval(timer)
+            resolve(canvas)
+          }
+        }, 50)
+      })
+    },
+    completeCropAndUpload () {
+      if (this.logoUploadLoading) {
+        this.$refs.cropper.getCropData(async (data) => {
+          const canvas = await this.clipCircleImg(data)
+          this.logoPreviewSrc = canvas.toDataURL('image/png')
+          this.cropperModal = false
+          canvas.toBlob(async data => {
+            try {
+              this.form.icon = await uploadImage(data)
+              this.logoUploadLoading = false
+            } catch (e) {
+              this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+                title: this.$t('tip.tips'),
+                autoHideDelay: 5000,
+                variant: 'warning'
+              })
+              this.logo = null
+              this.form.icon = null
+              this.logoUploadLoading = false
+            }
+          })
+        })
+      } else {
+        this.$refs.cropper.getCropData((data) => {
+          this.coverPreviewSrc = data
+          this.cropperModal = false
+        })
+        this.$refs.cropper.getCropBlob(async (data) => {
           try {
             this.form.poster = await uploadImage(data)
             this.coverUploadLoading = false
@@ -794,8 +825,8 @@ export default {
             this.coverImg = null
             this.form.poster = null
           }
-        }
-      })
+        })
+      }
     },
     clickEdit () {
       this.type = this.form.name ? 'edit' : 'create'
@@ -1093,36 +1124,6 @@ export default {
     transform: translate(-50%, -50%);
     font-size: 1rem;
     text-align: center;
-  }
-}
-.close-icon {
-  position: absolute;
-  right: -1.4rem;
-  top: -1.4rem;
-  @include icon(1.4rem, 1.4rem);
-  background-image: url("~@/static/images/circle-close.png");
-}
-.cropper-container {
-  height: 500px;
-  max-height: 100%;
-}
-.crop-btn-group {
-  padding: 1.2rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  button {
-    box-shadow: none;
-    width: fit-content;
-    padding: 0 2rem;
-  }
-}
-@media (max-width: 576px) {
-  .close-icon {
-    top: auto;
-    bottom: -2rem;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 </style>

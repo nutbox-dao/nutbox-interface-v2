@@ -338,3 +338,37 @@ input::-webkit-input-placeholder {
   border-radius: .8rem;
 }
 @import "dropdown";
+
+.cropper-container {
+  height: 500px;
+  max-height: 100%;
+  position: relative;
+  overflow: scroll;
+  canvas {
+    opacity: 0;
+  }
+  .vue-cropper {
+    position: absolute!important;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+.cropper-rounded-circle .cropper-crop-box {
+  border-radius: 50%;
+}
+.cropper-rounded-circle .cropper-view-box {
+  border-radius: 50%;
+}
+.crop-btn-group {
+  padding: 1.2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  button {
+    box-shadow: none;
+    width: fit-content;
+    padding: 0 2rem;
+  }
+}
