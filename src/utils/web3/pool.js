@@ -680,7 +680,7 @@ export const monitorUserBalances = async () => {
 
 
 /**
- * Update pools apy by polling
+ * Monitor pools apy by polling
  */
  export const UpdateApysOfPool = async () => {
   // apy calculate:
@@ -747,7 +747,6 @@ export const monitorUserBalances = async () => {
           return;
         }
       }
-      console.log('update apy', pools);
       store.commit('web3/saveAllPools', pools)
     }catch(e) {
       console.log('Update apys faile', e);
@@ -765,6 +764,9 @@ const getPrices = async () => {
   )
   let res = {}
   for (let p of binancePrice) {
+    if (p.symbol === 'ETHUSDT'){
+      store.commit('saveEthPrice', parseFloat(p.price))
+    }
     res[p.symbol] = p.price
   }
   for (let p of tokenPrices) {

@@ -423,7 +423,8 @@ module.exports = {
     isForeignAsset: "跨链资产",
     poolName: '矿池名称',
     inputPoolName: "请输入矿池名称",
-    sortByCap: '市值',
-    sortByPrice: '币价',
+    cap: '市值',
+    price: '币价',
+    totalSupply: '发行量'
   }
 }
