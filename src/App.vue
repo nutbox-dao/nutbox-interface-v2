@@ -67,13 +67,6 @@ export default {
     }
   },
   mounted () {
-    const _this = this
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth
-        _this.screenWidth = window.screenWidth
-      })()
-    }
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {

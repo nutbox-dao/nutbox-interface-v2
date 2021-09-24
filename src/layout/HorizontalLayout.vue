@@ -4,16 +4,20 @@
   <div class="page-layout">
     <div class="page-header-h">
       <b-navbar toggleable="lg">
-        <div class="d-flex align-items-center" v-if="screenWidth < 992">
-          <b-navbar-brand to="/" class="m-0">
-            <img class="logo" src="~@/static/images/logo_small.png"
-                 @click="gotoOfficial" alt="nutbox" />
-          </b-navbar-brand >
-          <img class="menu ml-2" src="~@/static/images/menu.png" alt=""  v-b-toggle.nav-collapse/>
+        <div class="m-logo">
+          <div class="d-flex align-items-center">
+            <b-navbar-brand to="/" class="m-0">
+              <img class="logo" src="~@/static/images/logo_small.png"
+                   @click="gotoOfficial" alt="nutbox" />
+            </b-navbar-brand >
+            <img class="menu ml-2" src="~@/static/images/menu.png" alt=""  v-b-toggle.nav-collapse/>
+          </div>
         </div>
-        <b-navbar-brand v-else to="/">
-          <img src="~@/static/images/logo.png" alt="" class="logo">
-        </b-navbar-brand>
+        <div class="pc-logo">
+          <b-navbar-brand to="/">
+            <img src="~@/static/images/logo.png" alt="" class="logo">
+          </b-navbar-brand>
+        </div>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav align="center" class="top">
             <b-nav-item to="/community">
@@ -90,8 +94,7 @@ export default {
       tipMessage: '',
       tipTitle: '',
       showMessage: false,
-      accountsPop: false,
-      screenWidth: document.body.clientWidth
+      accountsPop: false
     }
   },
   computed: {
@@ -110,9 +113,6 @@ export default {
       if (this.$store.state.web3.account) {
         return this.formatUserAddress(this.$store.state.web3.account, false)
       }
-    },
-    showMenu () {
-      return this.screenWidth > 960
     }
   },
   components: {
@@ -168,9 +168,6 @@ export default {
     },
   },
   watch: {
-    screenWidth (val) {
-      this.screenWidth = val
-    },
     '$route' (val) {
       // this.$refs.scrollContent.scrollTo({ top: 0 })
     }
@@ -178,6 +175,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+@import "src/static/css/layout-h";
 </style>

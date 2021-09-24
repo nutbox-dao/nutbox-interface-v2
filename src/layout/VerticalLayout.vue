@@ -173,6 +173,15 @@ export default {
     TipMessage,
     Identicon
   },
+  mounted() {
+    const _this = this
+    window.onresize = () => {
+      return (() => {
+        window.screenWidth = document.body.clientWidth
+        _this.screenWidth = window.screenWidth
+      })()
+    }
+  },
   methods: {
     ...mapMutations('polkadot', [
       'saveCrowdstakings',
@@ -217,3 +226,6 @@ export default {
   },
 }
 </script>
+<style lang="scss">
+@import "src/static/css/layout-v";
+</style>

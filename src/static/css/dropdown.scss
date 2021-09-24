@@ -84,6 +84,7 @@
   border: transparent;
   border-radius: .8rem;
   position: absolute!important;
+  @include coin-shadow();
 }
 .setting-dropdown .dropdown-item {
   display: flex;
