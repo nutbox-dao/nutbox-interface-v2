@@ -269,7 +269,7 @@ const routes = [
     path: '/specify',
     name: 'vertical-layout',
     component: VerticalLayout,
-    redirect: '/specify/wallet',
+    redirect: 'specify/wallet',
     children: [
       {
         path: 'wallet',

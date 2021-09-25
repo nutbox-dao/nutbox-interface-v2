@@ -1,9 +1,10 @@
 <template>
   <div class="container scroll-content">
+    <div class="page-view-title-v mt-5">{{$t("nps.nps") }}</div>
     <div class="view-top-header">
       <div class="page-back-text-icon font20" @click="$router.back()">Create Proposal</div>
     </div>
-    <div class="c-card">
+    <div class="c-card mb-5">
       <div class="custom-form">
         <b-form-group :label="$t('nps.title')" label-class="text-left font16">
           <b-form-input v-model="proposalForm.title" :placeholder="$t('nps.titleInputTip')"></b-form-input>

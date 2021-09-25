@@ -1,6 +1,6 @@
 <template>
   <div class="container scroll-content">
-    <div class="view-top-header flex-between-center">
+    <div class="view-top-header view-top-header-sticky flex-between-center">
       <b-input-group class="search-input">
         <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
         <template #append>

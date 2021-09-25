@@ -31,4 +31,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.account-dropdown-btn {
+  height: 1.8rem;
+  border-radius: 1.8rem;
+  border: 1px solid #E3E5E8;
+  padding: 0 1rem;
+}
 </style>

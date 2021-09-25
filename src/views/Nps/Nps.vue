@@ -1,28 +1,29 @@
 <template>
   <div class="page-view-content nps">
     <div class="container scroll-content">
-      <div class="mb-5">
-        <div class="view-top-header">
-          <div class="tip-box">
-            <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
-            <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
-          </div>
+      <div class="page-view-title-v mt-5">{{$t("nps.nps") }}</div>
+      <div class="view-top-header pb-0">
+        <div class="tip-box">
+          <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
+          <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
         </div>
-        <div class="view-top-header flex-between-center pt-2">
-          <div class="nav-box nav-box-bg">
-            <div class="nav">
+      </div>
+      <div class="view-top-header view-top-header-sticky flex-between-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
             <span v-for="(item, index) of tabOptions" :key="index"
                   :class="activeTab===index?'active':''"
                   @click="activeTab = index">{{item}}</span>
-            </div>
-          </div>
-          <div class="c-btn-group">
-            <button @click="$router.push('create-proposal')">
-              <i class="add-icon"></i>
-              <span>Create Proposal</span>
-            </button>
           </div>
         </div>
+        <div class="c-btn-group">
+          <button @click="$router.push('create-proposal')">
+            <i class="add-icon"></i>
+            <span>Create Proposal</span>
+          </button>
+        </div>
+      </div>
+      <div class="mb-5">
         <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
           <div class="proposal">
             <p
