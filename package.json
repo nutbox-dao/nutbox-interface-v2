@@ -34,6 +34,7 @@
     "json-to-graphql-query": "^2.0.0",
     "lodash.debounce": "^4.0.8",
     "nanoid": "^3.1.25",
+    "remarkable": "^2.0.1",
     "steem": "^0.7.11",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",

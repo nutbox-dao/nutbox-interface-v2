@@ -25,20 +25,12 @@
         >
           {{ index + 1 }}
         </p>
-        <a
-          target="_blank"
-          :href="'https://blog.nutbox.io/@' + proposalItem.author"
-          style="width: 100px; text-align: left"
-        >
-          {{ proposalItem.author }}
-        </a>
-        <a
-          target="_blank"
-          :href="
-            'https://blog.nutbox.io/@' +
-            proposalItem.author +
-            '/' +
-            proposalItem.permlink
+
+        <span
+          @click="
+            $router.push(
+              `/community/proposal-space/proposal/${proposalItem.id}/`
+            )
           "
           style="
             flex: 1;
@@ -48,9 +40,45 @@
           "
         >
           {{ proposalItem.title }}
-        </a>
+        </span>
+        <div class="w-25 pl-3 pr-3">
+          <b-alert show variant="secondary"
+            ><div class="row">
+              <div class="col-6 text-left">赞成</div>
+              <div class="col-6 text-right">
+                {{ proposalItem.voteAgreeTotalScore }}
+              </div>
+            </div>
+            <div class="row">
+              <b-progress
+                :value="voteAgreeTotalScoreRate"
+                variant="success"
+                :striped="true"
+                class="w-100"
+              ></b-progress></div
+          ></b-alert>
+        </div>
+        <div class="w-25 pl-3 pr-3">
+          <b-alert show variant="secondary"
+            ><div class="row">
+              <div class="col-6 text-left">反对</div>
+              <div class="col-6 text-right">
+                {{ proposalItem.voteDisagreeTotalScore }}
+              </div>
+            </div>
+            <div class="row">
+              <b-progress
+                :value="voteDisagreeTotalScoreRate"
+                variant="danger"
+                :striped="true"
+                class="w-100"
+              ></b-progress></div
+          ></b-alert>
+        </div>
+        <div class="w-20 pl-3 pr-3">
+          {{ $t("community.proposalEnd") + ":" + endTime }}
+        </div>
         <p
-          :class="proposalItem.status"
           style="
             font-size: 14px;
             font-weight: 600;
@@ -58,7 +86,13 @@
             padding: 0px 6px;
           "
         >
-          正在投票
+          {{
+            this.proposalItem.status == 0
+              ? $t("community.propsalVoteStatusWaitStart")
+              : this.proposalItem.status == 1
+              ? $t("community.propsalVoteStatusDoing")
+              : $t("community.propsalVoteStatusEnd")
+          }}
         </p>
       </div>
     </div>
@@ -66,12 +100,38 @@
 </template>
 
 <script>
+import { formatDate } from "@/utils/commen/util";
 export default {
   name: "ProposalItem",
   data() {
-    return {};
+    return {
+      voteTotalScore: 0,
+    };
   },
   props: ["proposalItem", "index"],
+  computed: {
+    endTime() {
+      var newDate = formatDate(this.proposalItem.end);
+      return newDate;
+    },
+
+    voteAgreeTotalScoreRate() {
+      return this.voteTotalScore == 0
+        ? 0
+        : (this.proposalItem.voteAgreeTotalScore * 100) / this.voteTotalScore;
+    },
+    voteDisagreeTotalScoreRate() {
+      return this.voteTotalScore == 0
+        ? 0
+        : (this.proposalItem.voteDisagreeTotalScore * 100) /
+            this.voteTotalScore;
+    },
+  },
+  mounted() {
+    this.voteTotalScore =
+      this.proposalItem.voteAgreeTotalScore +
+      this.proposalItem.voteDisagreeTotalScore;
+  },
 };
 </script>
 
@@ -148,5 +208,8 @@ span {
       color: var(--link);
     }
   }
+}
+.w-25 {
+  width: 20% !important;
 }
 </style>

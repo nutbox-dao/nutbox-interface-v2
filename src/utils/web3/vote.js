@@ -1,12 +1,8 @@
 import store from "@/store";
 import { getNonce, getDistributionEras } from "./community";
-import {
-  insertProposal,
-  getAllProposal as gap,
-  getProposalInfo
-} from "@/apis/api";
+import { insertVote, getAllVote as gav } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasLimit } from "../../config";
+import { errCode } from "../../config";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
@@ -14,15 +10,13 @@ import { getAccounts } from "@/utils/web3/account";
  * @param {*} form
  * @param {*} type 'create' / 'edit'
  */
-export const completeProposal = async (form, type) => {
+export const completeVote = async (form, type) => {
   return new Promise(async (resolve, reject) => {
     let nonce = await getNonce();
     const userId = await getAccounts();
     nonce = nonce ? nonce + 1 : 1;
 
     form.userId = userId;
-
-    form.blockNumber = 0;
 
     const originMessage = JSON.stringify(form);
     let signature = "";
@@ -44,43 +38,28 @@ export const completeProposal = async (form, type) => {
     try {
       let res = null;
 
-      res = await insertProposal(params);
+      res = await insertVote(params);
 
       // update nonce in storage
-      //store.commit("web3/saveNonce", nonce);
+      store.commit("web3/saveNonce", nonce);
       resolve(res);
     } catch (e) {
-      console.log("Insert proposal info failed", e);
+      console.log("Insert vote info failed", e);
       reject(e);
     }
   });
 };
 /**
- * get all proposal infos
+ * get all vote infos
  */
-export const getAllProposal = async communityId => {
+export const getAllVote = async proposalId => {
   return new Promise(async (resolve, reject) => {
     try {
-      const proposals = await gap(communityId);
+      const votes = await gav(proposalId);
 
-      resolve(proposals);
+      resolve(votes);
     } catch (e) {
-      console.log("Get all proposal fail", e);
-      reject(e);
-    }
-  });
-};
-/**
- * get all proposal infos
- */
-export const getProposal = async id => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const proposal = await getProposalInfo(id);
-
-      resolve(proposal);
-    } catch (e) {
-      console.log("Get  proposal fail", e);
+      console.log("Get all vote fail", e);
       reject(e);
     }
   });

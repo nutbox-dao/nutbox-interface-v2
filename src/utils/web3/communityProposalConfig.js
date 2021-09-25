@@ -30,22 +30,16 @@ export const getMyCommunityProposalConfigInfo = async stakingFactoryId => {
         communityProposalConfigInfo &&
         communityProposalConfigInfo.length > 0
       ) {
-        store.commit(
-          "web3/saveCommunityProposalConfigInfo",
-          communityProposalConfigInfo[0]
-        );
         resolve(communityProposalConfigInfo[0]);
         return;
       } else {
         console.log("first get communityProposalConfigInfo");
-        store.commit("web3/saveCommunityProposalConfigInfo", {
-          id: stakingFactoryId
-        });
+
         resolve({ id: stakingFactoryId });
       }
     } catch (e) {
       console.log("Get communityProposalConfig info from backend fail", e);
-      store.commit("web3/saveCommunityProposalConfigInfo", null);
+
       reject(e);
     }
   });
@@ -95,7 +89,7 @@ export const completeCommunityProposalConfigInfo = async (form, type) => {
                 res = await insertCommunityProposalConfig(params)
             } */
       // update nonce in storage
-      store.commit("web3/saveNonce", nonce);
+      //store.commit("web3/saveNonce", nonce);
       resolve(res);
     } catch (e) {
       console.log("Insert communityProposalConfig info failed", e);
@@ -113,7 +107,7 @@ export const getStrategies = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       let res = await gs();
-      debugger;
+
       // update nonce in storage
       store.commit("web3/saveStrategies", res);
       resolve(res);

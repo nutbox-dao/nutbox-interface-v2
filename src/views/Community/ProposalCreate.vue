@@ -69,8 +69,16 @@
               required
               :placeholder="$t('community.proposalBodyInput')"
               rows="8"
-              v-model="proposal.bobody"
+              v-model="proposal.body"
             ></b-form-textarea>
+          </b-form-group>
+
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.proposalBodyPreview')"
+          >
+            <Markdown :body="proposal.body" />
           </b-form-group>
 
           <b-button
@@ -93,8 +101,12 @@ import BSCAccount from "@/components/Accounts/BSCAccount";
 import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
-import { getScores } from "@/utils/web3/communityProposalConfig";
-import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
+import Markdown from "@/components/Commen/Markdown";
+import { getBalance } from "@/utils/web3/asset.js";
+import {
+  getScores,
+  getMyCommunityProposalConfigInfo,
+} from "@/utils/web3/communityProposalConfig";
 
 import { completeProposal } from "@/utils/web3/proposal";
 
@@ -105,6 +117,7 @@ export default {
     PolkadotAccount,
     SteemAccount,
     HiveAccount,
+    Markdown,
   },
   data() {
     return {
@@ -164,13 +177,9 @@ export default {
           strategies,
           network: this.form.network,
         };
-
-        getScores(params).then((res) => {
-          const totalScore = res;
-          this.isValid = totalScore >= this.form.threshold;
-          this.proposal.network = this.form.network;
-          this.proposal.strategies = JSON.stringify(strategies);
-          this.proposal.communityId = this.form.communityId;
+        getBalance().then((res) => {
+          this.totalScore = parseFloat(res.toString() / 1e18);
+          this.isValid = this.totalScore >= this.form.threshold;
         });
       },
       immediate: true,
@@ -180,6 +189,10 @@ export default {
   methods: {
     async submitProposal() {
       try {
+        this.proposal.communityId = this.form.communityId;
+        this.proposal.strategies = this.form.strategies;
+        this.proposal.network = this.form.network;
+        this.proposal.threshold = this.form.threshold;
         const result = await completeProposal(this.proposal);
 
         if (result.code == 0) {

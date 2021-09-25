@@ -444,7 +444,7 @@ export default {
           null,
           4
         );
-        debugger;
+
         const resCode = await completeCommunityProposalConfigInfo(
           this.form,
           this.type
