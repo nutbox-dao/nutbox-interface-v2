@@ -30,6 +30,7 @@ module.exports = {
     whitePaper: '白皮书',
     nps: 'Nutbox提案系统',
     contract: '合约地址',
+    social: '社交资料',
     docs: '文档',
     discord: 'Discord',
     blog: '博客',
@@ -358,6 +359,7 @@ module.exports = {
     unPublished: "未发布",
     publishBlog: '发布博客',
     communityBlog: '社区博客',
+    socialMedial: '社交媒体',
     blogTag: '社区标签',
     createBlog: '创建社区博客',
     createBlogMemo: '以下是您的社区博客标签以及私钥，请妥善保管，我们将不会托管您的账号。创建社区博客需要消耗您3个Steem用作手续费。',
@@ -366,7 +368,8 @@ module.exports = {
     distributionLimit: '最多可以创建6个阶段的分发策略',
     bindBlog: '绑定已有社区标签',
     bindBlogMemo: '填写您的steem社区标签进行绑定。示例：hive-12345',
-    inputBlogTag: "请输入您的steem社区标签"
+    inputBlogTag: "请输入您的steem社区标签",
+    udpateSocialSuccess: '社交信息更新成功'
   },
   asset: {
     asset: "资产",

@@ -1,7 +1,7 @@
 import { getContract, contractAddress } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt, updateSocial } from '@/apis/api'
 import { signMessage } from './utils'
 import { errCode, Multi_Config, GasLimit } from '@/config'
 import { waitForTx, getGasPrice } from './ethers'
@@ -525,6 +525,56 @@ export const publishBlog = async (blogTag) => {
             resolve(res)
         }catch(e) {
             console.log('Update community blogTag info failed', e);
+            reject(e)
+        }
+    })
+}
+
+/**
+ * update social info
+ * @param {*} social 
+ */
+export const udpateSocialInfo = async (social) => {
+    return new Promise(async (resolve, reject) => {
+        let id;
+        try{
+            id = await getMyStakingFactory()
+            if (!id){
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e) {
+            reject(e);
+            return;
+        }
+        let nonce = await getNonce()
+        const userId = await getAccounts();
+        nonce = nonce ? nonce + 1 : 1
+        const infoStr = JSON.stringify({
+            id,
+            ...social
+        })
+        let signature = ''
+        try{
+            signature = await signMessage(infoStr + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
+        const params = {
+            userId,
+            infoStr,
+            nonce,
+            signature
+        }
+        try{
+            let res = await updateSocial(params);
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            console.log('Update community social info failed', e);
             reject(e)
         }
     })
