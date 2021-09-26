@@ -27,23 +27,15 @@
         </b-dropdown>
         <component :is='tabOptions[activeTab]'/>
       </div>
-<!--      <div v-if="sortedPools.length > 0"></div>-->
-<!--      <div class="empty-bg" v-else>-->
-<!--        <img src="~@/static/images/empty-data.png" alt="" />-->
-<!--        <p> {{ $t('tip.noProject') }} </p>-->
-<!--      </div>-->
+     <div v-if="showingCards.length > 0"></div>
+      <div class="empty-bg" v-else>
+       <img src="~@/static/images/empty-data.png" alt="" />
+       <p> {{ $t('tip.noProject') }} </p>
+     </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, idx) of sortedPools" :key="idx.toString()+pool.trieIndex">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, idx) of showingCards" :key="idx.toString()+pool.trieIndex">
             <CrowdLoanCard :card="pool"/>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="i of 10" :key="i">
-          <div class="empty-bg" style="border: 1px solid">
-            <img src="~@/static/images/empty-data.png" alt="" />
-            <p> {{ $t('tip.noProject') }} </p>
           </div>
         </div>
       </div>
@@ -81,6 +73,9 @@ export default {
     data () {
       const { poolCards, allParachain } = this
       return { poolCards, allParachain }
+    },
+    showingCards () {
+      return this.sortedPools.filter(pool => pool.chainId === this.activeTab + 2)
     }
   },
   watch: {
