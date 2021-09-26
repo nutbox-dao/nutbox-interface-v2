@@ -5,6 +5,28 @@
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
     <template v-else>
+      <div class="view-top-header view-top-header-sticky view-top-header-pt0 p-view-top-header flex-between-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
+                <span v-for="(item, index) of tabOptions" :key="index"
+                      :class="activeTab===index?'active':''"
+                      @click="activeTab = index">{{item}}</span>
+          </div>
+        </div>
+        <component :is='tabOptions[activeTab]'/>
+      </div>
+      <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center ">
+        <b-dropdown class="top-header-dropdown" no-caret>
+          <template #button-content>
+            <span>{{tabOptions[activeTab]}}</span>
+            <i class="dropdown-icon ml-2"></i>
+          </template>
+          <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
+                           :class="activeTab===index?'active':''"
+                           @click="activeTab = index">{{item}}</b-dropdown-item>
+        </b-dropdown>
+        <component :is='tabOptions[activeTab]'/>
+      </div>
       <div v-if="sortedPools.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
@@ -26,13 +48,20 @@ import CrowdLoanCard from '@/components/CrowdStaking/CrowdLoanCard'
 import { getAllParachain } from '@/utils/web3/pool'
 import { mapState, mapGetters } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
+import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 
 export default {
   name: 'DCrowdLoan',
-  components: { CrowdLoanCard },
+  components: {
+    CrowdLoanCard,
+    Pokadot: PolkadotAccount,
+    Kusama: PolkadotAccount
+  },
   data () {
     return {
-      sortedPools: []
+      sortedPools: [],
+      activeTab: 0,
+      tabOptions: ['Pokadot', 'Kusama']
     }
   },
   computed: {
@@ -57,7 +86,7 @@ export default {
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
     }).catch(e => {
-      console.log(e);
+      console.log(e)
     })
   }
 }

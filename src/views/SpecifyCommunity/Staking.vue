@@ -8,7 +8,7 @@
       </div>
       <template v-else>
         <div class="view-top-header view-top-header-sticky p-view-top-header flex-between-center">
-          <div class="nav-box nav-box-line my-3">
+          <div class="nav-box nav-box-line">
             <div class="nav">
               <router-link v-if="showStakingPool" to="deposite">{{ $t('cs.deposit') }}</router-link>
               <router-link v-if="showSteemPool" to="steem-delegate">{{ $t('cs.steemDelegate') }}</router-link>
@@ -18,7 +18,6 @@
               <div class="center-blank"></div>
             </div>
           </div>
-          <component :is='$route.name'/>
         </div>
         <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
           <b-dropdown class="top-header-dropdown" no-caret>
@@ -32,7 +31,6 @@
             <b-dropdown-item v-if="showNominatePool" to="nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
             <b-dropdown-item v-if="showCrowdloanPool" to="crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
           </b-dropdown>
-          <component :is="$route.name"></component>
         </div>
         <router-view></router-view>
       </template>
@@ -42,11 +40,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import SteemAccount from '@/components/Accounts/SteemAccount'
-import HiveAccount from '@/components/Accounts/HiveAccount'
-import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
-import BSCAccount from '@/components/Accounts/BSCAccount'
-
 export default {
   computed: {
     ...mapState('web3', ['communityCard']),
@@ -73,13 +66,6 @@ export default {
     showCrowdloanPool () {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateCrowdloanAssetRegistry').length > 0
     }
-  },
-  components: {
-    crowdloan: PolkadotAccount,
-    nominate: PolkadotAccount,
-    'steem-delegate': SteemAccount,
-    'hive-delegate': HiveAccount,
-    deposite: BSCAccount
   },
   methods: {
   },
