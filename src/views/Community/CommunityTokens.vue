@@ -74,7 +74,7 @@ export default {
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
           price: '$' + formatBalance(c.price * this.ethPrice),
-          totalSupply: c.totalSupply.toString() / 1e18,
+          totalSupply: formatBalance(c.totalSupply.toString() / 1e18),
           cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply.toString() / 1e18))
         }))
         : []

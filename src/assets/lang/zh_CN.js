@@ -299,6 +299,8 @@ module.exports = {
     pool: '矿池',
     edit:'编辑',
     create:'完善',
+    communityList: '社区列表',
+    communityTokenList: '社区代币列表',
     communityName: "社区名字",
     communityLink: "社区官网",
     communityDesc: "社区介绍",
