@@ -82,6 +82,7 @@ module.exports = {
     deposit: "质押挖矿",
     steemDelegate: 'Steem代理',
     hiveDelegate: 'Hive代理',
+    delegate: '代理',
     crowdloan: '平行链拍卖',
     nomination: '验证者投票',
     community: "社区",

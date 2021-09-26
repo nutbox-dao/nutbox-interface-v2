@@ -27,6 +27,7 @@ import CommunityInfo from '@/views/Community/CommunityInfo'
 import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
 import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
 import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
+import Delegate from '@/views/CrowdStaking/Delegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
 import Nps from '@/views/Nps/Nps'
@@ -101,14 +102,9 @@ const routes = [
             component: CrowdNominate
           },
           {
-            path: 'steem-delegate',
-            name: 'steem-delegate',
-            component: SteemDelegate
-          },
-          {
-            path: 'hive-delegate',
-            name: 'hive-delegate',
-            component: HiveDelegate
+            path: 'delegate',
+            name: 'delegate',
+            component: Delegate
           },
           {
             path: 'deposite',
@@ -319,14 +315,9 @@ const routes = [
             component: CrowdNominate
           },
           {
-            path: 'steem-delegate',
-            name: 'steem-delegate',
-            component: SteemDelegate
-          },
-          {
-            path: 'hive-delegate',
-            name: 'hive-delegate',
-            component: HiveDelegate
+            path: 'delegate',
+            name: 'delegate',
+            component: Delegate
           },
           {
             path: 'deposite',
