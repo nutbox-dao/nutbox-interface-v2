@@ -7,7 +7,7 @@
           <i class="search-icon"></i>
         </template>
       </b-input-group>
-      <div class="c-btn-group" v-if="!loadingCommunity">
+      <div class="c-btn-group ml-3" v-if="!loadingCommunity">
         <!-- <button v-if="communityId"
                 @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button> -->
         <button v-if="!communityId" @click="$router.push('/community/tutorials')">
@@ -122,7 +122,7 @@ export default {
 }
 @media (min-width: 960px) {
   .search-input {
-    max-width: 20rem;
+    //max-width: 20rem;
   }
 }
 @media (max-width: 960px) {
