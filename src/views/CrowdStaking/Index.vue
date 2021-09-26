@@ -10,23 +10,13 @@
       </b-nav>
     </div>
     <div class="side-page-view-content">
-      <div class="container scroll-content">
-        <div class="loading-bg" v-if="loading">
-          <img src="~@/static/images/loading.gif" alt="" />
-          <p class="font16">{{ $t("tip.loading") }}</p>
-        </div>
-        <template v-else>
-          <div class="view-top-header p-view-top-header flex-between-center">
-            <div class="nav-box nav-box-bg">
-              <div class="nav">
-                <span v-for="(item, index) of tabOptions" :key="index"
-                      :class="activeTab===index?'active':''"
-                      @click="activeTab = index">{{item}}</span>
-              </div>
-            </div>
-            <component :is='$route.name'/>
-          </div>
-          <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
+      <div class="loading-bg" v-if="loading">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
+      </div>
+      <template >
+        <div class="view-top-header view-top-header-sticky m-view-top-header">
+          <div class="container text-left">
             <b-dropdown class="top-header-dropdown" no-caret>
               <template #button-content>
                 <span>{{$route.name}}</span>
@@ -38,19 +28,12 @@
               <b-dropdown-item to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
               <b-dropdown-item to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
             </b-dropdown>
-            <b-dropdown class="top-header-dropdown" right no-caret>
-              <template #button-content>
-                <span>{{tabOptions[activeTab]}}</span>
-                <i class="dropdown-icon ml-2"></i>
-              </template>
-              <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
-                    :class="activeTab===index?'active':''"
-                    @click="activeTab = index">{{item}}</b-dropdown-item>
-            </b-dropdown>
           </div>
+        </div>
+        <div class="container scroll-content">
           <router-view></router-view>
-        </template>
-      </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -97,12 +80,12 @@ export default {
     'hive-delegate': HiveAccount,
     deposite: BSCAccount
   },
-  data() {
-    return {
-      activeTab: 0,
-      tabOptions: ['BSC', 'Ethereum', 'Tron', 'Steem']
-    }
-  },
+  // data() {
+  //   return {
+  //     activeTab: 0,
+  //     tabOptions: ['BSC', 'Ethereum', 'Tron', 'Steem']
+  //   }
+  // },
   methods: {
   },
   created () {
@@ -111,4 +94,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.m-view-top-header {
+  border-bottom: 1px solid var(--dividers);
+  background-color: white;
+}
 </style>
