@@ -3,8 +3,7 @@
     <div class="page-view-sidebar">
       <b-nav vertical>
         <b-nav-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-nav-item>
-        <b-nav-item v-if="showSteemPool" to="/crowdstaking/steem-delegate">{{ $t('cs.steemDelegate') }}</b-nav-item>
-        <b-nav-item v-if="showHivePool" to="/crowdstaking/hive-delegate">{{ $t('cs.hiveDelegate') }}</b-nav-item>
+        <b-nav-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-nav-item>
         <b-nav-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-nav-item>
         <b-nav-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-nav-item>
       </b-nav>
@@ -22,11 +21,10 @@
                 <span>{{$route.name}}</span>
                 <i class="dropdown-icon ml-2"></i>
               </template>
-              <b-dropdown-item to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-dropdown-item>
-              <b-dropdown-item to="/crowdstaking/steem-delegate">{{ $t('cs.steemDelegate') }}</b-dropdown-item>
-              <b-dropdown-item to="/crowdstaking/hive-delegate">{{ $t('cs.hiveDelegate') }}</b-dropdown-item>
-              <b-dropdown-item to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
-              <b-dropdown-item to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
             </b-dropdown>
           </div>
         </div>
@@ -56,11 +54,8 @@ export default {
     showStakingPool() {
       return this.poolCards && this.poolCards.filter(p => p.type === 'HomeChainAssetRegistry').length > 0
     },
-    showSteemPool() {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry' && p.assetType === 'sp').length > 0
-    },
-    showHivePool() {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry' && p.assetType === 'hp').length > 0
+    showDelegatePool() {
+      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry').length > 0
     },
     showNominatePool() {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateNominateAssetRegistry').length > 0

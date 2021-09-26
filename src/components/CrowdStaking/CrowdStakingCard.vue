@@ -10,7 +10,7 @@
           <div
             class="link-title"
             @click="
-              $router.push('/community/detail-info?id=' + card.communityId)
+              openNewTab(card.communityId)
             "
           >
             <span>{{ card.communityName }}</span>
@@ -187,6 +187,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -194,6 +198,9 @@ export default {
       }finally{
         this.isWithdrawing = false  
       }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
 };

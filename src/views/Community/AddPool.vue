@@ -20,7 +20,7 @@
                 <div class="text-center">
                   <div class="custom-control" style="line-height: 1.5rem">
                     {{ $t('asset.notRegister') }}
-                    <router-link to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
+                    <router-link to="/community-setting/register/native">{{ $t('asset.registerOne') }}</router-link>
                   </div>
                 </div>
               </template>
@@ -37,7 +37,7 @@
                 <span v-show="form.assetId && isHomeChainAsset">* {{ $t('asset.isHomeAsset') }}</span>
                 <span v-show="form.assetId && !isHomeChainAsset">* {{ $t('asset.isForeignAsset') }}</span>
               </div>
-              <router-link class="text-right" to="/community/register/native">{{ $t('asset.registerOne') }}</router-link>
+              <router-link class="text-right" to="/community-setting/register/native">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </b-form-group>
           <div class="row">

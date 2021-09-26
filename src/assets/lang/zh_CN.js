@@ -82,6 +82,7 @@ module.exports = {
     deposit: "质押挖矿",
     steemDelegate: 'Steem代理',
     hiveDelegate: 'Hive代理',
+    delegate: '代理',
     crowdloan: '平行链拍卖',
     nomination: '验证者投票',
     community: "社区",
@@ -222,7 +223,8 @@ module.exports = {
     communityNameLimit: "社区名字不能超过{count}个字",
     needRightUrl: "请填写正确的网页链接",
     selectCowdloan: "请选择一个众贷项目",
-    inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。'
+    inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。',
+    withdrawSuccess: '收获成功'
   },
   nps: {
     nps: '提案改善',
