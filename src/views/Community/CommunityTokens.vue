@@ -102,6 +102,7 @@ export default {
 .tab-item{
   padding-bottom: .8rem;
   margin-right: 2rem;
+  cursor: pointer;
   &.active {
     border-bottom: 4px solid var(--primary-custom);
   }
