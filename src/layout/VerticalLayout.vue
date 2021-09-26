@@ -2,14 +2,17 @@
   <div class="page-layout">
     <div class="page-header-v flex-between-center" v-if="screenWidth < 992">
       <div class="header-brand">
-        <img class="logo" src="~@/static/images/logo_small.png"
-             @click="gotoOfficial" alt="nutbox" />
+        <img class="logo" src="~@/static/images/logo_small.png" alt="nutbox" />
         <img class="menu ml-2" src="~@/static/images/menu.png" alt=""  v-b-toggle.sidebar-menu/>
       </div>
     </div>
     <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<992">
       <div class="menu-box">
-        <img class="menu-logo" src="~@/static/images/logo.png" @click="gotoOfficial" alt="nutbox"/>
+        <div class="header-brand menu-logo flex-start-center">
+          <img src="~@/static/images/logo_small.png"
+               @click="gotoOfficial" alt="nutbox" />
+          <span class="text-left font-weight-bolder font16">Community Name</span>
+        </div>
         <div class="menu-items">
           <b-nav vertical align="center" class="top">
             <b-nav-item to="/specify/wallet" router-tag="div">
@@ -215,9 +218,6 @@ export default {
   watch: {
     screenWidth (val) {
       this.screenWidth = val
-    },
-    '$route' (val) {
-      this.$refs.scrollContent.scrollTo({ top: 0 })
     }
   },
 }

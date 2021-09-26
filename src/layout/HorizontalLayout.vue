@@ -194,9 +194,6 @@ export default {
     }
   },
   watch: {
-    '$route' (val) {
-      // this.$refs.scrollContent.scrollTo({ top: 0 })
-    }
   }
 }
 </script>

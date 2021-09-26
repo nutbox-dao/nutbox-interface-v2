@@ -20,6 +20,10 @@
                  tbody-tr-class="c-tr"
                  thead-class="c-th"
         >
+          <template #table-colgroup="scope">
+            <col v-for="field in scope.fields" :key="field.key"
+                 :style="{ width: field.key === 'tokenIcon' ? '3rem' : '' }">
+          </template>
           <template #cell(tokenIcon)="row">
             <img class="mr-2" style="width:3rem;height: 3rem" :src="row.item.tokenIcon" alt="">
           </template>
@@ -59,24 +63,24 @@ export default {
   computed: {
     ...mapState('web3', ['allCommunities']),
     ...mapState(['ethPrice', 'lang']),
-    fields() {
+    fields () {
       return [
-          { key: 'tokenIcon', label: ''},
-          { key: 'tokenSymbol', label: this.$t('asset.tokenSymbol') },
-          { key: 'name', label: this.$t('community.community') },
-          { key: 'price', label: this.$t('asset.price') },
-          { key: 'totalSupply', label: this.$t('asset.totalSupply') },
-          { key: 'cap', label: this.$t('asset.cap') },
-          // { key: 'action', label: '' }
-        ]
+        { key: 'tokenIcon', label: '' },
+        { key: 'tokenSymbol', label: this.$t('asset.tokenSymbol') },
+        { key: 'name', label: this.$t('community.community') },
+        { key: 'price', label: this.$t('asset.price') },
+        { key: 'totalSupply', label: this.$t('asset.totalSupply') },
+        { key: 'cap', label: this.$t('asset.cap') }
+        // { key: 'action', label: '' }
+      ]
     },
-    items (){
-      let sorted = this.allCommunities ? this.allCommunities.map(c => ({
-          ...c,
-          price: '$' + formatBalance(c.price * this.ethPrice),
-          totalSupply: c.totalSupply.toString() / 1e18,
-          cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply.toString() / 1e18))
-        }))
+    items () {
+      const sorted = this.allCommunities ? this.allCommunities.map(c => ({
+        ...c,
+        price: '$' + formatBalance(c.price * this.ethPrice),
+        totalSupply: c.totalSupply?.toString() / 1e18,
+        cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply?.toString() / 1e18))
+      }))
         : []
       if (this.activeTab === 0) {
         return sorted.sort((a, b) => parseFloat(a.cap) - parseFloat(b.cap))
@@ -86,8 +90,8 @@ export default {
     }
   },
   mounted () {
-    console.log('eth', this.ethPrice);
-  },
+    console.log('eth', this.ethPrice)
+  }
 }
 </script>
 

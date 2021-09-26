@@ -128,7 +128,7 @@ export default {
     height: 108px;
     background: white;
     padding: 18px;
-    margin-top: 20px;
+    margin-bottom: 20px;
     box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
     border-radius: 28px;
     border: 1px solid rgba(227, 229, 232, 0.5);
@@ -185,7 +185,6 @@ export default {
   .view-top-header {
     flex-direction: column;
     align-items: flex-end;
-    padding-bottom: 0;
   }
   .nav-box {
     margin-bottom: .5rem;

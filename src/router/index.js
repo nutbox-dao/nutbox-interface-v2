@@ -225,7 +225,7 @@ const routes = [
           {
             path: 'register-ctoken',
             name: 'register-ctoken',
-            component: RegisterCtoken,
+            component: RegisterCtoken
           },
           {
             path: 'staking',
@@ -301,30 +301,7 @@ const routes = [
       },
       {
         path: 'staking',
-        component: SpecifyCommunityStaking,
-        redirect: 'staking/deposite',
-        children: [
-          {
-            path: 'crowdloan',
-            name: 'crowdloan',
-            component: CrowdLoan
-          },
-          {
-            path: 'nominate',
-            name: 'nominate',
-            component: CrowdNominate
-          },
-          {
-            path: 'delegate',
-            name: 'delegate',
-            component: Delegate
-          },
-          {
-            path: 'deposite',
-            name: 'deposite',
-            component: CrowdStaking
-          }
-        ]
+        component: CommunityDetailInfo
       },
       {
         path: 'blog',
@@ -354,4 +331,20 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  console.log(to, from)
+  // next()
+  if (to.query.id) {
+    next()
+  } else if (from.query.id && to.matched[0].path === '/specify') {
+    next({
+      path: to.path,
+      query: {
+        id: from.query.id
+      }
+    })
+  } else {
+    next()
+  }
+})
 export default router

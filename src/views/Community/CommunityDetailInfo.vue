@@ -1,38 +1,35 @@
 <template>
   <div class="page-view-content">
     <div class="container scroll-content">
-      <div class="community-detail-info my-5">
+      <div class="page-view-title-v">{{$t("cs.crowdstaking") }}</div>
+      <div class="community-detail-info mb-5">
         <div class="loading-bg" v-if="!communityInfo">
           <img src="~@/static/images/loading.gif" alt="" />
           <p class="font16">{{ $t("tip.loading") }}</p>
         </div>
         <template v-else>
-          <div class="community-info p-card" v-if="activeTab!==5">
-            <img class="poster" :src="communityInfo.poster" alt="">
-            <i class="back-icon" @click="$router.back()"></i>
-            <div class="second-card">
-              <img class="large-logo" :src="communityInfo.icon" alt="" />
-              <div class="project-info text-left">
-                <div class="d-flex align-items-center">
-                  <a class="font20 font-bold title icon-title official-link-icon m-0"
-                     :href="communityInfo.website"
-                     target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
-                  <i class="v-line" v-show="communityInfo.website && communityInfo.website.length > 4"></i>
-                  <!-- <span>矿池余额：1000.00</span> -->
-                </div>
-                <div class="desc font14 mt-2"
-                     v-html="(communityInfo.description)"></div>
+          <div class="view-top-header view-top-header-sticky p-view-top-header flex-between-center">
+            <div class="nav-box nav-box-line">
+              <div class="nav mr-5">
+                <span v-for="(item, index) of tabOptions" :key="index"
+                      v-show="showTab(index)"
+                      :class="activeTab===index?'active':''"
+                      @click="activeTab = index">{{item.name}}</span>
               </div>
             </div>
+            <component :is='wallet'></component>
           </div>
-          <div class="nav-box nav-box-line my-4"
-               :style="{position: activeTab===5?'fixed':'unset'}">
-            <div class="nav mr-5">
-            <span v-for="(item, index) of tabOptions" :key="index"
-                  v-show="showTab(index)"
-                  :class="activeTab===index?'active':''"
-                  @click="activeTab = index">{{item.name}}</span>
-            </div>
+          <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
+            <b-dropdown class="top-header-dropdown" no-caret>
+              <template #button-content>
+                <span>{{tabOptions[activeTab].name}}</span>
+                <i class="dropdown-icon ml-2"></i>
+              </template>
+              <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
+                               v-show="showTab(index)"
+                               :class="activeTab===index?'active':''"
+                               @click="activeTab = index">{{item.name}}</b-dropdown-item>
+            </b-dropdown>
             <component :is='wallet'></component>
           </div>
           <div class="card-container tab-container">
