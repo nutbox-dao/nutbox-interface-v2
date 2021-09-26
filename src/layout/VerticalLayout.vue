@@ -225,3 +225,36 @@ export default {
 <style lang="scss">
 @import "src/static/css/layout-v";
 </style>
+<style lang="scss" scoped>
+#justswap-icon {
+  background-image: url("~@/static/images/just-swap.svg");
+}
+#github-icon {
+  background-image: url("~@/static/images/GitHub.svg");
+}
+#docs-icon {
+  background-image: url("~@/static/images/docs.svg");
+}
+#discord-icon {
+  background-image: url("~@/static/images/Discord.svg");
+}
+#telegram-icon {
+  background-image: url("~@/static/images/telegram.svg");
+}
+
+#justswap-icon:hover {
+  background-image: url("~@/static/images/just-swap-hover.svg");
+}
+#github-icon:hover {
+  background-image: url("~@/static/images/GitHub-hover.svg");
+}
+#docs-icon:hover {
+  background-image: url("~@/static/images/docs-hover.svg");
+}
+#discord-icon:hover {
+  background-image: url("~@/static/images/Discord-hover.svg");
+}
+#telegram-icon:hover {
+  background-image: url("~@/static/images/telegram-hover.svg");
+}
+</style>

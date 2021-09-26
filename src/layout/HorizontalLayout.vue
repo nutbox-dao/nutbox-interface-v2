@@ -49,22 +49,31 @@
             <template #button-content>
               <i class="more-setting-icon"></i>
             </template>
-            <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
-              <i class="dropdown-item-icon" id="github-icon"></i>
-              <span>Github</span>
-            </b-dropdown-item>
-            <b-dropdown-item href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
-              <i class="dropdown-item-icon" id="docs-icon"></i>
-              <span>{{ $t("commen.docs") }}</span>
-            </b-dropdown-item>
-            <b-dropdown-item href="https://discord.com/invite/zPkMuGY" target="_blank">
-              <i class="dropdown-item-icon" id="discord-icon"></i>
-              <span>Discord</span>
-            </b-dropdown-item>
-            <b-dropdown-item href="https://t.me/nutbox_defi" target="_blank">
-              <i class="dropdown-item-icon" id="telegram-icon"></i>
-              <span>Telegram</span>
-            </b-dropdown-item>
+            <template v-if="!langActive">
+              <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
+                <i class="dropdown-item-icon" id="github-icon"></i>
+                <span>Github</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
+                <i class="dropdown-item-icon" id="docs-icon"></i>
+                <span>{{ $t("commen.docs") }}</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://discord.com/invite/zPkMuGY" target="_blank">
+                <i class="dropdown-item-icon" id="discord-icon"></i>
+                <span>Discord</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://t.me/nutbox_defi" target="_blank">
+                <i class="dropdown-item-icon" id="telegram-icon"></i>
+                <span>Telegram</span>
+              </b-dropdown-item>
+              <div class="dropdown-item">
+                <i class="dropdown-item-icon" id="language-icon"></i>
+                <span>{{$t('commen.language')}}</span>
+              </div>
+            </template>
+            <template v-else>
+
+            </template>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-navbar>
@@ -94,7 +103,8 @@ export default {
       tipMessage: '',
       tipTitle: '',
       showMessage: false,
-      accountsPop: false
+      accountsPop: false,
+      langActive: false
     }
   },
   computed: {
@@ -165,16 +175,33 @@ export default {
         const end = address.slice(-6)
         return `${start}...${end}`
       }
-    },
+    }
   },
   watch: {
     '$route' (val) {
       // this.$refs.scrollContent.scrollTo({ top: 0 })
     }
-  },
+  }
 }
 </script>
 
 <style lang="scss">
 @import "src/static/css/layout-h";
+</style>
+<style lang="scss" scoped>
+#github-icon {
+  background-image: url("~@/static/images/h-github.svg");
+}
+#docs-icon {
+  background-image: url("~@/static/images/h-docs.svg");
+}
+#discord-icon {
+  background-image: url("~@/static/images/h-discord.svg");
+}
+#telegram-icon {
+  background-image: url("~@/static/images/h-telegram.svg");
+}
+#language-icon {
+  background-image: url("~@/static/images/h-language.svg");
+}
 </style>

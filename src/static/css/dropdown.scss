@@ -89,12 +89,13 @@
 .setting-dropdown .dropdown-item {
   display: flex;
   align-items: center;
+  padding: .6rem .8rem;
   .dropdown-item-icon {
-    @include icon(1.4rem, 1.4rem);
+    @include icon(1.2rem, 1.2rem);
   }
   span {
     font-size: .8rem;
-    margin-left: .2rem;
+    margin-left: .8rem;
   }
 }
 .top-header-dropdown .dropdown-toggle {
