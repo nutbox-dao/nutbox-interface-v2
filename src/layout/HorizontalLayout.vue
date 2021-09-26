@@ -45,11 +45,13 @@
             <i class="wallet-icon"></i>
             <div>{{ address || $t("commen.connectMetamask") }}</div>
           </div>
-          <b-nav-item-dropdown variant="text" class="setting-dropdown m-0" right no-caret>
+          <b-nav-item-dropdown variant="text" class="setting-dropdown m-0"
+                               @hidden="langActive=false"
+                               right no-caret>
             <template #button-content>
               <i class="more-setting-icon"></i>
             </template>
-            <template v-if="!langActive">
+            <div v-show="!langActive">
               <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
                 <i class="dropdown-item-icon" id="github-icon"></i>
                 <span>Github</span>
@@ -66,14 +68,20 @@
                 <i class="dropdown-item-icon" id="telegram-icon"></i>
                 <span>Telegram</span>
               </b-dropdown-item>
-              <div class="dropdown-item">
+              <div class="dropdown-item" @click="langActive=true">
                 <i class="dropdown-item-icon" id="language-icon"></i>
                 <span>{{$t('commen.language')}}</span>
               </div>
-            </template>
-            <template v-else>
-
-            </template>
+            </div>
+            <div v-show="langActive">
+              <div class="back-item" @click="langActive=false">
+                <i id="back-icon"></i>
+              </div>
+              <b-dropdown-item @click="setLanguage(lang)"
+                   v-for="lang of langOptions" :key="lang">
+                {{ $t(`commen.${lang}`) }}
+              </b-dropdown-item>
+            </div>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-navbar>
@@ -95,6 +103,7 @@ import TipMessage from '../components/ToolsComponents/TipMessage'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import { setupNetwork } from '@/utils/web3/web3'
+import { LOCALE_KEY } from "@/config";
 
 export default {
   name: 'VerticalLayout',
@@ -104,7 +113,8 @@ export default {
       tipTitle: '',
       showMessage: false,
       accountsPop: false,
-      langActive: false
+      langActive: false,
+      langOptions: ['zh', 'en', 'kr', 'es', 'my', 'jp']
     }
   },
   computed: {
@@ -142,6 +152,12 @@ export default {
     async gotoOfficial () {
       console.log(this.prices)
       window.open('https://nutbox.io', '_blank')
+    },
+    setLanguage (lang) {
+      this.langActive = false
+      localStorage.setItem(LOCALE_KEY, lang)
+      this.$store.commit('saveLang', lang)
+      this.$i18n.locale = lang
     },
     connect () {
       if (this.address) {
@@ -189,6 +205,13 @@ export default {
 @import "src/static/css/layout-h";
 </style>
 <style lang="scss" scoped>
+.back-item {
+  padding: 0 .6rem;
+}
+#back-icon {
+  @include icon(.8rem, .8rem);
+  background-image: url("~@/static/images/back-blcak-arrow.svg");
+}
 #github-icon {
   background-image: url("~@/static/images/h-github.svg");
 }
