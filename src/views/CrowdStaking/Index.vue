@@ -40,10 +40,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import SteemAccount from '@/components/Accounts/SteemAccount'
-import HiveAccount from '@/components/Accounts/HiveAccount'
-import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
-import BSCAccount from '@/components/Accounts/BSCAccount'
 
 export default {
   name: "Home",
@@ -73,19 +69,6 @@ export default {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateCrowdloanAssetRegistry').length > 0
     }
   },
-  components: {
-    crowdloan: PolkadotAccount,
-    nominate: PolkadotAccount,
-    'steem-delegate': SteemAccount,
-    'hive-delegate': HiveAccount,
-    deposite: BSCAccount
-  },
-  // data() {
-  //   return {
-  //     activeTab: 0,
-  //     tabOptions: ['BSC', 'Ethereum', 'Tron', 'Steem']
-  //   }
-  // },
   methods: {
   },
   created () {
