@@ -89,7 +89,10 @@
 .setting-dropdown .dropdown-item {
   display: flex;
   align-items: center;
-  padding: .6rem .8rem;
+  height: 2.4rem;
+  padding: 0 .8rem;
+  font-size: .7rem;
+  cursor: pointer;
   .dropdown-item-icon {
     @include icon(1.2rem, 1.2rem);
   }
