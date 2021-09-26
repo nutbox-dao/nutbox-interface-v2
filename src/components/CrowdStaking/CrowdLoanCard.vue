@@ -10,7 +10,7 @@
           <img class="icon2" :src="card.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
+          <div class="link-title" @click="openNewTab(card.communityId)">
             <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
@@ -149,6 +149,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -156,6 +160,9 @@ export default {
       }finally{
         this.isWithdrawing = false  
       }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
   watch: {

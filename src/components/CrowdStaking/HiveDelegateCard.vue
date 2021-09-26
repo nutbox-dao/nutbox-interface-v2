@@ -7,7 +7,7 @@
           <img class="icon2" src="~@/static/images/hive-logo.png" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
+          <div class="link-title" @click="openNewTab(card.communityId)">
             <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
@@ -25,8 +25,11 @@
       <div class="btn-row">
         <span class="value"> {{ pendingReward | amountForm }} </span>
         <div class="right-box">
-          <button class="primary-btn m-0">{{ $t('commen.withdraw') }}</button>
-        </div>
+        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+          <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+          {{ $t("commen.withdraw") }}
+        </button>
+      </div>
       </div>
       <div class="text-left mt-3 mb-1">
         <span style="color: #717376;" class="font-bold">HIVE POWER</span>
@@ -76,6 +79,8 @@ import DelegateModal from '@/components/ToolsComponents/HiveDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
+import { handleApiErrCode } from '@/utils/helper'
+import { withdrawReward } from '@/utils/web3/pool'
 
 export default {
   name: 'DDelegateCard',
@@ -116,7 +121,8 @@ export default {
     return {
       showModal: false,
       operate: 'add',
-      showHiveLogin: false
+      showHiveLogin: false,
+      isWithdrawing: false
     }
   },
   methods: {
@@ -127,6 +133,25 @@ export default {
     decrease(){
       this.operate ='minus'
       this.showModal = true
+    },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
 }

@@ -185,6 +185,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
