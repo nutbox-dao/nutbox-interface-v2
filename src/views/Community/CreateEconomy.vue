@@ -86,11 +86,11 @@
               <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
               <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
             </div>
-            <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
+            <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=256 || poolForm.start >= maxBlock"
                     @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
-            <span v-show="progressData.length>=6" class="block-tip">
+            <span v-show="progressData.length>=256" class="block-tip">
             {{ $t('community.distributionLimit') }}
-          </span>
+            </span>
           </div>
           <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
             <b-spinner small type="grow" v-show="deploying" />

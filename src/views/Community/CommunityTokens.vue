@@ -63,24 +63,24 @@ export default {
   computed: {
     ...mapState('web3', ['allCommunities']),
     ...mapState(['ethPrice', 'lang']),
-    fields () {
+    fields() {
       return [
-        { key: 'tokenIcon', label: '' },
-        { key: 'tokenSymbol', label: this.$t('asset.tokenSymbol') },
-        { key: 'name', label: this.$t('community.community') },
-        { key: 'price', label: this.$t('asset.price') },
-        { key: 'totalSupply', label: this.$t('asset.totalSupply') },
-        { key: 'cap', label: this.$t('asset.cap') }
-        // { key: 'action', label: '' }
-      ]
+          { key: 'tokenIcon', label: ''},
+          { key: 'tokenSymbol', label: this.$t('asset.tokenSymbol') },
+          { key: 'name', label: this.$t('community.community') },
+          { key: 'price', label: this.$t('asset.price') },
+          { key: 'totalSupply', label: this.$t('asset.totalSupply') },
+          { key: 'cap', label: this.$t('asset.cap') },
+          // { key: 'action', label: '' }
+        ]
     },
-    items () {
-      const sorted = this.allCommunities ? this.allCommunities.map(c => ({
-        ...c,
-        price: '$' + formatBalance(c.price * this.ethPrice),
-        totalSupply: c.totalSupply?.toString() / 1e18,
-        cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply?.toString() / 1e18))
-      }))
+    items (){
+      let sorted = this.allCommunities ? this.allCommunities.map(c => ({
+          ...c,
+          price: '$' + formatBalance(c.price * this.ethPrice),
+          totalSupply: formatBalance(c.totalSupply.toString() / 1e18),
+          cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply.toString() / 1e18))
+        }))
         : []
       if (this.activeTab === 0) {
         return sorted.sort((a, b) => parseFloat(a.cap) - parseFloat(b.cap))
@@ -90,8 +90,8 @@ export default {
     }
   },
   mounted () {
-    console.log('eth', this.ethPrice)
-  }
+    console.log('eth', this.ethPrice);
+  },
 }
 </script>
 
@@ -106,6 +106,7 @@ export default {
 .tab-item{
   padding-bottom: .8rem;
   margin-right: 2rem;
+  cursor: pointer;
   &.active {
     border-bottom: 4px solid var(--primary-custom);
   }

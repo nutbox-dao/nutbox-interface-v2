@@ -39,7 +39,7 @@
                   Github
                 </b-popover>
               </a>
-              <a id="docs-icon" href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
+              <a id="docs-icon" href="https://docs.nutbox.io/white_paper/" target="_blank">
                 <b-popover target="docs-icon" triggers="hover focus" placement="top">
                   {{ $t("commen.docs") }}
                 </b-popover>
