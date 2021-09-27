@@ -395,7 +395,7 @@ module.exports = {
     inputTokenSymbol: "Please input token symbol",
     inputDistributionAmount: "Please input distribution amount",
     notDeploy:"No Token yet?",
-    noTokens: 'No community token yet?',
+    noTokens: 'No community token registerd',
     deployOne:"Depoly one",
     deploy: 'Deploy',
     deployYourToken: 'Deploy one token',

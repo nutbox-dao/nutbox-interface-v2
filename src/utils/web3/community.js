@@ -166,8 +166,14 @@ export const createStakingFeast = async (form) => {
                 startHeight: d.startHeight,
                 stopHeight: d.stopHeight
             }))
+            let distributionStr = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(distribution.length), 1).substr(2)
+            for (let dis of distribution){
+                distributionStr += ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.startHeight).toHexString(), 32).substr(2) +
+                                   ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.stopHeight).toHexString(), 32).substr(2) +
+                                   ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.amount).toHexString(), 32).substr(2)
+            }
             // call contract
-            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distribution)
+            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distributionStr)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
