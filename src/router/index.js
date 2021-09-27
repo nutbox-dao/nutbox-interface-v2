@@ -333,15 +333,18 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(to, from)
-  // next()
   if (to.query.id) {
     next()
-  } else if (from.query.id && to.matched[0].path === '/specify') {
+  } else if (to.matched[0].path === '/specify' && from.query.id) {
     next({
       path: to.path,
       query: {
         id: from.query.id
       }
+    })
+  } else if (to.matched[0].path === '/specify' && !from.query.id) {
+    next({
+      path: '/'
     })
   } else {
     next()
