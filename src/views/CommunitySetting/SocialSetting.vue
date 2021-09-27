@@ -255,7 +255,7 @@ export default {
       try{
         this.uploading = true
         const res = await udpateSocialInfo(this.socialForm)
-        this.$bvToast.toast(this.$t('community.udpateSocialSuccess'), {
+        this.$bvToast.toast(this.$t('community.updateSocialSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })

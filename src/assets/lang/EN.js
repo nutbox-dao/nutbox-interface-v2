@@ -30,6 +30,7 @@ module.exports = {
     whitePaper: 'White Paper',
     nps: 'Nutbox Proposal System',
     contract: 'Contract Address',
+    social: 'Social info',
     docs: 'Docs',
     discord: 'Discord',
     blog: 'Blog',
@@ -81,6 +82,7 @@ module.exports = {
     deposit: "Deposit",
     steemDelegate: 'Steem Delegate',
     hiveDelegate: 'Hive Delegate',
+    delegate: 'Delegate',
     crowdloan: 'Crowdloan',
     nomination: 'Nominate',
     community: "Community",
@@ -221,7 +223,8 @@ module.exports = {
     communityNameLimit: 'The community name cannot exceed {count} words',
     needRightUrl: 'Please input right url.',
     selectCowdloan: 'Please selecte a crowdloan project.',
-    inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.'
+    inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.',
+    withdrawSuccess: 'Harvest success!'
   },
   nps: {
     nps: 'Governance',
@@ -229,7 +232,14 @@ module.exports = {
     pass: 'Passed',
     pending: 'Pending',
     unpass: 'Rejected',
-    rolling: 'Voting'
+    rolling: 'Voting',
+    title: 'Title',
+    titleInputTip: 'Please input title',
+    startAndEndTime: 'Start & end time',
+    startTime: 'Start time',
+    endTime: 'End time',
+    details: 'Details',
+    detailsInputTip: 'Please input proposal details.'
   },
   error: {
     error: 'Error',
@@ -285,14 +295,19 @@ module.exports = {
     community: 'Community',
     percentage: 'Percentage',
     communityInfo: 'Community Information',
+    social: 'Social',
+    pool: 'Pool',
     edit:'Edit ',
     create:'Complete ',
+    communityList: 'Community List',
+    communityTokenList: 'C-Token List',
     communityName: "Community Name",
     communityLink: "Community Link",
     communityDesc: "Community Description",
     communityLogo: "Community Logo",
     communityPoster: "Community Poster",
     communityBalance: "Community Balance",
+    communityAsset: 'Community Asset',
     commit: 'Commit',
     inputName: "Please input Community Name",
     inputLink: "Please input Community Website Link",
@@ -345,9 +360,10 @@ module.exports = {
     inputDevRatio: 'Please input number between 0-100',
     inputDevAddress: 'Input community devAddress',
     publishPool: "Publish Staking Pool",
-    publishBlog: 'Publish Blog',
     unPublished: "UnPublished",
+    publishBlog: 'Publish Blog',
     communityBlog: 'Community Blog',
+    socialMedial: 'Social Medial',
     blogTag: 'Blog Tag',
     createBlog: 'Create blog',
     createBlogMemo: 'Your blog tag and private key are listed below. Please preserve them carefully. We do not provide custody services. The process of blog account creation will consume your 3 STEEM as services fee.',
@@ -356,9 +372,11 @@ module.exports = {
     distributionLimit: 'Max distribution is 6',
     bindBlog: "Bind your community blog",
     bindBlogMemo: 'Please input your steem community tag to bind.eg:hive-12345',
-    inputBlogTag: 'Please input your steem community tag'
+    inputBlogTag: 'Please input your steem community tag',
+    updateSocialSuccess: 'Update social info success!'
   },
   asset: {
+    asset: 'Asset',
     network: "Network",
     native: "Native asset",
     foreign:"Foreign asset",
@@ -377,6 +395,7 @@ module.exports = {
     inputTokenSymbol: "Please input token symbol",
     inputDistributionAmount: "Please input distribution amount",
     notDeploy:"No Token yet?",
+    noTokens: 'No community token yet?',
     deployOne:"Depoly one",
     deploy: 'Deploy',
     deployYourToken: 'Deploy one token',
@@ -410,6 +429,9 @@ module.exports = {
     isHomeAsset: "Home asset",
     isForeignAsset: "Foreign asset",
     poolName: 'Staking pool name',
-    inputPoolName: "Please input staking pool name"
+    inputPoolName: "Please input staking pool name",
+    cap: 'Mkt Cap',
+    price: 'Price',
+    totalSupply: 'Supply'
   }
 }

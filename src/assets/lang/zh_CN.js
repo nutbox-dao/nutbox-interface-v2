@@ -373,7 +373,7 @@ module.exports = {
     bindBlog: '绑定已有社区标签',
     bindBlogMemo: '填写您的steem社区标签进行绑定。示例：hive-12345',
     inputBlogTag: "请输入您的steem社区标签",
-    udpateSocialSuccess: '社交信息更新成功'
+    updateSocialSuccess: '社交信息更新成功'
   },
   asset: {
     asset: "资产",
