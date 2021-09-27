@@ -178,7 +178,12 @@ const routes = [
           {
             path: 'community-info',
             component: CommunityInfo
-          }
+          },
+          {
+            path: 'register-ctoken',
+            name: 'register-ctoken',
+            component: RegisterCtoken
+          },
         ]
       },
       {
@@ -221,11 +226,6 @@ const routes = [
                 component: CrossChainAsset
               }
             ]
-          },
-          {
-            path: 'register-ctoken',
-            name: 'register-ctoken',
-            component: RegisterCtoken
           },
           {
             path: 'staking',
