@@ -138,7 +138,7 @@
           :autoCrop="true"
           :img="cropperImgSrc"
           :fixedNumber="[1, 1]"
-          :autoCropWidth="[200, 200]"
+          :autoCropWidth="200"
           :fixed="true"
           :centerBox="true"
           outputType="png"
