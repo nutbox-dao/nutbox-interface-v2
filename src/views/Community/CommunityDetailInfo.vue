@@ -38,8 +38,7 @@
                        :nominatePools='nominatePools'
                        :steemDelegatePools='steemDelegatePools'
                        :hiveDelegatePools='hiveDelegatePools'
-                       :erc20Pools='erc20Pools'
-                       :tag='communityInfo.blogTag'>
+                       :erc20Pools='erc20Pools'>
             </component>
           </div>
         </template>
@@ -59,7 +58,6 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
-import CommunityBlog from "@/views/Blog/CommunityBlog"
 
 export default {
   name: 'CommunityDetailInfo',
@@ -72,8 +70,7 @@ export default {
     BSCAccount,
     PolkadotAccount,
     SteemAccount,
-    HiveAccount,
-    CommunityBlog
+    HiveAccount
   },
   props: {},
   data () {
@@ -128,8 +125,7 @@ export default {
         { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
         { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
         { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
-        { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' },
-        { name: this.$t('commen.blog'), component: 'CommunityBlog' }
+        { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' }
       ]
     }
   },
@@ -160,8 +156,6 @@ export default {
           return this.nominatePools.length > 0
         case 4:
           return this.crowdloanPools.length > 0
-        case 5:
-          return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
   }

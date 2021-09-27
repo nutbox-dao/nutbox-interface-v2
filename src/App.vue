@@ -70,6 +70,10 @@ export default {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
+    const id = this.$route.query.id
+    if (id) {
+      this.$store.commit('saveCurrentCommunityId', id)
+    }
     // BSC data
     this.fetchBscData()
     // bsc related

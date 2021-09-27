@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import VerticalLayout from '@/layout/VerticalLayout'
 import HorizontalLayout from '@/layout/HorizontalLayout'
 import Blog from '../views/Blog/Blog'
+import CommunityBlog from '../views/Blog/CommunityBlog'
 import CrowdIndex from '../views/CrowdStaking/Index'
 import Wallet from '../views/Wallet/Wallet'
 import BSCWallet from '../views/Wallet/BSC'
@@ -25,8 +26,6 @@ import NativeAsset from '@/views/RegisterAsset/NativeAsset'
 import CrossChainAsset from '@/views/RegisterAsset/CrossChainAsset'
 import CommunityInfo from '@/views/Community/CommunityInfo'
 import CommunityDetailInfo from '@/views/Community/CommunityDetailInfo'
-import SteemDelegate from '@/views/CrowdStaking/SteemDelegate'
-import HiveDelegate from '@/views/CrowdStaking/HiveDelegate'
 import Delegate from '@/views/CrowdStaking/Delegate'
 import CrowdNominate from '@/views/CrowdStaking/CrowdNominate'
 import Tutorials from '@/views/Community/Tutorials'
@@ -39,7 +38,6 @@ import SocialSetting from '@/views/CommunitySetting/SocialSetting'
 import VoteSetting from '@/views/CommunitySetting/VoteSetting'
 import CreateProposal from '@/views/Nps/CreateProposal'
 import NpsIndex from '@/views/Nps/Index'
-import SpecifyCommunityStaking from '@/views/SpecifyCommunity/Staking'
 
 Vue.use(VueRouter)
 
@@ -305,7 +303,7 @@ const routes = [
       },
       {
         path: 'blog',
-        component: Blog
+        component: CommunityBlog
       },
       {
         path: 'nps',
@@ -332,7 +330,6 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from)
   // next()
   if (to.query.id) {
     next()

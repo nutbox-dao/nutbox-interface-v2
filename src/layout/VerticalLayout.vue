@@ -9,9 +9,9 @@
     <b-sidebar id="sidebar-menu" no-header :backdrop="screenWidth<992">
       <div class="menu-box">
         <div class="header-brand menu-logo flex-start-center">
-          <img src="~@/static/images/logo_small.png"
+          <img :src="showCommunity && allCommunities[0].icon"
                @click="gotoOfficial" alt="nutbox" />
-          <span class="text-left font-weight-bolder font16">Community Name</span>
+          <span class="text-left font-weight-bolder font16">{{ showCommunity && allCommunities[0].name }}</span>
         </div>
         <div class="menu-items">
           <b-nav vertical align="center" class="top">
@@ -23,7 +23,7 @@
               <i id="stake-icon" class="menu-icon" />
               <span>{{ $t("commen.crowdstaking") }}</span>
             </b-nav-item>
-            <b-nav-item to="/specify/blog">
+            <b-nav-item v-if="showBlog" to="/specify/blog">
               <i id="blog-icon" class="menu-icon" />
               <span>{{ $t("commen.blog") }}</span>
             </b-nav-item>
@@ -34,24 +34,34 @@
           </b-nav>
           <div class="bottom">
             <div class="links">
-              <a id="github-icon" href="https://github.com/nutbox-dao" target="_blank">
+              <a id="github-icon" v-if="showGithub" :href="allCommunities[0].github" target="_blank">
                 <b-popover target="github-icon" triggers="hover focus" placement="top">
                   Github
                 </b-popover>
               </a>
-              <a id="docs-icon" href="https://docs.nutbox.io/white_paper/" target="_blank">
+              <a id="docs-icon" v-if="showDocument" :href="allCommunities[0].document" target="_blank">
                 <b-popover target="docs-icon" triggers="hover focus" placement="top">
                   {{ $t("commen.docs") }}
                 </b-popover>
               </a>
-              <a id="discord-icon" href="https://discord.com/invite/zPkMuGY" target="_blank">
+              <a id="discord-icon" v-if="showDiscord" :href="allCommunities[0].discord" target="_blank">
                 <b-popover target="discord-icon" triggers="hover focus" placement="top">
                   Discord
                 </b-popover>
               </a>
-              <a id="telegram-icon" href="https://t.me/nutbox_defi" target="_blank">
+              <a id="telegram-icon" v-if="showTelegram" :href="allCommunities[0].telegram" target="_blank">
                 <b-popover target="telegram-icon" triggers="hover focus" placement="top">
                   Telegram
+                </b-popover>
+              </a>
+              <a id="facebook-icon" v-if="showFacebook" :href="allCommunities[0].facebook" target="_blank">
+                <b-popover target="telegram-icon" triggers="hover focus" placement="top">
+                  Facebook
+                </b-popover>
+              </a>
+              <a id="twitter-icon" v-if="showTwitter" :href="allCommunities[0].twitter" target="_blank">
+                <b-popover target="telegram-icon" triggers="hover focus" placement="top">
+                  Twitter
                 </b-popover>
               </a>
             </div>
@@ -166,6 +176,30 @@ export default {
     },
     showMenu () {
       return this.screenWidth > 960
+    },
+    showCommunity() {
+      return !!(this.allCommunities && this.allCommunities[0])
+    },
+    showGithub() {
+      return this.showCommunity && this.allCommunities[0].github.indexOf('https://github.com') !== -1
+    },
+    showDocument() {
+      return this.showCommunity && this.allCommunities[0].document && this.allCommunities[0].document !== 'null' && this.allCommunities[0].document !== 'undefined'
+    },
+    showDiscord() {
+      return this.showCommunity && this.allCommunities[0].discord && this.allCommunities[0].discord !== 'null' && this.allCommunities[0].discord !== 'undefined'
+    },
+    showTelegram() {
+      return this.showCommunity && this.allCommunities[0].telegram && this.allCommunities[0].telegram !== 'null' && this.allCommunities[0].telegram !== 'undefined'
+    },
+    showFacebook() {
+      return this.showCommunity && this.allCommunities[0].facebook && this.allCommunities[0].facebook !== 'null' && this.allCommunities[0].facebook !== 'undefined'
+    },
+    showTwitter() {
+      return this.showCommunity && this.allCommunities[0].twitter && this.allCommunities[0].twitter !== 'null' && this.allCommunities[0].twitter !== 'undefined'
+    },
+    showBlog() {
+      return this.showCommunity && this.allCommunities[0].blogTag && this.allCommunities[0].blogTag.indexOf('hive-') !== -1
     }
   },
   components: {
@@ -240,6 +274,9 @@ export default {
 }
 #telegram-icon {
   background-image: url("~@/static/images/telegram.svg");
+}
+#facebook-icon {
+  background-image: url("~@/static/images/facebook.png");
 }
 
 #justswap-icon:hover {

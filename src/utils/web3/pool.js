@@ -62,7 +62,8 @@ export const getAllPools = async (update = false) => {
       return;
     }
     try {
-      const allPools = await gap()
+      const currentCommunityId = store.state.currentCommunityId
+      const allPools = await gap(currentCommunityId)
       store.commit('web3/saveAllPools', allPools);
       store.commit('web3/saveLoadingAllPools', false)
 

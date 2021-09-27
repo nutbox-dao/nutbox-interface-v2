@@ -420,4 +420,7 @@ export default {
 .audition {
   background-image: url("~@/static/images/GitHub.svg");
 }
+.facebook {
+  background-image: url("~@/static/images/facebook.png")
+}
 </style>

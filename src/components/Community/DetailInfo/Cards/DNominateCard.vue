@@ -69,7 +69,7 @@
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ nomination.apy.toFixed(2) }}%</div>
+          <div class="info">{{ nomination.apy ? nomination.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
 

@@ -112,7 +112,8 @@ export const getAllCommunities = async (update=false) => {
             return;
         }
         try{
-            const communities = await gac()
+            const currentCommunityId = store.state.currentCommunityId
+            const communities = await gac(currentCommunityId)
             store.commit('web3/saveAllCommunities', communities)
             resolve(communities)
         }catch(e){

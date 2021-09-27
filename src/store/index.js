@@ -22,7 +22,9 @@ export default new Vuex.Store({
     ethPrice: 0,
     prices: {},
     metamaskConnected: false,
-    apys: {}
+    apys: {},
+    // exist in child community page
+    currentCommunityId: null
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -43,6 +45,9 @@ export default new Vuex.Store({
     },
     saveApys: (state, apys) => {
       state.apys = apys
+    },
+    saveCurrentCommunityId: (state, currentCommunityId) => {
+      state.currentCommunityId = currentCommunityId
     }
   },
   getters: {

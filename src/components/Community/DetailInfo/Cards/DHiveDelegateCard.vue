@@ -54,7 +54,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
-        <div class="info">{{ card.apy.toFixed(2) }}%</div>
+        <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
       </div>
     </div>
     <b-modal
