@@ -224,7 +224,8 @@ module.exports = {
     needRightUrl: 'Please input right url.',
     selectCowdloan: 'Please selecte a crowdloan project.',
     inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.',
-    withdrawSuccess: 'Harvest success!'
+    withdrawSuccess: 'Harvest success!',
+    deploying: 'Deploying please wait.'
   },
   nps: {
     nps: 'Governance',
@@ -289,7 +290,8 @@ module.exports = {
     steemAccountEmpty: 'Steem account missing',
     steemAccountActiveKeyEmpty: 'Steem account or active key missing',
     hiveAccountEmpty: 'Hive account missing',
-    hiveAccountActiveKeyEmpty: 'Hive accout or active key missing'
+    hiveAccountActiveKeyEmpty: 'Hive accout or active key missing',
+    tokenDeploying: "There's token in deploying, please wait or refresh page to try."
   },
   community: {
     community: 'Community',

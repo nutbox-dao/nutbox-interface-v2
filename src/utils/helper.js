@@ -215,6 +215,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.wrongInputDevRatio')
   } else if (code == errCode.NOT_A_TOKEN_CONTRACT) {
     tipStr = $t('error.notTokenContract')
+  } else if (code === errCode.TOKEN_DEPLOYING) {
+    tipStr = $t('error.tokenDeploying')
   }
   
   

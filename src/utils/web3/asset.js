@@ -509,27 +509,36 @@ export const deployERC20 = async ({
   symbol,
   decimal,
   totalSupply
-}, isMintable) => {
+}, isMintable, callback) => {
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20Factory', null, false)
-      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
-        console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
-        if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
+      let tokenDeploying = store.state.web3.tokenDeploying
+      if (tokenDeploying){
+        reject(errCode.TOKEN_DEPLOYING)
+        return;
+      }
+      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
+        if (store.state.web3.account.toLowerCase() === _creator.toLowerCase() && name === _name && symbol === _symbol && isMintable === _isMintable){
           contract.removeAllListeners('ERC20TokenCreated')
+          store.commit('web3/saveTokenDeploying', false)
           resolve(_tokenAddress)
           return;
         }
       })
+      tokenDeploying = true
+      store.commit('web3/saveTokenDeploying', tokenDeploying)
       const gas = await getGasPrice()
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
-      store.state.web3.account, 
-      isMintable, 
-      {
-        gasPrice: gas,
-        gasLimit: GasLimit
-      });
+            store.state.web3.account, 
+            isMintable, 
+            {
+              gasPrice: gas,
+              gasLimit: GasLimit
+            });
+      callback()
     } catch (e) {
+      store.commit('web3/saveTokenDeploying', false)
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)
       }else{

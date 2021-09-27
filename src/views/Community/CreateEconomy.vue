@@ -217,7 +217,8 @@ export default {
         })
         return
       }
-      if (parseInt(this.poolForm.reward) <= 0) {
+      if (parseFloat(this.poolForm.reward) <= 0) {
+        console.log(this.poolForm.reward);
         this.$bvToast.toast(this.$t('tip.wrongRewardNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'

@@ -145,8 +145,8 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">取消</button>
-        <button class="primary-btn" @click="completeCropAndUpload">完成</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
   </div>
@@ -220,10 +220,14 @@ export default {
         })
         return
       }
-
       this.deploying = true
       try {
-        this.tokenAddress = await deployERC20(this.form, this.isMintable)
+        this.tokenAddress = await deployERC20(this.form, this.isMintable, () => {
+          this.$bvToast.toast(this.$t('tip.deploying'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+        })
         console.log('address', this.tokenAddress)
         const token = {
           ...this.form,

@@ -23,6 +23,7 @@ export default {
     distributions: null,
     readonlyProvider: null,
     allPools: null,
+    tokenDeploying: false,
     // user deposit data
     depositDatas: {},
     // multicall get data
@@ -109,6 +110,10 @@ export default {
     saveDepositedDatas: (state, depositDatas) => {
       state.depositDatas = depositDatas
     },
+    saveTokenDeploying: (state, tokenDeploying) => {
+      state.tokenDeploying = tokenDeploying
+    },
+
     savePendingRewards: (state, pendingRewards) => {
       state.pendingRewards = pendingRewards
     },

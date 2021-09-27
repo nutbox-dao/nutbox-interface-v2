@@ -159,21 +159,22 @@ export const createStakingFeast = async (form) => {
         
         try{
             // make params
+            const gas = await getGasPrice()
             const assetId = form.assetId
             let distribution = form.poolData
-            distribution = distribution.map(d => ({
-                amount: ethers.utils.parseUnits(d.amount.toString(), form.decimal),
-                startHeight: d.startHeight,
-                stopHeight: d.stopHeight
-            }))
             let distributionStr = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(distribution.length), 1).substr(2)
             for (let dis of distribution){
                 distributionStr += ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.startHeight).toHexString(), 32).substr(2) +
                                    ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.stopHeight).toHexString(), 32).substr(2) +
-                                   ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.amount).toHexString(), 32).substr(2)
+                                   ethers.utils.hexZeroPad(ethers.utils.parseUnits(dis.amount.toString(), form.decimal).toHexString(), 32).substr(2)
             }
+            console.log(distributionStr);
             // call contract
-            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distributionStr)
+            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distributionStr,
+            {
+                gasPrice: gas,
+                gasLimit: GasLimit
+              })
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)

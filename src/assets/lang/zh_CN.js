@@ -224,7 +224,8 @@ module.exports = {
     needRightUrl: "请填写正确的网页链接",
     selectCowdloan: "请选择一个众贷项目",
     inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。',
-    withdrawSuccess: '收获成功'
+    withdrawSuccess: '收获成功',
+    deploying: '部署中，请稍后'
   },
   nps: {
     nps: '提案改善',
@@ -289,7 +290,8 @@ module.exports = {
     steemAccountEmpty: 'Steem帐号不能为空',
     steemAccountActiveKeyEmpty: 'Steem帐号或活跃密钥不能为空',
     hiveAccountEmpty: 'Hive帐号不能为空',
-    hiveAccountActiveKeyEmpty: 'Hive帐号或活跃密钥不能为空'
+    hiveAccountActiveKeyEmpty: 'Hive帐号或活跃密钥不能为空',
+    tokenDeploying: '有token正在部署中，请稍后再试，或刷新页面再试',
   },
   community: {
     community: '社区',

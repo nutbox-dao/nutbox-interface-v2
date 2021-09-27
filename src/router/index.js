@@ -154,10 +154,6 @@ const routes = [
             component: CommunityDetailInfo
           },
           {
-            path: 'deploy-token',
-            component: DeployToken
-          },
-          {
             path: 'create-economy',
             component: CreateEconomy
           },

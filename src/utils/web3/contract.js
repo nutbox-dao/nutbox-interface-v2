@@ -20,19 +20,19 @@ import {
 import { errCode, RPC_NODE } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0x043bD74934a593Af2bc1Af84E0058fb2D13f5B50",
-  "ERC20Factory": "0xa0430D47a67F34E24A6434326C7cEAFA67923707",
-  "HomeChainAssetRegistry": "0x7DB26C90f56397b40C730f6e86Ee741d5726C37e",
-  "SteemHiveDelegateAssetRegistry": "0x4074A1A91aeCCF2fA3087501e155029410F6e9d0",
-  "SubstrateCrowdloanAssetRegistry": "0xc4bA3aDD0aF74174c1621deAdb29f3FBCBEaC7Dd",
-  "SubstrateNominateAssetRegistry": "0x30c1c7Ce094E9a7ba704f8195D561173ec3d0264",
-  "ERC20AssetHandler": "0x272Ce88bfF1485c127738eC5760C608dF48083D4",
+  "RegistryHub": "0x3d64F13bEF77466903e001f99Aaf2589633A6813",
+  "ERC20Factory": "0x2bBcedf01653A4a6f2528A49eD562Fb948Cc6608",
+  "HomeChainAssetRegistry": "0xB84942a29be276DAbCe988FeCc99337b623d5Bef",
+  "SteemHiveDelegateAssetRegistry": "0xFC566098734D35B9BaC11FB5F68c557d24B3D546",
+  "SubstrateCrowdloanAssetRegistry": "0xa83e0081c5334Bd8983208e5DA63d5d4aE2FA31a",
+  "SubstrateNominateAssetRegistry": "0x51c7947A5A6635c6cd05713815FC16Aa1771Bd91",
+  "ERC20AssetHandler": "0x6055e2A958e209299eC8368AE6fadFe070AB066a",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0xcBd0A84D5A80b4eC521bd5c68FfC8a6598c5EDC2",
-  "Executor": "0x568B624b9968593Bf89654b8b52F0F73770de059",
-  "Bridge": "0xc962768dBC8651B9b7c6DCea8bE5b9dB667E0d7E",
-  "StakingFactory": "0xE9881046e2545baE32cBFB5b4D69509502D2f7E5",
-  "LinearCalculator": "0x95576869434e0D036A11a80a73FCe0da542c3E9d"
+  "TrustlessAssetHandler": "0x85Ef6A921E231AA2f9eb5C93DAE910c00006c81C",
+  "Executor": "0xF78f3413a4057537087c16abd24B38C2371487E5",
+  "Bridge": "0x715195DCe9734f6EA085aaEB3F12E8314217350D",
+  "StakingFactory": "0x59EC92955A0Ab990f26812316F5AaE3bCC54756B",
+  "LinearCalculator": "0x73392CA1Db0d351E8170FaBd9B5F94EcA1ccB747"
 }
 
 // contract file name
@@ -102,7 +102,7 @@ export const getContract = async function (contractName, address, onlyRead=true)
         // return;
       }
     }
-
+    
     const abi = await getAbi(contractName)
     if (!onlyRead){
       const provider = await getProvider()
