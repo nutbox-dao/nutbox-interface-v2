@@ -38,7 +38,6 @@ export default {
   .blog-frame {
     position: absolute;
     left: 0!important;
-    top: 3.6rem!important;
   }
 }
 </style>
