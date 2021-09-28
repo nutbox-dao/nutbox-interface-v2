@@ -123,18 +123,39 @@ export const getStrategies = async () => {
  * @param {*} form
  * @param {*} type 'create' / 'edit'
  */
-export const getScores = async params => {
+export const getScore = async params => {
   return new Promise(async (resolve, reject) => {
     try {
       params.addresses = [];
       params.addresses.push(await getAccounts());
+
       if (params.network) {
         const res = await gScores(params);
 
         const totalScore = res.result.scores[0][params.addresses];
 
-        // update nonce in storage
-        store.commit("web3/saveScores", totalScore);
+        resolve(totalScore);
+      }
+    } catch (e) {
+      console.log("Insert communityProposalConfig info failed", e);
+      reject(e);
+    }
+  });
+};
+
+/**
+ * Create or update communityProposalConfig info to backend
+ * @param {*} form
+ * @param {*} type 'create' / 'edit'
+ */
+export const getScores = async params => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (params.network) {
+        const res = await gScores(params);
+
+        const totalScore = res.result.scores;
+
         resolve(totalScore);
       }
     } catch (e) {

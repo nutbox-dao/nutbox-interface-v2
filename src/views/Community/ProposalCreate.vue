@@ -36,26 +36,51 @@
               v-model="proposal.title"
             ></b-form-input>
           </b-form-group>
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.currentBlock')"
+            label-for="proposalCurrent"
+          >
+            <b-form-input
+              id="proposalCurrent"
+              required
+              class="mb-2"
+              :value="blockNum"
+              readonly
+            ></b-form-input>
+          </b-form-group>
 
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalTime')"
+            :label="$t('community.proposalFirst_Block')"
             label-for="proposalStart"
+            :description="startTime"
           >
-            <b-form-datepicker
+            <b-form-input
               id="proposalStart"
+              required
               class="mb-2"
-              :placeholder="$t('community.proposalStart')"
-              v-model="proposal.start"
-            ></b-form-datepicker>
-            -
-            <b-form-datepicker
+              :placeholder="$t('community.proposalFirst_Block')"
+              v-model="proposal.first_block"
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.proposalEnd_Block')"
+            label-for="proposalEnd"
+            :description="endTime"
+          >
+            <b-form-input
               id="proposalEnd"
+              required
               class="mb-2"
-              :placeholder="$t('community.proposalEnd')"
-              v-model="proposal.end"
-            ></b-form-datepicker>
+              :placeholder="$t('community.proposalEnd_Block')"
+              v-model="proposal.end_block"
+            ></b-form-input>
           </b-form-group>
 
           <b-form-group
@@ -95,16 +120,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { handleApiErrCode, sleep } from "@/utils/helper";
+import { mapGetters, mapState } from "vuex";
+import { handleApiErrCode, sleep, blockTimeWithoutUTC } from "@/utils/helper";
 import BSCAccount from "@/components/Accounts/BSCAccount";
 import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
 import Markdown from "@/components/Commen/Markdown";
-import { getBalance } from "@/utils/web3/asset.js";
+
 import {
-  getScores,
+  getScore,
   getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 
@@ -132,6 +157,8 @@ export default {
         start: "",
         end: "",
         body: "",
+        first_block: 0,
+        end_block: 0,
       },
       noCommunity: false,
       isValid: false,
@@ -152,11 +179,20 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      blockNum: (state) => state.web3.blockNum,
+    }),
     ...mapGetters("web3", ["communityById"]),
     communityInfo() {
       const com = this.communityById(this.communityId);
       console.log("communityInfo", com);
       return com;
+    },
+    startTime() {
+      return blockTimeWithoutUTC(this.blockNum, this.proposal.first_block);
+    },
+    endTime() {
+      return blockTimeWithoutUTC(this.blockNum, this.proposal.end_block);
     },
   },
   watch: {
@@ -177,9 +213,13 @@ export default {
           strategies,
           network: this.form.network,
         };
-        getBalance().then((res) => {
-          this.totalScore = parseFloat(res.toString() / 1e18);
-          this.isValid = this.totalScore >= this.form.threshold;
+
+        getScore(params).then((res) => {
+          const totalScore = res;
+          this.isValid = totalScore >= this.form.threshold;
+          this.proposal.network = this.form.network;
+          this.proposal.strategies = JSON.stringify(strategies);
+          this.proposal.communityId = this.form.communityId;
         });
       },
       immediate: true,
@@ -193,6 +233,11 @@ export default {
         this.proposal.strategies = this.form.strategies;
         this.proposal.network = this.form.network;
         this.proposal.threshold = this.form.threshold;
+        this.proposal.passThreshold = this.form.passThreshold;
+
+        this.proposal.start = this.startTime;
+
+        this.proposal.end = this.endTime;
         const result = await completeProposal(this.proposal);
 
         if (result.code == 0) {

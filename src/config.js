@@ -112,7 +112,9 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE;
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337;
 export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME;
-
+export const BSC_CHAIN_NAME = process.env.VUE_APP_BSC_CHAIN_NAME;
+export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
+export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
 /**
  * chainId on blockchain to chain name
  */

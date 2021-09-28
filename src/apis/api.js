@@ -141,13 +141,12 @@ export const getAllVote = async proposalId =>
   get(BACKEND_API_URL + "/vote/get", { proposalId: proposalId });
 
 // ============================================ strategies ============================================
-const SNAPSHOT_SCORE_API_URL = "http://localhost:3003";
-//const SNAPSHOT_SCORE_API_URL = "https://score.snapshot.org";
+
 export const getStrategies = async () =>
-  get(SNAPSHOT_SCORE_API_URL + "/api/strategies");
+  get(BACKEND_API_URL + "/scores/strategies");
 
 export const getScores = async params =>
-  post(SNAPSHOT_SCORE_API_URL + "/api/scores", { params });
+  post(BACKEND_API_URL + "/scores/get", { params });
 
 export const getPricesOnCEX = async () =>
   get("https://api.binance.com/api/v3/ticker/price");

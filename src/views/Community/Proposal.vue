@@ -16,14 +16,13 @@
           <div>
             <h3>{{ proposal.title }}</h3>
           </div>
-          <div>
-            {{ $t("community.proposalStart") }}:{{
-              formatDate(proposal.start)
-            }}
-            {{ $t("community.proposalEnd") }}:{{ formatDate(proposal.end) }}
-          </div>
+
           <div><Markdown :body="proposal.body" /></div>
-          <div style="margin-top: 10px" class="row" v-show="!isVoted">
+          <div
+            style="margin-top: 10px"
+            class="row"
+            v-show="!isVoted && proposal.status == 1"
+          >
             <div class="col-6">
               <b-button
                 type="submit"
@@ -45,10 +44,73 @@
           </div>
         </div>
         <div class="col-4">
-          <div>
+          <div style="margin-top: 10px">
             <b-card no-body>
               <template v-slot:header>
-                <h4 class="mb-0">投票结果</h4>
+                <h4 class="mb-0">{{ $t("community.proposalInfo") }}</h4>
+              </template>
+
+              <b-list-group flush>
+                <b-list-group-item
+                  ><div class="row">
+                    <div class="col-6">
+                      {{ $t("community.proposalFirst_Block") }}
+                    </div>
+                    <div class="col-6">
+                      {{ proposal.first_block }}
+                    </div>
+                  </div>
+                </b-list-group-item>
+                <b-list-group-item
+                  ><div class="row">
+                    <div class="col-6">
+                      {{ $t("community.proposalEnd_Block") }}
+                    </div>
+                    <div class="col-6">
+                      {{ proposal.end_block }}
+                    </div>
+                  </div>
+                </b-list-group-item>
+                <b-list-group-item
+                  ><div class="row">
+                    <div class="col-6">
+                      {{ $t("community.proposalStart") }}
+                    </div>
+                    <div class="col-6">{{ formatDate(proposal.start) }}</div>
+                  </div>
+                </b-list-group-item>
+                <b-list-group-item
+                  ><div class="row">
+                    <div class="col-6">
+                      {{ $t("community.proposalEnd") }}
+                    </div>
+                    <div class="col-6">{{ formatDate(proposal.end) }}</div>
+                  </div>
+                </b-list-group-item>
+                <b-list-group-item
+                  ><div class="row">
+                    <div class="col-6">
+                      {{ $t("community.proposalStatus") }}
+                    </div>
+                    <div class="col-6">
+                      {{
+                        proposal.status == 0
+                          ? $t("community.propsalVoteStatusWaitStart")
+                          : proposal.status == 1
+                          ? $t("community.propsalVoteStatusDoing")
+                          : $t("community.propsalVoteStatusEnd")
+                      }}
+                    </div>
+                  </div>
+                </b-list-group-item>
+              </b-list-group>
+            </b-card>
+          </div>
+
+          <div style="margin-top: 10px">
+            <b-card no-body>
+              <template v-slot:header>
+                <h4 class="mb-0">{{ $t("community.proposalVoteResult") }}</h4>
               </template>
 
               <b-list-group flush>
@@ -82,6 +144,16 @@
                       ></b-progress>
                     </div></div
                 ></b-list-group-item>
+                <b-list-group-item v-show="proposal.status == 2">
+                  <div class="row">
+                    <div class="col-4">
+                      {{ $t("community.proposalVoteResult") }}
+                    </div>
+                    <div class="col-8">
+                      {{ $t("nps.pass") }}
+                    </div>
+                  </div></b-list-group-item
+                >
               </b-list-group>
             </b-card>
           </div>
@@ -89,7 +161,7 @@
           <div style="margin-top: 10px">
             <b-card no-body>
               <template v-slot:header>
-                <h4 class="mb-0">投票数</h4>
+                <h4 class="mb-0">{{ $t("community.proposalVoteNum") }}</h4>
               </template>
 
               <b-list-group flush>
@@ -165,9 +237,10 @@ import { completeVote, getAllVote } from "@/utils/web3/vote";
 import { formatDate as fd } from "@/utils/commen/util";
 import Markdown from "@/components/Commen/Markdown";
 import { getAccounts } from "@/utils/web3/account";
-import { getBalance } from "@/utils/web3/asset.js";
+
 import {
   getScores,
+  getScore,
   getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 export default {
@@ -198,7 +271,9 @@ export default {
         body: "",
         start: "",
         end: "",
-        blockNumber: "",
+        first_block: 0,
+        end_block: 0,
+        passThreshold: 0,
       },
       isValid: false,
       form: {
@@ -225,7 +300,7 @@ export default {
         voteType: "",
         voteScore: 0,
       },
-      isVoted: false,
+      isVoted: true,
       voteItems: [],
       currentUserId: "",
       voteTotalScore: 0,
@@ -260,9 +335,11 @@ export default {
           space: "",
           strategies,
           network: this.proposal.network,
+          isSingle: 1,
         };
-        getBalance().then((res) => {
-          this.totalScore = parseFloat(res.toString() / 1e18);
+
+        getScore(params).then((res) => {
+          this.totalScore = res;
           this.isValid = this.totalScore >= this.proposal.threshold;
         });
       },
@@ -310,20 +387,94 @@ export default {
     },
     async loadAllVote() {
       this.voteItems = await getAllVote(this.proposal.id);
+
       if (this.voteItems) {
         var list = this.voteItems.filter((t) => t.userId == this.currentUserId);
+
+        var addresses = [];
         this.voteItems.forEach((value, index) => {
-          if (value.voteType == 1) {
+          /*  if (value.voteType == 1) {
             this.voteAgreeTotalScore += value.voteScore;
           } else {
             this.voteDisagreeTotalScore += value.voteScore;
           }
-          this.voteTotalScore += value.voteScore;
+          this.voteTotalScore += value.voteScore; */
+          addresses.push(value.userId);
         });
+
+        const strategies = [];
+        if (this.proposal.strategies) {
+          const formStrategies = JSON.parse(this.proposal.strategies).forEach(
+            (element) => {
+              strategies.push(element.strategies);
+            }
+          );
+        }
+
+        let params = {
+          space: "",
+          strategies,
+          network: this.proposal.network,
+          addresses,
+          snapshot: this.proposal.end_block,
+          proposalId: this.proposal.id,
+        };
+
+        let scores = await getScores(params);
+        this.voteItems = this.voteItems
+          .map((vote) => {
+            vote.voteScore = strategies.map(
+              (strategy, i) => scores[i][vote.userId] || 0
+            );
+            vote.voteScore = vote.voteScore.reduce((a, b) => a + b, 0);
+            return vote;
+          })
+          .sort((a, b) => b.voteScore - a.voteScore)
+          .filter((vote) => vote.voteScore > 0);
+        this.voteAgreeTotalScore = 0;
+        this.voteDisagreeTotalScore = 0;
+        this.voteTotalScore = 0;
+        this.voteItems.forEach((vote, voteIndex) => {
+          if (vote.voteType == 1) {
+            this.voteAgreeTotalScore += vote.voteScore;
+          } else {
+            this.voteDisagreeTotalScore += vote.voteScore;
+          }
+          this.voteTotalScore += vote.voteScore;
+        });
+
+        /*  getScores(params).then((res) => {
+          const totalScores = res;
+
+          totalScores.forEach((value, index) => {
+            let tempVoteType = 0;
+            let tempVoteScore = 0;
+            this.voteItems.forEach((vote, voteIndex) => {
+              if (value[vote.userId]) {
+                vote.voteScore = value[vote.userId];
+
+                tempVoteScore = vote.voteScore;
+                tempVoteType = vote.voteType;
+              }
+            });
+
+            if (tempVoteType == 1) {
+              this.voteAgreeTotalScore += tempVoteScore;
+            } else {
+              this.voteDisagreeTotalScore += tempVoteScore;
+            }
+            this.voteTotalScore += tempVoteScore;
+          });
+        });
+ */
 
         if (list.length > 0) {
           this.isVoted = true;
+        } else {
+          this.isVoted = false;
         }
+      } else {
+        this.isVoted = false;
       }
     },
   },

@@ -87,9 +87,9 @@
           "
         >
           {{
-            this.proposalItem.status == 0
+            proposalItem.status == 0
               ? $t("community.propsalVoteStatusWaitStart")
-              : this.proposalItem.status == 1
+              : proposalItem.status == 1
               ? $t("community.propsalVoteStatusDoing")
               : $t("community.propsalVoteStatusEnd")
           }}

@@ -21,13 +21,22 @@
             :label="$t('community.proposalNetwork')"
             label-for="proposalNetwork"
           >
-            <b-form-input
+            <!--    <b-form-input
               id="proposalNetwork"
               required
               :placeholder="$t('community.proposalNetworkInput')"
               v-model="form.networkName"
               readonly
               @click="selectNetWork"
+            ></b-form-input>
+            <b-form-input hidden required v-model="form.network"></b-form-input>
+          </b-form-group> -->
+            <b-form-input
+              id="proposalNetwork"
+              required
+              :placeholder="$t('community.proposalNetworkInput')"
+              v-model="form.networkName"
+              readonly
             ></b-form-input>
             <b-form-input hidden required v-model="form.network"></b-form-input>
           </b-form-group>
@@ -93,7 +102,7 @@
             ></b-form-textarea>
           </b-form-group>
 
-          <b-form-group
+          <!-- <b-form-group
             label-cols-md="2"
             content-cols-md="8"
             :label="$t('community.proposalStrategies')"
@@ -127,6 +136,28 @@
                 >
               </b-input-group-append>
             </b-input-group>
+          </b-form-group> -->
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.proposalStrategies')"
+            label-for="proposalStrategies"
+          >
+            <b-input-group
+              v-for="item in strategyControlItems"
+              :key="item.strategyControlId"
+            >
+              <b-form-input
+                :placeholder="$t('community.proposalStrategiesInput')"
+                readonly
+                v-model="item.strategyKey"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-button variant="primary" @click="editStrategy(item)">{{
+                  $t("community.edit")
+                }}</b-button>
+              </b-input-group-append>
+            </b-input-group>
           </b-form-group>
 
           <b-form-group
@@ -139,6 +170,20 @@
               id="proposalThreshold"
               :placeholder="$t('community.proposalThresholdInput')"
               v-model="form.threshold"
+              type="number"
+            ></b-form-input>
+          </b-form-group>
+
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="8"
+            :label="$t('community.proposalPassThreshold')"
+            label-for="proposalPassThresholdInput"
+          >
+            <b-form-input
+              id="proposalPassThreshold"
+              :placeholder="$t('community.proposalPassThresholdInput')"
+              v-model="form.passthreshold"
               type="number"
             ></b-form-input>
           </b-form-group>
@@ -272,6 +317,12 @@ import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
 import { getMyCommunityInfo } from "@/utils/web3/community";
+import {
+  BSC_CHAIN_ID,
+  BSC_CHAIN_NAME,
+  BSC_STRATEGIES_NAME,
+  BSC_STRATEGIES_PARAMS,
+} from "../../config";
 
 import { nanoid } from "nanoid";
 
@@ -310,6 +361,7 @@ export default {
         members: "",
         strategies: "",
         threshold: 0,
+        passthreshold: 0,
         validation: "basic",
         onlyMembers: 0,
         userId: "",
@@ -476,15 +528,25 @@ export default {
     this.form.id = this.$router.currentRoute.params.key;
     this.form.communityId = this.$router.currentRoute.params.key;
 
-    this.strategies = await getStrategies();
+    //this.strategies = await getStrategies();
 
     const currentItem = {
       strategyControlId: nanoid(),
-      strategyKey: "",
+      strategyKey: BSC_STRATEGIES_NAME,
+      strategyParams: JSON.stringify(
+        JSON.parse(BSC_STRATEGIES_PARAMS),
+        null,
+        4
+      ),
+      strategies: {
+        name: BSC_STRATEGIES_NAME,
+        params: JSON.parse(BSC_STRATEGIES_PARAMS),
+      },
     };
 
     this.strategyControlItems.push(currentItem);
-
+    this.form.network = BSC_CHAIN_ID;
+    this.form.networkName = BSC_CHAIN_NAME;
     try {
       const communityInfo = await getMyCommunityInfo();
 
@@ -502,7 +564,9 @@ export default {
         await getMyCommunityProposalConfigInfo(communityInfo.id);
 
       this.form = communityProposalConfigInfo;
-      this.strategyControlItems = JSON.parse(this.form.strategies);
+
+      if (this.form.strategies)
+        this.strategyControlItems = JSON.parse(this.form.strategies);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
