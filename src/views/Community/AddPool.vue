@@ -112,6 +112,7 @@ import { handleApiErrCode } from '@/utils/helper'
 import Step from '@/components/ToolsComponents/Step'
 import { mapGetters } from 'vuex'
 import { OfficialAssets } from '@/config'
+import { hexToString } from '@/utils/web3/utils'
 
 export default {
   name: 'AddPool',
@@ -205,8 +206,8 @@ export default {
           case 'SteemHiveDelegateAssetRegistry':
             return {
               icon: asset.icon,
-              name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
-              symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation'),
+              name: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation') + '-' + hexToString(asset.agentAccount),
+              symbol: DELEGATION_CHAINID_TO_NAME[asset.chainId] + ' ' + this.$t('asset.delegation') + '-' + hexToString(asset.agentAccount),
               asset: asset.asset,
               isHomeChainAsset: false
             }

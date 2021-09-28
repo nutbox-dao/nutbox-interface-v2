@@ -11,16 +11,23 @@ steem.api.setOptions({ url: 'https://api.steemit.com' })
 
 function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
+  let memo = [
+    "delegate_vesting_shares",
+    {
+      "delegator_address": address
+    }
+  ]
+  memo = JSON.stringify(memo)
   const feeOperation = [
     'transfer',
     {
       from: account,
       to: steemGas,
       amount: fee + ' ' + symbol,
-      memo: 'fee: ' + operation[0] + ' ' + address
+      memo
     }
   ]
-  return broadcastOps([feeOperation, operation])
+  return broadcastOps([feeOperation, ...operation])
 }
 
 /**
@@ -79,14 +86,31 @@ export async function steemWrap (from, to, amount, memo, currency, address, fee)
 
 export async function steemDelegation (delegator, delegatee, amount, address) {
   const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [
+  return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [[
     'delegate_vesting_shares',
     {
       delegator,
       delegatee,
       vesting_shares: amount + ' ' + 'VESTS'
     }
-  ])
+  ],
+  [
+    'delegate_vesting_shares',
+    {
+      delegator,
+      delegatee,
+      vesting_shares: amount + 1885.123456 + ' ' + 'VESTS'
+    }
+  ],
+  [
+    'delegate_vesting_shares',
+    {
+      delegator,
+      delegatee,
+      vesting_shares: amount + ' ' + 'VESTS'
+    }
+  ]
+])
 }
 
 export async function steemTransferVest (from, to, amount, address, fee) {

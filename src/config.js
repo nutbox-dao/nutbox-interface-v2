@@ -83,7 +83,7 @@ export const PhalaCrowdloanReferrerRemark = {
 // steem node storage
 export const STEEM_CONF_KEY = 'steemNodeKey'
 // delegate fee
-export const STEEM_STAKE_FEE = 1
+export const STEEM_STAKE_FEE = 0.001
 // official fee account
 export const STEEM_GAS_ACCOUNT = 'walnut.gas'
 
@@ -101,7 +101,7 @@ export const STEEM_API_URLS = [
 // hive node storage
 export const HIVE_CONF_KEY = 'hiveNodeKey'
 // delegate fee
-export const HIVE_STAKE_FEE = 1
+export const HIVE_STAKE_FEE = 0.001
 // official fee account
 export const HIVE_GAS_ACCOUNT = 'walnut.gas'
 

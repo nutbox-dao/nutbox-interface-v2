@@ -48,6 +48,7 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { hexToString } from '@/utils/web3/utils'
 import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
+import { STEEM_STAKE_FEE } from '@/config'
 
 export default {
 
@@ -55,7 +56,7 @@ export default {
     return {
       delegatevalue: '',
       loading: false,
-      fee: 1
+      fee: STEEM_STAKE_FEE
     }
   },
   computed: {

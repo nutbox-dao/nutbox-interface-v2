@@ -49,6 +49,7 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { hexToString } from '@/utils/web3/utils'
 import { getDelegateFromHive, hiveDelegation } from '@/utils/hive/hive'
+import { HIVE_STAKE_FEE } from '@/config'
 
 export default {
 
@@ -56,7 +57,7 @@ export default {
     return {
       delegatevalue: '',
       loading: false,
-      fee: 1
+      fee: HIVE_STAKE_FEE
     }
   },
   computed: {
