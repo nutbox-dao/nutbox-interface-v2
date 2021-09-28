@@ -181,7 +181,7 @@ export default {
       return !!(this.allCommunities && this.allCommunities[0])
     },
     showGithub() {
-      return this.showCommunity && this.allCommunities[0].github.indexOf('https://github.com') !== -1
+      return this.showCommunity && this.allCommunities[0].github && this.allCommunities[0].github.indexOf('https://github.com') !== -1
     },
     showDocument() {
       return this.showCommunity && this.allCommunities[0].document && this.allCommunities[0].document !== 'null' && this.allCommunities[0].document !== 'undefined'
@@ -199,7 +199,7 @@ export default {
       return this.showCommunity && this.allCommunities[0].twitter && this.allCommunities[0].twitter !== 'null' && this.allCommunities[0].twitter !== 'undefined'
     },
     showBlog() {
-      return this.showCommunity && this.allCommunities[0].blogTag && this.allCommunities[0].blogTag.indexOf('hive-') !== -1
+      return this.showCommunity && this.allCommunities[0].blogTag && this.allCommunities[0].blogTag && this.allCommunities[0].blogTag.indexOf('hive-') !== -1
     }
   },
   components: {
