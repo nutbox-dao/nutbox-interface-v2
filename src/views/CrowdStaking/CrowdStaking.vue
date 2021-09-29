@@ -40,7 +40,6 @@ export default {
     }
   },
   mounted () {
-    console.log(666, this.stakingCards);
   },
 };
 </script>

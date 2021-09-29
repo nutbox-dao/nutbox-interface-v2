@@ -27,7 +27,7 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
       memo
     }
   ]
-  return broadcastOps([feeOperation, ...operation])
+  return broadcastOps([feeOperation, operation])
 }
 
 /**
@@ -86,31 +86,14 @@ export async function steemWrap (from, to, amount, memo, currency, address, fee)
 
 export async function steemDelegation (delegator, delegatee, amount, address) {
   const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [[
+  return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {
       delegator,
       delegatee,
       vesting_shares: amount + ' ' + 'VESTS'
     }
-  ],
-  [
-    'delegate_vesting_shares',
-    {
-      delegator,
-      delegatee,
-      vesting_shares: amount + 1885.123456 + ' ' + 'VESTS'
-    }
-  ],
-  [
-    'delegate_vesting_shares',
-    {
-      delegator,
-      delegatee,
-      vesting_shares: amount + ' ' + 'VESTS'
-    }
-  ]
-])
+  ])
 }
 
 export async function steemTransferVest (from, to, amount, address, fee) {

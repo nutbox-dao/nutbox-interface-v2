@@ -38,11 +38,12 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import { sleep } from "@/utils/helper";
 
 export default {
   name: "Home",
   computed: {
-    ...mapState('web3',["communityCard"]),
+    ...mapState('web3',["communityCard", 'pools']),
     ...mapGetters('web3', ['poolCards']),
     funds() {
       const fundInfos = this.getFundInfos();
@@ -65,6 +66,26 @@ export default {
     }
   },
   methods: {
+  },
+  async mounted () {
+    console.log(this.poolCards);
+    let count = 0
+    while (!this.poolCards){
+      if (count++ > 15){
+        break;
+      }
+      console.log(count);
+      await sleep(1)
+    }
+    if (this.showStakingPool) {
+      this.$router.replace('/crowdstaking/deposite')
+    }else if (this.showDelegatePool){
+      this.$router.replace('/crowdstaking/delegate')
+    }else if (this.showNominatePool){
+      this.$router.replace('/crowdstaking/nominate')
+    }else if (this.showCrowdloanPool){
+      this.$router.replace('/crowdstaking/crowdloan')
+    }
   },
   created () {
   },

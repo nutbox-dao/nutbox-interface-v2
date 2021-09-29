@@ -3,7 +3,7 @@
     <div class="container scroll-content">
       <div class="page-view-title-v">{{$t("cs.crowdstaking") }}</div>
       <div class="community-detail-info mb-5">
-        <div class="loading-bg" v-if="!communityInfo">
+        <div class="loading-bg" v-if="!communityInfo || !pools">
           <img src="~@/static/images/loading.gif" alt="" />
           <p class="font16">{{ $t("tip.loading") }}</p>
         </div>
@@ -58,6 +58,7 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: 'CommunityDetailInfo',
@@ -129,8 +130,20 @@ export default {
       ]
     }
   },
-  mounted () {
+  watch: {
+    pools(newValue, oldValue) {
+      if (!oldValue){
+
+      }
+    }
+  },
+  async mounted () {
     this.communityId = this.$route.query.id
+    let count  = 0
+    while(!this.pools){
+      await sleep(1)
+      if(count++ > 15) break;
+    }
     if (this.showTab(0)){
       this.activeTab = 0
     } else if (this.showTab(1)){
