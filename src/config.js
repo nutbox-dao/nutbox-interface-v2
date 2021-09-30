@@ -156,7 +156,7 @@ export const Transaction_config = {
 }
 
 export const GasTimes = 1000;
-export const GasLimit = 5000000
+export const GasLimit = 100000000
 
 // Register by nutbox
 export const OfficialAssets = [
@@ -192,14 +192,12 @@ export const OfficialAssets = [
   }
 ]
 
-// test network
-export const MultiAddress = '0x1151A533898441783347679F9E6DF028e516313B'      // on imac
-// export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'
+// local network
+export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
 // export const MultiAddress = '0x6F4892ed2092aFB21eA9936cF3CfbB61648529E0'    // on local mac book
 
 // goerli network
 // export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
-// export const NUTAddress = '0x94AF51B6b03AD129c385323FC7500120f389d759'
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,

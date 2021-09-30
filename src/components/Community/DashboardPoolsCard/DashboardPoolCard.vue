@@ -38,25 +38,23 @@
 </template>
 
 <script>
-import { getCToken } from '@/utils/web3/asset'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
 import { publishPool, getAllPools, monitorPools } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
-import { getContract } from '@/utils/web3/contract'
 
 export default {
   name: 'DashboardPoolCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId', 'blockNum', 'allPools', 'allTokens']),
+    ...mapState('web3', ['stakingFactoryId', 'blockNum', 'allPools', 'allTokens', 'monitorPools']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
       hiveVests: state => state.hive.vestsToHive,
       prices: state => state.prices
     }),
     totalDeposited() {
-      console.log(this.pool, this.decimals, this.steemVests)
-      return this.pool && this.pool.totalStakedAmount.toString() / this.decimals
+      if (!this.pool || !this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid]) return 0;
+      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid].totalStakedAmount / this.decimals
     },
     tvl () {
       if (!this.pool) return '--'
@@ -130,7 +128,6 @@ export default {
         await publishPool(this.pool)
         this.published = true;
         // 更新本地矿池数据
-        await sleep(1)
         const aa = await getAllPools(true)
         await monitorPools()
         this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {

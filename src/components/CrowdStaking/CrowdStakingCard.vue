@@ -122,7 +122,7 @@ export default {
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings"
+      "monitorPools"
     ]),
     ...mapState(['metamaskConnected']),
     pendingReward() {
@@ -143,7 +143,8 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid]) return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid]['totalStakedAmount']
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))

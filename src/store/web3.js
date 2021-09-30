@@ -30,7 +30,7 @@ export default {
     pendingRewards: {},
     userStakings:{},
     approvements: {},
-    totalStakings: {},
+    monitorPools: {},
     userBalances: {},
     communityBalance: 1,
     ctokenApprovement: false,
@@ -135,8 +135,8 @@ export default {
     saveUserStakings: (state, userStakings) => {
       state.userStakings = userStakings
     },
-    saveTotalStakings: (state, totalStakings) => {
-      state.totalStakings = totalStakings
+    saveMonitorPools: (state, monitorPools) => {
+      state.monitorPools = monitorPools
     },
     saveUserBalances: (state, userBalances) => {
       state.userBalances = userBalances

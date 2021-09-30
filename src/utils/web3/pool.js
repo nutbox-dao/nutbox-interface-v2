@@ -66,7 +66,8 @@ export const getAllPools = async (update = false) => {
       const allPools = await gap(currentCommunityId)
       store.commit('web3/saveAllPools', allPools);
       store.commit('web3/saveLoadingAllPools', false)
-
+      // remonitor pools info
+      monitorPoolInfos()
       resolve(allPools)
     } catch (e) {
       reject(e)
@@ -115,7 +116,6 @@ export const getMyOpenedPools = async (update = false) => {
       }
       // get active pools
       let pools = await Promise.all((new Array(21).toString().split(',')).map((item, i) => contract.openedPools(i)))
-
       pools = pools.filter(pool => pool.hasActived)
 
       try {
@@ -130,6 +130,10 @@ export const getMyOpenedPools = async (update = false) => {
           poolRatio: pool.poolRatio,
           stakerCount: pool.stakerCount,
           stakingPair: pool.stakingPair,
+          canRemoved: pool.canRemoved,
+          hasRemoved: pool.hasRemoved,
+          hasActived: pool.hasActived,
+          hasStopped: pool.hasStopped,
           totalStakedAmount: pool.totalStakedAmount,
           asset: myAsset[idToIndex[pool.stakingPair]],
         }))
@@ -597,41 +601,54 @@ export const monitorApprovements = async () => {
 
 
 /**
- * Monitor all pools tvl
+ * Monitor all pools info
  */
-export const monitorPoolTvls = async () => {
+export const monitorPoolInfos = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       const pools = await getAllPools()
+      console.log(532, pools);
       let watchers = store.state.web3.watchers
-      let watcher = watchers['poolTvls']
+      let watcher = watchers['poolInfos']
       watcher && watcher.stop()
       watcher = createWatcher(pools.map(p => {
         return {
           target: p.communityId,
           call: [
-            'getPoolTotalStakedAmount(uint8)(uint256)',
+            'openedPools(uint256)(uint8,uint64,string,bool,bool,bool,bool,uint16,bytes32,uint256,uint256)',
             p.pid,
           ],
           returns: [
-            [p.communityId + '-' + p.pid]
+            [p.communityId + '-' + p.pid + "-pid", pid => parseInt(pid)],
+            [p.communityId + '-' + p.pid + "-stakerCount", count => parseInt(count)],
+            [p.communityId + '-' + p.pid + "-poolName"],
+            [p.communityId + '-' + p.pid + "-hasActived"],
+            [p.communityId + '-' + p.pid + "-hasStopped"],
+            [p.communityId + '-' + p.pid + "-canRemoved"],
+            [p.communityId + '-' + p.pid + "-hasRemoved"],
+            [p.communityId + '-' + p.pid + "-poolRatio", ratio => parseInt(ratio)],
+            [p.communityId + '-' + p.pid + "-stakingPair"],
+            [p.communityId + '-' + p.pid + "-shareAcc"],
+            [p.communityId + '-' + p.pid + "-totalStakedAmount", amount => amount.toString()]
           ]
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        // console.log('Updates tvl', updates);
-        let totalStakings = store.state.web3.totalStakings
+        console.log('update pools info', updates);
+        let monitorPools = store.state.web3.monitorPools 
         updates.map(u => {
-          totalStakings[u.type] = u.value
+          const [communityId, pid, type] = u.type.split('-')
+          monitorPools[communityId + '-' + pid] = monitorPools[communityId + '-' + pid] ?? {}
+          monitorPools[communityId + '-' + pid][type] = u.value
         })
-        store.commit('web3/saveTotalStakings', {...totalStakings})
+        store.commit('web3/saveMonitorPools', {...monitorPools})
       });
       watcher.start()
-      watchers['poolTvls'] = watcher
+      watchers['poolInfos'] = watcher
       store.commit('web3/saveWatchers', {...watchers})
       resolve()
     } catch (e) {
-      console.log('monitor total stakings fail', e);
+      console.log('monitor pools info fail', e);
       reject(e)
     }
   })
@@ -692,6 +709,7 @@ export const monitorUserBalances = async () => {
   const update = async () => {
     try{
       let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
+      const monitorPools = store.state.web3.monitorPools
       let temp = {}
       for (let c of communities) {
         temp[c.id] = c
@@ -700,49 +718,47 @@ export const monitorUserBalances = async () => {
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
       for (let pool of pools){
         const key = pool.communityId + '-' + pool.pid
-        if (pool.totalStakedAmount === '0'){
-          continue;
-        }
-        if (pool.poolRatio === 0){
-          continue;
-        }
+        if (!monitorPools[key]) continue
+        const tvl = monitorPools[key]['totalStakedAmount']
+        const poolRatio = monitorPools[key]['poolRatio']
+        if (monitorPools[key]['hasStopped']) continue
+        if (monitorPools[key]['hasRemoved']) continue
+        if (pool.totalStakedAmount === '0') continue;
+        if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
         const ctokenAddress = com.ctoken
         const ctokenPrice = price[ctokenAddress]
-        if (ctokenPrice === 0){
-          continue;
-        }
+        if (ctokenPrice === 0) continue;
         const devRatio = com.rewardRatio
         const rewardPerBlock = com.rewardPerBlock
-        const poolRatio = pool.poolRatio
         if (pool.type === 'HomeChainAssetRegistry'){
           const p = price[pool.address]
           if (p === 0){
             continue
           }
           //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * p)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * p)
           continue;
         }
 
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
           const steemPrice = parseFloat(price['STEEMETH'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * steemPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * steemPrice)
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
           const hivePrice = parseFloat(price['HIVEETH'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * hivePrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * hivePrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
           const dotPrice = parseFloat(price['DOTETH'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * dotPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * dotPrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
           const ksmPrice = parseFloat(price['KSMETH'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (pool.totalStakedAmount / 1e18 * ksmPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * ksmPrice)
           continue;
         }
       }
@@ -783,7 +799,7 @@ export const monitorPools = async () => {
     monitorUserStakings(),
     monitorPendingRewards(),
     monitorApprovements(),
-    monitorPoolTvls(),
+    monitorPoolInfos(),
     monitorUserBalances()
   ]).catch(console.error)
 }

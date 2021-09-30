@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
-    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'totalStakings']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools']),
     steemLogin() {
       return !!this.steemAccount
     },
@@ -112,9 +112,10 @@ export default {
       return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid]) return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid]['totalStakedAmount']
       if(!tvl) return 0;
-      return this.vestsToHive * (tvl.toString() / 1e6)
+      return this.vestsToSteem * (tvl.toString() / 1e6)
     }
   },
   data () {

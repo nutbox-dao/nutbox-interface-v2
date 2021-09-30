@@ -259,7 +259,6 @@ export default {
         const img = new Image()
         img.src = imgSrc
         img.onload = () => {
-          console.log(img.width, img.height)
           const cw = canvas.width = img.width
           const ch = canvas.height = img.height
           ctx.beginPath()
@@ -339,9 +338,7 @@ export default {
       })
     },
     confirmDeploy () {
-      console.log(this.modalVisible);
       this.modalVisible = false;
-      console.log(this.modalVisible);
       this.$emit('deployed', this.tokenAddress);
     }
   }
