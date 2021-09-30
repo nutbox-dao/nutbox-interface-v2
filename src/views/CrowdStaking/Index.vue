@@ -78,7 +78,7 @@ export default {
       await sleep(1)
     }
     if (this.showStakingPool) {
-      this.$router.replace('/crowdstaking/deposite')
+      // this.$router.replace('/crowdstaking/deposite')
     }else if (this.showDelegatePool){
       this.$router.replace('/crowdstaking/delegate')
     }else if (this.showNominatePool){

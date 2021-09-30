@@ -68,13 +68,14 @@
 
 <script>
 import Progress from '@/components/Community/Progress'
-import { getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import { getMyOpenedPools } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper'
 import { errCode } from '../../config'
 import DashboardPoolCard from '@/components/Community/DashboardPoolsCard/DashboardPoolCard'
 import { mapState, mapGetters } from 'vuex'
 import Step from "@/components/ToolsComponents/Step";
+
 
 export default {
   name: 'PoolsDashboard',
@@ -95,11 +96,6 @@ export default {
       stakingPools: [],
       noCommunity: false,
       loadingPool: true,
-      progressData: [
-        // { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
-        // { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
-        // { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
-      ]
     }
   },
   methods: {
@@ -111,9 +107,6 @@ export default {
     try{
       this.loadingPool = true
       getMyCommunityInfo()
-      getDistributionEras().then(dist => {
-        this.progressData = dist
-      }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
       // const assets = await getRegitryAssets()
       const myPools = await getMyOpenedPools()
       console.log('my pools', myPools);

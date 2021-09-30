@@ -72,7 +72,7 @@ export const formatBalance = function (value, digit = 3) {
 }
 
 export const formatPrice = function (value) {
-  if (!value) return '$0.000'
+  if (!value) return '--'
   const ethPrice = store.state.ethPrice
   value = value * ethPrice
   const str =

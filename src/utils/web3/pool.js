@@ -114,7 +114,7 @@ export const getMyOpenedPools = async (update = false) => {
         return;
       }
       // get active pools
-      let pools = await Promise.all((new Array(10).toString().split(',')).map((item, i) => contract.openedPools(i)))
+      let pools = await Promise.all((new Array(21).toString().split(',')).map((item, i) => contract.openedPools(i)))
 
       pools = pools.filter(pool => pool.hasActived)
 
