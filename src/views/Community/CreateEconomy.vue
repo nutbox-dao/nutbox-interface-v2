@@ -109,7 +109,7 @@ import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
-import { MaxBlockNum, MAX_DISTRIBUTION_COUNT } from '@/constant'
+import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from "@/components/ToolsComponents/Step";
 

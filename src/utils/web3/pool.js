@@ -130,7 +130,7 @@ export const getMyOpenedPools = async (update = false) => {
           poolRatio: pool.poolRatio,
           stakerCount: pool.stakerCount,
           stakingPair: pool.stakingPair,
-          canRemoved: pool.canRemoved,
+          canRemove: pool.canRemove,
           hasRemoved: pool.hasRemoved,
           hasActived: pool.hasActived,
           hasStopped: pool.hasStopped,
@@ -464,6 +464,111 @@ export const withdrawReward = async (communityId, pid) => {
   })
 }
 
+/**
+ * Stop pool
+ * @param {*} pid 
+ * @returns 
+ */
+export const stopPool = async (pid) => {
+  return new Promise(async (resolve, reject) => {
+    const communityId = store.state.web3.stakingFactoryId
+    let contract = null
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e) {
+      reject(e)
+      return;
+    }
+    try{
+      const gas = await getGasPrice()
+      const tx = await contract.stopPool(pid, 
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Stop pool Fail', e);
+    }
+  })
+}
+
+/**
+ * tryWithdraw
+ * @param {*} pid 
+ * @returns 
+ */
+export const tryWithdraw = async (pid) => {
+  return new Promise(async (resolve, reject) => {
+    const communityId = store.state.web3.stakingFactoryId
+    let contract = null
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e) {
+      reject(e)
+      return;
+    }
+    try{
+      const gas = await getGasPrice()
+      const tx = await contract.tryWithdraw(pid, 
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('tryWithdraw pool Fail', e);
+    }
+  })
+}
+
+/**
+ * removePool
+ * @param {*} pid 
+ * @returns 
+ */
+export const removePool = async (pid) => {
+  return new Promise(async (resolve, reject) => {
+    const communityId = store.state.web3.stakingFactoryId
+    let contract = null
+    try{
+      contract = await getContract('StakingTemplate', communityId, false)
+    }catch(e) {
+      reject(e)
+      return;
+    }
+    try{
+      const gas = await getGasPrice()
+      const tx = await contract.removePool(pid, 
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('RemovePool pool Fail', e);
+    }
+  })
+}
+
 /** 
  * monitor users staking
  */
@@ -624,7 +729,7 @@ export const monitorPoolInfos = async () => {
             [p.communityId + '-' + p.pid + "-poolName"],
             [p.communityId + '-' + p.pid + "-hasActived"],
             [p.communityId + '-' + p.pid + "-hasStopped"],
-            [p.communityId + '-' + p.pid + "-canRemoved"],
+            [p.communityId + '-' + p.pid + "-canRemove"],
             [p.communityId + '-' + p.pid + "-hasRemoved"],
             [p.communityId + '-' + p.pid + "-poolRatio", ratio => parseInt(ratio)],
             [p.communityId + '-' + p.pid + "-stakingPair"],

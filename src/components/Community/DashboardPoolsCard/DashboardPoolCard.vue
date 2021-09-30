@@ -1,7 +1,8 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
-      <span v-show="!published" :class="'Completed'">{{ $t('community.unPublished') }}</span>
+      <span v-if="!published" :class="'Completed'">{{ $t('community.unPublished') }}</span>
+      <span v-else class="Active">{{ status }}</span>
     </div>
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
@@ -33,6 +34,10 @@
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('community.publishPool')}}
       </button>
+      <button class="primary-btn" :disabled="updating" v-else @click="confirm">
+        <b-spinner small type="grow" v-show="updating" />
+        {{ $t('community.publishPool')}}
+      </button>
     </div>
   </div>
 </template>
@@ -40,8 +45,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
-import { publishPool, getAllPools, monitorPools } from '@/utils/web3/pool'
-import { sleep } from '@/utils/helper'
+import { publishPool, getAllPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
 
 export default {
   name: 'DashboardPoolCard',
@@ -105,6 +109,27 @@ export default {
     erc20Price(){
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.publishePoolInfo) return null;
       return this.allTokens[this.publishePoolInfo.address]
+    },
+    status (){
+      if (!this.pool) return 'loading'
+      if (this.published){
+        const canRemove = this.pool.canRemove
+        const hasRemoved = this.pool.hasRemoved
+        const hasStopped = this.pool.hasStopped
+        if(!hasStopped){
+          return 'Active'
+        }else if (!canRemove){
+          return 'Stopped'
+        }else{
+          if (hasRemoved){
+            return 'Removed'
+          }else{
+            return 'CanRemove'
+          }
+        }
+      }else{
+        return 'Unpublished'
+      }
     }
   },
   data() {
