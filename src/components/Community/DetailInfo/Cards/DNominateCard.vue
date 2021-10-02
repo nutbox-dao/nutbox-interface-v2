@@ -1,5 +1,9 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+    </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
         <img class="icon1" :src="nomination.icon" alt="" />
@@ -58,7 +62,7 @@
         <button
           class="primary-btn"
           @click="nominate"
-          :disabled="loadingStaking"
+          :disabled="loadingStaking || status !== 'Active'"
         >
           <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
           >{{ $t("cs.nominate") }}
@@ -231,6 +235,22 @@ export default {
     },
     nominators(){
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
+    },
+    status (){
+      const canRemove = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   mounted() {

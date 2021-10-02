@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import {
-  getEthWeb,
   getWeb3,
   setupNetwork,
   isUnlocked,
@@ -17,22 +16,22 @@ import {
 import {
   getAccounts
 } from './account'
-import { errCode, RPC_NODE } from '../../config'
+import { errCode } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0xD15358977179511c5e61e5CBfD9B1fAF9A18d24f",
-  "ERC20Factory": "0x4f414bff371e5d6603197314674D08839D5dc86F",
-  "HomeChainAssetRegistry": "0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979",
-  "SteemHiveDelegateAssetRegistry": "0x9E5cbF1AD93D7B2BF0EA860f0fDA5D8273128122",
-  "SubstrateCrowdloanAssetRegistry": "0xaB924FDFC36da9c9fbfb99cB9B8DD66b72e91AAE",
-  "SubstrateNominateAssetRegistry": "0x893b6657738A2C019d2613Ae7A109eb11dC2A246",
-  "ERC20AssetHandler": "0xf019b6bac5a24f8BFEBB024B29472e1Aeb65FaC9",
+  "RegistryHub": "0x2fDa471B70715B94F66e85Bd96C43bC268d12E61",
+  "ERC20Factory": "0x66A9C8196BdeAAbc678b546007e46A506EbD3988",
+  "HomeChainAssetRegistry": "0xb2Da7B26B585042131C6b784f92f169B1be7c31F",
+  "SteemHiveDelegateAssetRegistry": "0x982E05750e7A20408DE98Ca6bEF09295626fBfEe",
+  "SubstrateCrowdloanAssetRegistry": "0x44bEdacc3B1DE060768499ea8EA5951A72333B38",
+  "SubstrateNominateAssetRegistry": "0xAFCa880882b95A5d32245DF032ce8146e87a9B7a",
+  "ERC20AssetHandler": "0x4CBE1Bf676e290e29f76f1Ee7BE0415c9792508A",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x6e21fBdc3b9f94F998Fb880c6571717F94d47520",
-  "Executor": "0xEb74188040606af216006d64205834904Ee987C2",
-  "Bridge": "0x786A91905cD1ad1C830dEaEE4E9Ce2Ca8a008E16",
-  "StakingFactory": "0x8A74B5eE7b1f5c058a83D4c675e267fD000730DC",
-  "LinearCalculator": "0x58a9d5D90CBb41b2D7dca8cf8646643f5DF180d4"
+  "TrustlessAssetHandler": "0x0e3E9e86f3c0080859363898b86179312E42A838",
+  "Executor": "0x4Fe7Ae9a90Ea123754fAF83dc0D7a78EF6841a1d",
+  "Bridge": "0xFb1Da36E48D3D8fE020388F90E89D9C739eaE5fC",
+  "StakingFactory": "0x2F004DC2D197BF052dafE4d4E0e274077687E111",
+  "LinearCalculator": "0x475D6E3B52cAf62Db7b75eFE268ec17d707cF552"
 }
 
 // contract file name

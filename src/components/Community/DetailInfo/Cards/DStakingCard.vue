@@ -1,5 +1,9 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+    </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
         <img class="icon1" :src="card.icon" alt="" />
@@ -36,8 +40,8 @@
         {{ (loadingUserStakings ? 0 : staked) | amountForm }}
       </span>
       <div class="right-box">
-        <button class="outline-btn" @click="decrease">-</button>
-        <button class="outline-btn" @click="increase">+</button>
+        <button class="outline-btn" :disabled="status !== 'Active'" @click="decrease">-</button>
+        <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
       </div>
     </div>
     <template v-else>
@@ -48,7 +52,7 @@
       v-else
         variant="primary"
         @click="approve"
-        :disabled="isApproving || loadingApprovements"
+        :disabled="isApproving || loadingApprovements || status !== 'Active'"
       >
         <b-spinner
           small
@@ -146,6 +150,22 @@ export default {
         return null;
       }
       return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data() {

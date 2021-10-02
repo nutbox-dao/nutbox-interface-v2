@@ -1,6 +1,10 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+      <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="nomination.communityIcon" alt="" />
@@ -245,6 +249,22 @@ export default {
     },
     nominators(){
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
+    },
+    status (){
+      const canRemove = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   mounted() {

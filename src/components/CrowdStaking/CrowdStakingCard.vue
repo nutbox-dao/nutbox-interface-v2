@@ -1,6 +1,10 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+      <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
@@ -57,7 +61,7 @@
           <b-button
             variant="primary"
             @click="approve"
-            :disabled="isApproving || loadingApprovements"
+            :disabled="isApproving || loadingApprovements || status !== 'Active'"
           >
             <b-spinner
               small
@@ -148,6 +152,22 @@ export default {
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data() {

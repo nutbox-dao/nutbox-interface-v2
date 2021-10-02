@@ -47,6 +47,10 @@
           <b-spinner small type="grow" v-show="updating" />
           {{ $t('community.withdrawPool')}}
         </button>
+        <button class="primary-btn" :disabled="true" v-else-if="status === 'Removed'" @click="withdraw">
+          <b-spinner small type="grow" v-show="updating" />
+          {{ $t('community.Removed')}}
+        </button>
       </template>
       
     </div>
@@ -127,7 +131,6 @@ export default {
         const canRemove = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-canRemove']
         const hasRemoved = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasRemoved']
         const hasStopped = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasStopped']
-        console.log(123, canRemove, hasRemoved, hasStopped);
         if(!hasStopped){
           return 'Active'
         }else if (!canRemove){
