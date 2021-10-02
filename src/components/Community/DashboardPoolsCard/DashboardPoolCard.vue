@@ -1,8 +1,8 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
-      <span v-if="!published" :class="'Completed'">{{ $t('community.unPublished') }}</span>
-      <span v-else class="Active">{{ status }}</span>
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
     </div>
     <div class="card-top mt-4">
       <div class="card-title-box flex-start-center">
@@ -34,10 +34,21 @@
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('community.publishPool')}}
       </button>
-      <button class="primary-btn" :disabled="updating" v-else @click="confirm">
-        <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.publishPool')}}
-      </button>
+      <template v-else>
+        <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="stop">
+          <b-spinner small type="grow" v-show="updating" />
+          {{ $t('community.stopPool')}}
+        </button>
+        <button class="primary-btn" :disabled="updating" v-else-if="status === 'CanRemove'" @click="remove">
+          <b-spinner small type="grow" v-show="updating" />
+          {{ $t('community.removePool')}}
+        </button>
+        <button class="primary-btn" :disabled="updating" v-else-if="status === 'Stopped'" @click="withdraw">
+          <b-spinner small type="grow" v-show="updating" />
+          {{ $t('community.withdrawPool')}}
+        </button>
+      </template>
+      
     </div>
   </div>
 </template>
@@ -57,8 +68,8 @@ export default {
       prices: state => state.prices
     }),
     totalDeposited() {
-      if (!this.pool || !this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid]) return 0;
-      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid].totalStakedAmount / this.decimals
+      if (!this.pool || !this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount']) return 0;
+      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount'] / this.decimals
     },
     tvl () {
       if (!this.pool) return '--'
@@ -113,9 +124,10 @@ export default {
     status (){
       if (!this.pool) return 'loading'
       if (this.published){
-        const canRemove = this.pool.canRemove
-        const hasRemoved = this.pool.hasRemoved
-        const hasStopped = this.pool.hasStopped
+        const canRemove = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-canRemove']
+        const hasRemoved = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasRemoved']
+        const hasStopped = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasStopped']
+        console.log(123, canRemove, hasRemoved, hasStopped);
         if(!hasStopped){
           return 'Active'
         }else if (!canRemove){
@@ -128,7 +140,7 @@ export default {
           }
         }
       }else{
-        return 'Unpublished'
+        return 'unPublished'
       }
     }
   },
@@ -166,12 +178,60 @@ export default {
       } finally{
         this.updating = false
       }
+    },
+    async stop() {
+      try{
+        this.updating = true
+        const res = await stopPool(this.pool.pid)
+        this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
+          title: this.$t('tip.tips'),
+          variant:'success'
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally{
+        this.updating = false
+      }
+    },
+    async withdraw() {
+      try{
+        this.updating = true
+        const res = await tryWithdraw(this.pool.pid)
+        his.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
+          title: this.$t('tip.tips'),
+          variant:'success'
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally{
+        this.updating = false
+      }
+    },
+    async remove() {
+      try{
+        this.updating = true
+        const res = await removePool(this.pool.pid)
+        this.$bvToast.toast(this.$t('tip.removePoolOk'), {
+          title: this.$t('tip.tips'),
+          variant:'success'
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally{
+        this.updating = false
+      }
     }
   },
   async mounted () {
+    console.log(this.pool);
     if (this.allPools){
       const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
-      
       if (p.length > 0){
         this.publishePoolInfo = p[0]
         this.published = true

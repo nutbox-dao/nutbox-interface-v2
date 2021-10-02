@@ -742,9 +742,7 @@ export const monitorPoolInfos = async () => {
         console.log('update pools info', updates);
         let monitorPools = store.state.web3.monitorPools 
         updates.map(u => {
-          const [communityId, pid, type] = u.type.split('-')
-          monitorPools[communityId + '-' + pid] = monitorPools[communityId + '-' + pid] ?? {}
-          monitorPools[communityId + '-' + pid][type] = u.value
+          monitorPools[u.type] = u.value
         })
         store.commit('web3/saveMonitorPools', {...monitorPools})
       });
@@ -822,12 +820,11 @@ export const monitorUserBalances = async () => {
       communities = temp
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
       for (let pool of pools){
-        const key = pool.communityId + '-' + pool.pid
-        if (!monitorPools[key]) continue
-        const tvl = monitorPools[key]['totalStakedAmount']
-        const poolRatio = monitorPools[key]['poolRatio']
-        if (monitorPools[key]['hasStopped']) continue
-        if (monitorPools[key]['hasRemoved']) continue
+        const key = pool.communityId + '-' + pool.pid + '-'
+        const tvl = monitorPools[key + 'totalStakedAmount']
+        const poolRatio = monitorPools[key + 'poolRatio']
+        if (monitorPools[key + 'hasStopped']) continue
+        if (monitorPools[key + 'hasRemoved']) continue
         if (pool.totalStakedAmount === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]

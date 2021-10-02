@@ -219,11 +219,11 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid]) return 0
+      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount']) return 0
       const tvl =
         this.monitorPools[
-          this.nomination.communityId + "-" + this.nomination.pid
-        ]['totalStakedAmount'];
+          this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount'
+        ];
       if (!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return tvl.toString() / 10 ** decimal;

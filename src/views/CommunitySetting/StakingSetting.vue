@@ -1,13 +1,14 @@
 <template>
   <div class="container scroll-content">
     <div class="view-top-header flex-between-center">
-      <div class="page-title-line font20 font-bold">质押池</div>
+      <div class="page-title-line font20 font-bold">{{ $t('community.pool') }}</div>
       <div class="c-btn-group" >
         <button class="outline-btn"
-                @click="$router.push('/community-setting/update-pool')">调整矿池数据</button>
+                v-show="stakingPools.length > 1"
+                @click="$router.push('/community-setting/update-pool')">{{ $t('community.updatePools') }}</button>
         <button @click="$router.push('/community-setting/add-pool')">
           <i class="add-icon"></i>
-          <span>添加矿池</span>
+          <span>{{ $t('community.addPool') }}</span>
         </button>
       </div>
     </div>

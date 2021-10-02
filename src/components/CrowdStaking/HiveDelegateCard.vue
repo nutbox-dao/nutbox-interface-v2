@@ -112,8 +112,8 @@ export default {
       return this.vestsToHive * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     },
     tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid]) return 0
-      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid]['totalStakedAmount']
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid + '-totalStakedAmount']) return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
       if(!tvl) return 0;
       return this.vestsToHive * (tvl.toString() / 1e6)
     }

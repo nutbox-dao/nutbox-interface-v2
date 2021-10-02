@@ -8,7 +8,7 @@ export const LOCALE_KEY = 'localeLanguage'
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 export const BACKEND_API_URL = "http://localhost:3000"
 
-export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
+export const QN_UPLOAD_URL = 'https://v2-api-test.nutbox.io' + "/qiNiu/upload"
 
 /**
  * ERROR CODE DEFINE
@@ -193,8 +193,8 @@ export const OfficialAssets = [
 ]
 
 // local network
-export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
-// export const MultiAddress = '0x6F4892ed2092aFB21eA9936cF3CfbB61648529E0'    // on local mac book
+// export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
+export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
 
 // goerli network
 // export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'

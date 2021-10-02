@@ -225,7 +225,10 @@ module.exports = {
     selectCowdloan: "请选择一个众贷项目",
     inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。',
     withdrawSuccess: '收获成功',
-    deploying: '部署中，请稍后'
+    deploying: '部署中，请稍后',
+    stopPoolOk: '已暂停矿池',
+    removePoolOk: '已删除矿池',
+    tryWithdrawOk: '清理成功'
   },
   nps: {
     nps: '提案改善',
@@ -344,6 +347,13 @@ module.exports = {
     setting: '设置',
     updatePools: "调整矿池数据",
     addPool: '添加矿池',
+    stopPool: '暂停矿池',
+    withdrawPool: '清理矿池',
+    removePool: '删除矿池',
+    Active: '挖矿中',
+    Stopped: '已暂停',
+    CanRemove: '已暂停',
+    Removed: '已删除',
     noPools:'还没有创建矿池',
     userCount: "质押用户数",
     totalDeposit: "总质押数",
