@@ -225,7 +225,7 @@ module.exports = {
     selectCowdloan: 'Please selecte a crowdloan project.',
     inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.',
     withdrawSuccess: 'Harvest success!',
-    deploying: 'Deploying please wait.'
+    deploying: 'Deploying, maybe cost you some time, please wait for a moment.'
   },
   nps: {
     nps: 'Governance',

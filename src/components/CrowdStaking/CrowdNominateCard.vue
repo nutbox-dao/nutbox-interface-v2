@@ -39,7 +39,7 @@
         <div class="right-box">
           <button
             class="primary-btn m-0"
-            :disabled="isWithdrawing"
+            :disabled="isWithdrawing || status !== 'Active'"
             @click="withdraw"
           >
             <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
@@ -73,7 +73,7 @@
         <button
           class="primary-btn"
           @click="nominate"
-          :disabled="loadingStaking"
+          :disabled="loadingStaking || status !== 'Active'"
         >
           <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
           >{{ $t("cs.nominate") }}

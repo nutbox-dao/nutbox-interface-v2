@@ -42,8 +42,8 @@
       <div class="btn-row mb-4" v-if="hiveLogin">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
-          <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" @click="increase">+</button>
+          <button class="outline-btn" :disabled="status !== 'Active'" @click="decrease">-</button>
+          <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
       <ConnectWalletBtn

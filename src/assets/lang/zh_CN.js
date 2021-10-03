@@ -225,7 +225,7 @@ module.exports = {
     selectCowdloan: "请选择一个众贷项目",
     inputRightBlogTag: '请输入正确的steem社区标签，如：hive-12345。',
     withdrawSuccess: '收获成功',
-    deploying: '部署中，请稍后',
+    deploying: '部署中，可能会消耗较长时间，请耐心等候',
     stopPoolOk: '已暂停矿池',
     removePoolOk: '已删除矿池',
     tryWithdrawOk: '清理成功'

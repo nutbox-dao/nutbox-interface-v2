@@ -181,14 +181,15 @@ export default {
     ...mapGetters('web3', ['createState'])
   },
   async mounted () {
-    getMyOpenedPools().then(pools => {
+    try{
+      const pools = await getMyOpenedPools()
       this.initChart(pools)
       this.adding = false
-    }).catch(e => {
+    } catch(e) {
       handleApiErrCode(e, (tip, param) => {
         this.$bvToast.toast(tip, param)
       })
-    })
+    }
     this.assetLoading = true
     try{
       let assets = await getRegitryAssets()

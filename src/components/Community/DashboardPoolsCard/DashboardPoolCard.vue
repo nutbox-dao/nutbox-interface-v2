@@ -16,7 +16,7 @@
       <div class="h-line mt-4 mb-3"></div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.userCount') }}</span>
-       <div class="info">{{ pool.stakerCount }}</div>
+       <div class="info">{{ stakerCount }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('community.totalDeposit') }}</span>
@@ -125,6 +125,9 @@ export default {
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.publishePoolInfo) return null;
       return this.allTokens[this.publishePoolInfo.address]
     },
+    stakerCount() {
+      return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']
+    },
     status (){
       if (!this.pool) return 'loading'
       if (this.published){
@@ -202,7 +205,7 @@ export default {
       try{
         this.updating = true
         const res = await tryWithdraw(this.pool.pid)
-        his.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
+        this.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
           title: this.$t('tip.tips'),
           variant:'success'
         })
