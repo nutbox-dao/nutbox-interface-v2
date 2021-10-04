@@ -150,6 +150,8 @@ export default {
           this.steemAccount,
           hexToString(this.card.agentAccount),
           amount,
+          this.card.communityId,
+          this.card.pid,
           this.account
         )
         if (res.success === true){

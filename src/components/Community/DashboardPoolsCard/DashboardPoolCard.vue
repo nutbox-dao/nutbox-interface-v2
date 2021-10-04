@@ -60,7 +60,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
-import { publishPool, getAllPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
+import { publishPool, getAllPools, getMyOpenedPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
 
 export default {
   name: 'DashboardPoolCard',
@@ -189,6 +189,7 @@ export default {
       try{
         this.updating = true
         const res = await stopPool(this.pool.pid)
+        await getMyOpenedPools(true)
         this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
           title: this.$t('tip.tips'),
           variant:'success'
@@ -205,6 +206,7 @@ export default {
       try{
         this.updating = true
         const res = await tryWithdraw(this.pool.pid)
+        await getMyOpenedPools(true)
         this.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
           title: this.$t('tip.tips'),
           variant:'success'
@@ -221,6 +223,7 @@ export default {
       try{
         this.updating = true
         const res = await removePool(this.pool.pid)
+        await getMyOpenedPools(true)
         this.$bvToast.toast(this.$t('tip.removePoolOk'), {
           title: this.$t('tip.tips'),
           variant:'success'

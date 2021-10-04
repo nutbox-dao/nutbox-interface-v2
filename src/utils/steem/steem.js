@@ -1,7 +1,7 @@
 import steem from 'steem'
 import { key_utils } from 'steem/lib/auth/ecc'
 import { auth } from 'steem'
-import { errCode, STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
+import { errCode, STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../../config.js'
 import { sleep } from '../helper'
 import store from '@/store'
 
@@ -9,12 +9,15 @@ const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[
 window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
 steem.api.setOptions({ url: 'https://api.steemit.com' })
 
-function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
+function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
   let memo = [
     "delegate_vesting_shares",
     {
-      "delegator_address": address
+      "homeChainId": BSC_CHAIN_ID, // ethruem chain id
+      "stakingFeast": stakingFeast,
+      "pid": pid,
+      "delegator_address": address,
     }
   ]
   memo = JSON.stringify(memo)
@@ -70,23 +73,23 @@ export async function transferSteem (from, to, amount, memo) {
   return await broadcastOps([transOp])
 }
 
-export async function steemWrap (from, to, amount, memo, currency, address, fee) {
-  fee = parseFloat(fee).toFixed(3)
-  amount = parseFloat(amount).toFixed(3)
-  return await requestBroadcastWithFee(from, address, fee, currency, [
-    'transfer',
-    {
-      from,
-      to,
-      amount: amount + ' ' + currency,
-      memo
-    }
-  ])
-}
+// export async function steemWrap (from, to, amount, memo, currency, address, fee) {
+//   fee = parseFloat(fee).toFixed(3)
+//   amount = parseFloat(amount).toFixed(3)
+//   return await requestBroadcastWithFee(from, address, fee, currency, [
+//     'transfer',
+//     {
+//       from,
+//       to,
+//       amount: amount + ' ' + currency,
+//       memo
+//     }
+//   ])
+// }
 
-export async function steemDelegation (delegator, delegatee, amount, address) {
+export async function steemDelegation (delegator, delegatee, amount, stakingFeast, pid, address) {
   const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [
+  return await requestBroadcastWithFee(delegator, stakingFeast, pid, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {
       delegator,

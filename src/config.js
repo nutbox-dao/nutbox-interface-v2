@@ -85,7 +85,7 @@ export const STEEM_CONF_KEY = 'steemNodeKey'
 // delegate fee
 export const STEEM_STAKE_FEE = 0.001
 // official fee account
-export const STEEM_GAS_ACCOUNT = 'walnut.gas'
+export const STEEM_GAS_ACCOUNT = 'test.walnut.gas'
 
 // Steem Config
 export const STEEM_API_URLS = [
@@ -103,7 +103,7 @@ export const HIVE_CONF_KEY = 'hiveNodeKey'
 // delegate fee
 export const HIVE_STAKE_FEE = 0.001
 // official fee account
-export const HIVE_GAS_ACCOUNT = 'walnut.gas'
+export const HIVE_GAS_ACCOUNT = 'test.walnut.gas'
 
 // Hive Config
 export const HIVE_API_URLS = [
