@@ -25,6 +25,7 @@
           type="number"
           v-model="delegatevalue"
           placeholder="0"
+          @keyup="isMax=false"
         />
         <div>
           <button class="primary-btn input-btn" @click="fillMax">{{ $t("commen.max") }}</button>
@@ -56,7 +57,8 @@ export default {
     return {
       delegatevalue: '',
       loading: false,
-      fee: STEEM_STAKE_FEE
+      fee: STEEM_STAKE_FEE,
+      isMax: false
     }
   },
   computed: {
@@ -90,7 +92,8 @@ export default {
     },
     fillMax(){
         this.delegatevalue =
-        this.operate === "add" ? this.spBalance : this.depositDatas[this.card.asset];
+        this.operate === "add" ? this.spBalance : this.staked;
+        this.isMax = true;
     },
     checkDelegateFee() {
       if (this.steemBalance >= 1){

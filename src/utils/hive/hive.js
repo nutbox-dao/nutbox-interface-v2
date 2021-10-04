@@ -10,15 +10,25 @@ const hiveConf = window.localStorage.getItem(HIVE_CONF_KEY) || HIVE_API_URLS[0]
 window.localStorage.setItem(HIVE_CONF_KEY, hiveConf)
 hive.api.setOptions({ url: hiveConf })
 
-async function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
+async function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
   const hiveGas = HIVE_GAS_ACCOUNT
+  let memo = [
+    "delegate_vesting_shares",
+    {
+      "homeChainId": BSC_CHAIN_ID, // ethruem chain id
+      "stakingFeast": stakingFeast,
+      "pid": pid,
+      "delegator_address": address,
+    }
+  ]
+  memo = JSON.stringify(memo)
   const feeOperation = [
     'transfer',
     {
       from: account,
       to: hiveGas,
       amount: fee + ' ' + symbol,
-      memo: 'fee: ' + operation[0] + ' ' + address
+      memo
     }
   ]
   return await broadcastOps([feeOperation, operation])
@@ -52,9 +62,9 @@ export async function hiveWrap (from, to, amount, memo, currency, address, fee) 
   ])
 }
 
-export async function hiveDelegation (delegator, delegatee, amount, address) {
+export async function hiveDelegation (delegator, delegatee, amount, takingFeast, pid, address) {
   const fee = parseFloat(HIVE_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, address, fee, 'HIVE', [
+  return await requestBroadcastWithFee(delegator, takingFeast, pid, address, fee, 'HIVE', [
     'delegate_vesting_shares',
     {
       delegator,

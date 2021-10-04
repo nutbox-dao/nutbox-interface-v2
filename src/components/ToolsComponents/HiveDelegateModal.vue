@@ -91,7 +91,7 @@ export default {
     },
     fillMax(){
         this.delegatevalue =
-        this.operate === "add" ? this.hpBalance : this.depositDatas[this.card.asset];
+        this.operate === "add" ? this.hpBalance : this.staked;
     },
     checkDelegateFee() {
       if (this.hiveBalance >= 1){
@@ -151,6 +151,8 @@ export default {
           this.hiveAccount,
           hexToString(this.card.agentAccount),
           amount,
+          this.card.communityId,
+          this.card.pid,
           this.account
         )
         if (res.success === true){
