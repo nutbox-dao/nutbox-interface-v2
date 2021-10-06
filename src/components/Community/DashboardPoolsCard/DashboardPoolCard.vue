@@ -26,6 +26,10 @@
         <span class="name">{{ $t('community.totalDepositDollor') }}</span>
        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
+      <div class="project-info-container">
+        <span class="name">{{ $t('stake.staked') + (stakedERC20 ? stakedERC20.symbol : 'NUT') }}</span>
+       <div class="info">{{ ((pool.stakedNUT ? pool.stakedNUT.toString() : 0) / 1e18) | amountForm }}</div>
+      </div>
       <!-- <div class="project-info-container">
         <span class="name">{{ $t('community.hasMined') }}</span>
         <div class="info">{{ minedToken | amountForm }}</div>
@@ -61,6 +65,7 @@
 import { mapState } from 'vuex'
 import { handleApiErrCode } from '@/utils/helper'
 import { publishPool, getAllPools, getMyOpenedPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
+import { getAssetMetadata } from '@/utils/web3/asset'
 
 export default {
   name: 'DashboardPoolCard',
@@ -156,7 +161,8 @@ export default {
       minedToken: 0,
       contract: null,
       published: false,
-      publishePoolInfo: null
+      publishePoolInfo: null,
+      stakedERC20: {}
     }
   },
   props: {
@@ -224,6 +230,7 @@ export default {
         this.updating = true
         const res = await removePool(this.pool.pid)
         await getMyOpenedPools(true)
+        this.pool.stakedNUT = 0
         this.$bvToast.toast(this.$t('tip.removePoolOk'), {
           title: this.$t('tip.tips'),
           variant:'success'
@@ -246,6 +253,7 @@ export default {
         this.published = true
       }
     }
+    this.stakedERC20 = await getAssetMetadata(this.pool.NUT, 'HomeChainAssetRegistry')
   },
 }
 </script>

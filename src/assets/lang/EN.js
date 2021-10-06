@@ -166,6 +166,7 @@ module.exports = {
     get: "Get",
     stake: "Deposit",
     unStake: "Undeposit",
+    staked: 'Staked '
   },
   tip: {
     approveSuccess:'Approval Success',

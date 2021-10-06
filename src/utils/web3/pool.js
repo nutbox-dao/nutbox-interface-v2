@@ -42,7 +42,7 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { GasLimit } from '@/config'
+import { GasLimit, NutAddress } from '@/config'
 import { ethers } from 'ethers'
 import {
   BLOCK_SECOND,
@@ -126,6 +126,8 @@ export const getMyOpenedPools = async (update = false) => {
         myAsset.map((a, i) => idToIndex[a.asset] = i)
         pools = pools.map(pool => ({
           pid: pool.pid,
+          NUT: pool.NUT,
+          stakedNUT: pool.stakedNUT,
           poolName: pool.poolName,
           poolRatio: pool.poolRatio,
           stakerCount: pool.stakerCount,
@@ -347,6 +349,20 @@ export const approvePool = async (pool) => {
           console.log('Approve pool Fail', e);
       }
       
+  })
+}
+
+export const approveNUT = async (pool) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const res = await approvePool({
+        address: NutAddress,
+        decimal: 18
+      })
+      resolve(res)
+    }catch(e) {
+      reject(e)
+    }
   })
 }
 
@@ -673,7 +689,7 @@ export const monitorApprovements = async () => {
       let watcher = watchers['approvements']
       watcher && watcher.stop()
       const account = await getAccounts();
-      watcher = createWatcher(pools.map(pool => ({
+      let calls = pools.map(pool => ({
         target: pool.address,
         call: [
           'allowance(address,address)(uint256)',
@@ -683,7 +699,19 @@ export const monitorApprovements = async () => {
         returns: [
           [pool.communityId + '-' + pool.pid, val => val / (10 ** pool.decimal) > 1e10]
         ]
-      })), Multi_Config)
+      }))
+      calls.push({
+        target: NutAddress,
+        call: [
+          'allowance(address,address)(uint256)',
+          account,
+          erc20HandlerAddress
+        ],
+        returns: [
+          ['NUTAllowance', val => val / (1e18) > 1e10]
+        ]
+      })
+      watcher = createWatcher(calls, Multi_Config)
       watcher.batch().subscribe(updates => {
         store.commit('web3/saveLoadingApprovements', false)
         let approvements = store.state.web3.approvements
@@ -712,7 +740,6 @@ export const monitorPoolInfos = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       const pools = await getAllPools()
-      console.log(532, pools);
       let watchers = store.state.web3.watchers
       let watcher = watchers['poolInfos']
       watcher && watcher.stop()
@@ -720,11 +747,13 @@ export const monitorPoolInfos = async () => {
         return {
           target: p.communityId,
           call: [
-            'openedPools(uint256)(uint8,uint64,string,bool,bool,bool,bool,uint16,bytes32,uint256,uint256)',
+            'openedPools(uint256)(uint8,bytes32,uint256,uint64,string,bool,bool,bool,bool,uint16,bytes32,uint256,uint256)',
             p.pid,
           ],
           returns: [
             [p.communityId + '-' + p.pid + "-pid", pid => parseInt(pid)],
+            [p.communityId + '-' + p.pid + "-NUT"],
+            [p.communityId + '-' + p.pid + "-stakedNUT", val => val.toString() / 1e18],
             [p.communityId + '-' + p.pid + "-stakerCount", count => parseInt(count)],
             [p.communityId + '-' + p.pid + "-poolName"],
             [p.communityId + '-' + p.pid + "-hasActived"],

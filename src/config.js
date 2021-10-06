@@ -195,6 +195,7 @@ export const OfficialAssets = [
 // local network
 // export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
 export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
+export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
 // export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'

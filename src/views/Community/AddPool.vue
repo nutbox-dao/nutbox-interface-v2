@@ -117,7 +117,15 @@
           </b-form-group>
           <div class="row">
             <div class="col-md-5">
+              <button v-if="!approved"
+                class="primary-btn"
+                  @click="approve"
+                  :disabled="isApproving || loadingApprovements">
+                <b-spinner small type="grow" v-show="isApproving || loadingApprovements" />
+                  {{ $t('commen.approveContract') }}
+              </button>
               <button
+                v-else
                 class="primary-btn"
                 @click="confirmAdd"
                 :disabled="adding"
@@ -127,6 +135,7 @@
               </button>
             </div>
           </div>
+          <span>创建矿池需要质押NUT</span>
         </div>
         <div class="divide-box">
           <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
@@ -166,10 +175,10 @@ import {
   VALIDATOR_CHAINID_TO_NAME,
 } from "@/config";
 import { stanfiAddress } from "@/utils/commen/account";
-import { addPool, getMyOpenedPools } from "@/utils/web3/pool";
+import { addPool, getMyOpenedPools, approveNUT } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
 import Step from "@/components/ToolsComponents/Step";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { OfficialAssets } from "@/config";
 import { hexToString } from "@/utils/web3/utils";
 
@@ -180,6 +189,7 @@ export default {
     return {
       isHomeChainAsset: true,
       adding: true,
+      isApproving: false,
       myPools: [],
       colorList: [
         "#FF7366",
@@ -251,6 +261,10 @@ export default {
   },
   computed: {
     ...mapGetters("web3", ["createState"]),
+    ...mapState('web3', ['loadingApprovements', 'approvements']),
+    approved() {
+      return this.approvements ? this.approvements['NUTAllowance'] : false;
+    },
   },
   async mounted() {
     try {
@@ -382,6 +396,22 @@ export default {
       this.selectedAddressData = data;
       this.isHomeChainAsset = data.isHomeChainAsset;
       this.form.assetId = data.asset;
+    },
+    async approve(){
+      try {
+        this.isApproving = true;
+        const hash = await approveNUT();
+        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isApproving = false;
+      }
     },
     checkInput() {
       let tipStr = "";

@@ -166,6 +166,7 @@ module.exports = {
     get: '获取',
     stake: "储蓄",
     unStake: "减少储蓄",
+    staked: '质押'
   },
   tip: {
     approveSuccess:'授权成功',
