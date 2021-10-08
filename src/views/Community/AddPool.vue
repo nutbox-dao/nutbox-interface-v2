@@ -135,7 +135,9 @@
               </button>
             </div>
           </div>
-          <span>创建矿池需要质押NUT</span>
+          <br/>
+          <p>{{ $t('community.createNeedStake') }}{{ stakedNUT | amountForm }} {{ ' ' + NUT.symbol }}</p>
+          <p> {{ $t('commen.balance') + ':' }} {{ userBalances && userBalances[NUT.address] && userBalances[NUT.address].toString() / 1e18 | amountForm }} {{ ' ' + NUT.symbol }}</p>
         </div>
         <div class="divide-box">
           <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
@@ -175,7 +177,7 @@ import {
   VALIDATOR_CHAINID_TO_NAME,
 } from "@/config";
 import { stanfiAddress } from "@/utils/commen/account";
-import { addPool, getMyOpenedPools, approveNUT } from "@/utils/web3/pool";
+import { addPool, getMyOpenedPools, approveNUT, getStakedNUTInfo } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
 import Step from "@/components/ToolsComponents/Step";
 import { mapGetters, mapState } from "vuex";
@@ -191,6 +193,8 @@ export default {
       adding: true,
       isApproving: false,
       myPools: [],
+      NUT: {},
+      stakedNUT: 0,
       colorList: [
         "#FF7366",
         "#7CBF4D",
@@ -261,7 +265,7 @@ export default {
   },
   computed: {
     ...mapGetters("web3", ["createState"]),
-    ...mapState('web3', ['loadingApprovements', 'approvements']),
+    ...mapState('web3', ['loadingApprovements', 'approvements', 'userBalances']),
     approved() {
       return this.approvements ? this.approvements['NUTAllowance'] : false;
     },
@@ -276,6 +280,10 @@ export default {
         this.$bvToast.toast(tip, param);
       });
     }
+    getStakedNUTInfo().then(res => {
+      this.NUT = res[0]
+      this.stakedNUT = res[1].toString() / 1e18;
+    })
     this.assetLoading = true;
     try {
       let assets = await getRegitryAssets();
@@ -423,6 +431,8 @@ export default {
         this.form.ratios.reduce((t, r) => t + parseInt(r * 100), 0) != 10000
       ) {
         tipStr = this.$t("tip.ratioError");
+      } else if (parseFloat(this.userBalances[this.NUT.address].toString() / 1e18) < parseFloat(this.stakedNUT)){
+        tipStr = this.$t("tip.insufficientBalance")
       } else {
         return true;
       }

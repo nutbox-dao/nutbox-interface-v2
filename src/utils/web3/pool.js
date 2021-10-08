@@ -28,7 +28,8 @@ import {
 } from '@makerdao/multicall'
 import {
   getRegitryAssets,
-  getAllTokenFromBackend
+  getAllTokenFromBackend,
+  getERC20Info
 } from './asset'
 import {
   getMyStakingFactory,
@@ -151,6 +152,25 @@ export const getMyOpenedPools = async (update = false) => {
   })
 }
 
+/**
+ * Get info for create a pool
+ * Include erc20token info and amount
+ * @returns 
+ */
+export const getStakedNUTInfo = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const registryHub = await getContract('RegistryHub')
+      let NUT = await registryHub.getNUT();
+      NUT = await registryHub.getHomeLocation(NUT);
+      NUT = await getERC20Info(NUT)
+      const stakedNUT = await registryHub.getStakedNUT();
+      resolve([NUT, stakedNUT])
+    }catch(e) {
+      reject(e);
+    }
+  })
+}
 
 /**
  * Add new pool
@@ -731,7 +751,6 @@ export const monitorApprovements = async () => {
     }
   })
 }
-
 
 /**
  * Monitor all pools info

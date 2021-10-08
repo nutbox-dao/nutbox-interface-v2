@@ -193,6 +193,13 @@ export default {
     },
     async stop() {
       try{
+        if (this.pool.poolRatio !== 0 || this.pool.poolRatio !== 100) {
+          this.$bvToast.toast(this.$t('tip.stopPoolTips'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
         this.updating = true
         const res = await stopPool(this.pool.pid)
         await getMyOpenedPools(true)

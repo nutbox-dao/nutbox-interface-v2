@@ -54,7 +54,8 @@ export default {
       // const assets = await getRegitryAssets()
       const myPools = await getMyOpenedPools()
       console.log('my pools', myPools)
-      this.stakingPools = myPools
+      this.stakingPools = [...myPools]
+      this.stakingPools.reverse()
     } catch (e) {
       if (e === errCode.NO_STAKING_FACTORY) {
         this.noCommunity = true

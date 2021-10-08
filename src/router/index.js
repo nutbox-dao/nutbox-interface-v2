@@ -15,9 +15,7 @@ import CrowdStaking from '../views/CrowdStaking/CrowdStaking'
 import CrowdLoan from '../views/CrowdStaking/CrowdLoan'
 import CommunityIndex from '../views/Community/Index'
 import Community from '../views/Community/Community'
-import DeployToken from '../views/Community/DeployToken'
 import CreateEconomy from '@/views/Community/CreateEconomy'
-import PoolsDashboard from '@/views/Community/PoolsDashboard'
 import AddPool from '@/views/Community/AddPool'
 import UpdatePool from '@/views/Community/UpdatePool'
 import Register from '@/views/RegisterAsset/Register'
@@ -156,22 +154,6 @@ const routes = [
           {
             path: 'create-economy',
             component: CreateEconomy
-          },
-          {
-            path: 'pool-dashboard',
-            component: PoolsDashboard
-          },
-          {
-            path: 'add-pool',
-            component: AddPool
-          },
-          {
-            path: 'update-pool',
-            component: UpdatePool
-          },
-          {
-            path: 'community-info',
-            component: CommunityInfo
           },
           {
             path: 'register-ctoken',

@@ -226,7 +226,11 @@ module.exports = {
     selectCowdloan: 'Please selecte a crowdloan project.',
     inputRightBlogTag: 'Please input a right steem community tag. eg:hive-12345.',
     withdrawSuccess: 'Harvest success!',
-    deploying: 'Deploying, maybe cost you some time, please wait for a moment.'
+    deploying: 'Deploying, maybe cost you some time, please wait for a moment.',
+    stopPoolOk: 'Pool has been stopped',
+    removePoolOk: 'Pool has been removed',
+    tryWithdrawOk: 'Redeem success.',
+    stopPoolTips: 'Need set pool ratio to 0 before stop pool.'
   },
   nps: {
     nps: 'Governance',
@@ -345,6 +349,13 @@ module.exports = {
     setting: 'Setting',
     updatePools: "Adjust Staking Pool data",
     addPool: 'Add Staking Pool',
+    stopPool: 'Stop pool',
+    withdrawPool: 'Clear pool',
+    removePool: 'Remove pool',
+    Active: 'Active',
+    Stopped: 'Stopped',
+    CanRemove: 'Stopped',
+    Removed: 'Removed',
     noPools:'No Staking Pools yet',
     userCount: "Number of users",
     totalDeposit: "Total staking",
@@ -376,7 +387,8 @@ module.exports = {
     bindBlog: "Bind your community blog",
     bindBlogMemo: 'Please input your steem community tag to bind.eg:hive-12345',
     inputBlogTag: 'Please input your steem community tag',
-    updateSocialSuccess: 'Update social info success!'
+    updateSocialSuccess: 'Update social info success!',
+    createNeedStake: 'Create new pool need you stake:'
   },
   asset: {
     asset: 'Asset',

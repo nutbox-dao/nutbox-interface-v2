@@ -229,7 +229,8 @@ module.exports = {
     deploying: '部署中，可能会消耗较长时间，请耐心等候',
     stopPoolOk: '已暂停矿池',
     removePoolOk: '已删除矿池',
-    tryWithdrawOk: '清理成功'
+    tryWithdrawOk: '清理成功',
+    stopPoolTips: '停止矿池前需将矿池挖矿比例设置为0！'
   },
   nps: {
     nps: '提案改善',
@@ -386,7 +387,8 @@ module.exports = {
     bindBlog: '绑定已有社区标签',
     bindBlogMemo: '填写您的steem社区标签进行绑定。示例：hive-12345',
     inputBlogTag: "请输入您的steem社区标签",
-    updateSocialSuccess: '社交信息更新成功'
+    updateSocialSuccess: '社交信息更新成功',
+    createNeedStake: '创建矿池需要质押：'
   },
   asset: {
     asset: "资产",
