@@ -193,7 +193,7 @@ export default {
     },
     async stop() {
       try{
-        if (this.pool.poolRatio !== 0 || this.pool.poolRatio !== 100) {
+        if (this.pool.poolRatio !== 0 && this.pool.poolRatio !== 10000) {
           this.$bvToast.toast(this.$t('tip.stopPoolTips'), {
             title: this.$t('tip.tips'),
             variant: 'info'

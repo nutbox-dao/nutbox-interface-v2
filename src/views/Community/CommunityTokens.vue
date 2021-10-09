@@ -75,6 +75,7 @@ export default {
         ]
     },
     items (){
+      console.log(235,this.allCommunities);
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
           price: '$' + formatBalance(c.price * this.ethPrice),

@@ -156,6 +156,14 @@ const routes = [
             component: CreateEconomy
           },
           {
+            path: 'add-pool',
+            component: AddPool
+          },
+          {
+            path: 'community-info',
+            component: CommunityInfo
+          },
+          {
             path: 'register-ctoken',
             name: 'register-ctoken',
             component: RegisterCtoken
