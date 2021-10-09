@@ -9,7 +9,6 @@ export default {
     subBalance: {},
     subLocked: {},
     subNominators: {},
-    subBonded: {},
     bonded: '',
     nominators: [],
     // communityIds
@@ -37,7 +36,8 @@ export default {
     loadingFunds: true,
     loadingContributions: true,
     clProjectFundInfos: [],
-    clLeasePeriod: {}
+    clLeasePeriod: {},
+    campaigns: null,// parachain's metadata
   },
   mutations: {
     // pokadot
@@ -58,9 +58,6 @@ export default {
     },
     saveSubNominators: (state, subNominators) => {
       state.subNominators = subNominators
-    },
-    saveSubBonded: (state, subBonded) => {
-      state.subBonded = subBonded
     },
     saveBonded: (state, bonded) => {
       state.bonded = bonded
@@ -136,6 +133,9 @@ export default {
     saveClProjectFundInfos: (state, funds) => {
       state.clProjectFundInfos = funds
     },
+    saveCampaigns: (state, campaigns) => {
+      state.campaigns = campaigns
+    }
   },
   getters: {
     // polkadot

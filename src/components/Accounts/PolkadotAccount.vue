@@ -1,10 +1,8 @@
 <template>
-  <b-dropdown class="c-dropdown" right no-caret>
+  <b-dropdown class="account-dropdown" right no-caret>
     <template #button-content>
-      <div class="account-dropdown-btn flex-between-center">
-        <span class="ml-2">{{account && account.meta && account.meta.name | formatUserAddress}}</span>
-        <i class="dropdown-icon ml-3"></i>
-      </div>
+      <span>{{account && account.meta && account.meta.name | formatUserAddress}}</span>
+      <i class="dropdown-icon ml-3"></i>
     </template>
     <b-dropdown-item v-for="(item, index) of allAccounts ? allAccounts : []" :key="index"
                      @click="changeAccount(item)">
@@ -34,8 +32,7 @@ import { mapState, mapMutations } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import { getBalance as getPolkadotBalance } from '@/utils/polkadot/account'
 import { getBalance as getKusamaBalance } from '@/utils/kusama/account'
-import { subBonded as subPolkadotBonded } from '@/utils/polkadot/staking'
-import { subBonded as subKusamaBonded, subNominators as subPolkadotNominators } from '@/utils/kusama/staking'
+import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   name: 'PolkadotAccount',
@@ -58,13 +55,11 @@ export default {
     changeAccount (acc) {
       console.log(acc.address);
       this.saveAccount(acc);
-      // TODO update data related with polkadot
+
       getPolkadotBalance(acc);
       getKusamaBalance(acc);
-      subPolkadotBonded();
-      subKusamaBonded();
-      subPolkadotNominators()
-
+      subNominators('polkadot');
+      subNominators('kusama')
     }
   }
 }

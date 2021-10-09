@@ -11,15 +11,22 @@
         {{ $t("cs.bondAndNominate") }}
       </div>
       <div class="input-group-box">
-        <div class="label">{{ $t("cs.available") }}: {{ formatBalance }}</div>
+        <div class="label flex-between-center">
+          <span>
+            {{ $t('cs.bondedAmount') }}: {{ locked }}
+          </span>
+          <span>
+            {{ $t("cs.available") }}: {{ formatBalance }}
+          </span>
+          </div>
         <div class="flex-between-center">
           <input type="number" v-model="inputAmount" />
         </div>
       </div>
       <div class="text-center mb-4 font16">
+        <p class="bondInfo">{{ $t("cs.bondInfo2") }} <span style="color:red;font-weight: 500">{{ minNominatorBond }} {{ this.symbol }}</span></p>
         <p class="bondInfo">{{ $t("cs.bondInfo1") }}</p>
-        <p class="bondInfo">{{ $t("cs.bondInfo2") }}</p>
-        <p class="bondInfo">{{ $t("cs.bondInfo3") }}</p>
+        <p class="bondInfo">{{ $t("cs.bondInfo3", {days : crowdstaking.chainId === 2 ? 28 : 7 }) }}</p>
       </div>
       <button class="primary-btn" @click="confirm" :disabled="isBondAndNominating">
         <b-spinner small type="grow" v-show="isBondAndNominating"></b-spinner
@@ -30,10 +37,11 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { formatBalance as fb } from "@/utils/polkadot/polkadot";
+import { formatBalance as kfb } from '@/utils/kusama/kusama'
 import BN from "bn.js";
-import { bondAndNominate } from "@/utils/polkadot/staking";
+import { bondAndNominate, getMinNominatorBond } from "@/utils/commen/crowdStaking";
 
 export default {
   data() {
@@ -42,6 +50,7 @@ export default {
       inputNonimator: "",
       paraTokenSymbol: "",
       isBondAndNominating: false,
+      minNominatorBond: 0
     };
   },
   props: {
@@ -50,13 +59,24 @@ export default {
     }
   },
   computed: {
-    ...mapState('polkadot',["symbol", "balance", "nominators"]),
     ...mapState(['lang']),
-    ...mapGetters('polkadot',["getFundInfo", "decimal", "available"]),
+    ...mapState({
+      pLocked: state => state.polkadot.locked,
+      kLocked: state => state.kusama.locked
+    }),
+    locked () {
+      return this.crowdstaking.chainId === 2 ? (this.pLocked.toNumber() / 1e10).toFixed(4) + this.symbol : (this.kLocked.toNumber() / 1e12).toFixed(4) + this.symbol
+    },
+    available () {
+      return this.crowdstaking.chainId === 2 ? this.$store.getters['polkadot/available'] : this.$store.getters['kusama/available']
+    },
     formatBalance() {
-      let uni = fb(this.available);
+      let uni = (this.crowdstaking.chainId === 2 ? fb : kfb)(this.available);
       return uni;
     },
+    symbol() {
+      return this.crowdstaking.chainId === 2 ? 'DOT' : 'KSM'
+    }
   },
   methods: {
     hide() {
@@ -75,17 +95,15 @@ export default {
         return false;
       }
       const amount = parseFloat(this.inputAmount);
-
-      if (amount < 0.1) {
-        this.$bvToast.toast(this.$t("tip.belowMinBond"), {
+      if (amount + parseFloat(this.locked) < parseFloat(this.minNominatorBond)) {
+        this.$bvToast.toast(this.$t("tip.belowMinBond", { min: this.minNominatorBond + this.symbol }), {
           title: this.$t("tip.tips"),
           autoHideDelay: 5000,
           variant: "warning",
         });
         return;
       }
-
-      if (this.available.lte(new BN(amount).mul(new BN(1e10)))) {
+      if (this.available.lte(new BN(amount * (this.symbol === 'polkadot' ? 1e10 : 1e12)))) {
         this.$bvToast.toast(this.$t("tip.insufficientBalance"), {
           title: this.$t("tip.tips"),
           autoHideDelay: 5000,
@@ -101,12 +119,12 @@ export default {
       }
       try {
         this.isBondAndNominating = true
-        const { community, project } = this.crowdstaking
         await bondAndNominate(
+          this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama',
           this.inputAmount,
-          project.validators,
-          community.communityId,
-          project.projectId,
+          [this.crowdstaking.validatorAccount],
+          this.crowdstaking.validatorAccount,
+          this.crowdstaking.validatorAccount,
           (info, param) => {
             this.$bvToast.toast(info, param);
           },
@@ -127,6 +145,9 @@ export default {
     },
   },
   mounted() {
+    getMinNominatorBond(this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama').then(res => {
+      this.minNominatorBond = this.crowdstaking.chainId == 2 ? res.toNumber() / 1e10 : res.toNumber() / 1e12
+    })
   },
 };
 </script>

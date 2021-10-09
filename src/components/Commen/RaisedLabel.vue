@@ -43,12 +43,7 @@ export default {
       let raised;
       let cap;
       if (this.isBalance){
-        const myData = this.fund.funds.filter(c=>c.contributor == this.account.address)
-        if (myData.length === 0){
-          raised = new BN(0);
-        }else{
-          raised = myData[0].amount
-        }
+        raised = this.fund.funds.ownContribution
         cap = this.balance
         raised = this.convertUni(raised)
         cap = this.convertUni(cap)

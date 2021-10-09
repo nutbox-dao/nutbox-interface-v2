@@ -10,7 +10,7 @@
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
       </div>
-      <div class="cards-container">
+      <div class="cards-container no-view-top-header">
         <div class="row">
           <div class="col-xl-4 col-md-6 mb-4" v-for="card, idx of stakingCards" :key="idx">
             <CrowdStakingCard
@@ -40,7 +40,6 @@ export default {
     }
   },
   mounted () {
-    console.log(235, this.poolCards);
   },
 };
 </script>

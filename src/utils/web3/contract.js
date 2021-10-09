@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import {
-  getEthWeb,
   getWeb3,
   setupNetwork,
   isUnlocked,
@@ -17,21 +16,22 @@ import {
 import {
   getAccounts
 } from './account'
-import { errCode, RPC_NODE } from '../../config'
+import { errCode } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0x89b1FaC6a759e45f4c9ac43a027B03E731f3ab78",
-  "HomeChainAssetRegistry": "0x325D479653d342787CA2c11623133F1EF3A62Ac6",
-  "SteemHiveDelegateAssetRegistry": "0x807156Eaa44De0E3375dc69CfC2DB13292A4a100",
-  "SubstrateCrowdloanAssetRegistry": "0x203dC8e9008209a80622de060CCa23F2A5B656e4",
-  "SubstrateNominateAssetRegistry": "0xc1425A4442d6E6DdD20F920609EE5eB56bBf9c54",
-  "ERC20AssetHandler": "0xd633fac63F98bFB130A1E9F287C30eb994A069F2",
+  "RegistryHub": "0x44bEdacc3B1DE060768499ea8EA5951A72333B38",
+  "ERC20Factory": "0xAFCa880882b95A5d32245DF032ce8146e87a9B7a",
+  "HomeChainAssetRegistry": "0x4Fe7Ae9a90Ea123754fAF83dc0D7a78EF6841a1d",
+  "SteemHiveDelegateAssetRegistry": "0xFb1Da36E48D3D8fE020388F90E89D9C739eaE5fC",
+  "SubstrateCrowdloanAssetRegistry": "0x4CBE1Bf676e290e29f76f1Ee7BE0415c9792508A",
+  "SubstrateNominateAssetRegistry": "0x0e3E9e86f3c0080859363898b86179312E42A838",
+  "ERC20AssetHandler": "0x475D6E3B52cAf62Db7b75eFE268ec17d707cF552",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x90Fb51D614C05FddE7790a485DB48A3762Fcd853",
-  "Executor": "0x13229E8fc9ffC8a09a34f0E8BD6A1FeeEB363f4d",
-  "Bridge": "0xbaEA5451D04C7F238128c6a576f7840127AB28C0",
-  "StakingFactory": "0x38c3280D833b33Afe9Bc3739B7bFC06675bF6588",
-  "ERC20Factory": "0xd58a79384f09cA48d3a96Bb23394749E6E055e14"
+  "TrustlessAssetHandler": "0x2Eb7E7de6db39E633629F328355445024e33781d",
+  "Executor": "0x879b26a1007653b3be59c5B06ac59264f6bB9047",
+  "Bridge": "0x2F004DC2D197BF052dafE4d4E0e274077687E111",
+  "StakingFactory": "0x0581B890D690BC748A39a643F1dAA95B5911cc08",
+  "LinearCalculator": "0x8f203dd5F056d826EC072fBe7D4a0190e94A8d85"
 }
 
 // contract file name
@@ -50,7 +50,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   ERC20: 'ERC20.json',
   SimpleERC20: 'SimpleERC20.json',
   MintableERC20: 'MintableERC20.json',
-  ERC20Factory: 'ERC20Factory.json'
+  ERC20Factory: 'ERC20Factory.json',
+  LinearCalculator: 'LinearCalculator.json'
 }
 
 // Get contract Abi
@@ -100,7 +101,7 @@ export const getContract = async function (contractName, address, onlyRead=true)
         // return;
       }
     }
-
+    
     const abi = await getAbi(contractName)
     if (!onlyRead){
       const provider = await getProvider()

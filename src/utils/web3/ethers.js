@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { getEthWeb } from './web3'
 import store from '@/store'
-import { RPC_NODE } from '@/config'
+import { RPC_NODE, errCode } from '@/config'
 import { sleep } from '@/utils/helper'
 
 /**
@@ -45,9 +45,21 @@ export const getGasPrice = async () => {
  * @param {*} hash 
  */
 export const waitForTx = async (hash) => {
-    const provider = await getProvider()
-    console.log(`Waiting for tx: ${hash}...`)
-    while (!await provider.getTransactionReceipt(hash)) {
-        sleep(1000)
-    }
+    return new Promise(async (resolve, reject) => {
+        try{
+            const provider = await getProvider()
+            console.log(`Waiting for tx: ${hash}...`)
+            while (!await provider.getTransactionReceipt(hash)) {
+                sleep(1000)
+            }
+            const trx = await provider.getTransactionReceipt(hash)
+            if (trx.status !== 0) {
+                resolve()
+            }else{
+                reject(errCode.TRANSACTION_FAIL)
+            }
+        }catch(err) {
+            reject(errCode.TRANSACTION_FAIL)
+        }
+    })
 }

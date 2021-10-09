@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import { deposit, withdraw } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
 import BN from 'bn.js'

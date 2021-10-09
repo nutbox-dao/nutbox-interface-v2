@@ -2,6 +2,7 @@ import {
   TIME_PERIOD,
   BLOCK_SECOND
 } from "@/constant"
+import CryptoJS from 'crypto'
 import {
   $t
 } from '@/i18n'
@@ -10,6 +11,13 @@ import {
   errCode
 } from "@/config"
 import axios from 'axios'
+import store from '@/store'
+
+var cryptoOptions = {
+  key: process.env.VUE_APP_CRYPTO_KEY,
+  iv: process.env.VUE_APP_CRYPTO_IV,
+  method: process.env.VUE_APP_CRYPTO_METHOD
+}
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -63,6 +71,21 @@ export const formatBalance = function (value, digit = 3) {
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
 }
 
+export const formatPrice = function (value) {
+  if (!value) return '--'
+  const ethPrice = store.state.ethPrice
+  value = value * ethPrice
+  const str =
+    Number(value).toFixed(3).toString()
+  let integer = str
+  let fraction = ''
+  if (str.includes('.')) {
+    integer = str.split('.')[0]
+    fraction = '.' + str.split('.')[1]
+  }
+  return '$' + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
+}
+
 export const formatUserAddress = (address, long = true) => {
   if (!address) return 'Loading Account'
   if (long) {
@@ -88,6 +111,7 @@ export function getDateString(now, timezone, extra = 0) {
 export function blockTime(start, end) {
   start = parseInt(start)
   end = parseInt(end)
+  if (!start || !end) return '';
   if (start > end) return '';
   if (start === end) return $t('commen.now')
   if (end - start > 9999999999) return "";
@@ -155,6 +179,7 @@ export const uploadImage = async (img) => {
       })
   })
 }
+
 /**
  * Handle API err code
  * @param {*} code 
@@ -174,7 +199,11 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.blockChainError')
   } else if(code === errCode.USER_CANCEL_SIGNING){
     tipStr = $t('error.cancelSigning')
-  } else if(code == errCode.NOT_CONNECT_METAMASK){
+  } else if(code === errCode.TRANSACTION_FAIL){
+    tipStr = $t('error.transactionFail')
+  } else if(code === errCode.ASSET_EXIST){
+    tipStr = $t('error.assetHasRegisterd')
+  }else if(code == errCode.NOT_CONNECT_METAMASK){
     tipStr = $t('error.notConnectWallet')
   } else if (code == errCode.UNLOCK_METAMASK) {
     tipStr = $t('error.unlockWallet')
@@ -186,6 +215,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('error.wrongInputDevRatio')
   } else if (code == errCode.NOT_A_TOKEN_CONTRACT) {
     tipStr = $t('error.notTokenContract')
+  } else if (code === errCode.TOKEN_DEPLOYING) {
+    tipStr = $t('error.tokenDeploying')
   }
   
   
@@ -212,4 +243,18 @@ export const handleApiErrCode = (code, toast) => {
 export const isPositiveInt = (str) => {
   const r = /^\d+$/
   return r.test(str)
+}
+
+export function encrpty (string) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createCipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(string, 'utf8', 'hex')
+  return encrypted + cipheriv.final('hex')
+}
+
+export function decrypt (encryptedString) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createDecipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(encryptedString, 'hex', 'utf8')
+  return encrypted + cipheriv.final('utf8')
 }

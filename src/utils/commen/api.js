@@ -18,11 +18,12 @@ import {
   web3FromSource,
   web3Enable
 } from '@polkadot/extension-dapp'
+import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
 
 export async function initApis() {
-  initApi('polkadot')
-  initApi('rococo')
-  initApi('kusama')
+  initApi('polkadot').then(subscribeAllFundInfo('polkadot'))
+  // initApi('rococo')
+  initApi('kusama').then(subscribeAllFundInfo('kusama'))
 }
 
 async function initApi(chain, changedNode) {

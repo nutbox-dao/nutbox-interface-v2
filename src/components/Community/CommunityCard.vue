@@ -6,7 +6,7 @@
         <img class="logo" :src="cardInfo.icon" alt="">
         <div class="flex-between-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
-          <a :href="cardInfo.website" target="_blank">
+          <a :href="cardInfo.website" target="_blank" v-show="cardInfo.website">
             <div class="more-text-icon">{{ $t('community.more') }}</div>
           </a>
         </div>
@@ -29,7 +29,7 @@
           <div class="info">{{ apyRange }}</div>
         </div>
         <button class="primary-btn"
-                @click="$router.push(`/community/detail-info?id=${cardInfo.id}`)">{{ $t('community.join') }}</button>
+                @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div>
     </div>
   </div>
@@ -54,6 +54,11 @@ export default {
       }
     }
   },
+  methods: {
+    openNewTab (cardInfo) {
+      window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
+    }
+  }
 }
 </script>
 

@@ -5,15 +5,37 @@
       <p class="font16">{{ $t('tip.loading') }}</p>
     </div>
     <template v-else>
-      <div v-if="crowdstakings.length > 0"></div>
+      <div class="view-top-header view-top-header-sticky view-top-header-pt0 p-view-top-header flex-between-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
+                <span v-for="(item, index) of tabOptions" :key="index"
+                      :class="activeTab===index?'active':''"
+                      @click="activeTab = index">{{item}}</span>
+          </div>
+        </div>
+        <component :is='tabOptions[activeTab]'/>
+      </div>
+      <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center ">
+        <b-dropdown class="top-header-dropdown" no-caret>
+          <template #button-content>
+            <span>{{tabOptions[activeTab]}}</span>
+            <i class="dropdown-icon ml-2"></i>
+          </template>
+          <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
+                           :class="activeTab===index?'active':''"
+                           @click="activeTab = index">{{item}}</b-dropdown-item>
+        </b-dropdown>
+        <component :is='tabOptions[activeTab]'/>
+      </div>
+      <div v-if="nominateCards.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdstakings" :key="idx">
-            <CrowdNominateCard :crowdstaking="card"/>
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of nominateCards" :key="idx">
+            <CrowdNominateCard :nomination="card"/>
           </div>
         </div>
       </div>
@@ -23,16 +45,44 @@
 
 <script>
 import CrowdNominateCard from '@/components/CrowdStaking/CrowdNominateCard'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { subNominators } from '@/utils/commen/crowdStaking'
+import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import SteemAccount from '@/components/Accounts/SteemAccount'
+import HiveAccount from '@/components/Accounts/HiveAccount'
 
 export default {
   name: 'CrowdNominate',
   components: {
-    CrowdNominateCard
+    CrowdNominateCard,
+    Pokadot: PolkadotAccount,
+    Kusama: PolkadotAccount,
+    Steem: SteemAccount,
+    Hive: HiveAccount
   },
   computed: {
-    ...mapState('polkadot', ['crowdstakings']),
-    ...mapState('web3', ['loadingAllPools'])
+    ...mapState({
+      loadingAllPools: state => state.web3.loadingAllPools
+    }),
+    ...mapGetters('web3', ['poolCards']),
+    data () {
+      const { poolCards, allParachain } = this
+      return { poolCards, allParachain }
+    },
+    nominateCards () {
+      return this.poolCards.filter(item => item.type === 'SubstrateNominateAssetRegistry')
+    }
+  },
+  data () {
+    return {
+      activeTab: 0,
+      tabOptions: ['Pokadot', 'Kusama', 'Steem', 'Hive']
+    }
+  },
+  mounted () {
+    // get parachian info from backend
+    subNominators('kusama')
+    subNominators('polkadot')
   }
 }
 </script>

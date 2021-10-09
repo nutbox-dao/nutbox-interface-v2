@@ -10,7 +10,7 @@
           <img class="icon2" :src="card.icon" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
+          <div class="link-title" @click="openNewTab(card.communityId)">
             <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
@@ -149,6 +149,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -156,10 +160,14 @@ export default {
       }finally{
         this.isWithdrawing = false  
       }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
   watch: {
     async currentBlockNum (newValue, _) {
+      if (newValue % 20 !== 0) return;
       const fund = this.getFundInfo
       if(!fund) return;
       const end = fund.end
@@ -259,7 +267,7 @@ export default {
     },
     contributions () {
       try {
-        return this.getFundInfo.funds.length
+        return this.getFundInfo.funds.count ?? 0
       } catch (e) {
         return 0
       }

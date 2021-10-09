@@ -2,79 +2,59 @@ import {
   encodeAddress,
   decodeAddress
 } from "@polkadot/util-crypto"
-import store from "../../store"
+import store from "@/store"
 
 import {
   $t
-} from '../../i18n'
-
-import {
-  getApi,
-  getTxPaymentInfo
-} from './polkadot'
+} from '@/i18n'
+import { waitApi } from "./api"
 import { stanfiAddress } from '@/utils/commen/account'
-import { createCrowdstakingRemark } from '../commen/remark'
-
-
-/**
- * 监听用户的绑定储蓄账户
- */
-export const subBonded = async () => {
-  let subBonded = store.state.polkadot.subBonded
-  try {
-    subBonded()
-  } catch (e) {}
-  const api = await getApi()
-  subBonded = await api.query.staking.bonded(store.state.polkadot.account.address, (bonded) => {
-    if (!bonded.toJSON()) {
-      store.commit('polkadot/saveBonded', null)
-      return;
-    }
-    store.commit('polkadot/saveBonded', bonded.toJSON())
-  })
-  store.commit('polkadot/saveSubBonded', subBonded)
-}
+import { createCrowdstakingRemark } from '@/utils/commen/remark'
 
 /**
  * 监听用户的投票节点
  */
-export const subNominators = async () => {
-  let subNominators = store.state.polkadot.subNominators
+export const subNominators = async (relayer) => {
+  let subNominators = store.state[relayer].subNominators
   try {
     subNominators()
   } catch (e) {}
-  const api = await getApi()
+  const api = await waitApi(relayer)
   // const {validators} = await api.derive.staking.overview()
-
-  store.commit('polkadot/saveLoadingStaking', true)
+  if (!store.state[relayer].nominators){
+    store.commit(relayer + '/saveLoadingStaking', true)
+  }
   // 获取用户投票的情况
   const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
-    if (!nominators.toJSON()) {
-      store.commit('polkadot/saveNominators', [])
-      store.commit('polkadot/saveLoadingStaking', false)
-      return;
-    }
-    // 获取节点的昵称
-    let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
-    infos = infos.map(acc => {
-      let nick = ''
-      let address = stanfiAddress(acc.accountId)
-      if (acc.identity?.displayParent || acc.identity?.display){
-        if (acc.identity?.display && acc.identity?.displayParent){
-          nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
-        }else if(acc.identity?.display){
-          nick = acc.identity.display
-        }else{
-          nick = acc.identity.displayParent
-        }
-      }else{
-        nick = `${address.slice(0,16)}...${address.slice(-5)}`
-      }
-      return {
-        address: stanfiAddress(acc.accountId),
-        nick
-      }
-    })
+    // if (!nominators.toJSON()) {
+    //   store.commit(relayer + '/saveNominators', [])
+    //   store.commit(relayer + '/saveLoadingStaking', false)
+    //   return;
+    // }
+    // // 获取节点的昵称
+    // let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
+    // infos = infos.map(acc => {
+    //   let nick = ''
+    //   let address = stanfiAddress(acc.accountId)
+    //   if (acc.identity?.displayParent || acc.identity?.display){
+    //     if (acc.identity?.display && acc.identity?.displayParent){
+    //       nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
+    //     }else if(acc.identity?.display){
+    //       nick = acc.identity.display
+    //     }else{
+    //       nick = acc.identity.displayParent
+    //     }
+    //   }else{
+    //     nick = `${address.slice(0,16)}...${address.slice(-5)}`
+    //   }
+    //   return {
+    //     address: stanfiAddress(acc.accountId),
+    //     nick
+    //   }
+    // })
+    let infos = [{address: '11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ', nick:'11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ'},
+    {address: '1A2ATy1FEu5yQ9ZzghPLsRckPQ7XLmq5MJQYcTvGnxGvCho', nick: 'test2'}
+  ]
     // 获取用户投票的节点的详细信息
     const currentEra = await api.query.staking.currentEra()
     for (let i = 0; i<infos.length; i++){
@@ -88,30 +68,19 @@ export const subNominators = async () => {
       infos[i]['ownStake'] = validatorOwnStake
       infos[i]['commission'] = (validatorComissionRate['commission'].toString() / 10000000).toFixed(1) + '%'
     }
-    store.commit('polkadot/saveLoadingStaking', false)
-    store.commit('polkadot/saveNominators', infos)
+    store.commit(relayer + '/saveLoadingStaking', false)
+    store.commit(relayer + '/saveNominators', infos)
   })
-  store.commit('polkadot/saveSubNominators', unsub)
+  store.commit(relayer + '/saveSubNominators', unsub)
 }
 
 /**
- * 或取我们平台所有社区支持的验证者节点信息
- * @param {Array} validators 验证者节点地址数组
+ * Get mininum nominator bonded of relaychain
+ * @param {*} relayer 
  */
-export const getValidatorsInfo = async (validators) => {
-  const api = await getApi()
-  const currentEra = await api.query.staking.currentEra()
-  let queryArray = []
-  let allValidatorInfosInOurDB = {}
-  for (const address of validators){
-    queryArray.push([api.query.staking.erasStakers, [currentEra.toString(), address]])
-  }
-  const unsub = await api.queryMulti(queryArray, (res) => {
-    for (let i=0; i<validators.length; i++){
-      allValidatorInfosInOurDB[validators[i]] = res[i]
-    }
-    store.commit('polkadot/saveAllValidatorInfosInOurDB', allValidatorInfosInOurDB)
-  })
+export const getMinNominatorBond = async (relayer) => {
+  const api = await waitApi(relayer)
+  return await api.query.staking.minNominatorBond()
 }
 
 /**
@@ -122,14 +91,14 @@ export const getValidatorsInfo = async (validators) => {
  * @param {function} toast toast
  * @param {function} callback callback
  */
-export const nominate = async (validators, communityId, projectId, toast, callback) => {
+export const nominate = async (relayer, validators, communityId, projectId, toast, callback) => {
     const from = store.state.polkadot.account && store.state.polkadot.account.address
     communityId = stanfiAddress(communityId)
     projectId = stanfiAddress(projectId)
     if (!from) {
       reject('no account')
     }
-    const api = await getApi()
+    const api = await waitApi(relayer)
     const nominatorTx = api.tx.staking.nominate(validators)
     const remark = createCrowdstakingRemark(api, communityId, projectId, null)
     const remarkTx = api.tx.system.remarkWithEvent(remark)
@@ -145,6 +114,7 @@ export const nominate = async (validators, communityId, projectId, toast, callba
         try {
           handelBlockState(api, status, dispatchError, toast, callback, unsub)
         } catch (e) {
+          console.log(e);
           toast(e.message, {
             title: $t('tip.error'),
             variant: 'danger'
@@ -162,15 +132,15 @@ export const nominate = async (validators, communityId, projectId, toast, callba
  * @param {function} toast toast
  * @param {function} callback callback
  */
-export const bondAndNominate = async (amount, validators, communityId, projectId, toast, callback) => {
+export const bondAndNominate = async (relayer, amount, validators, communityId, projectId, toast, callback) => {
   const from = store.state.polkadot.account && store.state.polkadot.account.address
   communityId = stanfiAddress(communityId)
   projectId = stanfiAddress(projectId)
   if (!from) {
     reject('no account')
   }
-  const api = await getApi()
-  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(4))))
+  const api = await waitApi(relayer)
+  const uni = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(new BN(relayer === 'polkadot' ? 4 : 6))))
   const bondTx = api.tx.staking.bond(store.state.polkadot.account.address, uni, {
     Staked: null
   })

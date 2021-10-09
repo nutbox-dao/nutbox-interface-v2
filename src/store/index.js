@@ -19,6 +19,12 @@ export default new Vuex.Store({
   state: {
     lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
     allParachain: null,
+    ethPrice: 0,
+    prices: {},
+    metamaskConnected: false,
+    apys: {},
+    // exist in child community page
+    currentCommunityId: null
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -27,6 +33,21 @@ export default new Vuex.Store({
     },
     saveAllParachain:(state, allParachain) => {
       state.allParachain = allParachain
+    },
+    saveEthPrice: (state, ethPrice) => {
+      state.ethPrice = ethPrice
+    },
+    savePrices: (state, prices) => {
+      state.prices = prices
+    },
+    saveMetamaskConnected: (state, metamaskConnected) => {
+      state.metamaskConnected = metamaskConnected
+    },
+    saveApys: (state, apys) => {
+      state.apys = apys
+    },
+    saveCurrentCommunityId: (state, currentCommunityId) => {
+      state.currentCommunityId = currentCommunityId
     }
   },
   getters: {

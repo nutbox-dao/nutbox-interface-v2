@@ -1,38 +1,49 @@
 <template>
-  <div class="page-view-content crowdstaking">
-    <div class="page-view-title">{{$t("cs.crowdstaking") }}</div>
+  <div class="page-container">
+    <div class="page-view-sidebar">
+      <b-nav vertical>
+        <b-nav-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-nav-item>
+        <b-nav-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-nav-item>
+        <b-nav-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-nav-item>
+        <b-nav-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-nav-item>
+      </b-nav>
+    </div>
+    <div class="side-page-view-content">
       <div class="loading-bg" v-if="loading">
         <img src="~@/static/images/loading.gif" alt="" />
         <p class="font16">{{ $t("tip.loading") }}</p>
       </div>
-      <template v-else>
-        <div class="nav-box container">
-          <div class="nav">
-            <router-link v-if="showStakingPool" to="/crowdstaking/deposite">Deposite</router-link>
-            <router-link v-if="showSteemPool" to="/crowdstaking/steem-delegate">Steem Delegate</router-link>
-            <router-link v-if="showHivePool" to="/crowdstaking/hive-delegate">Hive Delegate</router-link>
-            <router-link v-if="showNominatePool" to="/crowdstaking/nominate">Nominate</router-link>
-            <router-link v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">Crowdloan</router-link>
-            <div class="center-blank"></div>
+      <template >
+        <div class="view-top-header view-top-header-sticky m-view-top-header">
+          <div class="container text-left">
+            <b-dropdown class="top-header-dropdown" no-caret>
+              <template #button-content>
+                <span>{{$route.name}}</span>
+                <i class="dropdown-icon ml-2"></i>
+              </template>
+              <b-dropdown-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
+            </b-dropdown>
+          </div>
         </div>
-        <component :is='$route.name'/>
-      </div>
-    <router-view></router-view>
+        <div class="container scroll-content">
+          <router-view></router-view>
+        </div>
       </template>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import SteemAccount from '@/components/Accounts/SteemAccount'
-import HiveAccount from '@/components/Accounts/HiveAccount'
-import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
-import BSCAccount from '@/components/Accounts/BSCAccount'
+import { sleep } from "@/utils/helper";
 
 export default {
   name: "Home",
   computed: {
-    ...mapState('web3',["communityCard"]),
+    ...mapState('web3',["communityCard", 'pools']),
     ...mapGetters('web3', ['poolCards']),
     funds() {
       const fundInfos = this.getFundInfos();
@@ -42,14 +53,10 @@ export default {
       return this.communityCard === null
     },
     showStakingPool() {
-      console.log({poolCards: this.poolCards});
       return this.poolCards && this.poolCards.filter(p => p.type === 'HomeChainAssetRegistry').length > 0
     },
-    showSteemPool() {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry' && p.assetType === 'sp').length > 0
-    },
-    showHivePool() {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry' && p.assetType === 'hp').length > 0
+    showDelegatePool() {
+      return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry').length > 0
     },
     showNominatePool() {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateNominateAssetRegistry').length > 0
@@ -58,19 +65,36 @@ export default {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateCrowdloanAssetRegistry').length > 0
     }
   },
-  components: {
-    crowdloan: PolkadotAccount,
-    nominate: PolkadotAccount,
-    'steem-delegate': SteemAccount,
-    'hive-delegate': HiveAccount,
-    deposite: BSCAccount
-  },
   methods: {
+  },
+  async mounted () {
+    console.log(this.poolCards);
+    let count = 0
+    while (!this.poolCards){
+      if (count++ > 15){
+        break;
+      }
+      console.log(count);
+      await sleep(1)
+    }
+    if (this.showStakingPool) {
+      // this.$router.replace('/crowdstaking/deposite')
+    }else if (this.showDelegatePool){
+      this.$router.replace('/crowdstaking/delegate')
+    }else if (this.showNominatePool){
+      this.$router.replace('/crowdstaking/nominate')
+    }else if (this.showCrowdloanPool){
+      this.$router.replace('/crowdstaking/crowdloan')
+    }
   },
   created () {
   },
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.m-view-top-header {
+  border-bottom: 1px solid var(--dividers);
+  background-color: white;
+}
 </style>

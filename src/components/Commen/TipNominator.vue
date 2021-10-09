@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-modal">
+  <div class="tip-modal" id="tip-nominator">
     <img
       class="close-btn"
       src="~@/static/images/close.svg"
@@ -9,16 +9,16 @@
     <div class="c-modal-header">
       <div class="text-center font20 font-bold" v-if="lang === 'en'">
         Nominate to<span class="big">
-          {{ crowdstaking.project.projectName + "'s" }} </span
+          {{ crowdstaking.poolName + "'s" }} </span
         >validators <br />
         through<span class="big">
-          {{ crowdstaking.community.communityName }} </span
+          {{ crowdstaking.communityName }} </span
         >community
       </div>
       <div class="text-center font20 font-bold" v-else>
-        通过<span class="big"> {{ crowdstaking.community.communityName }} </span
+        通过<span class="big"> {{ crowdstaking.communityName }} </span
         >社区<br />
-        为<span class="big"> {{ crowdstaking.project.projectName }} </span
+        为<span class="big"> {{ crowdstaking.poolName }} </span
         >的验证者节点投票<br />
       </div>
     </div>
@@ -29,11 +29,11 @@
       </p>
     <div v-if="needToCancelValidators > 0" class="list-box">
       <b-form-checkbox-group
-        id="checkbox-group-2"
+        class="list-checkbox"
         v-model="selected"
         name="flavour-2"
       >
-        <div v-for="item of availableNominators" :key="item.address">
+        <div v-for="item of nominators" :key="item.address">
           <b-form-checkbox class="checkbox-item" :value="item.address">
             <div class="checkbox-item-card">
               <span
@@ -81,7 +81,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { nominate } from "@/utils/polkadot/staking";
+import { nominate } from "@/utils/commen/crowdStaking";
 import { MAX_NOMINATE_VALIDATOR } from "@/constant";
 
 export default {
@@ -90,8 +90,8 @@ export default {
       selected: [],
       inputAmount: "",
       inputNonimator: "",
-      paraTokenSymbol: "",
       isNominating: false,
+      relayer: ''
     };
   },
   props: {
@@ -100,24 +100,27 @@ export default {
     },
   },
   computed: {
-    ...mapState('polkadot',["symbol", "balance", "bonded", "nominators"]),
-    ...mapState(['lang']),
-    availableNominators() {
-      return this.nominators.filter(
-        ({ address }) =>
-          this.crowdstaking.project.validators.indexOf(address) === -1
-      );
+    ...mapState({
+      pNominators: state => state.polkadot.nominators,
+      pLoadingStaking: state => state.polkadot.loadingStaking,
+      kNominators: state => state.kusama.nominators,
+      kLoadingStaking: state => state.kusama.loadingStaking,
+    }),
+    nominators () {
+      return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
     },
+    loadingStaking () {
+      return this.pLoadingStaking || this.kLoadingStaking
+    },
+    ...mapState(['lang']),
     needToCancelValidators() {
       return (
-        this.availableNominators.length +
-        this.crowdstaking.project.validators.length -
-        MAX_NOMINATE_VALIDATOR
+        this.nominators.length >= MAX_NOMINATE_VALIDATOR && this.nominators.indexOf(this.crowdstaking.validatorAccount) === -1
       );
     },
     // 确认按钮是否可点击
     canNominate() {
-      if (this.needToCancelValidators) {
+      if (this.needToCancelValidators > 0) {
         return this.selected.length >= this.needToCancelValidators;
       } else {
         return true;
@@ -131,28 +134,29 @@ export default {
     },
     getNominateValidators() {
       if (this.needToCancelValidators > 0) {
+        console.log(352,this.nominators, this.selected);
         // 从用户选择的列表获取投票
-        return this.availableNominators
-          .filter(({ address }) => this.selected.indexOf(address) !== -1)
+        return this.nominators
+          .filter(({ address }) => this.selected.indexOf(address) === -1)
           .map(({ address }) => address)
-          .concat(this.crowdstaking.project.validators);
+          .concat([this.crowdstaking.validatorAccount]);
       } else {
         // 直接拼接节点
-        return this.availableNominators
+        return this.nominators
           .map(({ address }) => address)
-          .concat(this.crowdstaking.project.validators);
+          .concat([this.crowdstaking.validatorAccount]);
       }
     },
     async confirm() {
       try {
         this.isNominating = true;
-        const { community, project } = this.crowdstaking;
         const validators = this.getNominateValidators();
         console.log("selecet validator", validators);
         await nominate(
+          this.relayer,
           validators,
-          community.communityId,
-          project.projectId,
+          this.crowdstaking.validatorAccount,
+          this.crowdstaking.validatorAccount,
           (info, param) => {
             this.$bvToast.toast(info, param);
           },
@@ -161,6 +165,7 @@ export default {
           }
         );
       } catch (e) {
+        console.log(e);
         this.$bvToast.toast(e.message, {
           title: this.$t("tip.error"),
           autoHideDelay: 5000,
@@ -171,11 +176,19 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.relayer = this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama'
+    console.log(235,
+    this.$store.state.polkadot.totalStaked.toNumber(),
+    this.$store.state.polkadot.locked.toNumber(),
+    this.$store.state.polkadot.unLocking.toNumber(),
+    this.$store.state.polkadot.redeemable.toNumber(),
+    this.$store.state.polkadot.balance.toNumber());
+  },
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .tip-modal {
   position: relative;
   max-height: 80vh;
@@ -237,34 +250,11 @@ export default {
   display: flex;
   align-items: center;
 }
-.custom-control-label {
-  width: 100%;
-  &::before {
-    top: 50% !important;
-    transform: translateY(-50%);
-    left: -1.8rem !important;
-    width: 1.4rem !important;
-    height: 1.4rem !important;
-    border: none !important;
-    background-image: url("~@/static/images/no-check.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
-}
 input {
   outline: none;
 }
 .custom-control {
   padding-left: 2rem !important;
-}
-.custom-control-input {
-  width: 1.4rem !important;
-  height: 1.4rem !important;
-}
-.custom-control-input:checked ~ .custom-control-label::before {
-  background-image: url("~@/static/images/checked.png");
-  background-color: transparent !important;
 }
 .checkbox-item-card {
   background-color: #f6f7f9;
@@ -293,6 +283,29 @@ input {
     font-size: 0.7rem;
   }
 }
+/deep/ .custom-control-label {
+  width: 100%;
+}
+/deep/ .custom-control-label::before {
+  top: 50% !important;
+  transform: translateY(-50%);
+  left: -1.8rem !important;
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+  border: none !important;
+  background-image: url("~@/static/images/no-check.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+/deep/ .custom-control-input {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+}
+/deep/ .custom-control-input:checked ~ .custom-control-label::before {
+  background-image: url("~@/static/images/checked.png");
+  background-color: transparent !important;
+}
 @media (max-width: 320px) {
   .card-row {
     flex-direction: column;
@@ -307,4 +320,5 @@ input {
     display: none;
   }
 }
+
 </style>

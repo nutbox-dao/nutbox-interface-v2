@@ -1,5 +1,9 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+    </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
         <img class="icon1" :src="card.icon" alt="" />
@@ -29,13 +33,15 @@
       <span style="color: #717376" class="font-bold">{{ card.symbol }}</span>
       <span style="color: #bdbfc2"> STAKED</span>
     </div>
+    <ConnectMetaMask v-if="!metamaskConnected"/>
+    <template  v-else>
     <div class="btn-row mb-4" v-if="approved">
       <span class="value">
         {{ (loadingUserStakings ? 0 : staked) | amountForm }}
       </span>
       <div class="right-box">
         <button class="outline-btn" @click="decrease">-</button>
-        <button class="outline-btn" @click="increase">+</button>
+        <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
       </div>
     </div>
     <template v-else>
@@ -46,7 +52,7 @@
       v-else
         variant="primary"
         @click="approve"
-        :disabled="isApproving || loadingApprovements"
+        :disabled="isApproving || loadingApprovements || status !== 'Active'"
       >
         <b-spinner
           small
@@ -56,6 +62,7 @@
         {{ $t("commen.approveContract") }}
       </b-button>
     </template>
+    </template>
     <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> TVL </span>
@@ -63,7 +70,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
-        <div class="info">{{ card.apy.toFixed(2) }}%</div>
+        <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
       </div>
     </div>
     <b-modal
@@ -88,11 +95,13 @@ import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHome
 import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode, formatCountdown } from "@/utils/helper";
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: "DDelegateCard",
   components: {
     StakingHomeChainAssetModal,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -101,13 +110,14 @@ export default {
   },
   computed: {
     ...mapState("steem", ["steemAccount"]),
+    ...mapState(['metamaskConnected']),
     ...mapState("web3", [
       "pendingRewards",
       "approvements",
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings",
+      "monitorPools",
       "blockNum"
     ]),
     pendingReward() {
@@ -128,7 +138,8 @@ export default {
       return parseFloat(userStakingBn.toString() / (10 ** decimal));
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + '-' + this.card.pid] + '-totalStakedAmount') return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
@@ -139,6 +150,22 @@ export default {
         return null;
       }
       return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data() {
@@ -179,6 +206,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -189,7 +220,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.card);
   },
 };
 </script>
