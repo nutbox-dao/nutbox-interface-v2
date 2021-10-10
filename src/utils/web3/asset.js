@@ -431,7 +431,7 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(47), 4).substr(2) +                      // communityAccount length
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +                      // communityAccount length
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
       const gas = await getGasPrice()
@@ -478,7 +478,7 @@ export const registerNominateAsset = async (form) => {
       console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
-        ethers.utils.hexzeroPad(ethers.utils.hexlify(47), 4).substr(2) +
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
         addressToHex(form.nodeAddress).substr(2) // node address
       const gas = await getGasPrice()
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
