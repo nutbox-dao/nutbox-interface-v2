@@ -6,7 +6,7 @@
         <p class="font16">{{ $t("tip.loading") }}</p>
       </div>
       <template v-else>
-        <div class="community-info p-card" >
+        <div class="community-info p-card" v-if="activeTab!==5">
           <img class="poster" :src="communityInfo.poster" alt="">
           <i class="back-icon" @click="$router.back()"></i>
           <div class="second-card">
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="nav-box container">
+        <div class="nav-box container" :style="{position: activeTab===5?'fixed':'unset'}">
           <div class="nav mr-5">
             <span v-for="(item, index) of tabOptions" :key="index"
                   v-show="showTab(index)"
@@ -33,13 +33,14 @@
           </div>
           <component :is='wallet'></component>
         </div>
-        <div class="card-container mt-4">
+        <div class="card-container tab-container">
           <component :is="tabOptions[activeTab].component"
             :crowdloanPools='crowdloanPools'
             :nominatePools='nominatePools'
             :steemDelegatePools='steemDelegatePools'
             :hiveDelegatePools='hiveDelegatePools'
-            :erc20Pools='erc20Pools'>
+            :erc20Pools='erc20Pools'
+            :tag='communityInfo.blogTag'>
           </component>
         </div>
       </template>
@@ -58,6 +59,7 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
+import CommunityBlog from "@/views/Blog/CommunityBlog"
 
 export default {
   name: 'CommunityDetailInfo',
@@ -70,32 +72,25 @@ export default {
     BSCAccount,
     PolkadotAccount,
     SteemAccount,
-    HiveAccount
+    HiveAccount,
+    CommunityBlog
   },
   props: {},
   data () {
     return {
       communityId: null,
-      activeTab: 0,
-      tabOptions: [
-        { name: 'Deposite', component: 'DCrowdStaking', chain: '' },
-        { name: 'Steem Delegate', component: 'DSteemDelegate', chain: '' },
-        { name: 'Hive Delegate', component: 'DHiveDelegate', chain: '' },
-        { name: 'Nominate', component: 'DNominate', chain: '' },
-        { name: 'Crowdloan', component: 'DCrowdLoan', chain: '' }
-      ]
+      activeTab: 0
     }
   },
   computed: {
     ...mapGetters('web3', ['communityById']),
     communityInfo () {
       const com = this.communityById(this.communityId)
-      console.log('communityInfo', com)
       return com
     },
     wallet () {
       switch (this.activeTab) {
-        case 0: 
+        case 0:
           return 'BSCAccount';
         case 1:
           return 'SteemAccount'
@@ -104,7 +99,7 @@ export default {
         case 3:
           return 'PolkadotAccount';
         case 4:
-          return 'PolkadotAccount'
+          return 'PolkadotAccount';
         default:
           break;
       }
@@ -126,13 +121,31 @@ export default {
     },
     erc20Pools () {
       return this.pools ? this.pools.filter(p => p.type == 'HomeChainAssetRegistry') : []
+    },
+    tabOptions () {
+      return [
+        { name: this.$t('cs.deposit'), component: 'DCrowdStaking', chain: '' },
+        { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
+        { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
+        { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
+        { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' },
+        { name: this.$t('commen.blog'), component: 'CommunityBlog' }
+      ]
     }
   },
   mounted () {
     this.communityId = this.$route.query.id
-    console.log(2345, this.communityId)
-  },
-  async created () {
+    if (this.showTab(0)){
+      this.activeTab = 0
+    } else if (this.showTab(1)){
+      this.activeTab = 1
+    } else if (this.showTab(2)) {
+      this.activeTab = 2
+    } else if (this.showTab(3)) {
+      this.activeTab = 3
+    } else if(this.showTab(4)) {
+      this.activeTab = 4
+    }
   },
   methods: {
     showTab (index) {
@@ -141,12 +154,14 @@ export default {
           return this.erc20Pools.length > 0
         case 1:
           return this.steemDelegatePools.length > 0
-        case 2: 
+        case 2:
           return this.hiveDelegatePools.length > 0
         case 3:
           return this.nominatePools.length > 0
         case 4:
           return this.crowdloanPools.length > 0
+        case 5:
+          return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
   }
@@ -156,6 +171,15 @@ export default {
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
 @import "src/static/css/card/poster-card";
+.community-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .tab-container {
+    flex: 1;
+    position: relative;
+  }
+}
 .p-card {
   .poster{
     @include card-poster-bg(12rem);

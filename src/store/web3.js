@@ -180,16 +180,22 @@ export default {
       if (state.loadingCommunity){
         return 0;
       }
-      if (state.communityInfo.name){
-        
+      if (state.myPools && state.myPools.length > 0){
+        return 0
       }
-
+      if (state.communityInfo?.name){
+        return 3
+      }
+      if (state.stakingFactoryId){
+        return 2
+      }else{
+        return 1
+      }
     },
     communityCard: (state) => {
       const allPools = state.allPools;
       const allCommunities = state.allCommunities
       if (!allPools || !allCommunities) return []
-      console.log('allpools', allPools);
       const cardInfo = allCommunities
       .map(c => {
         const pools = allPools.filter(pool => pool.communityId === c.id)
@@ -223,7 +229,7 @@ export default {
       return community
     },
     poolCards: (state) => {
-      const showingPools = state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum));
+      const showingPools = state.allPools ? state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum)) : [];
       return showingPools;
     }
   }

@@ -14,10 +14,12 @@ import {
 } from './utils'
 import {
   errCode,
-  Multi_Config
+  Multi_Config,
+  OfficialAssets
 } from '@/config'
 import {
-  waitForTx
+  waitForTx,
+  getGasPrice
 } from './ethers'
 import {
   aggregate,
@@ -38,7 +40,8 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { Transaction_config } from '../../config'
+import { GasLimit } from '../../config'
+import { ethers } from 'ethers'
 
 
 /**
@@ -54,7 +57,6 @@ export const getAllPools = async (update = false) => {
     }
     try {
       const allPools = await gap()
-      console.log('update all pools', allPools);
       store.commit('web3/saveAllPools', allPools);
       store.commit('web3/saveLoadingAllPools', false)
 
@@ -100,7 +102,6 @@ export const getMyOpenedPools = async (update = false) => {
     try {
       const poolCount = await contract.numberOfPools()
       if (poolCount === 0) {
-        console.log('no pools');
         store.commit('web3/saveMyPools', [])
         resolve([])
         return;
@@ -112,11 +113,10 @@ export const getMyOpenedPools = async (update = false) => {
 
       try {
         // get pool asset info
-        const myAsset = await getRegitryAssets()
-        console.log('myasset', myAsset);
+        let myAsset = await getRegitryAssets()
+        myAsset = myAsset.concat(OfficialAssets);
         let idToIndex = {}
         myAsset.map((a, i) => idToIndex[a.asset] = i)
-        console.log(idToIndex);
         pools = pools.map(pool => ({
           pid: pool.pid,
           poolName: pool.poolName,
@@ -165,13 +165,17 @@ export const addPool = async (form) => {
     }
 
     try {
-      console.log(6236, form.assetId, form.name);
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
+      const gas = await getGasPrice()
+      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       // re monitor
       resolve(tx.hash)
     } catch (e) {
-      console.log(542, e);
+      console.log('Create pool fail', e);
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })
@@ -204,7 +208,12 @@ export const updatePoolsRatio = async (form) => {
     }
     try {
       console.log(form);
-      const tx = await contract.setPoolRatios(form.map(val => val * 100))
+      const gas = await getGasPrice()
+      const tx = await contract.setPoolRatios(form.map(val => val * 100),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -311,8 +320,12 @@ export const approvePool = async (pool) => {
      
       const erc20Handler = contractAddress['ERC20AssetHandler']
       try{
-        new BN(10).pow(new BN(pool.decimal + 50))
-        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString())
+        const gas = await getGasPrice()
+        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString(),
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
         await waitForTx(tx.hash)
         resolve(tx.hash)
       }catch(e){
@@ -344,12 +357,16 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
     }
     const account = await getAccounts();
     if (!boundAccount){
-      boundAccount = account
+      boundAccount = ethers.utils.keccak256(account)
     }
 
     try{
-      console.log('deposit', communityId, pid, amount.toString());
-      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount)
+      const gas = await getGasPrice()
+      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount,
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -382,7 +399,12 @@ export const withdraw = async (communityId, pid, amount) => {
 
     try{
       const account = await getAccounts();
-      const tx = await contract.withdraw(pid, account, amount.toString())
+      const gas = await getGasPrice()
+      const tx = await contract.withdraw(pid, account, amount.toString(),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -413,7 +435,12 @@ export const withdrawReward = async (communityId, pid) => {
 
     try{
       console.log(communityId, pid);
-      const tx = await contract.withdrawPoolRewards(pid, Transaction_config)
+      const gas = await getGasPrice()
+      const tx = await contract.withdrawPoolRewards(pid,
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -453,7 +480,7 @@ export const monitorUserStakings = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates user staking', updates);
+        // console.log('Updates user staking', updates);
         store.commit('web3/saveLoadingUserStakings', false)
         let userStakings = store.state.web3.userStakings
         updates.map(u => {
@@ -497,7 +524,7 @@ export const monitorPendingRewards = async () => {
           ]
         })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates pending rewards', updates);
+        // console.log('Updates pending rewards', updates);
         store.commit('web3/saveLoadingPendingRewards', false)
         let pendingRewards = store.state.web3.pendingRewards
         updates.map(u => {
@@ -548,7 +575,7 @@ export const monitorApprovements = async () => {
         updates.map(u => {
           approvements[u.type] = u.value
         })
-        console.log('Updates approve', approvements);
+        // console.log('Updates approve', approvements);
         store.commit('web3/saveApprovements', {...approvements})
       });
       watcher.start()
@@ -586,7 +613,7 @@ export const monitorPoolTvls = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('Updates tvl', updates);
+        // console.log('Updates tvl', updates);
         let totalStakings = store.state.web3.totalStakings
         updates.map(u => {
           totalStakings[u.type] = u.value
@@ -631,7 +658,7 @@ export const monitorUserBalances = async () => {
         updates.map(u => {
           userBalances[u.type] = u.value
         })
-        console.log('Updates balances', userBalances);
+        // console.log('Updates balances', userBalances);
         store.commit('web3/saveLoadingUserBalances', false)
         store.commit('web3/saveUserBalances', {...userBalances})
       })

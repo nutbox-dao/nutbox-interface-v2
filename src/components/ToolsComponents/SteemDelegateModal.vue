@@ -152,11 +152,12 @@ export default {
           this.account
         )
         if (res.success === true){
-          this.getVest();
+          this.getVests();
           this.getSteem();
+          this.$emit("hideDelegateMask");
         }
       }catch(e){
-        console.log(52, e);
+        console.log('Delegate sp fail5', e);
       }finally{
         this.loading = false
       }

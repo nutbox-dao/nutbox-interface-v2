@@ -33,6 +33,10 @@
                 <i id="blog-icon" class="menu-icon" />
                 <span>{{ $t("commen.blog") }}</span>
               </b-nav-item>
+              <b-nav-item to="/nps">
+                <i id="nps-icon" class="menu-icon" />
+                <span>{{ $t("nps.nps") }}</span>
+              </b-nav-item>
             </b-nav>
             <div class="bottom">
               <div class="links">
@@ -148,12 +152,12 @@ import {
 } from './utils/polkadot/account'
 import { initApis } from './utils/commen/api'
 import { isMobile } from './utils/commen/util'
-import { setupNetwork, chainChanged, test } from './utils/web3/web3'
+import { setupNetwork, chainChanged } from './utils/web3/web3'
 import { accountChanged, getAccounts } from './utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity, fetchAllCommunityDistributions } from '@/utils/web3/community'
+import { getAllCommunities, monitorCommunity } from '@/utils/web3/community'
 import { getAllPools, monitorPools } from '@/utils/web3/pool'
-import { handleApiErrCode } from '@/utils/helper'
+import { handleApiErrCode, UpdateApysOfPool } from '@/utils/helper'
 
 export default {
   data () {
@@ -175,7 +179,7 @@ export default {
       'projects'
     ]),
     ...mapState('polkadot', ['clCommunitys']),
-    ...mapState(['lang']),
+    ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities']),
     address () {
       if (this.$store.state.web3.account) {
@@ -200,11 +204,8 @@ export default {
     ...mapMutations('polkadot', ['saveClCommunitys']),
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
-    gotoOfficial () {
-      // test()
-      console.log(1);
-      fetchAllCommunityDistributions()
-      console.log(2);
+    async gotoOfficial () {
+      console.log(this.prices);
       // window.open('https://nutbox.io', '_blank')
     },
     setLanguage (lang) {
@@ -252,7 +253,6 @@ export default {
     }
   },
   async mounted () {
-
     const _this = this
     window.onresize = () => {
       return (() => {
@@ -260,11 +260,18 @@ export default {
         _this.screenWidth = window.screenWidth
       })()
     }
-    this.setLanguage(localStorage.getItem(LOCALE_KEY))
+    this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
+
+    // BSC data
+    this.fetchBscData();
     // bsc related
-    await getAccounts(true)
+    try{
+      await getAccounts(true)
+    }catch (e){
+      console.log('Get accounts fail', e);
+    }
     try {
       setupNetwork()
       chainChanged()
@@ -273,11 +280,11 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
-    // BSC data
-    this.fetchBscData();
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
+
+    UpdateApysOfPool()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
     if (isMobile()) {
@@ -286,8 +293,9 @@ export default {
     }
 
     // init polkadot apis
-    initApis()
-    loadPolkadotAccounts()
+    initApis().then(api => {
+      loadPolkadotAccounts()
+    })
   }
 }
 </script>
@@ -410,6 +418,13 @@ input::-webkit-input-placeholder {
     font-weight: bold;
     min-width: 5rem;
   }
+}
+.cropper-modal .modal-content {
+  background-color: transparent;
+  border: transparent;
+}
+.cropper-modal .modal-body{
+  padding: 0;
 }
 #wallet-icon {
   background-image: url("./static/images/wallet.svg");

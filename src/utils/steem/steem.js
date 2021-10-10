@@ -1,10 +1,13 @@
 import steem from 'steem'
-import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
+import { key_utils } from 'steem/lib/auth/ecc'
+import { auth } from 'steem'
+import { errCode, STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
 import { sleep } from '../helper'
+import store from '@/store'
 
 const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
 window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
-steem.api.setOptions({ url: steemConf })
+steem.api.setOptions({ url: 'https://api.steemit.com' })
 
 function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
@@ -17,12 +20,7 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
       memo: 'fee: ' + operation[0] + ' ' + address
     }
   ]
-  return new Promise(resolve => {
-    steem_keychain.requestBroadcast(account, [feeOperation, operation],
-      needsActive ? 'Active' : 'Posting', function (response) {
-        resolve(response)
-      })
-  })
+  return broadcastOps([feeOperation, operation])
 }
 
 /**
@@ -48,11 +46,7 @@ export async function custom_json (steem, tron) {
       }
     ]
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(steem, ops, "Active", function(response){
-      resolve(response)
-    })
-  })
+  return broadcastOps(ops)
 }
 
 export async function transferSteem (from, to, amount, memo) {
@@ -66,12 +60,7 @@ export async function transferSteem (from, to, amount, memo) {
       memo
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(from, [transOp],
-      'Active', function (response) {
-        resolve(response)
-      })
-  })
+  return await broadcastOps([transOp])
 }
 
 export async function steemWrap (from, to, amount, memo, currency, address, fee) {
@@ -120,16 +109,20 @@ export async function steemTransferVest (from, to, amount, address, fee) {
       amount: amount + ' STEEM'
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(from, [feeOperation, transferVestOp],
-      'Active', function (response) {
-        resolve(response)
-      })
-  })
+  return await broadcastOps([feeOperation, transferVestOp])
 }
 
 export async function getGlobalProperties () {
-  return await steem.api.getDynamicGlobalPropertiesAsync()
+  // return await steem.api.getDynamicGlobalPropertiesAsync()
+  return new Promise(async (resolve, reject) => {
+    const a = steem.api.getDynamicGlobalProperties((err, result) => {
+      console.log('getGlobalProperties error', err);
+      if (err){
+        reject(err)
+      }else
+       resolve(result)
+    })
+  })
 }
 
 export async function steemToVest (steemPower) {
@@ -189,10 +182,229 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
   }
 }
 
+/**
+ * Verify that the account and password match.
+ * @param {String} username steem account name.
+ * @param {String} privateKey steem active private key.
+ * @returns Boolean.
+ */
+ export const verifyNameAndKey = async function (username, privateKey) {
+  const accountInfo = await getAccountInfo(username)
+  const publicKey = accountInfo?.active?.key_auths[0][0]
+  if (!publicKey) {
+    return false
+  }
+
+  let res = false
+  try {
+    res = await auth.wifIsValid(privateKey, publicKey)
+  } catch (error) {
+    return false
+  }
+  return res
+}
+
+
 export const getKeychain = async () => {
   if (window.steem_keychain) {
     return window.steem_keychain
   }
   await sleep(2)
   return window.steem_keychain
+}
+
+/**
+ * Generate a new hive account
+ */
+export const generateNewHiveAccount = async () => {
+  return new Promise(async (resolve, reject) => {
+    let account = null
+    try{
+      while(!account){
+        const num = Math.ceil(Math.random()*3998999) + 10000 
+        const acc = 'hive-' + num;
+        if(!(await getAccountInfo(acc))){
+          account = acc
+          break;
+        }
+      }
+      resolve(account)
+    }catch(e){
+      reject(e)
+    }
+  })
+}
+
+/**
+ * generate main password
+ * @returns 
+ */
+export const generatePassword = () => {
+  return "P" + key_utils.get_random_key().toWif();
+}
+
+const generateAuth = (user, pass, type) => {
+  const key = auth.getPrivateKeys(user, pass, [type]);
+  const publicKey = auth.wifToPublic(Object.values(key)[0]);
+  if (type == "memo") {
+    return {
+      key: key,
+      auth: publicKey
+    };
+  } else {
+    return {
+      key: key,
+      auth: {
+        weight_threshold: 1,
+        account_auths: [],
+        key_auths: [[publicKey, 1]]
+      }
+    };
+  }
+};
+
+/**
+ * Genertate keys by password
+ * @param {*} username 
+ * @param {*} pass 
+ * @returns 
+ */
+export const generateKeys = (username, pass) => {
+  const owner = generateAuth(username, pass, "owner");
+  const active = generateAuth(username, pass, "active");
+  const posting = generateAuth(username, pass, "posting");
+  const memo = generateAuth(username, pass, "memo");
+
+  return {
+    'key': {
+      'owner': owner.key,
+      'active': active.key,
+      'posting': posting.key,
+      'memo': memo.key
+    },
+    'auth': {
+      'owner': owner.auth,
+      'active': active.auth,
+      'posting': posting.auth,
+      'memo': memo.auth
+    }
+  };
+};
+
+/**
+ * Create new steem community
+ * @param {*} account 
+ * @param {*} password 
+ * @returns 
+ */
+export const createNewCommunity = async (creator, account, password) => {
+  const account_keys = generateKeys(account, password).auth;
+  const ops = 
+  [
+    [
+      "account_create", {
+        "fee": "3.000 STEEM",
+        "creator": creator,
+        "new_account_name": account,
+        "owner": account_keys.owner,
+        "active": account_keys.active,
+        "posting": account_keys.posting,
+        "memo_key": account_keys.memo,
+        "json_metadata": ""
+      }
+    ]
+  ]
+  return await broadcastOps(ops)
+}
+
+/**
+ * Set community info
+ * @param {*} creator 
+ * @param {*} account 
+ * @param {*} password 
+ * @param {*} name 
+ * @param {*} description 
+ * @returns 
+ */
+export const setCommunityInfo = async (creator, account, password, name, description) => {
+  return new Promise(async (resolve, reject) => {
+    const updateProps = [
+      "updateProps",
+      {
+        "community": account,
+        props: {
+          title: name,
+          about: description
+        }
+      }
+    ]
+    const setRole = [
+      "setRole",
+      {
+        "community": account,
+        account: creator,
+        role: 'admin'
+      }
+    ]
+    // const wif = auth.getPrivateKeys(account, password, ['posting'])
+    const wif = auth.toWif(account, password, 'posting')
+    try{
+      const res = await Promise.all(
+        [steem.broadcast.customJsonAsync(wif, [], [account], 'community', JSON.stringify(updateProps)),
+          steem.broadcast.customJsonAsync(wif, [], [account], 'community', JSON.stringify(setRole))]
+      )
+      resolve(res)
+    }catch(err){
+      console.log(err);
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+  })
+}
+
+/**
+ * Subscribe community
+ * @returns 
+ */
+export const subscribeCommunity = async (creator, account) => {
+    const subscribeCustom = [
+      'subscribe',
+      {
+        'community': account
+      }
+    ]
+    const ops = [
+      [
+        "custom_json",
+        {
+          "required_auths":[],
+          "required_posting_auths": [creator],
+          'id':'community',
+          'json': JSON.stringify(subscribeCustom)
+        }
+      ]
+    ]
+    return await broadcastOps(ops);
+}
+
+async function broadcastOps(ops) {
+  return new Promise((resolve, reject) => {
+    console.log(store.state.steem.steemLoginType);
+    if (parseInt(store.state.steem.steemLoginType) === 0){// active key
+        steem.broadcast.send({
+          extensions: [],
+          operations: ops
+        }, [store.getters['steem/steemActiveKey']], (err, res) => {
+          if (err){
+            reject();
+          }else {
+            resolve({success: true})
+          }
+        })
+    }else{ // keychain
+      steem_keychain.requestBroadcast(store.state.steem.steemAccount, ops,
+        'Active', function (response) {
+          resolve(response)
+        })
+    }
+  })
 }

@@ -1,10 +1,10 @@
 import { getContract, contractAddress } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config, Transaction_config } from '../../config'
-import { waitForTx } from './ethers'
+import { errCode, Multi_Config, GasLimit } from '../../config'
+import { waitForTx, getGasPrice } from './ethers'
 import {
     createWatcher,
     aggregate
@@ -86,7 +86,6 @@ export const getMyCommunityInfo = async (update=false) => {
         try{
             communityInfo = await gci(stakingFactoryId)
             if (communityInfo && communityInfo.length > 0){
-                console.log('backend communityInfo', communityInfo[0]);
                 store.commit('web3/saveCommunityInfo', communityInfo[0])
                 resolve(communityInfo[0])
                 return;
@@ -115,7 +114,6 @@ export const getAllCommunities = async (update=false) => {
         try{
             const communities = await gac()
             store.commit('web3/saveAllCommunities', communities)
-            console.log(2, communities);
             resolve(communities)
         }catch(e){
             console.log('Get all community fail', e);
@@ -151,7 +149,6 @@ export const createStakingFeast = async (form) => {
         }
         
         try{
-            console.log(543, form.assetId);
             // make params
             const assetId = form.assetId
             let distribution = form.poolData
@@ -161,7 +158,7 @@ export const createStakingFeast = async (form) => {
                 stopHeight: d.stopHeight
             }))
             // call contract
-            const res = await contract.createStakingFeast(assetId, distribution, Transaction_config)
+            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distribution)
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
@@ -176,6 +173,7 @@ export const createStakingFeast = async (form) => {
 /**
  * Create or update community info to backend
  * @param {*} form
+ * @param {*} type 'create' / 'edit'
  */
 export const completeCommunityInfo = async (form, type) => {
     return new Promise(async (resolve, reject) => {
@@ -244,7 +242,12 @@ export const chargeCommunityBalance = async (amount) => {
         }
 
         try{
-            const tx = await contract.adminDepositReward(amount.toString());
+            const gas = await getGasPrice()
+            const tx = await contract.adminDepositReward(amount.toString(),
+            {
+              gasPrice: gas,
+              gasLimit: GasLimit
+            });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -315,7 +318,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDev(address);
+            const gas = await getGasPrice()
+            const tx = await contract.setDev(address,
+                {
+                  gasPrice: gas,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -352,7 +360,12 @@ export const setDevAddress = async (address) => {
         }
 
         try{
-            const tx = await contract.setDevRewardRatio(ratio);
+            const gas = await getGasPrice()
+            const tx = await contract.setDevRewardRatio(ratio,
+                {
+                  gasPrice: gas,
+                  gasLimit: GasLimit
+                });
             await waitForTx(tx.hash);
             resolve(tx.hash)
         }catch(e){
@@ -388,9 +401,11 @@ export const getDistributionEras = async (update=false) => {
 
         let contract;
         let decimal;
+        let rewardCalculator;
         try{
             contract = await getContract('StakingTemplate', stakingFactoryId)
             const cToken = await getCToken(stakingFactoryId)
+            rewardCalculator = await getContract('LinearCalculator');
             decimal = cToken.decimal
         }catch(e){
             reject(e);
@@ -398,18 +413,20 @@ export const getDistributionEras = async (update=false) => {
         }
 
         try{
-            const count = await contract.numberOfDistributionEras()
-            let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => contract.distributionEras(i)))
-            distri = distri.map((item, i) => ({
-                percentage: item.stopHeight - item.startHeight,
-                amount: item.amount.toString() / (10 ** decimal),
-                startHeight: item.startHeight.toString(),
-                stopHeight: item.stopHeight.toString(),
-                background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
-            }))
-            console.log('distribituions', distri);
-            store.commit('web3/saveDistributions', distri)
-            resolve(distri)
+            const rewardCalculatorAddress = await contract.rewardCalculator();
+            if (rewardCalculatorAddress == contractAddress['LinearCalculator']){
+                const count = await rewardCalculator.distributionCountMap(stakingFactoryId);
+                let distri = await Promise.all((new Array(count).toString().split(',')).map((item, i) => rewardCalculator.distributionErasMap(stakingFactoryId, i)))
+                distri = distri.map((item, i) => ({
+                    percentage: item.stopHeight - item.startHeight,
+                    amount: item.amount.toString() / (10 ** decimal),
+                    startHeight: item.startHeight.toString(),
+                    stopHeight: item.stopHeight.toString(),
+                    background: `rgba(80, 191, 0, ${(i+1)*(1.0 / count)})`
+                }))
+                store.commit('web3/saveDistributions', distri);
+                resolve(distri);
+            }
         }catch(e){
             console.log('getDistributionEras', e);
             reject(e);
@@ -451,6 +468,57 @@ export const getDistributionEras = async (update=false) => {
             }
         ], Multi_Config)
         console.log({dis});
+    })
+}
+
+/**
+ * Post community blog tag to backend
+ * @param {*} blogTag 
+ * @returns 
+ */
+export const publishBlog = async (blogTag) => {
+    return new Promise(async (resolve, reject) => {
+        let id;
+        try{
+            id = await getMyStakingFactory()
+            if (!id){
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e) {
+            reject(e);
+            return;
+        }
+        let nonce = await getNonce()
+        const userId = await getAccounts();
+        nonce = nonce ? nonce + 1 : 1
+        const infoStr = JSON.stringify({
+            id,
+            blogTag
+        })
+        let signature = ''
+        try{
+            signature = await signMessage(infoStr + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
+        const params = {
+            userId,
+            infoStr,
+            nonce,
+            signature
+        }
+        try{
+            let res = await ubt(params);
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            console.log('Update community blogTag info failed', e);
+            reject(e)
+        }
     })
 }
 
@@ -518,10 +586,10 @@ export const monitorCommunityBalance = async (communityInfo) => {
             const type = update.type;
             const value = update.value;
             if (type === 'communityBalance'){
-                console.log('Updates community balance', update);
+                // console.log('Updates community balance', update);
                 store.commit('web3/saveCommunityBalance', value)
             }else if (type === 'allowance'){
-                console.log('Updates community approvement', update);
+                // console.log('Updates community approvement', update);
                 store.commit('web3/saveCtokenApprovement', value)
             }
           })
@@ -574,10 +642,10 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
                 const type = update.type;
                 const value = update.value;
                 if (type === 'devAddress'){
-                    console.log('update dev address', value);
+                    // console.log('update dev address', value);
                     store.commit('web3/saveDevAddress', value)
                 }else if(type === 'devRatio'){
-                    console.log('update dev ratio', value);
+                    // console.log('update dev ratio', value);
                     store.commit('web3/saveDevRatio', value)
                 }
             })

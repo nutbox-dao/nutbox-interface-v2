@@ -100,6 +100,9 @@ export default {
            chainId:1
         }
         this.networkIndex = 0
+        setTimeout(() => {
+          this.$router.go(-1)
+        }, 1000)
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

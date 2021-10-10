@@ -34,8 +34,7 @@ import { mapState, mapMutations } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import { getBalance as getPolkadotBalance } from '@/utils/polkadot/account'
 import { getBalance as getKusamaBalance } from '@/utils/kusama/account'
-import { subBonded as subPolkadotBonded } from '@/utils/polkadot/staking'
-import { subBonded as subKusamaBonded, subNominators as subPolkadotNominators } from '@/utils/kusama/staking'
+import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   name: 'PolkadotAccount',
@@ -58,13 +57,11 @@ export default {
     changeAccount (acc) {
       console.log(acc.address);
       this.saveAccount(acc);
-      // TODO update data related with polkadot
+      
       getPolkadotBalance(acc);
       getKusamaBalance(acc);
-      subPolkadotBonded();
-      subKusamaBonded();
-      subPolkadotNominators()
-
+      subNominators('polkadot');
+      subNominators('kusama')
     }
   }
 }

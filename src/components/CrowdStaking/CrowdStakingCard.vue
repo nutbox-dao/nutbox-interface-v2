@@ -42,30 +42,32 @@
         <span style="color: #717376" class="font-bold">{{ card.symbol }}</span>
         <span style="color: #bdbfc2"> STAKED</span>
       </div>
-      <div class="btn-row mb-4" v-if="approved">
-        <span class="value">
-          {{ (loadingUserStakings ? 0 : staked) | amountForm }}
-        </span>
-        <div class="right-box">
-          <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" @click="increase">+</button>
-        </div>
-      </div>
+      <ConnectMetaMask v-if="!metamaskConnected"/>
       <template v-else>
-        <b-button
-          variant="primary"
-          @click="approve"
-          :disabled="isApproving || loadingApprovements"
-        >
-          <b-spinner
-            small
-            type="grow"
-            v-show="isApproving || loadingApprovements"
-          ></b-spinner>
-          {{ $t("commen.approveContract") }}
-        </b-button>
+        <div class="btn-row mb-4" v-if="approved">
+          <span class="value">
+            {{ (loadingUserStakings ? 0 : staked) | amountForm }}
+          </span>
+          <div class="right-box">
+            <button class="outline-btn" @click="decrease">-</button>
+            <button class="outline-btn" @click="increase">+</button>
+          </div>
+        </div>
+        <template v-else>
+          <b-button
+            variant="primary"
+            @click="approve"
+            :disabled="isApproving || loadingApprovements"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="isApproving || loadingApprovements"
+            ></b-spinner>
+            {{ $t("commen.approveContract") }}
+          </b-button>
+        </template>
       </template>
-
       <div class="detail-info-box">
         <div class="project-info-container">
           <span class="name"> TVL </span>
@@ -100,11 +102,13 @@ import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHome
 import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: "DDelegateCard",
   components: {
     StakingHomeChainAssetModal,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -120,6 +124,7 @@ export default {
       "loadingUserStakings",
       "totalStakings"
     ]),
+    ...mapState(['metamaskConnected']),
     pendingReward() {
       const pendingBn =
         this.pendingRewards[this.card.communityId + "-" + this.card.pid];

@@ -57,6 +57,17 @@
     font-size: .8rem;
     line-height: .8rem;
     font-weight: 500;
+    white-space: nowrap;
+  }
+  .c-text-info {
+    display: flex;
+    span {
+      white-space: nowrap;
+      margin-right: .6rem;
+    }
+    p {
+      word-break: break-all;
+    }
   }
 
 }

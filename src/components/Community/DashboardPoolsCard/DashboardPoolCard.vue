@@ -67,8 +67,8 @@ export default {
     async blockNum(newValue, oldValue) {
       try{
         if (!this.contract) return;
-        const res = await this.contract.calculateReward(1, newValue)
-        this.minedToken = res.toString() / 1e18
+        // const res = await this.contract.calculateReward(1, newValue)
+        // this.minedToken = res.toString() / 1e18
       }catch(e){
         console.log('watch total mined token failed', e);
       }
@@ -112,7 +112,7 @@ export default {
   async mounted () {
     this.apy = null
     if (this.allPools){
-      const p = this.allPools.filter(pool => pool.pid === this.pool.pid)
+      const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
       if (p.length > 0){
         this.apy = p[0].apy
         this.published = true

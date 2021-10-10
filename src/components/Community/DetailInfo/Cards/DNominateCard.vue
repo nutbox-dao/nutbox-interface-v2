@@ -2,136 +2,261 @@
   <div class="c-card">
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
-        <img class="icon1" :src="card.tokenIcon" alt="" />
+        <img class="icon1" :src="nomination.icon" alt="" />
       </div>
       <div class="card-link-title-text">
         <div class="title-text font20 font-bold link-title">
-          <span>{{ card.poolName }}</span>
+          <span>{{ nomination.poolName }}</span>
         </div>
       </div>
 
     </div>
     <div class="h-line mt-4 mb-2"></div>
-    <!-- <div class="detail-info-box">
-      <template v-if="isConnected">
+    <div>
+      <div class="text-left mt-3">
+        <span style="color: #717376" class="font-bold">{{
+          nomination.tokenSymbol + " "
+        }}</span>
+        <span style="color: #bdbfc2">EARNED</span>
+      </div>
+      <div class="btn-row">
+        <span class="value"> {{ pendingReward | amountForm }} </span>
+        <div class="right-box">
+          <button
+            class="primary-btn m-0"
+            :disabled="isWithdrawing"
+            @click="withdraw"
+          >
+            <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+            {{ $t("commen.withdraw") }}
+          </button>
+        </div>
+      </div>
+
+      <div class="detail-info-box">
+        <div class="text-left mt-3 mb-1">
+          <span style="color: #717376" class="font-bold">{{
+            relayer === 'polkadot' ? 'DOT' : 'KSM'
+          }}</span>
+          <span style="color: #bdbfc2"> STAKED</span>
+        </div>
+        <div class="btn-row">
+          <span class="value">
+            {{ (loadingUserStakings ? 0 : nominated) | amountForm }}
+          </span>
+        </div>
+        <div class="text-left mt-3 mb-1">
+          <span style="color: #bdbfc2">VALIDATOR ADDRESS  </span>
+          <img @click="copyValidator" style="width:1rem;height:1rem;cursor: pointer;" src="~@/static/images/copy.svg" alt="">
+        </div>
+        <div class="btn-row bt-1 mb-1">
+          <span>
+            {{ formatValidatorAccount }}
+          </span>
+        </div>
+
         <button
           class="primary-btn"
           @click="nominate"
-          :disabled="nominated || loadingStaking"
+          :disabled="loadingStaking"
         >
           <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-          >{{ nominated ? $t("cs.nominated") : $t("cs.nominate") }}
+          >{{ $t("cs.nominate") }}
         </button>
-      </template>
-      <div class="project-info-container">
-        <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm(4)}} ({{card.project.validators.length}})</div>
+        <div class="project-info-container">
+          <span class="name"> TVL </span>
+          <div class="info">{{ tvl | amountForm(4) }}</div>
+        </div>
+        <div class="project-info-container">
+          <span class="name"> APY </span>
+          <div class="info">{{ nomination.apy.toFixed(2) }}%</div>
+        </div>
       </div>
-      <div class="project-info-container">
-        <span class="name"> APY </span>
-        <div class="info">13.0%</div>
-      </div>
-    </div> -->
 
-    <b-modal
-      v-model="showNominate"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <TipNominator
-        :crowdstaking="card"
-        @hideNominate="showNominate = false"
-      />
-    </b-modal>
+      <b-modal
+        v-model="showNominate"
+        modal-class="custom-modal"
+        centered
+        hide-header
+        hide-footer
+        no-close-on-backdrop
+      >
+        <TipNominator
+          :crowdstaking="nomination"
+          @hideNominate="showNominate = false"
+        />
+      </b-modal>
 
-    <b-modal
-      v-model="showBondAndNominator"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <TipBondAndNominator
-        :crowdstaking="card"
-        @hideBondAndNominate="showBondAndNominator = false"
-      />
-    </b-modal>
+      <b-modal
+        v-model="showBondAndNominator"
+        modal-class="custom-modal"
+        centered
+        hide-header
+        hide-footer
+        no-close-on-backdrop
+      >
+        <TipBondAndNominator
+          :crowdstaking="nomination"
+          @hideBondAndNominate="showBondAndNominator = false"
+        />
+      </b-modal>
+    </div>
   </div>
 </template>
 
 <script>
-import TipBondAndNominator from '@/components/CrowdStaking/TipBoxes/TipBondAndNominator'
-import TipNominator from '@/components/CrowdStaking/TipBoxes/TipNominator'
-import { mapState } from 'vuex'
-import { stanfiAddress } from '@/utils/commen/account'
-import BN from 'bn.js'
+import TipBondAndNominator from "@/components/Commen/TipBondAndNominator";
+import TipNominator from "@/components/Commen/TipNominator";
+import { mapState } from "vuex";
+import { getMinNominatorBond } from '@/utils/commen/crowdStaking'
+import { handleApiErrCode } from '@/utils/helper'
+import { withdrawReward } from '@/utils/web3/pool'
 
 export default {
-  name: 'DNominateCard',
-  data () {
+  name: "CrowdNominateCard",
+  data() {
     return {
       showNominate: false,
-      showBondAndNominator: false
-    }
+      showBondAndNominator: false,
+      isWithdrawing: false,
+      relayer: '',
+      minNominatorsBond: 0,
+      formatValidatorAccount: ''
+    };
   },
   props: {
-    card: {
-      type: Object
-    }
+    nomination: {
+      type: Object,
+    },
   },
   filters: {
     formatValidatorAdd: function (add) {
-      return add.slice(0, 3) + '...' + add.slice(-3)
-    }
+      return add.slice(0, 3) + "..." + add.slice(-3);
+    },
   },
   components: {
     TipBondAndNominator,
-    TipNominator
+    TipNominator,
   },
   methods: {
-    async nominate () {
-      if (this.bonded) {
-        this.showNominate = true
+    nominate() {
+      if (this.minNominatorsBond.toNumber() <= this.locked.toNumber()) {
+        this.showNominate = true;
       } else {
-        this.showBondAndNominator = true
+        this.showBondAndNominator = true;
       }
-    }
+    },
+    copyValidator() {
+      const address = this.nomination.validatorAccount
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: this.formatValidatorAccount
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
+    },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.nomination.communityId, this.nomination.pid)
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    },
   },
   computed: {
-    ...mapState('polkadot', [
-      'isConnected',
-      'lang',
-      'bonded',
-      'nominators',
-      'loadingStaking',
-      'allValidatorInfosInOurDB'
+    ...mapState({
+      pLocked: state => state.polkadot.locked,
+      kLocked: state => state.kusama.locked,
+      pNominators: state => state.polkadot.nominators,
+      kNominatore: state => state.kusama.nominators
+    }),
+    ...mapState("web3", [
+      "pendingRewards",
+      "approvements",
+      "loadingApprovements",
+      "userStakings",
+      "loadingUserStakings",
+      "totalStakings",
+      "blockNum",
     ]),
-    ...mapState(['lang']),
-    ...mapState('web3', ['pendingRewards']),
-    pendingReward(){
-      const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
-      if(!pendingBn) return 0;
-      const decimal = this.card.decimal
-      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+    ...mapState(["lang"]),
+    nominated () {
+      const userStakingBn =
+        this.userStakings[this.nomination.communityId + "-" + this.nomination.pid];
+      if (!userStakingBn) return 0;
+      const decimal = this.nomination.chainId === 2 ? 10 : 12;
+      return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
-    symbol(){
-      console.log('');
-      return this.card
+    tvl() {
+      const tvl =
+        this.totalStakings[
+          this.nomination.communityId + "-" + this.nomination.pid
+        ];
+      if (!tvl) return 0;
+      const decimal = this.nomination.chainId === 2 ? 10 : 12;
+      return tvl.toString() / 10 ** decimal;
     },
-    tvl () {
-      
+    pendingReward() {
+      const pendingBn =
+        this.pendingRewards[
+          this.nomination.communityId + "-" + this.nomination.pid
+        ];
+      if (!pendingBn) return 0;
+      const decimal = this.nomination.tokenDecimal;
+      return parseFloat(pendingBn.toString() / 10 ** decimal).toFixed(3);
+    },
+    loadingStaking () {
+      return this.$store.state.polkadot.loadingStaking || this.$store.state.kusama.loadingStaking
+    },
+    locked() {
+      return this.relayer === 'polkadot' ? this.pLocked : this.kLocked
+    },
+    nominators(){
+      return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
     }
   },
-  mounted () {
-    console.log('nominate card', this.card);
-  }
-}
+  mounted() {
+    console.log(920, this.nomination);
+    this.relayer = this.nomination.chainId === 2 ? 'polkadot' : 'kusama'
+    this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 16) + '......' + this.nomination.validatorAccount.slice(-12)
+    getMinNominatorBond(this.relayer).then(res => {
+      this.minNominatorsBond = res
+    })
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+.btn-row {
+  @include c-flex-between-center;
+  .value {
+    font-size: 1.2rem;
+    font-weight: bolder;
+  }
+  .right-box {
+    width: 6rem;
+    @include c-flex-between-center;
+  }
+  .outline-btn {
+    background-color: white;
+    border: 1px solid var(--primary-custom);
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: 0.8rem;
+  }
+}
 </style>

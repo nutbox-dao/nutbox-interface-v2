@@ -20,18 +20,19 @@ import {
 import { errCode, RPC_NODE } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0x89b1FaC6a759e45f4c9ac43a027B03E731f3ab78",
-  "HomeChainAssetRegistry": "0x325D479653d342787CA2c11623133F1EF3A62Ac6",
-  "SteemHiveDelegateAssetRegistry": "0x807156Eaa44De0E3375dc69CfC2DB13292A4a100",
-  "SubstrateCrowdloanAssetRegistry": "0x203dC8e9008209a80622de060CCa23F2A5B656e4",
-  "SubstrateNominateAssetRegistry": "0xc1425A4442d6E6DdD20F920609EE5eB56bBf9c54",
-  "ERC20AssetHandler": "0xd633fac63F98bFB130A1E9F287C30eb994A069F2",
+  "RegistryHub": "0x4c99C3FaFAe0B83920fC4eb3370CB0a6541DA847",
+  "ERC20Factory": "0x97bCDCA82c845bAb4d8D7Cf2B0f7F56D29348e15",
+  "HomeChainAssetRegistry": "0xB7fF6a7725b4d979bd95Be37bA631C56A5f35dCe",
+  "SteemHiveDelegateAssetRegistry": "0x411BcCae82e6DA69D6E29ef44C3fCa2f3ff2bB33",
+  "SubstrateCrowdloanAssetRegistry": "0x5B353D9e16A9d1a70Ecf89655810AB5B7E34984E",
+  "SubstrateNominateAssetRegistry": "0xb693Daa5879aeBfbC45433d1d4cdae78d5e7c657",
+  "ERC20AssetHandler": "0x050222CA9BE1921AA332b5bF228D4af947407F24",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x90Fb51D614C05FddE7790a485DB48A3762Fcd853",
-  "Executor": "0x13229E8fc9ffC8a09a34f0E8BD6A1FeeEB363f4d",
-  "Bridge": "0xbaEA5451D04C7F238128c6a576f7840127AB28C0",
-  "StakingFactory": "0x38c3280D833b33Afe9Bc3739B7bFC06675bF6588",
-  "ERC20Factory": "0xd58a79384f09cA48d3a96Bb23394749E6E055e14"
+  "TrustlessAssetHandler": "0x2C366DAF7eA176b9ef782499bA45787B04765391",
+  "Executor": "0x8a4c371AEC232A69Eb41863e109f558F50B6682d",
+  "Bridge": "0xd07E6F1bb68F745694a58aBdFb3B5152B5f11F06",
+  "StakingFactory": "0x37d256Dbac122a83f40E766073aF71334105dDc0",
+  "LinearCalculator": "0x33de6235522d64bFc4736f8A302B91EB44330585"
 }
 
 // contract file name
@@ -50,7 +51,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   ERC20: 'ERC20.json',
   SimpleERC20: 'SimpleERC20.json',
   MintableERC20: 'MintableERC20.json',
-  ERC20Factory: 'ERC20Factory.json'
+  ERC20Factory: 'ERC20Factory.json',
+  LinearCalculator: 'LinearCalculator.json'
 }
 
 // Get contract Abi

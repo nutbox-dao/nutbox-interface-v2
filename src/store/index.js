@@ -19,6 +19,9 @@ export default new Vuex.Store({
   state: {
     lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
     allParachain: null,
+    prices: {},
+    metamaskConnected: false,
+    apys: {}
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -27,6 +30,15 @@ export default new Vuex.Store({
     },
     saveAllParachain:(state, allParachain) => {
       state.allParachain = allParachain
+    },
+    savePrices: (state, prices) => {
+      state.prices = prices
+    },
+    saveMetamaskConnected: (state, metamaskConnected) => {
+      state.metamaskConnected = metamaskConnected
+    },
+    saveApys: (state, apys) => {
+      state.apys = apys
     }
   },
   getters: {

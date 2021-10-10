@@ -160,6 +160,7 @@ export default {
   },
   watch: {
     async currentBlockNum (newValue, _) {
+      if (newValue % 20 !== 0) return;
       const fund = this.getFundInfo
       if(!fund) return;
       const end = fund.end
@@ -259,7 +260,7 @@ export default {
     },
     contributions () {
       try {
-        return this.getFundInfo.funds.length
+        return this.getFundInfo.funds.count ?? 0
       } catch (e) {
         return 0
       }

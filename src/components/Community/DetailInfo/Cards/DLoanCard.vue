@@ -38,7 +38,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.countDown') }} </span>
-        <div class="info">{{ countDown || "Loading" }}</div>
+        <div class="info">{{ countDownAuction || "Loading" }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.fund') }} </span>
@@ -160,6 +160,7 @@ export default {
   },
   watch: {
     async currentBlockNum (newValue, _) {
+      if (newValue % 20 !== 0) return;
       const fund = this.getFundInfo
       if (!fund) return;
       const end = fund.end
@@ -181,7 +182,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lang']),
+    ...mapState(['lang', 'apys']),
     ...mapState('web3', ['pendingRewards', 'blockNum']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
@@ -229,7 +230,7 @@ export default {
         return '0'
       }
     },
-    countDown () {
+    countDownAuction () {
       try {
         if (!this.getFundInfo) return
         const end = parseInt(this.getFundInfo.end)

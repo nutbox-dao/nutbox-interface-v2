@@ -40,7 +40,6 @@ export default {
     }
   },
   mounted () {
-    console.log(235, this.poolCards);
   },
 };
 </script>

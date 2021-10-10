@@ -1,5 +1,6 @@
 <template>
   <div class="page-view-content">
+    <Step :current-step="1"></Step>
     <div class="view-top-header mb-4">
       <div class="page-back-text-icon page-view-title" @click="$router.back()">
         {{ $t('community.createCommunity') }}
@@ -20,7 +21,7 @@
               <div class="text-center">
                 <div class="custom-control" style="line-height: 1.5rem">
                   {{ $t('asset.notRegister') }}
-                  <router-link to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
+                  <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
                 </div>
               </div>
             </template>
@@ -35,13 +36,13 @@
 <!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
           <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
             <div class="text-grey">
-              <div v-show="isMint">* This is a mintable token</div>
-              <div v-show="!isMint">* This is not a mintable token</div>
+              <!-- <div v-show="isMint">* This is a mintable token</div>
+              <div v-show="!isMint">* This is not a mintable token</div> -->
             </div>
             <div class="" style="line-height: 1.5rem">
               {{ $t('asset.notRegister') }}
               <router-link class="text-primary"
-                           to="/community/register-ctoken">{{ $t('asset.registerCAsset') }}</router-link>
+                           to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </div>
         </div>
@@ -57,14 +58,14 @@
 <!--            </button>-->
           </div>
           <p style="margin:0;">
-            {{ $t('community.currentBlock') }}{{blockNum}}
+            {{ $t('community.currentBlock') }} {{blockNum}}
           </p>
           <Progress :is-edit="progressData.length>0"
                     @delete="deleteData"
                     :progress-data="progressData"></Progress>
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
-            <b-input @keyup="startChange($event)" placeholder="输入起始区块高度" :disabled="progressData.length>0"
+            <b-input @keyup="startChange($event)" type="number" placeholder="输入起始区块高度" :disabled="progressData.length>0"
                      v-model="poolForm.start"></b-input>
           </div>
           <span class="block-tip">
@@ -73,7 +74,7 @@
           <div class="flex-between-center c-input-group">
             <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
             <b-input-group class="d-flex flex-between-center">
-              <b-input class="flex-full" @keyup="stopChange($event)"  :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+              <b-input class="flex-full" @keyup="stopChange($event)" type="number" :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
               <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
             </b-input-group>
           </div>
@@ -86,6 +87,9 @@
           </div>
           <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
                   @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
+          <span v-show="progressData.length>=6" class="block-tip">
+            {{ $t('community.distributionLimit') }}
+          </span>
         </div>
         <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
           <b-spinner small type="grow" v-show="deploying" />
@@ -99,16 +103,17 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import Dropdown from '@/components/ToolsComponents/Dropdown'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
-import { MaxBlockNum } from '@/constant'
+import { MaxBlockNum, MAX_DISTRIBUTION_COUNT } from '@/constant'
 import { OfficialAssets } from '@/config'
+import Step from "@/components/ToolsComponents/Step";
 
 export default {
   name: 'CreateEconomy',
-  components: { Progress, Dropdown },
+  components: { Progress, Dropdown, Step },
   data () {
     return {
       selectedKey: 'name',
@@ -148,7 +153,8 @@ export default {
     ...mapState({
       userDeployTokens: state => state.web3.allAssetsOfUser,
       blockNum: state => state.web3.blockNum
-    })
+    }),
+    ...mapGetters('web3', ['createState'])
   },
   watch: {
     userDeployTokens (val) {
@@ -157,11 +163,11 @@ export default {
   },
   async mounted () {
     this.assets = await getRegitryAssets()
+    this.poolForm.start = this.blockNum + 100
+    this.startTime = blockTime(0, 100)
     console.log({assets: this.assets});
     this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
     this.assetLoading = false
-    this.poolForm.start = this.blockNum + 100
-    this.startTime = blockTime(0, 100)
   },
   methods: {
     setSelectedData (data) {
@@ -175,11 +181,13 @@ export default {
       this.progressData.pop()
       this.updateProgressColor()
       if (this.progressData.length === 0) {
-        this.poolForm.start = this.blockNum
+        this.poolForm.start = this.blockNum + 100
       } else {
         this.poolForm.start = this.progressData[this.progressData.length - 1].stopHeight
       }
-      this.end = ''
+      this.poolForm.end = ''
+      this.stopTime = blockTime(1, 0)
+      this.startTime = blockTime(this.blockNum, this.poolForm.start)
     },
     startChange(e){
       const value = e.target.value;
@@ -202,6 +210,13 @@ export default {
       }
       if (parseInt(this.poolForm.end) <= parseInt(this.poolForm.start)) {
         this.$bvToast.toast(this.$t('tip.wrongStopBlockNum'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return
+      }
+      if (parseInt(this.poolForm.reward) <= 0) {
+        this.$bvToast.toast(this.$t('tip.wrongRewardNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
         })

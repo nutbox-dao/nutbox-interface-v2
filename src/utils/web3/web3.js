@@ -4,16 +4,13 @@ import {
 import {
   BSC_CHAIN_ID,
   RPC_NODE,
-  Multi_Config
+  CHAIN_NAME
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'
 
-import {
-  createWatcher
-} from '@makerdao/multicall'
-
 import { getProvider } from './ethers'
+import { getAccounts } from "./account"
 
 export const getWeb3 = () => {
   const web3  = new Web3(RPC_NODE)
@@ -30,24 +27,31 @@ export const setupNetwork = async () => {
   const chainId = parseInt(BSC_CHAIN_ID)
   try {
     await eth.request({
-      method: 'wallet_addEthereumChain',
+      // method: 'wallet_addEthereumChain',
+      method: 'wallet_switchEthereumChain',
       params: [{
-        chainId: `0x${chainId.toString(16)}`,
-        chainName: 'Binance Smart Chain Mainnet',
-        nativeCurrency: {
-          name: 'BNB',
-          symbol: 'bnb',
-          decimals: 18,
-        },
-        rpcUrls: [RPC_NODE],
-        blockExplorerUrls: ['https://bscscan.com/'],
+        chainId: `0x${chainId.toString(16)}`
+        // chainName: CHAIN_NAME,
+        // nativeCurrency: {
+        //   name: 'BNB',
+        //   symbol: 'bnb',
+        //   decimals: 18,
+        // },
+        // rpcUrls: [RPC_NODE],
+        // blockExplorerUrls: ['https://bscscan.com/'],
       }],
     })
+    store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
     console.log(333, error);
     store.commit('web3/saveChainId', chainId)
+    store.commit('web3/saveAccount', null)
+    store.commit('web3/saveStakingFactoryId', null)
+    store.commit('web3/saveMyPools', [])
+    store.commit('web3/saveAllAssetsOfUser', [])
+    store.commit('saveMetamaskConnected', false)
     return false
   }
 }
@@ -70,6 +74,7 @@ export const getEthWeb = async () => {
     await sleep(0.5)
     metamask = window.ethereum
   }
+  
   return metamask
 }
 
@@ -78,7 +83,7 @@ export const getEthWeb = async () => {
  */
 export const connectMetamask = async () => {
   const metamask = await getEthWeb()
-  metamask.request({
+  await metamask.request({
     method: 'eth_requestAccounts'
   });
 }
@@ -87,13 +92,24 @@ export const connectMetamask = async () => {
  * User changed chain
  */
 export const chainChanged = async () => {
+  
   const metamask = await getEthWeb()
+ 
   console.log('monitor chain id');
-  metamask.on('chainChanged', (chainId) => {
+  metamask.on('chainChanged', (chainId,n) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
-    getProvider(true)
-    // window.location.reload()
+    if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
+      store.commit('web3/saveAccount', null)
+      store.commit('web3/saveStakingFactoryId', null)
+      store.commit('web3/saveMyPools', [])
+      store.commit('web3/saveAllAssetsOfUser', [])
+      store.commit('saveMetamaskConnected', false)
+    }else{
+      getProvider(true)
+      store.commit('saveMetamaskConnected', true)
+      getAccounts(true)
+    }
   })
 }
 
@@ -148,39 +164,4 @@ export const test = async () => {
   await testMulticall()
 
 
-}
-
-export const testMulticall = async () => {
-  const watcher = createWatcher([{
-    target: '0xbA4218Da36D2269B4aD36934b08872B370D9e63D',
-    call: [
-      'isMintable()(bool)'
-    ],
-    returns: [
-      ['TC_BALANCE']
-    ]
-  }], Multi_Config)
-
-
-  // watcher.subscribe(update => {
-  //   console.log(`Update: ${update.type} = ${update.value}`);
-  // })
-  // Subscribe to batched state updates
-  watcher.batch().subscribe(updates => {
-    // Handle batched updates here
-    // Updates are returned as { type, value } objects, e.g:
-    // { type: 'BALANCE_OF_MKR_WHALE', value: 70000 }
-    console.log('Updates', updates);
-    watcher.stop()
-  });
-
-
-  // watcher.onNewBlock(blockNumber => {
-  //   console.log('New Block:', blockNumber);
-  //   watcher.stop()
-  // })
-
-  console.log('watcher start');
-
-  watcher.start();
 }

@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4 col-md-6 mb-4 " v-show="v.balance.toString() > 14" v-for="(v, k, i) in ctokenBalances" :key="i">
+    <div class="col-xl-4 col-md-6 mb-4 " v-for="(v, i) in sortedCards" :key="i">
       <div  class="wallet-card">
         <div class="top flex-between-center">
           <img :src="v.logo" alt="" class="logo" />
@@ -35,7 +35,7 @@
                   <img style="width: 14px; height: 14px"
                     class='copy-icon'
                     src="~@/static/images/copy.svg"
-                    @click="copy(k)"
+                    @click="copy(v.address)"
                   >
                 </div>
               </div>
@@ -60,7 +60,17 @@ export default {
     };
   },
   computed: {
-    ...mapState('web3', ['ctokenBalances'])
+    ...mapState('web3', ['ctokenBalances']),
+    sortedCards() {
+      let temp = []
+      for (const k in this.ctokenBalances) {
+        temp.push({
+          address: k,
+          ...this.ctokenBalances[k]
+        })
+      }
+      return temp.sort((a,b) => b.balance.sub(a.balance))
+    }
   },
   methods: {
     formatUserAddress (address, long = true) {

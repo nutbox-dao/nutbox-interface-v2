@@ -18,11 +18,12 @@ import {
   web3FromSource,
   web3Enable
 } from '@polkadot/extension-dapp'
+import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
 
 export async function initApis() {
-  initApi('polkadot')
-  initApi('rococo')
-  initApi('kusama')
+  initApi('polkadot').then(subscribeAllFundInfo('polkadot'))
+  // initApi('rococo')
+  initApi('kusama').then(subscribeAllFundInfo('kusama'))
 }
 
 async function initApi(chain, changedNode) {
@@ -96,6 +97,7 @@ export const waitApi = async (relaychain) => {
       res(api);
     }
     const interval = setInterval(() => {
+      
       const api = store.state[relaychain].api
       if (api && Object.keys(api).length > 0) {
         res(api);

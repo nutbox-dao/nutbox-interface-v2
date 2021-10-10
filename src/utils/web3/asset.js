@@ -20,13 +20,19 @@ import {
   getWeb3
 } from './web3'
 import {
-  waitForTx
+  waitForTx,
+  getGasPrice
 } from './ethers'
 import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
-import { errCode, CROWDLOAN_CHAINID_TO_NAME, DELEGATION_CHAINID_TO_NAME, Multi_Config } from "../../config";
+import { errCode,
+   CROWDLOAN_CHAINID_TO_NAME,
+    DELEGATION_CHAINID_TO_NAME,
+    Multi_Config,
+    GasLimit
+    } from "../../config";
 
 /**
  * Judge asset wheather Homechain assets
@@ -87,7 +93,7 @@ export const getRegitryAssets = async (update = false) => {
       contract = await getContract('RegistryHub', null);
     }catch(e){
       reject(e);
-      return
+      return 
     }
     try{
       const assetCount = await contract.registryCounter(account);
@@ -98,6 +104,7 @@ export const getRegitryAssets = async (update = false) => {
       }
       // get register assets
       assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
+
       // get assets contract and type
       const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
       assets = assets.map((asset, index) => ({
@@ -107,7 +114,6 @@ export const getRegitryAssets = async (update = false) => {
       }));
       // get metadata of assets
       const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-    
       assets = assets.map((asset, index) => ({
         ...asset,
         ...metadatas[index]
@@ -191,7 +197,6 @@ export const isMintableAsset = async (assetId) => {
  * @param {String} assetType asset contract address
  */
 export const getAssetMetadata = async (id, assetType) => {
-  
   let contract;
   try{
     contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
@@ -315,16 +320,31 @@ export const registerHomeChainAsset = async (assetAddress) => {
         return;
       }
 
+      // if address a token address
+      try{
+        const erc20 = await getContract('ERC20', assetAddress)
+        const name = await erc20.name()
+      }catch(e){
+        reject(errCode.NOT_A_TOKEN_CONTRACT)
+        return;
+      }
+
       try {
-        console.log(assetAddress);
+        const gas = await getGasPrice()
         const tx = await contract.registerAsset(
-          '0x', assetAddress, '0x'
+          '0x', assetAddress, '0x',
+          {
+            gasPrice: gas,
+            gasLimit: GasLimit
+          }
         )
         await waitForTx(tx.hash)
         resolve(tx.hash)
       } catch (e) {
         if (e.code === 4001){
           reject(errCode.USER_CANCEL_SIGNING)
+        }else if (e === errCode.TRANSACTION_FAIL) {
+          reject(errCode.ASSET_EXIST)
         }else {
           reject(errCode.BLOCK_CHAIN_ERR)
         }
@@ -355,14 +375,21 @@ export const registerSteemHiveAsset = async (form) => {
         web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
         web3.utils.stringToHex(form.account).substr(2)
+      const gas = await getGasPrice()
       const tx = await contract.registerAsset(
-        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName)
+        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+        {
+          gasPrice: gas,
+          gasLimit: GasLimit
+        }
       )
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -393,16 +420,22 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
-  
+      const gas = await getGasPrice()
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
         name: form.assetName,
         endingBlock: form.endingBlock
-      })))
+      })),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -432,13 +465,19 @@ export const registerNominateAsset = async (form) => {
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         addressToHex(form.nodeAddress).substr(2) // node address
-  
-      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName))
+      const gas = await getGasPrice()
+      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -460,15 +499,24 @@ export const deployERC20 = async ({
 }, isMintable) => {
   return new Promise(async (resolve, reject) => {
     try {
+      debugger
       const contract = await getContract('ERC20Factory', null, false)
-      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), store.state.web3.account, isMintable);
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
         console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
         if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
+          contract.removeAllListeners('ERC20TokenCreated')
           resolve(_tokenAddress)
           return;
         }
       })
+      const gas = await getGasPrice()
+      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
+      store.state.web3.account, 
+      isMintable, 
+      {
+        gasPrice: gas,
+        gasLimit: GasLimit
+      });
     } catch (e) {
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)
@@ -540,7 +588,7 @@ export const monitorCtokenBalance = async (update = false) => {
             symbol: t.tokenSymbol
           }
         })
-        console.log('Updates ctoken balances', ctokenBalances);
+        // console.log('Updates ctoken balances', ctokenBalances);
         store.commit('web3/saveLoadingCtokenBalances', false)
         store.commit('web3/saveCtokenBalances', {...ctokenBalances})
       })

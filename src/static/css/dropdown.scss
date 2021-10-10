@@ -22,6 +22,8 @@
   border-radius: .8rem;
   border-color: transparent;
   @include coin-shadow;
+  transform: none!important;
+  top: 2.6rem!important;
 }
 .c-dropdown .dropdown-header {
   font-weight: bolder;
