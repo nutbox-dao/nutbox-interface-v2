@@ -363,15 +363,6 @@ export default {
   async mounted () {
     this.communityInfo = await getMyCommunityInfo();
      this.blogTag = this.communityInfo.blogTag;
-     this.fixNullOfSocial()
-      // create hive account
-      try{
-        this.newBlogTag = await generateNewHiveAccount()
-        this.blogMainPassword = generatePassword()
-      }catch(e) {
-        console.log('generateNewHiveAccount fail',e)
-      }
-      console.log(this.blogTag);
       if (this.blogTag){
         this.state = ''
       }else{
@@ -380,6 +371,14 @@ export default {
         }else{
           this.state = 'create'
         }
+      }
+     this.fixNullOfSocial()
+      // create hive account
+      try{
+        this.newBlogTag = await generateNewHiveAccount()
+        this.blogMainPassword = generatePassword()
+      }catch(e) {
+        console.log('generateNewHiveAccount fail',e)
       }
   },
 }
