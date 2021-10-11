@@ -341,7 +341,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       // if address a token address
       try{
         const erc20 = await getContract('ERC20', assetAddress)
-        const name = await erc20.name()
+        const dicimals = await erc20.dicimals()
       }catch(e){
         reject(errCode.NOT_A_TOKEN_CONTRACT)
         return;
