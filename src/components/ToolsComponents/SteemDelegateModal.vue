@@ -25,6 +25,7 @@
           type="number"
           v-model="delegatevalue"
           placeholder="0"
+          @keyup="isMax=false"
         />
         <div>
           <button class="primary-btn input-btn" @click="fillMax">{{ $t("commen.max") }}</button>
@@ -48,6 +49,7 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { hexToString } from '@/utils/web3/utils'
 import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
+import { STEEM_STAKE_FEE } from '@/config'
 
 export default {
 
@@ -55,7 +57,8 @@ export default {
     return {
       delegatevalue: '',
       loading: false,
-      fee: 1
+      fee: STEEM_STAKE_FEE,
+      isMax: false
     }
   },
   computed: {
@@ -89,7 +92,8 @@ export default {
     },
     fillMax(){
         this.delegatevalue =
-        this.operate === "add" ? this.spBalance : this.depositDatas[this.card.asset];
+        this.operate === "add" ? this.spBalance : this.staked;
+        this.isMax = true;
     },
     checkDelegateFee() {
       if (this.steemBalance >= 1){
@@ -149,6 +153,8 @@ export default {
           this.steemAccount,
           hexToString(this.card.agentAccount),
           amount,
+          this.card.communityId,
+          this.card.pid,
           this.account
         )
         if (res.success === true){

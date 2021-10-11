@@ -11,19 +11,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.blog-frame {
-  background-color: white;
-  position: fixed;
-  top: 0;
-  left: 12rem;
-  bottom: 0;
-  right: 0;
-}
-@media only screen and (max-width: 960px) {
-  .blog-frame {
-    position: absolute;
-    left: 0!important;
-    top: 3.6rem!important;
-  }
-}
 </style>

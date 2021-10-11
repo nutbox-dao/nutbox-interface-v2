@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-export const BLOCK_SECOND = 3
+export const BLOCK_SECOND = 15
 
 export const POLKADOT_DECIMAL = 10
 export const KUSAMA_DECIMAL = 12
@@ -38,7 +38,7 @@ export const DECIMAL = {
 }
 
 export const PRICES_SYMBOL = [
-    'BNBETH','DOTETH','ETHETH', 'HIVEETH', 'STEEMUSDT', 'STEEMETH'
+    'BNBETH','DOTUSDT', 'KSMUSDT','ETHUSDT', 'HIVEETH', 'STEEMETH'
 ]
 
 // 最大投票数

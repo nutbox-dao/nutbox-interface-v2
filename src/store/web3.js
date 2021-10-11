@@ -23,13 +23,14 @@ export default {
     distributions: null,
     readonlyProvider: null,
     allPools: null,
+    tokenDeploying: false,
     // user deposit data
     depositDatas: {},
     // multicall get data
     pendingRewards: {},
     userStakings:{},
     approvements: {},
-    totalStakings: {},
+    monitorPools: {},
     userBalances: {},
     communityBalance: 1,
     ctokenApprovement: false,
@@ -109,6 +110,10 @@ export default {
     saveDepositedDatas: (state, depositDatas) => {
       state.depositDatas = depositDatas
     },
+    saveTokenDeploying: (state, tokenDeploying) => {
+      state.tokenDeploying = tokenDeploying
+    },
+
     savePendingRewards: (state, pendingRewards) => {
       state.pendingRewards = pendingRewards
     },
@@ -130,8 +135,8 @@ export default {
     saveUserStakings: (state, userStakings) => {
       state.userStakings = userStakings
     },
-    saveTotalStakings: (state, totalStakings) => {
-      state.totalStakings = totalStakings
+    saveMonitorPools: (state, monitorPools) => {
+      state.monitorPools = monitorPools
     },
     saveUserBalances: (state, userBalances) => {
       state.userBalances = userBalances

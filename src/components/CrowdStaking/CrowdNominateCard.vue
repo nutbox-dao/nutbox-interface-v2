@@ -1,6 +1,10 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+      <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="nomination.communityIcon" alt="" />
@@ -10,8 +14,7 @@
           <div
             class="link-title"
             @click="
-              $router.push(
-                '/community/detail-info?id=' + nomination.communityId
+              openNewTab(nomination.communityId
               )
             "
           >
@@ -36,7 +39,7 @@
         <div class="right-box">
           <button
             class="primary-btn m-0"
-            :disabled="isWithdrawing"
+            :disabled="isWithdrawing || status !== 'Active'"
             @click="withdraw"
           >
             <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
@@ -70,7 +73,7 @@
         <button
           class="primary-btn"
           @click="nominate"
-          :disabled="loadingStaking"
+          :disabled="loadingStaking || status !== 'Active'"
         >
           <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
           >{{ $t("cs.nominate") }}
@@ -81,7 +84,7 @@
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ nomination.apy.toFixed(2) }}%</div>
+          <div class="info">{{ nomination.apy ? nomination.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
 
@@ -179,6 +182,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.nomination.communityId, this.nomination.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -187,6 +194,9 @@ export default {
         this.isWithdrawing = false  
       }
     },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
+    }
   },
   computed: {
     ...mapState({
@@ -201,7 +211,7 @@ export default {
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings",
+      "monitorPools",
       "blockNum",
     ]),
     ...mapState(["lang"]),
@@ -213,9 +223,10 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
+      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount']) return 0
       const tvl =
-        this.totalStakings[
-          this.nomination.communityId + "-" + this.nomination.pid
+        this.monitorPools[
+          this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount'
         ];
       if (!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
@@ -238,6 +249,22 @@ export default {
     },
     nominators(){
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
+    },
+    status (){
+      const canRemove = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   mounted() {

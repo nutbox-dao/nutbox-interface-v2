@@ -1,0 +1,187 @@
+.page-header-h {
+  z-index: 9;
+  width: 100%;
+  height: 3.8rem;
+  padding: 0 1.6rem 0 2.6rem;
+  background-color: white;
+  box-shadow: .2rem 0 2.4rem 0 rgba(0, 0, 0, 0.04);
+  border-radius: 0 0 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .navbar-brand {
+    height: 3.8rem;
+    min-height: 3.8rem;
+    display: flex;
+    align-items: center;
+  }
+  .logo{
+    height: 2.8rem;
+  }
+  .menu {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+  .navbar {
+    flex: 1;
+    padding: 0;
+  }
+  .nav-item {
+    margin-right: 1.8rem;
+  }
+  .nav-link {
+    height: 3.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    color: #BDBFC2!important;
+    font-size: .8rem;
+    &.active {
+      color: #242629!important;
+      font-weight: bold;
+    }
+    &.active::after{
+      content: '';
+      width: 2.4rem;
+      height: .3rem;
+      border-radius: .3rem;
+      background-color: var(--primary-custom);
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .header-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 3.8rem;
+  }
+  .address-box {
+    height: 2rem;
+    border: 1px solid var(--primary-custom);
+    border-radius: 2rem;
+    background-color: rgba(255, 219, 38, 0.05);
+    display: flex;
+    align-items: center;
+    padding: .2rem .5rem .2rem .2rem;
+    margin-right: 1.8rem;
+    cursor: pointer;
+    .wallet-icon {
+      border: 1px solid var(--primary-custom);
+      border-radius: 50%;
+      height: 1.6rem;
+      width: 1.6rem;
+      padding: .2rem;
+      margin-right: .3rem;
+      &::after {
+        content: '';
+        @include icon;
+        background-image: url("~@/static/images/wallet.png");
+      }
+    }
+  }
+  .more-setting-icon {
+    @include icon(1.2rem, 1.2rem);
+    background-image: url("~@/static/images/more-icon.svg");
+  }
+}
+.page-container-h {
+  .page-view-sidebar {
+    width: 12rem;
+    height: 100%;
+    margin-top: -3.8rem;
+    position: absolute;
+    z-index: 1;
+    background: linear-gradient(153deg, #FFFFFF 0%, #FFFFFF 100%);
+    padding-top: 3.8rem;
+    overflow-y: auto;
+    .nav {
+      margin-top: 2rem;
+    }
+    .nav-item {
+      margin: 0 1.2rem .4rem 1.2rem;
+    }
+    .nav-link {
+      height: 2.4rem;
+      border-radius: 2.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: .8rem;
+      color: #242629;
+      font-weight: normal;
+      &.active {
+        background-color: var(--primary-custom);
+      }
+    }
+  }
+  .side-page-view-content {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    min-height: 100%;
+    padding-left: 12rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-view-content {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .page-view-title-v {
+    display: none;
+  }
+  .blog-frame {
+    background-color: white;
+    position: absolute;
+    top: 3.8rem;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  @media only screen and (max-width: 960px) {
+    .blog-frame {
+      position: absolute;
+      left: 0!important;
+      top: 3.6rem!important;
+    }
+  }
+}
+@media (min-width: 992px) {
+  .pc-logo {
+    display: block;
+  }
+  .m-logo {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .pc-logo {
+    display: none;
+  }
+  .m-logo {
+    display: block;
+  }
+  .page-header-h {
+    height: auto;
+    position: fixed;
+    padding: 0 1.2rem;
+    border-radius: 0;
+  }
+  .page-container-h {
+    padding-top: 3.8rem;
+    .page-view-sidebar {
+      display: none;
+    }
+    .side-page-view-content {
+      padding-left: 0;
+    }
+  }
+}

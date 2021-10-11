@@ -29,7 +29,7 @@
           <div class="info">{{ apyRange }}</div>
         </div>
         <button class="primary-btn"
-                @click="$router.push(`/community/detail-info?id=${cardInfo.id}`)">{{ $t('community.join') }}</button>
+                @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div>
     </div>
   </div>
@@ -54,6 +54,11 @@ export default {
       }
     }
   },
+  methods: {
+    openNewTab (cardInfo) {
+      window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
+    }
+  }
 }
 </script>
 

@@ -1,8 +1,7 @@
 <template>
   <div>
-      <b-button
-      class="connect"
-      variant="primary"
+      <button
+      class="connect primary-btn"
       style="width:100%"
       @click="connect"
       :disabled="isConnecting"
@@ -11,7 +10,7 @@
       {{
         $t('commen.connectMetamask')
       }}
-    </b-button>
+    </button>
   </div>
 </template>
 

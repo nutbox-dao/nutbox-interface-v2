@@ -1,6 +1,10 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+      <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
@@ -10,7 +14,7 @@
           <div
             class="link-title"
             @click="
-              $router.push('/community/detail-info?id=' + card.communityId)
+              openNewTab(card.communityId)
             "
           >
             <span>{{ card.communityName }}</span>
@@ -50,14 +54,14 @@
           </span>
           <div class="right-box">
             <button class="outline-btn" @click="decrease">-</button>
-            <button class="outline-btn" @click="increase">+</button>
+            <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
           </div>
         </div>
         <template v-else>
           <b-button
             variant="primary"
             @click="approve"
-            :disabled="isApproving || loadingApprovements"
+            :disabled="isApproving || loadingApprovements || status !== 'Active'"
           >
             <b-spinner
               small
@@ -75,7 +79,7 @@
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ card.apy.toFixed(2) }}%</div>
+          <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
     </div>
@@ -122,7 +126,7 @@ export default {
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings"
+      "monitorPools"
     ]),
     ...mapState(['metamaskConnected']),
     pendingReward() {
@@ -143,10 +147,27 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid + '-totalStakedAmount']) return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data() {
@@ -187,6 +208,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -194,6 +219,9 @@ export default {
       }finally{
         this.isWithdrawing = false  
       }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
 };

@@ -1,24 +1,27 @@
 <template>
   <div class="blog-frame">
-    <iframe :src="blogLink" style="width:100%;height:100%" frameborder="0"></iframe>
+    <div class="loading-bg" v-if="loading">
+      <img src="~@/static/images/loading.gif" alt="" />
+      <p class="font16">{{ $t("tip.loading") }}</p>
+    </div>
+    <iframe v-else :src="blogLink" style="width:100%;height:100%" frameborder="0"></iframe>
   </div>
 </template>
 
 <script>
+import { getAllCommunities } from '@/utils/web3/community'
 export default {
-  props: {
-    tag: {
-      type: String
-    },
-  },
   data() {
     return {
+      loading: true,
       blogLink: ''
     }
   },
-  mounted() {
-    this.blogLink = "https://blog.nutbox.io/trending/" + this.tag
-  }
+  async mounted () {
+    const allCommunities = await getAllCommunities()
+    this.blogLink = 'https://blog.nutbox.io/created/' + allCommunities[0].blogTag
+    this.loading = false
+  },
 }
 </script>
 
@@ -26,8 +29,8 @@ export default {
 .blog-frame {
   background-color: white;
   position: absolute;
-  top: 1rem;
-  left: 0;
+  top: 0;
+  left: 12rem;
   bottom: 0;
   right: 0;
 }
@@ -35,7 +38,6 @@ export default {
   .blog-frame {
     position: absolute;
     left: 0!important;
-    top: 3.6rem!important;
   }
 }
 </style>

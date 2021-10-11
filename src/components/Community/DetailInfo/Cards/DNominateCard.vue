@@ -1,5 +1,9 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+    </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
         <img class="icon1" :src="nomination.icon" alt="" />
@@ -58,7 +62,7 @@
         <button
           class="primary-btn"
           @click="nominate"
-          :disabled="loadingStaking"
+          :disabled="loadingStaking || status !== 'Active'"
         >
           <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
           >{{ $t("cs.nominate") }}
@@ -69,7 +73,7 @@
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ nomination.apy.toFixed(2) }}%</div>
+          <div class="info">{{ nomination.apy ? nomination.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
 
@@ -167,6 +171,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.nomination.communityId, this.nomination.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -189,7 +197,7 @@ export default {
       "loadingApprovements",
       "userStakings",
       "loadingUserStakings",
-      "totalStakings",
+      "monitorPools",
       "blockNum",
     ]),
     ...mapState(["lang"]),
@@ -201,9 +209,10 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     tvl() {
+      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount']) return 0
       const tvl =
-        this.totalStakings[
-          this.nomination.communityId + "-" + this.nomination.pid
+        this.monitorPools[
+          this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount'
         ];
       if (!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
@@ -226,6 +235,22 @@ export default {
     },
     nominators(){
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
+    },
+    status (){
+      const canRemove = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   mounted() {

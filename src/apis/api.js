@@ -4,15 +4,12 @@ import {
   CROWD_LOAN_API_URL,
   BACKEND_API_URL
 } from "../config";
-import { id } from "@ethersproject/hash";
 
 // ============================================ NPS ============================================
 const API_URL = "https://service.nutbox.io";
 
 export const getProposal = async params =>
   get(API_URL + "/nps/getProposal", params);
-
-// ============================================ crowdstaking ============================================
 /**
  * 获取所有的投票的卡片
  * @returns
@@ -82,9 +79,6 @@ export const getDashboardSummary = async params =>
 
 // ============================================ backend v2 ============================================
 
-export const getAllCommunities = async () =>
-  get(BACKEND_API_URL + "/community/get");
-
 export const getMyCommunityInfo = async communityId =>
   get(BACKEND_API_URL + "/community/get", { id: communityId });
 
@@ -94,12 +88,6 @@ export const insertCommunity = async params =>
 export const updateCommunity = async params =>
   put(BACKEND_API_URL + "/community/update", params);
 
-export const updateBlogTag = async params =>
-  put(BACKEND_API_URL + "/community/updateBlogTag", params);
-
-export const insertToken = async params =>
-  post(BACKEND_API_URL + "/token/insert", params);
-
 export const getAllTokens = async () => get(BACKEND_API_URL + "/token/get");
 
 export const getNonce = async accountId =>
@@ -107,8 +95,6 @@ export const getNonce = async accountId =>
 
 export const updatePoolInfo = async params =>
   put(BACKEND_API_URL + "/pool/update", params);
-
-export const getAllPools = async () => get(BACKEND_API_URL + "/pool/getAll");
 
 export const getAllParachain = async () =>
   get(BACKEND_API_URL + "/parachain/getall");
@@ -127,6 +113,7 @@ export const insertProposal = async params =>
 
 export const updateProposal = async params =>
   post(BACKEND_API_URL + "/proposal/update", params);
+export const getAllCommunities = async (communityId=null) => get(BACKEND_API_URL + '/community/get', {id: communityId})
 
 export const getAllProposal = async communityId =>
   get(BACKEND_API_URL + "/proposal/get", { communityId: communityId });
@@ -140,6 +127,12 @@ export const insertVote = async params =>
 export const getAllVote = async proposalId =>
   get(BACKEND_API_URL + "/vote/get", { proposalId: proposalId });
 
+export const updateBlogTag = async (params) => put(BACKEND_API_URL + '/community/updateBlogTag', params)
+
+export const updateSocial = async (params) => put(BACKEND_API_URL + '/community/updateSocial', params)
+
+export const insertToken = async (params) => post(BACKEND_API_URL + '/token/insert', params)
+
 // ============================================ strategies ============================================
 
 export const getStrategies = async () =>
@@ -148,8 +141,6 @@ export const getStrategies = async () =>
 export const getScores = async params =>
   post(BACKEND_API_URL + "/scores/get", { params });
 
-export const getPricesOnCEX = async () =>
-  get("https://api.binance.com/api/v3/ticker/price");
+export const getAllPools = async (communityId=null) => get(BACKEND_API_URL + '/pool/getAll', {id: communityId})
 
-export const getPricesOnDB = async () =>
-  get(BACKEND_API_URL + "/token/getprices");
+export const getPricesOnCEX = async () => get('https://api.binance.com/api/v3/ticker/price')

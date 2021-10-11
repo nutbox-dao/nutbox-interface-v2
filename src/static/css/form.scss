@@ -70,3 +70,62 @@
     white-space: nowrap;
   }
 }
+.c-date-picker .b-form-datepicker {
+  height: 2.4rem;
+}
+::v-deep .c-date-picker-dropdown {
+  width: 100%;
+  .dropdown-toggle {
+    height: 2.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: .8rem;
+    background-color: transparent;
+    border: transparent;
+    outline: none;
+    font-size: .8rem;
+    position: relative;
+    &:hover, &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
+  .dropdown-menu {
+    border: transparent;
+    padding: 1rem;
+    @include coin-shadow();
+    border-radius: .8rem;
+  }
+  .b-calendar-nav {
+    button {
+      color: var(--primary-custom);
+    }
+    button:hover, button:focus{
+      background: transparent;
+      outline: none;
+      box-shadow: none!important;
+    }
+  }
+  .b-calendar-inner {
+    width: fit-content;
+  }
+  .b-calendar-grid {
+    border: transparent;
+    box-shadow: none!important;
+  }
+  .b-calendar-grid-help {
+    display: none;
+  }
+  .b-calendar .b-calendar-grid-body .col[data-date] .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+  }
+}
+.v-line {
+  width: 1px;
+  height: 20px;
+  background-color: var(--dividers);
+}

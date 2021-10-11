@@ -1,5 +1,9 @@
 <template>
   <div class="c-card">
+    <div class="status-container text-right">
+      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+    </div>
     <div class="card-title-box flex-start-center">
       <div class="card-single-icon mr-2">
         <img class="icon1" src="~@/static/images/tokens/steem.png" alt="" />
@@ -17,7 +21,10 @@
     <div class="btn-row">
       <span class="value"> {{ pendingReward | amountForm }} </span>
       <div class="right-box">
-        <button class="primary-btn m-0">{{ $t('commen.withdraw') }}</button>
+        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+          <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+          {{ $t("commen.withdraw") }}
+        </button>
       </div>
     </div>
     <div class="text-left mt-3 mb-1">
@@ -33,7 +40,7 @@
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" @click="increase">+</button>
+          <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
       <ConnectWalletBtn
@@ -50,7 +57,7 @@
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
-        <div class="info">{{ card.apy.toFixed(2) }}%</div>
+        <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
       </div>
     </div>
     <b-modal
@@ -73,6 +80,9 @@ import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
 import { formatCountdown } from '@/utils/helper'
+import { handleApiErrCode } from '@/utils/helper'
+import { withdrawReward } from '@/utils/web3/pool'
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   name: 'DDelegateCard',
@@ -88,7 +98,7 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
-    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'totalStakings', 'blockNum']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -104,20 +114,38 @@ export default {
       return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid + '-totalStakedAmount']) return 0
+      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
       if(!tvl) return 0;
       return this.vestsToHive * (tvl.toString() / 1e6)
     },
     countDown() {
       if (!this.card?.firstBlock) return;
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data () {
     return {
       showModal: false,
       operate: 'add',
-      showSteemLogin: false
+      showSteemLogin: false,
+      isWithdrawing:false
     }
   },
   methods: {
@@ -128,6 +156,22 @@ export default {
     decrease(){
       this.operate ='minus'
       this.showModal = true
+    },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
     }
   },
 }

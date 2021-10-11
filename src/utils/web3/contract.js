@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import {
-  getEthWeb,
   getWeb3,
   setupNetwork,
   isUnlocked,
@@ -17,22 +16,22 @@ import {
 import {
   getAccounts
 } from './account'
-import { errCode, RPC_NODE } from '../../config'
+import { errCode } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0x4c99C3FaFAe0B83920fC4eb3370CB0a6541DA847",
-  "ERC20Factory": "0x97bCDCA82c845bAb4d8D7Cf2B0f7F56D29348e15",
-  "HomeChainAssetRegistry": "0xB7fF6a7725b4d979bd95Be37bA631C56A5f35dCe",
-  "SteemHiveDelegateAssetRegistry": "0x411BcCae82e6DA69D6E29ef44C3fCa2f3ff2bB33",
-  "SubstrateCrowdloanAssetRegistry": "0x5B353D9e16A9d1a70Ecf89655810AB5B7E34984E",
-  "SubstrateNominateAssetRegistry": "0xb693Daa5879aeBfbC45433d1d4cdae78d5e7c657",
-  "ERC20AssetHandler": "0x050222CA9BE1921AA332b5bF228D4af947407F24",
+  "RegistryHub": "0x051ad4E33324EB193Ad9e4f56876c4FBE2d38CC9",
+  "ERC20Factory": "0x7a57fAB6C10c7D65Af613E86a9e67c55497BEa97",
+  "HomeChainAssetRegistry": "0x1B4296c40336F6f4c91E53A9Cf04f076db0cCFFB",
+  "SteemHiveDelegateAssetRegistry": "0xC6Aa5d949e6eA2d7C4e10e37AA3CF3A28849c94A",
+  "SubstrateCrowdloanAssetRegistry": "0x609b7e0ED70175368b209f640162DA076c2C168C",
+  "SubstrateNominateAssetRegistry": "0xFD96F84Ce2de835462c08C8baA40D57CaE1ae7a9",
+  "ERC20AssetHandler": "0x97cA655920cd81e66E63eD3aAbD8749CF2A81682",
   "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x2C366DAF7eA176b9ef782499bA45787B04765391",
-  "Executor": "0x8a4c371AEC232A69Eb41863e109f558F50B6682d",
-  "Bridge": "0xd07E6F1bb68F745694a58aBdFb3B5152B5f11F06",
-  "StakingFactory": "0x37d256Dbac122a83f40E766073aF71334105dDc0",
-  "LinearCalculator": "0x33de6235522d64bFc4736f8A302B91EB44330585"
+  "TrustlessAssetHandler": "0x0236a8De69E9EE114C86689dCb475E978638618e",
+  "Executor": "0x060a1145Ad8E57AaEbed6F3465ce6c51afd73FFe",
+  "Bridge": "0x33049748Eae7194277EeaBB1d4aEFC1B6c472240",
+  "StakingFactory": "0xCA10E05b0C468cF7B055B2a7124F75EA6A0E843e",
+  "LinearCalculator": "0xA1DB44327535cB180027F7558825d5C0afe17e8E"
 }
 
 // contract file name
@@ -102,7 +101,7 @@ export const getContract = async function (contractName, address, onlyRead=true)
         // return;
       }
     }
-
+    
     const abi = await getAbi(contractName)
     if (!onlyRead){
       const provider = await getProvider()

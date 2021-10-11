@@ -95,7 +95,7 @@ export default {
           // update assets cache
           await getRegitryAssets(true)
           this.tokenAddress = ''
-          this.$router.go(-1);
+          this.$router.go(-1)
         }else{
           this.$bvToast.toast(this.$t('tip.registryAssetFail'), {
             title: this.$t('tip.error'),

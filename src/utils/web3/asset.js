@@ -3,11 +3,11 @@ import {
   contractAddress
 } from "./contract";
 import store from '@/store'
-import {  getProvider } from './ethers'
 import {
   createWatcher,
   aggregate
 } from '@makerdao/multicall'
+import { sleep } from '@/utils/helper'
 import {
   addressToHex
 } from '@/utils/commen/account'
@@ -21,19 +21,19 @@ import {
 } from './web3'
 import {
   waitForTx,
-  getGasPrice
+  getGasPrice,
+  getProvider
 } from './ethers'
 import {
   getAllTokens
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
-   CROWDLOAN_CHAINID_TO_NAME,
+    CROWDLOAN_CHAINID_TO_NAME,
     DELEGATION_CHAINID_TO_NAME,
     Multi_Config,
     GasLimit
-    } from "../../config";
-
+} from "@/config";
 /**
  * Judge asset wheather Homechain assets
  * @param {String} address regitsry contract address address 
@@ -221,7 +221,7 @@ export const getAssetMetadata = async (id, assetType) => {
       }
       break;
     case 'SubstrateCrowdloanAssetRegistry':
-      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]][parseInt(meta[1])]
+      icon = 'https://cdn.wherein.mobi/polkadot/paralogo/' + (meta[0] === 2 ? 'p/' : 'k/') + meta[1] + '.png'
       meta = {
         chainId: meta[0],
         paraId: meta[1],
@@ -276,17 +276,29 @@ export const getERC20Info = async (address) => {
         returns: [
           ['decimals']
         ]
+      },{
+        target: address,
+        call: [
+          'totalSupply()(uint256)'
+        ],
+        returns: [
+          ['totalSupply']  
+        ]
       }], Multi_Config)
 
       const tokenFromBackend = tokens?.filter(token => token.address === address)
       let icon = null
+      let price = null
       if (tokenFromBackend && tokenFromBackend.length > 0) {
         icon = tokenFromBackend[0].icon
+        price = tokenFromBackend[0].price
       }
       resolve({
         name: infos?.results?.transformed?.name,
         symbol: infos?.results?.transformed?.symbol,
         decimal: infos?.results?.transformed?.decimals,
+        totalSupply: infos?.results?.transformed?.totalSupply,
+        price,
         address,
         icon
       })
@@ -418,6 +430,7 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +                      // communityAccount length
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
       const gas = await getGasPrice()
@@ -464,6 +477,7 @@ export const registerNominateAsset = async (form) => {
       console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
         addressToHex(form.nodeAddress).substr(2) // node address
       const gas = await getGasPrice()
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
@@ -496,28 +510,37 @@ export const deployERC20 = async ({
   symbol,
   decimal,
   totalSupply
-}, isMintable) => {
+}, isMintable, callback) => {
   return new Promise(async (resolve, reject) => {
     try {
       debugger
       const contract = await getContract('ERC20Factory', null, false)
-      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
-        console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
-        if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
+      let tokenDeploying = store.state.web3.tokenDeploying
+      if (tokenDeploying){
+        reject(errCode.TOKEN_DEPLOYING)
+        return;
+      }
+      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
+        if (store.state.web3.account.toLowerCase() === _creator.toLowerCase() && name === _name && symbol === _symbol && isMintable === _isMintable){
           contract.removeAllListeners('ERC20TokenCreated')
+          store.commit('web3/saveTokenDeploying', false)
           resolve(_tokenAddress)
           return;
         }
       })
+      tokenDeploying = true
+      store.commit('web3/saveTokenDeploying', tokenDeploying)
       const gas = await getGasPrice()
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
-      store.state.web3.account, 
-      isMintable, 
-      {
-        gasPrice: gas,
-        gasLimit: GasLimit
-      });
+            store.state.web3.account, 
+            isMintable, 
+            {
+              gasPrice: gas,
+              gasLimit: GasLimit
+            });
+      callback()
     } catch (e) {
+      store.commit('web3/saveTokenDeploying', false)
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)
       }else{
@@ -548,6 +571,14 @@ export const getAllTokenFromBackend = async (update = false) => {
       reject(500)
     }
   })
+}
+
+/**update tokens info from db */
+export const updateAllTokensFromBackend = async () => {
+  while(true){
+    await sleep(10)
+    await getAllTokenFromBackend(true)
+  }
 }
 
 /**

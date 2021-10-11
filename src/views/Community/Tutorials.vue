@@ -1,52 +1,54 @@
 <template>
   <div class="page-view-content">
-    <div class="t-card" >
-      <div class="poster">
-        <i class="back-icon" @click="$router.back()"></i>
-        <div class="title-box offset-md-1 offset-1 text-left">
-          <img class="logo" src="~@/static/images/logo.png" alt="">
-          <div class="font-bold font28">Link Community to Web3.0</div>
-        </div>
-      </div>
-      <div class="content-container">
-        <div class="title font24">
-          <div class="circle"></div>
-          <div class="text">{{ $t('tutorial.createProcess') }}</div>
-        </div>
-        <div class="steps-box mt-4">
-          <div class="step-item">
-            <div class="s-card">{{ $t('tutorial.step0') }}</div>
-          </div>
-          <div class="step-item">
-            <div class="s-card">{{ $t('tutorial.step1') }}</div>
-          </div>
-          <div class="step-item">
-            <div class="s-card">{{ $t('tutorial.step2') }}</div>
-          </div>
-          <div class="step-item">
-            <div class="s-card">{{ $t('tutorial.step3') }}</div>
+    <div class="container scroll-content">
+      <div class="t-card my-5" >
+        <div class="poster">
+          <i class="back-icon" @click="$router.back()"></i>
+          <div class="title-box offset-md-1 offset-1 text-left">
+            <img class="logo" src="~@/static/images/logo.png" alt="">
+            <div class="font-bold font28">Link Community to Web3.0</div>
           </div>
         </div>
-        <div class="title font24 mt-5">
-          <div class="circle"></div>
-          <div class="text">{{ $t('tutorial.demoVideo') }}</div>
-        </div>
-        <div class="video-box mt-4">
-          <video id="video" width="100%" controls @canplay="canPlay">
-            <source src="https://cdn.wherein.mobi/nutbox-v2/video/1629821598092785.mp4" type="video/mp4">
-            <!--          <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">-->
-            Your browser does not support HTML video.
-          </video>
-          <div class="video-mask text-center" v-if="!playing">
-            <div class="font32 font-bold">{{ $t('tutorial.watchVideo') }}</div>
-            <i class="play-icon" @click="play"></i>
-            <div class="tip1 font12">
-              {{ $t('tutorial.videoTip1', {min: 5}) }}
+        <div class="content-container">
+          <div class="title font24">
+            <div class="circle"></div>
+            <div class="text">{{ $t('tutorial.createProcess') }}</div>
+          </div>
+          <div class="steps-box mt-4">
+            <div class="step-item">
+              <div class="s-card">{{ $t('tutorial.step0') }}</div>
             </div>
-            <div class="tip2 font12">{{ $t('tutorial.videoTip2') }}</div>
+            <div class="step-item">
+              <div class="s-card">{{ $t('tutorial.step1') }}</div>
+            </div>
+            <div class="step-item">
+              <div class="s-card">{{ $t('tutorial.step2') }}</div>
+            </div>
+            <div class="step-item">
+              <div class="s-card">{{ $t('tutorial.step3') }}</div>
+            </div>
           </div>
+          <div class="title font24 mt-5">
+            <div class="circle"></div>
+            <div class="text">{{ $t('tutorial.demoVideo') }}</div>
+          </div>
+          <div class="video-box mt-4">
+            <video id="video" width="100%" controls @canplay="canPlay">
+              <source src="https://cdn.wherein.mobi/nutbox-v2/video/1629821598092785.mp4" type="video/mp4">
+              <!--          <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">-->
+              Your browser does not support HTML video.
+            </video>
+            <div class="video-mask text-center" v-if="!playing">
+              <div class="font32 font-bold">{{ $t('tutorial.watchVideo') }}</div>
+              <i class="play-icon" @click="play"></i>
+              <div class="tip1 font12">
+                {{ $t('tutorial.videoTip1', {min: 5}) }}
+              </div>
+              <div class="tip2 font12">{{ $t('tutorial.videoTip2') }}</div>
+            </div>
+          </div>
+          <button class="primary-btn mt-4" @click="$router.replace('/community/create-economy')">{{ $t('tutorial.getStart') }}</button>
         </div>
-        <button class="primary-btn mt-4" @click="$router.replace('/community/create-economy')">{{ $t('tutorial.getStart') }}</button>
       </div>
     </div>
   </div>
@@ -81,7 +83,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/card/common-card";
 .t-card {
-  @include card(0);
+  @include card(0, white, auto, fit-content);
   text-align: left;
   .poster {
     min-height: 8rem;
