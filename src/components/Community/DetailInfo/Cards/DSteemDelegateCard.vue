@@ -82,6 +82,7 @@ import Login from '@/components/ToolsComponents/Login'
 import { formatCountdown } from '@/utils/helper'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   name: 'DDelegateCard',
@@ -120,7 +121,7 @@ export default {
     },
     countDown() {
       if (!this.card?.firstBlock) return;
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
     },
     status (){
       const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']

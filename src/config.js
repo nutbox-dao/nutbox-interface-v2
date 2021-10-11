@@ -150,9 +150,9 @@ export const GasLimit = 29900000;
 export const OfficialAssets = [
   {
     name: 'Walnut',
-    address: '0x0422bD784458A1B6B573C77ADa47F3dd6E0Ab165',
+    address: '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5',
     symbol: 'WNUT',
-    asset: '0x529dc7e9ced31e643d49badc67a6df9b48ab3cac8e3a0aca9a7f5505761c2bac',
+    asset: '0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64',
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
@@ -188,7 +188,7 @@ export const OfficialAssets = [
 
 // goerli network
 export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
-export const NutAddress = '0x0422bD784458A1B6B573C77ADa47F3dd6E0Ab165' 
+export const NutAddress = '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5' 
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,

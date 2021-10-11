@@ -96,6 +96,7 @@ import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode, formatCountdown } from "@/utils/helper";
 import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   name: "DDelegateCard",
@@ -149,7 +150,7 @@ export default {
       if (!this.card?.firstBlock){
         return null;
       }
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
     },
     status (){
       const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']

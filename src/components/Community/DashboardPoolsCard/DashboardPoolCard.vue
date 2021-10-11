@@ -96,7 +96,7 @@ export default {
             if (this.pool.asset.chainId === 2) { // polkadot
               return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
             }else if (this.pool.asset.chainId === 3) { // kusama
-              return this.totalDeposited * this.price['KSMUSDT'] / this.prices['ETHUSDT']
+              return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
             }
           }
         case 'HomeChainAssetRegistry':
