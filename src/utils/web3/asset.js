@@ -115,7 +115,7 @@ export const getRegitryAssets = async (update = false) => {
       }));
       // get metadata of assets
       const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-      assets = assets.map((asset, index) => ({
+      assets = assets.filter(asset => asset).map((asset, index) => ({
         ...asset,
         ...metadatas[index]
       }))
@@ -207,7 +207,12 @@ export const getAssetMetadata = async (id, assetType) => {
   }
   if (assetType === 'HomeChainAssetRegistry') {
     const homeLocation = await contract.getHomeLocation(id)
-    return await getERC20Info(homeLocation)
+    try{
+      const tokenInfo = await getERC20Info(homeLocation)
+      return tokenInfo
+    }catch(e){
+      return null
+    }
   }
   let meta = await contract.idToMetadata(id)
   let icon = ''
