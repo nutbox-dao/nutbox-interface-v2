@@ -1,5 +1,5 @@
 <template>
-  <div class="page-view-content">
+  <!--  <div class="page-view-content nps">
     <div class="text-left">
       <b-alert show variant="info">简要说明</b-alert>
     </div>
@@ -28,6 +28,54 @@
       :index="index"
     ></ProposalItem>
   </div>
+ -->
+
+  <div class="page-view-content nps">
+    <div class="container scroll-content">
+      <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
+      <div class="view-top-header pb-0">
+        <div class="tip-box">
+          <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
+          <div style="text-align: left; margin-top: 1rem">
+            {{ $t("nps.npsTemp") }}
+          </div>
+        </div>
+      </div>
+      <div class="view-top-header view-top-header-sticky flex-between-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
+            <span
+              v-for="(item, index) of tabOptions"
+              :key="index"
+              :class="activeTab === index ? 'active' : ''"
+              @click="changeTab(index)"
+              >{{ item }}</span
+            >
+          </div>
+        </div>
+        <div class="c-btn-group">
+          <button
+            @click="
+              $router.push(
+                `/nps/proposal-space/proposal-create/${$router.currentRoute.params.key}`
+              )
+            "
+          >
+            <i class="add-icon"></i>
+            <span>Create Proposal</span>
+          </button>
+        </div>
+      </div>
+      <div class="mb-5">
+        <ProposalItem
+          v-for="(proposalItem, index) in proposalitems"
+          :key="proposalItem.id"
+          :proposalItem="proposalItem"
+          :index="index"
+        ></ProposalItem>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -42,15 +90,33 @@ export default {
   },
   data() {
     return {
+      tempProposalItem: [],
       proposalitems: [],
+      tabOptions: ["ALL", "Voting", "Wait", "End"],
+      activeTab: 0,
     };
+  },
+  methods: {
+    changeTab(index) {
+      this.activeTab = index;
+      if (this.activeTab == 0) {
+        this.proposalitems = this.tempProposalItem;
+      } else if (this.activeTab == 1) {
+        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 1);
+      } else if (this.activeTab == 2) {
+        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 0);
+      } else if (this.activeTab == 3) {
+        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 2);
+      }
+    },
   },
   async mounted() {
     this.id = this.$router.currentRoute.params.key;
     this.communityId = this.$router.currentRoute.params.key;
 
     try {
-      this.proposalitems = await getAllProposal(this.communityId);
+      this.tempProposalItem = await getAllProposal(this.communityId);
+      this.proposalitems = this.tempProposalItem;
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
@@ -61,7 +127,75 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.createproposal {
-  float: right;
+.nps {
+  .tip-box {
+    @include card(2rem 1.2rem, rgba(0, 0, 0, 0.2), hidden, fit-content);
+    color: white;
+  }
+  .nps-card {
+    height: 108px;
+    background: white;
+    padding: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
+    border-radius: 28px;
+    border: 1px solid rgba(227, 229, 232, 0.5);
+  }
+  .proposal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+    p,
+    a {
+      margin: 0 10px;
+      color: var(--primary-text);
+      font-size: 16px;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      max-height: 60px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+    a:hover {
+      color: var(--link);
+    }
+
+    .pass {
+      background: rgba(80, 191, 0, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(80, 191, 0, 0.3);
+      color: var(--success);
+    }
+    .pending {
+      background: rgba(255, 219, 38, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 219, 38, 0.3);
+      color: var(--warning);
+    }
+    .unpass {
+      background: rgba(255, 91, 77, 0.051);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 91, 77, 0.3);
+      color: var(--error);
+    }
+    .rolling {
+      background: #408fff0d;
+      border-radius: 8px;
+      border: 1px solid #408fff4d;
+      color: var(--link);
+    }
+  }
+}
+@media (max-width: 560px) {
+  .view-top-header {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .nav-box {
+    margin-bottom: 0.5rem;
+  }
 }
 </style>

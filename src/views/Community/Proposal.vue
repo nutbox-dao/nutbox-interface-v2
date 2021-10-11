@@ -1,5 +1,5 @@
 <template>
-  <div class="page-view-content">
+  <div class="container scroll-content">
     <div class="mb-3 flex-between-center" style="height: 2.4rem">
       <div
         class="page-back-text-icon font20"
@@ -215,8 +215,9 @@
         <button
           class="primary-btn"
           @click="ConfirmVote"
-          :disabled="!isValid || isVoted"
+          :disabled="!isValid || isVoted || voteing"
         >
+          <b-spinner small type="grow" v-show="voteing" />
           {{  type == "agree"
                   ? $t("community.proposalAgreeBtn")
                   : $t("community.proposalDisagreeBtn"), }}
@@ -300,6 +301,7 @@ export default {
         voteType: "",
         voteScore: 0,
       },
+      voteing: false,
       isVoted: true,
       voteItems: [],
       currentUserId: "",
@@ -363,6 +365,7 @@ export default {
     },
     async ConfirmVote() {
       try {
+        this.voteing = true;
         this.vote.communityId = this.form.communityId;
         this.vote.proposalId = this.proposal.id;
         this.vote.voteType = this.type == "agree" ? 1 : 0;
@@ -382,7 +385,7 @@ export default {
           this.$bvToast.toast(tip, param);
         });
       } finally {
-        this.deploying = false;
+        this.voteing = false;
       }
     },
     async loadAllVote() {
