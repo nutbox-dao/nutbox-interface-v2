@@ -1,15 +1,4 @@
 <template>
-  <!--  <div class="proposal-item text-left">
-    <label
-      ><span> 1 </span>
-      <span> {{ proposalItem.author }}</span>
-      <span> {{ proposalItem.title }}</span></label
-    >
-
-    <b-button variant="primary" class="createproposal" size="sm">
-      {{ $t("cs.nominate") }}</b-button
-    >
-  </div> -->
   <div class="nps">
     <div class="nps-card">
       <div class="proposal">
@@ -28,9 +17,7 @@
 
         <span
           @click="
-            $router.push(
-              `/community/proposal-space/proposal/${proposalItem.id}/`
-            )
+            $router.push(`/nps/proposal-space/proposal/${proposalItem.id}/`)
           "
           style="
             flex: 1;
@@ -41,7 +28,7 @@
         >
           {{ proposalItem.title }}
         </span>
-        <div class="w-25 pl-3 pr-3">
+        <!--  <div class="w-25 pl-3 pr-3">
           <b-alert show variant="secondary"
             ><div class="row">
               <div class="col-6 text-left">赞成</div>
@@ -74,11 +61,18 @@
                 class="w-100"
               ></b-progress></div
           ></b-alert>
-        </div>
+        </div> -->
         <div class="w-20 pl-3 pr-3">
           {{ $t("community.proposalEnd") + ":" + endTime }}
         </div>
         <p
+          :class="
+            proposalItem.status == 0
+              ? 'propsalVoteStatusWaitStart'
+              : proposalItem.status == 1
+              ? 'propsalVoteStatusDoing'
+              : 'propsalVoteStatusEnd'
+          "
           style="
             font-size: 14px;
             font-weight: 600;
@@ -189,7 +183,7 @@ span {
       border: 1px solid rgba(80, 191, 0, 0.3);
       color: var(--success);
     }
-    .pending {
+    .propsalVoteStatusWaitStart {
       background: rgba(255, 219, 38, 0.05);
       border-radius: 8px;
       border: 1px solid rgba(255, 219, 38, 0.3);
@@ -201,7 +195,15 @@ span {
       border: 1px solid rgba(255, 91, 77, 0.3);
       color: var(--error);
     }
-    .rolling {
+
+    .propsalVoteStatusEnd {
+      background: rgba(255, 91, 77, 0.051);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 91, 77, 0.3);
+      color: var(--error);
+    }
+
+    .propsalVoteStatusDoing {
       background: #408fff0d;
       border-radius: 8px;
       border: 1px solid #408fff4d;

@@ -2,14 +2,14 @@ import store from "@/store";
 import {
   getMyStakingFactory,
   getNonce,
-  getDistributionEras
+  getDistributionEras,
 } from "./community";
 import {
   getMyCommunityProposalConfigInfo as gmcpci,
   insertCommunityProposalConfig,
   updateCommunityProposalConfig,
   getStrategies as gs,
-  getScores as gScores
+  getScores as gScores,
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, GasLimit } from "../../config";
@@ -20,7 +20,7 @@ import { getAccounts } from "@/utils/web3/account";
  * @param {*} update
  * @returns
  */
-export const getMyCommunityProposalConfigInfo = async stakingFactoryId => {
+export const getMyCommunityProposalConfigInfo = async (stakingFactoryId) => {
   return new Promise(async (resolve, reject) => {
     let communityProposalConfigInfo = null;
     try {
@@ -35,7 +35,7 @@ export const getMyCommunityProposalConfigInfo = async stakingFactoryId => {
       } else {
         console.log("first get communityProposalConfigInfo");
 
-        resolve({ id: stakingFactoryId });
+        resolve(null);
       }
     } catch (e) {
       console.log("Get communityProposalConfig info from backend fail", e);
@@ -79,7 +79,7 @@ export const completeCommunityProposalConfigInfo = async (form, type) => {
       userId,
       infoStr: originMessage,
       nonce,
-      signature
+      signature,
     };
     try {
       let res = null;
@@ -123,7 +123,7 @@ export const getStrategies = async () => {
  * @param {*} form
  * @param {*} type 'create' / 'edit'
  */
-export const getScore = async params => {
+export const getScore = async (params) => {
   return new Promise(async (resolve, reject) => {
     try {
       params.addresses = [];
@@ -148,7 +148,7 @@ export const getScore = async params => {
  * @param {*} form
  * @param {*} type 'create' / 'edit'
  */
-export const getScores = async params => {
+export const getScores = async (params) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (params.network) {
