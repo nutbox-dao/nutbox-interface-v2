@@ -53,8 +53,12 @@
   </template>
     <div class="detail-info-box">
       <div class="project-info-container">
-        <span class="name"> {{ tvl | amountForm }} </span>
-        <div class="info">--</div>
+        <span class="name"> {{ $t('community.totalDeposit') }} </span>
+        <div class="info">{{ totalDeposited | amountForm }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> TVL </span>
+        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
@@ -100,7 +104,8 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'blockNum', 'monitorPools']),
+    ...mapState(['prices']),
+    ...mapState('web3',['pendingRewards','userStakings', 'stakingFactoryId', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -115,10 +120,12 @@ export default {
       if(!userStakingBn) return 0;
       return this.vestsToHive * (userStakingBn.toString() / 1e6)
     },
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.stakingFactoryId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      return this.card && this.monitorPools[this.stakingFactoryId + '-' + this.card.pid + '-totalStakedAmount'] / 1e6
+    },
     tvl() {
-      const tvl = this.card.totalStakedAmount
-      if(!tvl) return 0;
-      return this.vestsToHive * (tvl.toString() / 1e6)
+      return this.totalDeposited * this.prices['HIVEETH']
     },
     countDown () {
       if (!this.card?.firstBlock) return;
