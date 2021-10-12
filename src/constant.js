@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-export const BLOCK_SECOND = 15
+export const BLOCK_SECOND = 12
 
 export const POLKADOT_DECIMAL = 10
 export const KUSAMA_DECIMAL = 12
