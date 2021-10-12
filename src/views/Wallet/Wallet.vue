@@ -1,18 +1,35 @@
 <template>
   <div class="page-view-content wallet">
-    <div class="page-view-title">{{ this.$t("wallet.wallet") }}</div>
-    <!-- <div class="page-view-subtitle">Choose asset type</div> -->
-    <div class="nav-box container" ref="navBox">
-      <div class="nav mr-5">
-        <router-link to="/wallet/bsc" exact>BSC</router-link>
-        <router-link to="/wallet/polkadot">Polkadot</router-link>
-        <router-link to="/wallet/kusama">Kusama</router-link>
-        <router-link to="/wallet/steem">Steem</router-link>
-        <router-link to="/wallet/hive">Hive</router-link>
+    <div class="container scroll-content">
+      <div class="page-view-title-v">{{ $t("wallet.wallet") }}</div>
+      <div class="view-top-header p-view-top-header flex-between-center">
+        <div class="nav-box nav-box-bg" ref="navBox">
+          <div class="nav">
+            <router-link to="bsc">BSC</router-link>
+            <router-link to="polkadot">Polkadot</router-link>
+            <router-link to="kusama">Kusama</router-link>
+            <router-link to="steem">Steem</router-link>
+            <router-link to="hive">Hive</router-link>
+          </div>
+        </div>
+        <component :is="$route.name"></component>
       </div>
-      <component :is="$route.name"></component>
+      <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
+        <b-dropdown class="top-header-dropdown" no-caret>
+          <template #button-content>
+            <span>{{$route.name}}</span>
+            <i class="dropdown-icon ml-2"></i>
+          </template>
+          <b-dropdown-item to="bsc" exact>BSC</b-dropdown-item >
+          <b-dropdown-item to="polkadot">Polkadot</b-dropdown-item >
+          <b-dropdown-item to="kusama">Kusama</b-dropdown-item >
+          <b-dropdown-item to="steem">Steem</b-dropdown-item >
+          <b-dropdown-item to="hive">Hive</b-dropdown-item >
+        </b-dropdown>
+        <component :is="$route.name"></component>
+      </div>
+      <router-view></router-view>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 

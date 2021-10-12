@@ -3,6 +3,7 @@ import store from '@/store'
 import {  getMyCommunityInfo, getNonce, monitorCommunity, getDistributionEras } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
+import { ethers } from 'ethers'
 
 /**
  * Get metamask accounts
@@ -15,6 +16,7 @@ export const getAccounts = async (update=false) => {
     const metamask = await getEthWeb()
     const accounts = await metamask.request({ method: 'eth_requestAccounts' })
     let account = accounts[0]
+    account = ethers.utils.getAddress(account)
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
     return accounts[0]
@@ -27,7 +29,7 @@ export const accountChanged = async () => {
     const metamask = await getEthWeb()
     metamask.on('accountsChanged', (accounts) => {
         console.log('Changed accounts', accounts);
-        store.commit('web3/saveAccount', accounts[0])
+        store.commit('web3/saveAccount', ethers.utils.getAddress(accounts[0]))
         store.commit('web3/saveStakingFactoryId', null)
         store.commit('web3/saveMyPools', [])
         store.commit('web3/saveAllAssetsOfUser', [])

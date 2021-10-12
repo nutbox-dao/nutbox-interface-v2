@@ -12,8 +12,8 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of nominatePools" :key="idx">
-            <DNominateCard :card="card"/>
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of nominatePools" :key="card.pid + '' + idx">
+            <DNominateCard :nomination="card"/>
           </div>
         </div>
       </div>

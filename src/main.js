@@ -6,7 +6,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import i18n from './i18n'
-import { formatBalance, formatUserAddress } from './utils/helper'
+import { formatBalance, formatUserAddress, formatPrice } from './utils/helper'
 import * as echarts from 'echarts/core'
 import { TooltipComponent, LegendComponent } from 'echarts/components'
 import { PieChart } from 'echarts/charts'
@@ -17,6 +17,7 @@ Vue.use(echarts)
 Vue.config.productionTip = false
 
 Vue.filter('amountForm', formatBalance)
+Vue.filter('formatPrice', formatPrice)
 Vue.filter('formatUserAddress', formatUserAddress)
 
 new Vue({

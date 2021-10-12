@@ -1,12 +1,11 @@
 import BN from 'bn.js'
 
-export const BLOCK_SECOND = 3
+export const BLOCK_SECOND = 15
 
 export const POLKADOT_DECIMAL = 10
 export const KUSAMA_DECIMAL = 12
 export const ROCOCO_DECIMAL = 12
 export const SP_DELEGATE_DECIMAL = 6
-export const MAX_DISTRIBUTION_COUNT = 6
 
 export const TIME_PERIOD = {
     MINUTES:60,
@@ -36,6 +35,10 @@ export const DECIMAL = {
     kusama: new BN(KUSAMA_DECIMAL),
     rococo: new BN(ROCOCO_DECIMAL)
 }
+
+export const PRICES_SYMBOL = [
+    'BNBETH','DOTUSDT', 'KSMUSDT','ETHUSDT', 'HIVEUSDT', 'STEEMETH'
+]
 
 // 最大投票数
 export const MAX_NOMINATE_VALIDATOR = 16

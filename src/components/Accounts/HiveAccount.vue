@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown v-if="isLogin" class="c-dropdown" right>
+  <b-dropdown v-if="isLogin" class="account-dropdown" right>
     <template #button-content>
       <div class="account-dropdown-btn flex-between-center">
         <span>{{hiveAccount}}</span>

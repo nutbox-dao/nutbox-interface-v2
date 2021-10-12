@@ -1,13 +1,17 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+    <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
           <img class="icon2" src="~@/static/images/tokens/steem.png" alt="" />
         </div>
         <div class="card-link-title-text font20 font-bold">
-          <div class="link-title" @click="$router.push('/community/detail-info?id='+card.communityId)">
+          <div class="link-title" @click="openNewTab(card.communityId)">
             <span>{{ card.communityName }}</span>
             <i class="link-icon"></i>
           </div>
@@ -25,8 +29,11 @@
       <div class="btn-row">
         <span class="value"> {{ pendingReward | amountForm }} </span>
         <div class="right-box">
-          <button class="primary-btn m-0">{{ $t('commen.withdraw') }}</button>
-        </div>
+        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+          <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+          {{ $t("commen.withdraw") }}
+        </button>
+      </div>
       </div>
       <div class="text-left mt-3 mb-1">
         <span style="color: #717376;" class="font-bold">{{ card.assetType == 'sp' ? 'STEEM POWER' : 'HIVE POWER'}}</span>
@@ -36,7 +43,7 @@
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" @click="increase">+</button>
+          <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
       <ConnectWalletBtn
@@ -47,12 +54,16 @@
         />
       <div class="detail-info-box">
         <div class="project-info-container">
+          <span class="name"> {{ $t('community.totalDeposit') }} </span>
+          <div class="info">{{ totalDeposited | amountForm }}</div>
+        </div>
+        <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm }}</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ card.apy.toFixed(2) }}%</div>
+          <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
     </div>
@@ -76,6 +87,8 @@ import DelegateModal from '@/components/ToolsComponents/SteemDelegateModal'
 import { mapState } from 'vuex'
 import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
+import { handleApiErrCode } from '@/utils/helper'
+import { withdrawReward } from '@/utils/web3/pool'
 
 export default {
   name: 'DDelegateCard',
@@ -91,7 +104,8 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
-    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'totalStakings']),
+    ...mapState(['prices']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools']),
     steemLogin() {
       return !!this.steemAccount
     },
@@ -106,17 +120,36 @@ export default {
       if(!userStakingBn) return 0;
       return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     },
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] / 1e6
+    },
     tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
-      if(!tvl) return 0;
-      return this.vestsToHive * (tvl.toString() / 1e6)
+      return this.totalDeposited * this.prices['STEEMETH']
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data () {
     return {
       showModal: false,
       operate: 'add',
-      showSteemLogin: false
+      showSteemLogin: false,
+      isWithdrawing: false
     }
   },
   methods: {
@@ -127,6 +160,25 @@ export default {
     decrease(){
       this.operate ='minus'
       this.showModal = true
+    },
+    async withdraw() {
+      try{
+        this.isWithdrawing = true
+        await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.isWithdrawing = false  
+      }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
 }

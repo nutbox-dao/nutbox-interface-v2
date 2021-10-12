@@ -1,6 +1,10 @@
 <template>
   <div class="multi-card">
     <div class="card-link-top-box">
+      <div class="status-container text-right">
+        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
+        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      </div>
       <div class="flex-start-center">
         <div class="card-link-icons">
           <img class="icon1" :src="card.communityIcon" alt="" />
@@ -10,7 +14,7 @@
           <div
             class="link-title"
             @click="
-              $router.push('/community/detail-info?id=' + card.communityId)
+              openNewTab(card.communityId)
             "
           >
             <span>{{ card.communityName }}</span>
@@ -42,38 +46,44 @@
         <span style="color: #717376" class="font-bold">{{ card.symbol }}</span>
         <span style="color: #bdbfc2"> STAKED</span>
       </div>
-      <div class="btn-row mb-4" v-if="approved">
-        <span class="value">
-          {{ (loadingUserStakings ? 0 : staked) | amountForm }}
-        </span>
-        <div class="right-box">
-          <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" @click="increase">+</button>
-        </div>
-      </div>
+      <ConnectMetaMask v-if="!metamaskConnected"/>
       <template v-else>
-        <b-button
-          variant="primary"
-          @click="approve"
-          :disabled="isApproving || loadingApprovements"
-        >
-          <b-spinner
-            small
-            type="grow"
-            v-show="isApproving || loadingApprovements"
-          ></b-spinner>
-          {{ $t("commen.approveContract") }}
-        </b-button>
+        <div class="btn-row mb-4" v-if="approved">
+          <span class="value">
+            {{ (loadingUserStakings ? 0 : staked) | amountForm }}
+          </span>
+          <div class="right-box">
+            <button class="outline-btn" @click="decrease">-</button>
+            <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
+          </div>
+        </div>
+        <template v-else>
+          <b-button
+            variant="primary"
+            @click="approve"
+            :disabled="isApproving || loadingApprovements || status !== 'Active'"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="isApproving || loadingApprovements"
+            ></b-spinner>
+            {{ $t("commen.approveContract") }}
+          </b-button>
+        </template>
       </template>
-
       <div class="detail-info-box">
         <div class="project-info-container">
+          <span class="name"> {{ $t('community.totalDeposit') }} </span>
+          <div class="info">{{ totalDeposited | amountForm }}</div>
+        </div>
+        <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm }}</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
-          <div class="info">{{ card.apy.toFixed(2) }}%</div>
+          <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>
     </div>
@@ -100,11 +110,13 @@ import StakingHomeChainAssetModal from "@/components/ToolsComponents/StakingHome
 import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: "DDelegateCard",
   components: {
     StakingHomeChainAssetModal,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -117,9 +129,11 @@ export default {
       "approvements",
       "loadingApprovements",
       "userStakings",
+      "allTokens",
       "loadingUserStakings",
-      "totalStakings"
+      "monitorPools"
     ]),
+    ...mapState(['metamaskConnected', 'prices']),
     pendingReward() {
       const pendingBn =
         this.pendingRewards[this.card.communityId + "-" + this.card.pid];
@@ -137,11 +151,35 @@ export default {
       const decimal = this.card.decimal;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
-    tvl() {
-      const tvl = this.totalStakings[this.card.communityId + '-' + this.card.pid]
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'];
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    tvl() {
+      return this.totalDeposited * this.erc20Price
+    },
+    erc20Price(){
+      if (!this.card || !this.card.address) return null;
+      return this.allTokens.filter(token => token.address === this.card.address)[0].price
+    },
+    status (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
     }
   },
   data() {
@@ -182,6 +220,10 @@ export default {
       try{
         this.isWithdrawing = true
         await withdrawReward(this.card.communityId, this.card.pid)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -189,6 +231,9 @@ export default {
       }finally{
         this.isWithdrawing = false  
       }
+    },
+    openNewTab (id) {
+      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   },
 };

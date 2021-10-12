@@ -1,100 +1,102 @@
 <template>
   <div class="page-view-content">
-    <Step :current-step="1"></Step>
-    <div class="view-top-header mb-4">
-      <div class="page-back-text-icon page-view-title" @click="$router.back()">
-        {{ $t('community.createCommunity') }}
+    <div class="container scroll-content">
+      <div class="view-top-header">
+        <Step :current-step="1"></Step>
+        <div class="page-back-text-icon" @click="$router.back()">
+          {{ $t('community.createCommunity') }}
+        </div>
       </div>
-    </div>
-    <div class="mt-3">
-      <div class="form">
-        <div class="primary-line-title font-bold font20">
-          {{ $t('community.yourCTokenId') }}
-        </div>
-        <div class="form-card custom-form step-1">
-          <Dropdown :menu-options="concatAddressOptions"
-                    :loading="assetLoading"
-                    :selected-key="selectedKey"
-                    :selected-item="selectedAddressData"
-                    @setSelectedData="setSelectedData">
-            <template v-slot:empty0>
-              <div class="text-center">
-                <div class="custom-control" style="line-height: 1.5rem">
-                  {{ $t('asset.notRegister') }}
-                  <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
+      <div class="mb-5">
+        <div class="form">
+          <div class="primary-line-title font-bold font20">
+            {{ $t('community.yourCTokenId') }}
+          </div>
+          <div class="form-card custom-form step-1">
+            <Dropdown :menu-options="concatAddressOptions"
+                      :loading="assetLoading"
+                      :selected-key="selectedKey"
+                      :selected-item="selectedAddressData"
+                      @setSelectedData="setSelectedData">
+              <template v-slot:empty0>
+                <div class="text-center">
+                  <div class="custom-control" style="line-height: 1.5rem">
+                    {{ $t('asset.notRegister') }}
+                    <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
+                  </div>
                 </div>
+              </template>
+              <template v-slot:drop-item="slotProps">
+                <img class="prefix-icon" :src="slotProps.item.icon" alt="">
+                <div class="flex-full d-flex flex-column">
+                  <span>{{slotProps.item.symbol}}</span>
+                  <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
+                </div>
+              </template>
+            </Dropdown>
+            <!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
+            <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
+              <div class="text-grey">
+                <!-- <div v-show="isMint">* This is a mintable token</div>
+                <div v-show="!isMint">* This is not a mintable token</div> -->
               </div>
-            </template>
-            <template v-slot:drop-item="slotProps">
-              <img class="prefix-icon" :src="slotProps.item.icon" alt="">
-              <div class="flex-full d-flex flex-column">
-                <span>{{slotProps.item.symbol}}</span>
-                <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
+              <div class="" style="line-height: 1.5rem">
+                {{ $t('asset.notRegister') }}
+                <router-link class="text-primary"
+                             to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
               </div>
-            </template>
-          </Dropdown>
-<!--          <b-input class="" placeholder="Please enter" v-model="form.contractAddr"></b-input>-->
-          <div id="mint-checkbox" class="mt-3 font12 flex-between-center">
-            <div class="text-grey">
-              <!-- <div v-show="isMint">* This is a mintable token</div>
-              <div v-show="!isMint">* This is not a mintable token</div> -->
-            </div>
-            <div class="" style="line-height: 1.5rem">
-              {{ $t('asset.notRegister') }}
-              <router-link class="text-primary"
-                           to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
             </div>
           </div>
-        </div>
-        <div class="primary-line-title font-bold font20">
-          {{ $t('community.settingTokenDistribution') }}
-        </div>
-        <div class="form-card custom-form step-2">
-          <div class="flex-between-center">
-            <span>{{ $t('community.tokenEra') }}</span>
-<!--            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">-->
-<!--              <i class="add-icon"></i>-->
-<!--              <span>Add Pool</span>-->
-<!--            </button>-->
+          <div class="primary-line-title font-bold font20">
+            {{ $t('community.settingTokenDistribution') }}
           </div>
-          <p style="margin:0;">
-            {{ $t('community.currentBlock') }} {{blockNum}}
-          </p>
-          <Progress :is-edit="progressData.length>0"
-                    @delete="deleteData"
-                    :progress-data="progressData"></Progress>
-          <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
-            <b-input @keyup="startChange($event)" type="number" placeholder="输入起始区块高度" :disabled="progressData.length>0"
-                     v-model="poolForm.start"></b-input>
-          </div>
-          <span class="block-tip">
+          <div class="form-card custom-form step-2">
+            <div class="flex-between-center">
+              <span>{{ $t('community.tokenEra') }}</span>
+              <!--            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">-->
+              <!--              <i class="add-icon"></i>-->
+              <!--              <span>Add Pool</span>-->
+              <!--            </button>-->
+            </div>
+            <p style="margin:0;">
+              {{ $t('community.currentBlock') }} {{blockNum}}
+            </p>
+            <Progress :is-edit="progressData.length>0"
+                      @delete="deleteData"
+                      :progress-data="progressData"></Progress>
+            <div class="flex-between-center c-input-group">
+              <span class="font16 font-bold px-3">{{ $t('community.startBlock') }}</span>
+              <b-input @keyup="startChange($event)" type="number" placeholder="输入起始区块高度" :disabled="progressData.length>0"
+                       v-model="poolForm.start"></b-input>
+            </div>
+            <span class="block-tip">
             {{ startTime }}
           </span>
-          <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
-            <b-input-group class="d-flex flex-between-center">
-              <b-input class="flex-full" @keyup="stopChange($event)" type="number" :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
-              <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
-            </b-input-group>
-          </div>
-          <span class="block-tip">
+            <div class="flex-between-center c-input-group">
+              <span class="font16 font-bold px-3">{{ $t('community.stopBlock') }}</span>
+              <b-input-group class="d-flex flex-between-center">
+                <b-input class="flex-full" @keyup="stopChange($event)" type="number" :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+                <span @click="max" class="append-input-btn">{{ $t('commen.max') }}</span>
+              </b-input-group>
+            </div>
+            <span class="block-tip">
             {{ stopTime }}
           </span>
-          <div class="flex-between-center c-input-group">
-            <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
-            <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
-          </div>
-          <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=6 || poolForm.start >= maxBlock"
-                  @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
-          <span v-show="progressData.length>=6" class="block-tip">
+            <div class="flex-between-center c-input-group">
+              <span class="font16 font-bold px-3">{{ $t('community.rewardAmount') }}</span>
+              <b-input :placeholder="$t('community.inputBlockReward')" v-model="poolForm.reward"></b-input>
+            </div>
+            <button class="primary-btn" :disabled="!poolForm.end || !poolForm.reward || progressData.length>=256 || poolForm.start >= maxBlock"
+                    @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
+            <span v-show="progressData.length>=256" class="block-tip">
             {{ $t('community.distributionLimit') }}
-          </span>
+            </span>
+          </div>
+          <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
+            <b-spinner small type="grow" v-show="deploying" />
+            {{ $t('asset.deploy') }}
+          </button>
         </div>
-        <button class="primary-btn" :disabled="progressData.length===0 || deploying" @click="confirmDeploy">
-          <b-spinner small type="grow" v-show="deploying" />
-          {{ $t('asset.deploy') }}
-        </button>
       </div>
     </div>
   </div>
@@ -107,7 +109,7 @@ import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '../../utils/helper'
-import { MaxBlockNum, MAX_DISTRIBUTION_COUNT } from '@/constant'
+import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from "@/components/ToolsComponents/Step";
 
@@ -215,7 +217,8 @@ export default {
         })
         return
       }
-      if (parseInt(this.poolForm.reward) <= 0) {
+      if (parseFloat(this.poolForm.reward) <= 0) {
+        console.log(this.poolForm.reward);
         this.$bvToast.toast(this.$t('tip.wrongRewardNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'

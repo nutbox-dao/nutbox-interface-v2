@@ -29,7 +29,7 @@
           <div class="info">{{ apyRange }}</div>
         </div>
         <button class="primary-btn"
-                @click="$router.push(`/community/detail-info?id=${cardInfo.id}`)">{{ $t('community.join') }}</button>
+                @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div>
     </div>
   </div>
@@ -43,17 +43,23 @@ export default {
   },
   computed: {
     apyRange() {
-      const apys = this.cardInfo.apys;
-      if (!apys || apys.length === 0) return '0%'
+      let apys = this.cardInfo.apys;
+      apys = apys.filter(apy => apy > 0 && apy < 1e12)
+      if (!apys || apys.length === 0) return '--'
       const max = Math.max.apply(0, apys)
       const min = Math.min.apply(0, apys)
       if (max === min){
-        return max + '%'
+        return max.toFixed(2) + '%'
       }else{
-        return min + '-' + max + '%'
+        return min.toFixed(2) + '-' + max.toFixed(2) + '%'
       }
     }
   },
+  methods: {
+    openNewTab (cardInfo) {
+      window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
+    }
+  }
 }
 </script>
 

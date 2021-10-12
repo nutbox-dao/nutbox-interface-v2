@@ -8,7 +8,7 @@
       >
         <b-form-input
           id="input-name"
-          @keyup="nameFilled"
+          maxlength="20"
           v-model="form.name"
           placeholder='e.g. "Bitcoin", "Ethereum"'
         ></b-form-input>
@@ -20,6 +20,7 @@
       >
         <b-form-input
           id="input-symbol"
+          maxlength="6"
           @keyup="symbolFilled"
           v-model="form.symbol"
           placeholder='e.g. "BTC", "ETH"'
@@ -51,7 +52,7 @@
           </template>
           <template #file-name>
             <div class="input-file-logo">
-              <img class="logo-preview" v-if="logoPreviewScr" :src="logoPreviewScr" alt="">
+              <img class="logo-preview" v-if="logoPreviewSrc" :src="logoPreviewSrc" alt="">
               <UploadLoading v-if="loading"/>
             </div>
           </template>
@@ -97,7 +98,7 @@
           </div>
           <div class="row-info">
             <span class="label">Logo</span>
-            <span class="info"><img class="logo" :src="logoPreviewScr" alt="" /></span>
+            <span class="info"><img class="logo" :src="logoPreviewSrc" alt="" /></span>
           </div>
           <div class="contract-addr-box">
             <div class="d-flex align-items-center mb-2">
@@ -120,6 +121,34 @@
         <button class="primary-btn mt-4" @click="confirmDeploy">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
+    <b-modal
+      v-model="cropperModal"
+      modal-class="cropper-modal"
+      size="lg"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="cropper-container">
+        <canvas id="cropper-canvas"></canvas>
+        <vueCropper
+          ref="cropper"
+          class="cropper-rounded-circle"
+          :infoTrue="true"
+          :autoCrop="true"
+          :img="cropperImgSrc"
+          :fixedNumber="[1, 1]"
+          :autoCropWidth="200"
+          :fixed="true"
+          :centerBox="true"
+          outputType="png"
+        ></vueCropper>
+      </div>
+      <div class="crop-btn-group">
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -130,10 +159,11 @@ import { uploadImage } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import { handleApiErrCode } from '../../utils/helper'
+import { VueCropper } from 'vue-cropper'
 
 export default {
   name: 'DeployForm',
-  components: { UploadLoading },
+  components: { UploadLoading, VueCropper },
   props: {
     isMintable: {
       type: Boolean,
@@ -153,8 +183,10 @@ export default {
       tokenAddress: '',
       logoUrl: '',
       deploying: false,
-      logoPreviewScr: null,
-      loading: true
+      logoPreviewSrc: null,
+      loading: true,
+      cropperModal: false,
+      cropperImgSrc: ''
     }
   },
   computed: {
@@ -188,10 +220,14 @@ export default {
         })
         return
       }
-
       this.deploying = true
       try {
-        this.tokenAddress = await deployERC20(this.form, this.isMintable)
+        this.tokenAddress = await deployERC20(this.form, this.isMintable, () => {
+          this.$bvToast.toast(this.$t('tip.deploying'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+        })
         console.log('address', this.tokenAddress)
         const token = {
           ...this.form,
@@ -211,25 +247,64 @@ export default {
         this.deploying = false
       }
     },
-
+    onCancel () {
+      this.cropperModal = false
+      this.logo = null
+      this.loading = false
+    },
+    clipCircleImg(imgSrc) {
+      return new Promise(resolve => {
+        const canvas = document.getElementById('cropper-canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = imgSrc
+        img.onload = () => {
+          const cw = canvas.width = img.width
+          const ch = canvas.height = img.height
+          ctx.beginPath()
+          ctx.arc(cw / 2, ch / 2, ch / 2, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.clip()
+          ctx.drawImage(img, 0, 0)
+        }
+        const timer = setInterval(function () {
+          if (img.complete) {
+            clearInterval(timer)
+            resolve(canvas)
+          }
+        }, 50)
+      })
+    },
+    completeCropAndUpload () {
+      this.$refs.cropper.getCropData(async (data) => {
+        const canvas = await this.clipCircleImg(data)
+        this.logoPreviewSrc = canvas.toDataURL('image/png')
+        this.cropperModal = false
+        canvas.toBlob(async data => {
+          try {
+            this.logoUrl = await uploadImage(data)
+            this.loading = false
+          } catch (e) {
+            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+              title: this.$t('tip.tips'),
+              autoHideDelay: 5000,
+              variant: 'warning'
+            })
+            this.logo = null
+            this.logoUrl = null
+            this.loading = false
+          }
+        })
+      })
+    },
     async updateFile (file) {
       if (!this.logo) return
+      this.logoUploadLoading = true
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (res) => {
-        this.logoPreviewScr = res.target.result
-      }
-      try {
-        this.logoUrl = await uploadImage(this.logo)
-        this.loading = false
-      } catch (e) {
-        this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-          title: this.$t('tip.tips'),
-          autoHideDelay: 5000,
-          variant: 'warning'
-        })
-        this.logo = null
-        this.logoUrl = null
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
       }
     },
     formatUserAddress (address, long = true) {
@@ -263,9 +338,7 @@ export default {
       })
     },
     confirmDeploy () {
-      console.log(this.modalVisible);
       this.modalVisible = false;
-      console.log(this.modalVisible);
       this.$emit('deployed', this.tokenAddress);
     }
   }

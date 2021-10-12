@@ -12,7 +12,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of erc20Pools" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of erc20Pools" :key="card.pid + '' + idx">
             <DStakingCard :card="card"/>
           </div>
         </div>
@@ -24,6 +24,7 @@
 <script>
 import DStakingCard from '@/components/Community/DetailInfo/Cards/DStakingCard'
 import { mapState } from 'vuex'
+import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   name: 'DCrowdStaking',
@@ -37,7 +38,11 @@ export default {
   },
   computed: {
     ...mapState('web3', ['loadingAllPools'])
-  }
+  },
+  mounted () {
+    subNominators('kusama')
+    subNominators('polkadot');
+  },
 }
 </script>
 

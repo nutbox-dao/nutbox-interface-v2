@@ -9,26 +9,27 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
+    "@hiveio/dhive": "^1.1.1",
     "@hiveio/hive-js": "^2.0.4",
     "@makerdao/multicall": "^0.12.0",
     "@pancakeswap/sdk": "^2.4.0",
-    "@polkadot/api": "^5.5.2",
-    "@polkadot/apps-config": "^0.95.1",
-    "@polkadot/extension-dapp": "^0.39.3",
-    "@polkadot/ui-keyring": "0.85.1",
-    "@polkadot/vue-identicon": "0.85.1",
+    "@polkadot/api": "^6.3.1",
+    "@polkadot/apps-config": "0.96.2-57",
+    "@polkadot/extension-dapp": "^0.40.3",
+    "@polkadot/ui-keyring": "0.85.5",
+    "@polkadot/vue-identicon": "0.85.5",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "bn.js": "^5.2.0",
     "bootstrap-vue": "^2.17.3",
     "clipboard": "^2.0.8",
     "core-js": "^3.6.5",
+    "crypto": "^1.0.1",
     "csv-exportor": "^1.0.2",
     "dotenv": "^8.2.0",
     "echarts": "^5.1.1",
     "ethers": "^5.4.2",
     "lodash.debounce": "^4.0.8",
-    "polkadot": "^1.0.0",
     "steem": "^0.7.11",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
@@ -64,7 +65,8 @@
     "sass-loader": "^10.1.1",
     "vue-cli-plugin-bootstrap-vue": "^0.7.0",
     "vue-cli-plugin-i18n": "^1.0.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.46.0"
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [

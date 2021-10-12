@@ -3,11 +3,11 @@ import {
   contractAddress
 } from "./contract";
 import store from '@/store'
-import {  getProvider } from './ethers'
 import {
   createWatcher,
   aggregate
 } from '@makerdao/multicall'
+import { sleep } from '@/utils/helper'
 import {
   addressToHex
 } from '@/utils/commen/account'
@@ -21,18 +21,22 @@ import {
 } from './web3'
 import {
   waitForTx,
-  getGasPrice
+  getGasPrice,
+  getProvider
 } from './ethers'
 import {
-  getAllTokens
+  getAllTokens,
+  updateTokenIcon as uti
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
-   CROWDLOAN_CHAINID_TO_NAME,
+    CROWDLOAN_CHAINID_TO_NAME,
     DELEGATION_CHAINID_TO_NAME,
     Multi_Config,
     GasLimit
-    } from "../../config";
+} from "@/config";
+import { stanfiAddress } from '@/utils/commen/account'
+
 
 /**
  * Judge asset wheather Homechain assets
@@ -114,7 +118,7 @@ export const getRegitryAssets = async (update = false) => {
       }));
       // get metadata of assets
       const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-      assets = assets.map((asset, index) => ({
+      assets = assets.filter(asset => asset).map((asset, index) => ({
         ...asset,
         ...metadatas[index]
       }))
@@ -206,7 +210,12 @@ export const getAssetMetadata = async (id, assetType) => {
   }
   if (assetType === 'HomeChainAssetRegistry') {
     const homeLocation = await contract.getHomeLocation(id)
-    return await getERC20Info(homeLocation)
+    try{
+      const tokenInfo = await getERC20Info(homeLocation)
+      return tokenInfo
+    }catch(e){
+      return null
+    }
   }
   let meta = await contract.idToMetadata(id)
   let icon = ''
@@ -221,12 +230,12 @@ export const getAssetMetadata = async (id, assetType) => {
       }
       break;
     case 'SubstrateCrowdloanAssetRegistry':
-      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]][parseInt(meta[1])]
+      icon = 'https://cdn.wherein.mobi/polkadot/paralogo/' + (meta[0] === 2 ? 'p/' : 'k/') + meta[1] + '.png'
       meta = {
         chainId: meta[0],
         paraId: meta[1],
         trieIndex: meta[2],
-        communityAccount: meta[3],
+        communityAccount: stanfiAddress(meta[3], meta[3] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -234,7 +243,7 @@ export const getAssetMetadata = async (id, assetType) => {
       icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]].icon;
       meta = {
         chainId: meta[0],
-        validatorAccount:meta[1],
+        validatorAccount:stanfiAddress(meta[1], meta[0] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -276,17 +285,29 @@ export const getERC20Info = async (address) => {
         returns: [
           ['decimals']
         ]
+      },{
+        target: address,
+        call: [
+          'totalSupply()(uint256)'
+        ],
+        returns: [
+          ['totalSupply']  
+        ]
       }], Multi_Config)
 
       const tokenFromBackend = tokens?.filter(token => token.address === address)
       let icon = null
+      let price = null
       if (tokenFromBackend && tokenFromBackend.length > 0) {
         icon = tokenFromBackend[0].icon
+        price = tokenFromBackend[0].price
       }
       resolve({
         name: infos?.results?.transformed?.name,
         symbol: infos?.results?.transformed?.symbol,
         decimal: infos?.results?.transformed?.decimals,
+        totalSupply: infos?.results?.transformed?.totalSupply,
+        price,
         address,
         icon
       })
@@ -294,15 +315,6 @@ export const getERC20Info = async (address) => {
       reject(e)
     }
   })
-}
-
-/**
- * Check assetId have been registered before
- * TODO
- * @param {*} assetId 
- */
-function checkAssetIfRegister(assetId){
-
 }
 
 /**
@@ -323,7 +335,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       // if address a token address
       try{
         const erc20 = await getContract('ERC20', assetAddress)
-        const name = await erc20.name()
+        const dicimals = await erc20.dicimals()
       }catch(e){
         reject(errCode.NOT_A_TOKEN_CONTRACT)
         return;
@@ -343,6 +355,8 @@ export const registerHomeChainAsset = async (assetAddress) => {
       } catch (e) {
         if (e.code === 4001){
           reject(errCode.USER_CANCEL_SIGNING)
+        }else if (e === errCode.TRANSACTION_FAIL) {
+          reject(errCode.ASSET_EXIST)
         }else {
           reject(errCode.BLOCK_CHAIN_ERR)
         }
@@ -386,6 +400,8 @@ export const registerSteemHiveAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -414,6 +430,7 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +                      // communityAccount length
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
       const gas = await getGasPrice()
@@ -430,6 +447,8 @@ export const registerCrowdloanAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -455,9 +474,9 @@ export const registerNominateAsset = async (form) => {
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-      console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
+        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
         addressToHex(form.nodeAddress).substr(2) // node address
       const gas = await getGasPrice()
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
@@ -470,6 +489,8 @@ export const registerNominateAsset = async (form) => {
     } catch (e) {
       if (e.code === 4001){
         reject(errCode.USER_CANCEL_SIGNING)
+      }else if (e === errCode.TRANSACTION_FAIL) {
+        reject(errCode.ASSET_EXIST)
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
@@ -488,33 +509,89 @@ export const deployERC20 = async ({
   symbol,
   decimal,
   totalSupply
-}, isMintable) => {
+}, isMintable, callback) => {
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20Factory', null, false)
-      const gas = await getGasPrice()
-      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
-      store.state.web3.account, 
-      isMintable, 
-      {
-        gasPrice: gas,
-        gasLimit: GasLimit
-      });
-      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable, _assetId) => {
-        console.log(_tokenAddress, _name, _symbol, _isMintable, _assetId);
-        if (store.state.web3.account === _creator, name === _name, symbol === _symbol, isMintable === _isMintable){
+      let tokenDeploying = store.state.web3.tokenDeploying
+      if (tokenDeploying){
+        reject(errCode.TOKEN_DEPLOYING)
+        return;
+      }
+      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
+        if (store.state.web3.account.toLowerCase() === _creator.toLowerCase() && name === _name && symbol === _symbol && isMintable === _isMintable){
           contract.removeAllListeners('ERC20TokenCreated')
+          store.commit('web3/saveTokenDeploying', false)
           resolve(_tokenAddress)
           return;
         }
       })
+      tokenDeploying = true
+      store.commit('web3/saveTokenDeploying', tokenDeploying)
+      const gas = await getGasPrice()
+      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
+            store.state.web3.account, 
+            isMintable, 
+            {
+              gasPrice: gas,
+              gasLimit: GasLimit
+            });
+      callback()
     } catch (e) {
+      store.commit('web3/saveTokenDeploying', false)
       if (e.code === 4001) {
         reject(errCode.USER_CANCEL_SIGNING)
       }else{
         reject(errCode.BLOCK_CHAIN_ERR)
       }
       console.log(`Deploy mintable token ${name} failed`, e);
+    }
+  })
+}
+
+export const updateTokenIcon = async (token) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyStakingFactory()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+
+    let nonce = await getNonce()
+    const userId = await getAccounts();
+    nonce = nonce ? nonce + 1 : 1
+
+    token['communityId'] = stakingFactoryId;
+    console.log('pool', potokenl);
+    const originMessage = JSON.stringify(token)
+    let signature = ''
+    try {
+      signature = await signMessage(originMessage + nonce)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+    const params = {
+      userId,
+      infoStr: originMessage,
+      nonce,
+      signature
+    }
+    try {
+      const res = await uti(params)
+      // update nonce in storage
+      store.commit('web3/saveNonce', nonce)
+      resolve(res)
+    } catch (e) {
+      reject(e)
     }
   })
 }
@@ -539,6 +616,14 @@ export const getAllTokenFromBackend = async (update = false) => {
       reject(500)
     }
   })
+}
+
+/**update tokens info from db */
+export const updateAllTokensFromBackend = async () => {
+  while(true){
+    await sleep(10)
+    await getAllTokenFromBackend(true)
+  }
 }
 
 /**

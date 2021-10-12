@@ -77,7 +77,7 @@ export const getDashboardSummary = async (params) => post(CROWD_LOAN_API_URL + '
 
 // ============================================ backend v2 ============================================ 
 
-export const getAllCommunities = async () => get(BACKEND_API_URL + '/community/get')
+export const getAllCommunities = async (communityId=null) => get(BACKEND_API_URL + '/community/get', {id: communityId})
 
 export const getMyCommunityInfo = async (communityId) => get(BACKEND_API_URL + '/community/get', {id: communityId})
 
@@ -87,14 +87,20 @@ export const updateCommunity = async (params) => put(BACKEND_API_URL + '/communi
 
 export const updateBlogTag = async (params) => put(BACKEND_API_URL + '/community/updateBlogTag', params)
 
+export const updateSocial = async (params) => put(BACKEND_API_URL + '/community/updateSocial', params)
+
 export const insertToken = async (params) => post(BACKEND_API_URL + '/token/insert', params)
 
 export const getAllTokens = async () => get(BACKEND_API_URL + '/token/get')
+
+export const updateTokenIcon = async (params) => put(BACKEND_API_URL + '/token/update', params)
 
 export const getNonce = async (accountId) => get(BACKEND_API_URL + '/user/getnonce', {id: accountId})
 
 export const updatePoolInfo = async (params) => put(BACKEND_API_URL + '/pool/update', params)
 
-export const getAllPools = async () => get(BACKEND_API_URL + '/pool/getAll')
+export const getAllPools = async (communityId=null) => get(BACKEND_API_URL + '/pool/getAll', {id: communityId})
 
 export const getAllParachain = async () => get(BACKEND_API_URL + '/parachain/getall')
+
+export const getPricesOnCEX = async () => get('https://api.binance.com/api/v3/ticker/price')

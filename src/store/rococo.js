@@ -17,7 +17,6 @@ export default {
 
     //   crowdstaking
     subNominators: {},
-    subBonded: {},
     bonded: '',
     nominators: [],
     // communityIds
@@ -68,9 +67,6 @@ export default {
     },
     saveSubNominators: (state, subNominators) => {
       state.subNominators = subNominators
-    },
-    saveSubBonded: (state, subBonded) => {
-      state.subBonded = subBonded
     },
     saveBonded: (state, bonded) => {
       state.bonded = bonded

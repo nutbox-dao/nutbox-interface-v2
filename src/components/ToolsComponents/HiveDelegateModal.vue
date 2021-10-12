@@ -49,6 +49,7 @@
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { hexToString } from '@/utils/web3/utils'
 import { getDelegateFromHive, hiveDelegation } from '@/utils/hive/hive'
+import { HIVE_STAKE_FEE } from '@/config'
 
 export default {
 
@@ -56,7 +57,7 @@ export default {
     return {
       delegatevalue: '',
       loading: false,
-      fee: 1
+      fee: HIVE_STAKE_FEE
     }
   },
   computed: {
@@ -90,7 +91,7 @@ export default {
     },
     fillMax(){
         this.delegatevalue =
-        this.operate === "add" ? this.hpBalance : this.depositDatas[this.card.asset];
+        this.operate === "add" ? this.hpBalance : this.staked;
     },
     checkDelegateFee() {
       if (this.hiveBalance >= 1){
@@ -150,6 +151,8 @@ export default {
           this.hiveAccount,
           hexToString(this.card.agentAccount),
           amount,
+          this.card.communityId,
+          this.card.pid,
           this.account
         )
         if (res.success === true){

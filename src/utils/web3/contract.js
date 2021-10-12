@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import {
-  getEthWeb,
   getWeb3,
   setupNetwork,
   isUnlocked,
@@ -17,7 +16,7 @@ import {
 import {
   getAccounts
 } from './account'
-import { errCode, RPC_NODE } from '../../config'
+import { errCode } from '../../config'
 
 export const contractAddress = {
   "RegistryHub": "0x84271A88991C1934382A66a54b9824bDc9185685",
@@ -102,7 +101,7 @@ export const getContract = async function (contractName, address, onlyRead=true)
         // return;
       }
     }
-
+    
     const abi = await getAbi(contractName)
     if (!onlyRead){
       const provider = await getProvider()

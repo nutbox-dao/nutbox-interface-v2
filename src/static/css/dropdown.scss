@@ -1,12 +1,12 @@
+.dropdown-toggle::after {
+  display: none;
+}
 .c-dropdown .dropdown-toggle {
   width: 100%;
   padding: 0!important;
   background-color: #F6F7F9;
   border: none;
   border-radius: .8rem;
-  &::after {
-    display: none;
-  }
 }
 .c-dropdown .dropdown-toggle:focus, .dropdown-toggle.focus, .dropdown-toggle:hover {
   background: #F6F7F9!important;
@@ -22,6 +22,8 @@
   border-radius: .8rem;
   border-color: transparent;
   @include coin-shadow;
+  transform: none!important;
+  top: 2.6rem!important;
 }
 .c-dropdown .dropdown-header {
   font-weight: bolder;
@@ -34,7 +36,14 @@
 }
 .c-dropdown-btn {
   padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   span {
+    display: inline-block;
+    width: fit-content;
+    min-width: fit-content;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -52,9 +61,54 @@
 .full-dropdown-menu {
   width: 100%;
 }
-.account-dropdown-btn {
+.account-dropdown .dropdown-toggle {
   @extend .c-dropdown-btn;
-  background: white;
+  height: 1.8rem;
+  border-radius: 1.8rem;
+  border: 1px solid #E3E5E8;
+  background-color: transparent;
+  &:hover, &:focus {
+    border: 1px solid #E3E5E8!important;
+  }
+}
+.account-dropdown .dropdown-menu {
+  border: transparent;
   border-radius: .8rem;
-  height: 2rem;
+  @include coin-shadow();
+}
+
+.setting-dropdown .dropdown-toggle:hover{
+  background-color: transparent!important;
+}
+.setting-dropdown .dropdown-menu {
+  border: transparent;
+  border-radius: .8rem;
+  position: absolute!important;
+  @include coin-shadow();
+}
+.setting-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  height: 2.4rem;
+  padding: 0 .8rem;
+  font-size: .7rem;
+  cursor: pointer;
+  .dropdown-item-icon {
+    @include icon(1.2rem, 1.2rem);
+  }
+  span {
+    font-size: .8rem;
+    margin-left: .8rem;
+  }
+}
+.top-header-dropdown .dropdown-toggle {
+  @extend .c-dropdown-btn;
+  height: 1.8rem;
+  width: fit-content;
+  border-radius: 1.8rem;
+  border: 1px solid var(--primary-custom);
+  background-color: transparent;
+  &:hover, &:focus {
+    border: 1px solid var(--primary-custom)!important;
+  }
 }

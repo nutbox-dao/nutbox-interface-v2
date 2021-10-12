@@ -1,10 +1,11 @@
 import { getContract, contractAddress } from './contract'
 import { ethers } from 'ethers'
 import store from '@/store'
-import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt } from '@/apis/api'
+import { getNonce as gn, getMyCommunityInfo as gci, insertCommunity, updateCommunity, getAllCommunities as gac, updateBlogTag as ubt, updateSocial } from '@/apis/api'
 import { signMessage } from './utils'
-import { errCode, Multi_Config, GasLimit } from '../../config'
+import { errCode, Multi_Config, GasLimit } from '@/config'
 import { waitForTx, getGasPrice } from './ethers'
+import { sleep } from '@/utils/helper' 
 import {
     createWatcher,
     aggregate
@@ -33,7 +34,6 @@ export const getMyStakingFactory = async (update=false) => {
             reject(e);
             return
         }
-        const registerHub = await getContract('RegistryHub', null)
 
         const account = await getAccounts();
         let stakingFactoryId = null
@@ -112,7 +112,8 @@ export const getAllCommunities = async (update=false) => {
             return;
         }
         try{
-            const communities = await gac()
+            const currentCommunityId = store.state.currentCommunityId
+            const communities = await gac(currentCommunityId)
             store.commit('web3/saveAllCommunities', communities)
             resolve(communities)
         }catch(e){
@@ -120,6 +121,14 @@ export const getAllCommunities = async (update=false) => {
             reject(e)
         }
     })
+}
+
+/**update tokens info from db */
+export const updateAllCommunitiesFromBackend = async () => {
+    while(true){
+        await sleep(18)
+        await getAllCommunities(true)
+    }
 }
 
 /**
@@ -150,15 +159,22 @@ export const createStakingFeast = async (form) => {
         
         try{
             // make params
+            const gas = await getGasPrice()
             const assetId = form.assetId
             let distribution = form.poolData
-            distribution = distribution.map(d => ({
-                amount: ethers.utils.parseUnits(d.amount.toString(), form.decimal),
-                startHeight: d.startHeight,
-                stopHeight: d.stopHeight
-            }))
+            let distributionStr = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(distribution.length), 1).substr(2)
+            for (let dis of distribution){
+                distributionStr += ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.startHeight).toHexString(), 32).substr(2) +
+                                   ethers.utils.hexZeroPad(ethers.BigNumber.from(dis.stopHeight).toHexString(), 32).substr(2) +
+                                   ethers.utils.hexZeroPad(ethers.utils.parseUnits(dis.amount.toString(), form.decimal).toHexString(), 32).substr(2)
+            }
+            console.log(distributionStr);
             // call contract
-            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distribution)
+            const res = await contract.createStakingFeast(assetId, contractAddress['LinearCalculator'], distributionStr,
+            {
+                gasPrice: gas,
+                gasLimit: GasLimit
+              })
             await waitForTx(res.hash)
             await monitorCommunity()
             resolve(res.hash)
@@ -513,11 +529,60 @@ export const publishBlog = async (blogTag) => {
         }
         try{
             let res = await ubt(params);
-            // update nonce in storage
             store.commit('web3/saveNonce', nonce)
             resolve(res)
         }catch(e) {
             console.log('Update community blogTag info failed', e);
+            reject(e)
+        }
+    })
+}
+
+/**
+ * update social info
+ * @param {*} social 
+ */
+export const udpateSocialInfo = async (social) => {
+    return new Promise(async (resolve, reject) => {
+        let id;
+        try{
+            id = await getMyStakingFactory()
+            if (!id){
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        }catch(e) {
+            reject(e);
+            return;
+        }
+        let nonce = await getNonce()
+        const userId = await getAccounts();
+        nonce = nonce ? nonce + 1 : 1
+        const infoStr = JSON.stringify({
+            id,
+            ...social
+        })
+        let signature = ''
+        try{
+            signature = await signMessage(infoStr + nonce)
+        }catch(e){
+            if (e.code === 4001){
+                reject(errCode.USER_CANCEL_SIGNING);
+                return;
+            }
+        }
+        const params = {
+            userId,
+            infoStr,
+            nonce,
+            signature
+        }
+        try{
+            let res = await updateSocial(params);
+            store.commit('web3/saveNonce', nonce)
+            resolve(res)
+        }catch(e) {
+            console.log('Update community social info failed', e);
             reject(e)
         }
     })

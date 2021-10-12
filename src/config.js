@@ -1,4 +1,4 @@
-import { contractAddress } from "./utils/web3/contract"
+import { contractAddress } from "@/utils/web3/contract"
 /** =================================== Normal =======================================*/
 // 调试模式
 export const DEBUG = false
@@ -19,6 +19,9 @@ export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
   ASSET_ID_ERROR: 102,
   WRONG_ETH_ADDRESS: 103,
   NOT_A_TOKEN_CONTRACT: 104,
+  TRANSACTION_FAIL: 105,
+  ASSET_EXIST:106,
+  TOKEN_DEPLOYING: 107,
 
   BLOCK_CHAIN_ERR: 351,
   CONTRACT_CREATE_FAIL: 352,
@@ -49,6 +52,7 @@ export const PARA_STATUS = {
   ACTIVE: "Active",
   RETIRED: "Retired",
   COMPLETED: "Completed",
+  WINNER: "Winner",
   OTHER: "Other"
 }
 
@@ -80,9 +84,9 @@ export const PhalaCrowdloanReferrerRemark = {
 // steem node storage
 export const STEEM_CONF_KEY = 'steemNodeKey'
 // delegate fee
-export const STEEM_STAKE_FEE = 1
+export const STEEM_STAKE_FEE = 0.001
 // official fee account
-export const STEEM_GAS_ACCOUNT = 'walnut.gas'
+export const STEEM_GAS_ACCOUNT = 'test.walnut.gas'
 
 // Steem Config
 export const STEEM_API_URLS = [
@@ -98,9 +102,9 @@ export const STEEM_API_URLS = [
 // hive node storage
 export const HIVE_CONF_KEY = 'hiveNodeKey'
 // delegate fee
-export const HIVE_STAKE_FEE = 1
+export const HIVE_STAKE_FEE = 0.001
 // official fee account
-export const HIVE_GAS_ACCOUNT = 'nutbox.gas'
+export const HIVE_GAS_ACCOUNT = 'test.walnut.gas'
 
 // Hive Config
 export const HIVE_API_URLS = [
@@ -111,6 +115,7 @@ export const HIVE_API_URLS = [
 
 export const RPC_NODE = process.env.VUE_APP_RPC_NODE
 export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337
+export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME
 
 /**
  * chainId on blockchain to chain name
@@ -140,31 +145,19 @@ export const CROWDLOAN_CHAINID_TO_NAME = {
   3: 'kusama'
 }
 
-// Nutbox official registried assets IDs
-export const NUTBOX_REGISTRY_ASSETS = [
+export const GasLimit = 29900000;
 
-]
-
-// sended transaction configs
-export const Transaction_config = {
-  gasPrice: 100000000,
-  gasLimit: GasLimit
-}
-
-export const GasTimes = 1000;
-export const GasLimit = 5000000
-
-// Register by nutbox 
+// Register by nutbox
 export const OfficialAssets = [
   {
-    name: 'NUT',
-    address: '0x20E12eEcd08DEaCe043d4f565db60718602BA300',
-    symbol: 'NUT',
-    asset: '0x1bb0baacf6cdc494fda78e20cfbc5c008e4f52b2927fcca76d1b16c5d004eb0e',
+    name: 'Walnut',
+    address: '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5',
+    symbol: 'WNUT',
+    asset: '0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64',
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/nut.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
   },
   // {
   //   name: 'WBNB',
@@ -176,21 +169,23 @@ export const OfficialAssets = [
   //   type: "HomeChainAssetRegistry",
   //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
   // },
-  {
-    name: 'WETH',
-    address: '0x46a5954257dFDdC69DFfC530485f23CADFF63A44',
-    symbol: 'WETH',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
-    asset: '0x444d189977c0a3884862dd6c8cddc62b59503bf43f34ec6fa852f390443a572f',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
-  }
+  // {
+  //   name: 'WETH',
+  //   address: '0xa49B1eEC62c669b65D571536E221fB172a62C9F6',
+  //   symbol: 'WETH',
+  //   contract: contractAddress['HomeChainAssetRegistry'],
+  //   decimal: 18,
+  //   type: "HomeChainAssetRegistry",
+  //   asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
+  //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+  // }
 ]
 
-// test network
-// export const MultiAddress = '0x823b1eaceF85E3ab6509062810B551C1A80760d9'
-// export const NUTAddress = '0x7D4c68c01923DCac056ee4274D6d4E7b7975D299'
+// local network
+// export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
+// export const NutAddress = '0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a'
+// export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
+// export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
 // export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
@@ -198,6 +193,7 @@ export const OfficialAssets = [
 
 // moonriver network
 export const MultiAddress = '0xe4AA437A83666f35Ffb4c22d35274C14581a0d06'
+export const NutAddress = '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5' 
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,

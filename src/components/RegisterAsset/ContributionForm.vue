@@ -4,7 +4,7 @@
       <b-form-group
         id="input-group-0"
         :label="$t('asset.network')"
-        label-for="dropdown-1"
+        label-for="dropdown-0"
       >
         <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
           <template #button-content>
@@ -33,18 +33,54 @@
           </b-dropdown-item>
         </b-dropdown>
       </b-form-group>
-      <b-form-group :label="$t('asset.parachainId')">
-        <b-form-input
-          v-model="form.paraId"
-          :placeholder="$t('asset.inputParachainId')"
-        ></b-form-input>
+      <b-form-group
+        id="input-group-1"
+        :label="$t('asset.parachainId')"
+        label-for="dropdown-1"
+      >
+        <b-dropdown class="c-dropdown" menu-class="full-dropdown-menu">
+          <template #button-content>
+            <div class="c-dropdown-btn flex-between-center">
+              <div class="flex-full flex-start-center text-left">
+                <img v-show="Object.keys(selectParachain).length > 0"
+                     :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+selectParachain.paraId+'.png'" alt="" />
+                <span>{{ selectParachain.text }}</span>
+              </div>
+              <i class="dropdown-icon"></i>
+            </div>
+          </template>
+          <template v-if="loading">
+            <div class="dropdown-menu-loading">
+              <img src="~@/static/images/loading.gif" alt="" />
+            </div>
+          </template>
+          <template v-else>
+            <div v-if="onliningCrowdloan.length === 0"
+                 class="text-center text-grey-light font12 my-2">{{ $t('tip.noProject') }}</div>
+            <b-dropdown-item
+              v-for="(item, index) of onliningCrowdloan"
+              :key="index"
+              @click="selectParachain = item"
+            >
+              <template #default>
+                <div class="flex-between-center">
+                  <div class="flex-full flex-start-center">
+                    <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+item.paraId+'.png'" alt="" />
+                    <span>{{ item.text }}</span>
+                  </div>
+                  <i class="selected-icon" v-if="selectParachain === item"></i>
+                </div>
+              </template>
+            </b-dropdown-item>
+          </template>
+        </b-dropdown>
       </b-form-group>
-      <b-form-group :label="$t('asset.trieIndex')">
+      <!-- <b-form-group :label="$t('asset.trieIndex')">
         <b-form-input
           v-model="form.trieIndex"
           :placeholder="$t('asset.inputTrieIndex')"
         ></b-form-input>
-      </b-form-group>
+      </b-form-group> -->
       <b-form-group :label="$t('asset.communityAddress')">
         <b-form-input
           v-model="form.communityAddress"
@@ -60,7 +96,7 @@
           :placeholder="$t('asset.inputAssetName')"
         ></b-form-input>
       </b-form-group>
-      <b-form-group
+      <!-- <b-form-group
         :label="$t('asset.endingBlock')"
         label-class="text-grey-light"
       >
@@ -68,7 +104,7 @@
           v-model="form.endingBlock"
           :placeholder="$t('asset.inputEndingBlock')"
         ></b-form-input>
-      </b-form-group>
+      </b-form-group> -->
       <button class="primary-btn" @click="register" :disabled='registring'>
         <b-spinner small type="grow" v-show="registring" />
         {{ $t("asset.register") }}
@@ -84,12 +120,14 @@ import { isPositiveInt } from "@/utils/helper";
 import { stanfiAddress } from "@/utils/commen/account";
 import { handleApiErrCode } from '@/utils/helper';
 import { ASSET_LOGO_URL } from '@/constant'
+import { mapState } from 'vuex'
 
 export default {
   name: "NominationForm",
   data() {
     return {
       registring: false,
+      selectParachain: {},
       form: {
         chainId: "",
         paraId: "",
@@ -107,17 +145,38 @@ export default {
         { name: "Kusuma",
           icon: ASSET_LOGO_URL.kusama.icon
         }
-      ],
+      ]
     };
+  },
+  watch: {
+    networkIndex(newValue, oldValue) {
+      this.selectParachain = {}
+    }
+  },
+  computed: {
+    ...mapState({
+      polkadotFund: state => state.polkadot.clProjectFundInfos,
+      kusamaFund: state => state.kusama.clProjectFundInfos,
+      polkadotLoading: state => state.polkadot.loadingFunds,
+      kusamaLoading: state => state.kusama.loadingFunds
+    }),
+    onliningCrowdloan (){
+      if (this.networkIndex === 0){
+        return this.polkadotFund.filter(f => f.statusIndex === 0)
+      }else {
+        return this.kusamaFund.filter(f => f.statusIndex === 0)
+      }
+    },
+    loading() {
+      return this.networkIndex===0?this.polkadotLoading:this.kusamaLoading
+    }
   },
   methods: {
     validateParams() {
       const substrateAddressType = this.networkIndex === 0 ? 0 : 2;
       let tipStr = "";
-      if (!isPositiveInt(this.form.paraId)) {
-        tipStr = this.$t("asset.inputParachainId");
-      } else if (!isPositiveInt(this.form.trieIndex)) {
-        tipStr = this.$t("asset.inputTrieIndex");
+      if (Object.keys(this.selectParachain).length === 0) {
+        tipStr = this.$t('tip.selectCowdloan')
       } else if (
         !stanfiAddress(this.form.communityAddress, substrateAddressType) ||
         stanfiAddress(
@@ -138,12 +197,15 @@ export default {
       return false
     },
     async register() {
-      if (!this.validateParams()) {
-        return;
-      }
-      this.form.chainId = parseInt(this.networkIndex) + 2;
       try{
         this.registring = true;
+        if (!this.validateParams()) {
+          this.registring = false
+          return;
+        }
+        this.form.chainId = parseInt(this.networkIndex) + 2;
+        this.form.paraId = this.selectParachain.paraId;
+        this.form.trieIndex = this.selectParachain.trieIndex;
         const tx = await registerCrowdloanAsset(this.form);
         // update cache
         await getRegitryAssets(true)
@@ -160,6 +222,9 @@ export default {
           endingBlock: "",
         }
         this.networkIndex = 0
+        setTimeout(() => {
+          this.$router.go(-1);
+        } , 1000)
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -202,5 +267,11 @@ label {
     @include icon;
     background-image: url("~@/static/images/selected-gray.png");
   }
+}
+.dropdown-menu-loading {
+  background-color: #f6f7f9;
+  text-align: center;
+  padding: 0.5rem 0;
+  margin: -0.5rem 0;
 }
 </style>
