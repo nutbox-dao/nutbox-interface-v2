@@ -100,7 +100,7 @@ export default {
             }
           }
         case 'HomeChainAssetRegistry':
-          return this.erc20Price
+          return this.erc20Price * this.totalDeposited * this.prices['ETHUSDT']
       }
     },
     decimals() {
@@ -128,7 +128,7 @@ export default {
     },
     erc20Price(){
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.publishePoolInfo) return null;
-      return this.allTokens[this.publishePoolInfo.address]
+      return this.allTokens[this.publishePoolInfo.address].price
     },
     stakerCount() {
       return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']

@@ -68,8 +68,12 @@
           >{{ $t("cs.nominate") }}
         </button>
         <div class="project-info-container">
+          <span class="name"> {{ $t('community.totalDeposit') }} </span>
+          <div class="info">{{ totalDeposited | amountForm(4) }}</div>
+        </div>
+        <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm(4) }}</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
@@ -200,7 +204,7 @@ export default {
       "monitorPools",
       "blockNum",
     ]),
-    ...mapState(["lang"]),
+    ...mapState(["lang", 'prices']),
     nominated () {
       const userStakingBn =
         this.userStakings[this.nomination.communityId + "-" + this.nomination.pid];
@@ -208,15 +212,19 @@ export default {
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
-    tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount']) return 0
-      const tvl =
-        this.monitorPools[
-          this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount'
-        ];
-      if (!tvl) return 0;
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.card && this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount'];
+      if(!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
-      return tvl.toString() / 10 ** decimal;
+      return (tvl.toString() / (10 ** decimal))
+    },
+    tvl() {
+        if (this.nomination.asset.chainId === 2) { // polkadot
+          return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
+        }else if (this.nomination.asset.chainId === 3) { // kusama
+          return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
+        }
     },
     pendingReward() {
       const pendingBn =
@@ -237,9 +245,9 @@ export default {
       return this.relayer === 'polkadot' ? this.pNominators : this.kNominators
     },
     status (){
-      const canRemove = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-canRemove']
-      const hasRemoved = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasRemoved']
-      const hasStopped = this.monitorPools[this.omination.communityId + '-' + this.omination.pid + '-hasStopped']
+      const canRemove = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-hasStopped']
       if(!hasStopped){
         return 'Active'
       }else if (!canRemove){
@@ -254,7 +262,6 @@ export default {
     }
   },
   mounted() {
-    console.log(920, this.nomination);
     this.relayer = this.nomination.chainId === 2 ? 'polkadot' : 'kusama'
     this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 16) + '......' + this.nomination.validatorAccount.slice(-12)
     getMinNominatorBond(this.relayer).then(res => {

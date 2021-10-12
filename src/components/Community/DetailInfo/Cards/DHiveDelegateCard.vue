@@ -105,7 +105,7 @@ export default {
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
     ...mapState(['prices']),
-    ...mapState('web3',['pendingRewards','userStakings', 'stakingFactoryId', 'loadingUserStakings', 'monitorPools', 'blockNum']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -121,8 +121,8 @@ export default {
       return this.vestsToHive * (userStakingBn.toString() / 1e6)
     },
     totalDeposited() {
-      if (!this.card || !this.monitorPools[this.stakingFactoryId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
-      return this.card && this.monitorPools[this.stakingFactoryId + '-' + this.card.pid + '-totalStakedAmount'] / 1e6
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] / 1e6
     },
     tvl() {
       return this.totalDeposited * this.prices['HIVEETH']

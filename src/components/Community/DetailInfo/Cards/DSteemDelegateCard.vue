@@ -103,7 +103,7 @@ export default {
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
     ...mapState(['prices']),
-    ...mapState('web3',['pendingRewards','userStakings', 'stakingFactoryId', 'loadingUserStakings', 'monitorPools', 'blockNum']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -119,8 +119,8 @@ export default {
       return this.vestsToSteem * (this.userStakings[this.card.communityId + '-' + this.card.pid].toString() / 1e6)
     },
     totalDeposited() {
-      if (!this.card || !this.monitorPools[this.stakingFactoryId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
-      return this.card && this.monitorPools[this.stakingFactoryId + '-' + this.pcardol.pid + '-totalStakedAmount'] / 1e6
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] / 1e6
     },
     tvl() {
       return this.totalDeposited * this.prices['STEEMETH']
