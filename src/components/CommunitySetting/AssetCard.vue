@@ -22,6 +22,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { updateTokenIcon } from '@/utils/web3/asset'
 
 export default {
   name: 'AssetCard',
@@ -51,7 +52,9 @@ export default {
   data() {
     return {
       showingSymbol: '',
-      showingName: ''
+      showingName: '',
+      logoUrl: '',
+      loading: false
     }
   },
   computed: {
@@ -112,6 +115,20 @@ export default {
       }, (e) => {
         console.log(e)
       })
+    },
+    async updateTokenIcon() {
+      if (this.type !== 'HomeChainAssetRegistry') return;
+      let token = {
+        address: this.address,
+        logo: this.logoUrl
+      }
+      try{
+        const res = await updateTokenIcon(token)
+      }catch(e){
+        
+      }finally{
+        this.loading = false
+      }
     }
   }
 }
