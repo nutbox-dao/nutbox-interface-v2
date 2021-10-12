@@ -43,7 +43,7 @@
                 placeholder="0.000"
               >
               </b-form-input>
-              <span class="c-append">DOT</span>
+              <span class="c-append">{{ cToken.symbol }}</span>
             </div>
             <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
               {{$t("community.charge") }}

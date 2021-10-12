@@ -896,17 +896,17 @@ export const monitorUserBalances = async () => {
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
-          const hivePrice = parseFloat(price['HIVEETH'])
+          const hivePrice = parseFloat(price['HIVUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * hivePrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
-          const dotPrice = parseFloat(price['DOTETH'])
+          const dotPrice = parseFloat(price['DOTUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * dotPrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
-          const ksmPrice = parseFloat(price['KSMETH'])
+          const ksmPrice = parseFloat(price['KSMUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * ksmPrice)
           continue;
         }

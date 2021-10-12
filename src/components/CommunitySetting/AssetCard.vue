@@ -69,7 +69,8 @@ export default {
         if (this.chainId === 1){
           return this.prices['STEEMETH'] * this.ethPrice
         }else if (this.chainId === 2){
-          return this.prices['HIVEETH'] * this.ethPrice
+          console.log('2354235', this.prices);
+          return this.prices['HIVEUSDT']
         }
       }
     }

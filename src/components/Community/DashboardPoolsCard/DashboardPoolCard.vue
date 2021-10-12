@@ -88,7 +88,7 @@ export default {
             if (this.pool.asset.chainId === 1){ // steem
               return this.totalDeposited * this.prices['STEEMETH']
             }else if (this.pool.asset.chainId === 2) { // hive
-              return this.totalDeposited * this.prices['HIVEETH']
+              return this.totalDeposited * this.prices['HIVEUSDT'] / this.prices['ETHUSDT']
             }
           }
         case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
