@@ -873,7 +873,7 @@ export const monitorUserBalances = async () => {
         const poolRatio = monitorPools[key + 'poolRatio']
         if (monitorPools[key + 'hasStopped']) continue
         if (monitorPools[key + 'hasRemoved']) continue
-        if (pool.totalStakedAmount === '0') continue;
+        if (tvl === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
         const ctokenAddress = com.ctoken

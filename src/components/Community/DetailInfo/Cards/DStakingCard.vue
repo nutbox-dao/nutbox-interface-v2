@@ -121,6 +121,7 @@ export default {
       "approvements",
       "loadingApprovements",
       "userStakings",
+      'allTokens',
       "loadingUserStakings",
       "monitorPools",
       "blockNum"
@@ -150,11 +151,11 @@ export default {
       return (tvl.toString() / (10 ** decimal))
     },
     tvl() {
-      return this.totalDeposited * this.erc20Price * this.prices['ETHUSDT']
+      return this.totalDeposited * this.erc20Price
     },
     erc20Price(){
-      if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.card) return null;
-      return this.allTokens[this.card.address].price
+      if (!this.card) return null;
+      return this.allTokens.filter(token => token.address === this.card.address)[0].price
     },
     //if community not start, show count down time
     countDown () {

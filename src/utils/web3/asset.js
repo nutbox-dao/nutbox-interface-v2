@@ -480,7 +480,6 @@ export const registerNominateAsset = async (form) => {
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-      console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
@@ -526,7 +525,6 @@ export const deployERC20 = async ({
         return;
       }
       contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
-        console.log(45125, _creator, _name, _symbol, _tokenAddress, _isMintable);
         if (store.state.web3.account.toLowerCase() === _creator.toLowerCase() && name === _name && symbol === _symbol && isMintable === _isMintable){
           contract.removeAllListeners('ERC20TokenCreated')
           store.commit('web3/saveTokenDeploying', false)
@@ -537,7 +535,6 @@ export const deployERC20 = async ({
       tokenDeploying = true
       store.commit('web3/saveTokenDeploying', tokenDeploying)
       const gas = await getGasPrice()
-      console.log(2532, gas, GasLimit);
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
             store.state.web3.account, 
             isMintable, 
@@ -545,7 +542,6 @@ export const deployERC20 = async ({
               gasPrice: gas,
               gasLimit: GasLimit
             });
-      console.log(6431, tx.hash);
       callback()
     } catch (e) {
       store.commit('web3/saveTokenDeploying', false)
