@@ -405,7 +405,7 @@ export default {
           addresses.push(value.userId);
         });
 
-        const strategies = [];
+        let strategies = [];
         if (this.proposal.strategies) {
           const formStrategies = JSON.parse(this.proposal.strategies).forEach(
             (element) => {
@@ -482,7 +482,9 @@ export default {
     },
   },
   async mounted() {
-    this.id = this.$router.currentRoute.params.key;
+    this.id = this.$router.currentRoute.params.key
+      ? this.$router.currentRoute.params.key
+      : this.$route.query.id;
 
     try {
       this.currentUserId = await getAccounts();

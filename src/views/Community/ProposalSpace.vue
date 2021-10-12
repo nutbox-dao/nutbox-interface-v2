@@ -13,7 +13,7 @@
         size="sm"
         @click="
           $router.push(
-            `/community/proposal-space/${$router.currentRoute.params.key}/proposal-create`
+            `/community/${$router.currentRoute.params.key}/proposal-create`
           )
         "
       >
@@ -37,7 +37,7 @@
         <div class="tip-box">
           <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
           <div style="text-align: left; margin-top: 1rem">
-            {{ $t("nps.npsTemp") }}
+            {{ form.remark }}
           </div>
         </div>
       </div>
@@ -54,13 +54,7 @@
           </div>
         </div>
         <div class="c-btn-group">
-          <button
-            @click="
-              $router.push(
-                `/nps/proposal-space/proposal-create/${$router.currentRoute.params.key}`
-              )
-            "
-          >
+          <button @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
             <i class="add-icon"></i>
             <span>Create Proposal</span>
           </button>
@@ -82,7 +76,8 @@
 import ProposalItem from "../../components/Community/Proposal/ProposalItem.vue";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { getAllProposal } from "@/utils/web3/proposal";
-
+import { MAIN_COMMUNITY_ID } from "../../config";
+import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
 export default {
   name: "Community",
   components: {
@@ -90,10 +85,26 @@ export default {
   },
   data() {
     return {
+      url: "",
       tempProposalItem: [],
       proposalitems: [],
-      tabOptions: ["ALL", "Voting", "Wait", "End"],
+      tabOptions: ["ALL", "Voting", "Passed", "Rejected"],
       activeTab: 0,
+      form: {
+        communityId: "",
+        network: "",
+        networkName: "",
+        symbol: "",
+        skin: "",
+        admins: "",
+        members: "",
+        strategies: "",
+        threshold: 0,
+        validation: "basic",
+        onlyMembers: 0,
+        userId: "",
+        remark: "",
+      },
     };
   },
   methods: {
@@ -104,19 +115,38 @@ export default {
       } else if (this.activeTab == 1) {
         this.proposalitems = this.tempProposalItem.filter((t) => t.status == 1);
       } else if (this.activeTab == 2) {
-        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 0);
+        this.proposalitems = this.tempProposalItem.filter(
+          (t) => t.proposalResult == 1
+        );
       } else if (this.activeTab == 3) {
-        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 2);
+        this.proposalitems = this.tempProposalItem.filter(
+          (t) => t.proposalResult == 2
+        );
       }
     },
   },
   async mounted() {
-    this.id = this.$router.currentRoute.params.key;
-    this.communityId = this.$router.currentRoute.params.key;
+    this.url =
+      this.$router.currentRoute.params.key || this.$route.query.id
+        ? "/specify"
+        : "";
 
+    this.id = this.$router.currentRoute.params.key
+      ? this.$router.currentRoute.params.key
+      : this.$route.query.id
+      ? this.$route.query.id
+      : MAIN_COMMUNITY_ID;
+
+    this.communityId = this.id;
+    this.form.communityId = this.communityId;
     try {
       this.tempProposalItem = await getAllProposal(this.communityId);
       this.proposalitems = this.tempProposalItem;
+
+      const communityProposalConfigInfo =
+        await getMyCommunityProposalConfigInfo(this.form.communityId);
+
+      this.form = communityProposalConfigInfo;
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);

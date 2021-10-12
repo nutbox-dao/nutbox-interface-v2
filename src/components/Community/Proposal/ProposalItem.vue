@@ -16,9 +16,7 @@
         </p>
 
         <span
-          @click="
-            $router.push(`/nps/proposal-space/proposal/${proposalItem.id}/`)
-          "
+          @click="$router.push(`${url}/nps/proposal?id=${proposalItem.id}`)"
           style="
             flex: 1;
             text-align: left;
@@ -85,7 +83,9 @@
               ? $t("community.propsalVoteStatusWaitStart")
               : proposalItem.status == 1
               ? $t("community.propsalVoteStatusDoing")
-              : $t("community.propsalVoteStatusEnd")
+              : proposalItem.proposalResult == 1
+              ? $t("nps.pass")
+              : $t("nps.unpass")
           }}
         </p>
       </div>
@@ -98,9 +98,7 @@ import { formatDate } from "@/utils/commen/util";
 export default {
   name: "ProposalItem",
   data() {
-    return {
-      voteTotalScore: 0,
-    };
+    return { url: "", voteTotalScore: 0 };
   },
   props: ["proposalItem", "index"],
   computed: {
@@ -122,6 +120,10 @@ export default {
     },
   },
   mounted() {
+    this.url =
+      this.$router.currentRoute.params.key || this.$route.query.id
+        ? "/specify"
+        : "";
     this.voteTotalScore =
       this.proposalItem.voteAgreeTotalScore +
       this.proposalItem.voteDisagreeTotalScore;

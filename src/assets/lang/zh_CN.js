@@ -450,6 +450,8 @@ module.exports = {
       basic: { minScore: "您需要至少有 {0} {1} 才能提交提案。" },
       customValidation: "您需要通过提案验证才能提交提案。",
     },
+    remarkInput: "请填写提案系统简介",
+    remark: "简介",
   },
   asset: {
     asset: "资产",

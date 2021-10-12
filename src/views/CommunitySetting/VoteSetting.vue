@@ -10,6 +10,24 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="5"
+          :label="$t('community.remark')"
+          label-for="remarkInput"
+          label-class="d-flex align-items-center font16 font-bold "
+        >
+          <div class="d-flex">
+            <div class="c-input-group">
+              <b-form-input
+                id="remark"
+                :placeholder="$t('community.remarkInput')"
+                v-model="form.remark"
+                max="2046"
+              ></b-form-input>
+            </div>
+          </div>
+        </b-form-group>
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="5"
           :label="$t('community.proposalThreshold')"
           label-for="proposalThresholdInput"
           label-class="d-flex align-items-center font16 font-bold "
@@ -38,7 +56,7 @@
               <b-form-input
                 id="proposalPassThreshold"
                 :placeholder="$t('community.proposalPassThresholdInput')"
-                v-model="form.passthreshold"
+                v-model="form.passThreshold"
                 type="number"
               ></b-form-input>
               <!--  <span class="c-append">%</span> -->

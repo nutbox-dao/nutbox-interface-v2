@@ -124,22 +124,19 @@ const routes = [
         children: [
           {
             path: "nps",
-            component: Nps,
+            component: ProposalSpace,
           },
           {
             path: "create-proposal",
             component: CreateProposal,
           },
           {
-            path: "proposal-space/proposal/:key",
+            path: "proposal",
             component: Proposal,
           },
+
           {
-            path: "proposal-space/:key",
-            component: ProposalSpace,
-          },
-          {
-            path: "proposal-space/proposal-create/:key",
+            path: "proposal-create",
             component: ProposalCreate,
           },
           {
@@ -318,11 +315,15 @@ const routes = [
         children: [
           {
             path: "nps",
-            component: Nps,
+            component: ProposalSpace,
           },
           {
-            path: "create-proposal",
-            component: CreateProposal,
+            path: "proposal-create",
+            component: ProposalCreate,
+          },
+          {
+            path: "proposal",
+            component: Proposal,
           },
         ],
       },
