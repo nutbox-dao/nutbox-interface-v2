@@ -128,7 +128,7 @@ export default {
     },
     erc20Price(){
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.publishePoolInfo) return null;
-      return this.allTokens[this.publishePoolInfo.address].price
+      return this.allTokens.filter(({address}) => address === this.publishePoolInfo.address)[0].price
     },
     stakerCount() {
       return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']
@@ -252,7 +252,6 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.pool);
     if (this.allPools){
       const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
       if (p.length > 0){
