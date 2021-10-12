@@ -5,9 +5,8 @@ export const DEBUG = false
 
 export const LOCALE_KEY = 'localeLanguage'
 // nutbox backend server
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 export const BACKEND_API_URL = "https://v2-api-test-moonbeam.nutbox.app"
-// export const BACKEND_API_URL = "http://localhost:3000"
+// export const BACKEND_API_URL = "http://localhost:3100"
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload"
 
@@ -145,15 +144,15 @@ export const CROWDLOAN_CHAINID_TO_NAME = {
   3: 'kusama'
 }
 
-export const GasLimit = 29900000;
+export const GasLimit = 10000000;
 
 // Register by nutbox
 export const OfficialAssets = [
   {
     name: 'Walnut',
-    address: '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5',
+    address: '0x6fC4561e8c2D5D4371253FC5d29A1B8b6ab230Ba',
     symbol: 'WNUT',
-    asset: '0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64',
+    asset: "0xe0c5faa812a4c220f7121c8acb14a5441cc66fea16b106e3aa3cdadfcd06a50e",
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
@@ -193,7 +192,7 @@ export const OfficialAssets = [
 
 // moonriver network
 export const MultiAddress = '0xe4AA437A83666f35Ffb4c22d35274C14581a0d06'
-export const NutAddress = '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5' 
+export const NutAddress = '0x6fC4561e8c2D5D4371253FC5d29A1B8b6ab230Ba' 
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
