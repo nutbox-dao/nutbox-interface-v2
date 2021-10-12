@@ -126,6 +126,8 @@ import { mapState } from "vuex";
 import { getMinNominatorBond } from '@/utils/commen/crowdStaking'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
+import { stanfiAddress } from '@/utils/commen/account'
+import { POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
 
 export default {
   name: "CrowdNominateCard",
@@ -136,7 +138,8 @@ export default {
       isWithdrawing: false,
       relayer: '',
       minNominatorsBond: 0,
-      formatValidatorAccount: ''
+      formatValidatorAccount: '',
+      validatorAccount: ''
     };
   },
   props: {
@@ -162,7 +165,7 @@ export default {
       }
     },
     copyValidator() {
-      const address = this.nomination.validatorAccount
+      const address = this.validatorAccount
       navigator.clipboard.writeText(address).then(() => {
         this.$bvToast.toast(
           this.$t('tip.copyAddress', {
@@ -269,7 +272,8 @@ export default {
   },
   mounted() {
     this.relayer = this.nomination.chainId === 2 ? 'polkadot' : 'kusama'
-    this.formatValidatorAccount = this.nomination.validatorAccount.slice(0, 16) + '......' + this.nomination.validatorAccount.slice(-12)
+    this.validatorAccount = stanfiAddress(this.nomination.validatorAccount, POLKADTO_ADDRESS_FORMAT_CODE[this.relayer])
+    this.formatValidatorAccount = this.validatorAccount.slice(0, 16) + '......' + this.validatorAccount.slice(-12)
     getMinNominatorBond(this.relayer).then(res => {
       this.minNominatorsBond = res
     })

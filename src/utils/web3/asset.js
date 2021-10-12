@@ -25,7 +25,8 @@ import {
   getProvider
 } from './ethers'
 import {
-  getAllTokens
+  getAllTokens,
+  updateTokenIcon as uti
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
@@ -34,6 +35,8 @@ import { errCode,
     Multi_Config,
     GasLimit
 } from "@/config";
+import { stanfiAddress } from '@/utils/commen/account'
+
 
 /**
  * Judge asset wheather Homechain assets
@@ -232,7 +235,7 @@ export const getAssetMetadata = async (id, assetType) => {
         chainId: meta[0],
         paraId: meta[1],
         trieIndex: meta[2],
-        communityAccount: meta[3],
+        communityAccount: stanfiAddress(meta[3], meta[3] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -240,7 +243,7 @@ export const getAssetMetadata = async (id, assetType) => {
       icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]].icon;
       meta = {
         chainId: meta[0],
-        validatorAccount:meta[1],
+        validatorAccount:stanfiAddress(meta[1], meta[0] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -312,15 +315,6 @@ export const getERC20Info = async (address) => {
       reject(e)
     }
   })
-}
-
-/**
- * Check assetId have been registered before
- * TODO
- * @param {*} assetId 
- */
-function checkAssetIfRegister(assetId){
-
 }
 
 /**
@@ -551,6 +545,53 @@ export const deployERC20 = async ({
         reject(errCode.BLOCK_CHAIN_ERR)
       }
       console.log(`Deploy mintable token ${name} failed`, e);
+    }
+  })
+}
+
+export const updateTokenIcon = async (token) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyStakingFactory()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+
+    let nonce = await getNonce()
+    const userId = await getAccounts();
+    nonce = nonce ? nonce + 1 : 1
+
+    token['communityId'] = stakingFactoryId;
+    console.log('pool', potokenl);
+    const originMessage = JSON.stringify(token)
+    let signature = ''
+    try {
+      signature = await signMessage(originMessage + nonce)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+    const params = {
+      userId,
+      infoStr: originMessage,
+      nonce,
+      signature
+    }
+    try {
+      const res = await uti(params)
+      // update nonce in storage
+      store.commit('web3/saveNonce', nonce)
+      resolve(res)
+    } catch (e) {
+      reject(e)
     }
   })
 }

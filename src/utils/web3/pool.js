@@ -308,7 +308,6 @@ export const publishPool = async (pool) => {
     } catch (e) {
       reject(e)
     }
-
   })
 }
 

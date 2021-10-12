@@ -34,7 +34,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of showingCards" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of showingCards" :key="card.pid + '' + idx">
             <CrowdNominateCard :nomination="card"/>
           </div>
         </div>
@@ -79,6 +79,7 @@ export default {
     }
   },
   mounted () {
+    console.log(235,this.showingCards);
     // get parachian info from backend
     subNominators('kusama')
     subNominators('polkadot')
