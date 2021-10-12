@@ -79,8 +79,12 @@
           >{{ $t("cs.nominate") }}
         </button>
         <div class="project-info-container">
+          <span class="name"> {{ $t('community.totalDeposit') }} </span>
+          <div class="info">{{ totalDeposited | amountForm(4) }}</div>
+        </div>
+        <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm(4) }}</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
@@ -206,7 +210,8 @@ export default {
       pLocked: state => state.polkadot.locked,
       kLocked: state => state.kusama.locked,
       pNominators: state => state.polkadot.nominators,
-      kNominatore: state => state.kusama.nominators
+      kNominatore: state => state.kusama.nominators,
+      prices: state => state.prices
     }),
     ...mapState("web3", [
       "pendingRewards",
@@ -225,15 +230,19 @@ export default {
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
-    tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount']) return 0
-      const tvl =
-        this.monitorPools[
-          this.nomination.communityId + "-" + this.nomination.pid + '-totalStakedAmount'
-        ];
-      if (!tvl) return 0;
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.card && this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount'];
+      if(!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
-      return tvl.toString() / 10 ** decimal;
+      return (tvl.toString() / (10 ** decimal))
+    },
+    tvl() {
+        if (this.nomination.asset.chainId === 2) { // polkadot
+          return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
+        }else if (this.nomination.asset.chainId === 3) { // kusama
+          return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
+        }
     },
     pendingReward() {
       const pendingBn =
