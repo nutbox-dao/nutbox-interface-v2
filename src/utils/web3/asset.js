@@ -11,7 +11,7 @@ import { sleep } from '@/utils/helper'
 import {
   addressToHex
 } from '@/utils/commen/account'
-import { getAllCommunities } from '@/utils/web3/community'
+import { getAllCommunities, getMyStakingFactory, getNonce } from '@/utils/web3/community'
 import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
@@ -36,6 +36,7 @@ import { errCode,
     GasLimit
 } from "@/config";
 import { stanfiAddress } from '@/utils/commen/account'
+import { signMessage } from './utils'
 
 
 /**
@@ -159,7 +160,7 @@ export const getCToken = async (communityId, update=false) => {
         const cToken = await getERC20Info(tokenAddress);
         cToken["assetId"] = assetId
         cToken['isMintable'] = await registerHub.mintable(assetId);
-        cTokens[assetId] = cToken
+        cTokens[communityId] = cToken
         store.commit('web3/saveCTokens', cTokens)
         resolve(cToken)
       }catch(e){
@@ -567,8 +568,7 @@ export const updateTokenIcon = async (token) => {
     const userId = await getAccounts();
     nonce = nonce ? nonce + 1 : 1
 
-    token['communityId'] = stakingFactoryId;
-    console.log('pool', potokenl);
+    token['id'] = stakingFactoryId;
     const originMessage = JSON.stringify(token)
     let signature = ''
     try {

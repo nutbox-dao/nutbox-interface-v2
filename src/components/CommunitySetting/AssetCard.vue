@@ -1,7 +1,7 @@
 <template>
   <div class="asset-card">
     <div class="top flex-between-center">
-      <img v-if="logo" :src="logo" alt="" class="logo" />
+      <img v-if="logo || type !== 'HomeChainAssetRegistry'" :src="logo" alt="" class="logo" />
       <b-form-file v-else
                    class="logo"
                    v-model="logoFile"
@@ -71,6 +71,7 @@ import { updateTokenIcon } from '@/utils/web3/asset'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import { uploadImage } from '@/utils/helper'
 import { VueCropper } from 'vue-cropper'
+import { getRegitryAssets } from '@/utils/web3/asset'
 
 export default {
   name: 'AssetCard',
@@ -125,7 +126,6 @@ export default {
         if (this.chainId === 1) {
           return this.prices.STEEMETH * this.ethPrice
         } else if (this.chainId === 2) {
-          console.log('2354235', this.prices)
           return this.prices.HIVEUSDT
         }
       }
@@ -184,7 +184,7 @@ export default {
     //   }
     // },
     async updateLogo (file) {
-      if (!this.logoFile) return
+      if (!this.logoFile || this.type !== 'HomeChainAssetRegistry') return
       this.loading = true
       const reader = new FileReader()
       reader.readAsDataURL(file)
@@ -208,11 +208,14 @@ export default {
             this.logoUrl = await uploadImage(data)
             const token = {
               address: this.address,
-              logo: this.logoUrl
+              icon: this.logoUrl
             }
             const res = await updateTokenIcon(token)
-            this.loading = false
+            let assets = await getRegitryAssets()
+            assets.filter(asset => asset.address === this.address)[0] = {...assets.filter(asset => asset.address === this.address)[0],icon: this.logoUrl}
+            this.$store.commit('web3/saveAllAssetsOfUser', {...assets})
           } catch (e) {
+            console.log(325,e);
             this.$bvToast.toast(this.$t('tip.picUploadFail'), {
               title: this.$t('tip.tips'),
               autoHideDelay: 5000,
@@ -220,6 +223,7 @@ export default {
             })
             this.logoFile = null
             this.logoUrl = null
+          }finally{
             this.loading = false
           }
         })
