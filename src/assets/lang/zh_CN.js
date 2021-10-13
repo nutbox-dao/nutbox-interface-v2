@@ -504,7 +504,7 @@ module.exports = {
     poolInfo: "矿池信息",
     stakingAsset: "质押资产",
     selectStakingAsset: "请选择质押资产",
-    isHomeAsset: "主链资产",
+    isHomeAsset: "主链资产",
     isForeignAsset: "跨链资产",
     poolName: "矿池名称",
     inputPoolName: "请输入矿池名称",

@@ -133,6 +133,16 @@ const routes = [
           {
             path: "proposal",
             component: Proposal,
+            path: "proposal-space/proposal/:key",
+            component: Proposal,
+          },
+          {
+            path: "proposal-space/:key",
+            component: ProposalSpace,
+          },
+          {
+            path: "proposal-space/proposal-create/:key",
+            component: ProposalCreate,
           },
 
           {
