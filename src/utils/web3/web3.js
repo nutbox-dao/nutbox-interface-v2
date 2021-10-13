@@ -3,14 +3,17 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE,
-  CHAIN_NAME
+  RPC_NODE
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'
 
 import { getProvider } from './ethers'
 import { getAccounts } from "./account"
+import { getRegitryAssets } from './asset'
+import { getMyCommunityInfo } from './community'
+import { getMyOpenedPools } from './pool'
+import { ethers } from 'ethers'
 
 export const getWeb3 = () => {
   const web3  = new Web3(RPC_NODE)
@@ -96,7 +99,7 @@ export const chainChanged = async () => {
   const metamask = await getEthWeb()
  
   console.log('monitor chain id');
-  metamask.on('chainChanged', (chainId,n) => {
+  metamask.on('chainChanged', async(chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
@@ -106,9 +109,12 @@ export const chainChanged = async () => {
       store.commit('web3/saveAllAssetsOfUser', null)
       store.commit('saveMetamaskConnected', false)
     }else{
+      await getAccounts(true)
       getProvider(true)
       store.commit('saveMetamaskConnected', true)
-      getAccounts(true)
+      getRegitryAssets(true)
+      getMyCommunityInfo(true)
+      getMyOpenedPools(true)
     }
   })
 }

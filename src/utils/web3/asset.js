@@ -11,7 +11,7 @@ import { sleep } from '@/utils/helper'
 import {
   addressToHex
 } from '@/utils/commen/account'
-import { getAllCommunities } from '@/utils/web3/community'
+import { getAllCommunities, getMyStakingFactory, getNonce } from '@/utils/web3/community'
 import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
@@ -25,7 +25,8 @@ import {
   getProvider
 } from './ethers'
 import {
-  getAllTokens
+  getAllTokens,
+  updateTokenIcon as uti
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
@@ -34,6 +35,8 @@ import { errCode,
     Multi_Config,
     GasLimit
 } from "@/config";
+import { stanfiAddress } from '@/utils/commen/account'
+import { signMessage } from './utils'
 /**
  * Judge asset wheather Homechain assets
  * @param {String} address regitsry contract address address 
@@ -155,7 +158,7 @@ export const getCToken = async (communityId, update=false) => {
         const cToken = await getERC20Info(tokenAddress);
         cToken["assetId"] = assetId
         cToken['isMintable'] = await registerHub.mintable(assetId);
-        cTokens[assetId] = cToken
+        cTokens[communityId] = cToken
         store.commit('web3/saveCTokens', cTokens)
         resolve(cToken)
       }catch(e){
@@ -231,7 +234,7 @@ export const getAssetMetadata = async (id, assetType) => {
         chainId: meta[0],
         paraId: meta[1],
         trieIndex: meta[2],
-        communityAccount: meta[3],
+        communityAccount: stanfiAddress(meta[3], meta[3] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -239,7 +242,7 @@ export const getAssetMetadata = async (id, assetType) => {
       icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]].icon;
       meta = {
         chainId: meta[0],
-        validatorAccount:meta[1],
+        validatorAccount:stanfiAddress(meta[1], meta[0] === 2 ? 0 : 2),
         icon
       }
       break;
@@ -315,15 +318,6 @@ export const getERC20Info = async (address) => {
 }
 
 /**
- * Check assetId have been registered before
- * TODO
- * @param {*} assetId 
- */
-function checkAssetIfRegister(assetId){
-
-}
-
-/**
  * register homechain asset
  * @param {*} assetAddress
  */
@@ -341,7 +335,7 @@ export const registerHomeChainAsset = async (assetAddress) => {
       // if address a token address
       try{
         const erc20 = await getContract('ERC20', assetAddress)
-        const name = await erc20.name()
+        const decimals = await erc20.decimals()
       }catch(e){
         reject(errCode.NOT_A_TOKEN_CONTRACT)
         return;
@@ -480,7 +474,6 @@ export const registerNominateAsset = async (form) => {
     try {
       const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-      console.log('chainid', form);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
@@ -553,6 +546,52 @@ export const deployERC20 = async ({
         reject(errCode.BLOCK_CHAIN_ERR)
       }
       console.log(`Deploy mintable token ${name} failed`, e);
+    }
+  })
+}
+
+export const updateTokenIcon = async (token) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyStakingFactory()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+
+    let nonce = await getNonce()
+    const userId = await getAccounts();
+    nonce = nonce ? nonce + 1 : 1
+
+    token['id'] = stakingFactoryId;
+    const originMessage = JSON.stringify(token)
+    let signature = ''
+    try {
+      signature = await signMessage(originMessage + nonce)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+    const params = {
+      userId,
+      infoStr: originMessage,
+      nonce,
+      signature
+    }
+    try {
+      const res = await uti(params)
+      // update nonce in storage
+      store.commit('web3/saveNonce', nonce)
+      resolve(res)
+    } catch (e) {
+      reject(e)
     }
   })
 }

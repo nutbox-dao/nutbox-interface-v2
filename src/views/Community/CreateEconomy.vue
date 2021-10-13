@@ -52,11 +52,7 @@
           </div>
           <div class="form-card custom-form step-2">
             <div class="flex-between-center">
-              <span>{{ $t('community.tokenEra') }}</span>
-              <!--            <button class="add-pool-btn" @click="$router.push('/community/add-pool')">-->
-              <!--              <i class="add-icon"></i>-->
-              <!--              <span>Add Pool</span>-->
-              <!--            </button>-->
+              <span>{{ $t('community.tokenEra') }} {{ totalSupply }}</span>
             </div>
             <p style="margin:0;">
               {{ $t('community.currentBlock') }} {{blockNum}}
@@ -156,7 +152,11 @@ export default {
       userDeployTokens: state => state.web3.allAssetsOfUser,
       blockNum: state => state.web3.blockNum
     }),
-    ...mapGetters('web3', ['createState'])
+    ...mapGetters('web3', ['createState']),
+    // total supply of the distribution that user designed
+    totalSupply(){
+      return this.progressData.reduce((t,p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseInt(p.amount), 0)
+    }
   },
   watch: {
     userDeployTokens (val) {

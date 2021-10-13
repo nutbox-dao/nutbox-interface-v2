@@ -74,8 +74,12 @@
       </template>
       <div class="detail-info-box">
         <div class="project-info-container">
+          <span class="name"> {{ $t('community.totalDeposit') }} </span>
+          <div class="info">{{ totalDeposited | amountForm }}</div>
+        </div>
+        <div class="project-info-container">
           <span class="name"> TVL </span>
-          <div class="info">{{ tvl | amountForm }}</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> APY </span>
@@ -125,10 +129,11 @@ export default {
       "approvements",
       "loadingApprovements",
       "userStakings",
+      "allTokens",
       "loadingUserStakings",
       "monitorPools"
     ]),
-    ...mapState(['metamaskConnected']),
+    ...mapState(['metamaskConnected', 'prices']),
     pendingReward() {
       const pendingBn =
         this.pendingRewards[this.card.communityId + "-" + this.card.pid];
@@ -146,12 +151,19 @@ export default {
       const decimal = this.card.decimal;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
-    tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.card.communityId + "-" + this.card.pid + '-totalStakedAmount']) return 0
-      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'];
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    tvl() {
+      return this.totalDeposited * this.erc20Price
+    },
+    erc20Price(){
+      if (!this.card || !this.card.address) return null;
+      return this.allTokens.filter(token => token.address === this.card.address)[0].price
     },
     status (){
       const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']

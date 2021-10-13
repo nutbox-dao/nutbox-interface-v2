@@ -38,7 +38,7 @@ export const DECIMAL = {
 }
 
 export const PRICES_SYMBOL = [
-    'BNBETH','DOTUSDT', 'KSMUSDT','ETHUSDT', 'HIVEETH', 'STEEMETH'
+    'BNBETH','DOTUSDT', 'KSMUSDT','ETHUSDT', 'HIVEUSDT', 'STEEMETH'
 ]
 
 // 最大投票数

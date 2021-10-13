@@ -140,6 +140,8 @@ export const updateSocial = async (params) =>
 export const insertToken = async (params) =>
   post(BACKEND_API_URL + "/token/insert", params);
 
+export const updateTokenIcon = async (params) => put(BACKEND_API_URL + '/token/update', params)
+
 // ============================================ strategies ============================================
 
 export const getStrategies = async () =>

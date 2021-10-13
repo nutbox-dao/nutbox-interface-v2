@@ -12,7 +12,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdloanPools" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdloanPools" :key="card.pid + ''  + idx">
             <DLoanCard :card="card"/>
           </div>
         </div>

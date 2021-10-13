@@ -385,7 +385,6 @@ export default {
         const img = new Image()
         img.src = imgSrc
         img.onload = () => {
-          console.log(img.width, img.height)
           const cw = canvas.width = img.width
           const ch = canvas.height = img.height
           ctx.beginPath()
