@@ -343,6 +343,7 @@ router.beforeEach((to, from, next) => {
     next({
       path: to.path,
       query: {
+        ...to.query,
         id: from.query.id,
       },
     });
