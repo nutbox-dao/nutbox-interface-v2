@@ -233,7 +233,7 @@ import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
 import Markdown from "@/components/Commen/Markdown";
-
+import { MAIN_COMMUNITY_ID } from "../../config";
 import {
   getScore,
   getMyCommunityProposalConfigInfo,
@@ -252,6 +252,7 @@ export default {
   },
   data() {
     return {
+      url: "",
       commiting: false,
       communityId: null,
       activeTab: 0,
@@ -349,11 +350,12 @@ export default {
         const result = await completeProposal(this.proposal);
 
         if (result.code == 0) {
-          this.$bvToast.toast(this.$t("tip.deployFactorySuccess"), {
+          this.$bvToast.toast(this.$t("tip.completeProposalSuccess"), {
             title: this.$t("tip.tips"),
             variant: "success",
           });
-          this.$router.replace("/nps/proposal-space/" + this.form.communityId);
+          /* this.$router.replace("/nps/proposal-space/" + this.form.communityId); */
+          this.$router.back();
         }
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
@@ -365,9 +367,17 @@ export default {
     },
   },
   async mounted() {
-    this.form.id = this.$router.currentRoute.params.key;
-    this.form.communityId = this.$router.currentRoute.params.key;
+    this.url =
+      this.$router.currentRoute.params.key || this.$route.query.id
+        ? "/specify"
+        : "";
+    this.form.id = this.$router.currentRoute.params.key
+      ? this.$router.currentRoute.params.key
+      : this.$route.query.id
+      ? this.$route.query.id
+      : MAIN_COMMUNITY_ID;
 
+    this.form.communityId = this.form.id;
     try {
       const communityProposalConfigInfo =
         await getMyCommunityProposalConfigInfo(this.form.communityId);

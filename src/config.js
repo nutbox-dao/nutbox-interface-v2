@@ -21,7 +21,7 @@ export const errCode = {
   WRONG_ETH_ADDRESS: 103,
   NOT_A_TOKEN_CONTRACT: 104,
   TRANSACTION_FAIL: 105,
-  ASSET_EXIST:106,
+  ASSET_EXIST: 106,
   TOKEN_DEPLOYING: 107,
 
   BLOCK_CHAIN_ERR: 351,
@@ -34,7 +34,7 @@ export const errCode = {
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,
   DB_ERROR: 453,
-  SERVER_ERR: 500
+  SERVER_ERR: 500,
 };
 
 /** ====================================== polkadot ============================================*/
@@ -53,13 +53,13 @@ export const PARA_STATUS = {
   RETIRED: "Retired",
   COMPLETED: "Completed",
   WINNER: "Winner",
-  OTHER: "Other"
+  OTHER: "Other",
 };
 
 export const POLKADTO_ADDRESS_FORMAT_CODE = {
   polkadot: 0,
   kusama: 2,
-  substrate: 42
+  substrate: 42,
 };
 
 // 添加到交易batch的remark结构
@@ -68,7 +68,7 @@ export const NUTBOX_REMARK_TYPE = {
   op: "u8", // 0为crowdloan， 1为crowdstaking
   stakingAddress: "Text", // address on bsc
   trieIndex: "Option<u8>", // crowdloan 才有该字段
-  communityId: "AccountId" // 通过哪个社区操作的
+  communityId: "AccountId", // 通过哪个社区操作的
 };
 
 // Phala推荐机制 remark
@@ -76,7 +76,7 @@ export const PhalaCrowdloanReferrerRemark = {
   magic: "Bytes",
   paraId: "ParaId",
   referrer: "AccountId",
-  referrerHash: "Bytes"
+  referrerHash: "Bytes",
 };
 
 /**======================================= steem  ====================================*/
@@ -84,27 +84,26 @@ export const PhalaCrowdloanReferrerRemark = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 0.001
+export const STEEM_STAKE_FEE = 0.001;
 // official fee account
-export const STEEM_GAS_ACCOUNT = 'test.walnut.gas'
+export const STEEM_GAS_ACCOUNT = "test.walnut.gas";
 
 // Steem Config
 export const STEEM_API_URLS = [
-  process.env.STEEM_API_URL ||
-  'https://api.steemitdev.com',
-  'https://api.steemit.com',
-  'https://cn.steems.top',
-  'https://api.justyy.com',
-  'https://aksaiapi.wherein.mobi'
-]
+  process.env.STEEM_API_URL || "https://api.steemitdev.com",
+  "https://api.steemit.com",
+  "https://cn.steems.top",
+  "https://api.justyy.com",
+  "https://aksaiapi.wherein.mobi",
+];
 
 /**===================================== hive  =======================================*/
 // hive node storage
 export const HIVE_CONF_KEY = "hiveNodeKey";
 // delegate fee
-export const HIVE_STAKE_FEE = 0.001
+export const HIVE_STAKE_FEE = 0.001;
 // official fee account
-export const HIVE_GAS_ACCOUNT = 'test.walnut.gas'
+export const HIVE_GAS_ACCOUNT = "test.walnut.gas";
 
 // Hive Config
 export const HIVE_API_URLS = ["https://api.hive.blog"];
@@ -117,12 +116,14 @@ export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME;
 export const BSC_CHAIN_NAME = process.env.VUE_APP_BSC_CHAIN_NAME;
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
+
+export const MAIN_COMMUNITY_ID = process.env.VUE_APP_MAIN_COMMUNITY_ID;
 /**
  * chainId on blockchain to chain name
  */
 export const DELEGATION_CHAINID_TO_NAME = {
   1: "steem",
-  2: "hive"
+  2: "hive",
 };
 
 /**
@@ -132,7 +133,7 @@ export const CROWDLOAN_CHAINID_TO_NAME = {
   0: "polkadot",
   1: "polkadot",
   2: "polkadot",
-  3: "kusama"
+  3: "kusama",
 };
 
 /**
@@ -142,7 +143,7 @@ export const VALIDATOR_CHAINID_TO_NAME = {
   0: "polkadot",
   1: "polkadot",
   2: "polkadot",
-  3: "kusama"
+  3: "kusama",
 };
 
 export const GasLimit = 29900000;
@@ -150,14 +151,14 @@ export const GasLimit = 29900000;
 // Register by nutbox
 export const OfficialAssets = [
   {
-    name: 'Walnut',
-    address: '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5',
-    symbol: 'WNUT',
-    asset: '0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64',
-    contract: contractAddress['HomeChainAssetRegistry'],
+    name: "Walnut",
+    address: "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5",
+    symbol: "WNUT",
+    asset: "0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64",
+    contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
+    icon: "https://cdn.wherein.mobi/nutbox/v2/1633769085901",
   },
   // {
   //   name: 'WBNB',
@@ -179,7 +180,7 @@ export const OfficialAssets = [
   //   asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
   //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
   // }
-]
+];
 
 // local network
 // export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
@@ -188,10 +189,10 @@ export const OfficialAssets = [
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = '0x0de95fe541D4017A1a64AAe448BA80F07f96A937'
-export const NutAddress = '0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5' 
+export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
-  multicallAddress: MultiAddress
+  multicallAddress: MultiAddress,
 };

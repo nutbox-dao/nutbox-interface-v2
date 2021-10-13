@@ -450,6 +450,8 @@ module.exports = {
       basic: { minScore: "您需要至少有 {0} {1} 才能提交提案。" },
       customValidation: "您需要通过提案验证才能提交提案。",
     },
+    remarkInput: "请填写提案系统简介",
+    remark: "简介",
   },
   asset: {
     asset: "资产",
@@ -502,7 +504,7 @@ module.exports = {
     poolInfo: "矿池信息",
     stakingAsset: "质押资产",
     selectStakingAsset: "请选择质押资产",
-    isHomeAsset: "主链资产",
+    isHomeAsset: "主链资产",
     isForeignAsset: "跨链资产",
     poolName: "矿池名称",
     inputPoolName: "请输入矿池名称",

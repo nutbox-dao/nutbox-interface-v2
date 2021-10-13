@@ -468,6 +468,8 @@ module.exports = {
       customValidation:
         "You need to pass the proposal validation in order to submit a proposal.",
     },
+    remarkInput: "Please input intro",
+    remark: "Intro",
   },
   asset: {
     asset: "Asset",
