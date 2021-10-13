@@ -31,7 +31,7 @@
             <span>{{ row.item.tokenSymbol }}</span>
           </template>
           <template #cell(name)="row">
-            <span @click="openNewTab(row.item)">{{ row.item.name }}</span>
+            <span style="cursor:pointer" @click="openNewTab(row.item)">{{ row.item.name }}</span>
           </template>
           <template #cell(action)>
             <button class="action-btn">Buy</button>
