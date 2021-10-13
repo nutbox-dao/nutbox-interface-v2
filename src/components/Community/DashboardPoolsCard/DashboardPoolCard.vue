@@ -88,7 +88,7 @@ export default {
             if (this.pool.asset.chainId === 1){ // steem
               return this.totalDeposited * this.prices['STEEMETH']
             }else if (this.pool.asset.chainId === 2) { // hive
-              return this.totalDeposited * this.prices['HIVEETH']
+              return this.totalDeposited * this.prices['HIVEUSDT'] / this.prices['ETHUSDT']
             }
           }
         case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
@@ -96,11 +96,11 @@ export default {
             if (this.pool.asset.chainId === 2) { // polkadot
               return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
             }else if (this.pool.asset.chainId === 3) { // kusama
-              return this.totalDeposited * this.price['KSMUSDT'] / this.prices['ETHUSDT']
+              return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
             }
           }
         case 'HomeChainAssetRegistry':
-          return this.erc20Price
+          return this.erc20Price * this.totalDeposited * this.prices['ETHUSDT']
       }
     },
     decimals() {
@@ -128,7 +128,7 @@ export default {
     },
     erc20Price(){
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry' || !this.publishePoolInfo) return null;
-      return this.allTokens[this.publishePoolInfo.address]
+      return this.allTokens.filter(({address}) => address === this.publishePoolInfo.address)[0].price
     },
     stakerCount() {
       return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']
@@ -252,7 +252,6 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.pool);
     if (this.allPools){
       const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
       if (p.length > 0){

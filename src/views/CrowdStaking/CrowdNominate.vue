@@ -27,14 +27,14 @@
         </b-dropdown>
         <component :is='tabOptions[activeTab]'/>
       </div>
-      <div v-if="nominateCards.length > 0"></div>
+      <div v-if="showingCards.length > 0"></div>
       <div class="empty-bg" v-else>
         <img src="~@/static/images/empty-data.png" alt="" />
         <p> {{ $t('tip.noProject') }} </p>
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of nominateCards" :key="idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of showingCards" :key="card.pid + '' + idx">
             <CrowdNominateCard :nomination="card"/>
           </div>
         </div>
@@ -48,17 +48,13 @@ import CrowdNominateCard from '@/components/CrowdStaking/CrowdNominateCard'
 import { mapState, mapGetters } from 'vuex'
 import { subNominators } from '@/utils/commen/crowdStaking'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
-import SteemAccount from '@/components/Accounts/SteemAccount'
-import HiveAccount from '@/components/Accounts/HiveAccount'
 
 export default {
   name: 'CrowdNominate',
   components: {
     CrowdNominateCard,
     Pokadot: PolkadotAccount,
-    Kusama: PolkadotAccount,
-    Steem: SteemAccount,
-    Hive: HiveAccount
+    Kusama: PolkadotAccount
   },
   computed: {
     ...mapState({
@@ -71,15 +67,19 @@ export default {
     },
     nominateCards () {
       return this.poolCards.filter(item => item.type === 'SubstrateNominateAssetRegistry')
+    },
+    showingCards () {
+      return this.nominateCards.filter(pool => pool.chainId === this.activeTab + 2)
     }
   },
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Pokadot', 'Kusama', 'Steem', 'Hive']
+      tabOptions: ['Pokadot', 'Kusama']
     }
   },
   mounted () {
+    console.log(235,this.showingCards);
     // get parachian info from backend
     subNominators('kusama')
     subNominators('polkadot')

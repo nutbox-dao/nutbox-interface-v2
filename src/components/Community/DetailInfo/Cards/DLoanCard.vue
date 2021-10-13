@@ -123,6 +123,7 @@ import { calStatus } from '@/utils/commen/crowdloan'
 import { formatCountdown, handleApiErrCode } from '@/utils/helper'
 import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   data () {
@@ -260,7 +261,7 @@ export default {
     },
     countDown (){
       if (!this.card?.firstBlock) return;
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
     }
   },
   mounted () {

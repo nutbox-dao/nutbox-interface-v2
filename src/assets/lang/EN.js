@@ -333,7 +333,7 @@ module.exports = {
     step2: 'Step 2',
     yourCTokenId: "Step 1：Choose an asset",
     settingTokenDistribution: "Step 2：Setting your asset distribution",
-    tokenEra: "Asset distribution policy", 
+    tokenEra: "Total distribution by current policy", 
     currentBlock: 'Current Block height',
     startBlock:'Start Block',
     inputStopBlock: 'Input Stop Block height',

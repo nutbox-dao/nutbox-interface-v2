@@ -308,7 +308,6 @@ export const publishPool = async (pool) => {
     } catch (e) {
       reject(e)
     }
-
   })
 }
 
@@ -873,7 +872,7 @@ export const monitorUserBalances = async () => {
         const poolRatio = monitorPools[key + 'poolRatio']
         if (monitorPools[key + 'hasStopped']) continue
         if (monitorPools[key + 'hasRemoved']) continue
-        if (pool.totalStakedAmount === '0') continue;
+        if (tvl === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
         const ctokenAddress = com.ctoken
@@ -897,17 +896,17 @@ export const monitorUserBalances = async () => {
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
-          const hivePrice = parseFloat(price['HIVEETH'])
+          const hivePrice = parseFloat(price['HIVUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * hivePrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
-          const dotPrice = parseFloat(price['DOTETH'])
+          const dotPrice = parseFloat(price['DOTUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * dotPrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
-          const ksmPrice = parseFloat(price['KSMETH'])
+          const ksmPrice = parseFloat(price['KSMUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * ksmPrice)
           continue;
         }

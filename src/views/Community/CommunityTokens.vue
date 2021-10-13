@@ -48,7 +48,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { formatBalance } from '@/utils/helper'
+import { formatBalance, formatPrice } from '@/utils/helper'
 export default {
   name: 'CommunityTokens',
   data () {
@@ -75,18 +75,25 @@ export default {
         ]
     },
     items (){
-      console.log(235,this.allCommunities);
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
-          price: '$' + formatBalance(c.price * this.ethPrice),
+          price: c.price,
           totalSupply: formatBalance(c.totalSupply.toString() / 1e18),
-          cap: '$' + formatBalance((c.price * this.ethPrice) * (c.totalSupply.toString() / 1e18))
+          cap: (c.price) * (c.totalSupply.toString() / 1e18)
         }))
         : []
       if (this.activeTab === 0) {
-        return sorted.sort((a, b) => parseFloat(a.cap) - parseFloat(b.cap))
+        return sorted.sort((a, b) => parseFloat(b.cap) - parseFloat(a.cap)).map(c => ({
+          ...c,
+          price: formatPrice(c.price),
+          cap: formatPrice(c.cap)
+        }))
       } else {
-        return sorted.sort((a, b) => parseFloat(a.totalSupply) - parseFloat(b.totalSupply))
+        return sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price)).map(c => ({
+          ...c,
+          price: formatPrice(c.price),
+          cap: formatPrice(c.cap)
+        }))
       }
     }
   },

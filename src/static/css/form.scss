@@ -73,7 +73,7 @@
 .c-date-picker .b-form-datepicker {
   height: 2.4rem;
 }
-/deep/ .c-date-picker-dropdown {
+::v-deep .c-date-picker-dropdown {
   width: 100%;
   .dropdown-toggle {
     height: 2.4rem;

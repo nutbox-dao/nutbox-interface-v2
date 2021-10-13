@@ -9,15 +9,15 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "@hiveio/dhive": "^1.1.0",
+    "@hiveio/dhive": "^1.1.1",
     "@hiveio/hive-js": "^2.0.4",
     "@makerdao/multicall": "^0.12.0",
     "@pancakeswap/sdk": "^2.4.0",
-    "@polkadot/api": "^6.2.1",
-    "@polkadot/apps-config": "^0.96.1",
+    "@polkadot/api": "^6.3.1",
+    "@polkadot/apps-config": "0.96.2-57",
     "@polkadot/extension-dapp": "^0.40.3",
-    "@polkadot/ui-keyring": "0.85.4",
-    "@polkadot/vue-identicon": "0.85.4",
+    "@polkadot/ui-keyring": "0.85.5",
+    "@polkadot/vue-identicon": "0.85.5",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "bn.js": "^5.2.0",
@@ -65,7 +65,8 @@
     "sass-loader": "^10.1.1",
     "vue-cli-plugin-bootstrap-vue": "^0.7.0",
     "vue-cli-plugin-i18n": "^1.0.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.46.0"
   },
   "lint-staged": {
     "*.{js,jsx,vue}": [

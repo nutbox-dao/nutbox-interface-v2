@@ -283,10 +283,10 @@ input {
     font-size: 0.7rem;
   }
 }
-/deep/ .custom-control-label {
+::v-deep .custom-control-label {
   width: 100%;
 }
-/deep/ .custom-control-label::before {
+::v-deep .custom-control-label::before {
   top: 50% !important;
   transform: translateY(-50%);
   left: -1.8rem !important;
@@ -298,11 +298,11 @@ input {
   background-position: center;
   background-size: cover;
 }
-/deep/ .custom-control-input {
+::v-deep .custom-control-input {
   width: 1.4rem !important;
   height: 1.4rem !important;
 }
-/deep/ .custom-control-input:checked ~ .custom-control-label::before {
+::v-deep .custom-control-input:checked ~ .custom-control-label::before {
   background-image: url("~@/static/images/checked.png");
   background-color: transparent !important;
 }
