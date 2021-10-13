@@ -116,10 +116,10 @@
               <b-list-group flush>
                 <b-list-group-item>
                   <div class="row">
-                    <div class="col-4">
+                    <div class="col-3">
                       {{ $t("community.proposalAgreeBtn") }}
                     </div>
-                    <div class="col-8">
+                    <div class="col-6">
                       <b-progress
                         :value="voteAgreeTotalScoreRate"
                         variant="success"
@@ -127,30 +127,45 @@
                         class="w-100"
                       ></b-progress>
                     </div>
+                    <div class="col-3">
+                      {{ voteAgreeTotalScore }}
+                    </div>
                   </div>
                 </b-list-group-item>
 
                 <b-list-group-item>
                   <div class="row">
-                    <div class="col-4">
+                    <div class="col-3">
                       {{ $t("community.proposalDisagreeBtn") }}
                     </div>
-                    <div class="col-8">
+                    <div class="col-6">
                       <b-progress
                         :value="voteDisagreeTotalScoreRate"
                         variant="danger"
                         :striped="true"
                         class="w-100"
                       ></b-progress>
-                    </div></div
-                ></b-list-group-item>
+                    </div>
+                    <div class="col-3">
+                      {{ voteDisagreeTotalScore }}
+                    </div>
+                  </div></b-list-group-item
+                >
                 <b-list-group-item v-show="proposal.status == 2">
                   <div class="row">
                     <div class="col-4">
                       {{ $t("community.proposalVoteResult") }}
                     </div>
                     <div class="col-8">
-                      {{ $t("nps.pass") }}
+                      {{
+                        proposal.status == 0
+                          ? $t("community.propsalVoteStatusWaitStart")
+                          : proposal.status == 1
+                          ? $t("community.propsalVoteStatusDoing")
+                          : proposal.proposalResult == 1
+                          ? $t("nps.pass")
+                          : $t("nps.unpass")
+                      }}
                     </div>
                   </div></b-list-group-item
                 >
@@ -274,7 +289,7 @@ export default {
         end: "",
         first_block: 0,
         end_block: 0,
-        passThreshold: 0,
+        passthreshold: 0,
       },
       isValid: false,
       form: {

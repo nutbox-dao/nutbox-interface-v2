@@ -16,12 +16,13 @@
         >
           <div class="d-flex">
             <div class="c-input-group">
-              <b-form-input
+              <b-form-textarea
                 id="remark"
                 :placeholder="$t('community.remarkInput')"
                 v-model="form.remark"
+                rows="4"
                 max="2046"
-              ></b-form-input>
+              ></b-form-textarea>
             </div>
           </div>
         </b-form-group>
@@ -56,7 +57,7 @@
               <b-form-input
                 id="proposalPassThreshold"
                 :placeholder="$t('community.proposalPassThresholdInput')"
-                v-model="form.passThreshold"
+                v-model="form.passthreshold"
                 type="number"
               ></b-form-input>
               <!--  <span class="c-append">%</span> -->
