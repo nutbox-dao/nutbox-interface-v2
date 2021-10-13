@@ -69,7 +69,6 @@ import {
   approveCommunityBalance,
   setDevAddress,
   setDevRatio,
-  monitorCommunity,
   publishBlog
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
@@ -350,7 +349,7 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
-        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true), monitorCommunity()])
+        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true)])
         await sleep(1);
         this.$router.push("/community/pool-dashboard");
       } catch (e) {

@@ -1,6 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
-import {  getMyCommunityInfo, getNonce, monitorCommunity, getDistributionEras } from './community'
+import {  getMyCommunityInfo, getNonce, getDistributionEras } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
@@ -35,7 +35,6 @@ export const accountChanged = async () => {
         store.commit('web3/saveAllAssetsOfUser', null)
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
-            monitorCommunity()
         }).catch(console.error)
         getMyOpenedPools(true)
         getNonce(true)
