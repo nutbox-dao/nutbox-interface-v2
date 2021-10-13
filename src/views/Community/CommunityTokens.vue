@@ -30,6 +30,9 @@
           <template #cell(tokenSymbol)="row">
             <span>{{ row.item.tokenSymbol }}</span>
           </template>
+          <template #cell(name)="row">
+            <span @click="openNewTab(row.item)">{{ row.item.name }}</span>
+          </template>
           <template #cell(action)>
             <button class="action-btn">Buy</button>
           </template>
@@ -75,7 +78,6 @@ export default {
         ]
     },
     items (){
-      console.log(235,this.allCommunities);
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
           price: '$' + formatBalance(c.price * this.ethPrice),
@@ -88,6 +90,11 @@ export default {
       } else {
         return sorted.sort((a, b) => parseFloat(a.totalSupply) - parseFloat(b.totalSupply))
       }
+    }
+  },
+  methods: {
+    openNewTab (cardInfo) {
+      window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
     }
   },
   mounted () {

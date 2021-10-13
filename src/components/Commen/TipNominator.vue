@@ -178,12 +178,6 @@ export default {
   },
   mounted() {
     this.relayer = this.crowdstaking.chainId === 2 ? 'polkadot' : 'kusama'
-    console.log(235,
-    this.$store.state.polkadot.totalStaked.toNumber(),
-    this.$store.state.polkadot.locked.toNumber(),
-    this.$store.state.polkadot.unLocking.toNumber(),
-    this.$store.state.polkadot.redeemable.toNumber(),
-    this.$store.state.polkadot.balance.toNumber());
   },
 };
 </script>
