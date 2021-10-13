@@ -29,6 +29,20 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="5"
+          :label="$t('community.proposalBodyPreview')"
+          label-for="remarkInput"
+          label-class="d-flex align-items-center font16 font-bold "
+        >
+          <div class="d-flex">
+            <div class="c-input-group">
+              <Markdown :body="form.remark" />
+            </div>
+          </div>
+        </b-form-group>
+
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="5"
           :label="$t('community.proposalThreshold')"
           label-for="proposalThresholdInput"
           label-class="d-flex align-items-center font16 font-bold "
@@ -126,11 +140,14 @@ import {
   BSC_STRATEGIES_NAME,
   BSC_STRATEGIES_PARAMS,
 } from "../../config";
-
+import Markdown from "@/components/Commen/Markdown";
 import { nanoid } from "nanoid";
 
 export default {
   name: "VoteSetting",
+  components: {
+    Markdown,
+  },
   data() {
     return {
       updateing: false,

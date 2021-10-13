@@ -499,7 +499,7 @@ export default {
   async mounted() {
     this.id = this.$router.currentRoute.params.key
       ? this.$router.currentRoute.params.key
-      : this.$route.query.id;
+      : this.$route.query.proposalId;
 
     try {
       this.currentUserId = await getAccounts();
