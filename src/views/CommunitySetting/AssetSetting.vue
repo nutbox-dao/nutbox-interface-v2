@@ -430,8 +430,9 @@ export default {
     }
   },
   async mounted () {
-    const communityInfo = await getMyCommunityInfo();
+    let communityInfo;
     try{
+      communityInfo = await getMyCommunityInfo();
       getDistributionEras().then(dist => {
         this.progressData = dist
       }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
