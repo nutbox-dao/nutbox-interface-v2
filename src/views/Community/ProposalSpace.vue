@@ -37,7 +37,7 @@
         <div class="tip-box">
           <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
           <div style="text-align: left; margin-top: 1rem">
-            {{ form.remark }}
+            <Markdown :body="form.remark" />
           </div>
         </div>
       </div>
@@ -78,17 +78,20 @@ import { handleApiErrCode, sleep } from "@/utils/helper";
 import { getAllProposal } from "@/utils/web3/proposal";
 import { MAIN_COMMUNITY_ID } from "../../config";
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
+import { getAccounts } from "@/utils/web3/account";
+import Markdown from "@/components/Commen/Markdown";
 export default {
   name: "Community",
   components: {
     ProposalItem,
+    Markdown,
   },
   data() {
     return {
       url: "",
       tempProposalItem: [],
       proposalitems: [],
-      tabOptions: ["ALL", "Voting", "Passed", "Rejected"],
+      tabOptions: ["ALL", "Voting", "Passed", "Rejected", "My proposal"],
       activeTab: 0,
       form: {
         communityId: "",
@@ -122,10 +125,15 @@ export default {
         this.proposalitems = this.tempProposalItem.filter(
           (t) => t.proposalResult == 2
         );
+      } else if (this.activeTab == 4) {
+        this.proposalitems = this.tempProposalItem.filter(
+          (t) => t.userId == this.userId
+        );
       }
     },
   },
   async mounted() {
+    this.userId = await getAccounts();
     this.url =
       this.$router.currentRoute.params.key || this.$route.query.id
         ? "/specify"

@@ -16,9 +16,7 @@
         </p>
 
         <span
-          @click="
-            $router.push(`/nps/proposal-space/proposal/${proposalItem.id}/`)
-          "
+          @click="$router.push(`${url}/nps/proposal?id=${proposalItem.id}`)"
           style="
             flex: 1;
             text-align: left;

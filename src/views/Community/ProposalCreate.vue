@@ -342,7 +342,7 @@ export default {
         this.proposal.strategies = this.form.strategies;
         this.proposal.network = this.form.network;
         this.proposal.threshold = this.form.threshold;
-        this.proposal.passThreshold = this.form.passThreshold;
+        this.proposal.passthreshold = this.form.passthreshold;
 
         this.proposal.start = this.startTime;
 
