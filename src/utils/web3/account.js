@@ -31,8 +31,8 @@ export const accountChanged = async () => {
         console.log('Changed accounts', accounts);
         store.commit('web3/saveAccount', ethers.utils.getAddress(accounts[0]))
         store.commit('web3/saveStakingFactoryId', null)
-        store.commit('web3/saveMyPools', [])
-        store.commit('web3/saveAllAssetsOfUser', [])
+        store.commit('web3/saveMyPools', null)
+        store.commit('web3/saveAllAssetsOfUser', null)
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
             monitorCommunity()

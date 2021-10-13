@@ -49,8 +49,8 @@ export const setupNetwork = async () => {
     store.commit('web3/saveChainId', chainId)
     store.commit('web3/saveAccount', null)
     store.commit('web3/saveStakingFactoryId', null)
-    store.commit('web3/saveMyPools', [])
-    store.commit('web3/saveAllAssetsOfUser', [])
+    store.commit('web3/saveMyPools', null)
+    store.commit('web3/saveAllAssetsOfUser', null)
     store.commit('saveMetamaskConnected', false)
     return false
   }
@@ -102,8 +102,8 @@ export const chainChanged = async () => {
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)
-      store.commit('web3/saveMyPools', [])
-      store.commit('web3/saveAllAssetsOfUser', [])
+      store.commit('web3/saveMyPools', null)
+      store.commit('web3/saveAllAssetsOfUser', null)
       store.commit('saveMetamaskConnected', false)
     }else{
       getProvider(true)
