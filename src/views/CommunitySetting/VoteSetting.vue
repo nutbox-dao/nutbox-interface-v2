@@ -25,7 +25,7 @@
               ></b-form-textarea>
             </div>
           </div>
-        <span>{{ $t('nps.markdownTip') }}</span>
+        <div class="mt-3">{{ $t('nps.markdownTip') }}</div>
         </b-form-group>
         <b-form-group
           label-cols-md="2"
@@ -35,7 +35,7 @@
           label-class="d-flex align-items-center font16 font-bold "
         >
           <div class="d-flex">
-            <div class="c-input-group">
+            <div class="c-input-group p-3" style="min-height: 2.4rem">
               <Markdown :body="form.remark" />
             </div>
           </div>

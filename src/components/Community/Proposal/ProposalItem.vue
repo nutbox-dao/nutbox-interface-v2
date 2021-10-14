@@ -2,8 +2,9 @@
   <div class="nps">
     <div class="nps-card">
       <div class="proposal">
-        <p
-          style="
+        <div class="p-content d-flex w-100">
+          <p
+            style="
             width: 32px;
             height: 32px;
             border-radius: 16px;
@@ -11,23 +12,24 @@
             font-size: 14px;
             line-height: 32px;
           "
-        >
-          {{ index + 1 }}
-        </p>
+          >
+            {{ index + 1 }}
+          </p>
 
-        <span
-          @click="
+          <span
+            @click="
             $router.push(`${url}/nps/proposal?proposalId=${proposalItem.id}`)
           "
-          style="
+            style="
             flex: 1;
             text-align: left;
             font-weight: 500;
             border-radius: 8px;
           "
-        >
+          >
           {{ proposalItem.title }}
         </span>
+        </div>
         <!--  <div class="w-25 pl-3 pr-3">
           <b-alert show variant="secondary"
             ><div class="row">
@@ -62,34 +64,28 @@
               ></b-progress></div
           ></b-alert>
         </div> -->
-        <div class="w-20 pl-3 pr-3">
-          {{ $t("nps.proposalEnd") + ":" + endTime }}
-        </div>
-        <p
-          :class="
+        <div class="d-flex align-items-center justify-content-end w-100">
+          <div class="w-20">
+            {{ $t("nps.proposalEnd") + ":" + endTime }}
+          </div>
+          <div class="flag"
+            :class="
             proposalItem.status == 0
               ? 'propsalVoteStatusWaitStart'
               : proposalItem.status == 1
               ? 'propsalVoteStatusDoing'
-              : 'propsalVoteStatusEnd'
-          "
-          style="
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 24px;
-            padding: 0px 6px;
-          "
-        >
-          {{
-            proposalItem.status == 0
-              ? $t("nps.propsalVoteStatusWaitStart")
-              : proposalItem.status == 1
-              ? $t("nps.propsalVoteStatusDoing")
-              : proposalItem.proposalResult == 1
-              ? $t("nps.pass")
-              : $t("nps.unpass")
-          }}
-        </p>
+              : 'propsalVoteStatusEnd'">
+            {{
+              proposalItem.status == 0
+                ? $t("nps.propsalVoteStatusWaitStart")
+                : proposalItem.status == 1
+                ? $t("nps.propsalVoteStatusDoing")
+                : proposalItem.proposalResult == 1
+                  ? $t("nps.pass")
+                  : $t("nps.unpass")
+            }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -133,7 +129,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style  lang="scss" scoped>
 /* .proposal-item {
   padding: 20px;
   background-color: white;
@@ -151,19 +147,18 @@ span {
  */
 .nps {
   .nps-card {
-    height: 108px;
-    background: white;
-    padding: 18px;
-    margin-top: 20px;
-    box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
-    border-radius: 28px;
-    border: 1px solid rgba(227, 229, 232, 0.5);
+    @include card();
+    margin-bottom: 1rem;
+    position: relative;
   }
   .proposal {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 72px;
+    .p-content {
+      align-items:center;
+    }
     p,
     a {
       margin: 0 10px;
@@ -180,7 +175,12 @@ span {
     a:hover {
       color: var(--link);
     }
-
+    .flag {
+      padding: .4rem .6rem;
+      font-size: .7rem;
+      line-height: .8rem;
+      margin-left: 1rem;
+    }
     .pass {
       background: rgba(80, 191, 0, 0.05);
       border-radius: 8px;
@@ -217,5 +217,29 @@ span {
 }
 .w-25 {
   width: 20% !important;
+}
+@media (max-width: 960px) {
+  .nps {
+    .nps-card {
+      padding-top: 3rem;
+    }
+    .proposal {
+      flex-direction: column;
+      .flag {
+        position: absolute;
+        top: .8rem;
+        right: .8rem;
+        margin: 0;
+        font-size: .6rem;
+        line-height: .8rem;
+      }
+    }
+  }
+}
+@media (max-width: 760px) {
+  .nps .proposal .p-content {
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
 }
 </style>
