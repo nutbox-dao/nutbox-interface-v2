@@ -265,7 +265,7 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras, monitorCommunity } from '@/utils/web3/community'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
@@ -436,6 +436,7 @@ export default {
       getDistributionEras().then(dist => {
         this.progressData = dist
       }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
+      monitorCommunity()
     }catch(e){
       if (e === errCode.NO_STAKING_FACTORY){
         this.noCommunity = true;

@@ -271,8 +271,7 @@ import Login from "@/components/ToolsComponents/Login";
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
-  getAllCommunities,
-  monitorCommunity,
+  getAllCommunities
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapGetters } from "vuex";
@@ -527,8 +526,7 @@ export default {
         });
         await Promise.all([
           getAllCommunities(true),
-          getMyCommunityInfo(true),
-          monitorCommunity(),
+          getMyCommunityInfo(true)
         ]);
         await sleep(1);
         this.$router.replace("/community-setting/staking");

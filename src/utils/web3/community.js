@@ -44,6 +44,7 @@ export const getMyStakingFactory = async (update = false) => {
     const account = await getAccounts();
     let stakingFactoryId = null;
     try {
+      console.log(11111111);
       const count = await contract.stakingFeastCounter(account);
       if (count > 0) {
         stakingFactoryId = await contract.stakingFeastRecord(account, 0);
@@ -123,6 +124,7 @@ export const getAllCommunities = async (update = false) => {
       return;
     }
     try {
+      console.log(22222222222);
       const currentCommunityId = store.state.currentCommunityId;
       const communities = await gac(currentCommunityId);
       store.commit("web3/saveAllCommunities", communities);
@@ -280,7 +282,7 @@ export const chargeCommunityBalance = async (amount) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory(false);
+      stakingFactoryId = await getMyStakingFactory();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -357,7 +359,7 @@ export const setDevAddress = async (address) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory(false);
+      stakingFactoryId = await getMyStakingFactory();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -398,7 +400,7 @@ export const setDevRatio = async (ratio) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory(false);
+      stakingFactoryId = await getMyStakingFactory();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -773,7 +775,7 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
 export const monitorCommunity = async () => {
   let communityInfo;
   try {
-    communityInfo = await getMyCommunityInfo(true);
+    communityInfo = await getMyCommunityInfo();
     if (!communityInfo) {
       return;
     }
