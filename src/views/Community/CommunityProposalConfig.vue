@@ -12,19 +12,19 @@
     <div class="mt-3">
       <div class="community-info-card text-left">
         <div class="title font-bold">
-          {{ $t("community.proposalConfigLabel") }}
+          {{ $t("nps.proposalConfigLabel") }}
         </div>
         <div class="custom-form pl-md-3">
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalNetwork')"
+            :label="$t('nps.proposalNetwork')"
             label-for="proposalNetwork"
           >
             <!--    <b-form-input
               id="proposalNetwork"
               required
-              :placeholder="$t('community.proposalNetworkInput')"
+              :placeholder="$t('nps.proposalNetworkInput')"
               v-model="form.networkName"
               readonly
               @click="selectNetWork"
@@ -34,7 +34,7 @@
             <b-form-input
               id="proposalNetwork"
               required
-              :placeholder="$t('community.proposalNetworkInput')"
+              :placeholder="$t('nps.proposalNetworkInput')"
               v-model="form.networkName"
               readonly
             ></b-form-input>
@@ -44,13 +44,13 @@
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalSymbol')"
+            :label="$t('nps.proposalSymbol')"
             label-for="proposalSymbol"
           >
             <b-form-input
               id="proposalSymbol"
               required
-              :placeholder="$t('community.proposalSymbolInput')"
+              :placeholder="$t('nps.proposalSymbolInput')"
               v-model="form.symbol"
             ></b-form-input>
           </b-form-group>
@@ -105,7 +105,7 @@
           <!-- <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalStrategies')"
+            :label="$t('nps.proposalStrategies')"
             label-for="proposalStrategies"
           >
             <b-input-group
@@ -113,7 +113,7 @@
               :key="item.strategyControlId"
             >
               <b-form-input
-                :placeholder="$t('community.proposalStrategiesInput')"
+                :placeholder="$t('nps.proposalStrategiesInput')"
                 readonly
                 @click="selectStrategy(item)"
                 v-model="item.strategyKey"
@@ -140,7 +140,7 @@
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalStrategies')"
+            :label="$t('nps.proposalStrategies')"
             label-for="proposalStrategies"
           >
             <b-input-group
@@ -148,7 +148,7 @@
               :key="item.strategyControlId"
             >
               <b-form-input
-                :placeholder="$t('community.proposalStrategiesInput')"
+                :placeholder="$t('nps.proposalStrategiesInput')"
                 readonly
                 v-model="item.strategyKey"
               ></b-form-input>
@@ -163,12 +163,12 @@
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalThreshold')"
+            :label="$t('nps.proposalThreshold')"
             label-for="proposalThresholdInput"
           >
             <b-form-input
               id="proposalThreshold"
-              :placeholder="$t('community.proposalThresholdInput')"
+              :placeholder="$t('nps.proposalThresholdInput')"
               v-model="form.threshold"
               type="number"
             ></b-form-input>
@@ -177,12 +177,12 @@
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalPassThreshold')"
+            :label="$t('nps.proposalPassThreshold')"
             label-for="proposalPassThresholdInput"
           >
             <b-form-input
               id="proposalPassThreshold"
-              :placeholder="$t('community.proposalPassThresholdInput')"
+              :placeholder="$t('nps.proposalPassThresholdInput')"
               v-model="form.passthreshold"
               type="number"
             ></b-form-input>
@@ -191,14 +191,14 @@
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
-            :label="$t('community.proposalValidation')"
+            :label="$t('nps.proposalValidation')"
             label-for="proposalValidationInput"
             v-show="false"
           >
             <b-form-input
               id="proposalValidation"
               required
-              :placeholder="$t('community.proposalValidationInput')"
+              :placeholder="$t('nps.proposalValidationInput')"
               v-model="form.validation"
             ></b-form-input>
           </b-form-group>
@@ -218,7 +218,7 @@
     <b-modal
       id="modal-network"
       scrollable
-      :title="$t('community.proposalNetwork')"
+      :title="$t('nps.proposalNetwork')"
       v-model="modalNetworksOpen"
       hide-footer
       ><Networks :chooseNetWork="chooseNetWork"></Networks>
@@ -227,7 +227,7 @@
     <b-modal
       id="modal-strategy"
       scrollable
-      :title="$t('community.proposalStrategies')"
+      :title="$t('nps.proposalStrategies')"
       v-model="modalStrategyOpen"
       hide-footer
       ><Strategies
@@ -242,7 +242,7 @@
       v-model="modelEditStrategyOpen"
       modal-class="custom-modal"
       size="lg"
-      :title="$t('community.editStrategy')"
+      :title="$t('nps.editStrategy')"
       centered
       hide-footer
     >

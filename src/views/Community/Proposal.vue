@@ -6,7 +6,7 @@
         style="line-height: 1rem"
         @click="$router.back()"
       >
-        {{ $t("community.voteProposal") }}
+        {{ $t("nps.voteProposal") }}
       </div>
     </div>
 
@@ -29,7 +29,7 @@
                 variant="primary"
                 @click="onVote('agree')"
                 :disabled="!isValid || isVoted"
-                >{{ $t("community.proposalAgreeBtn") }}</b-button
+                >{{ $t("nps.proposalAgreeBtn") }}</b-button
               >
             </div>
             <div class="col-6">
@@ -38,7 +38,7 @@
                 variant="primary"
                 @click="onVote('disagree')"
                 :disabled="!isValid || isVoted"
-                >{{ $t("community.proposalDisagreeBtn") }}</b-button
+                >{{ $t("nps.proposalDisagreeBtn") }}</b-button
               >
             </div>
           </div>
@@ -47,14 +47,14 @@
           <div style="margin-top: 10px">
             <b-card no-body>
               <template v-slot:header>
-                <h4 class="mb-0">{{ $t("community.proposalInfo") }}</h4>
+                <h4 class="mb-0">{{ $t("nps.proposalInfo") }}</h4>
               </template>
 
               <b-list-group flush>
                 <b-list-group-item
                   ><div class="row">
                     <div class="col-6">
-                      {{ $t("community.proposalFirst_Block") }}
+                      {{ $t("nps.proposalFirst_Block") }}
                     </div>
                     <div class="col-6">
                       {{ proposal.first_block }}
@@ -64,7 +64,7 @@
                 <b-list-group-item
                   ><div class="row">
                     <div class="col-6">
-                      {{ $t("community.proposalEnd_Block") }}
+                      {{ $t("nps.proposalEnd_Block") }}
                     </div>
                     <div class="col-6">
                       {{ proposal.end_block }}
@@ -74,7 +74,7 @@
                 <b-list-group-item
                   ><div class="row">
                     <div class="col-6">
-                      {{ $t("community.proposalStart") }}
+                      {{ $t("nps.proposalStart") }}
                     </div>
                     <div class="col-6">{{ formatDate(proposal.start) }}</div>
                   </div>
@@ -82,7 +82,7 @@
                 <b-list-group-item
                   ><div class="row">
                     <div class="col-6">
-                      {{ $t("community.proposalEnd") }}
+                      {{ $t("nps.proposalEnd") }}
                     </div>
                     <div class="col-6">{{ formatDate(proposal.end) }}</div>
                   </div>
@@ -90,15 +90,15 @@
                 <b-list-group-item
                   ><div class="row">
                     <div class="col-6">
-                      {{ $t("community.proposalStatus") }}
+                      {{ $t("nps.proposalStatus") }}
                     </div>
                     <div class="col-6">
                       {{
                         proposal.status == 0
-                          ? $t("community.propsalVoteStatusWaitStart")
+                          ? $t("nps.propsalVoteStatusWaitStart")
                           : proposal.status == 1
-                          ? $t("community.propsalVoteStatusDoing")
-                          : $t("community.propsalVoteStatusEnd")
+                          ? $t("nps.propsalVoteStatusDoing")
+                          : $t("nps.propsalVoteStatusEnd")
                       }}
                     </div>
                   </div>
@@ -110,14 +110,14 @@
           <div style="margin-top: 10px">
             <b-card no-body>
               <template v-slot:header>
-                <h4 class="mb-0">{{ $t("community.proposalVoteResult") }}</h4>
+                <h4 class="mb-0">{{ $t("nps.proposalVoteResult") }}</h4>
               </template>
 
               <b-list-group flush>
                 <b-list-group-item>
                   <div class="row">
                     <div class="col-3">
-                      {{ $t("community.proposalAgreeBtn") }}
+                      {{ $t("nps.proposalAgreeBtn") }}
                     </div>
                     <div class="col-6">
                       <b-progress
@@ -128,7 +128,7 @@
                       ></b-progress>
                     </div>
                     <div class="col-3">
-                      {{ voteAgreeTotalScore }}
+                      {{ voteAgreeTotalScore | amountForm }}
                     </div>
                   </div>
                 </b-list-group-item>
@@ -136,7 +136,7 @@
                 <b-list-group-item>
                   <div class="row">
                     <div class="col-3">
-                      {{ $t("community.proposalDisagreeBtn") }}
+                      {{ $t("nps.proposalDisagreeBtn") }}
                     </div>
                     <div class="col-6">
                       <b-progress
@@ -147,21 +147,21 @@
                       ></b-progress>
                     </div>
                     <div class="col-3">
-                      {{ voteDisagreeTotalScore }}
+                      {{ voteDisagreeTotalScore | amountForm }}
                     </div>
                   </div></b-list-group-item
                 >
                 <b-list-group-item v-show="proposal.status == 2">
                   <div class="row">
                     <div class="col-4">
-                      {{ $t("community.proposalVoteResult") }}
+                      {{ $t("nps.proposalVoteResult") }}
                     </div>
                     <div class="col-8">
                       {{
                         proposal.status == 0
-                          ? $t("community.propsalVoteStatusWaitStart")
+                          ? $t("nps.propsalVoteStatusWaitStart")
                           : proposal.status == 1
-                          ? $t("community.propsalVoteStatusDoing")
+                          ? $t("nps.propsalVoteStatusDoing")
                           : proposal.proposalResult == 1
                           ? $t("nps.pass")
                           : $t("nps.unpass")
@@ -176,7 +176,7 @@
           <div style="margin-top: 10px">
             <b-card no-body>
               <template v-slot:header>
-                <h4 class="mb-0">{{ $t("community.proposalVoteNum") }}</h4>
+                <h4 class="mb-0">{{ $t("nps.proposalVoteNum") }}</h4>
               </template>
 
               <b-list-group flush>
@@ -184,13 +184,13 @@
                   ><div class="row">
                     <div class="col-5">{{ cutString(item.userId, 10) }}</div>
                     <div class="col-5">
-                      {{ item.voteScore }}
+                      {{ item.voteScore | amountForm }}
                     </div>
                     <div class="col-2">
                       {{
                         item.voteType == 1
-                          ? $t("community.proposalAgreeBtn")
-                          : $t("community.proposalDisagreeBtn")
+                          ? $t("nps.proposalAgreeBtn")
+                          : $t("nps.proposalDisagreeBtn")
                       }}
                     </div>
                   </div>
@@ -207,7 +207,7 @@
       v-model="modelVoteOpen"
       modal-class="custom-modal"
       size="lg"
-      :title="$t('community.propsalSureVote')"
+      :title="$t('nps.propsalSureVote')"
       centered
       hide-footer
     >
@@ -215,15 +215,15 @@
         <b-card class="mb-3">
           <div>
             {{
-              $t("community.propsalVoteRemind", [
+              $t("nps.propsalVoteRemind", [
                 type == "agree"
-                  ? $t("community.proposalAgreeBtn")
-                  : $t("community.proposalDisagreeBtn"),
+                  ? $t("nps.proposalAgreeBtn")
+                  : $t("nps.proposalDisagreeBtn"),
               ])
             }}
           </div>
           <div>
-            {{ $t("community.propsalVoteRight") }}:{{ totalScore
+            {{ $t("nps.propsalVoteRight") }}:{{ totalScore | amountForm
             }}{{ form.symbol }}
           </div>
         </b-card>
@@ -234,8 +234,8 @@
         >
           <b-spinner small type="grow" v-show="voteing" />
           {{  type == "agree"
-                  ? $t("community.proposalAgreeBtn")
-                  : $t("community.proposalDisagreeBtn"), }}
+                  ? $t("nps.proposalAgreeBtn")
+                  : $t("nps.proposalDisagreeBtn"), }}
         </button>
       </div>
     </b-modal>

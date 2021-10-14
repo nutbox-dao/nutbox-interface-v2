@@ -17,14 +17,14 @@
               :key="index"
               :class="activeTab === index ? 'active' : ''"
               @click="activeTab = index"
-              >{{ item }}</span
+              >{{ $t('nps.' + item) }}</span
             >
           </div>
         </div>
         <div class="c-btn-group">
           <button @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
             <i class="add-icon"></i>
-            <span>Create Proposal</span>
+            <span>{{ $t('nps.createProposal') }}</span>
           </button>
         </div>
       </div>
@@ -42,11 +42,10 @@
 
 <script>
 import ProposalItem from "../../components/Community/Proposal/ProposalItem.vue";
-import { handleApiErrCode, sleep } from "@/utils/helper";
+import { handleApiErrCode } from "@/utils/helper";
 import { getAllProposal } from "@/utils/web3/proposal";
 import { MAIN_COMMUNITY_ID } from "../../config";
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
-import { getAccounts } from "@/utils/web3/account";
 import Markdown from "@/components/Commen/Markdown";
 import { mapState } from 'vuex'
 
@@ -87,7 +86,7 @@ export default {
   data() {
     return {
       url: "",
-      tabOptions: ["ALL", "Voting", "Passed", "Rejected", "My proposal"],
+      tabOptions: ["all", "rolling", "pass", "unpass", "mine"],
       activeTab: 0,
     };
   },

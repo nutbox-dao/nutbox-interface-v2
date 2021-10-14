@@ -63,7 +63,7 @@
           ></b-alert>
         </div> -->
         <div class="w-20 pl-3 pr-3">
-          {{ $t("community.proposalEnd") + ":" + endTime }}
+          {{ $t("nps.proposalEnd") + ":" + endTime }}
         </div>
         <p
           :class="
@@ -82,9 +82,9 @@
         >
           {{
             proposalItem.status == 0
-              ? $t("community.propsalVoteStatusWaitStart")
+              ? $t("nps.propsalVoteStatusWaitStart")
               : proposalItem.status == 1
-              ? $t("community.propsalVoteStatusDoing")
+              ? $t("nps.propsalVoteStatusDoing")
               : proposalItem.proposalResult == 1
               ? $t("nps.pass")
               : $t("nps.unpass")

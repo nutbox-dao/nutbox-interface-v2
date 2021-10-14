@@ -1,133 +1,15 @@
 <template>
-  <!-- <div class="page-view-content">
-    <div class="mb-3 flex-between-center" style="height: 2.4rem">
-      <div
-        class="page-back-text-icon font20"
-        style="line-height: 1rem"
-        @click="$router.back()"
-      >
-        {{ $t("community.voteProposal") }}
-      </div>
-    </div>
-    <b-alert variant="danger" :show="!isValid">
-      {{
-        $t("community.validationWarning.basic.minScore", [
-          form.threshold,
-          form.symbol,
-        ])
-      }}</b-alert
-    >
-    <div class="mt-3">
-      <div class="community-info-card text-left">
-        <div class="title font-bold">
-          {{ $t("community.proposalConfigLabel") }}
-        </div>
-        <div class="custom-form pl-md-3">
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.proposalTitle')"
-            label-for="proposalTitleInput"
-          >
-            <b-form-input
-              id="proposalTitleInput"
-              required
-              :placeholder="$t('community.proposalTitleInput')"
-              v-model="proposal.title"
-            ></b-form-input>
-          </b-form-group>
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.currentBlock')"
-            label-for="proposalCurrent"
-          >
-            <b-form-input
-              id="proposalCurrent"
-              required
-              class="mb-2"
-              :value="blockNum"
-              readonly
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.proposalFirst_Block')"
-            label-for="proposalStart"
-            :description="startTime"
-          >
-            <b-form-input
-              id="proposalStart"
-              required
-              class="mb-2"
-              :placeholder="$t('community.proposalFirst_Block')"
-              v-model="proposal.first_block"
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.proposalEnd_Block')"
-            label-for="proposalEnd"
-            :description="endTime"
-          >
-            <b-form-input
-              id="proposalEnd"
-              required
-              class="mb-2"
-              :placeholder="$t('community.proposalEnd_Block')"
-              v-model="proposal.end_block"
-            ></b-form-input>
-          </b-form-group>
-
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.proposalBody')"
-            label-for="proposalBodyInput"
-          >
-            <b-form-textarea
-              id="proposalBodyInput"
-              required
-              :placeholder="$t('community.proposalBodyInput')"
-              rows="8"
-              v-model="proposal.body"
-            ></b-form-textarea>
-          </b-form-group>
-
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('community.proposalBodyPreview')"
-          >
-            <Markdown :body="proposal.body" />
-          </b-form-group>
-
-          <b-button
-            type="submit"
-            variant="primary"
-            @click="submitProposal"
-            :disabled="!isValid"
-            >{{ $t("community.commit") }}</b-button
-          >
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="container scroll-content">
     <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
     <div class="view-top-header">
       <div class="page-back-text-icon font20" @click="$router.back()">
-        Create Proposal
+        {{ $t('nps.createProposal') }}
       </div>
     </div>
     <div class="c-card mb-5">
       <b-alert variant="danger" :show="!isValid">
         {{
-          $t("community.validationWarning.basic.minScore", [
+          $t("nps.validationWarning.basic.minScore", [
             form.threshold,
             form.symbol,
           ])
@@ -142,7 +24,7 @@
           <b-form-input
             id="proposalTitleInput"
             required
-            :placeholder="$t('community.proposalTitleInput')"
+            :placeholder="$t('nps.proposalTitleInput')"
             v-model="proposal.title"
           ></b-form-input>
         </b-form-group>
@@ -162,7 +44,7 @@
         </b-form-group>
 
         <b-form-group
-          :label="$t('community.proposalFirst_Block')"
+          :label="$t('nps.proposalFirst_Block')"
           label-for="proposalStart"
           :description="startTime"
           label-class="text-left font16"
@@ -171,13 +53,13 @@
             id="proposalStart"
             required
             class="mb-2"
-            :placeholder="$t('community.proposalFirst_Block')"
+            :placeholder="$t('nps.proposalFirst_Block')"
             v-model="proposal.first_block"
           ></b-form-input>
         </b-form-group>
 
         <b-form-group
-          :label="$t('community.proposalEnd_Block')"
+          :label="$t('nps.proposalEnd_Block')"
           label-for="proposalEnd"
           :description="endTime"
           label-class="text-left font16"
@@ -186,27 +68,27 @@
             id="proposalEnd"
             required
             class="mb-2"
-            :placeholder="$t('community.proposalEnd_Block')"
+            :placeholder="$t('nps.proposalEnd_Block')"
             v-model="proposal.end_block"
           ></b-form-input>
         </b-form-group>
 
         <b-form-group
-          :label="$t('community.proposalBody')"
+          :label="$t('nps.proposalBody')"
           label-for="proposalBodyInput"
           label-class="text-left font16"
         >
           <b-form-textarea
             id="proposalBodyInput"
             required
-            :placeholder="$t('community.proposalBodyInput')"
+            :placeholder="$t('nps.proposalBodyInput')"
             rows="8"
             v-model="proposal.body"
           ></b-form-textarea>
         </b-form-group>
 
         <b-form-group
-          :label="$t('community.proposalBodyPreview')"
+          :label="$t('nps.proposalBodyPreview')"
           label-class="text-left font16"
         >
           <Markdown :body="proposal.body" class="text-left font16" />

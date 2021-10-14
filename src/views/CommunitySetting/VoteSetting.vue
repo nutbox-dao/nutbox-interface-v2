@@ -2,7 +2,7 @@
   <div class="container scroll-content d-flex flex-column">
     <div class="view-top-header flex-between-center">
       <div class="page-title-line font20 font-bold">
-        {{ $t("community.proposalConfigLabel") }}
+        {{ $t("nps.proposalConfigLabel") }}
       </div>
     </div>
     <div class="c-card mb-5">
@@ -10,7 +10,7 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="10"
-          :label="$t('community.remark')"
+          :label="$t('nps.remark')"
           label-for="remarkInput"
           label-class="d-flex align-items-center font16 font-bold "
         >
@@ -18,7 +18,7 @@
             <div class="c-input-group">
               <b-form-textarea
                 id="remark"
-                :placeholder="$t('community.remarkInput')"
+                :placeholder="$t('nps.remarkInput')"
                 v-model="form.remark"
                 rows="10"
                 max="2046"
@@ -29,7 +29,7 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="10"
-          :label="$t('community.proposalBodyPreview')"
+          :label="$t('nps.proposalBodyPreview')"
           label-for="remarkInput"
           label-class="d-flex align-items-center font16 font-bold "
         >
@@ -43,7 +43,7 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="5"
-          :label="$t('community.proposalThreshold')"
+          :label="$t('nps.proposalThreshold')"
           label-for="proposalThresholdInput"
           label-class="d-flex align-items-center font16 font-bold "
         >
@@ -51,7 +51,7 @@
             <div class="c-input-group">
               <b-form-input
                 id="proposalThreshold"
-                :placeholder="$t('community.proposalThresholdInput')"
+                :placeholder="$t('nps.proposalThresholdInput')"
                 v-model="form.threshold"
                 type="number"
               ></b-form-input>
@@ -62,7 +62,7 @@
         <b-form-group
           label-cols-md="2"
           content-cols-md="5"
-          :label="$t('community.proposalPassThreshold')"
+          :label="$t('nps.proposalPassThreshold')"
           label-for="proposalPassThresholdInput"
           label-class="d-flex align-items-center font16 font-bold"
         >
@@ -70,7 +70,7 @@
             <div class="c-input-group">
               <b-form-input
                 id="proposalPassThreshold"
-                :placeholder="$t('community.proposalPassThresholdInput')"
+                :placeholder="$t('nps.proposalPassThresholdInput')"
                 v-model="form.passthreshold"
                 type="number"
               ></b-form-input>
