@@ -787,25 +787,3 @@ export const monitorCommunity = async () => {
     monitorCommunityDevInfo(communityInfo),
   ]).catch(console.error);
 };
-
-/**
- * Get community's infos from backend
- * @param {*} update
- * @returns
- */
-export const getCommunityToken = async (address = null) => {
-  return new Promise(async (resolve, reject) => {
-    let token = null;
-    try {
-      token = await gct(address);
-
-      store.commit("web3/savetoken", token[0]);
-      resolve(token[0]);
-      return;
-    } catch (e) {
-      console.log("Get token info from backend fail", e);
-      store.commit("web3/saveToken", null);
-      reject(e);
-    }
-  });
-};

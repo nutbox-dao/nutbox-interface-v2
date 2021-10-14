@@ -1,12 +1,12 @@
 import store from "@/store";
-import { getNonce, getDistributionEras } from "./community";
+import { getNonce } from "./community";
 import {
   insertProposal,
   getAllProposal as gap,
   getProposalInfo
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasLimit } from "../../config";
+import { errCode } from "../../config";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
@@ -62,7 +62,7 @@ export const getAllProposal = async communityId => {
   return new Promise(async (resolve, reject) => {
     try {
       const proposals = await gap(communityId);
-
+      store.commit('web3/saveProposals', proposals)
       resolve(proposals);
     } catch (e) {
       console.log("Get all proposal fail", e);

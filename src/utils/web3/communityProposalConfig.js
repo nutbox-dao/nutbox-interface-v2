@@ -30,6 +30,7 @@ export const getMyCommunityProposalConfigInfo = async (stakingFactoryId) => {
         communityProposalConfigInfo &&
         communityProposalConfigInfo.length > 0
       ) {
+        store.commit('web3/saveCommunityProposalConfig', communityProposalConfigInfo[0])
         resolve(communityProposalConfigInfo[0]);
         return;
       } else {
@@ -107,7 +108,6 @@ export const getStrategies = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       let res = await gs();
-
       // update nonce in storage
       store.commit("web3/saveStrategies", res);
       resolve(res);

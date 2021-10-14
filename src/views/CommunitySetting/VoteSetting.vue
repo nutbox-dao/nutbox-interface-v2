@@ -133,15 +133,16 @@ import {
   getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 import { handleApiErrCode } from "@/utils/helper";
-import { getMyCommunityInfo, getCommunityToken } from "@/utils/web3/community";
+import { getCToken } from '@/utils/web3/asset'
+import { getMyCommunityInfo } from "@/utils/web3/community";
 import {
   BSC_CHAIN_ID,
   BSC_CHAIN_NAME,
   BSC_STRATEGIES_NAME,
-  BSC_STRATEGIES_PARAMS,
 } from "../../config";
 import Markdown from "@/components/Commen/Markdown";
 import { nanoid } from "nanoid";
+import { mapState } from 'vuex'
 
 export default {
   name: "VoteSetting",
@@ -180,6 +181,9 @@ export default {
         userId: "",
       },
     };
+  },
+  computed: {
+    ...mapState('web3', ['communityProposalConfig'])
   },
   methods: {
     async submitForm() {
@@ -233,9 +237,9 @@ export default {
       this.form.id = communityInfo.id;
       this.form.communityId = communityInfo.id;
 
-      const token = await getCommunityToken(communityInfo.ctoken);
+      const token = await getCToken(communityInfo.id);
 
-      let strategyParamsObj = JSON.parse(BSC_STRATEGIES_PARAMS);
+      let strategyParamsObj = {};
       strategyParamsObj.address = token.address;
       strategyParamsObj.symbol = token.symbol;
       strategyParamsObj.decimals = token.token_decimal;
@@ -254,13 +258,11 @@ export default {
       this.strategyControlItems.push(currentItem);
       this.form.network = BSC_CHAIN_ID;
       this.form.networkName = BSC_CHAIN_NAME;
-
-      const communityProposalConfigInfo =
-        await getMyCommunityProposalConfigInfo(communityInfo.id);
-
-      if (communityProposalConfigInfo) {
-        this.form = communityProposalConfigInfo;
-      }
+      this.form = this.communityProposalConfig ?? this.form
+      getMyCommunityProposalConfigInfo(communityInfo.id).then(res => {
+        this.form = res
+        this.strategyControlItems = JSON.parse(this.form.strategies);
+      });
 
       if (this.form.strategies)
         this.strategyControlItems = JSON.parse(this.form.strategies);

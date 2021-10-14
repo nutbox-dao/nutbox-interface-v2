@@ -48,7 +48,7 @@
               v-for="(item, index) of tabOptions"
               :key="index"
               :class="activeTab === index ? 'active' : ''"
-              @click="changeTab(index)"
+              @click="activeTab = index"
               >{{ item }}</span
             >
           </div>
@@ -80,60 +80,50 @@ import { MAIN_COMMUNITY_ID } from "../../config";
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
 import { getAccounts } from "@/utils/web3/account";
 import Markdown from "@/components/Commen/Markdown";
+import { mapState } from 'vuex'
+
 export default {
   name: "Community",
   components: {
     ProposalItem,
     Markdown,
   },
-  data() {
-    return {
-      url: "",
-      tempProposalItem: [],
-      proposalitems: [],
-      tabOptions: ["ALL", "Voting", "Passed", "Rejected", "My proposal"],
-      activeTab: 0,
-      form: {
-        communityId: "",
-        network: "",
-        networkName: "",
-        symbol: "",
-        skin: "",
-        admins: "",
-        members: "",
-        strategies: "",
-        threshold: 0,
-        validation: "basic",
-        onlyMembers: 0,
-        userId: "",
-        remark: "",
-      },
-    };
-  },
-  methods: {
-    changeTab(index) {
-      this.activeTab = index;
+  computed: {
+    ...mapState({
+      form: state => state.web3.communityProposalConfig,
+      proposals: state => state.web3.proposals,
+      account: state => state.web3.account
+    }),
+    // status: 0 unstart,1 voting, 2 end
+    // proposalresult: 0 unstart, 1 pass, 2 unpass.
+    proposalitems(){
       if (this.activeTab == 0) {
-        this.proposalitems = this.tempProposalItem;
+        return this.proposals;
       } else if (this.activeTab == 1) {
-        this.proposalitems = this.tempProposalItem.filter((t) => t.status == 1);
+        return this.proposals.filter((t) => t.status == 1);
       } else if (this.activeTab == 2) {
-        this.proposalitems = this.tempProposalItem.filter(
+        return this.proposals.filter(
           (t) => t.proposalResult == 1
         );
       } else if (this.activeTab == 3) {
-        this.proposalitems = this.tempProposalItem.filter(
+        return this.proposals.filter(
           (t) => t.proposalResult == 2
         );
       } else if (this.activeTab == 4) {
-        this.proposalitems = this.tempProposalItem.filter(
-          (t) => t.userId == this.userId
+        return this.proposals.filter(
+          (t) => t.userId == this.account
         );
       }
-    },
+    }
+  },
+  data() {
+    return {
+      url: "",
+      tabOptions: ["ALL", "Voting", "Passed", "Rejected", "My proposal"],
+      activeTab: 0,
+    };
   },
   async mounted() {
-    this.userId = await getAccounts();
     this.url =
       this.$router.currentRoute.params.key || this.$route.query.id
         ? "/specify"
@@ -146,15 +136,9 @@ export default {
       : MAIN_COMMUNITY_ID;
 
     this.communityId = this.id;
-    this.form.communityId = this.communityId;
     try {
-      this.tempProposalItem = await getAllProposal(this.communityId);
-      this.proposalitems = this.tempProposalItem;
-
-      const communityProposalConfigInfo =
-        await getMyCommunityProposalConfigInfo(this.form.communityId);
-
-      this.form = communityProposalConfigInfo;
+      getAllProposal(this.communityId);
+      getMyCommunityProposalConfigInfo(this.communityId);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);

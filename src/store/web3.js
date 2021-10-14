@@ -50,6 +50,10 @@ export default {
     loadingCommunity: true,
     loadingCtokenBalances: true,
 
+    // proposal
+    proposals: null,
+    communityProposalConfig: null
+
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -173,6 +177,12 @@ export default {
     },
     saveCtokenBalances: (state, ctokenBalances) => {
       state.ctokenBalances = ctokenBalances
+    },
+    saveProposals: (state, proposals) => {
+      state.proposals = proposals
+    },
+    saveCommunityProposalConfig: (state, communityProposalConfig) => {
+      state.communityProposalConfig = communityProposalConfig
     }
   },
   getters: {
