@@ -195,4 +195,5 @@ export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
   multicallAddress: MultiAddress,
+  interval: 3000
 };

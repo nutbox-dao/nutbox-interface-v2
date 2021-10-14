@@ -296,6 +296,7 @@ module.exports = {
     },
     remarkInput: "请填写提案系统简介",
     remark: "简介",
+    markdownTip: '你可以使用markdown格式来设置内容'
   },
   error: {
     error: "错误",

@@ -25,6 +25,7 @@
               ></b-form-textarea>
             </div>
           </div>
+        <span>{{ $t('nps.markdownTip') }}</span>
         </b-form-group>
         <b-form-group
           label-cols-md="2"

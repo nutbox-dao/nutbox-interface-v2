@@ -296,6 +296,7 @@ module.exports = {
     },
     remarkInput: "Please input intro",
     remark: "Intro",
+    markdownTip: 'Your use markdown format.'
   },
   error: {
     error: "Error",
