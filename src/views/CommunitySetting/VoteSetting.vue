@@ -9,7 +9,7 @@
       <div class="custom-form text-left">
         <b-form-group
           label-cols-md="2"
-          content-cols-md="5"
+          content-cols-md="10"
           :label="$t('community.remark')"
           label-for="remarkInput"
           label-class="d-flex align-items-center font16 font-bold "
@@ -20,7 +20,7 @@
                 id="remark"
                 :placeholder="$t('community.remarkInput')"
                 v-model="form.remark"
-                rows="4"
+                rows="10"
                 max="2046"
               ></b-form-textarea>
             </div>
@@ -28,7 +28,7 @@
         </b-form-group>
         <b-form-group
           label-cols-md="2"
-          content-cols-md="5"
+          content-cols-md="10"
           :label="$t('community.proposalBodyPreview')"
           label-for="remarkInput"
           label-class="d-flex align-items-center font16 font-bold "

@@ -1,42 +1,10 @@
 <template>
-  <!--  <div class="page-view-content nps">
-    <div class="text-left">
-      <b-alert show variant="info">简要说明</b-alert>
-    </div>
-    <div class="text-left">
-      <label
-        ><h3>{{ $t("community.voteProposal") }}</h3></label
-      >
-      <b-button
-        variant="warning"
-        class="createproposal"
-        size="sm"
-        @click="
-          $router.push(
-            `/community/${$router.currentRoute.params.key}/proposal-create`
-          )
-        "
-      >
-        {{ $t("community.createProposal") }}</b-button
-      >
-    </div>
-
-    <ProposalItem
-      v-for="(proposalItem, index) in proposalitems"
-      :key="proposalItem.id"
-      :proposalItem="proposalItem"
-      :index="index"
-    ></ProposalItem>
-  </div>
- -->
-
   <div class="page-view-content nps">
     <div class="container scroll-content">
       <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
       <div class="view-top-header pb-0">
         <div class="tip-box">
-          <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
-          <div style="text-align: left; margin-top: 1rem">
+          <div style="text-align: left">
             <Markdown :body="form.remark" />
           </div>
         </div>

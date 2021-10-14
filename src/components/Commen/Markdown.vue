@@ -32,7 +32,7 @@ export default {
 
 <style  lang="scss">
 .markdown-body {
-  font-size: 22px;
+  font-size: .8rem;
   line-height: 1.4;
   word-wrap: break-word;
 }
