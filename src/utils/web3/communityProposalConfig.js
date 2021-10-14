@@ -99,7 +99,7 @@ export const completeCommunityProposalConfigInfo = async (form, type) => {
 };
 
 /**
- * Create or update communityProposalConfig info to backend
+ * Get Strategies from backend
  * @param {*} form
  * @param {*} type 'create' / 'edit'
  */
@@ -112,16 +112,15 @@ export const getStrategies = async () => {
       store.commit("web3/saveStrategies", res);
       resolve(res);
     } catch (e) {
-      console.log("Insert communityProposalConfig info failed", e);
+      console.log("Get Strategies info failed", e);
       reject(e);
     }
   });
 };
 
 /**
- * Create or update communityProposalConfig info to backend
- * @param {*} form
- * @param {*} type 'create' / 'edit'
+ * Get all scores from backend
+ * @param {*} params
  */
 export const getScore = async (params) => {
   return new Promise(async (resolve, reject) => {
@@ -137,16 +136,15 @@ export const getScore = async (params) => {
         resolve(totalScore);
       }
     } catch (e) {
-      console.log("Insert communityProposalConfig info failed", e);
+      console.log("Get score info failed", e);
       reject(e);
     }
   });
 };
 
 /**
- * Create or update communityProposalConfig info to backend
- * @param {*} form
- * @param {*} type 'create' / 'edit'
+ *  Get score from backend
+ * @param {*} params
  */
 export const getScores = async (params) => {
   return new Promise(async (resolve, reject) => {
@@ -159,7 +157,7 @@ export const getScores = async (params) => {
         resolve(totalScore);
       }
     } catch (e) {
-      console.log("Insert communityProposalConfig info failed", e);
+      console.log("Get all score  failed", e);
       reject(e);
     }
   });
