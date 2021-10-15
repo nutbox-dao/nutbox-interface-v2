@@ -12,7 +12,7 @@
           content-cols-md="10"
           :label="$t('nps.remark')"
           label-for="remarkInput"
-          label-class="d-flex align-items-center font16 font-bold "
+          label-class="d-flex font16 font-bold "
         >
           <div class="d-flex">
             <div class="c-input-group">
@@ -32,7 +32,7 @@
           content-cols-md="10"
           :label="$t('nps.proposalBodyPreview')"
           label-for="remarkInput"
-          label-class="d-flex align-items-center font16 font-bold "
+          label-class="d-flex font16 font-bold "
         >
           <div class="d-flex">
             <div class="c-input-group p-3" style="min-height: 2.4rem">
@@ -75,7 +75,7 @@
                 v-model="form.passthreshold"
                 type="number"
               ></b-form-input>
-               <span class="c-append">{{ form.symbol }}</span>
+               <span class="c-append">%</span>
             </div>
           </div>
         </b-form-group>
