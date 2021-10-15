@@ -21,7 +21,7 @@
       <p class="font16">{{ $t("tip.loading") }}</p>
     </div>
     <template v-else>
-      <div class="empty-bg" v-if="filterCommunities && filterCommunities.length === 0">
+      <div class="empty-bg" v-if="!filterCommunities || filterCommunities.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>{{ $t("tip.noCommunities") }}</p>
       </div>
