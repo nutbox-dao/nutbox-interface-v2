@@ -6,9 +6,9 @@ export const DEBUG = false;
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
 
-//export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "https://v2-api-shibuya.nutbox.app"
 
-export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -146,15 +146,15 @@ export const VALIDATOR_CHAINID_TO_NAME = {
   3: "kusama",
 };
 
-export const GasLimit = 29900000;
+export const GasLimit = 10000000;
 
 // Register by nutbox
 export const OfficialAssets = [
   {
     name: "Walnut",
-    address: "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5",
+    address: "0xC21Aab50E30Ed43877526ec6984C29F7758A3Df0",
     symbol: "WNUT",
-    asset: "0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64",
+    asset: "0x2bce06de31b1b7c6e0384188949610c6e498732c56057d8248137d12ffcb0a62",
     contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",
@@ -189,8 +189,8 @@ export const OfficialAssets = [
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
+export const MultiAddress = "0x091CB6934957E4F948fE1bA57eF9eafea33a10c2";
+export const NutAddress = "0xC21Aab50E30Ed43877526ec6984C29F7758A3Df0";
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
