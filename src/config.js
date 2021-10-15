@@ -146,7 +146,7 @@ export const VALIDATOR_CHAINID_TO_NAME = {
   3: "kusama",
 };
 
-export const GasLimit = 29900000;
+export const GasLimit = 10000000;
 
 // Register by nutbox
 export const OfficialAssets = [

@@ -261,8 +261,10 @@ export default {
       this.form.networkName = BSC_CHAIN_NAME;
       this.form = this.communityProposalConfig ?? this.form
       getMyCommunityProposalConfigInfo(communityInfo.id).then(res => {
-        this.form = res
-        this.strategyControlItems = JSON.parse(this.form.strategies);
+        if (res){
+          this.form = res
+          this.strategyControlItems = JSON.parse(this.form.strategies);
+        }
       });
 
       if (this.form.strategies)

@@ -2,6 +2,11 @@
   <div class="page-view-content nps">
     <div class="container scroll-content">
       <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
+    <div class="loading-bg" v-if="loading">
+      <img src="~@/static/images/loading.gif" alt="" />
+      <p class="font16">{{ $t("tip.loading") }}</p>
+    </div>
+    <template v-else>
       <div class="view-top-header pb-0">
         <div class="tip-box">
           <div style="text-align: left">
@@ -28,7 +33,12 @@
           </button>
         </div>
       </div>
-      <div class="mb-5">
+
+      <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>{{ $t("tip.noCommunities") }}</p>
+      </div>
+      <div class="mb-5" v-else>
         <ProposalItem
           v-for="(proposalItem, index) in proposalitems"
           :key="proposalItem.id"
@@ -36,6 +46,7 @@
           :index="index"
         ></ProposalItem>
       </div>
+    </template>
     </div>
   </div>
 </template>
@@ -64,6 +75,7 @@ export default {
     // status: 0 unstart,1 voting, 2 end
     // proposalresult: 0 unstart, 1 pass, 2 unpass.
     proposalitems(){
+      if (!this.proposals) return []
       if (this.activeTab == 0) {
         return this.proposals;
       } else if (this.activeTab == 1) {
@@ -88,9 +100,11 @@ export default {
       url: "",
       tabOptions: ["all", "rolling", "pass", "unpass", "mine"],
       activeTab: 0,
+      loading: false
     };
   },
   async mounted() {
+    this.loading = true
     this.url =
       this.$router.currentRoute.params.key || this.$route.query.id
         ? "/specify"
@@ -111,6 +125,7 @@ export default {
         this.$bvToast.toast(info, params);
       });
     }
+    this.loading = false
   },
 };
 </script>
