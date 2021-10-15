@@ -12,13 +12,13 @@ import { isMobile } from '@/utils/commen/util'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
+import { getAllCommunities } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import {
   loadAccounts as loadPolkadotAccounts
 } from '@/utils/polkadot/account'
-import { updateAllTokensFromBackend } from '@/utils/web3/asset'
+
 export default {
   computed: {
     ...mapState('polkadot', [

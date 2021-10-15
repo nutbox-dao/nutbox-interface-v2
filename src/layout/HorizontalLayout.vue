@@ -104,6 +104,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import { setupNetwork } from '@/utils/web3/web3'
 import { LOCALE_KEY } from "@/config";
+import { getMyStakingFactory } from '@/utils/web3/community'
 
 export default {
   name: 'VerticalLayout',
@@ -193,8 +194,9 @@ export default {
       }
     }
   },
-  watch: {
-  }
+  mounted () {
+    getMyStakingFactory();
+  },
 }
 </script>
 

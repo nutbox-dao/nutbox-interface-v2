@@ -345,7 +345,6 @@ export default {
     ...mapActions("steem", ["setVestsToSteem"]),
     ...mapActions("hive", ["setVestsToHive"]),
     async gotoOfficial() {
-      getAllValidators("polkadot");
       // test()
       // window.open('https://nutbox.io', '_blank')
     },
