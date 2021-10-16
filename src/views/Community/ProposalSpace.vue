@@ -10,7 +10,7 @@
       <div class="view-top-header pb-0">
         <div class="tip-box">
           <div style="text-align: left">
-            <Markdown :body="form.remark" />
+            <Markdown :body="form ? form.remark : ''" />
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
 
       <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
         <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t("tip.noCommunities") }}</p>
+        <p>{{ $t("nps.noProposals") }}</p>
       </div>
       <div class="mb-5" v-else>
         <ProposalItem

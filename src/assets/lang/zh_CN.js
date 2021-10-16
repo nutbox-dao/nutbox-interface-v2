@@ -256,6 +256,7 @@ module.exports = {
     proposalConfigLabel: "编辑提案配置",
     voteProposal: "提案投票",
     createProposal: "创建提案",
+    noProposals: '还没有创建提案',
     proposalTitle: "标题",
     proposalTitleInput: "请填写提案标题",
     proposalStart: "开始时间",

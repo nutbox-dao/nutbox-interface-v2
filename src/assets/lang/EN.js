@@ -256,6 +256,7 @@ module.exports = {
     proposalConfigLabel: "Proposal Config",
     voteProposal: "Vote Proposal",
     createProposal: "Create Proposal",
+    noProposals: 'No proposals',
     proposalTitle: "Title",
     proposalTitleInput: "Please input proposal title",
     proposalStart: "Start time",
