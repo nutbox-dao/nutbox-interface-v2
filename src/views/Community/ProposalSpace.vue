@@ -119,13 +119,14 @@ export default {
     this.communityId = this.id;
     try {
       getAllProposal(this.communityId);
-      getMyCommunityProposalConfigInfo(this.communityId);
+      getMyCommunityProposalConfigInfo(this.communityId).then(console.log);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
       });
+    }finally{
+      this.loading = false
     }
-    this.loading = false
   },
 };
 </script>
