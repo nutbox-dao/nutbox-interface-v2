@@ -1,202 +1,88 @@
 <template>
   <div class="container scroll-content">
-    <div class="mb-3 flex-between-center" style="height: 2.4rem">
-      <div
-        class="page-back-text-icon font20"
-        style="line-height: 1rem"
-        @click="$router.back()"
-      >
+    <div class="view-top-header">
+      <div class="page-back-text-icon font20" style="line-height: 1rem" @click="$router.back()">
         {{ $t("nps.voteProposal") }}
       </div>
     </div>
-
-    <div class="mt-3">
-      <div class="community-info-card row text-left">
-        <div class="custom-form col-8">
-          <div>
-            <h3>{{ proposal.title }}</h3>
+    <div class="row text-left">
+      <div class="custom-form col-md-8 mb-5">
+        <div class="font32 font-bold my-2">{{ proposal.title }}</div>
+        <div class="flag"
+             :class="
+             proposal.status == 0
+              ? 'propsalVoteStatusWaitStart'
+              : proposal.status == 1
+              ? 'propsalVoteStatusDoing'
+              : 'propsalVoteStatusEnd'">
+          {{
+            proposal.status == 0
+              ? $t("nps.propsalVoteStatusWaitStart")
+              : proposal.status == 1
+              ? $t("nps.propsalVoteStatusDoing")
+              : $t("nps.propsalVoteStatusEnd")
+          }}
+        </div>
+        <Markdown :body="proposal.body" />
+        <div class="row mt-4" v-show="!isVoted && proposal.status == 1">
+          <div class="col-6 text-right">
+            <button class="primary-btn w-50"
+                    @click="onVote('agree')"
+                    :disabled="!isValid || isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
           </div>
-
-          <div><Markdown :body="proposal.body" /></div>
-          <div
-            style="margin-top: 10px"
-            class="row"
-            v-show="!isVoted && proposal.status == 1"
-          >
-            <div class="col-6">
-              <b-button
-                type="submit"
-                variant="primary"
-                @click="onVote('agree')"
-                :disabled="!isValid || isVoted"
-                >{{ $t("nps.proposalAgreeBtn") }}</b-button
-              >
+          <div class="col-6">
+            <button class="primary-btn w-50"
+                    @click="onVote('disagree')"
+                    :disabled="!isValid || isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="c-card">
+          <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
+          <div class="c-card-content">
+            <div class="flex-between-center">
+              <span class="text-grey-light">{{ $t("nps.proposalFirst_Block") }}</span>
+              <span>{{ proposal.first_block }}</span>
             </div>
-            <div class="col-6">
-              <b-button
-                type="submit"
-                variant="primary"
-                @click="onVote('disagree')"
-                :disabled="!isValid || isVoted"
-                >{{ $t("nps.proposalDisagreeBtn") }}</b-button
-              >
+            <div class="flex-between-center">
+              <span class="text-grey-light">{{ $t("nps.proposalEnd_Block") }}</span>
+              <span>{{ proposal.end_block }}</span>
+            </div>
+            <div class="flex-between-center">
+              <span class="text-grey-light">{{ $t("nps.proposalStart") }}</span>
+              <span>{{ formatDate(proposal.start) }}</span>
+            </div>
+            <div class="flex-between-center">
+              <span class="text-grey-light">{{ $t("nps.proposalEnd") }}</span>
+              <span>{{ formatDate(proposal.end) }}</span>
             </div>
           </div>
         </div>
-        <div class="col-4">
-          <div style="margin-top: 10px">
-            <b-card no-body>
-              <template v-slot:header>
-                <h4 class="mb-0">{{ $t("nps.proposalInfo") }}</h4>
-              </template>
-
-              <b-list-group flush>
-                <b-list-group-item
-                  ><div class="row">
-                    <div class="col-6">
-                      {{ $t("nps.proposalFirst_Block") }}
-                    </div>
-                    <div class="col-6">
-                      {{ proposal.first_block }}
-                    </div>
-                  </div>
-                </b-list-group-item>
-                <b-list-group-item
-                  ><div class="row">
-                    <div class="col-6">
-                      {{ $t("nps.proposalEnd_Block") }}
-                    </div>
-                    <div class="col-6">
-                      {{ proposal.end_block }}
-                    </div>
-                  </div>
-                </b-list-group-item>
-                <b-list-group-item
-                  ><div class="row">
-                    <div class="col-6">
-                      {{ $t("nps.proposalStart") }}
-                    </div>
-                    <div class="col-6">{{ formatDate(proposal.start) }}</div>
-                  </div>
-                </b-list-group-item>
-                <b-list-group-item
-                  ><div class="row">
-                    <div class="col-6">
-                      {{ $t("nps.proposalEnd") }}
-                    </div>
-                    <div class="col-6">{{ formatDate(proposal.end) }}</div>
-                  </div>
-                </b-list-group-item>
-                <b-list-group-item
-                  ><div class="row">
-                    <div class="col-6">
-                      {{ $t("nps.proposalStatus") }}
-                    </div>
-                    <div class="col-6">
-                      {{
-                        proposal.status == 0
-                          ? $t("nps.propsalVoteStatusWaitStart")
-                          : proposal.status == 1
-                          ? $t("nps.propsalVoteStatusDoing")
-                          : $t("nps.propsalVoteStatusEnd")
-                      }}
-                    </div>
-                  </div>
-                </b-list-group-item>
-              </b-list-group>
-            </b-card>
-          </div>
-
-          <div style="margin-top: 10px">
-            <b-card no-body>
-              <template v-slot:header>
-                <h4 class="mb-0">{{ $t("nps.proposalVoteResult") }}</h4>
-              </template>
-
-              <b-list-group flush>
-                <b-list-group-item>
-                  <div class="row">
-                    <div class="col-3">
-                      {{ $t("nps.proposalAgreeBtn") }}
-                    </div>
-                    <div class="col-6">
-                      <b-progress
-                        :value="voteAgreeTotalScoreRate"
-                        variant="success"
-                        :striped="true"
-                        class="w-100"
-                      ></b-progress>
-                    </div>
-                    <div class="col-3">
-                      {{ voteAgreeTotalScore | amountForm }}
-                    </div>
-                  </div>
-                </b-list-group-item>
-
-                <b-list-group-item>
-                  <div class="row">
-                    <div class="col-3">
-                      {{ $t("nps.proposalDisagreeBtn") }}
-                    </div>
-                    <div class="col-6">
-                      <b-progress
-                        :value="voteDisagreeTotalScoreRate"
-                        variant="danger"
-                        :striped="true"
-                        class="w-100"
-                      ></b-progress>
-                    </div>
-                    <div class="col-3">
-                      {{ voteDisagreeTotalScore | amountForm }}
-                    </div>
-                  </div></b-list-group-item
-                >
-                <b-list-group-item v-show="proposal.status == 2">
-                  <div class="row">
-                    <div class="col-4">
-                      {{ $t("nps.proposalVoteResult") }}
-                    </div>
-                    <div class="col-8">
-                      {{
-                        proposal.status == 0
-                          ? $t("nps.propsalVoteStatusWaitStart")
-                          : proposal.status == 1
-                          ? $t("nps.propsalVoteStatusDoing")
-                          : proposal.proposalResult == 1
-                          ? $t("nps.pass")
-                          : $t("nps.unpass")
-                      }}
-                    </div>
-                  </div></b-list-group-item
-                >
-              </b-list-group>
-            </b-card>
-          </div>
-
-          <div style="margin-top: 10px">
-            <b-card no-body>
-              <template v-slot:header>
-                <h4 class="mb-0">{{ $t("nps.proposalVoteNum") }}</h4>
-              </template>
-
-              <b-list-group flush>
-                <b-list-group-item v-for="item in voteItems" :key="item.id"
-                  ><div class="row">
-                    <div class="col-5">{{ cutString(item.userId, 10) }}</div>
-                    <div class="col-5">
-                      {{ item.voteScore | amountForm }}
-                    </div>
-                    <div class="col-2">
-                      {{
-                        item.voteType == 1
-                          ? $t("nps.proposalAgreeBtn")
-                          : $t("nps.proposalDisagreeBtn")
-                      }}
-                    </div>
-                  </div>
-                </b-list-group-item>
-              </b-list-group>
-            </b-card>
+        <div class="c-card">
+          <div class="c-card-header font20">{{ $t("nps.proposalVoteResult") }}</div>
+          <div class="c-card-content">
+            <div class="progress-box">
+              <div class="flex-between-center">
+                <span>{{ $t("nps.proposalAgreeBtn") }}</span>
+                <span>{{ voteAgreeTotalScore | amountForm }} (0%)</span>
+              </div>
+              <b-progress :value="voteAgreeTotalScoreRate"
+                          height=".5rem"
+                          variant="success"
+                          class="w-100 my-1"></b-progress>
+            </div>
+            <div class="progress-box">
+              <div class="flex-between-center">
+                <span>{{ $t("nps.proposalDisagreeBtn") }}</span>
+                <span>{{ voteDisagreeTotalScore | amountForm }} (0%)</span>
+              </div>
+              <b-progress :value="voteDisagreeTotalScoreRate"
+                          height=".5rem"
+                          variant="danger"
+                          class="w-100 my-1"></b-progress>
+            </div>
+            <button class="primary-btn rounded-pill w-75">Download Report</button>
           </div>
         </div>
       </div>
@@ -524,64 +410,47 @@ export default {
 };
 </script>
 <style  lang="scss" scoped>
-.community-info-card {
-  @include card(1.6rem 1.2rem, white, none, auto);
-  @include single-color-bg(0.3rem 1rem);
-  background-position: left 1.6rem;
-  .title {
-    font-size: 1rem;
-    line-height: 1rem;
-    margin-bottom: 2rem;
+.c-card {
+  @include card(0, white, none, fit-conent);
+  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: .6rem;
+  .c-card-header {
+    padding: 1.6rem 1.2rem .8rem;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(246, 247, 249, 1));
+    border-radius: 1.4rem 1.4rem 0 0;
+  }
+  .c-card-content {
+    padding: 1.2rem;
+    border-radius: 0 0 1.4rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
   }
 }
-@import "src/static/css/form";
-.cover-preview {
-  width: 100%;
+.flag {
+  font-size: .7rem;
+  padding: .2rem .3rem;
+  line-height: .7rem;
+  width: fit-content;
+  margin-bottom: .5rem;
 }
-.edit-mask {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  span {
-    position: absolute;
-    display: inline-block;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1rem;
-    text-align: center;
-  }
+.propsalVoteStatusWaitStart {
+  background: rgba(255, 219, 38, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 219, 38, 0.3);
+  color: var(--warning);
 }
-.close-icon {
-  position: absolute;
-  right: -1.4rem;
-  top: -1.4rem;
-  @include icon(1.4rem, 1.4rem);
-  background-image: url("~@/static/images/circle-close.png");
+.propsalVoteStatusEnd {
+  background: rgba(255, 91, 77, 0.051);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 91, 77, 0.3);
+  color: var(--error);
 }
-.cropper-container {
-  height: 500px;
-  max-height: 100%;
-}
-.crop-btn-group {
-  padding: 1.2rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  button {
-    box-shadow: none;
-    width: fit-content;
-    padding: 0 2rem;
-  }
-}
-@media (max-width: 576px) {
-  .close-icon {
-    top: auto;
-    bottom: -2rem;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+
+.propsalVoteStatusDoing {
+  background: #408fff0d;
+  border-radius: 8px;
+  border: 1px solid #408fff4d;
+  color: var(--link);
 }
 </style>
