@@ -11,16 +11,20 @@
         <div class="flag"
              :class="
              proposal.status == 0
-              ? 'propsalVoteStatusWaitStart'
+              ? 'proposal-pending'
               : proposal.status == 1
-              ? 'propsalVoteStatusDoing'
-              : 'propsalVoteStatusEnd'">
+              ? 'proposal-rolling'
+              : proposal.proposalResult === 1
+              ? 'proposal-pass'
+              : 'proposal-unpass'">
           {{
             proposal.status == 0
               ? $t("nps.propsalVoteStatusWaitStart")
               : proposal.status == 1
               ? $t("nps.propsalVoteStatusDoing")
-              : $t("nps.propsalVoteStatusEnd")
+              : proposal.proposalResult === 1
+              ? $t("nps.pass")
+              : $t("nps.unpass")
           }}
         </div>
         <Markdown :body="proposal.body" />
@@ -65,7 +69,7 @@
             <div class="progress-box">
               <div class="flex-between-center">
                 <span>{{ $t("nps.proposalAgreeBtn") }}</span>
-                <span>{{ voteAgreeTotalScore | amountForm }} (0%)</span>
+                <span>{{ voteAgreeTotalScore | amountForm }} ({{ voteAgreeTotalScoreRate.toFixed(2) }}%)</span>
               </div>
               <b-progress :value="voteAgreeTotalScoreRate"
                           height=".5rem"
@@ -75,14 +79,24 @@
             <div class="progress-box">
               <div class="flex-between-center">
                 <span>{{ $t("nps.proposalDisagreeBtn") }}</span>
-                <span>{{ voteDisagreeTotalScore | amountForm }} (0%)</span>
+                <span>{{ voteDisagreeTotalScore | amountForm }} ({{ voteDisagreeTotalScoreRate.toFixed(2) }}%)</span>
               </div>
               <b-progress :value="voteDisagreeTotalScoreRate"
                           height=".5rem"
                           variant="danger"
                           class="w-100 my-1"></b-progress>
             </div>
-            <button class="primary-btn rounded-pill w-75">Download Report</button>
+            <div class="progress-box">
+              <div class="flex-between-center">
+                <span>{{ $t("nps.proposalVoteResult") }}</span>
+                <span>{{ voteAgreeTotalScore - voteDisagreeTotalScore | amountForm }}</span>
+              </div>
+              <b-progress :value="voteAgreeTotalScoreRate - voteDisagreeTotalScoreRate"
+                          height=".5rem"
+                          variant="info"
+                          class="w-100 my-1"></b-progress>
+            </div>
+            <button @click="download" :disabled="loading" class="primary-btn rounded-pill w-75">{{ $t('nps.downloadReport') }}</button>
           </div>
         </div>
       </div>
@@ -116,7 +130,7 @@
         <button
           class="primary-btn"
           @click="ConfirmVote"
-          :disabled="!isValid || isVoted || voteing"
+          :disabled="!isValid || isVoted || voteing || loading"
         >
           <b-spinner small type="grow" v-show="voteing" />
           {{  type == "agree"
@@ -129,17 +143,13 @@
 </template>
 
 <script>
-import { handleApiErrCode, sleep } from "@/utils/helper";
-import BSCAccount from "@/components/Accounts/BSCAccount";
-import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
-import SteemAccount from "@/components/Accounts/SteemAccount";
-import HiveAccount from "@/components/Accounts/HiveAccount";
+import { handleApiErrCode } from "@/utils/helper";
+import CsvExportor from "csv-exportor";
 import { getProposal } from "@/utils/web3/proposal";
 import { completeVote, getAllVote } from "@/utils/web3/vote";
 import { formatDate as fd } from "@/utils/commen/util";
 import Markdown from "@/components/Commen/Markdown";
-import { getAccounts } from "@/utils/web3/account";
-
+import { mapState } from "vuex";
 import {
   getScores,
   getScore,
@@ -148,10 +158,6 @@ import {
 export default {
   name: "Proposal",
   components: {
-    BSCAccount,
-    PolkadotAccount,
-    SteemAccount,
-    HiveAccount,
     Markdown,
   },
   data() {
@@ -204,6 +210,7 @@ export default {
       },
       voteing: false,
       isVoted: true,
+      loading: false,
       voteItems: [],
       currentUserId: "",
       voteTotalScore: 0,
@@ -212,6 +219,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('web3', ['account']),
     voteAgreeTotalScoreRate() {
       return this.voteTotalScore == 0
         ? 0
@@ -347,31 +355,6 @@ export default {
           this.voteTotalScore += vote.voteScore;
         });
 
-        /*  getScores(params).then((res) => {
-          const totalScores = res;
-
-          totalScores.forEach((value, index) => {
-            let tempVoteType = 0;
-            let tempVoteScore = 0;
-            this.voteItems.forEach((vote, voteIndex) => {
-              if (value[vote.userId]) {
-                vote.voteScore = value[vote.userId];
-
-                tempVoteScore = vote.voteScore;
-                tempVoteType = vote.voteType;
-              }
-            });
-
-            if (tempVoteType == 1) {
-              this.voteAgreeTotalScore += tempVoteScore;
-            } else {
-              this.voteDisagreeTotalScore += tempVoteScore;
-            }
-            this.voteTotalScore += tempVoteScore;
-          });
-        });
- */
-
         if (list.length > 0) {
           this.isVoted = true;
         } else {
@@ -381,6 +364,30 @@ export default {
         this.isVoted = false;
       }
     },
+    download() {
+      console.log(this.voteItems);
+      const header = ['communityId', 'id', 'created', 'userId', 'voteScore', 'voteType']
+      try{
+        CsvExportor.downloadCsv(
+          this.voteItems.map(item => ({
+            communityId: item.communityId,
+            id: item.id,
+            created: item.created,
+            userId: item.userId,
+            voteScore: item.voteScore,
+            agree: item.voteType === 1
+          })),
+          {header},
+          'Proposal-result-of-' + this.proposal.title + '.csv'
+        )
+        this.$bvToast.toast(this.$t('nps.exportOk'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+      }catch(e) {
+        console.log(2345,e);
+      }
+    }
   },
   async mounted() {
     this.id = this.$router.currentRoute.params.key
@@ -388,7 +395,8 @@ export default {
       : this.$route.query.proposalId;
 
     try {
-      this.currentUserId = await getAccounts();
+      this.loading = true;
+      this.currentUserId = this.account
 
       var proposalList = await getProposal(this.id);
 
@@ -401,6 +409,7 @@ export default {
       this.form = communityProposalConfigInfo;
 
       this.strategyControlItems = JSON.parse(this.form.strategies);
+      this.loading = false;
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
@@ -433,24 +442,5 @@ export default {
   line-height: .7rem;
   width: fit-content;
   margin-bottom: .5rem;
-}
-.propsalVoteStatusWaitStart {
-  background: rgba(255, 219, 38, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 219, 38, 0.3);
-  color: var(--warning);
-}
-.propsalVoteStatusEnd {
-  background: rgba(255, 91, 77, 0.051);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 91, 77, 0.3);
-  color: var(--error);
-}
-
-.propsalVoteStatusDoing {
-  background: #408fff0d;
-  border-radius: 8px;
-  border: 1px solid #408fff4d;
-  color: var(--link);
 }
 </style>

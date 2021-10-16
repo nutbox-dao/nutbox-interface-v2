@@ -95,7 +95,7 @@ module.exports = {
     bondAndNominate: " Bonding and Vote",
     cancel: "Cancel",
     bondInfo1: "Please retain some amount of cryptocurrencies for further transaction fees",
-    bondInfo2: "The minimum bonding amount is .",
+    bondInfo2: "The minimum bonding amount is {min} {symbol}.",
     bondInfo3: "The unbinding process will take {days} day.",
     confirm: "Confirm",
     cancelValidorsInfo: "Please cancel at least {} nodes you voted, before you vote other nodes",
@@ -277,9 +277,9 @@ module.exports = {
     proposalPassThresholdInput: "Please input pass threshold",
     proposalValidation: "Validation",
     proposalValidationInput: "Please input validation",
-    proposalAgreeBtn: "agree",
-    proposalDisagreeBtn: "disagree",
-    propsalSureVote: "Are sure",
+    proposalAgreeBtn: "Agree",
+    proposalDisagreeBtn: "Disagree",
+    propsalSureVote: "Are you sure",
     propsalVoteRight: "Your voting rights",
     propsalVoteRemind: "Are you sure you {0}?",
     propsalVoteStatusWaitStart: "Wait",
@@ -297,7 +297,8 @@ module.exports = {
     },
     remarkInput: "Please input intro",
     remark: "Intro",
-    markdownTip: 'Your use markdown format.'
+    markdownTip: 'Your use markdown format.',
+    downloadReport: 'Download Report.'
   },
   error: {
     error: "Error",

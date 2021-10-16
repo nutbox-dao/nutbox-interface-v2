@@ -16,7 +16,7 @@
         <div class="bind-input">
           <div class="balance flex-between-center">
             <span>{{ $t("wallet.balance") }}</span>
-            <span class="text-right">{{ available / 1e10 | amountForm(4) }} KSM</span>
+            <span class="text-right">{{ available / 1e12 | amountForm(4) }} KSM</span>
           </div>
           <input type="number" v-model="inputAmount" :placeholder="$t('wallet.inputAmount')" class="font24"/>
         </div>

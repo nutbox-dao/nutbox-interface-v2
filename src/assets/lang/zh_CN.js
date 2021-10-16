@@ -95,7 +95,7 @@ module.exports = {
     bondAndNominate: " 绑定并投票",
     cancel: "取消",
     bondInfo1: "请保留少量资金用于后续操作手续费",
-    bondInfo2: "请至少绑定",
+    bondInfo2: "请至少绑定 {min} {symbol}",
     bondInfo3: "解绑操作后需要等待 {days} 天",
     confirm: "确定",
     cancelValidorsInfo: "请取消至少 {n} 个您已经投票过的节点，再进行本次投票",
@@ -297,7 +297,8 @@ module.exports = {
     },
     remarkInput: "请填写提案系统简介",
     remark: "简介",
-    markdownTip: '你可以使用markdown格式来设置内容'
+    markdownTip: '你可以使用markdown格式来设置内容',
+    downloadReport: '下载报告'
   },
   error: {
     error: "错误",

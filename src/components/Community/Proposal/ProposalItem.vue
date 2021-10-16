@@ -30,61 +30,29 @@
           {{ proposalItem.title }}
         </span>
         </div>
-        <!--  <div class="w-25 pl-3 pr-3">
-          <b-alert show variant="secondary"
-            ><div class="row">
-              <div class="col-6 text-left">赞成</div>
-              <div class="col-6 text-right">
-                {{ proposalItem.voteAgreeTotalScore }}
-              </div>
-            </div>
-            <div class="row">
-              <b-progress
-                :value="voteAgreeTotalScoreRate"
-                variant="success"
-                :striped="true"
-                class="w-100"
-              ></b-progress></div
-          ></b-alert>
-        </div>
-        <div class="w-25 pl-3 pr-3">
-          <b-alert show variant="secondary"
-            ><div class="row">
-              <div class="col-6 text-left">反对</div>
-              <div class="col-6 text-right">
-                {{ proposalItem.voteDisagreeTotalScore }}
-              </div>
-            </div>
-            <div class="row">
-              <b-progress
-                :value="voteDisagreeTotalScoreRate"
-                variant="danger"
-                :striped="true"
-                class="w-100"
-              ></b-progress></div
-          ></b-alert>
-        </div> -->
         <div class="d-flex align-items-center justify-content-end w-100">
           <div class="w-20">
             {{ $t("nps.proposalEnd") + ":" + endTime }}
           </div>
           <div class="flag"
-            :class="
-            proposalItem.status == 0
-              ? 'propsalVoteStatusWaitStart'
+             :class="
+             proposalItem.status == 0
+              ? 'proposal-pending'
               : proposalItem.status == 1
-              ? 'propsalVoteStatusDoing'
-              : 'propsalVoteStatusEnd'">
-            {{
-              proposalItem.status == 0
-                ? $t("nps.propsalVoteStatusWaitStart")
-                : proposalItem.status == 1
-                ? $t("nps.propsalVoteStatusDoing")
-                : proposalItem.proposalResult == 1
-                  ? $t("nps.pass")
-                  : $t("nps.unpass")
-            }}
-          </div>
+              ? 'proposal-rolling'
+              : proposalItem.proposalResult === 1
+              ? 'proposal-pass'
+              : 'proposal-unpass'">
+          {{
+            proposalItem.status == 0
+              ? $t("nps.propsalVoteStatusWaitStart")
+              : proposalItem.status == 1
+              ? $t("nps.propsalVoteStatusDoing")
+              : proposalItem.proposalResult === 1
+              ? $t("nps.pass")
+              : $t("nps.unpass")
+          }}
+        </div>
         </div>
       </div>
     </div>
@@ -180,38 +148,6 @@ span {
       font-size: .7rem;
       line-height: .8rem;
       margin-left: 1rem;
-    }
-    .pass {
-      background: rgba(80, 191, 0, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(80, 191, 0, 0.3);
-      color: var(--success);
-    }
-    .propsalVoteStatusWaitStart {
-      background: rgba(255, 219, 38, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 219, 38, 0.3);
-      color: var(--warning);
-    }
-    .unpass {
-      background: rgba(255, 91, 77, 0.051);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 91, 77, 0.3);
-      color: var(--error);
-    }
-
-    .propsalVoteStatusEnd {
-      background: rgba(255, 91, 77, 0.051);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 91, 77, 0.3);
-      color: var(--error);
-    }
-
-    .propsalVoteStatusDoing {
-      background: #408fff0d;
-      border-radius: 8px;
-      border: 1px solid #408fff4d;
-      color: var(--link);
     }
   }
 }

@@ -145,53 +145,6 @@ export default {
     border-radius: 28px;
     border: 1px solid rgba(227, 229, 232, 0.5);
   }
-  .proposal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 72px;
-    p,
-    a {
-      margin: 0 10px;
-      color: var(--primary-text);
-      font-size: 16px;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      max-height: 60px;
-      font-weight: 600;
-      line-height: 20px;
-    }
-    a:hover {
-      color: var(--link);
-    }
-
-    .pass {
-      background: rgba(80, 191, 0, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(80, 191, 0, 0.3);
-      color: var(--success);
-    }
-    .pending {
-      background: rgba(255, 219, 38, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 219, 38, 0.3);
-      color: var(--warning);
-    }
-    .unpass {
-      background: rgba(255, 91, 77, 0.051);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 91, 77, 0.3);
-      color: var(--error);
-    }
-    .rolling {
-      background: #408fff0d;
-      border-radius: 8px;
-      border: 1px solid #408fff4d;
-      color: var(--link);
-    }
-  }
 }
 @media (max-width: 560px) {
   .view-top-header {

@@ -200,6 +200,30 @@ ponsived {
   }
 }
 
+.proposal-pass {
+  background: rgba(80, 191, 0, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(80, 191, 0, 0.3);
+  color: var(--success);
+}
+.proposal-pending {
+  background: rgba(255, 219, 38, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 219, 38, 0.3);
+  color: var(--warning);
+}
+.proposal-unpass {
+  background: rgba(255, 91, 77, 0.051);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 91, 77, 0.3);
+  color: var(--error);
+}
+.proposal-rolling {
+  background: #408fff0d;
+  border-radius: 8px;
+  border: 1px solid #408fff4d;
+  color: var(--link);
+}
 
 .empty-bg{
   padding: 4rem;

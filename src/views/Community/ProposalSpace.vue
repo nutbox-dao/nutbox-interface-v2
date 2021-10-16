@@ -136,6 +136,9 @@ export default {
   .tip-box {
     @include card(2rem 1.2rem, rgba(0, 0, 0, 0.2), hidden, fit-content);
     color: white;
+    background-image: url('~@/static/images/poster.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
   }
   .nps-card {
     height: 108px;
