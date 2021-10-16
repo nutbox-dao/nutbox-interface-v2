@@ -281,7 +281,7 @@ module.exports = {
     proposalDisagreeBtn: "Disagree",
     propsalSureVote: "Are you sure",
     propsalVoteRight: "Your voting rights",
-    propsalVoteRemind: "Are you sure you {0}?",
+    propsalVoteRemind: "Are you sure {0}?",
     propsalVoteStatusWaitStart: "Wait",
     propsalVoteStatusDoing: "Voting",
     propsalVoteStatusEnd: "End",
