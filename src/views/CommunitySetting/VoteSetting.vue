@@ -75,7 +75,7 @@
                 v-model="form.passthreshold"
                 type="number"
               ></b-form-input>
-               <span class="c-append">%</span>
+               <span class="c-append">{{ form.symbol }}</span>
             </div>
           </div>
         </b-form-group>
