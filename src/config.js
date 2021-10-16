@@ -188,7 +188,7 @@ export const OfficialAssets = [
 // export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
-// goerli network
+// shibuya network
 export const MultiAddress = "0x091CB6934957E4F948fE1bA57eF9eafea33a10c2";
 export const NutAddress = "0xC21Aab50E30Ed43877526ec6984C29F7758A3Df0";
 

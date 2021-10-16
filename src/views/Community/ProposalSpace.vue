@@ -10,7 +10,7 @@
       <div class="view-top-header pb-0">
         <div class="tip-box">
           <div style="text-align: left">
-            <Markdown :body="form.remark" />
+            <Markdown :body="form ? form.remark : ''" />
           </div>
         </div>
       </div>
