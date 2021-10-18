@@ -3,7 +3,8 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE
+  RPC_NODE,
+  CHAIN_NAME
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'
@@ -30,32 +31,34 @@ export const setupNetwork = async () => {
   const chainId = parseInt(BSC_CHAIN_ID)
   try {
     await eth.request({
-      // method: 'wallet_addEthereumChain',
       method: 'wallet_switchEthereumChain',
       params: [{
         chainId: `0x${chainId.toString(16)}`
-        // chainName: CHAIN_NAME,
-        // nativeCurrency: {
-        //   name: 'BNB',
-        //   symbol: 'bnb',
-        //   decimals: 18,
-        // },
-        // rpcUrls: [RPC_NODE],
-        // blockExplorerUrls: ['https://bscscan.com/'],
       }],
     })
     store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
-    console.log(333, error);
-    store.commit('web3/saveChainId', chainId)
-    store.commit('web3/saveAccount', null)
-    store.commit('web3/saveStakingFactoryId', null)
-    store.commit('web3/saveMyPools', null)
-    store.commit('web3/saveAllAssetsOfUser', null)
-    store.commit('saveMetamaskConnected', false)
-    return false
+    try{
+      await eth.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: `0x${chainId.toString(16)}`,
+          chainName: CHAIN_NAME,
+          rpcUrls:[RPC_NODE]
+        }],
+      })
+    }catch(error){
+      console.log(333, error);
+      store.commit('web3/saveChainId', chainId)
+      store.commit('web3/saveAccount', null)
+      store.commit('web3/saveStakingFactoryId', null)
+      store.commit('web3/saveMyPools', null)
+      store.commit('web3/saveAllAssetsOfUser', null)
+      store.commit('saveMetamaskConnected', false)
+      return false
+    }
   }
 }
 

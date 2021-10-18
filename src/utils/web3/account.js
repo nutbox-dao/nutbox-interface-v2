@@ -35,10 +35,12 @@ export const accountChanged = async () => {
         store.commit('web3/saveAllAssetsOfUser', null)
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
+            if (res){
+                getMyOpenedPools(true)
+                getNonce(true)
+                getDistributionEras(true)
+            }
         }).catch(console.error)
-        getMyOpenedPools(true)
-        getNonce(true)
-        getDistributionEras(true)
         monitorCtokenBalance(true)
         monitorPools()
     })

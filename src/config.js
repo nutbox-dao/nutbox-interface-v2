@@ -6,9 +6,9 @@ export const DEBUG = false;
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
 
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 
-// export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -152,9 +152,9 @@ export const GasLimit = 10000000;
 export const OfficialAssets = [
   {
     name: "Walnut",
-    address: "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5",
+    address: "0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a",
     symbol: "WNUT",
-    asset: "0xb824e2c623de0d69fc661e1bcab7c0fad2aeaa6c0c3f78481f5127a7ba13da64",
+    asset: "0xd7ba247f8c0303522e94bceca8154b78c64a6960a56f985b3ca33385e6c6881d",
     contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",
@@ -183,14 +183,15 @@ export const OfficialAssets = [
 ];
 
 // local network
-// export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
-// export const NutAddress = '0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a'
+export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
+export const NutAddress = '0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a'
+
 // export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
+// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+// export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
