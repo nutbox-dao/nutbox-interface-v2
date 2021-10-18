@@ -41,7 +41,7 @@
                 width: 32px;
                 height: 32px;
                 border-radius: 16px;
-                border: 1px solid var(--primary);
+                border: 1px solid var(--primary-custom);
                 font-size: 14px;
                 line-height: 32px;
               "

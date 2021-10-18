@@ -24,12 +24,12 @@ export default {
   border: 1px solid rgba(227, 229, 232, 0.5);
   box-sizing: border-box;
 }
-.left-bar { 
+.left-bar {
   position: relative;
   float: left;
   width:4px;
   height:20px;
-  background:var(--primary);
+  background:var(--primary-custom);
   left:0;
   top:18px;
   margin-left: -24px;

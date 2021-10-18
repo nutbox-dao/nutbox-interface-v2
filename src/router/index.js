@@ -40,6 +40,7 @@ import SocialSetting from "@/views/CommunitySetting/SocialSetting";
 import VoteSetting from "@/views/CommunitySetting/VoteSetting";
 import CreateProposal from "@/views/Nps/CreateProposal";
 import NpsIndex from "@/views/Nps/Index";
+import GameSetting from "@/views/CommunitySetting/GameSetting";
 
 Vue.use(VueRouter);
 
@@ -258,6 +259,18 @@ const routes = [
             component: AddPool,
             meta: { slideBar: true },
           },
+          {
+            path: "game",
+            name: "game",
+            component: GameSetting,
+            meta: { slideBar: true },
+          },
+          {
+            path: "game-info",
+            name: "game-info",
+            component: () => import('@/views/CommunitySetting/GameInfo'),
+            meta: { slideBar: true },
+          }
         ],
       },
     ],
@@ -326,6 +339,10 @@ const routes = [
             component: Proposal,
           },
         ],
+      },
+      {
+        path: "game",
+        component: () => import('@/views/Game/Game'),
       },
     ],
   },

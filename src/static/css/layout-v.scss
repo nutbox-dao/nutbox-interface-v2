@@ -67,10 +67,10 @@
     font-size: .8rem;
     color: #BDBFC2;
     &.active {
-      border-left: 3px solid var(--primary);
+      border-left: 3px solid var(--primary-custom);
       color: #242629;
       font-weight: bold;
-      background-image: linear-gradient(to right, rgba(255, 219, 27, 0.2), rgba(255, 219, 27, 0));
+      background-image: linear-gradient(to right, rgba(var(--primary-custom-rgb), 0.2), rgba(var(--primary-custom-rgb), 0));
     }
     &:hover {
       background: linear-gradient(to right, rgba(227, 229, 232, 0.4), rgba(227, 229, 232, 0));

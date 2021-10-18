@@ -113,8 +113,10 @@ $blue: #ffdb1b;
 :root {
   --yellow-background: #f5ecd8;
   --primary-custom: #ffdb1b;
-  --primary: #ffdb1b;
+  --primary-custom-rgb: 255, 219, 27;
+  --primary-hover: #ffeb75;
   --primary-text: #242629;
+  --primary-btn-text-color: #242629;
   --secondary-text: #717376;
   --disable: #bdbfc2;
   --dividers: #e3e5e8;

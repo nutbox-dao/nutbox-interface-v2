@@ -41,6 +41,10 @@
               <i id="nps-icon" class="menu-icon" />
               <span>{{ $t("nps.nps") }}</span>
             </b-nav-item>
+            <b-nav-item to="/specify/game">
+<!--              <i id="nps-icon" class="menu-icon" />-->
+              <span>Game</span>
+            </b-nav-item>
           </b-nav>
           <div class="bottom">
             <div class="links">
@@ -214,6 +218,7 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import Identicon from "@polkadot/vue-identicon";
 
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
+import {hexToRgb} from "@/utils/commen/util";
 
 export default {
   data() {
@@ -317,6 +322,7 @@ export default {
     Identicon,
   },
   async mounted() {
+    this.setThemeColor()
     const _this = this;
 
     this.id = this.$router.currentRoute.params.key
@@ -347,6 +353,16 @@ export default {
     async gotoOfficial() {
       // test()
       // window.open('https://nutbox.io', '_blank')
+    },
+    setThemeColor () {
+      const uri = window.location.href.split('?')[1]
+      const params = new URLSearchParams(uri)
+      const theme = params.get('theme')
+      if(theme) {
+        const root = document.documentElement
+        root.style.setProperty('--primary-custom', `#${theme}`)
+        root.style.setProperty('--primary-custom-rgb', hexToRgb(`#${theme}`))
+      }
     },
     setLanguage(lang) {
       localStorage.setItem(LOCALE_KEY, lang);
