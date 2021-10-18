@@ -943,11 +943,13 @@ const getPrices = async () => {
  * Monitor pools data
  */
 export const monitorPools = async () => {
-  await Promise.all([
-    monitorUserStakings(),
-    monitorPendingRewards(),
-    monitorApprovements(),
-    monitorPoolInfos(),
-    monitorUserBalances()
-  ]).catch(console.error)
+  getAllPools().then(() => {
+    Promise.all([
+      monitorUserStakings(),
+      monitorPendingRewards(),
+      monitorApprovements(),
+      monitorPoolInfos(),
+      monitorUserBalances()
+    ]).catch(console.error)
+  })
 }

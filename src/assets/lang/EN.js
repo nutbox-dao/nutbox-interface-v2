@@ -365,6 +365,7 @@ module.exports = {
     communityLink: "Offcial Link",
     communityDesc: "Description",
     communityLogo: "Logo",
+    communityThemeColor: 'Theme color',
     communityPoster: "Poster",
     communityBalance: "Community Balance",
     communityAsset: "Community Asset",

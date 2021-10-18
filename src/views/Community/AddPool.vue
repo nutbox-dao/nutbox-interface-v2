@@ -253,7 +253,7 @@ export default {
       concatAddressOptions: [
         {
           categoryName: "personal",
-          items: [{ name: "AAA", address: "0x000" }],
+          items: [{ name: "AAA", address: "0x0000" }],
         },
         {
           categoryName: "official",
