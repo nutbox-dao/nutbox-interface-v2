@@ -365,6 +365,7 @@ module.exports = {
     communityLink: "社区官网",
     communityDesc: "社区介绍",
     communityLogo: "社区Logo",
+    communityThemeColor: '社区主题色',
     communityPoster: "社区封面",
     communityBalance: "社区余额",
     communityAsset: "社区资产",
@@ -504,4 +505,17 @@ module.exports = {
     price: "币价",
     totalSupply: "发行量",
   },
+  game: {
+    create: '创建游戏',
+    edit: '编辑',
+    gameName: '游戏名字',
+    gameLink: '游戏官网',
+    gameDesc: '游戏介绍',
+    gameCategory: '游戏分类',
+    gameLogo: '游戏Logo',
+    gamePoster: '游戏封面',
+    inputGameName: "请输入游戏名字",
+    inputGameLink: "请输入游戏官网链接",
+    inputGameDesc: "请输入一段游戏的介绍",
+  }
 };

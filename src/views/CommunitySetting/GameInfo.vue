@@ -2,7 +2,6 @@
   <div class="page-view-content" >
     <div class="scroll-content container">
       <div class="view-top-header">
-        <Step v-show="showStep" :current-step="2"></Step>
         <div class="flex-between-center w-100">
           <div
             class="font20" :class="$route.query.type==='create'?'page-back-text-icon':'page-title-line'"
@@ -27,59 +26,69 @@
       </div>
       <div class="mb-5">
         <div class="community-info-card text-left">
-          <!-- community name -->
+          <!-- game name -->
           <div class="custom-form pl-md-3">
             <b-form-group
               label-cols-md="2"
               content-cols-md="5"
-              :label="$t('community.communityName')"
+              :label="$t('game.gameName')"
             >
               <b-form-input
                 :disabled="!isEdit"
                 v-model="form.name"
-                :placeholder="$t('community.inputName')"
+                :placeholder="$t('game.inputGameName')"
               ></b-form-input>
             </b-form-group>
-            <!-- community link -->
+            <!-- game link -->
             <b-form-group
               label-cols-md="2"
               content-cols-md="5"
-              :label="$t('community.communityLink')"
+              :label="$t('game.gameLink')"
             >
               <b-form-input
                 :disabled="!isEdit"
                 v-model="form.website"
-                :placeholder="$t('community.inputLink')"
+                :placeholder="$t('game.inputGameLink')"
               ></b-form-input>
               <span>{{ $t('cl.optional') }}</span>
             </b-form-group>
-            <!-- community description -->
+            <!-- game description -->
             <b-form-group
               label-cols-md="2"
               content-cols-md="8"
-              :label="$t('community.communityDesc')"
+              :label="$t('game.gameDesc')"
             >
               <b-form-textarea
                 :disabled="!isEdit"
                 v-model="form.description"
-                :placeholder="$t('community.inputDesc')"
+                :placeholder="$t('game.inputGameDesc')"
                 rows="5"
               ></b-form-textarea>
             </b-form-group>
-            <!-- community theme -->
+            <!-- game category -->
             <b-form-group
               label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('community.communityThemeColor')"
+              content-cols-md="3"
+              :label="$t('game.gameCategory')"
             >
-              <input class="p-2 w-50" type="color" :disabled="!isEdit" v-model="form.color"/>
+              <b-dropdown class="c-dropdown w-100" menu-class="full-dropdown-menu">
+                <template #button-content>
+                  <div class="c-dropdown-btn w-100 d-flex justify-content-between" style="height: 2.4rem">
+                    <span>{{form.category || 'Chose'}}</span>
+                    <i class="dropdown-icon ml-3"></i>
+                  </div>
+                </template>
+                <b-dropdown-item @click="form.category='Recommend'">Recommend</b-dropdown-item>
+                <b-dropdown-item @click="form.category='Popular'">Popular</b-dropdown-item>
+                <b-dropdown-item @click="form.category='Others'">Others</b-dropdown-item>
+              </b-dropdown>
             </b-form-group>
-            <!-- community logo -->
+            <!-- game logo -->
             <b-form-group
               label-cols-md="2"
               content-cols-md="8"
               class="logo-form"
-              :label="$t('community.communityLogo')"
+              :label="$t('game.gameLogo')"
             >
               <b-form-file
                 :disabled="!isEdit"
@@ -93,7 +102,7 @@
                     <template v-if="form.icon">
                       <img class="cover-preview" :src="form.icon" alt="" />
                       <div v-if="isEdit" class="edit-mask">
-                        <span>{{ $t("community.edit") }}<br />LOGO</span>
+                        <span>{{ $t("game.edit") }}<br />LOGO</span>
                       </div>
                     </template>
                     <template v-else>
@@ -122,12 +131,12 @@
                 {{ $t("community.picTip", { size: "200*200" }) }}
               </div>
             </b-form-group>
-            <!-- community poster -->
+            <!-- game poster -->
             <b-form-group
               label-cols-md="2"
               content-cols-md="8"
               class="cover-form"
-              :label="$t('community.communityPoster')"
+              :label="$t('game.gamePoster')"
             >
               <b-form-file
                 :disabled="!isEdit"
@@ -182,7 +191,7 @@
               content-cols-md="5"
               label=""
             >
-              <button class="primary-btn" @click="showTips">
+              <button class="primary-btn">
                 {{ $t("community.commit") }}
               </button>
             </b-form-group>
@@ -190,56 +199,6 @@
         </div>
       </div>
     </div>
-    <!------------------------------------------- tips --------------------------------------------->
-    <!-- noCommunity tip -->
-    <b-modal
-      v-model="noCommunity"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center my-5">
-          {{ $t("community.noCommunity") }}
-        </div>
-        <button class="primary-btn" @click="gotoCreate">
-          {{ $t("community.gotoCreate") }}
-        </button>
-      </div>
-    </b-modal>
-    <b-modal
-      v-model="showSignatureTip"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <!-- <img class="close-btn" src="~@/static/images/close.svg"
-             alt="" @click="showSignatureTip=false"/> -->
-        <div class="my-5">
-          {{ $t("community.editTip") }}
-        </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="onConfirm" :disabled="uploading">
-            <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("community.sign") }}
-          </button>
-          <button
-            class="primary-btn primary-btn-outline"
-            @click="showSignatureTip = false"
-            :disabled="uploading"
-          >
-            <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("commen.cancel") }}
-          </button>
-        </div>
-      </div>
-    </b-modal>
     <!-- crop pic tip -->
     <b-modal
       v-model="cropperModal"
@@ -273,106 +232,53 @@
 </template>
 
 <script>
-import { uploadImage } from "@/utils/helper";
-import UploadLoading from "@/components/ToolsComponents/UploadLoading";
-import Login from "@/components/ToolsComponents/Login";
-import {
-  completeCommunityInfo,
-  getMyCommunityInfo,
-  getAllCommunities
-} from "@/utils/web3/community";
-import { handleApiErrCode, sleep } from "@/utils/helper";
-import { mapGetters } from "vuex";
-import Step from '@/components/ToolsComponents/Step'
+import { uploadImage } from '@/utils/helper'
+import UploadLoading from '@/components/ToolsComponents/UploadLoading'
+import { mapGetters } from 'vuex'
 import { VueCropper } from 'vue-cropper'
 
 export default {
   name: 'EditCommunityInfo',
-  components: { UploadLoading, Step, VueCropper },
+  components: { UploadLoading, VueCropper },
   data () {
     return {
       logo: null,
       coverImg: null,
-      chargeValue: 0,
-      inputDevAddress: '',
-      inputDevRatio: '',
-      inputBlogTag:'',
       form: {
-        id: "",
-        name: "",
-        website: "",
-        description: "",
-        icon: "",
-        poster: "",
-        pools: [],
-        blogTag: '',
-        color: '#ffdb1b'
+        id: '',
+        name: '',
+        website: '',
+        description: '',
+        icon: '',
+        poster: '',
+        category: ''
       },
-      logoPreviewSrc: "",
+      logoPreviewSrc: '',
       logoUploadLoading: false,
-      coverPreviewSrc: "",
+      coverPreviewSrc: '',
       coverUploadLoading: false,
       type: null,
       isEdit: false,
       canEdit: false,
-      noCommunity: false,
-      showSignatureTip: false,
-      showChargeTip: false,
-      showDevAddressTip: false,
-      showDevRatioTip: false,
-      showBlogTip: false,
-      uploading: false,
-      approving: false,
-      charging: false,
-      publishingBlog: false,
-      creatingBlog: false,
-      cToken: {},
-      isMintable: true,
-      cTokenAddress: "",
-      updatingAddress: false,
-      updatingDevRatio: false,
       showStep: false,
       cropperModal: false,
       cropperImgSrc: '',
       cropFixedNumber: [1, 1],
-      cropImgSize: [200, 200],
-      blogTag: '',
-      blogMainPassword: '',
-      blogBtnName: '',
-      state: '',
-      showSteemLogin: false
+      cropImgSize: [200, 200]
     }
   },
   computed: {
     ...mapGetters('web3', ['createState'])
   },
   watch: {
-    type(newValue, oldValue) {
+    type (newValue, oldValue) {
       // type : null , create, edit
-      this.isEdit = !!newValue;
+      this.isEdit = !!newValue
     }
   },
-  async mounted() {
-    this.type = this.$route.query.type;
-    this.isEdit = !!this.type;
-    try {
-      const communityInfo = await getMyCommunityInfo();
-      if (!communityInfo) {
-        // Havn't create feast
-        this.noCommunity = true;
-        return;
-      }
-      this.canEdit = true;
-      this.form = {...communityInfo};
-      if (!communityInfo.name) {
-        this.form.id = communityInfo.id;
-        return;
-      }
-    } catch (e) {
-      handleApiErrCode(e, (info, params) => {
-        this.$bvToast.toast(info, params);
-      });
-    }
+  async mounted () {
+    this.type = this.$route.query.type
+    this.isEdit = !!this.type
   },
   methods: {
     onCancel () {
@@ -386,7 +292,7 @@ export default {
         this.coverUploadLoading = false
       }
     },
-    clipCircleImg(imgSrc) {
+    clipCircleImg (imgSrc) {
       return new Promise(resolve => {
         const canvas = document.getElementById('cropper-canvas')
         const ctx = canvas.getContext('2d')
@@ -478,170 +384,9 @@ export default {
         this.cropFixedNumber = [30, 7]
         this.cropImgSize = [1200, 280]
       }
-    },
-    valideInfos() {
-      const { name, website, description, icon, poster } = this.form;
-      let tips = null;
-      if (website && website.length > 0) {
-        const regUrl = '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]';
-        const res = website.match(regUrl)
-        console.log({res});
-        if (!res) {
-          tips = this.$t("tip.needRightUrl")
-          this.$bvToast.toast(tips, {
-            title: this.$t("tip.tips"),
-            autoHideDelay: 5000,
-            variant: "warning",
-          });
-          return false;
-        }
-      }
-
-      if (!name || name.length === 0) {
-        tips = this.$t("tip.needName");
-      } else if(name && name.length > 16){
-        tips = this.$t("tip.communityNameLimit", {count: 16})
-      } else if (!description || description.length === 0) {
-        tips = this.$t("tip.needDescription");
-      } else if (!icon || icon.length === 0) {
-        tips = this.$t("tip.needIcon");
-      } else if (!poster || poster.length === 0) {
-        tips = this.$t("tip.needPoster");
-      } else {
-        return true;
-      }
-      this.$bvToast.toast(tips, {
-        title: this.$t("tip.tips"),
-        autoHideDelay: 5000,
-        variant: "warning",
-      });
-      return false;
-    },
-    async showTips() {
-      console.log(this.form);
-      if (this.valideInfos()) {
-        this.showSignatureTip = true;
-      }
-    },
-    async onConfirm() {
-      try {
-        this.uploading = true;
-        const resCode = await completeCommunityInfo(this.form, this.type);
-
-        // go to community dashboard
-        this.$bvToast.toast(this.$t("tip.completeCommunityInfoSuccess"), {
-          title: this.$t("tip.tips"),
-          variant: "success",
-        });
-        await Promise.all([
-          getAllCommunities(true),
-          getMyCommunityInfo(true)
-        ]);
-        await sleep(1);
-        this.$router.replace("/community-setting/staking");
-      } catch (e) {
-        const handleRes = handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.uploading = false;
-      }
-    },
-    async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/;
-      const res = reg.test(this.inputBlogTag);
-      if (!res) {
-        this.$bvToast.toast(this.$t("tip.inputRightBlogTag"), {
-          title: this.$t("tip.tips"),
-          variant: "warning",
-        });
-        return;
-      }
-      try {
-        this.creatingBlog = true;
-        await publishBlog(this.inputBlogTag);
-        this.state = "";
-        this.form.blogTag = this.inputBlogTag;
-        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-        this.showBlogTip = false;
-      } catch (e) {
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.creatingBlog = false;
-      }
-    },
-    async createBlog() {
-      try {
-        this.creatingBlog = true;
-        // create new account
-        const res = await createNewCommunity(
-          this.steemAccount,
-          this.blogTag,
-          this.blogMainPassword
-        );
-        if (res && res.success) {
-          // set community info
-          setCommunityInfo(
-            this.steemAccount,
-            this.blogTag,
-            this.blogMainPassword,
-            this.form.name,
-            this.form.description
-          );
-          // subscribe account
-          const res = await subscribeCommunity(this.steemAccount, this.blogTag);
-          if (res && res.success) {
-            this.showBlogTip = false;
-            this.$bvToast.toast(this.$t("tip.createBlogSuccess"), {
-              title: this.$t("tip.success"),
-              variant: "success",
-            });
-            // update
-            this.state = "publish";
-            this.form.blogTag = this.blogTag;
-          } else if (res && !res.success) {
-            this.$bvToast.toast(res.message, {
-              title: res.error,
-              variant: "error",
-            });
-          }
-        }
-      } catch (e) {
-        console.log("create account fail", e);
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.creatingBlog = false;
-      }
-    },
-    async publishBlog() {
-      try {
-        this.publishingBlog = true;
-        await publishBlog(this.blogTag);
-        this.state = "";
-        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-      } catch (e) {
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.publishingBlog = false;
-      }
-    },
-    gotoCreate() {
-      this.$router.push("/community/create-economy");
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">

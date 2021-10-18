@@ -13,6 +13,7 @@
             <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
             <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
             <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
+            <b-nav-item to="/community-setting/game">Game</b-nav-item>
           </b-nav>
         </div>
         <div class="side-page-view-content">
@@ -25,6 +26,7 @@
                   <b-nav-item to="/community-setting/staking">{{ $t('community.pool') }}</b-nav-item>
                   <b-nav-item to="/community-setting/social">{{ $t('community.social') }}</b-nav-item>
                   <b-nav-item to="/community-setting/vote">{{ $t('nps.nps') }}</b-nav-item>
+                  <b-nav-item to="/community-setting/game">Game</b-nav-item>
                 </div>
               </div>
             </div>
