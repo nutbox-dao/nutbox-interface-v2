@@ -138,7 +138,8 @@ export default {
     color: white;
     background-image: url('~@/static/images/poster.png');
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
+    background-position: center;
   }
   .nps-card {
     height: 108px;
