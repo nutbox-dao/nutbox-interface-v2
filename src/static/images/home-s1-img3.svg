@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="876px" height="826px" viewBox="0 0 876 826" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 12</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="876" height="826"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME" transform="translate(-564.000000, 0.000000)">
+            <g id="编组-12" transform="translate(564.000000, 0.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="蒙版"></g>
+                <g mask="url(#mask-2)" id="椭圆形" opacity="0.049999997" stroke="#FFFFFF" stroke-width="6">
+                    <g transform="translate(0.003615, -325.000000)">
+                        <circle cx="669.5" cy="618.5" r="515.5"></circle>
+                        <circle cx="568.5" cy="568.5" r="565.5"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

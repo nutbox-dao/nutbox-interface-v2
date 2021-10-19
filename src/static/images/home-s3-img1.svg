@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="324px" height="322px" viewBox="0 0 324 322" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 14</title>
+    <defs>
+        <linearGradient x1="80.1289876%" y1="39.3534782%" x2="96.2575396%" y2="53.412232%" id="linearGradient-1">
+            <stop stop-color="#9C4D1B" offset="0%"></stop>
+            <stop stop-color="#DC7C41" offset="42.2170196%"></stop>
+            <stop stop-color="#F9D2B8" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="8.3671875%" y1="0%" x2="91.6328125%" y2="95.6317117%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" stop-opacity="0.296246722" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="8.3671875%" y1="0%" x2="91.0186921%" y2="99.2624563%" id="linearGradient-3">
+            <stop stop-color="#F8B62A" offset="0%"></stop>
+            <stop stop-color="#F8B62A" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <path d="M24,0 L268,0 C281.254834,-2.4348735e-15 292,10.745166 292,24 L292,296 C292,309.254834 281.254834,320 268,320 L24,320 C10.745166,320 1.623249e-15,309.254834 0,296 L0,24 C-1.623249e-15,10.745166 10.745166,2.4348735e-15 24,0 Z" id="path-4"></path>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME" transform="translate(-1012.000000, -2163.000000)">
+            <g id="编组-5备份" transform="translate(348.000000, 1940.000000)">
+                <g id="编组-14" transform="translate(664.000000, 224.000000)">
+                    <path d="M15.9985434,90 L15.9984724,230.565102 C5.74601123,209.306036 0,185.465357 0,160.282624 C0,135.099834 5.74603773,111.259103 15.9985434,90 Z M308.002425,90.002007 C318.254324,111.260603 324,135.100626 324,160.282624 C324,185.464565 318.25435,209.304536 308.002495,230.563096 Z" id="形状结合备份-5" fill="url(#linearGradient-1)"></path>
+                    <g id="编组-4" transform="translate(16.000000, 0.000000)" opacity="0.89993641">
+                        <g id="矩形备份">
+                            <use fill="url(#linearGradient-2)" fill-rule="evenodd" style="mix-blend-mode: multiply;" xlink:href="#path-4"></use>
+                            <use stroke="url(#linearGradient-3)" stroke-width="2" xlink:href="#path-4"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

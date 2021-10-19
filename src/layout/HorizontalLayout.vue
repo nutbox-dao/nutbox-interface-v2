@@ -20,6 +20,9 @@
         </div>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav align="center" class="top">
+            <b-nav-item to="/home">
+              <span>{{ $t("commen.home") }}</span>
+            </b-nav-item>
             <b-nav-item to="/community">
               <span>{{ $t("cs.community") }}</span>
             </b-nav-item>

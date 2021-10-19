@@ -45,7 +45,8 @@ module.exports = {
     tr: "Türkçe",
     es: "Español",
     jp: "日本語",
-    goToHome: "Back to homepage"
+    goToHome: "Back to homepage",
+    home: 'Home'
   },
   tutorial: {
     createProcess: "Create Process",
