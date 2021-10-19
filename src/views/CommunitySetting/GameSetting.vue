@@ -37,6 +37,7 @@
 <script>
 import SettingGameCard from "@/components/Community/Game/SettingGameCard";
 import { getAllGame } from "@/utils/web3/game";
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import { mapState } from "vuex";
 export default {
   name: "GameSetting",
@@ -61,13 +62,10 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    this.url =
-      this.$router.currentRoute.params.key || this.$route.query.id
-        ? "/specify"
-        : "";
+    const communityInfo = await getMyCommunityInfo()
 
     try {
-      getAllGame();
+      getAllGame(communityInfo.id);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);

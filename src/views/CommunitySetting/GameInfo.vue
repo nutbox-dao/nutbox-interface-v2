@@ -151,7 +151,7 @@
             <!-- game poster -->
             <b-form-group
               label-cols-md="2"
-              content-cols-md="8"
+              content-cols-md="6"
               class="cover-form"
               :label="$t('game.gamePoster')"
             >
@@ -248,8 +248,8 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">取消</button>
-        <button class="primary-btn" @click="completeCropAndUpload">完成</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
 
@@ -349,11 +349,10 @@ export default {
       const { gameName, gameSite, gameIntro, gameType, gameLogo, gameCover } =
         this.form;
       let tips = null;
-      if (gameSite && gameSite.length > 0) {
+      if (!gameSite || gameSite.length > 0) {
         const regUrl =
           "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
-        const res = gameSite.match(regUrl);
-        console.log({ res });
+        const res = gameSite && gameSite.match(regUrl);
         if (!res) {
           tips = this.$t("tip.needRightUrl");
           this.$bvToast.toast(tips, {
@@ -512,7 +511,7 @@ export default {
       reader.onload = (res) => {
         this.cropperImgSrc = res.target.result;
         this.cropperModal = true;
-        this.cropFixedNumber = [30, 7];
+        this.cropFixedNumber = [714, 250];
         this.cropImgSize = [714, 250];
       };
     },

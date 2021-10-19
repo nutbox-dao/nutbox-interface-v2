@@ -18,7 +18,9 @@
           <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">-- %</div>
         </div> -->
-        <a class="primary-btn" :href="game.gameSite" target="_blank">Join</a>
+        <button class="primary-btn" @click="gotoGame">
+          {{ $t('community.join') }}
+        </button>
       </div>
     </div>
   </div>
@@ -28,6 +30,11 @@
 export default {
   name: "GameCard",
   props: ["game", "index"],
+  methods: {
+    gotoGame() {
+      window.open(this.game.gameSite, '__blank')
+    }
+  },
 };
 </script>
 

@@ -168,4 +168,4 @@ export const insertGame = async (params) =>
 export const updateGame = async (params) =>
   put(BACKEND_API_URL + "/game/update", params);
 
-export const getAllGame = async () => get(BACKEND_API_URL + "/game/get");
+export const getAllGame = async (communityId) => get(BACKEND_API_URL + "/game/get", {communityId});

@@ -469,6 +469,13 @@ module.exports = {
     createNeedStake: "Create new pool need you stake:",
     notYourCommunity: "Wrong community info",
   },
+  game:{
+    game: 'Game',
+    recommend: 'Recommend',
+    popular: 'Popular',
+    others: 'Others',
+    noGames: 'No games'
+  },
   asset: {
     asset: "Asset",
     network: "Network",

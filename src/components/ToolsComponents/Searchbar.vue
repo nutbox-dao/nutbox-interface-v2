@@ -3,7 +3,7 @@
     <i class="search-icon" @click="isExpand=true"></i>
     <input class="search-input" type="text" name="" placeholder="Search" v-model="searchText">
     <i v-if="searchText.trim()!==''" class="clear-input-text text-grey" @click="searchText = ''"></i>
-    <span class="cancel-btn" @click="isExpand=false">取消</span>
+    <span class="cancel-btn" @click="isExpand=false">{{ $t('commen.cancel') }}</span>
   </div>
 </template>
 

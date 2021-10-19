@@ -265,8 +265,8 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">取消</button>
-        <button class="primary-btn" @click="completeCropAndUpload">完成</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
   </div>

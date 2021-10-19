@@ -336,10 +336,10 @@ export default {
     this.communityProposalConfigInfo = await getMyCommunityProposalConfigInfo(
       this.id
     );
-    if(this.allCommunities && this.allCommunities[0].color){
+    if(this.allCommunities && this.allCommunities[0] && this.allCommunities[0].color){
       this.setThemeColor(this.allCommunities[0].color)
     }
-    this.games = await getAllGame();
+    this.games = await getAllGame(this.id);
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -392,8 +392,11 @@ export default {
       this.screenWidth = val;
     },
     allCommunities(val) {
-      const color = val[0].color;
-      this.setThemeColor(color)
+      if (val && val.length > 0){
+        console.log(33, val);
+        const color = val[0].color;
+        this.setThemeColor(color)
+      }
     }
   },
 };

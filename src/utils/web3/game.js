@@ -21,6 +21,7 @@ export const completeGame = async (form, type) => {
     const userId = await getAccounts();
     nonce = nonce ? nonce + 1 : 1;
     form.userId = userId;
+    form.communityId = store.state.web3.stakingFactoryId
 
     const originMessage = JSON.stringify(form);
     let signature = "";
@@ -41,7 +42,6 @@ export const completeGame = async (form, type) => {
     };
     try {
       let res = null;
-
       res =
         type == "create" ? await insertGame(params) : await updateGame(params);
 
@@ -55,10 +55,10 @@ export const completeGame = async (form, type) => {
 /**
  * get all game infos
  */
-export const getAllGame = async () => {
+export const getAllGame = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const games = await gag();
+      const games = await gag(communityId);
       store.commit("web3/saveGames", games);
       resolve(games);
     } catch (e) {

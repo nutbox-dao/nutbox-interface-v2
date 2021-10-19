@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content wallet">
     <div class="container scroll-content">
-      <div class="page-view-title-v">Game</div>
+      <div class="page-view-title-v">{{ $t('game.game') }}</div>
 
       <div class="loading-bg" v-if="loading">
         <img src="~@/static/images/loading.gif" alt="" />
@@ -16,7 +16,7 @@
                 :key="tab"
                 :class="activeTab === tab ? 'active' : ''"
                 @click="activeTab = tab"
-                >{{ tab }}</span
+                >{{ $t('game.' + tab) }}</span
               >
             </div>
           </div>
@@ -27,7 +27,7 @@
         >
           <div class="empty-bg">
             <img src="~@/static/images/empty-data.png" alt="" />
-            <p>No Game</p>
+            <p>{{ $t('game.noGames') }}</p>
           </div>
         </div>
         <template v-else>
@@ -57,6 +57,7 @@ export default {
     ...mapState({
       games: (state) => state.web3.games,
       account: (state) => state.web3.account,
+      currentCommunityId: state => state.currentCommunityId
     }),
 
     gameItems() {
@@ -69,7 +70,7 @@ export default {
   data() {
     return {
       tabOptions: ["recommend", "popular", "others"],
-      activeTab: "",
+      activeTab: 'recommend',
       loading: false,
     };
   },
@@ -81,7 +82,7 @@ export default {
         : "";
 
     try {
-      getAllGame();
+      getAllGame(this.currentCommunityId);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params);
