@@ -46,7 +46,8 @@ module.exports = {
     es: "Español",
     jp: "日本語",
     goToHome: "Back to homepage",
-    home: 'Home'
+    home: 'Home',
+    dappStore: 'DApp Store'
   },
   tutorial: {
     createProcess: "Create Process",

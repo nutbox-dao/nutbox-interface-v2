@@ -6,7 +6,7 @@
       <b-navbar toggleable="lg">
         <div class="m-logo">
           <div class="d-flex align-items-center">
-            <b-navbar-brand to="/" class="m-0">
+            <b-navbar-brand to="/home" class="m-0">
               <img class="logo" src="~@/static/images/logo_small.png"
                    @click="gotoOfficial" alt="nutbox" />
             </b-navbar-brand >
@@ -20,12 +20,6 @@
         </div>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav align="center" class="top">
-            <b-nav-item to="/home">
-              <span>{{ $t("commen.home") }}</span>
-            </b-nav-item>
-            <b-nav-item to="/dapp">
-              <span>DAPP Store</span>
-            </b-nav-item>
             <b-nav-item to="/community">
               <span>{{ $t("cs.community") }}</span>
             </b-nav-item>
@@ -34,6 +28,9 @@
             </b-nav-item>
             <b-nav-item to="/blog">
               <span>{{ $t("commen.blog") }}</span>
+            </b-nav-item>
+            <b-nav-item to="/dapp">
+              <span>{{ $t('commen.dappStore') }}</span>
             </b-nav-item>
             <b-nav-item to="/nps">
               <span>{{ $t("nps.nps") }}</span>

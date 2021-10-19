@@ -33,6 +33,7 @@ export const accountChanged = async () => {
         store.commit('web3/saveStakingFactoryId', null)
         store.commit('web3/saveMyPools', null)
         store.commit('web3/saveAllAssetsOfUser', null)
+        store.commit('web3/saveCommunityInfo', null)
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
             if (res){

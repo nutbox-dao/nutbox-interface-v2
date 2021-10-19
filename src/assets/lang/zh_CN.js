@@ -46,7 +46,8 @@ module.exports = {
     es: "Español",
     jp: "日本語",
     goToHome: "返回首页",
-    home: '首页'
+    home: '首页',
+    dappStore: '应用商城'
   },
   tutorial: {
     createProcess: "创建流程",
