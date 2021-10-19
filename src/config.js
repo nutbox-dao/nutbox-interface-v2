@@ -6,9 +6,9 @@ export const DEBUG = false;
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
 
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+//export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 
-// export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -196,5 +196,5 @@ export const NutAddress = "0x6Dc44b7dae64432297dB7bC2995F84617E63ccF5";
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
   multicallAddress: MultiAddress,
-  interval: 3000
+  interval: 3000,
 };

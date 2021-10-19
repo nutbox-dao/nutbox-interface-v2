@@ -1,12 +1,12 @@
-import Cookie from 'vue-cookies'
-import { BSC_CHAIN_ID } from '@/config'
-import { ASSET_LOGO_URL } from '@/constant'
+import Cookie from "vue-cookies";
+import { BSC_CHAIN_ID } from "@/config";
+import { ASSET_LOGO_URL } from "@/constant";
 
 export default {
   namespaced: true,
   state: {
-    ethers:null,
-    account: Cookie.get('bsc-account'),
+    ethers: null,
+    account: Cookie.get("bsc-account"),
     allAccounts: [],
     abis: {},
     chainId: -1,
@@ -28,13 +28,13 @@ export default {
     depositDatas: {},
     // multicall get data
     pendingRewards: {},
-    userStakings:{},
+    userStakings: {},
     approvements: {},
     monitorPools: {},
     userBalances: {},
     communityBalance: 1,
     ctokenApprovement: false,
-    devAddress: '',
+    devAddress: "",
     devRatio: 0,
     ctokenBalances: {},
 
@@ -52,200 +52,208 @@ export default {
 
     // proposal
     proposals: null,
-    communityProposalConfig: null
-
+    communityProposalConfig: null,
+    //games
+    games: null,
   },
   mutations: {
     saveEthers: (state, ethers) => {
-      state.ethers = ethers
+      state.ethers = ethers;
     },
     saveAccount: (state, account) => {
-      state.account = account,
-        Cookie.set('bsc-account', account, '30d')
+      (state.account = account), Cookie.set("bsc-account", account, "30d");
     },
     saveAllAccounts: (state, allAccounts) => {
-      state.allAccounts = allAccounts
+      state.allAccounts = allAccounts;
     },
-    saveAbi: (state, {name, abi}) => {
-      state[name] = abi
+    saveAbi: (state, { name, abi }) => {
+      state[name] = abi;
     },
     saveChainId: (state, chainId) => {
-      state.chainId = chainId
+      state.chainId = chainId;
     },
     saveStakingFactoryId: (state, stakingFactoryId) => {
-      state.stakingFactoryId = stakingFactoryId
+      state.stakingFactoryId = stakingFactoryId;
     },
     saveCommunityInfo: (state, communityInfo) => {
-      state.communityInfo = communityInfo
+      state.communityInfo = communityInfo;
     },
     saveAllAssetsOfUser: (state, allAssetsOfUser) => {
-      state.allAssetsOfUser = allAssetsOfUser
+      state.allAssetsOfUser = allAssetsOfUser;
     },
     saveAllTokens: (state, allTokens) => {
-      state.allTokens = allTokens
+      state.allTokens = allTokens;
     },
-    saveBlockNum : (state, blockNum) => {
-      state.blockNum = blockNum
+    saveBlockNum: (state, blockNum) => {
+      state.blockNum = blockNum;
     },
     saveNonce: (state, nonce) => {
-      state.nonce = nonce
+      state.nonce = nonce;
     },
     saveAllCommunities: (state, communities) => {
-      state.allCommunities = communities
+      state.allCommunities = communities;
     },
     saveMyPools: (state, myPools) => {
-      state.myPools = myPools
+      state.myPools = myPools;
     },
     saveWatchers: (state, watchers) => {
-      state.watchers = watchers
+      state.watchers = watchers;
     },
     saveCTokens: (state, cTokens) => {
-      state.cTokens = cTokens
+      state.cTokens = cTokens;
     },
-    saveDistributions: (state, distributions) =>{
-      state.distributions = distributions
+    saveDistributions: (state, distributions) => {
+      state.distributions = distributions;
     },
     saveReadonlyProvider: (state, readonlyProvider) => {
-      state.readonlyProvider = readonlyProvider
+      state.readonlyProvider = readonlyProvider;
     },
     saveAllPools: (state, allPools) => {
-      state.allPools = allPools
+      state.allPools = allPools;
     },
     saveDepositedDatas: (state, depositDatas) => {
-      state.depositDatas = depositDatas
+      state.depositDatas = depositDatas;
     },
     saveTokenDeploying: (state, tokenDeploying) => {
-      state.tokenDeploying = tokenDeploying
+      state.tokenDeploying = tokenDeploying;
     },
 
     savePendingRewards: (state, pendingRewards) => {
-      state.pendingRewards = pendingRewards
+      state.pendingRewards = pendingRewards;
     },
     saveApprovements: (state, approvements) => {
-      state.approvements = approvements
+      state.approvements = approvements;
     },
     saveLoadingPendingRewards: (state, loadingPendingRewards) => {
-      state.loadingPendingRewards = loadingPendingRewards
+      state.loadingPendingRewards = loadingPendingRewards;
     },
     saveLoadingApprovements: (state, loadingApprovements) => {
-      state.loadingApprovements = loadingApprovements
+      state.loadingApprovements = loadingApprovements;
     },
     saveLoadingAllPools: (state, loadingAllPools) => {
-      state.loadingAllPools = loadingAllPools
+      state.loadingAllPools = loadingAllPools;
     },
     saveLoadingUserStakings: (state, loadingUserStakings) => {
-      state.loadingUserStakings = loadingUserStakings
+      state.loadingUserStakings = loadingUserStakings;
     },
     saveUserStakings: (state, userStakings) => {
-      state.userStakings = userStakings
+      state.userStakings = userStakings;
     },
     saveMonitorPools: (state, monitorPools) => {
-      state.monitorPools = monitorPools
+      state.monitorPools = monitorPools;
     },
     saveUserBalances: (state, userBalances) => {
-      state.userBalances = userBalances
+      state.userBalances = userBalances;
     },
     saveLoadingUserBalances: (state, loadingUserBalances) => {
-      state.loadingUserBalances = loadingUserBalances
+      state.loadingUserBalances = loadingUserBalances;
     },
     saveLoadingCommunityBalance: (state, loadingCommunityBalance) => {
-      state.loadingCommunityBalance = loadingCommunityBalance
+      state.loadingCommunityBalance = loadingCommunityBalance;
     },
     saveCommunityBalance: (state, communityBalance) => {
-      state.communityBalance =communityBalance
+      state.communityBalance = communityBalance;
     },
     saveLoadingApprovementCtoken: (state, loadingApprovementCtoken) => {
-      state.loadingApprovementCtoken = loadingApprovementCtoken
+      state.loadingApprovementCtoken = loadingApprovementCtoken;
     },
     saveCtokenApprovement: (state, ctokenApprovement) => {
-      state.ctokenApprovement = ctokenApprovement
+      state.ctokenApprovement = ctokenApprovement;
     },
     saveLoadingDevInfo: (state, loadingDevInfo) => {
-      state.loadingDevInfo = loadingDevInfo
+      state.loadingDevInfo = loadingDevInfo;
     },
     saveDevAddress: (state, devAddress) => {
-      state.devAddress = devAddress
+      state.devAddress = devAddress;
     },
     saveDevRatio: (state, devRatio) => {
-      state.devRatio = devRatio
+      state.devRatio = devRatio;
     },
     saveLoadingCommunity: (state, loadingCommunity) => {
-      state.loadingCommunity = loadingCommunity
+      state.loadingCommunity = loadingCommunity;
     },
     saveLoadingCtokenBalances: (state, loadingCtokenBalances) => {
-      state.loadingCtokenBalances = loadingCtokenBalances
+      state.loadingCtokenBalances = loadingCtokenBalances;
     },
     saveCtokenBalances: (state, ctokenBalances) => {
-      state.ctokenBalances = ctokenBalances
+      state.ctokenBalances = ctokenBalances;
     },
     saveProposals: (state, proposals) => {
-      state.proposals = proposals
+      state.proposals = proposals;
     },
     saveCommunityProposalConfig: (state, communityProposalConfig) => {
-      state.communityProposalConfig = communityProposalConfig
-    }
+      state.communityProposalConfig = communityProposalConfig;
+    },
+    saveGames: (state, games) => {
+      state.games = games;
+    },
   },
   getters: {
-    isMainChain:(state) => {
-      return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID)
+    isMainChain: (state) => {
+      return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID);
     },
     // Get tourist step of user
     createState: (state) => {
       // if loading, do not show tourist
-      if (state.loadingCommunity){
+      if (state.loadingCommunity) {
         return 0;
       }
-      if (state.myPools && state.myPools.length > 0){
-        return 0
+      if (state.myPools && state.myPools.length > 0) {
+        return 0;
       }
-      if (state.communityInfo?.name){
-        return 3
+      if (state.communityInfo?.name) {
+        return 3;
       }
-      if (state.stakingFactoryId){
-        return 2
-      }else{
-        return 1
+      if (state.stakingFactoryId) {
+        return 2;
+      } else {
+        return 1;
       }
     },
     communityCard: (state) => {
       const allPools = state.allPools;
-      const allCommunities = state.allCommunities
-      if (!allPools || !allCommunities) return []
-      const cardInfo = allCommunities
-      .map(c => {
-        const pools = allPools.filter(pool => pool.communityId === c.id)
+      const allCommunities = state.allCommunities;
+      if (!allPools || !allCommunities) return [];
+      const cardInfo = allCommunities.map((c) => {
+        const pools = allPools.filter((pool) => pool.communityId === c.id);
         return {
           ...c,
-          assetLogos: pools.map(p => {
-            if (p.type === 'SubstrateCrowdloanAssetRegistry'){
-              return p.chainId === 2 ? ASSET_LOGO_URL.polkadot.icon : ASSET_LOGO_URL.kusama.icon
+          assetLogos: pools.map((p) => {
+            if (p.type === "SubstrateCrowdloanAssetRegistry") {
+              return p.chainId === 2
+                ? ASSET_LOGO_URL.polkadot.icon
+                : ASSET_LOGO_URL.kusama.icon;
             }
             return p.icon;
           }),
-          apys: pools.map(p => p.apy)
-        }
-      })
-      return cardInfo
+          apys: pools.map((p) => p.apy),
+        };
+      });
+      return cardInfo;
     },
     /**
      * Get community's info contains pools info
-     * @param {*} state 
-     * @returns 
+     * @param {*} state
+     * @returns
      */
     communityById: (state) => (communityId) => {
-      if (!state.allCommunities || !state.allPools) return {}
-      let community = state.allCommunities.filter(c => c.id === communityId)
-      const pools = state.allPools.filter(p => p.communityId === communityId)
-      if (!community || community.length === 0){
-        return {}
+      if (!state.allCommunities || !state.allPools) return {};
+      let community = state.allCommunities.filter((c) => c.id === communityId);
+      const pools = state.allPools.filter((p) => p.communityId === communityId);
+      if (!community || community.length === 0) {
+        return {};
       }
-      community = community[0]
-      community.pools = pools
-      return community
+      community = community[0];
+      community.pools = pools;
+      return community;
     },
     poolCards: (state) => {
-      const showingPools = state.allPools ? state.allPools.filter(p => parseInt(p.firstBlock) <= parseInt(state.blockNum)) : [];
+      const showingPools = state.allPools
+        ? state.allPools.filter(
+            (p) => parseInt(p.firstBlock) <= parseInt(state.blockNum)
+          )
+        : [];
       return showingPools;
-    }
-  }
-}
+    },
+  },
+};

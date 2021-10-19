@@ -45,7 +45,7 @@ module.exports = {
     tr: "Türkçe",
     es: "Español",
     jp: "日本語",
-    goToHome: "Back to homepage"
+    goToHome: "Back to homepage",
   },
   tutorial: {
     createProcess: "Create Process",
@@ -56,7 +56,8 @@ module.exports = {
     demoVideo: "Demo Video",
     getStart: "Get Started",
     watchVideo: "Watch Demo Video",
-    videoTip1: "In this video, we will walk you through the staking pool generation process, from start to finish. It takes less than {min} minutes.",
+    videoTip1:
+      "In this video, we will walk you through the staking pool generation process, from start to finish. It takes less than {min} minutes.",
     videoTip2: "Click on the play button to start the video",
   },
   wallet: {
@@ -94,11 +95,13 @@ module.exports = {
     available: "Availabe Catiptal",
     bondAndNominate: " Bonding and Vote",
     cancel: "Cancel",
-    bondInfo1: "Please retain some amount of cryptocurrencies for further transaction fees",
+    bondInfo1:
+      "Please retain some amount of cryptocurrencies for further transaction fees",
     bondInfo2: "The minimum bonding amount is {min} {symbol}.",
     bondInfo3: "The unbinding process will take {days} day.",
     confirm: "Confirm",
-    cancelValidorsInfo: "Please cancel at least {} nodes you voted, before you vote other nodes",
+    cancelValidorsInfo:
+      "Please cancel at least {} nodes you voted, before you vote other nodes",
   },
   validator: {
     validator: "Validator",
@@ -182,7 +185,8 @@ module.exports = {
     noStakingProject: "No validators",
     tokenSafeTip:
       "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
-    belowMinContribution: "Input is less than the minimum allowed contribution of  {min}",
+    belowMinContribution:
+      "Input is less than the minimum allowed contribution of  {min}",
     belowMinBond: "Input is less than the minimum surggest bonded of 0.1",
     wrongNominatorAddress: "Wrong Nominator Address",
     wrongTransferAddress: "Wrong Transfer Address",
@@ -204,14 +208,16 @@ module.exports = {
     notContractAddress: "Pleae Provide Deloy Token Contract Address",
     registryAssetFail: "Registry Asset Fail",
     registryAssetSuccess: "Registry Asset Success",
-    wrongStartBlockNum: "Start BlockNum must be larger than the current BlockNum",
+    wrongStartBlockNum:
+      "Start BlockNum must be larger than the current BlockNum",
     wrongStopBlockNum: "Stop BlcokNum must be larger than the Start BlockNum",
     youHaveCreatedCommunity: "You Have Created Community",
     pleaseFillData: "Please select delpoy asset and distribution policies",
     deployFactoryFail: "Factory Fail to delpoy, Please try agian",
     deployFactorySuccess: "Factory deloy Success, Please wait",
     deploySuccess: "Deloy Success",
-    storeTokenAddress: "Please confirm the information and store Token Address immediately",
+    storeTokenAddress:
+      "Please confirm the information and store Token Address immediately",
     needName: "Please input Community Name",
     needWebsit: "Please input Community Website",
     needDescription: "Please input Community Desctiption",
@@ -226,7 +232,8 @@ module.exports = {
     communityNameLimit: "The community name cannot exceed {count} words",
     needRightUrl: "Please input right url.",
     selectCowdloan: "Please selecte a crowdloan project.",
-    inputRightBlogTag: "Please input a right steem community tag. eg:hive-12345.",
+    inputRightBlogTag:
+      "Please input a right steem community tag. eg:hive-12345.",
     withdrawSuccess: "Harvest success!",
     deploying: "Deploying, maybe cost you some time, please wait for a moment.",
     stopPoolOk: "Pool has been stopped",
@@ -236,16 +243,21 @@ module.exports = {
     completeCommunityProposalConfigSuccess: "Community proposal config success",
     completeProposalSuccess: "Proposal success",
     completeVoteSuccess: "Vote success",
+    needGameName: "Please input game name",
+    gameNameLimit: "The game name cannot exceed{count}words",
+    needGameType: "Please choose game type",
+    completeGameSuccess: "Game Success",
   },
   nps: {
     nps: "Governance",
-    npsTemp: "Show Peanut governance for example. Walnut governance is under develoment.",
-    all: 'All',
+    npsTemp:
+      "Show Peanut governance for example. Walnut governance is under develoment.",
+    all: "All",
     pass: "Passed",
     pending: "Pending",
     unpass: "Rejected",
     rolling: "Voting",
-    mine: 'My publish',
+    mine: "My publish",
     title: "Title",
     titleInputTip: "Please input title",
     startAndEndTime: "Start & end time",
@@ -256,7 +268,7 @@ module.exports = {
     proposalConfigLabel: "Proposal Config",
     voteProposal: "Vote Proposal",
     createProposal: "Create Proposal",
-    noProposals: 'No proposals',
+    noProposals: "No proposals",
     proposalTitle: "Title",
     proposalTitleInput: "Please input proposal title",
     proposalStart: "Start time",
@@ -292,13 +304,17 @@ module.exports = {
     editProposalConfigBtn: "ProposalConfig",
     editStrategy: "Edit Strategy",
     validationWarning: {
-      basic: { minScore: "You need to have a minimum of {0} {1} in order to submit a proposal."},
-      customValidation: "You need to pass the proposal validation in order to submit a proposal.",
+      basic: {
+        minScore:
+          "You need to have a minimum of {0} {1} in order to submit a proposal.",
+      },
+      customValidation:
+        "You need to pass the proposal validation in order to submit a proposal.",
     },
     remarkInput: "Please input intro",
     remark: "Intro",
-    markdownTip: 'Your use markdown format.',
-    downloadReport: 'Download Report.'
+    markdownTip: "Your use markdown format.",
+    downloadReport: "Download Report.",
   },
   error: {
     error: "Error",
@@ -308,7 +324,8 @@ module.exports = {
     delegateFail: "Delegate fail",
     changeDelegateFail: "Change delegation fail",
     approveFail: "Approve fail",
-    accountChanged: "Steem and tron address mismatch，Please confirm whether the wallet account is switched",
+    accountChanged:
+      "Steem and tron address mismatch，Please confirm whether the wallet account is switched",
     delegateerror: "Delegation Error！",
     tryrefreshpage: "Error，please refresh page and try again！",
     steemloginerr: "Steem login failed!",
@@ -324,7 +341,8 @@ module.exports = {
     illegalTronAddress: "Invalid tron address",
     inputError: "Input wrong value",
     inputOverflow: "Input overflow",
-    inputOutOfRange: "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
+    inputOutOfRange:
+      "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
     inputLinkIllegal: "Please input correct link",
     notEnoughFee: "Insufficient fee",
     insufficentPnut: "Insufficient Pnut",
@@ -349,7 +367,8 @@ module.exports = {
     steemAccountActiveKeyEmpty: "Steem account or active key missing",
     hiveAccountEmpty: "Hive account missing",
     hiveAccountActiveKeyEmpty: "Hive accout or active key missing",
-    tokenDeploying: "There's token in deploying, please wait or refresh page to try.",
+    tokenDeploying:
+      "There's token in deploying, please wait or refresh page to try.",
   },
   community: {
     community: "Community",
@@ -365,7 +384,7 @@ module.exports = {
     communityLink: "Offcial Link",
     communityDesc: "Description",
     communityLogo: "Logo",
-    communityThemeColor: 'Theme color',
+    communityThemeColor: "Theme color",
     communityPoster: "Poster",
     communityBalance: "Community Balance",
     communityAsset: "Community Asset",
@@ -375,12 +394,14 @@ module.exports = {
     inputDesc: "Plese input Community Description ",
     inputApy: "Please input Apy",
     uploadLogo: "Upload Logo",
-    picTip:"The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
+    picTip:
+      "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
     uploadPoster: "Upload Poster",
     poster: "Poster",
     noCommunity: "You have no community yet",
     gotoCreate: "Go to create now",
-    editTip:"Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
+    editTip:
+      "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
     sign: "Sign and upload",
     createCommunity: "Create you exclusive staking economy",
     step1: "Step 1",
@@ -444,7 +465,7 @@ module.exports = {
     inputBlogTag: "Please input your steem community tag",
     updateSocialSuccess: "Update social info success!",
     createNeedStake: "Create new pool need you stake:",
-    notYourCommunity: 'Wrong community info'
+    notYourCommunity: "Wrong community info",
   },
   asset: {
     asset: "Asset",
@@ -482,7 +503,8 @@ module.exports = {
     communityAddress: "Community address（Polkadot address）",
     inputCommunityAddress: "Please input community polkdot address",
     endingBlock: "Asset valid date",
-    inputEndingBlock:"Please input the ending block height when the asset is invalid",
+    inputEndingBlock:
+      "Please input the ending block height when the asset is invalid",
     registerSteemTab: "Register STEEM/HIVE binding asset",
     registerCrowdloanTab: "Register Polkadot/Kusma Crwodloan binding asset",
     registerValidatorTab: "Register olkadot/Kuama validaots node binding asset",

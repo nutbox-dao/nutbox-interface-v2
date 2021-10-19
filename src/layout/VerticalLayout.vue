@@ -41,8 +41,8 @@
               <i id="nps-icon" class="menu-icon" />
               <span>{{ $t("nps.nps") }}</span>
             </b-nav-item>
-            <b-nav-item to="/specify/game">
-<!--              <i id="nps-icon" class="menu-icon" />-->
+            <b-nav-item v-if="showGame" to="/specify/game">
+              <!--              <i id="nps-icon" class="menu-icon" />-->
               <span>Game</span>
             </b-nav-item>
           </b-nav>
@@ -218,7 +218,8 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import Identicon from "@polkadot/vue-identicon";
 
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
-import {hexToRgb} from "@/utils/commen/util";
+import { getAllGame } from "@/utils/web3/game";
+import { hexToRgb } from "@/utils/commen/util";
 
 export default {
   data() {
@@ -229,6 +230,7 @@ export default {
       accountsPop: false,
       screenWidth: document.body.clientWidth,
       communityProposalConfigInfo: null,
+      games: null,
     };
   },
   computed: {
@@ -316,13 +318,16 @@ export default {
         this.communityProposalConfigInfo != "undefined"
       );
     },
+    showGame() {
+      return this.games && this.games !== "null" && this.games != "undefined";
+    },
   },
   components: {
     TipMessage,
     Identicon,
   },
   async mounted() {
-    this.setThemeColor()
+    this.setThemeColor();
     const _this = this;
 
     this.id = this.$router.currentRoute.params.key
@@ -332,7 +337,7 @@ export default {
     this.communityProposalConfigInfo = await getMyCommunityProposalConfigInfo(
       this.id
     );
-
+    this.games = await getAllGame();
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -354,14 +359,14 @@ export default {
       // test()
       // window.open('https://nutbox.io', '_blank')
     },
-    setThemeColor () {
-      const uri = window.location.href.split('?')[1]
-      const params = new URLSearchParams(uri)
-      const theme = params.get('theme')
-      if(theme) {
-        const root = document.documentElement
-        root.style.setProperty('--primary-custom', `#${theme}`)
-        root.style.setProperty('--primary-custom-rgb', hexToRgb(`#${theme}`))
+    setThemeColor() {
+      const uri = window.location.href.split("?")[1];
+      const params = new URLSearchParams(uri);
+      const theme = params.get("theme");
+      if (theme) {
+        const root = document.documentElement;
+        root.style.setProperty("--primary-custom", `#${theme}`);
+        root.style.setProperty("--primary-custom-rgb", hexToRgb(`#${theme}`));
       }
     },
     setLanguage(lang) {

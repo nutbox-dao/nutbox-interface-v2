@@ -140,7 +140,8 @@ export const updateSocial = async (params) =>
 export const insertToken = async (params) =>
   post(BACKEND_API_URL + "/token/insert", params);
 
-export const updateTokenIcon = async (params) => put(BACKEND_API_URL + '/token/update', params)
+export const updateTokenIcon = async (params) =>
+  put(BACKEND_API_URL + "/token/update", params);
 
 // ============================================ strategies ============================================
 
@@ -155,3 +156,16 @@ export const getAllPools = async (communityId = null) =>
 
 export const getPricesOnCEX = async () =>
   get("https://api.binance.com/api/v3/ticker/price");
+
+//============================================ game ============================================
+
+export const getGame = async (gameId) =>
+  get(BACKEND_API_URL + "/game/get", { id: gameId });
+
+export const insertGame = async (params) =>
+  post(BACKEND_API_URL + "/game/insert", params);
+
+export const updateGame = async (params) =>
+  put(BACKEND_API_URL + "/game/update", params);
+
+export const getAllGame = async () => get(BACKEND_API_URL + "/game/get");

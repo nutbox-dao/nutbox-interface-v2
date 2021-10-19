@@ -2,15 +2,19 @@
   <div class="container scroll-content">
     <div class="view-top-header flex-between-center">
       <div class="page-title-line font20 font-bold">Game</div>
-      <div class="c-btn-group" >
-        <button @click="$router.push('/community-setting/game-info?type=create')">
+      <div class="c-btn-group">
+        <button
+          @click="$router.push('/community-setting/game-info?type=create')"
+        >
           <i class="add-icon"></i>
           <span>Add game</span>
         </button>
       </div>
     </div>
-    <div v-if="gameList.length===0"
-         class="empty-card mb-5 d-flex flex-column justify-content-center">
+    <div
+      v-if="gameItems.length === 0"
+      class="empty-card mb-5 d-flex flex-column justify-content-center"
+    >
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
         <p>No Game</p>
@@ -18,8 +22,12 @@
     </div>
     <template v-else>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="game of 5" :key="game">
-          <SettingGameCard/>
+        <div
+          class="col-xl-4 col-md-6 mb-4"
+          v-for="(game, index) in gameItems"
+          :key="game.id"
+        >
+          <SettingGameCard :game="game" :index="index" />
         </div>
       </div>
     </template>
@@ -27,19 +35,49 @@
 </template>
 
 <script>
-import SettingGameCard from '@/components/Community/Game/SettingGameCard'
-
+import SettingGameCard from "@/components/Community/Game/SettingGameCard";
+import { getAllGame } from "@/utils/web3/game";
+import { mapState } from "vuex";
 export default {
-  name: 'GameSetting',
+  name: "GameSetting",
   components: { SettingGameCard },
-  data () {
+  computed: {
+    ...mapState({
+      games: (state) => state.web3.games,
+      account: (state) => state.web3.account,
+    }),
+    gameItems() {
+      if (!this.games) return [];
+      if (!this.activeTab) return this.games;
+      return this.games.filter((t) => t.gameType == this.activeTab);
+    },
+  },
+  data() {
     return {
-      gameList: ['1']
+      tabOptions: ["recommend", "popular", "others"],
+      activeTab: "",
+      loading: false,
+    };
+  },
+  async mounted() {
+    this.loading = true;
+    this.url =
+      this.$router.currentRoute.params.key || this.$route.query.id
+        ? "/specify"
+        : "";
+
+    try {
+      getAllGame();
+    } catch (e) {
+      handleApiErrCode(e, (info, params) => {
+        this.$bvToast.toast(info, params);
+      });
+    } finally {
+      this.loading = false;
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

@@ -1,32 +1,34 @@
 <template>
   <div class="p-card">
-    <img class="poster" src="~@/static/images/game-poster.png" alt="">
+    <img class="poster" :src="game.gameCover" alt="" />
     <div class="second-card d-flex flex-column justify-content-between">
       <div>
         <div class="game-logo">
-          <img src="~@/static/images/game-logo.png" alt="">
+          <img :src="game.gameLogo" alt="" />
         </div>
         <div class="flex-between-center mt-2 mb-3">
-          <div class="font20 font-bold">Game Name</div>
+          <div class="font20 font-bold">{{ game.gameName }}</div>
         </div>
-        <div class="desc font14 text-grey-light text-left">简介...</div>
+        <div class="desc font14 text-grey-light text-left">
+          {{ game.gameIntro }}
+        </div>
       </div>
       <div>
-        <div class="project-info-container">
+        <!--   <div class="project-info-container">
           <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">-- %</div>
-        </div>
-        <button class="primary-btn">Join</button>
+        </div> -->
+        <a class="primary-btn" :href="game.gameSite" target="_blank">Join</a>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: 'GameCard'
-}
+  name: "GameCard",
+  props: ["game", "index"],
+};
 </script>
 
 <style scoped lang="scss">
@@ -39,7 +41,7 @@ export default {
   top: -2rem;
   left: 1.2rem;
   border: 2px solid white;
-  padding: .2rem;
+  padding: 0.2rem;
   display: flex;
   align-items: center;
   border-radius: 3.2rem 3.2rem 0 0;
@@ -50,12 +52,12 @@ export default {
 .info-icon {
   width: 1.2rem;
   height: 1.2rem;
-  margin-left: .2rem;
+  margin-left: 0.2rem;
   border-radius: 1.2rem;
 }
 .desc {
   margin-bottom: 1rem;
-  @include text-multi-line(3)
+  @include text-multi-line(3);
 }
 .primary-btn {
   margin-top: 1rem;
