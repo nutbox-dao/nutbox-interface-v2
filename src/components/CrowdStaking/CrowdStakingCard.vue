@@ -58,8 +58,8 @@
           </div>
         </div>
         <template v-else>
-          <b-button
-            variant="primary"
+          <button
+            class="primary-btn"
             @click="approve"
             :disabled="isApproving || loadingApprovements || status !== 'Active'"
           >
@@ -69,7 +69,7 @@
               v-show="isApproving || loadingApprovements"
             ></b-spinner>
             {{ $t("commen.approveContract") }}
-          </b-button>
+          </button>
         </template>
       </template>
       <div class="detail-info-box">

@@ -322,7 +322,6 @@ export default {
     Identicon,
   },
   async mounted() {
-    this.setThemeColor()
     const _this = this;
 
     this.id = this.$router.currentRoute.params.key
@@ -332,6 +331,10 @@ export default {
     this.communityProposalConfigInfo = await getMyCommunityProposalConfigInfo(
       this.id
     );
+
+    if(this.allCommunities && this.allCommunities[0].color){
+      this.setThemeColor(this.allCommunities[0].color)
+    }
 
     window.onresize = () => {
       return (() => {
@@ -354,14 +357,12 @@ export default {
       // test()
       // window.open('https://nutbox.io', '_blank')
     },
-    setThemeColor () {
-      const uri = window.location.href.split('?')[1]
-      const params = new URLSearchParams(uri)
-      const theme = params.get('theme')
-      if(theme) {
+    setThemeColor (color) {
+      console.log(234, color);
+      if(color) {
         const root = document.documentElement
-        root.style.setProperty('--primary-custom', `#${theme}`)
-        root.style.setProperty('--primary-custom-rgb', hexToRgb(`#${theme}`))
+        root.style.setProperty('--primary-custom', `${color}`)
+        root.style.setProperty('--primary-custom-rgb', hexToRgb(`${color}`))
       }
     },
     setLanguage(lang) {
@@ -387,6 +388,10 @@ export default {
     screenWidth(val) {
       this.screenWidth = val;
     },
+    allCommunities(val) {
+      const color = val[0].color;
+      this.setThemeColor(color)
+    }
   },
 };
 </script>

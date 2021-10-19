@@ -32,10 +32,10 @@
       <span style="color: #BDBFC2"> DELEGATED</span>
     </div>
 
-    <b-button
-        variant="primary" :disabled='true' v-if="!!countDown">
+    <button 
+        class="primary-btn" :disabled='true' v-if="!!countDown">
         {{ countDown }}
-    </b-button>
+    </button>
     <template v-else>
       <div class="btn-row mb-4" v-if="hiveLogin">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>

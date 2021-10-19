@@ -101,42 +101,6 @@
               v-model="form.members"
             ></b-form-textarea>
           </b-form-group>
-
-          <!-- <b-form-group
-            label-cols-md="2"
-            content-cols-md="8"
-            :label="$t('nps.proposalStrategies')"
-            label-for="proposalStrategies"
-          >
-            <b-input-group
-              v-for="(item, index) in strategyControlItems"
-              :key="item.strategyControlId"
-            >
-              <b-form-input
-                :placeholder="$t('nps.proposalStrategiesInput')"
-                readonly
-                @click="selectStrategy(item)"
-                v-model="item.strategyKey"
-              ></b-form-input>
-              <b-input-group-append>
-                <b-button variant="primary" @click="editStrategy(item)">{{
-                  $t("community.edit")
-                }}</b-button>
-                <b-button
-                  variant="primary"
-                  v-show="index == 0"
-                  @click="addStrategy()"
-                  >{{ $t("commen.add") }}</b-button
-                >
-                <b-button
-                  variant="primary"
-                  v-show="index > 0"
-                  @click="removeStrategy(item.strategyControlId)"
-                  >{{ $t("commen.remove") }}</b-button
-                >
-              </b-input-group-append>
-            </b-input-group>
-          </b-form-group> -->
           <b-form-group
             label-cols-md="2"
             content-cols-md="8"
@@ -153,9 +117,9 @@
                 v-model="item.strategyKey"
               ></b-form-input>
               <b-input-group-append>
-                <b-button variant="primary" @click="editStrategy(item)">{{
+                <button class="primary-btn" @click="editStrategy(item)">{{
                   $t("community.edit")
-                }}</b-button>
+                }}</button>
               </b-input-group-append>
             </b-input-group>
           </b-form-group>
@@ -209,9 +173,9 @@
             }}</b-form-checkbox>
           </b-form-group>
 
-          <b-button type="submit" variant="primary" @click="submitForm">{{
+          <button type="submit" class="primary-btn" @click="submitForm">{{
             $t("community.commit")
-          }}</b-button>
+          }}</button>
         </div>
       </div>
     </div>

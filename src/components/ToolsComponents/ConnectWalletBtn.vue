@@ -1,19 +1,17 @@
 <template>
   <div class="connect-wallet">
-    <b-button
-      class="login-btn"
-      variant="primary"
+    <button
+      class="login-btn primary-btn"
       style="width:90%"
       @click="unlock"
       :disabled="isConnecting"
       v-if="showBtn"
     >
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
-      <!-- <b-button variant="primary" @click="unlock"> -->
       {{
         btnName
       }}
-    </b-button>
+    </button>
   </div>
 </template>
 

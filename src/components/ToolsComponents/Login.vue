@@ -17,9 +17,8 @@
               v-model="keychainAccount"
             ></b-input>
           </div>
-          <b-button
-            variant="primary"
-            class="login-btn"
+          <button
+            class="login-btn primary-btn"
             @click="loginByKeychain"
             :disabled="isLoging"
           >
@@ -29,7 +28,7 @@
               v-show="isLogingByKeyChain"
             ></b-spinner>
             {{ $t('commen.loginByKeychain') }}
-          </b-button>
+          </button>
         </div>
         <!-- Active login -->
         <div style="margin-top: 2rem">
@@ -47,9 +46,8 @@
               v-model="steemActiveKey"
             ></b-input>
           </div>
-          <b-button
-            variant="primary"
-            class="login-btn"
+          <button
+            class="login-btn primary-btn"
             @click="login"
             :disabled="isLoging"
           >
@@ -59,7 +57,7 @@
               v-show="isLogingByActiveKey"
             ></b-spinner>
             {{ this.loginBtnText }}
-          </b-button>
+          </button>
         </div>
       </div>
       <TipMessage

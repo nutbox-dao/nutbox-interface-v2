@@ -364,6 +364,7 @@ export default {
       }
       this.canEdit = true;
       this.form = {...communityInfo};
+      this.form.color = this.form.color ?? '#ffdb1b';
       if (!communityInfo.name) {
         this.form.id = communityInfo.id;
         return;
@@ -526,6 +527,7 @@ export default {
     async onConfirm() {
       try {
         this.uploading = true;
+        console.log(234, this.form);
         const resCode = await completeCommunityInfo(this.form, this.type);
 
         // go to community dashboard
@@ -545,96 +547,6 @@ export default {
         });
       } finally {
         this.uploading = false;
-      }
-    },
-    async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/;
-      const res = reg.test(this.inputBlogTag);
-      if (!res) {
-        this.$bvToast.toast(this.$t("tip.inputRightBlogTag"), {
-          title: this.$t("tip.tips"),
-          variant: "warning",
-        });
-        return;
-      }
-      try {
-        this.creatingBlog = true;
-        await publishBlog(this.inputBlogTag);
-        this.state = "";
-        this.form.blogTag = this.inputBlogTag;
-        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-        this.showBlogTip = false;
-      } catch (e) {
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.creatingBlog = false;
-      }
-    },
-    async createBlog() {
-      try {
-        this.creatingBlog = true;
-        // create new account
-        const res = await createNewCommunity(
-          this.steemAccount,
-          this.blogTag,
-          this.blogMainPassword
-        );
-        if (res && res.success) {
-          // set community info
-          setCommunityInfo(
-            this.steemAccount,
-            this.blogTag,
-            this.blogMainPassword,
-            this.form.name,
-            this.form.description
-          );
-          // subscribe account
-          const res = await subscribeCommunity(this.steemAccount, this.blogTag);
-          if (res && res.success) {
-            this.showBlogTip = false;
-            this.$bvToast.toast(this.$t("tip.createBlogSuccess"), {
-              title: this.$t("tip.success"),
-              variant: "success",
-            });
-            // update
-            this.state = "publish";
-            this.form.blogTag = this.blogTag;
-          } else if (res && !res.success) {
-            this.$bvToast.toast(res.message, {
-              title: res.error,
-              variant: "error",
-            });
-          }
-        }
-      } catch (e) {
-        console.log("create account fail", e);
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.creatingBlog = false;
-      }
-    },
-    async publishBlog() {
-      try {
-        this.publishingBlog = true;
-        await publishBlog(this.blogTag);
-        this.state = "";
-        this.$bvToast.toast(this.$t("community.publishBlogSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-      } catch (e) {
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      } finally {
-        this.publishingBlog = false;
       }
     },
     gotoCreate() {

@@ -431,7 +431,7 @@ export default {
         this.form.ratios.reduce((t, r) => t + parseInt(r * 100), 0) != 10000
       ) {
         tipStr = this.$t("tip.ratioError");
-      } else if (parseFloat(this.userBalances[this.NUT.address].toString() / 1e18) < parseFloat(this.stakedNUT)){
+      } else if (!this.userBalances[this.NUT.address] || parseFloat(this.userBalances[this.NUT.address].toString() / 1e18) < parseFloat(this.stakedNUT)){
         tipStr = this.$t("tip.insufficientBalance")
       } else {
         return true;

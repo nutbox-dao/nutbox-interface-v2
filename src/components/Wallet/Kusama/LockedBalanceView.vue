@@ -17,9 +17,6 @@
         <button class="primary-btn" @click="showUnbond=true" :disabled='parseFloat(balances) < 0.0001'>
           {{ $t('wallet.unBond') }}
         </button>
-        <!-- <b-button variant="primary" @click="redeem" :disabled='parseFloat(balances) < 0.0001'>
-          {{ $t('wallet.redeem') }}
-        </b-button> -->
       </div>
     </div>
       <b-modal
