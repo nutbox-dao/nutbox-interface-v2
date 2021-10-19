@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68px" height="68px" viewBox="0 0 68 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_communnity</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME-2" transform="translate(-702.000000, -1310.000000)">
+            <g id="编组-5" transform="translate(214.000000, 1040.000000)">
+                <g id="编组-19备份-3" transform="translate(360.000000, 176.000000)">
+                    <g id="icon_communnity" transform="translate(128.000000, 94.000000)">
+                        <circle id="椭圆形" fill="#F8B62A" cx="34" cy="34" r="34"></circle>
+                        <g id="编组-7" transform="translate(11.801279, 16.000000)" stroke="#121212" stroke-width="3">
+                            <circle id="椭圆形" cx="22.1987211" cy="18" r="16.5"></circle>
+                            <path d="M7.44481383,13.3807443 C2.61218216,14.4806593 -0.441347292,16.0990832 -0.441347292,17.9035566 C-0.441347292,21.2172651 9.85610346,23.9035566 22.5586527,23.9035566 C35.261202,23.9035566 45.5586527,21.2172651 45.5586527,17.9035566 C45.5586527,16.0784863 42.4350172,14.443737 37.5063139,13.3432829" id="路径" transform="translate(22.558653, 18.623420) rotate(-30.000000) translate(-22.558653, -18.623420) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

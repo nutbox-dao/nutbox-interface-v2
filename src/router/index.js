@@ -41,6 +41,7 @@ import VoteSetting from "@/views/CommunitySetting/VoteSetting";
 import CreateProposal from "@/views/Nps/CreateProposal";
 import NpsIndex from "@/views/Nps/Index";
 import GameSetting from "@/views/CommunitySetting/GameSetting";
+import Home from "@/views/Home";
 
 Vue.use(VueRouter);
 
@@ -49,11 +50,17 @@ const routes = [
     path: "/",
     name: "HorizontalLayout",
     component: HorizontalLayout,
+    redirect: '/home',
     children: [
       {
-        path: "/",
-        name: "index",
-        redirect: "/community",
+        path: "/home",
+        name: "home",
+        component: Home
+      },
+      {
+        path: "/dapp",
+        name: "dapp",
+        component: () => import('@/views/Dapp')
       },
       {
         path: "/wallet",
