@@ -41,8 +41,8 @@
               <i id="nps-icon" class="menu-icon" />
               <span>{{ $t("nps.nps") }}</span>
             </b-nav-item>
-            <b-nav-item to="/specify/game">
-<!--              <i id="nps-icon" class="menu-icon" />-->
+            <b-nav-item v-if="showGame" to="/specify/game">
+              <!--              <i id="nps-icon" class="menu-icon" />-->
               <span>Game</span>
             </b-nav-item>
           </b-nav>
@@ -218,7 +218,8 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import Identicon from "@polkadot/vue-identicon";
 
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
-import {hexToRgb} from "@/utils/commen/util";
+import { getAllGame } from "@/utils/web3/game";
+import { hexToRgb } from "@/utils/commen/util";
 
 export default {
   data() {
@@ -229,6 +230,7 @@ export default {
       accountsPop: false,
       screenWidth: document.body.clientWidth,
       communityProposalConfigInfo: null,
+      games: null,
     };
   },
   computed: {
@@ -316,6 +318,9 @@ export default {
         this.communityProposalConfigInfo != "undefined"
       );
     },
+    showGame() {
+      return this.games && this.games !== "null" && this.games != "undefined";
+    },
   },
   components: {
     TipMessage,
@@ -331,11 +336,10 @@ export default {
     this.communityProposalConfigInfo = await getMyCommunityProposalConfigInfo(
       this.id
     );
-
     if(this.allCommunities && this.allCommunities[0].color){
       this.setThemeColor(this.allCommunities[0].color)
     }
-
+    this.games = await getAllGame();
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -358,7 +362,6 @@ export default {
       // window.open('https://nutbox.io', '_blank')
     },
     setThemeColor (color) {
-      console.log(234, color);
       if(color) {
         const root = document.documentElement
         root.style.setProperty('--primary-custom', `${color}`)

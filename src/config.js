@@ -5,7 +5,6 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
 
 export const BACKEND_API_URL = "http://localhost:3000";
@@ -196,5 +195,5 @@ export const NutAddress = '0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a'
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
   multicallAddress: MultiAddress,
-  interval: 3000
+  interval: 3000,
 };
