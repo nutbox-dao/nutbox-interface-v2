@@ -23,6 +23,9 @@
             <b-nav-item to="/home">
               <span>{{ $t("commen.home") }}</span>
             </b-nav-item>
+            <b-nav-item to="/dapp">
+              <span>DAPP Store</span>
+            </b-nav-item>
             <b-nav-item to="/community">
               <span>{{ $t("cs.community") }}</span>
             </b-nav-item>

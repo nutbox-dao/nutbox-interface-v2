@@ -58,6 +58,11 @@ const routes = [
         component: Home
       },
       {
+        path: "/dapp",
+        name: "dapp",
+        component: () => import('@/views/Dapp')
+      },
+      {
         path: "/wallet",
         redirect: "/wallet/bsc",
         component: Wallet,

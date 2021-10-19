@@ -222,6 +222,11 @@ $home-primary-color: #F8B62A;
 }
 .section4 {
   padding: 5rem 0;
+  background-image:
+    linear-gradient(-30deg,rgba(43, 102, 163, .68),rgba(39, 90, 145, 0.2), rgba(22, 34, 59, 0) 35%);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: right bottom;
   .box-item-bg {
     background-image: linear-gradient(150deg, $home-primary-color, white);
     border-radius: 12rem;
