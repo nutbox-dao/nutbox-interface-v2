@@ -12,7 +12,7 @@ module.exports = {
     confirm: "Confirm",
     add: "Add",
     update: "Update",
-    crowdstaking: "Crowdstaking",
+    crowdstaking: "Staking",
 
     apy: "APY",
     withdraw: "Harvest",
@@ -469,13 +469,6 @@ module.exports = {
     createNeedStake: "Create new pool need you stake:",
     notYourCommunity: "Wrong community info",
   },
-  game:{
-    game: 'Game',
-    recommend: 'Recommend',
-    popular: 'Popular',
-    others: 'Others',
-    noGames: 'No games'
-  },
   asset: {
     asset: "Asset",
     network: "Network",
@@ -535,5 +528,24 @@ module.exports = {
     cap: "Mkt Cap",
     price: "Price",
     totalSupply: "Supply",
+  },
+  game: {
+    game: 'Game',
+    recommend: 'Recommend',
+    popular: 'Popular',
+    others: 'Others',
+    noGames: 'No games',
+    create: "Create",
+    edit: "Edit",
+    gameName: "Game name",
+    gameLink: "Page link",
+    gameDesc: "Description",
+    gameCategory: "Category",
+    gameLogo: "Logo",
+    gamePoster: "Poster",
+    inputGameName: "Please input game name",
+    inputGameLink: "Please input game official page link",
+    inputGameDesc: "Please descipte your game",
+    noGame: "Game not exsit",
   },
 };

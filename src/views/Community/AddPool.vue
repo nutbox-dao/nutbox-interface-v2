@@ -178,7 +178,7 @@ import {
 } from "@/config";
 import { stanfiAddress } from "@/utils/commen/account";
 import { addPool, getMyOpenedPools, approveNUT, getStakedNUTInfo } from "@/utils/web3/pool";
-import { handleApiErrCode } from "@/utils/helper";
+import { handleApiErrCode, sleep } from "@/utils/helper";
 import Step from "@/components/ToolsComponents/Step";
 import { mapGetters, mapState } from "vuex";
 import { OfficialAssets } from "@/config";
@@ -453,6 +453,7 @@ export default {
           title: this.$t("tip.deployFactorySuccess"),
           variant: "success",
         });
+        await sleep(2)
         try {
           await getMyOpenedPools(true);
           this.$router.push("/community-setting/staking");

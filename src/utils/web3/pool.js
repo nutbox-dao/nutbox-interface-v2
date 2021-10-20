@@ -115,7 +115,7 @@ export const getMyOpenedPools = async (update = false) => {
         return;
       }
       // get active pools
-      let pools = await Promise.all((new Array(21).toString().split(',')).map((item, i) => contract.openedPools(i)))
+      let pools = await Promise.all((new Array(30).toString().split(',')).map((item, i) => contract.openedPools(i)))
       pools = pools.filter(pool => pool.hasActived)
 
       try {
@@ -239,7 +239,6 @@ export const updatePoolsRatio = async (form) => {
       return;
     }
     try {
-      console.log(form);
       const gas = await getGasPrice()
       const tx = await contract.setPoolRatios(form.map(val => val * 100),
       {
@@ -282,7 +281,6 @@ export const publishPool = async (pool) => {
     pool['pid'] = parseInt(pool.pid)
     pool['stakerCount'] = parseInt(pool.stakerCount)
     pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
-    console.log('pool', pool);
     const originMessage = JSON.stringify(pool)
     let signature = ''
     try {
@@ -478,7 +476,6 @@ export const withdrawReward = async (communityId, pid) => {
     }
 
     try{
-      console.log(communityId, pid);
       const gas = await getGasPrice()
       const tx = await contract.withdrawPoolRewards(pid,
         {
@@ -785,7 +782,7 @@ export const monitorPoolInfos = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('update pools info', updates);
+        // console.log('update pools info', updates);
         let monitorPools = store.state.web3.monitorPools 
         updates.map(u => {
           monitorPools[u.type] = u.value

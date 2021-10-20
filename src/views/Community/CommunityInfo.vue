@@ -275,7 +275,6 @@
 <script>
 import { uploadImage } from "@/utils/helper";
 import UploadLoading from "@/components/ToolsComponents/UploadLoading";
-import Login from "@/components/ToolsComponents/Login";
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
@@ -527,7 +526,6 @@ export default {
     async onConfirm() {
       try {
         this.uploading = true;
-        console.log(234, this.form);
         const resCode = await completeCommunityInfo(this.form, this.type);
 
         // go to community dashboard
@@ -535,6 +533,7 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
+        await sleep(2)
         await Promise.all([
           getAllCommunities(true),
           getMyCommunityInfo(true)

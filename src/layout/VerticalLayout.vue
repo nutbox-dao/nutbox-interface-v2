@@ -42,8 +42,8 @@
               <span>{{ $t("nps.nps") }}</span>
             </b-nav-item>
             <b-nav-item v-if="showGame" to="/specify/game">
-              <!--              <i id="nps-icon" class="menu-icon" />-->
-              <span>Game</span>
+              <i id="game-icon" class="menu-icon" />
+              <span>{{ $t('game.game') }}</span>
             </b-nav-item>
           </b-nav>
           <div class="bottom">

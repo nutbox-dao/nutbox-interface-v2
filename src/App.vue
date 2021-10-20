@@ -242,6 +242,9 @@ input::-webkit-input-placeholder {
 #community-icon {
   background-image: url("./static/images/menu-icon-community.svg");
 }
+#game-icon {
+  background-image: url("./static/images/game.png")
+}
 #setting-icon {
   @include icon(1.2rem, 1.2rem);
   background-image: url("~@/static/images/setting-icon.svg");
@@ -275,5 +278,8 @@ input::-webkit-input-placeholder {
   #community-icon {
     background-image: url("./static/images/menu-icon-community-hover.svg");
   }
+  #game-icon {
+  background-image: url("./static/images/game-hover.png")
+}
 }
 </style>

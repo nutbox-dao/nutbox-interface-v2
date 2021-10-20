@@ -453,13 +453,6 @@ module.exports = {
     createNeedStake: "创建矿池需要质押：",
     notYourCommunity: "社区信息错误",
   },
-  game:{
-    game: '游戏',
-    recommend: '推荐',
-    popular: '流行',
-    others: '其他',
-    noGames: '还没有游戏'
-  },
   asset: {
     asset: "资产",
     network: "网络",
@@ -520,6 +513,11 @@ module.exports = {
     totalSupply: "发行量",
   },
   game: {
+    game: '游戏',
+    recommend: '推荐',
+    popular: '流行',
+    others: '其他',
+    noGames: '还没有游戏',
     create: "创建游戏",
     edit: "编辑",
     gameName: "游戏名字",

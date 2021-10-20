@@ -82,6 +82,7 @@ export default {
         : "";
 
     try {
+      console.log(2344, this.currentCommunityId);
       getAllGame(this.currentCommunityId);
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
