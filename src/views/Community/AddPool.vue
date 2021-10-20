@@ -178,7 +178,7 @@ import {
 } from "@/config";
 import { stanfiAddress } from "@/utils/commen/account";
 import { addPool, getMyOpenedPools, approveNUT, getStakedNUTInfo } from "@/utils/web3/pool";
-import { handleApiErrCode } from "@/utils/helper";
+import { handleApiErrCode, sleep } from "@/utils/helper";
 import Step from "@/components/ToolsComponents/Step";
 import { mapGetters, mapState } from "vuex";
 import { OfficialAssets } from "@/config";
@@ -253,7 +253,7 @@ export default {
       concatAddressOptions: [
         {
           categoryName: "personal",
-          items: [{ name: "AAA", address: "0x000" }],
+          items: [{ name: "AAA", address: "0x0000" }],
         },
         {
           categoryName: "official",
@@ -431,7 +431,7 @@ export default {
         this.form.ratios.reduce((t, r) => t + parseInt(r * 100), 0) != 10000
       ) {
         tipStr = this.$t("tip.ratioError");
-      } else if (parseFloat(this.userBalances[this.NUT.address].toString() / 1e18) < parseFloat(this.stakedNUT)){
+      } else if (!this.userBalances[this.NUT.address] || parseFloat(this.userBalances[this.NUT.address].toString() / 1e18) < parseFloat(this.stakedNUT)){
         tipStr = this.$t("tip.insufficientBalance")
       } else {
         return true;
@@ -453,6 +453,7 @@ export default {
           title: this.$t("tip.deployFactorySuccess"),
           variant: "success",
         });
+        await sleep(2)
         try {
           await getMyOpenedPools(true);
           this.$router.push("/community-setting/staking");

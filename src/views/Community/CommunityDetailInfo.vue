@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content">
     <div class="container scroll-content">
-      <div class="page-view-title-v">{{$t("cs.crowdstaking") }}</div>
+      <div class="page-view-title-v">{{$t("commen.crowdstaking") }}</div>
       <div class="community-detail-info mb-5">
         <div class="loading-bg" v-if="!communityInfo || !pools">
           <img src="~@/static/images/loading.gif" alt="" />
@@ -58,6 +58,7 @@ import BSCAccount from '@/components/Accounts/BSCAccount'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
+import CommunityBlog from '@/views/Blog/CommunityBlog'
 import { sleep } from '@/utils/helper'
 
 export default {
@@ -71,7 +72,8 @@ export default {
     BSCAccount,
     PolkadotAccount,
     SteemAccount,
-    HiveAccount
+    HiveAccount,
+    CommunityBlog
   },
   props: {},
   data () {
@@ -169,6 +171,8 @@ export default {
           return this.nominatePools.length > 0
         case 4:
           return this.crowdloanPools.length > 0
+        case 5:
+          return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
   }

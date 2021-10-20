@@ -43,7 +43,7 @@
                 placeholder="0.000"
               >
               </b-form-input>
-              <span class="c-append">DOT</span>
+              <span class="c-append">{{ cToken.symbol }}</span>
             </div>
             <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
               {{$t("community.charge") }}
@@ -265,7 +265,7 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras, monitorCommunity } from '@/utils/web3/community'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
@@ -430,11 +430,13 @@ export default {
     }
   },
   async mounted () {
-    const communityInfo = await getMyCommunityInfo();
+    let communityInfo;
     try{
+      communityInfo = await getMyCommunityInfo();
       getDistributionEras().then(dist => {
         this.progressData = dist
       }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
+      monitorCommunity()
     }catch(e){
       if (e === errCode.NO_STAKING_FACTORY){
         this.noCommunity = true;

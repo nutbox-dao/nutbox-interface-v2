@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="354px" viewBox="0 0 224 354" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>元素bg</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="224" height="354"></rect>
+        <linearGradient x1="0%" y1="53.7248658%" x2="64.1748047%" y2="36.2939453%" id="linearGradient-3">
+            <stop stop-color="#714278" offset="0%"></stop>
+            <stop stop-color="#422B82" offset="31.5889134%"></stop>
+            <stop stop-color="#714278" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="50%" x2="50%" y2="44.8755297%" id="linearGradient-4">
+            <stop stop-color="#714278" offset="0%"></stop>
+            <stop stop-color="#714278" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME-2" transform="translate(0.000000, -746.000000)">
+            <g id="编组-5" transform="translate(0.000000, 746.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="蒙版"></g>
+                <g mask="url(#mask-2)">
+                    <g transform="translate(-225.000000, 0.000000)">
+                        <circle id="椭圆形备份" fill="url(#linearGradient-3)" cx="369" cy="255" r="80"></circle>
+                        <circle id="椭圆形" fill="url(#linearGradient-4)" opacity="0.5" cx="177" cy="177" r="177"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

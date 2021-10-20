@@ -6,9 +6,9 @@
           {{ $t("error.needtronlink") }}
         </p>
         <div class="install">
-          <b-button variant="primary" @click="install">
+          <button class="primary-btn" @click="install">
             {{ $t("wallet.install") }}
-          </b-button>
+          </button>
         </div>
       </div>
     </div>

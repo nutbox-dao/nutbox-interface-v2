@@ -45,12 +45,12 @@
       </div>
     </div>
     <template v-else>
-      <b-button variant="primary" v-if="!!countDown" :disabled='true'>
+      <button class="primary-btn" v-if="!!countDown" :disabled='true'>
         {{ countDown }}
-      </b-button>
-      <b-button
+      </button>
+      <button
       v-else
-        variant="primary"
+        class="primary-btn"
         @click="approve"
         :disabled="isApproving || loadingApprovements || status !== 'Active'"
       >
@@ -60,13 +60,17 @@
           v-show="isApproving || loadingApprovements"
         ></b-spinner>
         {{ $t("commen.approveContract") }}
-      </b-button>
+      </button>
     </template>
     </template>
     <div class="detail-info-box">
       <div class="project-info-container">
+        <span class="name"> {{ $t('community.totalDeposit') }} </span>
+        <div class="info">{{ totalDeposited | amountForm }}</div>
+      </div>
+      <div class="project-info-container">
         <span class="name"> TVL </span>
-        <div class="info">{{ tvl | amountForm }}</div>
+        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
@@ -96,6 +100,7 @@ import { mapState } from "vuex";
 import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { handleApiErrCode, formatCountdown } from "@/utils/helper";
 import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   name: "DDelegateCard",
@@ -110,12 +115,13 @@ export default {
   },
   computed: {
     ...mapState("steem", ["steemAccount"]),
-    ...mapState(['metamaskConnected']),
+    ...mapState(['metamaskConnected', 'prices']),
     ...mapState("web3", [
       "pendingRewards",
       "approvements",
       "loadingApprovements",
       "userStakings",
+      'allTokens',
       "loadingUserStakings",
       "monitorPools",
       "blockNum"
@@ -137,19 +143,26 @@ export default {
       const decimal = this.card.decimal;
       return parseFloat(userStakingBn.toString() / (10 ** decimal));
     },
-    tvl() {
-      if (!this.monitorPools || !this.monitorPools[this.card.communityId + '-' + this.card.pid] + '-totalStakedAmount') return 0
-      const tvl = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'];
       if(!tvl) return 0;
       const decimal = this.card.decimal
       return (tvl.toString() / (10 ** decimal))
+    },
+    tvl() {
+      return this.totalDeposited * this.erc20Price
+    },
+    erc20Price(){
+      if (!this.card) return null;
+      return this.allTokens.filter(token => token.address === this.card.address)[0].price
     },
     //if community not start, show count down time
     countDown () {
       if (!this.card?.firstBlock){
         return null;
       }
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3)
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
     },
     status (){
       const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']

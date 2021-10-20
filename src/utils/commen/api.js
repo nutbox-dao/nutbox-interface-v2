@@ -97,6 +97,7 @@ export const waitApi = async (relaychain) => {
       res(api);
     }
     const interval = setInterval(() => {
+      
       const api = store.state[relaychain].api
       if (api && Object.keys(api).length > 0) {
         res(api);

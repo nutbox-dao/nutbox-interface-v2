@@ -1,6 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
-import {  getMyCommunityInfo, getNonce, monitorCommunity, getDistributionEras } from './community'
+import {  getMyCommunityInfo, getNonce, getDistributionEras } from './community'
 import { getMyOpenedPools, monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
@@ -31,15 +31,17 @@ export const accountChanged = async () => {
         console.log('Changed accounts', accounts);
         store.commit('web3/saveAccount', ethers.utils.getAddress(accounts[0]))
         store.commit('web3/saveStakingFactoryId', null)
-        store.commit('web3/saveMyPools', [])
-        store.commit('web3/saveAllAssetsOfUser', [])
+        store.commit('web3/saveMyPools', null)
+        store.commit('web3/saveAllAssetsOfUser', null)
+        store.commit('web3/saveCommunityInfo', null)
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
-            monitorCommunity()
+            if (res){
+                getMyOpenedPools(true)
+                getNonce(true)
+                getDistributionEras(true)
+            }
         }).catch(console.error)
-        getMyOpenedPools(true)
-        getNonce(true)
-        getDistributionEras(true)
         monitorCtokenBalance(true)
         monitorPools()
     })

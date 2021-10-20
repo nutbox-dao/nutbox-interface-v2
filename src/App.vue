@@ -12,13 +12,13 @@ import { isMobile } from '@/utils/commen/util'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities, monitorCommunity, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
+import { getAllCommunities } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import {
   loadAccounts as loadPolkadotAccounts
 } from '@/utils/polkadot/account'
-import { updateAllTokensFromBackend } from '@/utils/web3/asset'
+
 export default {
   computed: {
     ...mapState('polkadot', [
@@ -56,7 +56,6 @@ export default {
         getAllPools().then(res => {
           monitorPools()
         }).catch(console.error)
-        monitorCommunity()
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -93,9 +92,6 @@ export default {
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
-
-    updateAllTokensFromBackend();
-    updateAllCommunitiesFromBackend()
     UpdateApysOfPool()
 
     // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
@@ -117,8 +113,10 @@ $blue: #ffdb1b;
 :root {
   --yellow-background: #f5ecd8;
   --primary-custom: #ffdb1b;
-  --primary: #ffdb1b;
+  --primary-custom-rgb: 255, 219, 27;
+  --primary-hover: #ffeb75;
   --primary-text: #242629;
+  --primary-btn-text-color: #242629;
   --secondary-text: #717376;
   --disable: #bdbfc2;
   --dividers: #e3e5e8;
@@ -244,6 +242,9 @@ input::-webkit-input-placeholder {
 #community-icon {
   background-image: url("./static/images/menu-icon-community.svg");
 }
+#game-icon {
+  background-image: url("./static/images/game.png")
+}
 #setting-icon {
   @include icon(1.2rem, 1.2rem);
   background-image: url("~@/static/images/setting-icon.svg");
@@ -277,5 +278,8 @@ input::-webkit-input-placeholder {
   #community-icon {
     background-image: url("./static/images/menu-icon-community-hover.svg");
   }
+  #game-icon {
+  background-image: url("./static/images/game-hover.png")
+}
 }
 </style>

@@ -155,7 +155,7 @@
 <script>
 import { deployERC20 } from '@/utils/web3/asset'
 import { monitorUserBalances } from '@/utils/web3/pool'
-import { uploadImage } from '@/utils/helper'
+import { uploadImage, sleep } from '@/utils/helper'
 import { insertToken, getAllTokens } from '@/apis/api'
 import UploadLoading from '@/components/ToolsComponents/UploadLoading'
 import { handleApiErrCode } from '../../utils/helper'
@@ -236,6 +236,7 @@ export default {
         }
         this.modalVisible = true
         await insertToken(token)
+        await sleep(2)
         // update tokens cache
         await getAllTokens(true)
         await monitorUserBalances()

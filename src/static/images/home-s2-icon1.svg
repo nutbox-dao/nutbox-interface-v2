@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68px" height="68px" viewBox="0 0 68 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_users</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME-2" transform="translate(-342.000000, -1310.000000)">
+            <g id="编组-5" transform="translate(214.000000, 1040.000000)">
+                <g id="编组-19备份-2" transform="translate(0.000000, 176.000000)">
+                    <g id="编组" transform="translate(76.500000, 94.000000)">
+                        <g id="icon_users" transform="translate(51.500000, 0.000000)">
+                            <circle id="椭圆形" fill="#F8B62A" cx="34" cy="34" r="34"></circle>
+                            <circle id="椭圆形" stroke="#121212" stroke-width="3" cx="34" cy="25" r="9"></circle>
+                            <path d="M25,38 L43,38 C46.8659932,38 50,41.1340068 50,45 L50,51 C50,51.5522847 49.5522847,52 49,52 L19,52 C18.4477153,52 18,51.5522847 18,51 L18,45 C18,41.1340068 21.1340068,38 25,38 Z" id="形状结合" stroke="#121212" stroke-width="3"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

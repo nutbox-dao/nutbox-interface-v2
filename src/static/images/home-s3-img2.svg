@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="451px" height="582px" viewBox="0 0 451 582" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>形状结合</title>
+    <defs>
+        <linearGradient x1="0%" y1="53.7248658%" x2="59.4480191%" y2="5.66130843%" id="linearGradient-1">
+            <stop stop-color="#714278" offset="0%"></stop>
+            <stop stop-color="#422B82" offset="31.5889134%"></stop>
+            <stop stop-color="#714278" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="nutbox-HOME" transform="translate(0.000000, -1800.000000)" fill="url(#linearGradient-1)">
+            <g id="编组-6" transform="translate(0.000000, 1800.000000)">
+                <path d="M160,0 C320.714862,0 451,130.285138 451,291 C451,451.714862 320.714862,582 160,582 C-0.714862192,582 -131,451.714862 -131,291 C-131,130.285138 -0.714862192,0 160,0 Z M160,145 C79.3664265,145 14,210.366427 14,291 C14,371.633573 79.3664265,437 160,437 C240.633573,437 306,371.633573 306,291 C306,210.366427 240.633573,145 160,145 Z" id="形状结合" transform="translate(160.000000, 291.000000) scale(-1, 1) translate(-160.000000, -291.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

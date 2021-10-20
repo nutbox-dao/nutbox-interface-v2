@@ -50,7 +50,6 @@ import {
   PRICES_SYMBOL
 } from "@/constant"
 
-
 /**
  * Get all pools that user have upload to backend
  * @returns 
@@ -116,7 +115,7 @@ export const getMyOpenedPools = async (update = false) => {
         return;
       }
       // get active pools
-      let pools = await Promise.all((new Array(21).toString().split(',')).map((item, i) => contract.openedPools(i)))
+      let pools = await Promise.all((new Array(30).toString().split(',')).map((item, i) => contract.openedPools(i)))
       pools = pools.filter(pool => pool.hasActived)
 
       try {
@@ -240,7 +239,6 @@ export const updatePoolsRatio = async (form) => {
       return;
     }
     try {
-      console.log(form);
       const gas = await getGasPrice()
       const tx = await contract.setPoolRatios(form.map(val => val * 100),
       {
@@ -283,7 +281,6 @@ export const publishPool = async (pool) => {
     pool['pid'] = parseInt(pool.pid)
     pool['stakerCount'] = parseInt(pool.stakerCount)
     pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
-    console.log('pool', pool);
     const originMessage = JSON.stringify(pool)
     let signature = ''
     try {
@@ -308,7 +305,6 @@ export const publishPool = async (pool) => {
     } catch (e) {
       reject(e)
     }
-
   })
 }
 
@@ -480,7 +476,6 @@ export const withdrawReward = async (communityId, pid) => {
     }
 
     try{
-      console.log(communityId, pid);
       const gas = await getGasPrice()
       const tx = await contract.withdrawPoolRewards(pid,
         {
@@ -787,7 +782,7 @@ export const monitorPoolInfos = async () => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        console.log('update pools info', updates);
+        // console.log('update pools info', updates);
         let monitorPools = store.state.web3.monitorPools 
         updates.map(u => {
           monitorPools[u.type] = u.value
@@ -873,7 +868,7 @@ export const monitorUserBalances = async () => {
         const poolRatio = monitorPools[key + 'poolRatio']
         if (monitorPools[key + 'hasStopped']) continue
         if (monitorPools[key + 'hasRemoved']) continue
-        if (pool.totalStakedAmount === '0') continue;
+        if (tvl === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
         const ctokenAddress = com.ctoken
@@ -897,17 +892,17 @@ export const monitorUserBalances = async () => {
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
-          const hivePrice = parseFloat(price['HIVEETH'])
+          const hivePrice = parseFloat(price['HIVUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * hivePrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
-          const dotPrice = parseFloat(price['DOTETH'])
+          const dotPrice = parseFloat(price['DOTUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * dotPrice)
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
-          const ksmPrice = parseFloat(price['KSMETH'])
+          const ksmPrice = parseFloat(price['KSMUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * ksmPrice)
           continue;
         }
@@ -945,11 +940,13 @@ const getPrices = async () => {
  * Monitor pools data
  */
 export const monitorPools = async () => {
-  await Promise.all([
-    monitorUserStakings(),
-    monitorPendingRewards(),
-    monitorApprovements(),
-    monitorPoolInfos(),
-    monitorUserBalances()
-  ]).catch(console.error)
+  getAllPools().then(() => {
+    Promise.all([
+      monitorUserStakings(),
+      monitorPendingRewards(),
+      monitorApprovements(),
+      monitorPoolInfos(),
+      monitorUserBalances()
+    ]).catch(console.error)
+  })
 }

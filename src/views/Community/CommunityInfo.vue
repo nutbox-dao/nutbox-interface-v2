@@ -66,6 +66,14 @@
                 rows="5"
               ></b-form-textarea>
             </b-form-group>
+            <!-- community theme -->
+            <b-form-group
+              label-cols-md="2"
+              content-cols-md="5"
+              :label="$t('community.communityThemeColor')"
+            >
+              <input class="p-2 w-50" type="color" :disabled="!isEdit" v-model="form.color"/>
+            </b-form-group>
             <!-- community logo -->
             <b-form-group
               label-cols-md="2"
@@ -202,7 +210,6 @@
         </button>
       </div>
     </b-modal>
-    <!-- signature tip -->
     <b-modal
       v-model="showSignatureTip"
       modal-class="custom-modal"
@@ -228,7 +235,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t('commen.cancel') }}
+            {{ $t("commen.cancel") }}
           </button>
         </div>
       </div>
@@ -258,8 +265,8 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">取消</button>
-        <button class="primary-btn" @click="completeCropAndUpload">完成</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
   </div>
@@ -271,8 +278,7 @@ import UploadLoading from "@/components/ToolsComponents/UploadLoading";
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
-  getAllCommunities,
-  monitorCommunity,
+  getAllCommunities
 } from "@/utils/web3/community";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import { mapGetters } from "vuex";
@@ -298,7 +304,8 @@ export default {
         icon: "",
         poster: "",
         pools: [],
-        blogTag: ''
+        blogTag: '',
+        color: '#ffdb1b'
       },
       logoPreviewSrc: "",
       logoUploadLoading: false,
@@ -314,13 +321,13 @@ export default {
       showDevRatioTip: false,
       showBlogTip: false,
       uploading: false,
-      approving:false,
+      approving: false,
       charging: false,
       publishingBlog: false,
       creatingBlog: false,
       cToken: {},
       isMintable: true,
-      cTokenAddress: '',
+      cTokenAddress: "",
       updatingAddress: false,
       updatingDevRatio: false,
       showStep: false,
@@ -347,7 +354,6 @@ export default {
   async mounted() {
     this.type = this.$route.query.type;
     this.isEdit = !!this.type;
-
     try {
       const communityInfo = await getMyCommunityInfo();
       if (!communityInfo) {
@@ -357,6 +363,7 @@ export default {
       }
       this.canEdit = true;
       this.form = {...communityInfo};
+      this.form.color = this.form.color ?? '#ffdb1b';
       if (!communityInfo.name) {
         this.form.id = communityInfo.id;
         return;
@@ -386,7 +393,6 @@ export default {
         const img = new Image()
         img.src = imgSrc
         img.onload = () => {
-          console.log(img.width, img.height)
           const cw = canvas.width = img.width
           const ch = canvas.height = img.height
           ctx.beginPath()
@@ -527,7 +533,11 @@ export default {
           title: this.$t("tip.tips"),
           variant: "success",
         });
-        await Promise.all([getAllCommunities(true), getMyCommunityInfo(true), monitorCommunity()])
+        await sleep(2)
+        await Promise.all([
+          getAllCommunities(true),
+          getMyCommunityInfo(true)
+        ]);
         await sleep(1);
         this.$router.replace("/community-setting/staking");
       } catch (e) {
@@ -574,6 +584,36 @@ export default {
     transform: translate(-50%, -50%);
     font-size: 1rem;
     text-align: center;
+  }
+}
+.close-icon {
+  position: absolute;
+  right: -1.4rem;
+  top: -1.4rem;
+  @include icon(1.4rem, 1.4rem);
+  background-image: url("~@/static/images/circle-close.png");
+}
+.cropper-container {
+  height: 500px;
+  max-height: 100%;
+}
+.crop-btn-group {
+  padding: 1.2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  button {
+    box-shadow: none;
+    width: fit-content;
+    padding: 0 2rem;
+  }
+}
+@media (max-width: 576px) {
+  .close-icon {
+    top: auto;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 </style>

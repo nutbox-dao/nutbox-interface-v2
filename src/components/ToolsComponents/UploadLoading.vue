@@ -1,12 +1,19 @@
 <template>
   <div class="loader-box">
-    <span class="loader"> </span>
+    <span class="loader"
+          :style="{width: loaderSize, minWidth: loaderSize, height:loaderSize, minHeight:loaderSize}"> </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'UploadLoading'
+  name: 'UploadLoading',
+  props: {
+    loaderSize: {
+      type: String,
+      default: '4rem'
+    }
+  }
 }
 </script>
 
@@ -17,6 +24,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
   border-radius: .8rem;
+  top: 0;
 }
 .loader {
   position: absolute;

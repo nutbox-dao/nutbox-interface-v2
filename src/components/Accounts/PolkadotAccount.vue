@@ -55,7 +55,6 @@ export default {
     changeAccount (acc) {
       console.log(acc.address);
       this.saveAccount(acc);
-
       getPolkadotBalance(acc);
       getKusamaBalance(acc);
       subNominators('polkadot');

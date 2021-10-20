@@ -89,7 +89,7 @@ export default {
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
     }).catch(e => {
-      console.log(e)
+      console.log(e);
     })
   }
 }

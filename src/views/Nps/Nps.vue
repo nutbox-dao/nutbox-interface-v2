@@ -1,19 +1,25 @@
 <template>
   <div class="page-view-content nps">
     <div class="container scroll-content">
-      <div class="page-view-title-v mt-5">{{$t("nps.nps") }}</div>
+      <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
       <div class="view-top-header pb-0">
         <div class="tip-box">
           <div class="page-view-title">{{ this.$t("nps.nps") }}</div>
-          <div style="text-align:left;margin-top:1rem">{{ $t('nps.npsTemp') }}</div>
+          <div style="text-align: left; margin-top: 1rem">
+            {{ $t("nps.npsTemp") }}
+          </div>
         </div>
       </div>
       <div class="view-top-header view-top-header-sticky flex-between-center">
         <div class="nav-box nav-box-bg">
           <div class="nav">
-            <span v-for="(item, index) of tabOptions" :key="index"
-                  :class="activeTab===index?'active':''"
-                  @click="activeTab = index">{{item}}</span>
+            <span
+              v-for="(item, index) of tabOptions"
+              :key="index"
+              :class="activeTab === index ? 'active' : ''"
+              @click="activeTab = index"
+              >{{ item }}</span
+            >
           </div>
         </div>
         <div class="c-btn-group">
@@ -24,17 +30,21 @@
         </div>
       </div>
       <div class="mb-5">
-        <div class="nps-card" v-for="(item, index) in proposalList" :key="item.num">
+        <div
+          class="nps-card"
+          v-for="(item, index) in proposalList"
+          :key="item.num"
+        >
           <div class="proposal">
             <p
               style="
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            border: 1px solid var(--primary);
-            font-size: 14px;
-            line-height: 32px;
-          "
+                width: 32px;
+                height: 32px;
+                border-radius: 16px;
+                border: 1px solid var(--primary-custom);
+                font-size: 14px;
+                line-height: 32px;
+              "
             >
               {{ index + 1 }}
             </p>
@@ -47,24 +57,26 @@
             </a>
             <a
               target="_blank"
-              :href="'https://blog.nutbox.io/@' + item.author + '/' + item.permlink"
+              :href="
+                'https://blog.nutbox.io/@' + item.author + '/' + item.permlink
+              "
               style="
-            flex: 1;
-            text-align: left;
-            font-weight: 500;
-            border-radius: 8px;
-          "
+                flex: 1;
+                text-align: left;
+                font-weight: 500;
+                border-radius: 8px;
+              "
             >
               {{ item.title }}
             </a>
             <p
               :class="item.status"
               style="
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 24px;
-            padding: 0px 6px;
-          "
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 24px;
+                padding: 0px 6px;
+              "
             >
               <!--{{ new Date(item.timestamp+'Z') | timeFormat}} -->
               {{ statusDesc(item.status) }}
@@ -86,8 +98,8 @@ export default {
   data() {
     return {
       proposalList: [],
-      tabOptions: ['ALL', 'Voting', 'Passed', 'Rejected'],
-      activeTab: 0
+      tabOptions: ["ALL", "Voting", "Passed", "Rejected"],
+      activeTab: 0,
     };
   },
   filters: {
@@ -106,8 +118,8 @@ export default {
         return this.$t("nps.pending");
       } else if (status === "unpass") {
         return this.$t("nps.unpass");
-      } else if (status === 'rolling'){
-        return this.$t("nps.rolling")
+      } else if (status === "rolling") {
+        return this.$t("nps.rolling");
       }
     },
   },
@@ -121,7 +133,7 @@ export default {
 <style lang="scss" scoped>
 .nps {
   .tip-box {
-    @include card(2rem 1.2rem, rgba(0, 0, 0, .2), hidden, fit-content);
+    @include card(2rem 1.2rem, rgba(0, 0, 0, 0.2), hidden, fit-content);
     color: white;
   }
   .nps-card {
@@ -133,53 +145,6 @@ export default {
     border-radius: 28px;
     border: 1px solid rgba(227, 229, 232, 0.5);
   }
-  .proposal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 72px;
-    p,
-    a {
-      margin: 0 10px;
-      color: var(--primary-text);
-      font-size: 16px;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      max-height: 60px;
-      font-weight: 600;
-      line-height: 20px;
-    }
-    a:hover {
-      color: var(--link);
-    }
-
-    .pass {
-      background: rgba(80, 191, 0, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(80, 191, 0, 0.3);
-      color: var(--success);
-    }
-    .pending {
-      background: rgba(255, 219, 38, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 219, 38, 0.3);
-      color: var(--warning);
-    }
-    .unpass {
-      background: rgba(255, 91, 77, 0.051);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 91, 77, 0.3);
-      color: var(--error);
-    }
-    .rolling {
-      background: #408fff0d;
-      border-radius: 8px;
-      border: 1px solid #408fff4d;
-      color: var(--link);
-    }
-  }
 }
 @media (max-width: 560px) {
   .view-top-header {
@@ -187,7 +152,7 @@ export default {
     align-items: flex-end;
   }
   .nav-box {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 }
 </style>

@@ -32,10 +32,10 @@
       <span style="color: #BDBFC2"> DELEGATED</span>
     </div>
 
-    <b-button
-        variant="primary" :disabled='true' v-if="!!countDown">
+    <button 
+        class="primary-btn" :disabled='true' v-if="!!countDown">
         {{ countDown }}
-    </b-button>
+    </button>
     <template v-else>
       <div class="btn-row mb-4" v-if="hiveLogin">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
@@ -53,8 +53,12 @@
   </template>
     <div class="detail-info-box">
       <div class="project-info-container">
-        <span class="name"> {{ tvl | amountForm }} </span>
-        <div class="info">--</div>
+        <span class="name"> {{ $t('community.totalDeposit') }} </span>
+        <div class="info">{{ totalDeposited | amountForm }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> TVL </span>
+        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
         <span class="name"> APY </span>
@@ -83,6 +87,8 @@ import Login from '@/components/ToolsComponents/Login'
 import { formatCountdown } from '@/utils/helper'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
+import { BLOCK_SECOND } from '@/constant'
+
 
 export default {
   name: 'DDelegateCard',
@@ -98,7 +104,8 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'blockNum', 'monitorPools']),
+    ...mapState(['prices']),
+    ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount
     },
@@ -113,14 +120,16 @@ export default {
       if(!userStakingBn) return 0;
       return this.vestsToHive * (userStakingBn.toString() / 1e6)
     },
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] * this.vestsToHive / 1e6
+    },
     tvl() {
-      const tvl = this.card.totalStakedAmount
-      if(!tvl) return 0;
-      return this.vestsToHive * (tvl.toString() / 1e6)
+      return this.totalDeposited * this.prices['HIVEUSDT'] / this.prices['ETHUSDT']
     },
     countDown () {
       if (!this.card?.firstBlock) return;
-      return formatCountdown(this.card.firstBlock, this.blockNum, 3);
+      return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND);
     },
     status (){
       const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']

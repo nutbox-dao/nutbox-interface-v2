@@ -1,7 +1,7 @@
 <template>
   <div class="page-view-content">
     <div class="container scroll-content">
-      <div class="page-view-title-v">{{$t("cs.crowdstaking") }}</div>
+      <div class="page-view-title-v">{{$t("commen.crowdstaking") }}</div>
       <div class="loading-bg" v-if="loading">
         <img src="~@/static/images/loading.gif" alt="" />
         <p class="font16">{{ $t("tip.loading") }}</p>

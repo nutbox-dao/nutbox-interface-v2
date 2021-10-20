@@ -11,6 +11,10 @@ import store from '@/store'
 
 import { getProvider } from './ethers'
 import { getAccounts } from "./account"
+import { getRegitryAssets } from './asset'
+import { getMyCommunityInfo } from './community'
+import { getMyOpenedPools } from './pool'
+import { ethers } from 'ethers'
 
 export const getWeb3 = () => {
   const web3  = new Web3(RPC_NODE)
@@ -27,32 +31,34 @@ export const setupNetwork = async () => {
   const chainId = parseInt(BSC_CHAIN_ID)
   try {
     await eth.request({
-      // method: 'wallet_addEthereumChain',
       method: 'wallet_switchEthereumChain',
       params: [{
         chainId: `0x${chainId.toString(16)}`
-        // chainName: CHAIN_NAME,
-        // nativeCurrency: {
-        //   name: 'BNB',
-        //   symbol: 'bnb',
-        //   decimals: 18,
-        // },
-        // rpcUrls: [RPC_NODE],
-        // blockExplorerUrls: ['https://bscscan.com/'],
       }],
     })
     store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
-    console.log(333, error);
-    store.commit('web3/saveChainId', chainId)
-    store.commit('web3/saveAccount', null)
-    store.commit('web3/saveStakingFactoryId', null)
-    store.commit('web3/saveMyPools', [])
-    store.commit('web3/saveAllAssetsOfUser', [])
-    store.commit('saveMetamaskConnected', false)
-    return false
+    try{
+      await eth.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: `0x${chainId.toString(16)}`,
+          chainName: CHAIN_NAME,
+          rpcUrls:[RPC_NODE]
+        }],
+      })
+    }catch(error){
+      console.log(333, error);
+      store.commit('web3/saveChainId', chainId)
+      store.commit('web3/saveAccount', null)
+      store.commit('web3/saveStakingFactoryId', null)
+      store.commit('web3/saveMyPools', null)
+      store.commit('web3/saveAllAssetsOfUser', null)
+      store.commit('saveMetamaskConnected', false)
+      return false
+    }
   }
 }
 
@@ -74,6 +80,7 @@ export const getEthWeb = async () => {
     await sleep(0.5)
     metamask = window.ethereum
   }
+  
   return metamask
 }
 
@@ -91,21 +98,26 @@ export const connectMetamask = async () => {
  * User changed chain
  */
 export const chainChanged = async () => {
+  
   const metamask = await getEthWeb()
+ 
   console.log('monitor chain id');
-  metamask.on('chainChanged', (chainId) => {
+  metamask.on('chainChanged', async(chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)
-      store.commit('web3/saveMyPools', [])
-      store.commit('web3/saveAllAssetsOfUser', [])
+      store.commit('web3/saveMyPools', null)
+      store.commit('web3/saveAllAssetsOfUser', null)
       store.commit('saveMetamaskConnected', false)
     }else{
+      await getAccounts(true)
       getProvider(true)
       store.commit('saveMetamaskConnected', true)
-      getAccounts(true)
+      getRegitryAssets(true)
+      getMyCommunityInfo(true)
+      getMyOpenedPools(true)
     }
   })
 }

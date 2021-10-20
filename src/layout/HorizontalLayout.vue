@@ -6,7 +6,7 @@
       <b-navbar toggleable="lg">
         <div class="m-logo">
           <div class="d-flex align-items-center">
-            <b-navbar-brand to="/" class="m-0">
+            <b-navbar-brand to="/home" class="m-0">
               <img class="logo" src="~@/static/images/logo_small.png"
                    @click="gotoOfficial" alt="nutbox" />
             </b-navbar-brand >
@@ -28,6 +28,9 @@
             </b-nav-item>
             <b-nav-item to="/blog">
               <span>{{ $t("commen.blog") }}</span>
+            </b-nav-item>
+            <b-nav-item to="/dapp">
+              <span>{{ $t('commen.dappStore') }}</span>
             </b-nav-item>
             <b-nav-item to="/nps">
               <span>{{ $t("nps.nps") }}</span>
@@ -104,6 +107,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Identicon from '@polkadot/vue-identicon'
 import { setupNetwork } from '@/utils/web3/web3'
 import { LOCALE_KEY } from "@/config";
+import { getMyStakingFactory } from '@/utils/web3/community'
 
 export default {
   name: 'VerticalLayout',
@@ -193,8 +197,9 @@ export default {
       }
     }
   },
-  watch: {
-  }
+  mounted () {
+    getMyStakingFactory();
+  },
 }
 </script>
 
