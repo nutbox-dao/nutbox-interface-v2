@@ -157,8 +157,6 @@ export const getAllPools = async (communityId = null) =>
 export const getPricesOnCEX = async () =>
   get("https://api.binance.com/api/v3/ticker/price");
 
-//============================================ game ============================================
-
 export const getGame = async (gameId) =>
   get(BACKEND_API_URL + "/game/get", { id: gameId });
 

@@ -3,8 +3,7 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE,
-  CHAIN_NAME
+  RPC_NODE
 } from '@/config'
 import Web3 from "web3"
 import store from '@/store'

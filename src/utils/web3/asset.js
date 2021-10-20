@@ -37,6 +37,7 @@ import { errCode,
 } from "@/config";
 import { stanfiAddress } from '@/utils/commen/account'
 import { signMessage } from './utils'
+
 /**
  * Judge asset wheather Homechain assets
  * @param {String} address regitsry contract address address 
