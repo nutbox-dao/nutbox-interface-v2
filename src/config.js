@@ -39,13 +39,7 @@ export const errCode = {
 /** ====================================== polkadot ============================================*/
 export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io";
 export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io";
-// export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.nutbox.io"
 export const ROCOCO_WEB_SOCKET = "wss://crowdloan-test.nutbox.io/relaychain/ws";
-
-export const CROWD_STAKING_API_URL = "https://crowdstaking-api.nutbox.io";
-// export const CROWD_STAKING_API_URL = "http://localhost:3200"
-export const CROWD_LOAN_API_URL = "https://crowdloan-api.nutbox.io";
-// export const CROWD_LOAN_API_URL = "http://localhost:3000"
 
 export const PARA_STATUS = {
   ACTIVE: "Active",
@@ -61,13 +55,37 @@ export const POLKADTO_ADDRESS_FORMAT_CODE = {
   substrate: 42,
 };
 
+// const remark = api.createType('NutboxRemark', {
+//   magic: 'nutbox',
+//   msgType: 'crowdloan',
+//   source: api.createType('Compact<u8>', 2),   // 2: polkadot, 3: kusama
+//   dest: api.createType('Compact<u8>', 0),
+//   sequence: api.createType('Compact<u64>', Date.now()),
+//   paraId: api.createType('Compact<u32>', 2001),
+//   trieIndex: api.createType('Compact<u32>', 1),
+//   communityAccount: 'DzmAoYXo1ka1xW3CCZajTXqJxG5oQUJLqLBbpqDzCUatHBP',
+//   recipient: '0xA29D4E0F035cb50C0d78c8CeBb56Ca292616Ab20'.substr(2),
+//   amount: api.createType('Compact<BalanceOf>', new BN('6000000000000')),
+//   bindAccount: 'HNZata7iMYWmk5RvZRTiAsSDhV8366zq2YGb3tLH5Upf74F',
+//   stakingFeast: '0xef1E390c2108376C45e5e5467Eaf58D454FdE7Ad'.substr(2),
+//   pid: api.createType('Compact<u8>', 0)
+// });
+
 // 添加到交易batch的remark结构
 export const NUTBOX_REMARK_TYPE = {
   magic: "Text", // 默认为nutbox
-  op: "u8", // 0为crowdloan， 1为crowdstaking
-  stakingAddress: "Text", // address on bsc
-  trieIndex: "Option<u8>", // crowdloan 才有该字段
-  communityId: "AccountId", // 通过哪个社区操作的
+  msgType: 'Text',  // crowdloan
+  source: 'Compact<u8>',  // 2: polkadot, 3: kusama
+  dest: 'Compact<u8>',
+  sequence: 'Compact<u64>',
+  paraId: 'Compact<u32>',
+  trieIndex: 'Compact<u32>',
+  communityAccount: 'Text',
+  recipient: 'Text',
+  amount: 'Compact<BalanceOf>',
+  bindAccount: 'Text',
+  stakingFeast: 'Text',
+  pid: 'Compact<u8>'
 };
 
 // Phala推荐机制 remark

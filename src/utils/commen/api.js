@@ -22,7 +22,6 @@ import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
 
 export async function initApis() {
   initApi('polkadot').then(subscribeAllFundInfo('polkadot'))
-  // initApi('rococo')
   initApi('kusama').then(subscribeAllFundInfo('kusama'))
 }
 
