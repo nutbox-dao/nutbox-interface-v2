@@ -128,7 +128,7 @@ export default {
     },
     erc20Price(){
       if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry') return null;
-      return this.allTokens.filter(({address}) => address === this.pool.asset.address)[0].price
+      return this.allTokens.filter(({address}) => address === this.pool.asset.address)[0]?.price
     },
     stakerCount() {
       return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']
