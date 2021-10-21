@@ -305,7 +305,7 @@ export default {
         const res = await createNewCommunity(this.steemAccount, this.newBlogTag, this.blogMainPassword)
         if(res && res.success){
           // set community info
-          setCommunityInfo(this.steemAccount, this.newBlogTag, this.blogMainPassword, this.form.name, this.form.description)
+          setCommunityInfo(this.steemAccount, this.newBlogTag, this.blogMainPassword, this.communityInfo.name, this.communityInfo.description)
           // subscribe account
           const res = await subscribeCommunity(this.steemAccount, this.newBlogTag)
           if (res && res.success){

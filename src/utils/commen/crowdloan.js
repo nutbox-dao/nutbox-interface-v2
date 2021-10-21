@@ -56,6 +56,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
     }
   }
   endpoints = tmp
+  paraIds = [2000, 2001]
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {
@@ -98,6 +99,8 @@ export const subscribeAllFundInfo = async (relaychain) => {
           }
           res({
             ...fund,
+            paraId: pId,
+            Test: 'Bifrost',
             status,
             statusIndex,
             cap: new BN(cap),

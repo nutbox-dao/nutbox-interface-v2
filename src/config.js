@@ -5,9 +5,8 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-
-// export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -38,7 +37,7 @@ export const errCode = {
 
 /** ====================================== polkadot ============================================*/
 export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io";
-export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io";
+export const KUSAMA_WEB_SOCKET = "ws://127.0.0.1:9944"// "wss://kusama-rpc.polkadot.io";
 export const ROCOCO_WEB_SOCKET = "wss://crowdloan-test.nutbox.io/relaychain/ws";
 
 export const PARA_STATUS = {
@@ -167,15 +166,15 @@ export const GasLimit = 10000000;
 
 
 // local network
-// export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
-// export const NutAddress = '0x61b053807fBD95d1e187cd3Ed98c9abf2CEED62a'
+export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
+export const NutAddress = '0x8F45066eE7B4a09355A43bC689188a46b33797eB'
 
 // export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
+// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+// export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
 
 // Register by nutbox
 export const OfficialAssets = [
@@ -183,7 +182,7 @@ export const OfficialAssets = [
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",
-    asset: "0xcac6b153e1d2c35b9a4aec10dd2c507f86be7bab807c71bd2f0407626e9132b2",
+    asset: "0x8fc392966ab8ae661c101da3cac00722d172319b137266ecaca375f7f90838e8",
     contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",
