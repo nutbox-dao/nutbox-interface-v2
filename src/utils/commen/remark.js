@@ -19,11 +19,11 @@ import { BSC_CHAIN_ID } from '@/config'
 });
  * @returns 
  */
-export const createCrowdloanRemark = (api, paraId, trieIndex, communityAccount, recipient,amount,bindAccount,stakingFeast, pid) => {
+export const createCrowdloanRemark = (api, chainId, paraId, trieIndex, communityAccount, recipient,amount,bindAccount,stakingFeast, pid) => {
   const remark = api.createType('NutboxRemark', {
     magic: 'nutbox',
     msgType: 'crowdloan',
-    source: api.createType('Compact<u8>', 3),
+    source: api.createType('Compact<u8>', chainId),
     dest: api.createType('Compact<u8>', 0),
     sequence: api.createType('Compact<u64>', Date.now()),
     paraId,

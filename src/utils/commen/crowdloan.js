@@ -56,7 +56,6 @@ export const subscribeAllFundInfo = async (relaychain) => {
     }
   }
   endpoints = tmp
-  paraIds = [2000, 2001]
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {
@@ -216,6 +215,7 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
     // stakingFeast, 
     // pid
     const remark = createCrowdloanRemark(api, 
+      relaychain === 'polkadot' ? 2 : 3,
       paraId, 
       trieIndex, 
       stanfiAddress(communityId, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
