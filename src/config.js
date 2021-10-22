@@ -74,17 +74,17 @@ export const POLKADTO_ADDRESS_FORMAT_CODE = {
 export const NUTBOX_REMARK_TYPE = {
   magic: "Text", // 默认为nutbox
   msgType: 'Text',  // crowdloan
-  source: 'Compact<u8>',  // 2: polkadot, 3: kusama
-  dest: 'Compact<u8>',
-  sequence: 'Compact<u64>',
-  paraId: 'Compact<u32>',
-  trieIndex: 'Compact<u32>',
+  source: 'u8',  // 2: polkadot, 3: kusama
+  dest: 'u8',
+  sequence: 'u64',
+  paraId: 'u32',
+  trieIndex: 'u32',
   communityAccount: 'Text',
   recipient: 'Text',
-  amount: 'Compact<BalanceOf>',
+  amount: 'u128',
   bindAccount: 'Text',
   stakingFeast: 'Text',
-  pid: 'Compact<u8>'
+  pid: 'u8'
 };
 
 // Phala推荐机制 remark

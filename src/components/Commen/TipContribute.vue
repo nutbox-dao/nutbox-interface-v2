@@ -44,6 +44,7 @@ import { mapState } from "vuex";
 import { contribute as pC } from "@/utils/polkadot/crowdloan"
 import { contribute as kC } from "@/utils/kusama/crowdloan"
 import { contribute as rC } from "@/utils/rococo/crowdloan"
+import { contribute } from "@/utils/commen/crowdloan"
 import { formatBalance as fbp } from "@/utils/polkadot/polkadot"
 import { formatBalance as fbk } from "@/utils/kusama/kusama"
 import { formatBalance as fbr } from "@/utils/rococo/rococo"
@@ -77,6 +78,10 @@ export default {
     },
     communityNominatorId: {
       type: String
+    },
+    // pool card infos
+    card: {
+      type: Object
     }
   },
   computed: {
@@ -185,16 +190,15 @@ export default {
         });
         this.isComtribution = true;
         const trieIndex = this.fund.trieIndex;
-        const contribute = {
-          polkadot: pC,
-          kusama: kC,
-          rococo: rC
-        }
-        const res = await contribute[this.relaychain](
+        //relaychain, paraId, amount, communityId, trieIndex, stakingFeast, pid, toast, callback
+        const res = await contribute(
+          this.relaychain,
           this.paraId,
           parseFloat(this.inputAmount),
           this.communityId,
           trieIndex,
+          this.card.communityId,
+          this.card.pid,
           (info, param) => {
             this.$bvToast.toast(info, param);
           },

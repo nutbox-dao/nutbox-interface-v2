@@ -271,9 +271,9 @@ export default {
       }
     },
     async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/
-      const res = reg.test(this.inputBlogTag)
-      if (!res){
+      const check = this.inputBlogTag.split('-')
+      const maxNum = Math.ceil(Math.random()*3998999) + 10000
+      if (check.length !== 2 || check[0] !== 'hive' || parseInt(check[1]) > 3999999 || parseInt(check[1] < 10000)){
         this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
           title: this.$t('tip.tips'),
           variant:'warning'

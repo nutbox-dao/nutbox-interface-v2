@@ -97,6 +97,7 @@
         :fund="getFundInfo"
         :relaychain='chain'
         :paraName="card.poolName"
+        :card="card"
         @hideContribute="showContribute = false"
       />
     </b-modal>
