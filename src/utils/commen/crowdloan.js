@@ -216,6 +216,7 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
     // stakingFeast, 
     // pid
     const remark = createCrowdloanRemark(api, 
+      relaychain === 'polkadot' ? 2 : 3,
       paraId, 
       trieIndex, 
       stanfiAddress(communityId, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
