@@ -26,7 +26,7 @@ import {
 import {
   handelBlockState
 } from './transactionHandler'
-import { PARA_STATUS } from '@/config'
+import { PARA_STATUS, POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
 import { waitApi } from "./api"
 import { createWsEndpoints } from '@polkadot/apps-config';
 
@@ -56,6 +56,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
     }
   }
   endpoints = tmp
+  paraIds = [2000, 2001]
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {
@@ -98,6 +99,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
           }
           res({
             ...fund,
+            paraId: pId,
             status,
             statusIndex,
             cap: new BN(cap),
@@ -189,7 +191,7 @@ export const withdraw = async (relaychain, paraId, toast, callback) => {
 }
 
 
-export const contribute = async (relaychain, paraId, amount, communityId, trieIndex, toast, callback) => {
+export const contribute = async (relaychain, paraId, amount, communityId, trieIndex, stakingFeast, pid, toast, callback) => {
   const api = await waitApi(relaychain)
   const from = store.state.polkadot.account && store.state.polkadot.account.address
   communityId = stanfiAddress(communityId)
@@ -201,9 +203,27 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   const contributeTx = api.tx.crowdloan.contribute(paraId, amount, null)
+  const recipient = store.state.web3.account;
   if (communityId) {
     let trans = []
-    const remark = createCrowdloanRemark(api, trieIndex, communityId)
+    // api, 
+    // paraId, 
+    // trieIndex, 
+    // communityAccount, 
+    // recipient,
+    // amount,
+    // bindAccount,
+    // stakingFeast, 
+    // pid
+    const remark = createCrowdloanRemark(api, 
+      paraId, 
+      trieIndex, 
+      stanfiAddress(communityId, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
+      recipient,
+      amount,
+      stanfiAddress(from, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
+      stakingFeast,
+      pid)
     const remarkTx = api.tx.system.remarkWithEvent(remark)
     trans.push(contributeTx)
     trans.push(remarkTx)
