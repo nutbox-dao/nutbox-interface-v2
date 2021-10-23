@@ -208,13 +208,13 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
     trans.push(contributeTx)
     trans.push(remarkTx)
 
-    if (parseInt(paraId) === 2004){
-      // 添加phala的remark
-      const referrer = api.createType('AccountId', communityId)
-      const pid = api.createType('ParaId', 2004)
-      const khalaTx = api.tx.system.remarkWithEvent(createKhalaReferrerRemark(api, pid, referrer))
-      trans.push(khalaTx)
-    }
+    // if (parseInt(paraId) === 2004){
+    //   // 添加phala的remark
+    //   const referrer = api.createType('AccountId', communityId)
+    //   const pid = api.createType('ParaId', 2004)
+    //   const khalaTx = api.tx.system.remarkWithEvent(createKhalaReferrerRemark(api, pid, referrer))
+    //   trans.push(khalaTx)
+    // }
     const unsub = await api.tx.utility
       .batch(trans).signAndSend(from, {
         nonce
