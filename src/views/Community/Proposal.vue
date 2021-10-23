@@ -32,12 +32,12 @@
           <div class="col-6 text-right">
             <button class="primary-btn w-50"
                     @click="onVote('agree')"
-                    :disabled="!isValid || isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
+                    :disabled="isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
           </div>
           <div class="col-6">
             <button class="primary-btn w-50"
                     @click="onVote('disagree')"
-                    :disabled="!isValid || isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
+                    :disabled="isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@
         <button
           class="primary-btn"
           @click="ConfirmVote"
-          :disabled="!isValid || isVoted || voteing || loading"
+          :disabled="isVoted || voteing || loading"
         >
           <b-spinner small type="grow" v-show="voteing" />
           {{  type == "agree"
@@ -183,7 +183,6 @@ export default {
         end_block: 0,
         passthreshold: 0,
       },
-      isValid: false,
       form: {
         communityId: "",
         network: "",
@@ -229,33 +228,6 @@ export default {
       return this.voteTotalScore == 0
         ? 0
         : (this.voteDisagreeTotalScore * 100) / this.voteTotalScore;
-    },
-  },
-  watch: {
-    "proposal.network": {
-      handler(newValue, oldValue) {
-        const strategies = [];
-        if (this.proposal.strategies) {
-          const formStrategies = JSON.parse(this.proposal.strategies).forEach(
-            (element) => {
-              strategies.push(element.strategies);
-            }
-          );
-        }
-        var params = {
-          space: "",
-          strategies,
-          network: this.proposal.network,
-          isSingle: 1,
-        };
-
-        getScore(params).then((res) => {
-          this.totalScore = res;
-          this.isValid = this.totalScore >= this.proposal.threshold;
-        });
-      },
-      immediate: true,
-      deep: true,
     },
   },
   methods: {

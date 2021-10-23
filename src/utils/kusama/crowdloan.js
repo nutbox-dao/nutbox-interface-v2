@@ -36,6 +36,6 @@ export const withdraw = async (paraId, toast, callback) => {
 }
 
 
-export const contribute = async (paraId, amount, communityId, trieIndex, toast, callback) => {
-  return await c('kusama', paraId, amount, communityId, trieIndex, toast, callback)
+export const contribute = async (amount, communityId, trieIndex, stakingFeast, pid, toast, callback) => {
+  return await c('kusama', paraId, amount, communityId, trieIndex, stakingFeast, pid, toast, callback)
 }

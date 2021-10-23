@@ -271,9 +271,9 @@ export default {
       }
     },
     async bindBlog() {
-      const reg = /^hive-[1-3]\d{3,6}$/
-      const res = reg.test(this.inputBlogTag)
-      if (!res){
+      const check = this.inputBlogTag.split('-')
+      const maxNum = Math.ceil(Math.random()*3998999) + 10000
+      if (check.length !== 2 || check[0] !== 'hive' || parseInt(check[1]) > 3999999 || parseInt(check[1] < 10000)){
         this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
           title: this.$t('tip.tips'),
           variant:'warning'
@@ -305,7 +305,7 @@ export default {
         const res = await createNewCommunity(this.steemAccount, this.newBlogTag, this.blogMainPassword)
         if(res && res.success){
           // set community info
-          setCommunityInfo(this.steemAccount, this.newBlogTag, this.blogMainPassword, this.form.name, this.form.description)
+          setCommunityInfo(this.steemAccount, this.newBlogTag, this.blogMainPassword, this.communityInfo.name, this.communityInfo.description)
           // subscribe account
           const res = await subscribeCommunity(this.steemAccount, this.newBlogTag)
           if (res && res.success){
