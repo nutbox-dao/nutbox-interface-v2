@@ -3,9 +3,9 @@
     <div class="page-view-sidebar">
       <b-nav vertical>
         <b-nav-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-nav-item>
+        <b-nav-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-nav-item>
         <b-nav-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-nav-item>
         <b-nav-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-nav-item>
-        <b-nav-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-nav-item>
       </b-nav>
     </div>
     <div class="side-page-view-content">

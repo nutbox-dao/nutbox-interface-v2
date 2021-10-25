@@ -91,7 +91,7 @@ import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 
 export default {
-  name: 'DDelegateCard',
+  name: 'SteemDelegateCard',
   components: {
     DelegateModal,
     ConnectWalletBtn,

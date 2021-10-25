@@ -113,7 +113,7 @@ import { handleApiErrCode } from "@/utils/helper";
 import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
-  name: "DDelegateCard",
+  name: "CrowdStakingCard",
   components: {
     StakingHomeChainAssetModal,
     ConnectMetaMask
@@ -162,7 +162,7 @@ export default {
       return this.totalDeposited * this.erc20Price
     },
     erc20Price(){
-      if (!this.card || !this.card.address) return null;
+      if (!this.card || !this.card.address || !this.allTokens) return null;
       return this.allTokens.filter(token => token.address === this.card.address)[0].price
     },
     status (){
