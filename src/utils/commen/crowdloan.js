@@ -145,7 +145,7 @@ export const handleContributors = async (relaychain, api, funds) => {
           resolve(fund)
         }
         const contributions = await api.derive.crowdloan.contributions(pid)
-        const own = await  api.derive.crowdloan.ownContributions(pid, [account])
+        const own = await api.derive.crowdloan.ownContributions(pid, [account])
         fund.funds = {
           count: contributions.contributorsHex.length,
           ownContribution: own[account]
@@ -359,13 +359,23 @@ export const sortCRPoolCard = (pools, parachains) => {
       return {
         ...pool,
         statusStr: PARA_STATUS.COMPLETED,
-        statusIndex: 2
+        statusIndex: 2,
+        currentTrieindex: -1
       }
     }else{
+      // passed trieindex will be convert to complete status
+      if (pool.trieIndex !== para[0]. trieIndex) 
+        return {
+          ...pool,
+          statusStr: PARA_STATUS.COMPLETED,
+          statusIndex: 2,
+          currentTrieindex: para[0].trieIndex
+        }
       return {
         ...pool,
         statusStr: para[0].statusStr,
-        statusIndex: para[0].statusIndex
+        statusIndex: para[0].statusIndex,
+        currentTrieindex: para[0].trieIndex
       }
     }
   })

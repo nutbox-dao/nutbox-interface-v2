@@ -854,6 +854,7 @@ export const monitorUserBalances = async () => {
   // token price = 0 or ctoken price = 0 => apy = 0
   const update = async () => {
     try{
+      const ts = new Date().getTime();
       let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
       const monitorPools = store.state.web3.monitorPools
       let temp = {}
@@ -889,7 +890,7 @@ export const monitorUserBalances = async () => {
         }
 
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
-          const steemPrice = parseFloat(price['STEEMETH'])
+          const steemPrice = parseFloat(price['STEEMETH']) * parseFloat(price['ETHUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToSteem * steemPrice)
           continue;
         }
@@ -910,6 +911,7 @@ export const monitorUserBalances = async () => {
         }
       }
       store.commit('web3/saveAllPools', pools)
+      console.log('update apy used:', (new Date().getTime()) - ts);
     }catch(e) {
       console.log('Update apys faile', e);
     }

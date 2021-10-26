@@ -24,7 +24,6 @@
 <script>
 import DStakingCard from '@/components/Community/DetailInfo/Cards/DStakingCard'
 import { mapState } from 'vuex'
-import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
   name: 'DCrowdStaking',
@@ -40,8 +39,6 @@ export default {
     ...mapState('web3', ['loadingAllPools'])
   },
   mounted () {
-    subNominators('kusama')
-    subNominators('polkadot');
   },
 }
 </script>

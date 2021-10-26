@@ -63,6 +63,7 @@ import { stanfiAddress } from '@/utils/commen/account'
 import { registerNominateAsset, getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { ASSET_LOGO_URL } from '@/constant'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   name: 'NominationForm',
@@ -124,6 +125,10 @@ export default {
         this.registring = false
       }
     }
+  },
+  created () {
+    initApis('polkadot');
+    initApis('kusama');
   },
 }
 

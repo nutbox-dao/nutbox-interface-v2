@@ -21,18 +21,6 @@
           />
         </div>
       </div>
-      <!-- <UserContributions class="mb-4">
-        <template #title>
-          <div class="card-title">
-            {{ $t("wallet.contribution") }}
-          </div>
-        </template>
-      </UserContributions>
-      <UserNominations>
-        <template #title>
-          <div class="card-title">{{ $t("wallet.nomination") }}</div>
-        </template>
-      </UserNominations> -->
     </div>
   </div>
 </template>
@@ -40,8 +28,6 @@
 <script>
 import BalanceView from "@/components/Wallet/Kusama/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Kusama/LockedBalanceView";
-import UserContributions from "@/components/Wallet/Kusama/UserContributions";
-import UserNominations from "@/components/Wallet/Kusama/UserNominations"
 import { mapState, mapGetters } from "vuex";
 import { subNominators } from '@/utils/commen/crowdStaking'
 
@@ -57,9 +43,7 @@ export default {
   },
   components: {
     BalanceView,
-    UserContributions,
-    LockedBalanceView,
-    UserNominations
+    LockedBalanceView
   },
   async mounted() {
     subNominators('kusama')

@@ -26,35 +26,32 @@ export const subNominators = async (relayer) => {
   }
   // 获取用户投票的情况
   const unsub = await api.query.staking.nominators(store.state.polkadot.account.address, async (nominators) => {
-    // if (!nominators.toJSON()) {
-    //   store.commit(relayer + '/saveNominators', [])
-    //   store.commit(relayer + '/saveLoadingStaking', false)
-    //   return;
-    // }
-    // // 获取节点的昵称
-    // let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
-    // infos = infos.map(acc => {
-    //   let nick = ''
-    //   let address = stanfiAddress(acc.accountId)
-    //   if (acc.identity?.displayParent || acc.identity?.display){
-    //     if (acc.identity?.display && acc.identity?.displayParent){
-    //       nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
-    //     }else if(acc.identity?.display){
-    //       nick = acc.identity.display
-    //     }else{
-    //       nick = acc.identity.displayParent
-    //     }
-    //   }else{
-    //     nick = `${address.slice(0,16)}...${address.slice(-5)}`
-    //   }
-    //   return {
-    //     address: stanfiAddress(acc.accountId),
-    //     nick
-    //   }
-    // })
-    let infos = [{address: '11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ', nick:'11VR4pF6c7kfBhfmuwwjWY3FodeYBKWx7ix2rsRCU2q6hqJ'},
-    {address: '1A2ATy1FEu5yQ9ZzghPLsRckPQ7XLmq5MJQYcTvGnxGvCho', nick: 'test2'}
-  ]
+    if (!nominators.toJSON()) {
+      store.commit(relayer + '/saveNominators', [])
+      store.commit(relayer + '/saveLoadingStaking', false)
+      return;
+    }
+    // 获取节点的昵称
+    let infos = await Promise.all(nominators.toJSON().targets.map(v => api.derive.accounts.info(v)))
+    infos = infos.map(acc => {
+      let nick = ''
+      let address = stanfiAddress(acc.accountId)
+      if (acc.identity?.displayParent || acc.identity?.display){
+        if (acc.identity?.display && acc.identity?.displayParent){
+          nick = acc.identity.displayParent + ' (' + acc.identity.display + ')'
+        }else if(acc.identity?.display){
+          nick = acc.identity.display
+        }else{
+          nick = acc.identity.displayParent
+        }
+      }else{
+        nick = `${address.slice(0,16)}...${address.slice(-5)}`
+      }
+      return {
+        address: stanfiAddress(acc.accountId),
+        nick
+      }
+    })
     // 获取用户投票的节点的详细信息
     const currentEra = await api.query.staking.currentEra()
     for (let i = 0; i<infos.length; i++){

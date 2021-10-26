@@ -13,7 +13,7 @@
               <span>{{ cToken.name }}</span>
               <i class="copy-icon ml-2" @click="copyAddress"></i>
             </div>
-            <div class="font24">${{ cToken.price * ethPrice | amountForm }}</div>
+            <div class="font24">${{ cToken.price | amountForm }}</div>
           </div>
         </div>
         <div class="col-md-6 c-mt-1">
@@ -24,7 +24,7 @@
             </div>
             <div class="row-info">
               <span>{{ $t('asset.cap') }}：</span>
-              <span>${{ (cToken.price * ethPrice *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)) | amountForm}}</span>
+              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)) | amountForm}}</span>
             </div>
           </div>
         </div>
@@ -39,7 +39,7 @@
             <div class="c-input-group">
               <b-form-input
                 :disabled="true"
-                v-model="communityTokenInfo.balance"
+                v-model="communityBalanceValue"
                 placeholder="0.000"
               >
               </b-form-input>
@@ -99,7 +99,7 @@
     </div>
     <div class="row">
       <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of homeAssets" :key="i">
-        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price * ethPrice" :type='asset.type' :chainId="asset.chainId"/>
+        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
       </div>
     </div>
     <div class="view-top-header">
@@ -107,7 +107,7 @@
     </div>
     <div class="row">
       <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of foreignAssets" :key="i">
-        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price * ethPrice" :type='asset.type' :chainId="asset.chainId"/>
+        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
       </div>
     </div>
     <!-- charge balance tip -->
@@ -281,11 +281,6 @@ export default {
       progressData: [
 
       ],
-      communityTokenInfo: {
-        balance: '',
-        address: '',
-        rate: ''
-      },
       showChargeTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
@@ -307,13 +302,15 @@ export default {
     ...mapState('web3', ['communityBalance', 'userBalances', 'ctokenApprovement', 'devAddress', 'devRatio']),
     ...mapGetters('web3', ['createState']),
     ...mapState('steem', ['steemAccount']),
-    ...mapState(['ethPrice']),
     communityBalanceValue () {
       if (this.communityBalance) {
         return (this.communityBalance.toString() / 1e18).toFixed(6)
       } else {
         return 0
       }
+    },
+    cTokenAddress () {
+      return this.cToken.address
     },
     cTokenBalance () {
       if (!this.userBalances || !this.userBalances[this.cTokenAddress]) {

@@ -7,7 +7,6 @@
 <script>
 import { LOCALE_KEY } from '@/config'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { initApis } from '@/utils/commen/api'
 import { isMobile } from '@/utils/commen/util'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
@@ -100,10 +99,7 @@ export default {
       this.$store.commit('polkadot/saveAccount', null)
     }
 
-    // init polkadot apis
-    initApis().then(api => {
-      loadPolkadotAccounts()
-    })
+    loadPolkadotAccounts()
   }
 }
 </script>

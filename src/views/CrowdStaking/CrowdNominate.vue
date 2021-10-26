@@ -48,6 +48,7 @@ import CrowdNominateCard from '@/components/CrowdStaking/CrowdNominateCard'
 import { mapState, mapGetters } from 'vuex'
 import { subNominators } from '@/utils/commen/crowdStaking'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   name: 'CrowdNominate',
@@ -79,8 +80,9 @@ export default {
     }
   },
   mounted () {
-    console.log(235,this.showingCards);
     // get parachian info from backend
+    initApis('polkadot')
+    initApis('kusama')
     subNominators('kusama')
     subNominators('polkadot')
   }

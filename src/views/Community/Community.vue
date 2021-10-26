@@ -69,11 +69,6 @@ export default {
       console.log('loadingCommunity', newValue)
     }
   },
-  watch: {
-    loadingCommunity(newValue, oldValue) {
-      console.log('loadingCommunity', newValue);
-    }
-  },
   mounted () {
     getMyCommunityInfo().catch(e => {
       if (e === errCode.NO_STAKING_FACTORY) return

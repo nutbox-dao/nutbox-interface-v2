@@ -124,13 +124,23 @@ export const getAllCommunities = async (update = false) => {
       return;
     }
     try {
+      if(store.state.web3.loadingAllCommunities){
+        while(store.state.web3.loadingAllCommunities) {
+          await sleep(0.2)
+        }
+        resolve(store.state.web3.allCommunities)
+        return;
+      }
       console.log(22222222222);
+      store.commit('web3/saveLoadingAllCommunities', true);
       const currentCommunityId = store.state.currentCommunityId;
       const communities = await gac(currentCommunityId);
       store.commit("web3/saveAllCommunities", communities);
+      store.commit('web3/saveLoadingAllCommunities', false);
       resolve(communities);
     } catch (e) {
       console.log("Get all community fail", e);
+      store.commit('web3/saveLoadingAllCommunities', false);
       reject(e);
     }
   });

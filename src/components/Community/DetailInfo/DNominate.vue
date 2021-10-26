@@ -24,6 +24,8 @@
 <script>
 import DNominateCard from '@/components/Community/DetailInfo/Cards/DNominateCard'
 import { mapState } from 'vuex'
+import { subNominators } from '@/utils/commen/crowdStaking'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   name: 'DCrowdStaking',
@@ -37,7 +39,14 @@ export default {
   },
   computed: {
     ...mapState('web3', ['loadingAllPools'])
-  }
+  },
+  created () {
+    console.log('Dcrowdstaking');
+    initApis('polkadot');
+    initApis('kusama');
+    subNominators('kusama');
+    subNominators('polkadot');
+  },
 }
 </script>
 

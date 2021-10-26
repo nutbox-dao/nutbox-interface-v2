@@ -51,6 +51,7 @@
 <script>
 import { monitorCtokenBalance, getBalance } from '@/utils/web3/asset'
 import { mapState } from 'vuex'
+import { NutAddress } from '../../config';
 
 export default {
    name: 'BSCWallet',
@@ -69,7 +70,7 @@ export default {
           ...this.ctokenBalances[k]
         })
       }
-      return temp.sort((a,b) => b.balance.sub(a.balance))
+      return temp.sort((a,b) => a.address === nutAddress && b.balance.sub(a.balance))
     }
   },
   methods: {

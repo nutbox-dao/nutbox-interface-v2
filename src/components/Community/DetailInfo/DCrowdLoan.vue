@@ -12,7 +12,7 @@
       </div>
       <div class="cards-container">
         <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of crowdloanPools" :key="card.pid + ''  + idx">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(card, idx) of sortedPools" :key="card.pid + ''  + idx">
             <DLoanCard :card="card"/>
           </div>
         </div>
@@ -26,6 +26,7 @@ import DLoanCard from '@/components/Community/DetailInfo/Cards/DLoanCard'
 import { getAllParachain } from '@/utils/web3/pool'
 import { mapState } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   name: 'DCrowdLoan',
@@ -62,9 +63,13 @@ export default {
     // get parachian info from backend
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.crowdloanPools, this.allParachain)
+      const loadPolkadot = this.sortedPools.filter(pool => pool.chainId === 2).length > 0
+      const loadKusama = this.sortedPools.filter(pool => pool.chainId === 3).length > 0
+      if (loadPolkadot) initApis('polkadot')
+      if (loadKusama) initApis('kusama')
     }).catch(e => {
     })
-  }
+  },
 }
 </script>
 

@@ -49,6 +49,7 @@ import { getAllParachain } from '@/utils/web3/pool'
 import { mapState, mapGetters } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   name: 'DCrowdLoan',
@@ -85,9 +86,18 @@ export default {
     }
   },
   mounted () {
+    
     // get parachian info from backend
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
+      const loadPolkadot = this.sortedPools.filter(pool => pool.chainId === 2).length > 0
+      const loadKusama = this.sortedPools.filter(pool => pool.chainId === 3).length > 0
+      if (loadPolkadot){
+        initApis('polkadot')
+      }
+      if (loadKusama){
+        initApis('kusama')
+      }
     }).catch(e => {
       console.log(e);
     })

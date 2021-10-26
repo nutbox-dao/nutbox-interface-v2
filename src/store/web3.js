@@ -39,9 +39,11 @@ export default {
     ctokenBalances: {},
 
     // loading state
+    loadingAllCommunities: false,
+    loadingAllPools: true,
+    loadingAllTokens: false,
     loadingPendingRewards: true,
     loadingApprovements: true,
-    loadingAllPools: true,
     loadingUserStakings: true,
     loadingUserBalances: true,
     loadingCommunityBalance: true,
@@ -132,6 +134,12 @@ export default {
     },
     saveLoadingAllPools: (state, loadingAllPools) => {
       state.loadingAllPools = loadingAllPools;
+    },
+    saveLoadingAllCommunities: (state, loadingAllCommunities) => {
+      state.loadingAllCommunities = loadingAllCommunities
+    },
+    saveLoadingAllTokens: (state, loadingAllTokens) => {
+      state.loadingAllTokens = loadingAllTokens
     },
     saveLoadingUserStakings: (state, loadingUserStakings) => {
       state.loadingUserStakings = loadingUserStakings;

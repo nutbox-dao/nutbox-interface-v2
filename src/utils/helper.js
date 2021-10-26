@@ -65,8 +65,6 @@ export const formatBalance = function (value, digit = 3) {
 
 export const formatPrice = function (value) {
   if (!value) return "--";
-  const ethPrice = store.state.ethPrice;
-  value = value * ethPrice;
   const str = Number(value).toFixed(3).toString();
   let integer = str;
   let fraction = "";

@@ -20,16 +20,6 @@
         />
       </div>
     </div>
-    <!-- <UserContributions class="mb-4">
-      <template #title>
-        <div class="card-title">{{ $t("wallet.contribution") }}</div>
-      </template>
-    </UserContributions>
-    <UserNominations>
-      <template #title>
-        <div class="card-title">{{ $t("wallet.nomination") }}</div>
-      </template>
-    </UserNominations> -->
   </div>
 </template>
 
@@ -37,8 +27,6 @@
 import BalanceView from "@/components/Wallet/Polkadot/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Polkadot/LockedBalanceView";
 import { mapState, mapGetters } from "vuex";
-import UserNominations from "@/components/Wallet/Polkadot/UserNominations";
-import UserContributions from "@/components/Wallet/Polkadot/UserContributions"
 import { subNominators } from '@/utils/commen/crowdStaking'
 
 export default {
@@ -53,9 +41,7 @@ export default {
   },
   components: {
     BalanceView,
-    UserNominations,
-    LockedBalanceView,
-    UserContributions
+    LockedBalanceView
   },
   async mounted() {
     subNominators('polkadot')

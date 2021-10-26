@@ -25,7 +25,7 @@ export default {
       tabOptions: [
         { name: 'registerSteemTab', id: 0, cName: 'DelegationForm' },
         { name: 'registerCrowdloanTab', id: 1, cName: 'ContributionForm' },
-        { name: 'registerValidatorTab', id: 2, cName: 'NominationForm' }
+        // { name: 'registerValidatorTab', id: 2, cName: 'NominationForm' }
       ]
     }
   }

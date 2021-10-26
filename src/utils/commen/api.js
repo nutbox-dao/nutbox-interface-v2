@@ -2,7 +2,6 @@ import {
   ApiPromise,
   WsProvider
 } from "@polkadot/api"
-import { typesBundle, typesChain } from "@polkadot/apps-config"
 import { TypeRegistry } from '@polkadot/types/create';
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc';
 import {
@@ -20,9 +19,17 @@ import {
 } from '@polkadot/extension-dapp'
 import { subscribeAllFundInfo } from '@/utils/commen/crowdloan'
 
-export async function initApis() {
-  initApi('polkadot').then(subscribeAllFundInfo('polkadot'))
-  initApi('kusama').then(subscribeAllFundInfo('kusama'))
+export async function initApis(relaychain) {
+  if (store.state[relaychain].apiState == 'loaded' || store.state[relaychain].apiState == 'loading') return; 
+  store.commit(relaychain + '/saveApiState', 'loading')
+  initApi(relaychain).then(() => {
+    subscribeAllFundInfo(relaychain)
+    store.commit(relaychain + '/saveApiState', 'loaded')
+    if (relaychain === 'polkadot'){
+    }
+  }).catch(err => {
+    store.commit(relaychain + '/saveApiState', 'error')
+  })
 }
 
 async function initApi(chain, changedNode) {
@@ -56,9 +63,7 @@ async function initApi(chain, changedNode) {
       PalletId: 'Raw',
       NutboxRemark: NUTBOX_REMARK_TYPE,
       PhalaCrowdloanReferrerRemark,
-      registry,
-      typesBundle,
-      typesChain
+      registry
     }
   })
   console.log((new Date().getTime() - s) / 1000, chain, 'connected');

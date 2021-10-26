@@ -173,8 +173,12 @@ export const GasLimit = 10000000;
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
+// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+// export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
+
+// bsc test net
+export const MultiAddress = "0xDc61d5878E8d24a665eb2c8BAD14882883712471"
+export const NutAddress = "0x62ac8cfE26986bf50d80F4303816AffE187d4231"
 
 // Register by nutbox
 export const OfficialAssets = [
@@ -182,7 +186,7 @@ export const OfficialAssets = [
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",
-    asset: "0x8fc392966ab8ae661c101da3cac00722d172319b137266ecaca375f7f90838e8",
+    asset: "0x5c8ac5babfb40d5e9ce5a62e742f5ee5f36f8be72d96389de19250b01951c8b4",
     contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",

@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     ...mapState('web3', ['allCommunities']),
-    ...mapState(['ethPrice', 'lang']),
+    ...mapState(['lang']),
     fields() {
       return [
           { key: 'tokenIcon', label: ''},
@@ -104,9 +104,6 @@ export default {
     openNewTab (cardInfo) {
       window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
     }
-  },
-  mounted () {
-    console.log('eth', this.ethPrice);
   },
 }
 </script>
