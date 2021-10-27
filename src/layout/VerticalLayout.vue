@@ -2,7 +2,7 @@
   <div class="page-layout">
     <div class="page-header-v flex-between-center" v-if="screenWidth < 992">
       <div class="header-brand">
-        <img class="logo" src="~@/static/images/logo_small.png" alt="nutbox" />
+        <img class="logo" :src="showCommunity && allCommunities[0].icon" alt="nutbox" />
         <img
           class="menu ml-2"
           src="~@/static/images/menu.png"
@@ -392,10 +392,15 @@ export default {
       this.screenWidth = val;
     },
     allCommunities(val) {
-      if (val && val.length > 0){
+      if (val && val.length === 1){
         console.log(33, val);
         const color = val[0].color;
-        this.setThemeColor(color)
+        this.setThemeColor(color);
+        document.title = val[0].name;
+        var link = document.querySelector("link[rel*='icon']") || document.createElement("link");
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = val[0].icon;
       }
     }
   },

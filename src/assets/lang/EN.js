@@ -403,7 +403,7 @@ module.exports = {
     noCommunity: "You have no community yet",
     gotoCreate: "Go to create now",
     editTip:
-      "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
+      "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use.",
     sign: "Sign and upload",
     createCommunity: "Create you exclusive staking economy",
     step1: "Step 1",
