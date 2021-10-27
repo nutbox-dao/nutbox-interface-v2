@@ -1,13 +1,13 @@
 <template>
   <div class="container scroll-content">
     <div class="view-top-header flex-between-center">
-      <div class="page-title-line font20 font-bold">Game</div>
+      <div class="page-title-line font20 font-bold">{{ $t('game.game') }}</div>
       <div class="c-btn-group">
         <button
           @click="$router.push('/community-setting/game-info?type=create')"
         >
           <i class="add-icon"></i>
-          <span>Add game</span>
+          <span>{{ $t('game.create') }}</span>
         </button>
       </div>
     </div>
@@ -17,7 +17,7 @@
     >
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
-        <p>No Game</p>
+        <p>{{ $t('game.noGames') }}</p>
       </div>
     </div>
     <template v-else>

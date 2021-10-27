@@ -74,6 +74,35 @@
             >
               <input class="p-2 w-50" type="color" :disabled="!isEdit" v-model="form.color"/>
             </b-form-group>
+            <!-- <b-form-group
+              label-cols-md="2"
+              content-cols-md="3"
+              :label="$t('game.gameCategory')"
+            >
+              <b-dropdown
+                class="c-dropdown w-100"
+                menu-class="full-dropdown-menu"
+              >
+                <template #button-content>
+                  <div
+                    class="c-dropdown-btn w-100 d-flex justify-content-between"
+                    style="height: 2.4rem"
+                  >
+                    <span>{{ form.gameType || "Chose" }}</span>
+                    <i class="dropdown-icon ml-3"></i>
+                  </div>
+                </template>
+                <b-dropdown-item @click="form.gameType = 'recommend'"
+                  >recommend</b-dropdown-item
+                >
+                <b-dropdown-item @click="form.gameType = 'popular'"
+                  >popular</b-dropdown-item
+                >
+                <b-dropdown-item @click="form.gameType = 'others'"
+                  >others</b-dropdown-item
+                >
+              </b-dropdown>
+            </b-form-group> -->
             <!-- community logo -->
             <b-form-group
               label-cols-md="2"
