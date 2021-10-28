@@ -114,7 +114,6 @@ export default {
   @include c-flex-between-center;
   border-radius: .6rem;
   height: 2.4rem;
-  margin-top: -2rem;
   input {
     border: none;
     height: 2.4rem;

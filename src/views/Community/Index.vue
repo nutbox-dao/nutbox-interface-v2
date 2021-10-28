@@ -12,8 +12,8 @@
           <div class="view-top-header m-view-top-header flex-between-center">
             <div class="nav-box nav-box-bg">
               <div class="nav">
-                <b-nav-item to="/community">{{ $t('community.communityList') }}</b-nav-item>
-                <b-nav-item to="#">{{ $t('community.communityTokenList') }}</b-nav-item>
+                <b-nav-item to="/community/community-list">{{ $t('community.communityList') }}</b-nav-item>
+                <b-nav-item to="/community/community-token">{{ $t('community.communityTokenList') }}</b-nav-item>
               </div>
             </div>
           </div>
