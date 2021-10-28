@@ -452,6 +452,7 @@ module.exports = {
     updateSocialSuccess: "社交信息更新成功",
     createNeedStake: "创建矿池需要质押：",
     notYourCommunity: "社区信息错误",
+    communityCategory: "社区生态"
   },
   asset: {
     asset: "资产",

@@ -1,6 +1,13 @@
 <template>
   <div class="container scroll-content">
     <div class="view-top-header view-top-header-sticky flex-between-center">
+      <div class="nav-box nav-box-bg">
+        <div class="nav">
+          <span v-for="(item, index) of tabOptions" :key="index"
+                :class="activeTab===index?'active':''"
+                @click="activeTab = index">{{item}}</span>
+        </div>
+      </div>
       <b-input-group class="search-input">
         <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
         <template #append>
@@ -8,8 +15,6 @@
         </template>
       </b-input-group>
       <div class="c-btn-group ml-3" v-if="!loadingCommunity">
-        <!-- <button v-if="communityId"
-                @click="$router.push('/community/pool-dashboard')">{{ $t('community.communityDashboard') }}</button> -->
         <button v-if="!communityId" @click="$router.push('/community/tutorials')">
           <i class="add-icon"></i>
           <span>{{ $t('community.createYourCommunity') }}</span>
@@ -39,7 +44,7 @@ import CommunityCard from '@/components/Community/CommunityCard'
 import { mapGetters, mapState } from 'vuex'
 import { getMyCommunityInfo, getAllCommunities } from '@/utils/web3/community'
 import { handleApiErrCode } from '../../utils/helper'
-import { errCode } from '@/config'
+import { errCode, CHAIN_NAME } from '@/config'
 
 export default {
   name: 'Community',
@@ -48,7 +53,7 @@ export default {
     return {
       loading: false,
       activeTab: 0,
-      tabOptions: ['All', 'Joined', 'Created', 'Other'],
+      tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: ''
     }
   },
@@ -61,12 +66,15 @@ export default {
     ...mapGetters('web3', ['communityCard']),
     filterCommunities () {
       if (!this.communityCard) return []
-      return this.communityCard.filter(c => c.name.toLowerCase().includes(this.searchText.toLowerCase()))
+      return this.communityCard.filter(c => (this.activeTab == 0 || c.category == this.tabOptions[this.activeTab]) && c.name.toLowerCase().includes(this.searchText.toLowerCase()))
     }
   },
   watch: {
     loadingCommunity (newValue, oldValue) {
       console.log('loadingCommunity', newValue)
+    },
+    activeTab (newValue) {
+
     }
   },
   mounted () {
