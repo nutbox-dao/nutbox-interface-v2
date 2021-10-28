@@ -75,7 +75,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
           pId
         })
       }
-      const storedFunds = [...store.state[relaychain].clProjectFundInfos]
+      // const storedFunds = [...store.state[relaychain].clProjectFundInfos]
       funds = await Promise.all(effectEndpoints.map(fund => {
         return new Promise(async (res) => {
           const {
@@ -91,12 +91,12 @@ export const subscribeAllFundInfo = async (relaychain) => {
           const [status, statusIndex] = await calStatus(relaychain, end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
           let contributions = []
           // 如果有缓存，先直接用已经缓存的contribution数据
-          if (storedFunds && storedFunds.length > 0) {
-            const f = storedFunds.filter(a => a.paraId === pId)
-            if (f && f.length > 0) {
-              contributions = f[0].funds || []
-            }
-          }
+          // if (storedFunds && storedFunds.length > 0) {
+          //   const f = storedFunds.filter(a => a.paraId === pId)
+          //   if (f && f.length > 0) {
+          //     contributions = f[0].funds || []
+          //   }
+          // }
           res({
             ...fund,
             paraId: pId,
@@ -258,27 +258,10 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
         })
         return false
       })
-  }else{ // 没有社区id， 就是官方直接投票，不加remark
-    const unsub = await contributeTx.signAndSend(from, {
-      nonce
-    }, ({
-      status,
-      dispatchError
-    }) => {
-      try {
-        handelBlockState(api, status, dispatchError, toast, callback, unsub)
-      } catch (e) {
-        toast(e.message, {
-          title: $t('tip.error'),
-          variant: 'danger'
-        })
-      }
-    }).catch(err => {
-      toast(err.message, {
-        title: $t('tip.error'),
-        variant: 'danger'
-      })
-      return false
+  }else{ // 没有社区id， 就不投
+    toast($t('tip.error'), {
+      title: $t('tip.error'),
+      variant: 'danger'
     })
   }
 }
