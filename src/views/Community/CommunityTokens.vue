@@ -1,5 +1,11 @@
 <template>
   <div class="container scroll-content py-5">
+    <b-input-group class="search-input">
+        <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
+        <template #append>
+          <i class="search-icon"></i>
+        </template>
+      </b-input-group>
     <div class="table-card text-left">
       <div class="tabs">
         <span class="tab-item font16" :class="activeTab===index?'active':''"
@@ -11,8 +17,8 @@
         <p>{{ $t('asset.noTokens') }}</p>
       </div>
       <div class="table-box">
-        <b-table v-show="items.length > 0"
-                 :items="items"
+        <b-table v-show="searchedToken.length > 0"
+                 :items="searchedToken"
                  :fields="fields"
                  thead-tr-class="th-cell"
                  table-class="c-table"
@@ -60,7 +66,8 @@ export default {
       activeTab: 0,
       currentPage: 1,
       totalRows: 0,
-      perPage: 12
+      perPage: 12,
+      searchText: '',
     }
   },
   computed: {
@@ -98,6 +105,10 @@ export default {
           cap: formatPrice(c.cap)
         }))
       }
+    },
+    searchedToken () {
+      if (!this.items) return [];
+      return this.items.filter(t => t.name.toLowerCase().includes(this.searchText.toLowerCase()) || t.tokenSymbol.toLowerCase().includes(this.searchText.toLowerCase()))
     }
   },
   methods: {
@@ -109,6 +120,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.search-input {
+  background: white;
+  @include c-flex-between-center;
+  border-radius: .6rem;
+  height: 2.4rem;
+  margin-bottom: 1.2rem;
+  input {
+    border: none;
+    height: 2.4rem;
+    outline: none;
+    border-radius: .6rem;
+  }
+  .search-icon {
+    @include icon(1.2rem, 1.2rem);
+    margin-right: .8rem;
+    background-image: url("~@/static/images/search-icon.svg");
+  }
+}
 .table-card {
   @include card(1.2rem, white, none, fit-content);
 }
