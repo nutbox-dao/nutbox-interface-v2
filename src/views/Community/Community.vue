@@ -8,6 +8,8 @@
                 @click="activeTab = index">{{item}}</span>
         </div>
       </div>
+    </div>
+    <div class="view-top-header view-top-header-sticky flex-between-center">
       <b-input-group class="search-input">
         <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
         <template #append>
@@ -112,6 +114,7 @@ export default {
   @include c-flex-between-center;
   border-radius: .6rem;
   height: 2.4rem;
+  margin-top: -2rem;
   input {
     border: none;
     height: 2.4rem;
