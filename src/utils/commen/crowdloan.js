@@ -117,7 +117,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
       if (funds.length > 0) {
         store.commit(relaychain + '/saveClProjectFundInfos', funds)
         // 异步加载投票数据
-        handleContributors(relaychain, api, funds)
+        // handleContributors(relaychain, api, funds)
       } else {
         store.commit(relaychain + '/saveSubFund', null);
       }

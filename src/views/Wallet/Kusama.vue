@@ -30,6 +30,7 @@ import BalanceView from "@/components/Wallet/Kusama/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Kusama/LockedBalanceView";
 import { mapState, mapGetters } from "vuex";
 import { subNominators } from '@/utils/commen/crowdStaking'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   data() {
@@ -46,7 +47,8 @@ export default {
     LockedBalanceView
   },
   async mounted() {
-    subNominators('kusama')
+    initApis('kusama');
+    subNominators('kusama');
   },
 };
 </script>

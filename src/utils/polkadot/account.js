@@ -57,7 +57,6 @@ export const getBalance = async (account) => {
   // cancel last
   let subBalance = store.state.polkadot.subBalance
   let subLocked = store.state.polkadot.subLocked
-
   try {
     subBalance()
   } catch (e) {}

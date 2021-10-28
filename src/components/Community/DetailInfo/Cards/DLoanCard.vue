@@ -31,28 +31,12 @@
         </button>
       </div>
     </div>
-    <div class="detail-info-box">
-      <div class="project-info-container">
-        <span class="name"> {{ $t('cl.leasePeriod') }} </span>
-        <div class="info">{{ leasePeriod || "Loading" }}</div>
-      </div>
-      <div class="project-info-container">
-        <span class="name"> {{ $t('cl.countDown') }} </span>
-        <div class="info">{{ countDownAuction || "Loading" }}</div>
-      </div>
-      <div class="project-info-container">
-        <span class="name"> {{ $t('cl.fund') }} </span>
-        <div class="info">
-          <RaisedLabel :fund="getFundInfo" :relaychain='chain' />
-          <ContributorsLabel :fund="getFundInfo"/>
-        </div>
-      </div>
-      <div class="project-info-container">
-        <span class="name"> {{ $t('cl.contributed') }} </span>
-        <div class="info">
-          <RaisedLabel :fund="getFundInfo" :relaychain='chain' :isBalance="true" />
-        </div>
-      </div>
+    <div class="text-left mt-3">
+      <span style="color: #717376" class="font-bold">{{ card.chainId == 2 ? 'DOT ' : 'KSM ' }}</span>
+      <span style="color: #bdbfc2">STAKED</span>
+    </div>
+     <div class="btn-row">
+      <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
     </div>
     <div class="text-center">
       <button v-if="!!countDown" disabled='true' class="primary-btn">
@@ -83,6 +67,24 @@
         </button>
       </template>
     </div>
+    <div class="detail-info-box">
+      <p style="height:1rem"></p>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.leasePeriod') }} </span>
+        <div class="info">{{ leasePeriod || "Loading" }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.countDown') }} </span>
+        <div class="info">{{ countDownAuction || "Loading" }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.fund') }} </span>
+        <div class="info">
+          <RaisedLabel :fund="getFundInfo" :relaychain='chain' />
+        </div>
+      </div>
+    </div>
+
     <!-- <ConnectWallet v-else /> -->
     <b-modal
       v-model="showContribute"
@@ -189,7 +191,7 @@ export default {
   },
   computed: {
     ...mapState(['lang', 'apys']),
-    ...mapState('web3', ['pendingRewards', 'blockNum']),
+    ...mapState('web3', ['pendingRewards', 'blockNum', 'userStakings', 'loadingUserStakings']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -219,6 +221,13 @@ export default {
     },
     paraId () {
       return parseInt(this.card.paraId)
+    },
+    staked() {
+      const userStakingBn =
+        this.userStakings[this.card.communityId + "-" + this.card.pid];
+      if (!userStakingBn) return 0;
+      const decimal = this.card.chainId === 2 ? 10 : 12;
+      return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     communityId () {
       return stanfiAddress(this.card.communityAccount)

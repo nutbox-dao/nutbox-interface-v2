@@ -28,6 +28,7 @@ import BalanceView from "@/components/Wallet/Polkadot/BalanceView";
 import LockedBalanceView from "@/components/Wallet/Polkadot/LockedBalanceView";
 import { mapState, mapGetters } from "vuex";
 import { subNominators } from '@/utils/commen/crowdStaking'
+import { initApis } from '@/utils/commen/api'
 
 export default {
   data() {
@@ -44,6 +45,7 @@ export default {
     LockedBalanceView
   },
   async mounted() {
+    initApis('polkadot')
     subNominators('polkadot')
   },
 };

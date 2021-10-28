@@ -22,67 +22,68 @@
     </div>
     <div class="c-card">
       <div class="text-left mt-3">
-      <span style="color: #717376" class="font-bold">{{
-        card.tokenSymbol + " "
-      }}</span>
-      <span style="color: #bdbfc2">EARNED</span>
+        <span style="color: #717376" class="font-bold">{{
+          card.tokenSymbol + " "
+        }}</span>
+        <span style="color: #bdbfc2">EARNED</span>
+      </div>
+      <div class="btn-row">
+        <span class="value"> {{ pendingReward | amountForm }} </span>
+        <div class="right-box">
+          <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+            <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+            {{ $t("commen.withdraw") }}
+          </button>
+        </div>
+      </div>
+      <div class="text-left mt-3">
+        <span style="color: #717376" class="font-bold">{{ card.chianId == 2 ? 'DOT ' : 'KSM ' }}</span>
+        <span style="color: #bdbfc2">STAKED</span>
+      </div>
+      <div class="btn-row">
+        <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
     </div>
-    <div class="btn-row">
-      <span class="value"> {{ pendingReward | amountForm }} </span>
-      <div class="right-box">
-        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
-          <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
-          {{ $t("commen.withdraw") }}
-        </button>
+    <div class="text-center">
+      <button
+        class="primary-btn"
+        :disabled="!isConnected || status !== 'Active'"
+        @click="showContribute = true"
+      >
+        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+        {{ $t("cl.contribute") }}
+      </button>
+      <button
+        class="primary-btn"
+        :disabled="!isConnected"
+        v-show="status === 'Retired'"
+        @click="showWithdraw = true"
+      >
+        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+        {{ $t("cl.withdraw") }}
+      </button>
+      <button class="primary-btn" disabled v-show="status === 'Completed'">
+        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+        {{ $t("cl.completed") }}
+      </button>
+    </div>
+    <div class="detail-info-box">
+      <p style="height:1rem"></p>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.leasePeriod') }} </span>
+        <div class="info">{{ leasePeriod || "Loading" }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.countDown') }} </span>
+        <div class="info">{{ countDown || "Loading" }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('cl.fund') }} </span>
+        <div class="info">
+          <RaisedLabel :fund="getFundInfo" :relaychain='chain' />
+        </div>
       </div>
     </div>
-      <div class="detail-info-box">
-        <div class="project-info-container">
-          <span class="name"> {{ $t('cl.leasePeriod') }} </span>
-          <div class="info">{{ leasePeriod || "Loading" }}</div>
-        </div>
-        <div class="project-info-container">
-          <span class="name"> {{ $t('cl.countDown') }} </span>
-          <div class="info">{{ countDown || "Loading" }}</div>
-        </div>
-        <div class="project-info-container">
-          <span class="name"> {{ $t('cl.fund') }} </span>
-          <div class="info">
-            <RaisedLabel :fund="getFundInfo" :relaychain='chain' />
-            <ContributorsLabel :fund="getFundInfo"/>
-          </div>
-        </div>
-        <div class="project-info-container">
-          <span class="name"> {{ $t('cl.contributed') }} </span>
-          <div class="info">
-            <RaisedLabel :fund="getFundInfo" :relaychain='chain' :isBalance="true" />
-          </div>
-        </div>
-      </div>
-      <div class="text-center">
-        <button
-          class="primary-btn"
-          :disabled="!isConnected"
-          v-show="status === 'Active'"
-          @click="showContribute = true"
-        >
-          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-          {{ $t("cl.contribute") }}
-        </button>
-        <button
-          class="primary-btn"
-          :disabled="!isConnected"
-          v-show="status === 'Retired'"
-          @click="showWithdraw = true"
-        >
-          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-          {{ $t("cl.withdraw") }}
-        </button>
-        <button class="primary-btn" disabled v-show="status === 'Completed'">
-          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-          {{ $t("cl.completed") }}
-        </button>
-      </div>
+
       <!-- <ConnectWallet v-else /> -->
       <b-modal
         v-model="showContribute"
@@ -191,7 +192,7 @@ export default {
   },
   computed: {
     ...mapState(['lang']),
-    ...mapState('web3', ['pendingRewards']),
+    ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -221,6 +222,13 @@ export default {
     },
     paraId () {
       return parseInt(this.card.paraId)
+    },
+    staked() {
+      const userStakingBn =
+        this.userStakings[this.card.communityId + "-" + this.card.pid];
+      if (!userStakingBn) return 0;
+      const decimal = this.card.chainId === 2 ? 10 : 12;
+      return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     communityId () {
       return this.card.communityAccount
@@ -275,6 +283,7 @@ export default {
     }
   },
   mounted () {
+    console.log('card', this.card);
     this.status = this.getFundInfo?.status || this.card.statusStr
   }
 }
