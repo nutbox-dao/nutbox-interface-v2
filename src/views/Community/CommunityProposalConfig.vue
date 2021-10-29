@@ -273,7 +273,6 @@ import Strategies from "../../components/Community/Proposal/Strategies.vue";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import {
   completeCommunityProposalConfigInfo,
-  getStrategies,
   getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 import BSCAccount from "@/components/Accounts/BSCAccount";
@@ -491,8 +490,6 @@ export default {
   async mounted() {
     this.form.id = this.$router.currentRoute.params.key;
     this.form.communityId = this.$router.currentRoute.params.key;
-
-    //this.strategies = await getStrategies();
 
     const currentItem = {
       strategyControlId: nanoid(),

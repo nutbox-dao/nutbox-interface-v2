@@ -79,9 +79,6 @@ export const updateTokenIcon = async (params) =>
 
 // ============================================ strategies ============================================
 
-export const getStrategies = async () =>
-  get(BACKEND_API_URL + "/scores/strategies");
-
 export const getScores = async (params) =>
   post(BACKEND_API_URL + "/scores/get", { params });
 

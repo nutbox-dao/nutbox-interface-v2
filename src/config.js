@@ -5,8 +5,8 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io"
-export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -100,9 +100,9 @@ export const PhalaCrowdloanReferrerRemark = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 0.001;
+export const STEEM_STAKE_FEE = 2;
 // official fee account
-export const STEEM_GAS_ACCOUNT = "test.walnut.gas";
+export const STEEM_GAS_ACCOUNT = "walnut.gas";
 
 // Steem Config
 export const STEEM_API_URLS = [
@@ -117,9 +117,9 @@ export const STEEM_API_URLS = [
 // hive node storage
 export const HIVE_CONF_KEY = "hiveNodeKey";
 // delegate fee
-export const HIVE_STAKE_FEE = 0.001;
+export const HIVE_STAKE_FEE = 2;
 // official fee account
-export const HIVE_GAS_ACCOUNT = "test.walnut.gas";
+export const HIVE_GAS_ACCOUNT = "walnut.gas";
 
 // Hive Config
 export const HIVE_API_URLS = ["https://api.hive.blog"];
@@ -177,8 +177,8 @@ export const GasLimit = 10000000;
 // export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
 
 // bsc test net
-export const MultiAddress = "0xDc61d5878E8d24a665eb2c8BAD14882883712471"
-export const NutAddress = "0x62ac8cfE26986bf50d80F4303816AffE187d4231"
+export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 // Register by nutbox
 export const OfficialAssets = [
@@ -186,32 +186,52 @@ export const OfficialAssets = [
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",
-    asset: "0x5c8ac5babfb40d5e9ce5a62e742f5ee5f36f8be72d96389de19250b01951c8b4",
+    asset: "0x60c0b04ec025fa4158044f22dc3590f6c64baf13a4f9ca4a280982ee3d8e2bed",
     contract: contractAddress["HomeChainAssetRegistry"],
     decimal: 18,
     type: "HomeChainAssetRegistry",
     icon: "https://cdn.wherein.mobi/nutbox/v2/1633769085901",
   },
-  // {
-  //   name: 'WBNB',
-  //   address: '0x64f525e92B614bA4f8d332910B11430DD487895b',
-  //   symbol: 'WBNB',
-  //   asset: '0x5f54be7b77630ac5a539705d38e0ea00bed06f3c6d2fff334855440d18296b7f',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: "HomeChainAssetRegistry",
-  //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
-  // },
-  // {
-  //   name: 'WETH',
-  //   address: '0xa49B1eEC62c669b65D571536E221fB172a62C9F6',
-  //   symbol: 'WETH',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: "HomeChainAssetRegistry",
-  //   asset: '0x6314ea4ddefe5213313d39e1e3d62c4a399c4df5b47cf3b0613a49f68239eedc',
-  //   icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
-  // }
+  {
+    name: 'Wrapped BNB',
+    address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    symbol: 'WBNB',
+    asset: '0xb90fe532b37240954353f38fe729360f365263ffb3674bab1d07fe43d92573c0',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: "HomeChainAssetRegistry",
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
+  },
+  {
+    name: 'Ethereum Token',
+    address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+    symbol: 'ETH',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: "HomeChainAssetRegistry",
+    asset: '0x4c606d65f6a51160a91ba185988f4cc6749e6422c79bdb2f63b1b36bfa44b515',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+  },
+  {
+    name: 'PancakeSwap Token',
+    address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+    symbol: 'CAKE',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: "HomeChainAssetRegistry",
+    asset: '0xcb3d2d4130630a838634786f5fe28f13b8b061ebc9987587a9099e487c9c0cdf',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+  },
+  {
+    name: 'BTCB Token',
+    address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+    symbol: 'BTCB',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: "HomeChainAssetRegistry",
+    asset: '0x36be4d0a728a4a0ad58ffcf89f440e13f4db370fd7d0ab22528b929ec955f237',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+  }
 ];
 
 export const Multi_Config = {

@@ -6,9 +6,7 @@ import {
 } from "./community";
 import {
   getMyCommunityProposalConfigInfo as gmcpci,
-  insertCommunityProposalConfig,
   updateCommunityProposalConfig,
-  getStrategies as gs,
   getScores as gScores,
 } from "@/apis/api";
 import { signMessage } from "./utils";
@@ -94,25 +92,6 @@ export const completeCommunityProposalConfigInfo = async (form, type) => {
       resolve(res);
     } catch (e) {
       console.log("Insert communityProposalConfig info failed", e);
-      reject(e);
-    }
-  });
-};
-
-/**
- * Get Strategies from backend
- * @param {*} form
- * @param {*} type 'create' / 'edit'
- */
-export const getStrategies = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let res = await gs();
-      // update nonce in storage
-      store.commit("web3/saveStrategies", res);
-      resolve(res);
-    } catch (e) {
-      console.log("Get Strategies info failed", e);
       reject(e);
     }
   });

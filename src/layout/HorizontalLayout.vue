@@ -118,7 +118,7 @@ export default {
       showMessage: false,
       accountsPop: false,
       langActive: false,
-      langOptions: ['zh', 'en', 'kr', 'es', 'my', 'jp']
+      langOptions: ['zh', 'en', 'kr', 'es', 'my']
     }
   },
   computed: {
