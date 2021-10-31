@@ -16,6 +16,9 @@ export const getProposal = async (params) =>
 export const getMyCommunityInfo = async (communityId) =>
   get(BACKEND_API_URL + "/community/get", { id: communityId });
 
+export const getStakingFeast = async (userId) => 
+  get(BACKEND_API_URL + "/stakingfeast/get", { userId });
+
 export const insertCommunity = async (params) =>
   post(BACKEND_API_URL + "/community/insert", params);
 

@@ -10,6 +10,7 @@ import {
   updateBlogTag as ubt,
   updateSocial,
   getCommunityToken as gct,
+  getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, GasLimit } from "@/config";
@@ -33,22 +34,13 @@ export const getMyStakingFactory = async (update = false) => {
       return;
     }
     store.commit("web3/saveLoadingCommunity", true);
-    let contract;
-    try {
-      contract = await getContract("StakingFactory", null);
-    } catch (e) {
-      reject(e);
-      return;
-    }
+    
 
     const account = await getAccounts();
     let stakingFactoryId = null;
     try {
-      console.log(11111111);
-      const count = await contract.stakingFeastCounter(account);
-      if (count > 0) {
-        stakingFactoryId = await contract.stakingFeastRecord(account, 0);
-      } else {
+      stakingFactoryId = await getStakingFeast(account);
+      if (!stakingFactoryId || stakingFactoryId.length === 0) {
         store.commit("web3/saveStakingFactoryId", null);
         store.commit("web3/saveLoadingCommunity", false);
         resolve(null);
@@ -60,6 +52,7 @@ export const getMyStakingFactory = async (update = false) => {
       return;
     }
     console.log("community", stakingFactoryId);
+    stakingFactoryId = stakingFactoryId[0].stakingFeast;
     store.commit("web3/saveLoadingCommunity", false);
     store.commit("web3/saveStakingFactoryId", stakingFactoryId);
     resolve(stakingFactoryId);
