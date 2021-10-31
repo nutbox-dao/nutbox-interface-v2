@@ -10,6 +10,7 @@ import {
   updateBlogTag as ubt,
   updateSocial,
   getCommunityToken as gct,
+  getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, GasLimit } from "@/config";
@@ -33,22 +34,13 @@ export const getMyStakingFactory = async (update = false) => {
       return;
     }
     store.commit("web3/saveLoadingCommunity", true);
-    let contract;
-    try {
-      contract = await getContract("StakingFactory", null);
-    } catch (e) {
-      reject(e);
-      return;
-    }
+    
 
     const account = await getAccounts();
     let stakingFactoryId = null;
     try {
-      console.log(11111111);
-      const count = await contract.stakingFeastCounter(account);
-      if (count > 0) {
-        stakingFactoryId = await contract.stakingFeastRecord(account, 0);
-      } else {
+      stakingFactoryId = await getStakingFeast(account);
+      if (!stakingFactoryId || stakingFactoryId.length === 0) {
         store.commit("web3/saveStakingFactoryId", null);
         store.commit("web3/saveLoadingCommunity", false);
         resolve(null);
@@ -60,6 +52,7 @@ export const getMyStakingFactory = async (update = false) => {
       return;
     }
     console.log("community", stakingFactoryId);
+    stakingFactoryId = stakingFactoryId[0].stakingFeast;
     store.commit("web3/saveLoadingCommunity", false);
     store.commit("web3/saveStakingFactoryId", stakingFactoryId);
     resolve(stakingFactoryId);
@@ -183,6 +176,7 @@ export const createStakingFeast = async (form) => {
     try {
       // make params
       const gas = await getGasPrice();
+      const account = await getAccounts();
       const assetId = form.assetId;
       let distribution = form.poolData;
       let distributionStr =
@@ -210,7 +204,15 @@ export const createStakingFeast = async (form) => {
             )
             .substr(2);
       }
-      console.log(distributionStr);
+      contract.on('StakingFeastCreated', (user, feast, asset) => {
+        if (account.toLowerCase() === user.toLowerCase() && asset.toLowerCase() == assetId.toLowerCase()){
+          console.log('Create new staking feast', feast);
+          contract.removeAllListeners('StakingFeastCreated');
+          store.commit("web3/saveStakingFactoryId", ethers.utils.getAddress(feast));
+          await monitorCommunity();
+          resolve(feast);
+        }
+      })
       // call contract
       const res = await contract.createStakingFeast(
         assetId,
@@ -222,8 +224,6 @@ export const createStakingFeast = async (form) => {
         }
       );
       await waitForTx(res.hash);
-      await monitorCommunity();
-      resolve(res.hash);
     } catch (e) {
       console.log("Create Staking Feast Failed", e);
       reject(errCode.BLOCK_CHAIN_ERR);
