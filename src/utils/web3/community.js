@@ -207,9 +207,9 @@ export const createStakingFeast = async (form) => {
       contract.on('StakingFeastCreated', async (user, feast, asset) => {
         if (account.toLowerCase() === user.toLowerCase() && asset.toLowerCase() == assetId.toLowerCase()){
           console.log('Create new staking feast', feast);
-          contract.removeAllListeners('StakingFeastCreated');
           store.commit("web3/saveStakingFactoryId", ethers.utils.getAddress(feast));
           await monitorCommunity();
+          contract.removeAllListeners('StakingFeastCreated');
           resolve(feast);
         }
       })

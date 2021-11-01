@@ -241,6 +241,36 @@ export const OfficialAssets = [
     type: 'HomeChainAssetRegistry',
     asset: '0xcd7d1928ba1ec24587cc3904f5fbfef77489c68f0369ec29813dfbec4a3cf216',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
+  },
+  {
+    name: 'Mint Club Grant',
+    address: '0x58764cE77f0140F9678bA6dED9D9697c979F4E0f',
+    symbol: 'GRANT',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: 'HomeChainAssetRegistry',
+    asset: '0xfba9ce2c26f6f71630e94ec0e0363f3d8bf2cf4399e01a3c4570567d37e00e7a',
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-grant.png'
+  },
+  {
+    name: 'Mint Club DAO',
+    address: '0x558810B46101DE82b579DD1950E9C717dCc28338',
+    symbol: 'MINTDAO',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: 'HomeChainAssetRegistry',
+    asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-mintdao.png'
+  },
+  {
+    name: 'Mint Club Creator',
+    address: '0x9f3C60dC06f66b3e0ea1Eb05866F9c1A74d43D67',
+    symbol: 'CREATOR',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: 'HomeChainAssetRegistry',
+    asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
   }
 ];
 
