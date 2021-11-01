@@ -125,7 +125,7 @@ export default {
       return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] * this.vestsToHive / 1e6
     },
     tvl() {
-      return this.totalDeposited * this.prices['HIVEUSDT'] / this.prices['ETHUSDT']
+      return this.totalDeposited * this.prices['HIVEUSDT']
     },
     countDown () {
       if (!this.card?.firstBlock) return;

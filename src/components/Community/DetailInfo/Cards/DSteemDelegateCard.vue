@@ -123,7 +123,7 @@ export default {
       return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'] * this.vestsToSteem / 1e6
     },
     tvl() {
-      return this.totalDeposited * this.prices['STEEMETH']
+      return this.totalDeposited * this.prices['STEEMETH'] * this.prices['ETHUSDT']
     },
     countDown() {
       if (!this.card?.firstBlock) return;

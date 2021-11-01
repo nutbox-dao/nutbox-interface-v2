@@ -224,9 +224,9 @@ export default {
     },
     tvl() {
         if (this.nomination.asset.chainId === 2) { // polkadot
-          return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
+          return this.totalDeposited * this.prices['DOTUSDT']
         }else if (this.nomination.asset.chainId === 3) { // kusama
-          return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
+          return this.totalDeposited * this.prices['KSMUSDT']
         }
     },
     pendingReward() {

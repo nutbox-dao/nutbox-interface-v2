@@ -86,21 +86,21 @@ export default {
         case 'SteemHiveDelegateAssetRegistry':
           {
             if (this.pool.asset.chainId === 1){ // steem
-              return this.totalDeposited * this.prices['STEEMETH']
+              return this.totalDeposited * this.prices['STEEMETH'] * this.prices['ETHUSDT']
             }else if (this.pool.asset.chainId === 2) { // hive
-              return this.totalDeposited * this.prices['HIVEUSDT'] / this.prices['ETHUSDT']
+              return this.totalDeposited * this.prices['HIVEUSDT']
             }
           }
         case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
           {
             if (this.pool.asset.chainId === 2) { // polkadot
-              return this.totalDeposited * this.prices['DOTUSDT'] / this.prices['ETHUSDT']
+              return this.totalDeposited * this.prices['DOTUSDT']
             }else if (this.pool.asset.chainId === 3) { // kusama
-              return this.totalDeposited * this.prices['KSMUSDT'] / this.prices['ETHUSDT']
+              return this.totalDeposited * this.prices['KSMUSDT']
             }
           }
         case 'HomeChainAssetRegistry':
-          return this.erc20Price * this.totalDeposited * this.prices['ETHUSDT']
+          return this.erc20Price * this.totalDeposited
       }
     },
     decimals() {
