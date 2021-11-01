@@ -155,7 +155,7 @@ export default {
     ...mapGetters('web3', ['createState']),
     // total supply of the distribution that user designed
     totalSupply(){
-      return this.progressData.reduce((t,p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseInt(p.amount), 0)
+      return this.progressData.reduce((t,p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseFloat(p.amount), 0)
     }
   },
   watch: {
