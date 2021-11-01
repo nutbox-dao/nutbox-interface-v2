@@ -21,7 +21,7 @@
                 <span>{{$route.name}}</span>
                 <i class="dropdown-icon ml-2"></i>
               </template>
-              <b-dropdown-item v-if="showStakingPool" to="/crowdstaking/deposite">{{ $t('cs.deposit') }}</b-dropdown-item>
+              <b-dropdown-item v-if="showStakingPool" to="/crowdstaking/deposit">{{ $t('cs.deposit') }}</b-dropdown-item>
               <b-dropdown-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-dropdown-item>
               <b-dropdown-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
               <b-dropdown-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
@@ -78,7 +78,7 @@ export default {
       await sleep(1)
     }
     if (this.showStakingPool) {
-      // this.$router.replace('/crowdstaking/deposite')
+      // this.$router.replace('/crowdstaking/deposit')
     }else if (this.showDelegatePool){
       this.$router.replace('/crowdstaking/delegate')
     }else if (this.showNominatePool){

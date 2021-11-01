@@ -5,8 +5,8 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
-export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -200,7 +200,7 @@ export const OfficialAssets = [
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 18,
     type: "HomeChainAssetRegistry",
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/bnb.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/bnb.png'
   },
   {
     name: 'Ethereum Token',
@@ -210,7 +210,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0x4c606d65f6a51160a91ba185988f4cc6749e6422c79bdb2f63b1b36bfa44b515',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/eth.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/eth.png'
   },
   {
     name: 'PancakeSwap Token',
@@ -220,7 +220,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0xcb3d2d4130630a838634786f5fe28f13b8b061ebc9987587a9099e487c9c0cdf',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/cake.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/cake.png'
   },
   {
     name: 'BTCB Token',
@@ -230,7 +230,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0x36be4d0a728a4a0ad58ffcf89f440e13f4db370fd7d0ab22528b929ec955f237',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/btc.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/btc.png'
   },
   {
     name: 'Mint Club',
@@ -240,7 +240,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: 'HomeChainAssetRegistry',
     asset: '0xcd7d1928ba1ec24587cc3904f5fbfef77489c68f0369ec29813dfbec4a3cf216',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/mint.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
   }
 ];
 

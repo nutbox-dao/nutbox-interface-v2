@@ -10,7 +10,7 @@
         <div class="view-top-header view-top-header-sticky p-view-top-header flex-between-center">
           <div class="nav-box nav-box-line">
             <div class="nav">
-              <router-link v-if="showStakingPool" to="deposite">{{ $t('cs.deposit') }}</router-link>
+              <router-link v-if="showStakingPool" to="deposit">{{ $t('cs.deposit') }}</router-link>
               <router-link v-if="showSteemPool" to="steem-delegate">{{ $t('cs.steemDelegate') }}</router-link>
               <router-link v-if="showHivePool" to="hive-delegate">{{ $t('cs.hiveDelegate') }}</router-link>
               <router-link v-if="showNominatePool" to="nominate">{{ $t('cs.nomination') }}</router-link>
@@ -25,7 +25,7 @@
               <span>{{$route.name}}</span>
               <i class="dropdown-icon ml-2"></i>
             </template>
-            <b-dropdown-item v-if="showStakingPool" to="deposite">{{ $t('cs.deposit') }}</b-dropdown-item>
+            <b-dropdown-item v-if="showStakingPool" to="deposit">{{ $t('cs.deposit') }}</b-dropdown-item>
             <b-dropdown-item v-if="showSteemPool" to="steem-delegate">{{ $t('cs.steemDelegate') }}</b-dropdown-item>
             <b-dropdown-item v-if="showHivePool" to="hive-delegate">{{ $t('cs.hiveDelegate') }}</b-dropdown-item>
             <b-dropdown-item v-if="showNominatePool" to="nominate">{{ $t('cs.nomination') }}</b-dropdown-item>

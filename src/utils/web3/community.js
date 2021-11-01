@@ -204,7 +204,7 @@ export const createStakingFeast = async (form) => {
             )
             .substr(2);
       }
-      contract.on('StakingFeastCreated', (user, feast, asset) => {
+      contract.on('StakingFeastCreated', async (user, feast, asset) => {
         if (account.toLowerCase() === user.toLowerCase() && asset.toLowerCase() == assetId.toLowerCase()){
           console.log('Create new staking feast', feast);
           contract.removeAllListeners('StakingFeastCreated');

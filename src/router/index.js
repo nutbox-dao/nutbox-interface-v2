@@ -97,7 +97,7 @@ const routes = [
       {
         path: "/crowdstaking",
         component: CrowdIndex,
-        redirect: "/crowdstaking/deposite",
+        redirect: "/crowdstaking/deposit",
         children: [
           {
             path: "crowdloan",
@@ -115,8 +115,8 @@ const routes = [
             component: Delegate,
           },
           {
-            path: "deposite",
-            name: "deposite",
+            path: "deposit",
+            name: "deposit",
             component: CrowdStaking,
           },
         ],
