@@ -96,7 +96,7 @@ export default {
         this.isMax = true;
     },
     checkDelegateFee() {
-      if (this.steemBalance >= 1){
+      if (this.steemBalance >= this.fee){
         return true;
       }
       this.$bvToast.toast(this.$t('error.delegateeroor'), {
@@ -173,6 +173,11 @@ export default {
     },
   },
   mounted () {
+    if (!this.steemAccount){
+      return;
+    }
+    this.getSteem()
+    this.getVests()
   },
 }
 </script>

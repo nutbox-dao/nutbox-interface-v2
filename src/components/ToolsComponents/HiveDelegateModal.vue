@@ -171,6 +171,10 @@ export default {
     },
   },
   mounted () {
+    if(this.hiveAccount && this.hiveAccount.length > 0){
+      this.getVests();
+      this.getHive();
+    }
   },
 }
 </script>

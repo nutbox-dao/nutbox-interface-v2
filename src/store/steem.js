@@ -109,6 +109,7 @@ export default {
       commit
     }, { steemAccount, activeKey, steemLoginType }) {
       try {
+        console.log(263489247);
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
         const sbd = parseFloat(account.sbd_balance)

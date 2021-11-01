@@ -854,7 +854,6 @@ export const monitorUserBalances = async () => {
   // token price = 0 or ctoken price = 0 => apy = 0
   const update = async () => {
     try{
-      const ts = new Date().getTime();
       let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
       const monitorPools = store.state.web3.monitorPools
       let temp = {}
@@ -911,7 +910,6 @@ export const monitorUserBalances = async () => {
         }
       }
       store.commit('web3/saveAllPools', pools)
-      console.log('update apy used:', (new Date().getTime()) - ts);
     }catch(e) {
       console.log('Update apys faile', e);
     }
