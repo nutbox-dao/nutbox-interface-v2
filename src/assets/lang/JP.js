@@ -172,5 +172,4 @@ module.exports = {
       hasVoted: 'あなたの投稿はnutbox.mineに投票されました',
       pleaseRetry: "もう一度試してください"
     }
-  
 }
