@@ -5,8 +5,8 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
-// export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -100,7 +100,7 @@ export const PhalaCrowdloanReferrerRemark = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 2;
+export const STEEM_STAKE_FEE = 3;
 // official fee account
 export const STEEM_GAS_ACCOUNT = "walnut.gas";
 
@@ -117,7 +117,7 @@ export const STEEM_API_URLS = [
 // hive node storage
 export const HIVE_CONF_KEY = "hiveNodeKey";
 // delegate fee
-export const HIVE_STAKE_FEE = 2;
+export const HIVE_STAKE_FEE = 3;
 // official fee account
 export const HIVE_GAS_ACCOUNT = "walnut.gas";
 
@@ -176,7 +176,7 @@ export const GasLimit = 10000000;
 // export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
 // export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
 
-// bsc test net
+// bsc net
 export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
 export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
@@ -210,7 +210,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0x4c606d65f6a51160a91ba185988f4cc6749e6422c79bdb2f63b1b36bfa44b515',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/eth.png'
   },
   {
     name: 'PancakeSwap Token',
@@ -220,7 +220,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0xcb3d2d4130630a838634786f5fe28f13b8b061ebc9987587a9099e487c9c0cdf',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/cake.png'
   },
   {
     name: 'BTCB Token',
@@ -230,7 +230,17 @@ export const OfficialAssets = [
     decimal: 18,
     type: "HomeChainAssetRegistry",
     asset: '0x36be4d0a728a4a0ad58ffcf89f440e13f4db370fd7d0ab22528b929ec955f237',
-    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/WETH.png'
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/btc.png'
+  },
+  {
+    name: 'Mint Club',
+    address: '0x1f3Af095CDa17d63cad238358837321e95FC5915',
+    symbol: 'MINT',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 18,
+    type: 'HomeChainAssetRegistry',
+    asset: '0xcd7d1928ba1ec24587cc3904f5fbfef77489c68f0369ec29813dfbec4a3cf216',
+    icon: 'https://cdn.wherein.mobi/nutbox-v2/token/logo/mint.png'
   }
 ];
 
