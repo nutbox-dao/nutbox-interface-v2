@@ -873,6 +873,7 @@ export const monitorUserBalances = async () => {
         if (tvl === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
+        if (!com) continue;
         const ctokenAddress = com.ctoken
         const ctokenPrice = price[ctokenAddress]
         if (ctokenPrice === 0) continue;
