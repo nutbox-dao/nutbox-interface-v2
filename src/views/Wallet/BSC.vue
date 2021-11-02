@@ -70,7 +70,7 @@ export default {
           ...this.ctokenBalances[k]
         })
       }
-      return temp.sort((a,b) => a.address === nutAddress && b.balance.sub(a.balance))
+      return temp.sort((a,b) => a.address === this.NutAddress && b.balance.sub(a.balance))
     }
   },
   methods: {
