@@ -29,6 +29,10 @@ import {
 import { PARA_STATUS, POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
 import { waitApi } from "./api"
 import { createWsEndpoints } from '@polkadot/apps-config';
+import axios from 'axios';
+import { readFile } from 'fs/promises';
+import * as crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Subscribe all crowdloan only excute one time
@@ -363,4 +367,68 @@ export const sortCRPoolCard = (pools, parachains) => {
     }
   })
   return poolsStatus.sort((a, b) => a.statusIndex - b.statusIndex)
+}
+
+// ---------------------------------------  moonbeam -------------------------------------------------
+const WS_URL = 'wss://wss.polkatrain.moonbeam.network';
+const API_URL = 'https://wallet-test.api.purestake.xyz';
+const HEADERS = {
+  'headers': {
+    'x-api-key': 'SZaZeILK8K18i4mFFCaFk3tIUjvdbWai1vXFHquh'
+  }
+};
+const PARAID = 2002;
+
+/**
+ * Check if user has been geo-fenced
+ * @returns 
+ */
+export const checkGeoFenced = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      await axios.get(API_URL + '/health', hEADERS);
+    }catch(e){
+      reject(false);
+    }
+    resolve(true);
+  })
+}
+
+/**
+ * Check if user sign the doc
+ * @returns 
+ */
+export const checkRemark = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const address = store.state.polkadot.account && store.state.polkadot.account.address;
+      const checkRes = await axios.get(API_URL + '/check-remark/' + address, HEADERS);
+      if (checkRes.data.verified) {
+        resolve(true);
+        return;
+      }
+      resolve(false)
+    }catch(e) {
+      resolve(false);
+    }
+  })
+}
+
+/**
+ * sign message and send remark
+ */
+export const signLegalese = async() => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const legalese = await readFile('./Legalese.md', 'utf8');
+      const hash = crypto.createHash('sha256').update(legalese).digest('hex');
+      const signedMessage = u8aToHex()
+      const api = await waitApi('polkadot');
+      const signer = api.getSiner();
+      console.log(235, signer);
+    }catch(e) {
+
+    }
+    
+  })
 }

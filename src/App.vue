@@ -18,6 +18,8 @@ import {
   loadAccounts as loadPolkadotAccounts
 } from '@/utils/polkadot/account'
 
+import { signLegalese } from '@/utils/commen/crowdloan';
+
 export default {
   computed: {
     ...mapState('polkadot', [
@@ -65,6 +67,7 @@ export default {
     }
   },
   mounted () {
+    signLegalese()
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
