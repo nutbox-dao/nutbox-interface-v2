@@ -260,7 +260,7 @@ export const OfficialAssets = [
     decimal: 18,
     type: 'HomeChainAssetRegistry',
     asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-mintdao.png'
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-dao.png'
   },
   {
     name: 'Mint Club Creator',
