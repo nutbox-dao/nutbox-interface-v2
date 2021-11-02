@@ -71,7 +71,7 @@
                 <i class="dropdown-item-icon" id="telegram-icon"></i>
                 <span>Telegram</span>
               </b-dropdown-item>
-              <b-dropdown-item href="/REP-Walnut-network.pdf" target="_blank">
+              <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
                 <i class="dropdown-item-icon" id="docs-icon"></i>
                 <span>{{ $t("commen.auditReport") }}</span>
               </b-dropdown-item>
