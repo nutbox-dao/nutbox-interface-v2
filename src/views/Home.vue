@@ -15,7 +15,7 @@
                 DAO Goverance <br>
                 Community Service
               </div>
-              <button class="s1-btn">Explore</button>
+              <button @click="$router.replace('/community/community-list')" class="s1-btn">Explore</button>
             </div>
             <div class="col-md-6 box-right">
               <img class="home-img1" src="~@/static/images/home-s1-img1.png" alt="">

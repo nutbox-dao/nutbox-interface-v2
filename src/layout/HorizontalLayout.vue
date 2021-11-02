@@ -71,6 +71,10 @@
                 <i class="dropdown-item-icon" id="telegram-icon"></i>
                 <span>Telegram</span>
               </b-dropdown-item>
+              <b-dropdown-item href="/REP-Walnut-network.pdf" target="_blank">
+                <i class="dropdown-item-icon" id="docs-icon"></i>
+                <span>{{ $t("commen.auditReport") }}</span>
+              </b-dropdown-item>
               <div class="dropdown-item" @click="langActive=true">
                 <i class="dropdown-item-icon" id="language-icon"></i>
                 <span>{{$t('commen.language')}}</span>

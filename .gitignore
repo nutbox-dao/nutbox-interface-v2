@@ -4,6 +4,7 @@ node_modules
 /dist.zip
 
 /public/*.json
+/public/*.pdf
 
 # local env files
 .env.local

@@ -37,6 +37,7 @@ module.exports = {
     contractAddr: "Contract Address",
     search: "Search",
     dashboard: "Dashboard",
+    auditReport: "Audit Report",
     language: "Language",
     zh: "中文",
     en: "English",

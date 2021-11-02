@@ -37,6 +37,7 @@ module.exports = {
     contractAddr: "合约地址",
     search: "搜索",
     dashboard: "仪表盘",
+    auditReport: "审计报告",
     language: "语言",
     zh: "中文",
     en: "English",
