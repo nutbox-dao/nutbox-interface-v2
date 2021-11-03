@@ -456,8 +456,8 @@ export default {
         await sleep(2)
         try {
           await getMyOpenedPools(true);
-          this.$router.push("/community-setting/staking");
         } catch (e) {}
+        this.$router.push("/community-setting/staking");
       } catch (e) {
         handleApiErrCode(e, (info, para) => {
           this.$bvToast.toast(info, para);
