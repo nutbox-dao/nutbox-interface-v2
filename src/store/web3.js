@@ -194,7 +194,7 @@ export default {
     },
     saveGames: (state, games) => {
       state.games = games;
-    },
+    }
   },
   getters: {
     isMainChain: (state) => {

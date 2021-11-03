@@ -18,8 +18,6 @@ import {
   loadAccounts as loadPolkadotAccounts
 } from '@/utils/polkadot/account'
 
-import { signLegalese } from '@/utils/commen/crowdloan';
-
 export default {
   computed: {
     ...mapState('polkadot', [
@@ -59,7 +57,7 @@ export default {
         }).catch(console.error)
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
+          this.$bvToast.toast(tip, param) 
         })
       } finally {
         this.loading = false
@@ -67,7 +65,6 @@ export default {
     }
   },
   mounted () {
-    signLegalese()
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {

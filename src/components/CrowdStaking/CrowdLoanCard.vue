@@ -46,11 +46,11 @@
     <div class="text-center">
       <button
         class="primary-btn"
-        :disabled="!isConnected || status !== 'Active'"
-        @click="showContribute = true"
+        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !isCheckedRemark"
+        @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
       >
         <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.contribute") }}
+        {{ isCheckedGeofenced ? $t('cl.contribute') : $t('cl.geoDefenced') }}
       </button>
       <button
         class="primary-btn"
@@ -112,6 +112,16 @@
       >
         <TipWithdraw :fund="getFundInfo" :relaychain='chain' @hideWithdraw="showWithdraw = false" />
       </b-modal>
+      <b-modal
+        v-model="showMoonbeamRegister"
+        modal-class="custom-modal"
+        centered
+        hide-header
+        hide-footer
+        no-close-on-backdrop
+      >
+        <MoonbeamRegister @hideMoonbeam="showMoonbeamRegister=false" :relaychain="chain"/>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -122,17 +132,21 @@ import TipContribute from '@/components/Commen/TipContribute'
 import TipWithdraw from '@/components/Commen/TipWithdraw'
 import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
-import { calStatus } from '@/utils/commen/crowdloan'
+import { calStatus, MoonbeamParaId, checkGeoFenced, checkRemark } from '@/utils/commen/crowdloan'
 import { formatCountdown, handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from "@/utils/web3/pool";
+import MoonbeamRegister from '@/components/Commen/MoonbeamRegister'
 
 export default {
   data () {
     return {
       showContribute: false,
       showWithdraw: false,
+      showMoonbeamRegister: true,
       status: 'Completed',
-      isWithdrawing: false
+      isWithdrawing: false,
+      isCheckedGeofenced: false,
+      isCheckedRemark: false
     }
   },
   props: {
@@ -144,7 +158,8 @@ export default {
     TipContribute,
     TipWithdraw,
     ContributorsLabel,
-    RaisedLabel
+    RaisedLabel,
+    MoonbeamRegister
   },
   methods: {
     async withdraw() {
@@ -282,9 +297,22 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     console.log('card', this.card);
     this.status = this.getFundInfo?.status || this.card.statusStr
+    // check moonbeam legalese
+    if (parseInt(this.card.pid) === MoonbeamParaId){
+      try{
+        await checkGeoFenced();
+        this.isCheckedGeofenced = true;
+      }catch(e) {
+        return;
+      }
+      this.isCheckedRemark = await checkRemark();
+    }else{
+      this.isCheckedRemark = true;
+      this.isCheckedGeofenced = true;
+    }
   }
 }
 </script>

@@ -1,3 +1,4 @@
+import { BN } from "bn.js"
 
 
 export default {
@@ -128,7 +129,7 @@ export default {
       if (state.balance && state.totalStaked) {
         return state.balance.sub(state.totalStaked)
       } else {
-        return 0
+        return new BN(0)
       }
     },
     // crowdloan

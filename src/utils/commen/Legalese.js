@@ -1,4 +1,4 @@
-By accessing the Moonbeam Crowdloan Application ("Moonbeam Crowdloan Application"),  you represent and warrant to the Moonbeam Foundation LTD. ("Moonbeam Foundation") as follows:
+export const legalese = `By accessing the Moonbeam Crowdloan Application ("Moonbeam Crowdloan Application"),  you represent and warrant to the Moonbeam Foundation LTD. ("Moonbeam Foundation") as follows:
 
 1. you are not a citizen or resident of a country the laws of which prohibit or conflict with the holding, sale, or trading of tokens; such countries to include (without limitation) THE UNITED STATES OF AMERICA, ITS TERRITORIES AND POSSESSIONS, ANY STATE OF THE UNITED STATES, AND THE DISTRICT OF COLUMBIA ("U.S."), CANADA, PEOPLE'S REPUBLIC OF CHINA, DEMOCRATIC PEOPLE'S REPUBLIC OF KOREA, CUBA, SYRIA, IRAN, SUDAN, PEOPLE'S REPUBLIC OF CRIMEA;
 2. you agree and acknowledge that nothing in the Moonbeam Crowdloan Application constitutes a prospectus or offer document of any sort nor is intended to constitute an offer of securities of any form, units in a business trust, units in a collective investment scheme, or any other form of capital markets product or investment in any jurisdiction, nor a solicitation for any form of investment;
@@ -15,4 +15,4 @@ By accessing the Moonbeam Crowdloan Application ("Moonbeam Crowdloan Application
 9. you are acquiring GLMR tokens as principal and for your own benefit and you are not acting on the instructions of, or as nominee or agent for or on behalf of, any other person;
 10. the GLMR tokens to be delivered to and received by you will not be used for any purpose in connection with money laundering, terrorism financing, or any other acts in breach or contravention of any applicable law, regulation, or rule;
 11. you bear the sole responsibility to determine what tax implications your use of the Moonbeam Crowdloan Application may have for you; and
-12. all of the above representations and warranties are and will continue to be, true, complete, accurate, and non-misleading from the time of your acceptance of this attestation and notwithstanding the receipt by you of any GLMR tokens.
+12. all of the above representations and warranties are and will continue to be, true, complete, accurate, and non-misleading from the time of your acceptance of this attestation and notwithstanding the receipt by you of any GLMR tokens.`

@@ -190,6 +190,7 @@ export default {
           this.relaychain,
           this.paraId,
           parseFloat(this.inputAmount),
+          this.fund.funds.ownContribution,
           this.communityId,
           trieIndex,
           this.card.communityId,
@@ -212,6 +213,10 @@ export default {
         this.isComtribution = false;
       }
     },
+  },
+  mounted () {
+    console.log(this.card);
+    console.log(23, this.fund.funds.ownContribution.toString());
   },
 };
 </script>

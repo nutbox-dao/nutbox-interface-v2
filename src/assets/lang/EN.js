@@ -154,6 +154,12 @@ module.exports = {
     trieIndex: "TrieIndex",
     contributeAmount: "Contribute amount",
     contributeTime: "Contribute time",
+    geoDefenced: "Area can't surpoted",
+    insufficientBalance: 'Please ensure you have enough funds to cover the transaction fee (around 0.0411 DOT).',
+    signLegales: 'Sign legales',
+    signAndSend: 'Sign and send',
+    waitingBlockFinal: 'Waiting for the block finalized, this will cost some time, please be patient.',
+    signed: 'Signed success, now you can contribute to moonbeam.'
   },
   transaction: {
     broadcasting: "Transaction Is Broadcasting.",

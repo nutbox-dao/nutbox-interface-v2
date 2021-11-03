@@ -45,12 +45,11 @@
       <template v-else>  
         <button
           class="primary-btn"
-          :disabled="!isConnected"
-          v-show="status === 'Active'"
-          @click="showContribute = true"
+          :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !isCheckedRemark"
+          @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
         >
           <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-          {{ $t("cl.contribute") }}
+          {{ checkGeoenced ? $t("cl.contribute") : $t("cl.geoDefenced") }}
         </button>
         <button
           class="primary-btn"
@@ -122,7 +121,7 @@ import TipContribute from '@/components/Commen/TipContribute'
 import TipWithdraw from '@/components/Commen/TipWithdraw'
 import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
-import { calStatus } from '@/utils/commen/crowdloan'
+import { calStatus, MoonbeamParaId, checkGeoFenced, checkRemark } from '@/utils/commen/crowdloan'
 import { formatCountdown, handleApiErrCode } from '@/utils/helper'
 import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
@@ -132,9 +131,12 @@ export default {
   data () {
     return {
       showContribute: false,
+      showMoonbeamRegister: false,
       showWithdraw: false,
       status: 'Completed',
-      isWithdrawing: false
+      isWithdrawing: false,
+      isCheckedGeofenced: false,
+      isCheckedRemark: false
     }
   },
   props: {
@@ -274,8 +276,22 @@ export default {
       return formatCountdown(this.card.firstBlock, this.blockNum, BLOCK_SECOND)
     }
   },
-  mounted () {
+  async mounted () {
     this.status = this.getFundInfo?.status || this.card.statusStr || 'Completed'
+
+    // check moonbeam legalese
+    if (parseInt(this.card.pid) === MoonbeamParaId){
+      try{
+        await checkGeoFenced();
+        this.isCheckedGeofenced = true;
+      }catch(e) {
+        return;
+      }
+      this.isCheckedRemark = await checkRemark();  
+    }else{
+      this.isCheckedRemark = true;
+      this.isCheckedGeofenced = true;
+    }
   }
 }
 </script>
