@@ -144,7 +144,7 @@ export default {
     return {
       showContribute: false,
       showWithdraw: false,
-      showMoonbeamRegister: true,
+      showMoonbeamRegister: false,
       status: 'Completed',
       isWithdrawing: false,
       isCheckedGeofenced: false,

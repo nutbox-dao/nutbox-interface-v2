@@ -15,9 +15,9 @@
              <Markdown :body="legalese" v-if="status === 'pending'"/>
            </div>
             <div class="tip-contribute" v-if="status === 'signedLegales'">
-                <p>
+                <h4>
                     Next step
-                </p>
+                </h4>
                 Use your account to send the signture as remark to Polkadot
             </div>
            <div class="h-line"></div>

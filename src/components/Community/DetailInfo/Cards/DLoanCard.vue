@@ -49,7 +49,7 @@
           @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
         >
           <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-          {{ checkGeoenced ? $t("cl.contribute") : $t("cl.geoDefenced") }}
+          {{ isCheckedGeofenced ? $t("cl.contribute") : $t("cl.geoDefenced") }}
         </button>
         <button
           class="primary-btn"
@@ -112,6 +112,18 @@
     >
       <TipWithdraw :fund="getFundInfo" :relaychain='chain' @hideWithdraw="showWithdraw = false" />
     </b-modal>
+    <b-modal
+        v-model="showMoonbeamRegister"
+        modal-class="custom-modal"
+        :scrollable="true"
+        size="lg"
+        centered
+        hide-header
+        hide-footer
+        no-close-on-backdrop
+      >
+        <MoonbeamRegister @hideMoonbeam="showMoonbeamRegister=false" :relaychain="chain"/>
+      </b-modal>
   </div>
 </template>
 
@@ -126,6 +138,7 @@ import { formatCountdown, handleApiErrCode } from '@/utils/helper'
 import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
 import { BLOCK_SECOND } from '@/constant'
+import MoonbeamRegister from '@/components/Commen/MoonbeamRegister'
 
 export default {
   data () {
@@ -148,7 +161,8 @@ export default {
     TipContribute,
     TipWithdraw,
     ContributorsLabel,
-    RaisedLabel
+    RaisedLabel,
+    MoonbeamRegister
   },
   methods: {
     async withdraw() {
@@ -285,6 +299,7 @@ export default {
         await checkGeoFenced();
         this.isCheckedGeofenced = true;
       }catch(e) {
+        this.isCheckedGeofenced = false;
         return;
       }
       this.isCheckedRemark = await checkRemark();  
