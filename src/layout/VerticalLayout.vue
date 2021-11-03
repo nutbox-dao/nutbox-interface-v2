@@ -111,7 +111,7 @@
                 target="_blank"
               >
                 <b-popover
-                  target="telegram-icon"
+                  target="facebook-icon"
                   triggers="hover focus"
                   placement="top"
                 >
@@ -125,7 +125,7 @@
                 target="_blank"
               >
                 <b-popover
-                  target="telegram-icon"
+                  target="twitter-icon"
                   triggers="hover focus"
                   placement="top"
                 >
@@ -419,6 +419,9 @@ export default {
 }
 #facebook-icon {
   background-image: url("~@/static/images/facebook.png");
+}
+#twitter-icon {
+  background-image: url("~@/static/images/twitter.png")
 }
 
 #justswap-icon:hover {
