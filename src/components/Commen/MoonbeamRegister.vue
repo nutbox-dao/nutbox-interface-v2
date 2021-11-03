@@ -10,14 +10,18 @@
              <h3>
                 Moonbeam Crowdloan Terms and Conditions
              </h3>
-            <Markdown :body="legalese" v-if="status === 'pending'"/>
+           <div class="h-line"></div>
+           <div style="overflow: scroll">
+             <Markdown :body="legalese" v-if="status === 'pending'"/>
+           </div>
             <div class="tip-contribute" v-if="status === 'signedLegales'">
                 <p>
                     Next step
                 </p>
                 Use your account to send the signture as remark to Polkadot
             </div>
-            <b-form-checkbox v-if="status === 'pending'" class="checkbox-item" v-model="hasReaded">
+           <div class="h-line"></div>
+           <b-form-checkbox v-if="status === 'pending'" class="checkbox-item mb-3" v-model="hasReaded">
                 I have read and agree to the terms and conditions
             </b-form-checkbox>
             <button class="primary-btn" @click="confirm" :disabled="!hasReaded || isSigningRemark || isSigningLegalses">
@@ -42,7 +46,7 @@ export default {
             isSigningLegalses: false,
             isSigningRemark: false,
             hasReaded: false,
-            status: 'pending', // pending, signedLegales, 
+            status: 'pending', // pending, signedLegales,
             remark: ''
         }
     },
@@ -82,7 +86,7 @@ export default {
                    this.status = 'signedLegales'
                 } else if(this.status === 'signedLegales'){
                     this.isSigningRemark = true;
-                    const res = await sendRemark(this.chain, this.remark, 
+                    const res = await sendRemark(this.chain, this.remark,
                             (info, param) => {
                                 this.$bvToast.toast(info, param);
                             },);
@@ -99,7 +103,7 @@ export default {
             }catch (e) {
                 console.log(423, e);
                 handleApiErrCode(e, (tip, param) => {
-                    this.$bvToast.toast(tip, param) 
+                    this.$bvToast.toast(tip, param)
                 })
             }finally {
                 this.isSigningLegalses = false;
@@ -114,5 +118,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.h-line {
+  width: 100%;
+  height: 1px;
+  background-color: #f6f7f9;
+  margin-bottom: 15px;
+  margin-top: 24px;
+}
+.close-btn {
+  right: 0;
+}
+.primary-btn {
+  min-height: 2.4rem;
+}
+.tip-modal {
+  position: relative;
+  height: 100%;
+  .tip-contribute {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
 </style>

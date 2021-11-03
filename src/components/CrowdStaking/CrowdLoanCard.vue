@@ -115,6 +115,8 @@
       <b-modal
         v-model="showMoonbeamRegister"
         modal-class="custom-modal"
+        :scrollable="true"
+        size="lg"
         centered
         hide-header
         hide-footer
@@ -175,7 +177,7 @@ export default {
           this.$bvToast.toast(tip, param)
         })
       }finally{
-        this.isWithdrawing = false  
+        this.isWithdrawing = false
       }
     },
     openNewTab (id) {
