@@ -148,9 +148,8 @@ export default {
     },
     tokensTvl() {
       let tvl = 0;
-      const vestsToSteem = 1885
+      const vestsToSteem = this.vestsToSteem
       if (!this.allPools || !this.monitorPools || !this.prices || !this.allTokens) return 0;
-      console.log(this.allPools);
       for (let i = 0; i < this.allPools.length; i++) {
         const pool = this.allPools[i];
         let amount = this.monitorPools[pool.communityId + '-' + pool.pid + '-totalStakedAmount'];
@@ -159,32 +158,31 @@ export default {
           const price = this.allTokens.filter(token => token.address === pool.address)[0].price;
           tvl += amount / (10 ** pool.tokenDecimal) * price;
         }else if(pool.type === 'SteemHiveDelegateAssetRegistry') {
-          // if (pool.chainId === 1) {
-          //   if (!vestsToSteem) continue;
-          //   amount = amount.toString() * vestsToSteem / 1e6
-          //   const price = this.prices['STEEMETH'] * this.prices['ETHUSDT'];
-          //   tvl += amount * price;
-          // }else {
-          //   if (!this.vestsToHive) continue;
-          //   amount = amount.toString() * this.vestsToHive / 1e6
-          //   const price = this.prices['HIVEUSDT'];
-          //   tvl += amount * price;
-          // }
+          if (pool.chainId === 1) {
+            if (!vestsToSteem) continue;
+            amount = amount.toString() * vestsToSteem / 1e6
+            const price = this.prices['STEEMETH'] * this.prices['ETHUSDT'];
+            tvl += amount * price;
+          }else {
+            if (!this.vestsToHive) continue;
+            amount = amount.toString() * this.vestsToHive / 1e6
+            const price = this.prices['HIVEUSDT'];
+            tvl += amount * price;
+          }
         }else if(pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') {
-          // if (pool.chainId === 2) {
-          //   amount = amount.toString() / 1e10;
-          //   tvl += amount * this.prices['DOTUSDT']
-          // }else {
-          //   amount = amount.toString() / 1e12;
-          //   tvl += amount * this.prices['KSMUSDT']
-          // }
+          if (pool.chainId === 2) {
+            amount = amount.toString() / 1e10;
+            tvl += amount * this.prices['DOTUSDT']
+          }else {
+            amount = amount.toString() / 1e12;
+            tvl += amount * this.prices['KSMUSDT']
+          }
         }
       }
       return tvl;
     }
   },
   mounted () {
-    console.log(777, this.allPools);
   },
 }
 </script>
