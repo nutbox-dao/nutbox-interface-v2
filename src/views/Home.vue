@@ -27,7 +27,7 @@
         <img class="section-bg1" src="~@/static/images/home-s2-img2.svg" alt="">
         <img class="section-bg2" src="~@/static/images/home-s2-img3.svg" alt="">
         <div class="s-title s2-title">Community</div>
-        <div class="sub-title">it's easy to bring DeFi,social media and Governance to the community</div>
+        <div class="sub-title">It's easy to bring DeFi,social media and Governance to the community</div>
         <div class="s-box">
           <div class="box-item box-item-s2">
             <img class="box-icon" src="~@/static/images/home-s2-icon1.svg" alt="">
