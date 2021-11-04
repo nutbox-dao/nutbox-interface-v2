@@ -13,7 +13,7 @@ import {
   getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasLimit } from "@/config";
+import { errCode, Multi_Config, GasTimes } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
@@ -214,13 +214,17 @@ export const createStakingFeast = async (form) => {
         }
       })
       // call contract
+      let gasLimit = await contract.estimateGas.createStakingFeast(assetId,
+        contractAddress["LinearCalculator"],
+        distributionStr)
+      gasLimit = parseInt(gasLimit.toString() * GasTimes);
       const res = await contract.createStakingFeast(
         assetId,
         contractAddress["LinearCalculator"],
         distributionStr,
         {
           gasPrice: gas,
-          gasLimit: GasLimit,
+          gasLimit,
         }
       );
       await waitForTx(res.hash);
@@ -305,9 +309,11 @@ export const chargeCommunityBalance = async (amount) => {
 
     try {
       const gas = await getGasPrice();
+      let gasLimt = await contract.estimateGas.adminDepositReward(amount.toString());
+      gasLimt = parseInt(gasLimt.toString() * GasTimes);
       const tx = await contract.adminDepositReward(amount.toString(), {
         gasPrice: gas,
-        gasLimit: GasLimit,
+        gasLimit,
       });
       await waitForTx(tx.hash);
       resolve(tx.hash);
@@ -382,9 +388,11 @@ export const setDevAddress = async (address) => {
 
     try {
       const gas = await getGasPrice();
+      let gasLimit = await contract.estimateGas.setDev(address);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.setDev(address, {
         gasPrice: gas,
-        gasLimit: GasLimit,
+        gasLimit,
       });
       await waitForTx(tx.hash);
       resolve(tx.hash);
@@ -423,9 +431,11 @@ export const setDevRatio = async (ratio) => {
 
     try {
       const gas = await getGasPrice();
+      let gasLimit = await contract.estimateGas.setDevRewardRatio(ratio);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes);
       const tx = await contract.setDevRewardRatio(ratio, {
         gasPrice: gas,
-        gasLimit: GasLimit,
+        gasLimit
       });
       await waitForTx(tx.hash);
       resolve(tx.hash);

@@ -43,7 +43,7 @@ import {
   loadFunds as loadPolkadotFunds
 } from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { GasLimit, NutAddress } from '@/config'
+import { GasTimes, NutAddress } from '@/config'
 import { ethers } from 'ethers'
 import {
   BLOCK_SECOND,
@@ -197,11 +197,13 @@ export const addPool = async (form) => {
     }
 
     try {
-      const gas = await getGasPrice()
+      const gasPrice = await getGasPrice()
+      let gasLimit = await contract.estimateGas.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes);
       const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)),
       {
-        gasPrice: gas,
-        gasLimit: GasLimit
+        gasPrice: gasPrice,
+        gasLimit
       })
       await waitForTx(tx.hash)
       // re monitor
@@ -240,10 +242,12 @@ export const updatePoolsRatio = async (form) => {
     }
     try {
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.setPoolRatios(form.map(val => val * 100));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.setPoolRatios(form.map(val => val * 100),
       {
         gasPrice: gas,
-        gasLimit: GasLimit
+        gasLimit
       })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -349,10 +353,12 @@ export const approvePool = async (pool) => {
       const erc20Handler = contractAddress['ERC20AssetHandler']
       try{
         const gas = await getGasPrice()
+        let gasLimit = await contract.estimateGas.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString());
+        gasLimit = parseInt(gasLimit.toString() * GasTimes)
         const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString(),
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         })
         await waitForTx(tx.hash)
         resolve(tx.hash)
@@ -404,10 +410,12 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
 
     try{
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.deposit(pid, account, amount.toString());
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.deposit(pid, account, amount.toString(), boundAccount,
       {
         gasPrice: gas,
-        gasLimit: GasLimit
+        gasLimit
       })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -442,10 +450,12 @@ export const withdraw = async (communityId, pid, amount) => {
     try{
       const account = await getAccounts();
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.withdraw(pid, account, amount.toString());
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.withdraw(pid, account, amount.toString(),
       {
         gasPrice: gas,
-        gasLimit: GasLimit
+        gasLimit
       })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -477,10 +487,12 @@ export const withdrawReward = async (communityId, pid) => {
 
     try{
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.withdrawPoolRewards(pid);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.withdrawPoolRewards(pid,
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -512,10 +524,12 @@ export const stopPool = async (pid) => {
     }
     try{
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.stopPool(pid);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.stopPool(pid, 
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -547,10 +561,12 @@ export const tryWithdraw = async (pid) => {
     }
     try{
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.tryWithdraw(pid);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.tryWithdraw(pid, 
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -582,10 +598,12 @@ export const removePool = async (pid) => {
     }
     try{
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.removePool(pid);
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.removePool(pid, 
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         })
       await waitForTx(tx.hash)
       resolve(tx.hash)

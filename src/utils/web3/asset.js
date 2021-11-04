@@ -33,7 +33,7 @@ import { errCode,
     CROWDLOAN_CHAINID_TO_NAME,
     DELEGATION_CHAINID_TO_NAME,
     Multi_Config,
-    GasLimit
+    GasTimes
 } from "@/config";
 import { stanfiAddress } from '@/utils/commen/account'
 import { signMessage } from './utils'
@@ -344,11 +344,13 @@ export const registerHomeChainAsset = async (assetAddress) => {
 
       try {
         const gas = await getGasPrice()
+        let gasLimit = await contract.estimateGas.registerAsset('0x', assetAddress, '0x');
+        gasLimit = parseInt(gasLimit.toString() * GasTimes)
         const tx = await contract.registerAsset(
           '0x', assetAddress, '0x',
           {
             gasPrice: gas,
-            gasLimit: GasLimit
+            gasLimit
           }
         )
         await waitForTx(tx.hash)
@@ -389,11 +391,14 @@ export const registerSteemHiveAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
         web3.utils.stringToHex(form.account).substr(2)
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.registerAsset(
+        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.registerAsset(
         foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
         {
           gasPrice: gas,
-          gasLimit: GasLimit
+          gasLimit
         }
       )
       await waitForTx(tx.hash)
@@ -435,13 +440,18 @@ export const registerCrowdloanAsset = async (form) => {
         addressToHex(form.communityAddress).substr(2) // communityAccount
       console.log(foreignLocation, form);
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
+        name: form.assetName,
+        endingBlock: form.endingBlock
+      })));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
         name: form.assetName,
         endingBlock: form.endingBlock
       })),
       {
         gasPrice: gas,
-        gasLimit: GasLimit
+        gasLimit
       })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -480,10 +490,12 @@ export const registerNominateAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
         addressToHex(form.nodeAddress).substr(2) // node address
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName),
       {
         gasPrice: gas,
-        gasLimit: GasLimit
+        gasLimit
       })
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -531,12 +543,14 @@ export const deployERC20 = async ({
       tokenDeploying = true
       store.commit('web3/saveTokenDeploying', tokenDeploying)
       const gas = await getGasPrice()
+      let gasLimit = await contract.estimateGas.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal));
+      gasLimit = parseInt(gasLimit.toString() * GasTimes)
       const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
             store.state.web3.account, 
             isMintable, 
             {
               gasPrice: gas,
-              gasLimit: GasLimit
+              gasLimit
             });
       callback()
     } catch (e) {

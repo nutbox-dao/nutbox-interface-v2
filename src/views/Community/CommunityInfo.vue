@@ -533,8 +533,8 @@ export default {
 
       if (!name || name.length === 0) {
         tips = this.$t("tip.needName");
-      } else if(name && name.length > 16){
-        tips = this.$t("tip.communityNameLimit", {count: 16})
+      } else if(name && name.length > 32){
+        tips = this.$t("tip.communityNameLimit", {count: 32})
       } else if (!description || description.length === 0) {
         tips = this.$t("tip.needDescription");
       } else if (!icon || icon.length === 0) {

@@ -421,7 +421,7 @@ export default {
   background-image: url("~@/static/images/facebook.png");
 }
 #twitter-icon {
-  
+  background-image: url("~@/static/images/twitter.png");
 }
 
 #justswap-icon:hover {
@@ -438,5 +438,8 @@ export default {
 }
 #telegram-icon:hover {
   background-image: url("~@/static/images/telegram-hover.svg");
+}
+#twitter-icon:hover {
+  background-image: url("~@/static/images/twitter-hover.png");
 }
 </style>

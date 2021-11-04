@@ -162,7 +162,7 @@ export const VALIDATOR_CHAINID_TO_NAME = {
   3: "kusama",
 };
 
-export const GasLimit = 10000000;
+export const GasTimes = 1.5;
 
 
 // local network
