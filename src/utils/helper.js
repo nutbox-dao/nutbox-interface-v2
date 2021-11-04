@@ -49,6 +49,7 @@ export const retryMethod = async function (func, retries = 5, interval = 1) {
 };
 
 export const formatBalance = function (value, digit = 3) {
+  if (value === 0 && digit === 0) return 0; 
   if (!value) return "0.000";
   const str =
     digit != null && digit >= 0

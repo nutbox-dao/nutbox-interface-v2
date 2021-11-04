@@ -32,17 +32,17 @@
           <div class="box-item box-item-s2">
             <img class="box-icon" src="~@/static/images/home-s2-icon1.svg" alt="">
             <div class="label">Users</div>
-            <div class="value">10,000,000</div>
+            <div class="value">{{ usersCount | amountForm(0) }}</div>
           </div>
           <div class="box-item box-item-s2">
             <img class="box-icon" src="~@/static/images/home-s2-icon2.svg" alt="">
             <div class="label">Communnity</div>
-            <div class="value">10,000</div>
+            <div class="value">{{ communityCount | amountForm(0) }}</div>
           </div>
           <div class="box-item box-item-s2">
             <img class="box-icon" src="~@/static/images/home-s2-icon3.svg" alt="">
             <div class="label">Proposals</div>
-            <div class="value">1,000</div>
+            <div class="value">{{ 0 | amountForm(0) }}</div>
           </div>
         </div>
       </section>
@@ -56,21 +56,21 @@
           </div>
           <div class="s-box">
             <div class="box-item box-item-s3">
-              <div class="label">Staking</div>
-              <div class="value">100</div>
+              <div class="label">Pools</div>
+              <div class="value">{{ poolsCount | amountForm(0) }}</div>
             </div>
             <div class="box-item box-item-s3">
-              <div class="label">Staking Token</div>
-              <div class="value">$1,000,000,00</div>
+              <div class="label">Tokens</div>
+              <div class="value">{{ tokensCount | amountForm(0) }}</div>
             </div>
             <div class="box-item box-item-s3">
               <div class="label">TVL</div>
-              <div class="value">$1,000,000,00</div>
+              <div class="value">{{ tokensTvl | formatPrice }}</div>
             </div>
           </div>
         </div>
       </section>
-      <section class="section4">
+      <!-- <section class="section4">
         <div class="container">
           <div class="row">
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-center">
@@ -102,14 +102,90 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { getDataCounts } from '@/apis/api'
+
 export default {
-  name: 'Home'
+  name: 'Home',
+  data() {
+    return {
+      counts: {
+        tokenCount: 0,
+        userCount: 0,
+        poolCount: 0,
+        communityCount: 0
+      }
+    }
+  },
+  computed: {
+    ...mapState('web3', ['allCommunities', 'allTokens', 'allPools', 'monitorPools']),
+    ...mapState(['prices']),
+    ...mapState('steem', ['vestsToSteem']),
+    ...mapState('hive', ['vestsToHive']),
+    usersCount() {
+      let count = 0;
+      if (!this.allPools || this.allPools.length == 0) return 0;
+      for (let i = 0; i < this.allPools.length; i++){
+        const pool = this.allPools[i];
+        count += this.monitorPools[pool.communityId + '-' + pool.pid + '-stakerCount']
+      }
+      return count
+    },
+    communityCount() {
+      return this.allCommunities ? this.allCommunities.length : 0
+    },
+    poolsCount() {
+      return this.allPools ? this.allPools.length : 0
+    },
+    tokensCount() {
+      return this.allTokens ? this.allTokens.length : 0
+    },
+    tokensTvl() {
+      let tvl = 0;
+      const vestsToSteem = 1885
+      if (!this.allPools || !this.monitorPools || !this.prices || !this.allTokens) return 0;
+      console.log(this.allPools);
+      for (let i = 0; i < this.allPools.length; i++) {
+        const pool = this.allPools[i];
+        let amount = this.monitorPools[pool.communityId + '-' + pool.pid + '-totalStakedAmount'];
+
+        if (pool.type === 'HomeChainAssetRegistry') {
+          const price = this.allTokens.filter(token => token.address === pool.address)[0].price;
+          tvl += amount / (10 ** pool.tokenDecimal) * price;
+        }else if(pool.type === 'SteemHiveDelegateAssetRegistry') {
+          // if (pool.chainId === 1) {
+          //   if (!vestsToSteem) continue;
+          //   amount = amount.toString() * vestsToSteem / 1e6
+          //   const price = this.prices['STEEMETH'] * this.prices['ETHUSDT'];
+          //   tvl += amount * price;
+          // }else {
+          //   if (!this.vestsToHive) continue;
+          //   amount = amount.toString() * this.vestsToHive / 1e6
+          //   const price = this.prices['HIVEUSDT'];
+          //   tvl += amount * price;
+          // }
+        }else if(pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') {
+          // if (pool.chainId === 2) {
+          //   amount = amount.toString() / 1e10;
+          //   tvl += amount * this.prices['DOTUSDT']
+          // }else {
+          //   amount = amount.toString() / 1e12;
+          //   tvl += amount * this.prices['KSMUSDT']
+          // }
+        }
+      }
+      return tvl;
+    }
+  },
+  mounted () {
+    console.log(777, this.allPools);
+  },
 }
 </script>
 

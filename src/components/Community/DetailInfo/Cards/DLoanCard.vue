@@ -67,8 +67,21 @@
         </button>
       </template>
     </div>
+    <!-- pool info -->
     <div class="detail-info-box">
       <p style="height:1rem"></p>
+      <div class="project-info-container">
+        <span class="name"> {{ $t('community.totalDeposit') }} </span>
+        <div class="info">{{ totalDeposited | amountForm }}</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name"> TVL </span>
+        <div class="info">{{ tvl | formatPrice }}</div>
+      </div>
+    </div>
+
+    <!-- parachain info -->
+    <div class="detail-info-box">
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.leasePeriod') }} </span>
         <div class="info">{{ leasePeriod || "Loading" }}</div>
@@ -190,8 +203,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lang', 'apys']),
-    ...mapState('web3', ['pendingRewards', 'blockNum', 'userStakings', 'loadingUserStakings']),
+    ...mapState(['lang', 'apys', 'prices']),
+    ...mapState('web3', ['pendingRewards', 'blockNum', 'userStakings', 'loadingUserStakings', 'monitorPools']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
@@ -228,6 +241,14 @@ export default {
       if (!userStakingBn) return 0;
       const decimal = this.card.chainId === 2 ? 10 : 12;
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
+    },
+    totalDeposited() {
+      if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
+      const decimals = this.card.chainId === 2 ? 10 : 12;
+      return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'].toString() / (10 ** decimals);
+    },
+    tvl() {
+      return this.totalDeposited * (this.card.chainId ===2 ? this.prices['DOTUSDT']: this.prices['KSMUSDT'])
     },
     communityId () {
       return stanfiAddress(this.card.communityAccount)

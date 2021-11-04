@@ -28,7 +28,6 @@ import CommunityDetailInfo from "@/views/Community/CommunityDetailInfo";
 import Delegate from "@/views/CrowdStaking/Delegate";
 import CrowdNominate from "@/views/CrowdStaking/CrowdNominate";
 import Tutorials from "@/views/Community/Tutorials";
-import Nps from "@/views/Nps/Nps";
 import ProposalSpace from "@/views/Community/ProposalSpace";
 import Proposal from "@/views/Community/Proposal";
 import CommunityProposalConfig from "@/views/Community/CommunityProposalConfig";

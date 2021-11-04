@@ -1,15 +1,12 @@
 import { get, post, put } from "./axios";
 import {
-  CROWD_STAKING_API_URL,
-  CROWD_LOAN_API_URL,
   BACKEND_API_URL,
 } from "../config";
 
-// ============================================ NPS ============================================
-const API_URL = "https://service.nutbox.io";
-
-export const getProposal = async (params) =>
-  get(API_URL + "/nps/getProposal", params);
+// ============================================ commen ============================================
+export const getDataCounts = async () => {
+  get(BACKEND_API_URL + '/getdatacounts')
+}
 
 // ============================================ backend v2 ============================================
 
