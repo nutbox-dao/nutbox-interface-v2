@@ -257,8 +257,6 @@ async function getSignature(address, contribution, previousContribution) {
  * @returns 
  */
 export const subscribeAllFundInfo = async (relaychain) => {
-  let campaigns = store.state[relaychain].campaigns
-  if (campaigns) return campaigns;
   const api = await waitApi(relaychain)
   if (!api.query.crowdloan) {
     store.commit(relaychain + '/saveLoadingFunds', false)
@@ -266,7 +264,8 @@ export const subscribeAllFundInfo = async (relaychain) => {
   }
   let endpoints = createWsEndpoints((key, value) => value || key);
   const genesisHash = api.genesisHash.toHex()
-  endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHash === genesisHashRelay)
+  console.log(genesisHash, relaychain, endpoints);
+  endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHashRelay === genesisHash)
   let paraIds = []
   let tmp = []
   // extract endpoints
@@ -277,7 +276,20 @@ export const subscribeAllFundInfo = async (relaychain) => {
     }
   }
   endpoints = tmp
-  console.log(721, paraIds);
+  console.log(721, relaychain, endpoints);
+  if (relaychain === 'polkadot') {
+    endpoints = [
+      {
+        paraId: 2000,
+        text: 'Acala'
+      },
+      {
+        paraId: 2004,
+        text: 'Moonbeam'
+      }
+    ]
+    paraIds = [2000, 2004]
+  }
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {

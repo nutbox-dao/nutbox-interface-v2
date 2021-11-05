@@ -43,7 +43,7 @@
             <div class="c-dropdown-btn flex-between-center">
               <div class="flex-full flex-start-center text-left">
                 <img v-show="Object.keys(selectParachain).length > 0"
-                     :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+selectParachain.paraId+'.png'" alt="" />
+                     :src="'https://cdn.wherein.mobi/polkadot/paralogo/' + (networkIndex===0 ? 'p/' : 'k/') + selectParachain.paraId+'.png'" alt="" />
                 <span>{{ selectParachain.text }}</span>
               </div>
               <i class="dropdown-icon"></i>
@@ -65,7 +65,7 @@
               <template #default>
                 <div class="flex-between-center">
                   <div class="flex-full flex-start-center">
-                    <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/k/'+item.paraId+'.png'" alt="" />
+                    <img :src="'https://cdn.wherein.mobi/polkadot/paralogo/' + (networkIndex===0 ? 'p' : 'k') + '/' + item.paraId+'.png'" alt="" />
                     <span>{{ item.text }}</span>
                   </div>
                   <i class="selected-icon" v-if="selectParachain === item"></i>
