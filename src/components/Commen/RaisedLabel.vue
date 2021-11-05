@@ -66,15 +66,14 @@ export default {
     convertUni(uni) {
       let unit = " ";
       uni = new BN(uni)
-      uni = uni.div(new BN(10).pow(new BN(this.relaychain === 'polkadlot' ? 10 :12).sub(new BN(4))))
-
-      if (uni >= 1e22) {
+      uni = uni.div(new BN(10).pow(new BN(this.relaychain === 'polkadot' ? 10 :12).sub(new BN(4))))
+      if (uni >= 1e23) {
         uni = uni.div(new BN(1e18));
         unit = " E";
       } else if (uni >= 1e19) {
         uni = uni.div(new BN(1e15));
         unit = " P";
-      } else if (uni >= 1e16) {
+      } else if (uni >= 1e116) {
         uni = uni.div(new BN(1e12));
         unit = " T";
       } else if (uni >= 1e13) {
