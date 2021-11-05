@@ -324,14 +324,17 @@ export default {
     console.log('card', this.card);
     this.status = this.getFundInfo?.status || this.card.statusStr
     // check moonbeam legalese
-    if (parseInt(this.card.pid) === MoonbeamParaId){
+    if (parseInt(this.card.paraId) === MoonbeamParaId){
+      console.log(0);
       try{
         await checkGeoFenced();
         this.isCheckedGeofenced = true;
+        console.log(1);
       }catch(e) {
         return;
       }
       this.isCheckedRemark = await checkRemark();
+      console.log(2);
     }else{
       this.isCheckedRemark = true;
       this.isCheckedGeofenced = true;
