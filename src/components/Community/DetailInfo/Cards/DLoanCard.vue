@@ -77,14 +77,18 @@
         <span class="name"> TVL </span>
         <div class="info">{{ tvl | formatPrice }}</div>
       </div>
+      <div class="project-info-container">
+        <span class="name"> APY </span>
+        <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
+      </div>
     </div>
 
     <!-- parachain info -->
     <div class="detail-info-box">
-      <div class="project-info-container">
+      <!-- <div class="project-info-container">
         <span class="name"> {{ $t('cl.leasePeriod') }} </span>
         <div class="info">{{ leasePeriod || "Loading" }}</div>
-      </div>
+      </div> -->
       <div class="project-info-container">
         <span class="name"> {{ $t('cl.countDown') }} </span>
         <div class="info">{{ countDownAuction || "Loading" }}</div>

@@ -869,7 +869,7 @@ export const monitorUserBalances = async () => {
           continue;
         }
       }
-      store.commit('web3/saveAllPools', pools)
+      store.commit('web3/saveAllPools', [...pools])
     }catch(e) {
       console.log('Update apys faile', e);
     }

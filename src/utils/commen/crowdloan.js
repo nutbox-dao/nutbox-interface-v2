@@ -446,6 +446,7 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     signature = await getSignature(from, amount.toString(), reviousContribution.toString());
     signature = signature.data.signature
     console.log(32523, signature);
+    return;
   }
   if (parseInt(paraId === AstarParaId && relaychain === 'polkadot')) {
      memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
