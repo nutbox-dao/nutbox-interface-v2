@@ -41,14 +41,15 @@ import * as crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 
 // ---------------------------------------  moonbeam -------------------------------------------------
-const WS_URL = 'wss://wss.polkatrain.moonbeam.network';
-const API_URL = 'https://wallet-test.api.purestake.xyz';
+const API_URL = 'https://yy9252r9jh.api.purestake.io';
 const HEADERS = {
   'headers': {
-    'x-api-key': 'SZaZeILK8K18i4mFFCaFk3tIUjvdbWai1vXFHquh'
+    'x-api-key': '7FmNwZ3UhMZM2BIGCiu35Hxc6UU8aNn81yzKtb42'
   }
 };
-export const MoonbeamParaId = 2002;
+export const MoonbeamParaId = 5000;
+export const PhalaParaId = 5000;
+export const AcalaParaId = 5000;
 
 /**
  * Check if user has been geo-fenced
@@ -88,7 +89,7 @@ export const checkRemark = async () => {
  * sign message and send remark
  * return {*} remark remark
  */
-export const signLegalese = async(callback) => {
+export const signLegalese = async() => {
   return new Promise(async (resolve, reject) => {
     try{
       const hash = crypto.createHash('sha256').update(legalese).digest('hex');
@@ -134,11 +135,7 @@ async function agreeRemark(address, signedMessage) {
  */
 export async function sendRemark(relaychain, remark, toast) {
   return new Promise(async (resolve, reject) => {
-    const wsProvider = new WsProvider(WS_URL);
-    var api = await ApiPromise.create({ provider: wsProvider });
-    const injected = await web3FromSource('polkadot-js')
-    api.setSigner(injected.signer)
-    // api = await waitApi(relaychain);  TODO
+    const api = await waitApi(relaychain)
     const remarkExtrinsic = api.tx.system.remark(remark);
     const address = store.state.polkadot.account && store.state.polkadot.account.address;
 
@@ -410,10 +407,14 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     return false
   }
   let signature = null;
+  let memoTx = null;
   const decimal = DECIMAL[relaychain]
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
-  if (parseInt(paraId) === MoonbeamParaId) {
+  if (parseInt(paraId) === MoonbeamParaId && relaychain === 'polkadot') {
     signature = await getSignature(from, amout.toString(), reviousContribution.toString());
+  }
+  if (parseInt(paraId === AcalaParaId && relaychain === 'polkadot')) {
+     memoTx = api.tx.crowdloan.addMemo(AcalaParaId, communityId);
   }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
@@ -443,6 +444,7 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     const remarkTx = api.tx.system.remarkWithEvent(remark)
     trans.push(contributeTx)
     trans.push(remarkTx)
+    if (memoTx) trans.push(memoTx);
 
     // if (parseInt(paraId) === 2004){
     //   // 添加phala的remark
