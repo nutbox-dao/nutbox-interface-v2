@@ -47,7 +47,7 @@ const HEADERS = {
     'x-api-key': '7FmNwZ3UhMZM2BIGCiu35Hxc6UU8aNn81yzKtb42'
   }
 };
-export const MoonbeamParaId = 5000;
+export const MoonbeamParaId = 2004;
 export const PhalaParaId = 5000;
 export const AcalaParaId = 5000;
 
