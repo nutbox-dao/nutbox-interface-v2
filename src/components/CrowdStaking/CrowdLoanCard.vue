@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="text-left mt-3">
-        <span style="color: #717376" class="font-bold">{{ card.chianId == 2 ? 'DOT ' : 'KSM ' }}</span>
+        <span style="color: #717376" class="font-bold">{{ card.chainId == 2 ? 'DOT ' : 'KSM ' }}</span>
         <span style="color: #bdbfc2">STAKED</span>
       </div>
       <div class="btn-row">
