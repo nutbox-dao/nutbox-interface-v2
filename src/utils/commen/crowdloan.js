@@ -1,6 +1,5 @@
 import BN from "bn.js"
 import store from "@/store"
-import { ApiPromise, WsProvider } from '@polkadot/api';
 import {
   u8aToHex,
 } from "@polkadot/util"
@@ -27,7 +26,8 @@ import {
 } from '@polkadot/extension-dapp'
 
 import {
-  stanfiAddress
+  stanfiAddress,
+  addressToHex
 } from './account'
 
 import {
@@ -414,7 +414,7 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     signature = await getSignature(from, amout.toString(), reviousContribution.toString());
   }
   if (parseInt(paraId === AcalaParaId && relaychain === 'polkadot')) {
-     memoTx = api.tx.crowdloan.addMemo(AcalaParaId, communityId);
+     memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
   }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()

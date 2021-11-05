@@ -475,6 +475,7 @@ module.exports = {
     updateSocialSuccess: "Update social info success!",
     createNeedStake: "Create new pool need you stake:",
     notYourCommunity: "Wrong community info",
+    communityCategory: 'Category'
   },
   asset: {
     asset: "Asset",
