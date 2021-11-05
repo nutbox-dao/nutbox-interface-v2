@@ -63,6 +63,9 @@ export const PhalaParaId = 5000;
 // ---------------------------------------  acala -------------------------------------------------
 export const AcalaParaId = 5000;
 
+// ---------------------------------------  astar -------------------------------------------------
+export const AstarParaId = 2006;
+
 /**
  * Check if user has been geo-fenced
  * @returns 
@@ -268,15 +271,6 @@ export const subscribeAllFundInfo = async (relaychain) => {
   endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHashRelay === genesisHash)
   let paraIds = []
   let tmp = []
-  // extract endpoints
-  for (let e of endpoints) {
-    if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
-      paraIds.push(e.paraId)
-      tmp.push(e)
-    }
-  }
-  endpoints = tmp
-  console.log(721, relaychain, endpoints);
   if (relaychain === 'polkadot') {
     endpoints = [
       {
@@ -286,10 +280,22 @@ export const subscribeAllFundInfo = async (relaychain) => {
       {
         paraId: 2004,
         text: 'Moonbeam'
+      },
+      {
+        paraId: 2006,
+        text: 'Astar'
       }
     ]
-    paraIds = [2000, 2004]
   }
+  // extract endpoints
+  for (let e of endpoints) {
+    if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
+      paraIds.push(e.paraId)
+      tmp.push(e)
+    }
+  }
+  endpoints = tmp
+  
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {
@@ -437,7 +443,7 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
   if (parseInt(paraId) === MoonbeamParaId && relaychain === 'polkadot') {
     signature = await getSignature(from, amout.toString(), reviousContribution.toString());
   }
-  if (parseInt(paraId === AcalaParaId && relaychain === 'polkadot')) {
+  if (parseInt(paraId === AstarParaId && relaychain === 'polkadot')) {
      memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
   }
   paraId = api.createType('Compact<u32>', paraId)
