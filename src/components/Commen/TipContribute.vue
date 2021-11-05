@@ -131,7 +131,7 @@ export default {
 
       const amount = parseFloat(this.inputAmount);
       const mins = {
-        polkadot: 1.0000,
+        polkadot: 5.0000,
         kusama: 0.0999,
         rococo:1
       }
