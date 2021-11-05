@@ -86,7 +86,7 @@ export default {
                    this.status = 'signedLegales'
                 } else if(this.status === 'signedLegales'){
                     this.isSigningRemark = true;
-                    const res = await sendRemark(this.chain, this.remark,
+                    const res = await sendRemark(this.relaychain, this.remark,
                             (info, param) => {
                                 this.$bvToast.toast(info, param);
                             },);

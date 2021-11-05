@@ -46,7 +46,7 @@
     <div class="text-center">
       <button
         class="primary-btn"
-        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !isCheckedRemark"
+        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced"
         @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
       >
         <b-spinner small type="grow" v-show="!isConnected"></b-spinner>

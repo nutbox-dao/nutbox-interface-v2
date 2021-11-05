@@ -150,7 +150,9 @@ async function agreeRemark(address, signedMessage) {
  */
 export async function sendRemark(relaychain, remark, toast) {
   return new Promise(async (resolve, reject) => {
+    console.log('32', remark);
     const api = await waitApi(relaychain)
+    console.log(2, api);
     const remarkExtrinsic = api.tx.system.remark(remark);
     const address = store.state.polkadot.account && store.state.polkadot.account.address;
 
@@ -441,14 +443,16 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
   const decimal = DECIMAL[relaychain]
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
   if (parseInt(paraId) === MoonbeamParaId && relaychain === 'polkadot') {
-    signature = await getSignature(from, amout.toString(), reviousContribution.toString());
+    signature = await getSignature(from, amount.toString(), reviousContribution.toString());
+    signature = signature.data.signature
+    console.log(32523, signature);
   }
   if (parseInt(paraId === AstarParaId && relaychain === 'polkadot')) {
      memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
   }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
-  const contributeTx = api.tx.crowdloan.contribute(paraId, amount, signature);
+  const contributeTx = api.tx.crowdloan.contribute(paraId, amount, {'Sr25519': signature});
   const recipient = store.state.web3.account;
   if (communityId) {
     let trans = []

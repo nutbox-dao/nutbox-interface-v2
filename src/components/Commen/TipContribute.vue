@@ -112,6 +112,11 @@ export default {
       }
     }
   },
+  watch: {
+    'fund.funds'(newValue, oldValue) {
+      
+    }
+  },
   methods: {
     hide() {
       // if (this.isComtribution) return;
@@ -216,7 +221,7 @@ export default {
   },
   mounted () {
     console.log(this.card);
-    console.log(23, this.fund.funds.ownContribution.toString());
+    console.log(23, this.fund?.funds.ownContribution.toString());
   },
 };
 </script>
