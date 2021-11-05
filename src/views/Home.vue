@@ -65,7 +65,7 @@
             </div>
             <div class="box-item box-item-s3">
               <div class="label">TVL</div>
-              <div class="value">{{ tokensTvl | formatPrice }}</div>
+              <div class="value">${{ tokensTvl | amountForm(0) }}</div>
             </div>
           </div>
         </div>
