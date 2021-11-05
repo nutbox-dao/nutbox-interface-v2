@@ -153,7 +153,7 @@ export default {
       for (let i = 0; i < this.allPools.length; i++) {
         const pool = this.allPools[i];
         let amount = this.monitorPools[pool.communityId + '-' + pool.pid + '-totalStakedAmount'];
-
+        if (!amount) continue;
         if (pool.type === 'HomeChainAssetRegistry') {
           const price = this.allTokens.filter(token => token.address === pool.address)[0].price;
           tvl += amount / (10 ** pool.tokenDecimal) * price;

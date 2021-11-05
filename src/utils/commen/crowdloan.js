@@ -47,8 +47,20 @@ const HEADERS = {
     'x-api-key': '7FmNwZ3UhMZM2BIGCiu35Hxc6UU8aNn81yzKtb42'
   }
 };
+
+// test nest
+// const API_URL = 'https://wallet-test.api.purestake.xyz';
+// const HEADERS = {
+//   'headers': {
+//     'x-api-key': 'SZaZeILK8K18i4mFFCaFk3tIUjvdbWai1vXFHquh'
+//   }
+// };
 export const MoonbeamParaId = 2004;
+
+// ---------------------------------------  phala -------------------------------------------------
 export const PhalaParaId = 5000;
+
+// ---------------------------------------  acala -------------------------------------------------
 export const AcalaParaId = 5000;
 
 /**
