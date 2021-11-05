@@ -1,3 +1,4 @@
+import { BN } from 'bn.js'
 import Cookie from 'vue-cookies'
 
 export default {
@@ -143,7 +144,7 @@ export default {
       if (state.balance && state.locked) {
         return state.balance.sub(state.locked)
       } else {
-        return 0
+        return new BN(0)
       }
     },
      // crowdloan

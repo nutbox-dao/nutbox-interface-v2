@@ -57,7 +57,7 @@ export default {
         }).catch(console.error)
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
+          this.$bvToast.toast(tip, param) 
         })
       } finally {
         this.loading = false

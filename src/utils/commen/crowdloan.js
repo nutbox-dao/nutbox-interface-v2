@@ -1,6 +1,6 @@
 import BN from "bn.js"
 import store from "@/store"
-
+import { ApiPromise, WsProvider } from '@polkadot/api';
 import {
   u8aToHex,
 } from "@polkadot/util"
@@ -19,6 +19,13 @@ import {
   createKhalaReferrerRemark
 } from './remark'
 
+import { legalese } from './Legalese'
+
+import {
+  web3FromSource,
+  web3Enable
+} from '@polkadot/extension-dapp'
+
 import {
   stanfiAddress
 } from './account'
@@ -29,6 +36,211 @@ import {
 import { PARA_STATUS, POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
 import { waitApi } from "./api"
 import { createWsEndpoints } from '@polkadot/apps-config';
+import axios from 'axios';
+import * as crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
+
+// ---------------------------------------  moonbeam -------------------------------------------------
+const WS_URL = 'wss://wss.polkatrain.moonbeam.network';
+const API_URL = 'https://wallet-test.api.purestake.xyz';
+const HEADERS = {
+  'headers': {
+    'x-api-key': 'SZaZeILK8K18i4mFFCaFk3tIUjvdbWai1vXFHquh'
+  }
+};
+export const MoonbeamParaId = 2002;
+
+/**
+ * Check if user has been geo-fenced
+ * @returns 
+ */
+export const checkGeoFenced = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      await axios.get(API_URL + '/health', HEADERS);
+    }catch(e){
+      reject(false);
+    }
+    resolve(true);
+  })
+}
+
+/**
+ * Check if user sign the doc
+ * @returns 
+ */
+export const checkRemark = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const address = store.state.polkadot.account && store.state.polkadot.account.address;
+      const checkRes = await axios.get(API_URL + '/check-remark/' + address, HEADERS);
+      if (checkRes.data.verified) {
+        resolve(true);
+        return;
+      }
+      resolve(false)
+    }catch(e) {
+      resolve(false);
+    }
+  })
+}
+/**
+ * sign message and send remark
+ * return {*} remark remark
+ */
+export const signLegalese = async(callback) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const hash = crypto.createHash('sha256').update(legalese).digest('hex');
+      await web3Enable('nutbox');
+      const injected = await web3FromSource('polkadot-js')
+      const signer = injected.signer;
+      const address = store.state.polkadot.account && store.state.polkadot.account.address;
+      let { signature } = await signer.signRaw({
+        address,
+        data: hash,
+        type: 'bytes'
+      })
+      const agreementResponse = await agreeRemark(address, signature);
+      resolve(agreementResponse.data.remark);
+    }catch(e) {
+      console.log('sign legalese fail:', e);
+      reject(e);
+    }
+    
+  })
+}
+
+/**
+ * agree remark
+ * @param {*} address 
+ * @param {*} signedMessage 
+ * @returns 
+ */
+async function agreeRemark(address, signedMessage) {
+  console.log('Calling /agree-remark', address, signedMessage);
+
+  return await axios.post(API_URL + '/agree-remark', {
+    'address': address,
+    'signed-message': signedMessage,
+  }, HEADERS);
+}
+
+/**
+ * send remark to relaychain and moonbeam backend
+ * @param {*} relaychain 
+ * @param {*} remark 
+ * @param {*} callback to show tips to user
+ */
+export async function sendRemark(relaychain, remark, toast) {
+  return new Promise(async (resolve, reject) => {
+    const wsProvider = new WsProvider(WS_URL);
+    var api = await ApiPromise.create({ provider: wsProvider });
+    const injected = await web3FromSource('polkadot-js')
+    api.setSigner(injected.signer)
+    // api = await waitApi(relaychain);  TODO
+    const remarkExtrinsic = api.tx.system.remark(remark);
+    const address = store.state.polkadot.account && store.state.polkadot.account.address;
+
+    console.log('Sending remark extrinsic and waiting for finalization')
+    try{
+      const hash = await remarkExtrinsic.signAndSend(address, async ({ dispatchError, status }) => {
+        // Wait until block is finalized!
+        if (status.isInBlock || status.isFinalized) {
+          if (dispatchError) {
+            let errMsg = ''
+            if (dispatchError.isModule) {
+              // for module errors, we have the section indexed, lookup
+              const decoded = api.registry.findMetaError(dispatchError.asModule);
+              const {
+                documentation,
+                name,
+                section
+              } = decoded;
+              errMsg = `${section}.${name}: ${documentation.join(' ')}`
+              console.log(`${section}.${name}: ${documentation.join(' ')}`);
+            } else {
+              // Other, CannotLookup, BadOrigin, no extra info
+              console.log(dispatchError.toString());
+              errMsg = dispatchError.toString()
+            }
+            toast(errMsg, {
+              title: $t('tip.error'),
+              variant: 'danger'
+            })
+            resolve(false);
+          }
+        }
+        if (status.isBroadcast) {
+          setTimeout(() => {
+            toast($t('transaction.broadcasting'), {
+              title: $t('tip.tips'),
+              autoHideDelay: 5000,
+              variant: 'warning'
+            })
+          }, 700);
+        } else if (status.isInBlock) {
+          console.log("Transaction included at blockHash.", status.asInBlock.toJSON());
+          toast($t('cl.waitingBlockFinal'), {
+            title: $t('tip.tips'),
+            autoHideDelay: 12000,
+            variant: 'warning'
+          })
+        } else if (status.isFinalized) {
+          try{
+            await verifyRemark(address, remarkExtrinsic.hash.toHex(), status.asFinalized.toHex());
+            resolve(true);
+          }catch(e) {
+            console.log('veifyRemark fail:', e);
+            resolve(false);
+          }
+        }
+      });
+    }catch(e) {
+      toast($t('cl.insufficientBalance'), {
+        title: $t('tip.insufficientBalance'),
+        autoHideDelay: 5000,
+        variant: "danger",
+      });
+      resolve(false);
+    }
+  })
+}
+
+/**
+ * verifyRemark on relaychain
+ * @param {*} address 
+ * @param {*} extrinsicHash 
+ * @param {*} blockHash 
+ */
+async function verifyRemark(address, extrinsicHash, blockHash) {
+  console.log('Calling /verify-remark', address, extrinsicHash, blockHash);
+  const response = await axios.post(API_URL + '/verify-remark', {
+    'address': address,
+    'extrinsic-hash': extrinsicHash,
+    'block-hash': blockHash,
+  }, HEADERS);
+  return;
+}
+
+/**
+ * get signature from moonbeam backend
+ * @param {*} address 
+ * @param {*} contribution 
+ * @param {*} previousContribution 
+ * @returns 
+ */
+async function getSignature(address, contribution, previousContribution) {
+  const guid = uuidv4();
+  console.log('Calling /make-signature', contribution, previousContribution, address);
+
+  return await axios.post(API_URL + '/make-signature', {
+    'address': address,
+    'previous-total-contribution': previousContribution.toString(),
+    'contribution': contribution.toString(),
+    'guid': guid
+  }, HEADERS);
+}
 
 /**
  * Subscribe all crowdloan only excute one time
@@ -75,7 +287,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
           pId
         })
       }
-      // const storedFunds = [...store.state[relaychain].clProjectFundInfos]
+      const storedFunds = [...store.state[relaychain].clProjectFundInfos]
       funds = await Promise.all(effectEndpoints.map(fund => {
         return new Promise(async (res) => {
           const {
@@ -91,12 +303,12 @@ export const subscribeAllFundInfo = async (relaychain) => {
           const [status, statusIndex] = await calStatus(relaychain, end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber)
           let contributions = []
           // 如果有缓存，先直接用已经缓存的contribution数据
-          // if (storedFunds && storedFunds.length > 0) {
-          //   const f = storedFunds.filter(a => a.paraId === pId)
-          //   if (f && f.length > 0) {
-          //     contributions = f[0].funds || []
-          //   }
-          // }
+          if (storedFunds && storedFunds.length > 0) {
+            const f = storedFunds.filter(a => a.paraId === pId)
+            if (f && f.length > 0) {
+              contributions = f[0].funds || []
+            }
+          }
           res({
             ...fund,
             paraId: pId,
@@ -117,7 +329,7 @@ export const subscribeAllFundInfo = async (relaychain) => {
       if (funds.length > 0) {
         store.commit(relaychain + '/saveClProjectFundInfos', funds)
         // 异步加载投票数据
-        // handleContributors(relaychain, api, funds)
+        handleContributors(relaychain, api, funds)
       } else {
         store.commit(relaychain + '/saveSubFund', null);
       }
@@ -144,10 +356,10 @@ export const handleContributors = async (relaychain, api, funds) => {
         if (fund.statusIndex !== 1 && fund.funs && fund.funds.count) {
           resolve(fund)
         }
-        const contributions = await api.derive.crowdloan.contributions(pid)
+        // const contributions = await api.derive.crowdloan.contributions(pid)
         const own = await api.derive.crowdloan.ownContributions(pid, [account])
         fund.funds = {
-          count: contributions.contributorsHex.length,
+          // count: contributions.contributorsHex.length,
           ownContribution: own[account]
         }
         resolve(fund)
@@ -190,19 +402,22 @@ export const withdraw = async (relaychain, paraId, toast, callback) => {
   })
 }
 
-
-export const contribute = async (relaychain, paraId, amount, communityId, trieIndex, stakingFeast, pid, toast, callback) => {
+export const contribute = async (relaychain, paraId, amount, reviousContribution, communityId, trieIndex, stakingFeast, pid, toast, callback) => {
   const api = await waitApi(relaychain)
   const from = store.state.polkadot.account && store.state.polkadot.account.address
   communityId = stanfiAddress(communityId)
   if (!from) {
     return false
   }
+  let signature = null;
   const decimal = DECIMAL[relaychain]
-  paraId = api.createType('Compact<u32>', paraId)
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
+  if (parseInt(paraId) === MoonbeamParaId) {
+    signature = await getSignature(from, amout.toString(), reviousContribution.toString());
+  }
+  paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
-  const contributeTx = api.tx.crowdloan.contribute(paraId, amount, null)
+  const contributeTx = api.tx.crowdloan.contribute(paraId, amount, signature);
   const recipient = store.state.web3.account;
   if (communityId) {
     let trans = []
@@ -265,8 +480,6 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
     })
   }
 }
-
-
 
 // 获取当前的status
 export const calStatus = async (relaychain, end, firstPeriod, lastPeriod, raised, cap, pId, bestBlockNumber) => {

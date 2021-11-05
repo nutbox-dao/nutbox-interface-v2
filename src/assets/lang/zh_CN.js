@@ -151,6 +151,12 @@ module.exports = {
     trieIndex: "竞拍期数",
     contributeAmount: "投票数",
     contributeTime: "投票时间",
+    geoDefenced: '地区不支持该功能',
+    insufficientBalance: '请保证您的钱包有足够的可用余额用来交易(大约 0.0411 DOT).',
+    signLegales: '签署协议',
+    signAndSend: '签名并发送',
+    waitingBlockFinal: '正在等待区块被确认，请耐心等候',
+    signed: '签名成功，现在可以为Moonbeam投票了'
   },
   transaction: {
     broadcasting: "正在广播交易",
