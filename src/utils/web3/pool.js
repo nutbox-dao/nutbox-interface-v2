@@ -838,30 +838,34 @@ export const monitorUserBalances = async () => {
           const p = price[pool.address]
           if (p === 0){
             continue
-          }
+          }          
           //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * p)
+          pool.apy = 100 * pool.apy;
           continue;
         }
-
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
           const steemPrice = parseFloat(price['STEEMETH']) * parseFloat(price['ETHUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToSteem * steemPrice)
+          pool.apy = pool.apy * 100;
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
           const hivePrice = parseFloat(price['HIVUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToHive * hivePrice)
+          pool.apy = 100 * pool.apy;
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
           const dotPrice = parseFloat(price['DOTUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e10 * dotPrice)
+          pool.apy = 100 * pool.apy;
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
           const ksmPrice = parseFloat(price['KSMUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e12 * ksmPrice)
+          pool.apy = 100 * pool.apy;
           continue;
         }
       }
