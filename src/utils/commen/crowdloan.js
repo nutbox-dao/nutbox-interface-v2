@@ -445,10 +445,9 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
   if (parseInt(paraId) === MoonbeamParaId && relaychain === 'polkadot') {
     signature = await getSignature(from, amount.toString(), reviousContribution.toString());
     signature = signature.data.signature
-    console.log(32523, signature);
     return;
   }
-  if (parseInt(paraId === AstarParaId && relaychain === 'polkadot')) {
+  if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
      memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
   }
   paraId = api.createType('Compact<u32>', paraId)
