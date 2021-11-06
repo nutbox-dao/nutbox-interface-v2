@@ -280,12 +280,24 @@ export const subscribeAllFundInfo = async (relaychain) => {
         text: 'Acala'
       },
       {
+        paraId: 2002,
+        text: 'Crust'
+      },
+      {
         paraId: 2004,
         text: 'Moonbeam'
       },
       {
         paraId: 2006,
         text: 'Astar'
+      },
+      {
+        paraId: 2012,
+        text: 'Parallel'
+      },
+      {
+        paraId: 2013,
+        text: 'Litentry'
       }
     ]
   }
