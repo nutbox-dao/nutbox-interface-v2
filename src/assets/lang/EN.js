@@ -451,6 +451,7 @@ module.exports = {
     createYourCommunity: "Create Your Community",
     communityDashboard: "Manage Your Community",
     charge: "Charge",
+    withdraw: 'Withdraw',
     communityCharge: "Community Charge",
     confirmCharge: "Confirm Charge",
     chargeSuccess: "Charge success",

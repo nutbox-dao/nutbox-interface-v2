@@ -435,6 +435,7 @@ module.exports = {
     createYourCommunity: "创建你的社区",
     communityDashboard: "管理你的社区",
     charge: "充值",
+    withdraw: '提现',
     communityCharge: "社区资金充值",
     confirmCharge: "确认充值",
     chargeSuccess: "充值成功",

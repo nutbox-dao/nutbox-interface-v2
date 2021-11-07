@@ -48,6 +48,9 @@
             <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
               {{$t("community.charge") }}
             </button>
+            <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
+              {{$t("community.withdraw") }}
+            </button>
           </div>
         </b-form-group>
         <!-- community dev address -->
@@ -175,6 +178,63 @@
         </div>
       </div>
     </b-modal>
+    <!-- withdraw balance tip -->
+
+    <b-modal
+      v-model="showWithdrawTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center mb-4">
+          {{ $t("community.withdraw") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="label flex-between-start">
+            <span>{{ $t("community.withdraw") }}</span>
+            <span class="text-right"
+            >{{ $t("wallet.balance") }}:
+              {{ communityBalanceValue | amountForm }}</span
+            >
+          </div>
+          <div class="input-box flex-between-center">
+            <input
+              style="flex: 1"
+              type="number"
+              v-model="withdrawValue"
+              placeholder="0"
+            />
+            <div class="ml-2">
+              <button
+                class="primary-btn"
+                @click="fillMax"
+                :disabled="withdrawing"
+              >
+                {{ $t("commen.max") }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showWithdrawTip = false"
+            :disabled="withdrawing"
+          >
+            <b-spinner small type="grow" v-show="withdrawing" />
+            {{ $t('commen.cancel') }}
+          </button>
+          <button class="primary-btn" @click="withdraw" :disabled="withdrawing">
+            <b-spinner small type="grow" v-show="withdrawing" />
+            {{ $t("community.withdraw") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
     <!-- dev address tip -->
     <b-modal
       v-model="showDevAddressTip"
@@ -265,7 +325,7 @@
 <script>
 import Progress from '@/components/Community/Progress'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras, monitorCommunity } from '@/utils/web3/community'
+import { approveCommunityBalance, chargeCommunityBalance, withdrawCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras, monitorCommunity } from '@/utils/web3/community'
 import { getRegitryAssets } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
@@ -282,12 +342,15 @@ export default {
 
       ],
       showChargeTip: false,
+      showWithdrawTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
       chargeValue: 0,
+      withdrawValue: 0,
       inputDevAddress: '',
       inputDevRatio: '',
       charging: false,
+      withdrawing: false,
       approving: false,
       updatingAddress: false,
       updatingDevRatio: false,
@@ -384,6 +447,45 @@ export default {
         })
       } finally {
         this.charging = false
+      }
+    },
+    async withdraw () {
+      try {
+        this.withdrawing = true
+        const withdrawValue = Number(this.withdrawValue)
+        console.log(232, withdrawValue);
+        if (!withdrawValue || withdrawValue <= 0) {
+          this.$bvToast.toast(this.$t('error.inputError'), {
+            title: this.$t('tip.tips'),
+            autoHideDelay: 5000,
+            variant: 'warning'
+          })
+          return
+        }
+        if (withdrawValue > this.communityBalanceValue) {
+          this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+            title: this.$t('tip.tips'),
+            autoHideDelay: 5000,
+            variant: 'warning'
+          })
+          return;
+        }
+        const decimal = new BN(10).pow(new BN(18))
+        const amount = new BN(Number(this.withdrawValue * 1e6)).mul(decimal).divn(1e6)
+        const hash = await withdrawCommunityBalance(amount)
+        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        setTimeout(() => {
+          this.showWithdrawTip = false
+        }, 2000)
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.withdrawing = false
       }
     },
     async updateAddress () {

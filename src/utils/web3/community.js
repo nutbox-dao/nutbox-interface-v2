@@ -308,7 +308,40 @@ export const chargeCommunityBalance = async (amount) => {
       return;
     }
   });
-};
+}
+
+/**
+ * withdraw community balance
+ * @param {*} amount 
+ * @returns 
+ */
+export const withdrawCommunityBalance = async (amount) =>  {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null;
+    let contract = null;
+    try {
+      stakingFactoryId = await getMyStakingFactory();
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY);
+        return;
+      }
+      contract = await getContract("StakingTemplate", stakingFactoryId, false);
+    } catch (e) {
+      reject(e);
+      return;
+    }
+
+    try {
+      const tx = await contract.adminWithdrawReward(amount.toString());
+      await waitForTx(tx.hash);
+      resolve(tx.hash);
+    } catch (e) {
+      console.log("Withdraw community balance Failed", e);
+      reject(errCode.BLOCK_CHAIN_ERR);
+      return;
+    }
+  });
+}
 
 /**
  * Approve erc20handler to user users ctoken

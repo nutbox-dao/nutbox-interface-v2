@@ -53,7 +53,7 @@ export const MoonbeamParaId = 2004;
 export const PhalaParaId = 5000;
 
 // ---------------------------------------  acala -------------------------------------------------
-export const AcalaParaId = 5000;
+export const AcalaParaId = 2000;
 
 // ---------------------------------------  astar -------------------------------------------------
 export const AstarParaId = 2006;
@@ -423,9 +423,9 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     signature = signature.data.signature
     return;
   }
-  if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
-     memoTx = api.tx.crowdloan.addMemo(AcalaParaId, addressToHex(communityId));
-  }
+  // if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
+     memoTx = api.tx.crowdloan.addMemo(paraId, addressToHex(communityId));
+  // }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   const contributeTx = api.tx.crowdloan.contribute(paraId, amount, {'Sr25519': signature});
