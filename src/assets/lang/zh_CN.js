@@ -249,6 +249,7 @@ module.exports = {
     gameNameLimit: "游戏名称长度不能超过{count}个字",
     needGameType: "请填写游戏类型",
     completeGameSuccess: "游戏编辑完成",
+    deployTokenTip: '注意： 该项为token的预挖量，会一次性挖到您的个人账户，而不是总发行量，请谨慎填写。'
   },
   nps: {
     nps: "提案改善",

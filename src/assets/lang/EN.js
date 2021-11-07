@@ -256,6 +256,7 @@ module.exports = {
     gameNameLimit: "The game name cannot exceed{count}words",
     needGameType: "Please choose game type",
     completeGameSuccess: "Game Success",
+    deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.'
   },
   nps: {
     nps: "Governance",

@@ -36,6 +36,7 @@
           v-model="form.totalSupply"
           :placeholder="$t('asset.inputDistributionAmount')"
         ></b-form-input>
+        <p style="font-size: .4rem; color: red">{{ $t('tip.deployTokenTip') }}</p>
       </b-form-group>
       <b-form-group label="Logo" label-for="logo" class="logo-form">
         <b-form-file
