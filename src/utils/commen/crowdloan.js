@@ -47,14 +47,6 @@ const HEADERS = {
     'x-api-key': '7FmNwZ3UhMZM2BIGCiu35Hxc6UU8aNn81yzKtb42'
   }
 };
-
-// test nest
-// const API_URL = 'https://wallet-test.api.purestake.xyz';
-// const HEADERS = {
-//   'headers': {
-//     'x-api-key': 'SZaZeILK8K18i4mFFCaFk3tIUjvdbWai1vXFHquh'
-//   }
-// };
 export const MoonbeamParaId = 2004;
 
 // ---------------------------------------  phala -------------------------------------------------
@@ -269,38 +261,10 @@ export const subscribeAllFundInfo = async (relaychain) => {
   }
   let endpoints = createWsEndpoints((key, value) => value || key);
   const genesisHash = api.genesisHash.toHex()
-  console.log(genesisHash, relaychain, endpoints);
   endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHashRelay === genesisHash)
   let paraIds = []
   let tmp = []
-  if (relaychain === 'polkadot') {
-    endpoints = [
-      {
-        paraId: 2000,
-        text: 'Acala'
-      },
-      {
-        paraId: 2002,
-        text: 'Crust'
-      },
-      {
-        paraId: 2004,
-        text: 'Moonbeam'
-      },
-      {
-        paraId: 2006,
-        text: 'Astar'
-      },
-      {
-        paraId: 2012,
-        text: 'Parallel'
-      },
-      {
-        paraId: 2013,
-        text: 'Litentry'
-      }
-    ]
-  }
+  console.log(relaychain, endpoints);
   // extract endpoints
   for (let e of endpoints) {
     if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
