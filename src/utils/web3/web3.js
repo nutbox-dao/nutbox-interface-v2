@@ -5,7 +5,6 @@ import {
   BSC_CHAIN_ID,
   RPC_NODE
 } from '@/config'
-import Web3 from "web3"
 import store from '@/store'
 
 import { getProvider } from './ethers'
