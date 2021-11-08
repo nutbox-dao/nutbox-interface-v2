@@ -32,6 +32,11 @@
     <div class="text-left mt-3 mb-1">
       <span style="color: #717376" class="font-bold">{{ card.symbol }}</span>
       <span style="color: #bdbfc2"> STAKED</span>
+      <img style="margin-left: 6px; width: 14px; height: 14px; cursor: pointer;"
+                    class='copy-icon'
+                    src="~@/static/images/copy.svg"
+                    @click="copy(card.address)"
+                  >
     </div>
     <ConnectMetaMask v-if="!metamaskConnected"/>
     <template  v-else>
@@ -190,6 +195,35 @@ export default {
     };
   },
   methods: {
+    formatUserAddress (address, long = true) {
+      if (!address) return 'Loading Account'
+      if (long) {
+        if (address.length < 16) return address
+        const start = address.slice(0, 28)
+        const end = address.slice(-5)
+        return `${start}...`
+      } else {
+        const start = address.slice(0, 6)
+        const end = address.slice(-6)
+        return `${start}...${end}`
+      }
+    },
+    copy(address) {
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: this.formatUserAddress(address)
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
+    },
     increase() {
       this.operate = "add";
       this.showModal = true;

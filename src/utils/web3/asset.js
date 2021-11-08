@@ -235,7 +235,7 @@ export const getAssetMetadata = async (id, assetType) => {
         chainId: meta[0],
         paraId: meta[1],
         trieIndex: meta[2],
-        communityAccount: stanfiAddress(meta[3], meta[3] === 2 ? 0 : 2),
+        communityAccount: stanfiAddress(meta[3], meta[0] === 2 ? 0 : 2),
         icon
       }
       break;
