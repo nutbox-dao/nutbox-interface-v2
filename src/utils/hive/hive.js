@@ -189,7 +189,7 @@ export const getKeychain = async () => {
 }
 
 async function broadcastOps(ops) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     if (parseInt(store.state.hive.hiveLoginType) === 0){// active key
       try{
       await client.broadcast.sendOperations(ops, [store.getters['hive/hiveActiveKey']])
