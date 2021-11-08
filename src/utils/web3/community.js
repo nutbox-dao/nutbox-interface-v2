@@ -19,7 +19,6 @@ import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
 import BN from "bn.js";
-import { getWeb3 } from "./web3";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
@@ -384,9 +383,7 @@ export const approveCommunityBalance = async (address) => {
  */
 export const setDevAddress = async (address) => {
   return new Promise(async (resolve, reject) => {
-    const web3 = getWeb3();
-    console.log(address);
-    if (!web3.utils.isAddress(address)) {
+    if (!ethers.utils.isAddress(address)) {
       reject(errCode.WRONG_ETH_ADDRESS);
       return;
     }

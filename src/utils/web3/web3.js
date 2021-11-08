@@ -13,12 +13,6 @@ import { getAccounts } from "./account"
 import { getRegitryAssets } from './asset'
 import { getMyCommunityInfo } from './community'
 import { getMyOpenedPools } from './pool'
-import { ethers } from 'ethers'
-
-export const getWeb3 = () => {
-  const web3  = new Web3(RPC_NODE)
-  return web3
-}
 
 /**
  * Add bsc to metamask

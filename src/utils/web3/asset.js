@@ -16,9 +16,7 @@ import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
 } from "ethers";
-import {
-  getWeb3
-} from './web3'
+import { stringToHex } from '@polkadot/util'
 import {
   waitForTx,
   getGasPrice,
@@ -374,17 +372,16 @@ export const registerSteemHiveAsset = async (form) => {
       reject(e);
       return;
     }
-    
+  
     try {
-      const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
-        web3.utils.stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
+        stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
-        web3.utils.stringToHex(form.account).substr(2)
+        stringToHex(form.account).substr(2)
       const tx = await contract.registerAsset(
-        foreignLocation, homeChain, web3.utils.stringToHex(form.assetName)
+        foreignLocation, homeChain, stringToHex(form.assetName)
       )
       await waitForTx(tx.hash)
       resolve(tx.hash)
@@ -415,7 +412,6 @@ export const registerCrowdloanAsset = async (form) => {
     }
     
     try {
-      const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
@@ -423,7 +419,7 @@ export const registerCrowdloanAsset = async (form) => {
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
         ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +                      // communityAccount length
         addressToHex(form.communityAddress).substr(2) // communityAccount
-      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(JSON.stringify({
+      const tx = await contract.registerAsset(foreignLocation, homeChain, stringToHex(JSON.stringify({
         name: form.assetName,
         endingBlock: form.endingBlock
       })))
@@ -457,13 +453,12 @@ export const registerNominateAsset = async (form) => {
     }
     
     try {
-      const web3 = await getWeb3()
       const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
       const foreignLocation = '0x' +
         ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
         ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
         addressToHex(form.nodeAddress).substr(2) // node address
-      const tx = await contract.registerAsset(foreignLocation, homeChain, web3.utils.stringToHex(form.assetName))
+      const tx = await contract.registerAsset(foreignLocation, homeChain, stringToHex(form.assetName))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {

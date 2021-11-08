@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import {
-  getWeb3,
   setupNetwork,
   isUnlocked,
   connectMetamask
@@ -126,9 +125,9 @@ export const getContract = async function (contractName, address, onlyRead=true)
  * @param {*} address 
  */
 export const isContractAddress = async (address) => {
-  const provider = await getWeb3()
+  const provider = await getProvider()
   try{
-    const res = await provider.eth.getCode(address)
+    const res = await provider.getCode(address)
     return res
   }catch(e){
     return false

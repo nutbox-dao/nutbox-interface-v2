@@ -1,12 +1,12 @@
 import { sleep } from "@/utils/helper";
-import { getWeb3 } from "@/utils/web3/web3";
+import { getProvider } from '@/utils/web3/ethers'
 import store from "@/store";
 
 export const subBlockNum = async () => {
-  const web3 = await getWeb3();
+  const provider = await getProvider();
   while (true) {
     try {
-      const blockNumber = await web3.eth.getBlockNumber();
+      const blockNumber = await provider.getBlockNumber();
       store.commit("web3/saveBlockNum", blockNumber);
     } catch (e) {}
     await sleep(1);
