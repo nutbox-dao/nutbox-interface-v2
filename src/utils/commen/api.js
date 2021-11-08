@@ -8,9 +8,7 @@ import {
   POLKADOT_WEB_SOCKET,
   NUTBOX_REMARK_TYPE,
   PhalaCrowdloanReferrerRemark,
-  KUSAMA_WEB_SOCKET,
-  ROCOCO_WEB_SOCKET,
-  DEBUG
+  KUSAMA_WEB_SOCKET
 } from "@/config"
 import store from "@/store"
 import {
@@ -33,19 +31,14 @@ export async function initApis(relaychain) {
 }
 
 async function initApi(chain, changedNode) {
-  if (chain === 'rococo' && !DEBUG){
-    return;
-  }
   const registry = new TypeRegistry();
   const apis = {
     polkadot: store.state.polkadot.api,
-    kusama: store.state.kusama.api,
-    rococo: store.state.rococo.api,
+    kusama: store.state.kusama.api
   }
   const node = {
     polkadot: POLKADOT_WEB_SOCKET,
-    kusama: KUSAMA_WEB_SOCKET,
-    rococo: ROCOCO_WEB_SOCKET
+    kusama: KUSAMA_WEB_SOCKET
   }
   if (apis[chain]) {
     return apis[chain]

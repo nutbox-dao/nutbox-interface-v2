@@ -7,7 +7,6 @@ import {
 
 import polkadot from './polkadot'
 import kusama from './kusama'
-import rococo from './rococo'
 import web3 from './web3'
 import community from '@/store/community'
 import steem from './steem'
@@ -55,7 +54,6 @@ export default new Vuex.Store({
   modules: {
     polkadot,
     kusama,
-    rococo,
     web3,
     community,
     steem,

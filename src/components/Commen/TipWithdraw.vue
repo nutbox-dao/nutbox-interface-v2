@@ -27,7 +27,6 @@
 import { mapState, mapGetters } from "vuex";
 import { withdraw as pW } from "@/utils/polkadot/crowdloan";
 import { withdraw as kW, withdraw } from '@/utils/kusama/crowdloan';
-import { withdraw as rW } from "@/utils/rococo/crowdloan";
 import BN from "bn.js";
 import { formatBalance } from "@/utils/helper"
 
@@ -49,7 +48,6 @@ export default {
   },
   computed: {
     ...mapState('polkadot', ["account"]),
-    ...mapGetters('rococo', ["fundInfo"]),
   },
   async mounted () {
     const fund = this.fund;
@@ -76,8 +74,7 @@ export default {
         this.isWithdraw = true
         const withdraw = {
           polkadot: pW,
-          kusama: kW,
-          rococo: rW
+          kusama: kW
         }
         const res = await withdraw[this.relaychain](this.fund.paraId, (info, param) => {
           this.$bvToast.toast(info, param);

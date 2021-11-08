@@ -4,7 +4,6 @@ export const BLOCK_SECOND = 3
 
 export const POLKADOT_DECIMAL = 10
 export const KUSAMA_DECIMAL = 12
-export const ROCOCO_DECIMAL = 12
 export const SP_DELEGATE_DECIMAL = 6
 export const MAX_DISTRIBUTION_COUNT = 6
 
@@ -20,8 +19,7 @@ export const MaxBlockNum = 999999999999999
 
 export const POLKADOT_RELAYCHAIN_SYMBOL = {
     polkadot: 'DOT',
-    kusama: 'KSM',
-    rococo: 'ROC'
+    kusama: 'KSM'
 }
 
 export const API_CONNECT_STATE = {
@@ -33,8 +31,7 @@ export const API_CONNECT_STATE = {
 
 export const DECIMAL = {
     polkadot: new BN(POLKADOT_DECIMAL),
-    kusama: new BN(KUSAMA_DECIMAL),
-    rococo: new BN(ROCOCO_DECIMAL)
+    kusama: new BN(KUSAMA_DECIMAL)
 }
 
 export const PRICES_SYMBOL = [

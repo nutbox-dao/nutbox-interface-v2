@@ -44,7 +44,6 @@ import { mapState } from "vuex";
 import { contribute } from "@/utils/commen/crowdloan"
 import { formatBalance as fbp } from "@/utils/polkadot/polkadot"
 import { formatBalance as fbk } from "@/utils/kusama/kusama"
-import { formatBalance as fbr } from "@/utils/rococo/rococo"
 
 import BN from "bn.js";
 import { POLKADOT_RELAYCHAIN_SYMBOL } from '@/constant'
@@ -97,8 +96,6 @@ export default {
           return this.$store.getters["polkadot/available"]
         case 'kusama':
           return this.$store.getters['kusama/available']
-        default:
-          return this.$store.state.rococo.balance
       }
     },
     fbBalance(){
@@ -107,8 +104,6 @@ export default {
           return fbp(this.balance)
           case 'kusama':
             return fbk(this.balance)
-          case 'rococo':
-            return fbr(this.balance)
       }
     }
   },
@@ -137,8 +132,7 @@ export default {
       const amount = parseFloat(this.inputAmount);
       const mins = {
         polkadot: 5.0000,
-        kusama: 0.0999,
-        rococo:1
+        kusama: 0.0999
       }
       if (amount < mins[this.relaychain]) {
         this.$bvToast.toast(
