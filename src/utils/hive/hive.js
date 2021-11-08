@@ -1,5 +1,3 @@
-import hive from '@hiveio/hive-js'
-import { auth } from '@hiveio/hive-js'
 const { Client } = require("@hiveio/dhive");
 import { HIVE_API_URLS, HIVE_CONF_KEY, HIVE_GAS_ACCOUNT, HIVE_STAKE_FEE } from '@/config.js'
 import { sleep } from '../helper'
@@ -8,7 +6,6 @@ import store from '@/store'
 const client = new Client(["https://api.hive.blog", "https://api.hivekings.com", "https://anyx.io", "https://api.openhive.network"]);
 const hiveConf = window.localStorage.getItem(HIVE_CONF_KEY) || HIVE_API_URLS[0]
 window.localStorage.setItem(HIVE_CONF_KEY, hiveConf)
-hive.api.setOptions({ url: hiveConf })
 
 async function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
   const hiveGas = HIVE_GAS_ACCOUNT
@@ -180,29 +177,27 @@ export const getKeychain = async () => {
   if (!publicKey) {
     return false
   }
+  return false
 
-  let res = false
-  try {
-    res = await auth.wifIsValid(privateKey, publicKey)
-  } catch (error) {
-    return false
-  }
-  return res
+  // let res = false
+  // try {
+  //   res = await auth.wifIsValid(privateKey, publicKey)
+  // } catch (error) {
+  //   return false
+  // }
+  // return res
 }
 
 async function broadcastOps(ops) {
   return new Promise((resolve, reject) => {
     if (parseInt(store.state.hive.hiveLoginType) === 0){// active key
-        hive.broadcast.send({
-          extensions: [],
-          operations: ops
-        }, [store.getters['hive/hiveActiveKey']], (err, res) => {
-          if (err){
-            reject();
-          }else {
-            resolve({success: true})
-          }
-        })
+      try{
+      await client.broadcast.sendOperations(ops, [store.getters['hive/hiveActiveKey']])
+      resolve(true);
+      }catch(e){
+        reject(e)
+      }
+       
     }else{ // keychain
       hive_keychain.requestBroadcast(store.state.hive.hiveAccount, ops, 'Active', function (response) {
         resolve(response)
