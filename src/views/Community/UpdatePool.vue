@@ -3,7 +3,7 @@
     <div class="scroll-content container">
       <div class="view-top-header">
         <div class="page-back-text-icon font20 m-0" @click="$router.back()">
-          {{ $t("asset.addPool") }}
+          {{ $t("asset.updatePool") }}
         </div>
       </div>
       <div class="pool-card text-left mb-5">
@@ -20,7 +20,7 @@
             >
               <span
                 class="circle"
-                :style="{ 'border-color': colorList[index] }"
+                :style="{ 'border-color': getColor(index) }"
               ></span>
               <span class="name">{{ item.name || "--" }}</span>
               <span class="value">{{ item.value }}</span>
@@ -135,7 +135,16 @@ export default {
           },
           plugins: {
             tooltip: {
-              enabled: false
+              callbacks: {
+                label: function(ctx) {
+                  let sum = 0
+                  const dataArr = ctx.chart.data.datasets[0].data
+                  dataArr.map(data => {
+                    sum += Number(data.value)
+                  })
+                  return `${ctx.raw.name}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
+                }
+              }
             },
             datalabels: {
               color: 'black',
@@ -151,9 +160,9 @@ export default {
                 let sum = 0
                 const dataArr = ctx.chart.data.datasets[0].data
                 dataArr.map(data => {
-                  sum += data.value
+                  sum += Number(data.value)
                 })
-                return (value.value * 100 / sum).toFixed(2) + '%'
+                return (Number(value.value) * 100 / sum).toFixed(2) + '%'
               }
             }
           }
@@ -178,6 +187,13 @@ export default {
       ],
       assetLoading: true,
     };
+  },
+  computed: {
+    getColor() {
+      return (index) => {
+        return this.colorList[index % this.colorList.length]
+      }
+    }
   },
   async mounted() {
     getMyOpenedPools()

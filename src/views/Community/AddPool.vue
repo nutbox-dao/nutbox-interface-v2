@@ -245,9 +245,7 @@ export default {
                   dataArr.map(data => {
                     sum += Number(data.value)
                   })
-                  return `${i18n.t(
-                    'percentage'
-                  )}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
+                  return `${ctx.raw.name}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
                 }
               }
             },
