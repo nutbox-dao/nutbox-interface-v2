@@ -154,7 +154,7 @@
             >
               <span
                 class="circle"
-                :style="{ 'border-color': colorList[index] }"
+                :style="{ 'border-color': getColor(index)}"
               ></span>
               <span class="name">{{ item.name || "--" }}</span>
               <span class="value">{{ item.value }}</span>
@@ -185,13 +185,16 @@ import { hexToString } from "@/utils/web3/utils";
 import {
   Chart,
   ArcElement,
-  DoughnutController
+  DoughnutController,
+  Tooltip
 } from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 Chart.register(
   ArcElement,
-  DoughnutController
+  DoughnutController,
+  Tooltip
 )
+import i18n from "@/i18n";
 export default {
   name: "AddPool",
   components: { Dropdown, Step },
@@ -235,7 +238,18 @@ export default {
           },
           plugins: {
             tooltip: {
-              enabled: false
+              callbacks: {
+                label: function(ctx) {
+                  let sum = 0
+                  const dataArr = ctx.chart.data.datasets[0].data
+                  dataArr.map(data => {
+                    sum += Number(data.value)
+                  })
+                  return `${i18n.t(
+                    'percentage'
+                  )}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
+                }
+              }
             },
             datalabels: {
               color: 'black',
@@ -251,9 +265,9 @@ export default {
                 let sum = 0
                 const dataArr = ctx.chart.data.datasets[0].data
                 dataArr.map(data => {
-                  sum += data.value
+                  sum += Number(data.value)
                 })
-                return (value.value * 100 / sum).toFixed(2) + '%'
+                return (Number(value.value) * 100 / sum).toFixed(2) + '%'
               }
             }
           }
@@ -285,6 +299,11 @@ export default {
     approved() {
       return this.approvements ? this.approvements['NUTAllowance'] : false;
     },
+    getColor() {
+      return (index) => {
+        return this.colorList[index % this.colorList.length]
+      }
+    }
   },
   async mounted() {
     try {
@@ -390,7 +409,7 @@ export default {
       this.setData(pools)
     },
     setData(pools) {
-      const data = { value: 100, name: this.form.name };
+      const data = { value: 0, name: this.form.name, poolRatio: 0, poolName: '' };
       this.myPools = pools.map((pool) => ({
         ...pool,
         name: pool.poolName,

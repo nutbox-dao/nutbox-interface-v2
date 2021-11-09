@@ -25,6 +25,10 @@
         </div>
         <div class="menu-items">
           <b-nav vertical align="center" class="top">
+            <b-nav-item to="/specify/home">
+              <i id="home-icon" class="menu-icon" />
+              <span>Home</span>
+            </b-nav-item>
             <b-nav-item to="/specify/wallet" router-tag="div">
               <i id="wallet-icon" class="menu-icon" />
               <span>{{ address || $t("wallet.wallet") }}</span>
