@@ -10,12 +10,12 @@
         <div class="line-card-title">{{ $t("asset.poolRatios") }}</div>
         <div class="row">
           <div class="col-lg-6 col-md-7">
-            <div id="pie"></div>
+            <canvas id="pie"></canvas>
           </div>
           <div class="col-lg-6 col-md-5 legend-box">
             <div
               class="legend-info"
-              v-for="(item, index) of options.series[0].data"
+              v-for="(item, index) of chartData.data.datasets[0].data"
               :key="index"
             >
               <span
@@ -40,21 +40,21 @@
               >
                 <b-form-input
                   class="ration-input"
-                  :data-label="options.series[0].data[inputIndex].name"
+                  :data-label="chartData.data.datasets[0].data[inputIndex].name"
                   :disabled="
-                    options.series[0].data[inputIndex].hasStopped ||
-                    options.series[0].data[inputIndex].hasRemoved
+                    chartData.data.datasets[0].data[inputIndex].hasStopped ||
+                    chartData.data.datasets[0].data[inputIndex].hasRemoved
                   "
                   v-model="form.ratios[inputIndex]"
                   @input="inputChange"
                   step="0.01"
                   type="number"
                 ></b-form-input>
-                <span class="font12 text-grey mt-1" :style="'color:' + ((options.series[0].data[inputIndex].hasRemoved || options.series[0].data[inputIndex].hasStopped) ? 'red' : '')">{{
-                  options.series[0].data[inputIndex].name +
-                  (options.series[0].data[inputIndex].hasRemoved
+                <span class="font12 text-grey mt-1" :style="'color:' + ((chartData.data.datasets[0].data[inputIndex].hasRemoved || chartData.data.datasets[0].data[inputIndex].hasStopped) ? 'red' : '')">{{
+                  chartData.data.datasets[0].data[inputIndex].name +
+                  (chartData.data.datasets[0].data[inputIndex].hasRemoved
                     ? ("(" + $t("community.Removed") + ")")
-                    : (options.series[0].data[inputIndex].hasStopped
+                    : (chartData.data.datasets[0].data[inputIndex].hasStopped
                     ? ('(' + $t("community.Stopped") + ')')
                     : ""))
                 }}</span>
@@ -80,11 +80,20 @@
 </template>
 
 <script>
-import * as echarts from "echarts/core";
 import debounce from "lodash.debounce";
 import Dropdown from "@/components/ToolsComponents/Dropdown";
 import { updatePoolsRatio, getMyOpenedPools } from "@/utils/web3/pool";
 import { handleApiErrCode } from "@/utils/helper";
+import {
+  Chart,
+  ArcElement,
+  DoughnutController
+} from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+Chart.register(
+  ArcElement,
+  DoughnutController
+)
 
 export default {
   name: "AddPool",
@@ -105,42 +114,50 @@ export default {
         "#9D94FF",
         "#FF73AD",
       ],
-      options: {
-        tooltip: { show: true, trigger: "item" },
-        legend: { show: false },
-        series: [
-          {
-            name: "",
-            type: "pie",
-            radius: ["40%", "60%"], // 圆环大小
-            avoidLabelOverlap: false,
-            label: {
-              show: true,
-              formatter: "{d}%",
-              fontSize: 14,
-              fontWeight: "bolder",
-            },
-            labelLine: {
-              show: false,
-            },
-            tooltip: {
-              backgroundColor: "rgba(255, 255, 255, 0.8)",
-              extraCssText:
-                "box-shadow: 0 4 12px 4px rgba(0, 0, 0, 0.05); border-radius: .6rem;",
-              borderWidth: 0,
-              textStyle: {
-                color: "#242629",
-                fontSize: 12,
-              },
-              formatter: `<div class="c-tooltip"><span>Pool</span><span>{b0}</span></div>
-                <div class="c-tooltip"><span>${this.$i18n.t(
-                  "percentage"
-                )}</span><span>{d}%</span></div>`,
-              // 饼图、仪表盘、漏斗图: {a}（系列名称），{b}（数据项名称），{c}（数值）, {d}（百分比）
-            },
-            data: [{ value: 0, name: "default" }],
+      chartData: {
+        type: 'doughnut',
+        plugins: [ChartDataLabels],
+        data: {
+          labels: [],
+          datasets: [
+            {
+              data: [{ value: 0, name: "default" }]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          parsing: {
+            key: 'value'
           },
-        ],
+          layout: {
+            padding: 60
+          },
+          plugins: {
+            tooltip: {
+              enabled: false
+            },
+            datalabels: {
+              color: 'black',
+              clip: false,
+              anchor: 'end',
+              align: 'end',
+              offset: 10,
+              font: {
+                weight: 'bold'
+              },
+              padding: 6,
+              formatter: (value, ctx) => {
+                let sum = 0
+                const dataArr = ctx.chart.data.datasets[0].data
+                dataArr.map(data => {
+                  sum += data.value
+                })
+                return (value.value * 100 / sum).toFixed(2) + '%'
+              }
+            }
+          }
+        }
       },
       form: {
         assetId: "",
@@ -176,27 +193,30 @@ export default {
   },
   methods: {
     initChart(pools) {
-      this.chart = echarts.init(document.getElementById("pie"));
-      this.setData(pools);
-      this.chart.setOption(this.options);
+      const ctx = document.getElementById('pie')
+      this.chart = new Chart(ctx, this.chartData)
+      this.setData(pools)
     },
     setData(pools) {
-      this.options.color = this.colorList;
       this.myPools = pools.map((pool) => ({
         ...pool,
         name: pool.poolName,
         value: (pool.hasStopped || pool.hasRemoved) ? 0 : pool.poolRatio / 100,
       }));
-      this.options.series[0].data = this.myPools;
+      this.chartData.data.datasets = [{
+        data: this.myPools,
+        backgroundColor: this.colorList
+      }]
+      this.chart.update()
       this.form.ratios = this.myPools.map((item) => {
         return item.value;
       });
     },
     inputChange: debounce(function () {
-      this.options.series[0].data.map((item, index) => {
+      this.chartData.data.datasets[0].data.map((item, index) => {
         item.value = this.form.ratios[index];
       });
-      this.chart.setOption(this.options);
+      this.chart.update()
     }, 1500),
     checkInput() {
       let tipStr = "";
