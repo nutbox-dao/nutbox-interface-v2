@@ -25,7 +25,7 @@ module.exports = {
     copy: "Copy",
     complete: "Complete",
     now: "Now",
-    connectMetamask: "Connect Wallet",
+    connectMetamask: "Connect Metamask",
 
     whitePaper: "White Paper",
     nps: "Nutbox Proposal System",
