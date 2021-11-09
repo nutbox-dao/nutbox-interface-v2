@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import * as echarts from "echarts/core";
 import debounce from "lodash.debounce";
 import Dropdown from "@/components/ToolsComponents/Dropdown";
 import { updatePoolsRatio, getMyOpenedPools } from "@/utils/web3/pool";
