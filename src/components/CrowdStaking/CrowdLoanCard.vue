@@ -46,10 +46,10 @@
     <div class="text-center">
       <button
         class="primary-btn"
-        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced"
+        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !moonbeanOk"
         @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
       >
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+        <b-spinner small type="grow" v-show="!isConnected || !moonbeanOk"></b-spinner>
         {{ isCheckedGeofenced ? $t('cl.contribute') : $t('cl.geoDefenced') }}
       </button>
       <button
@@ -152,7 +152,7 @@ import TipWithdraw from '@/components/Commen/TipWithdraw'
 import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus, MoonbeamParaId, checkGeoFenced, checkRemark } from '@/utils/commen/crowdloan'
-import { formatCountdown, handleApiErrCode } from '@/utils/helper'
+import { formatCountdown, handleApiErrCode, sleep } from '@/utils/helper'
 import { withdrawReward } from "@/utils/web3/pool";
 import MoonbeamRegister from '@/components/Commen/MoonbeamRegister'
 
@@ -165,7 +165,8 @@ export default {
       status: 'Completed',
       isWithdrawing: false,
       isCheckedGeofenced: false,
-      isCheckedRemark: false
+      isCheckedRemark: false,
+      moonbeanOk: false
     }
   },
   props: {
@@ -325,23 +326,25 @@ export default {
     }
   },
   async mounted () {
-    console.log('card', this.card);
     this.status = this.getFundInfo?.status || this.card.statusStr
     // check moonbeam legalese
     if (parseInt(this.card.paraId) === MoonbeamParaId){
-      console.log(0);
       try{
         await checkGeoFenced();
         this.isCheckedGeofenced = true;
-        console.log(1);
       }catch(e) {
         return;
       }
       this.isCheckedRemark = await checkRemark();
-      console.log(2);
+      while(!this.getFundInfo){
+        await sleep(0.5);
+      }
+      this.moonbeanOk = true;
+
     }else{
       this.isCheckedRemark = true;
       this.isCheckedGeofenced = true;
+      this.moonbeanOk = true;
     }
   }
 }

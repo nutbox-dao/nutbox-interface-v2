@@ -57,6 +57,10 @@ export default {
     data (newValue, oldValue) {
       const { crowdloanPools, allParachain } = newValue
       this.sortedPools = sortCRPoolCard(crowdloanPools, allParachain)
+      const loadPolkadot = this.sortedPools.filter(pool => pool.chainId === 2).length > 0
+      const loadKusama = this.sortedPools.filter(pool => pool.chainId === 3).length > 0
+      if (loadPolkadot) initApis('polkadot')
+      if (loadKusama) initApis('kusama')
     }
   },
   mounted () {

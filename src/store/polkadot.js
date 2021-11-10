@@ -17,7 +17,7 @@ export default {
     // projectIds
     projects: [],
     crowdstakings: [],
-    isConnected: true,
+    isConnected: false,
     loadingStaking: true,
     account: Cookie.get('polkadot-account'),
     allAccounts: [],
@@ -141,8 +141,8 @@ export default {
   getters: {
     // polkadot
     available: (state) => {
-      if (state.balance && state.locked) {
-        return state.balance.sub(state.locked)
+      if (state.balance && state.totalStaked) {
+        return state.balance.sub(state.totalStaked)
       } else {
         return new BN(0)
       }

@@ -45,10 +45,10 @@
       <template v-else>  
         <button
           class="primary-btn"
-          :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced"
+          :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !moonbeanOk"
           @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
         >
-          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          <b-spinner small type="grow" v-show="!isConnected || !moonbeanOk"></b-spinner>
           {{ isCheckedGeofenced ? $t("cl.contribute") : $t("cl.geoDefenced") }}
         </button>
         <button
@@ -151,7 +151,7 @@ import TipWithdraw from '@/components/Commen/TipWithdraw'
 import ContributorsLabel from '@/components/Commen/ContributorsLabel'
 import RaisedLabel from '@/components/Commen/RaisedLabel'
 import { calStatus, MoonbeamParaId, checkGeoFenced, checkRemark } from '@/utils/commen/crowdloan'
-import { formatCountdown, handleApiErrCode } from '@/utils/helper'
+import { formatCountdown, handleApiErrCode, sleep } from '@/utils/helper'
 import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
 import { BLOCK_SECOND } from '@/constant'
@@ -166,7 +166,8 @@ export default {
       status: 'Completed',
       isWithdrawing: false,
       isCheckedGeofenced: false,
-      isCheckedRemark: false
+      isCheckedRemark: false,
+      moonbeanOk: false,
     }
   },
   props: {
@@ -328,9 +329,14 @@ export default {
         return;
       }
       this.isCheckedRemark = await checkRemark();  
+      while(!this.getFundInfo){
+        await sleep(0.5);
+      }
+      this.moonbeanOk = true;
     }else{
       this.isCheckedRemark = true;
       this.isCheckedGeofenced = true;
+      this.moonbeanOk = true;
     }
   }
 }

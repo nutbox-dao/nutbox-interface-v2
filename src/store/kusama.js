@@ -11,7 +11,7 @@ export default {
     subLocked: {},
     balance: 0,
     currentBlockNum: {},
-    isConnected: true,
+    isConnected: false,
 
     //   crowdstaking
     subNominators: {},

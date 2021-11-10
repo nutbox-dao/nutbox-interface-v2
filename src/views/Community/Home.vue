@@ -177,7 +177,7 @@ export default {
   },
   async mounted () {
     while (!this.currentCommunityId) {
-      await sleep(200);
+      await sleep(0.2);
     }
     this.ctoken = this.cTokens[this.currentCommunityId]
     getCToken(this.currentCommunityId, true).then(async (res) => {

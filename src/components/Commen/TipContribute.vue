@@ -214,8 +214,6 @@ export default {
     },
   },
   mounted () {
-    console.log(this.card);
-    console.log(23, this.fund?.funds.ownContribution.toString());
   },
 };
 </script>
