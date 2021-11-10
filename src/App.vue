@@ -211,6 +211,9 @@ input::-webkit-input-placeholder {
 .cropper-modal .modal-body{
   padding: 0;
 }
+#home-icon {
+  background-image: url("./static/images/home.svg");
+}
 #wallet-icon {
   background-image: url("./static/images/wallet.svg");
 }
@@ -247,6 +250,9 @@ input::-webkit-input-placeholder {
 }
 
 .active {
+  #home-icon {
+    background-image: url("./static/images/home-hover.svg");
+  }
   #wallet-icon {
     background-image: url("./static/images/wallet-hover.svg");
   }
