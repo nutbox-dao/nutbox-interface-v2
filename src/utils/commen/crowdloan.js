@@ -420,12 +420,15 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
   amount = api.createType('Compact<BalanceOf>', new BN(amount * 1e6).mul(new BN(10).pow(decimal.sub(new BN(6)))))
   if (parseInt(paraId) === MoonbeamParaId && relaychain === 'polkadot') {
     signature = await getSignature(from, amount.toString(), reviousContribution.toString());
-    signature = signature.data.signature
-    return;
+    signature = signature.data.signature;
+    if (store.state.web3.account) {
+      console.log(4444, store.state.web3.account);
+      memoTx = api.tx.crowdloan.addMemo(paraId, store.state.web3.account);
+    }
   }
-  // if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
+  if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
      memoTx = api.tx.crowdloan.addMemo(paraId, addressToHex(communityId));
-  // }
+  }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   const contributeTx = api.tx.crowdloan.contribute(paraId, amount, {'Sr25519': signature});
