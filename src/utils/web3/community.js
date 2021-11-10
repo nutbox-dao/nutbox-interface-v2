@@ -459,6 +459,7 @@ export const getDistributionEras = async (update = false) => {
     const distribuitons = store.state.web3.distributions;
     if (!update && distribuitons) {
       resolve(distribuitons);
+      return;
     }
 
     let stakingFactoryId = null;
@@ -517,6 +518,62 @@ export const getDistributionEras = async (update = false) => {
     }
   });
 };
+
+/**
+ * get child community distribution eras
+ * @param {*} communityId 
+ */
+export const getSpecifyDistributionEras = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    const distribuitons = store.state.web3.specifyDistributionEras;
+    if (distribuitons) {
+      resolve(distribuitons);
+      return;
+    }
+    let contract;
+    let decimal;
+    let rewardCalculator;
+    try {
+      contract = await getContract("StakingTemplate", communityId);
+      const cToken = await getCToken(communityId);
+      rewardCalculator = await getContract("LinearCalculator");
+      decimal = cToken.decimal;
+    } catch (e) {
+      reject(e);
+      return;
+    }
+
+    try {
+      const rewardCalculatorAddress = await contract.rewardCalculator();
+      if (rewardCalculatorAddress == contractAddress["LinearCalculator"]) {
+        const count = await rewardCalculator.distributionCountMap(
+          communityId
+        );
+        let distri = await Promise.all(
+          new Array(count)
+            .toString()
+            .split(",")
+            .map((item, i) =>
+              rewardCalculator.distributionErasMap(communityId, i)
+            )
+        );
+        distri = distri.map((item, i) => ({
+          percentage: item.stopHeight - item.startHeight,
+          amount: item.amount.toString() / 10 ** decimal,
+          startHeight: item.startHeight.toString(),
+          stopHeight: item.stopHeight.toString(),
+          background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`,
+        }));
+        store.commit("web3/saveSpecifyDistributionEras", distri);
+        resolve(distri);
+      }
+    } catch (e) {
+      console.log("getSpecifyDistributionEras", e);
+      reject(e);
+      return;
+    }
+  })
+}
 
 /**
  *
@@ -667,6 +724,51 @@ export const getNonce = async (update = false) => {
 };
 
 /**
+ * get community balance by ctoken
+ * @param {*} ctoken 
+ * @returns 
+ */
+export const getCommunityBalance = async (communityId, ctoken) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const assetId = ctoken.assetId;
+      let contract;
+      try{
+        contract = await getContract("ERC20AssetHandler");
+      }catch(e) {
+        reject(e);
+      }
+      const source = ethers.utils.keccak256(
+        "0x" +
+        communityId.substr(2) +
+        assetId.substr(2) +
+          "61646d696e"
+      )
+      const balance = await contract.getBalance(source);
+      resolve(balance);
+    }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+/**
+ * get specify community dao fund info
+ * @param {*} communityId 
+ */
+export const getCommunityDaoInfo = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const contract = await getContract("StakingTemplate", communityId);
+      const [dev, ratio] = await Promise.all([contract.getDev(), contract.getDevRewardRatio()]);
+      resolve({ dev, ratio })
+    }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+/**
  * monityor Community balance and allowance
  * If cToken of this community is not a mintable token, he may need to charge balance of community
  */
@@ -685,19 +787,10 @@ export const monitorCommunityBalance = async (communityInfo) => {
       const erc20HandlerAddress = contractAddress["ERC20AssetHandler"];
       watcher && watcher.stop();
       const account = await getAccounts();
-      console.log(cToken.assetId, communityInfo.id);
-      console.log(
-        ethers.utils.keccak256(
-          "0x" +
-            communityInfo.id.substr(2) +
-            cToken.assetId.substr(2) +
-            "61646d696e"
-        )
-      );
       watcher = createWatcher(
         [
           {
-            target: contractAddress["ERC20AssetHandler"],
+            target: erc20HandlerAddress,
             call: [
               "getBalance(bytes32)(uint256)",
               ethers.utils.keccak256(

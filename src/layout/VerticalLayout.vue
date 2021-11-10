@@ -389,7 +389,6 @@ export default {
     },
     allCommunities(val) {
       if (val && val.length === 1){
-        console.log(33, val);
         const color = val[0].color;
         this.setThemeColor(color);
         document.title = val[0].name;

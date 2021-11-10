@@ -477,7 +477,8 @@ module.exports = {
     updateSocialSuccess: "Update social info success!",
     createNeedStake: "Create new pool need you stake:",
     notYourCommunity: "Wrong community info",
-    communityCategory: 'Category'
+    communityCategory: 'Category',
+    tokenRelease: 'Community Token Distribution'
   },
   asset: {
     asset: "Asset",

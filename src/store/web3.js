@@ -57,6 +57,9 @@ export default {
     communityProposalConfig: null,
     //games
     games: null,
+
+    // child community
+    specifyDistributionEras: null
   },
   mutations: {
     saveEthers: (state, ethers) => {
@@ -194,6 +197,9 @@ export default {
     },
     saveGames: (state, games) => {
       state.games = games;
+    },
+    saveSpecifyDistributionEras: (state, specifyDistributionEras) => {
+      state.specifyDistributionEras = specifyDistributionEras
     }
   },
   getters: {
