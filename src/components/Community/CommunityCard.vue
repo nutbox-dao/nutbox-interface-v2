@@ -1,6 +1,7 @@
 <template>
   <div class="p-card">
     <img class="poster" :src="cardInfo.poster" alt="">
+    <img class="vip" src="~@/static/images/vip.svg" v-show="cardInfo.is_vip" alt="">
     <div class="second-card d-flex flex-column justify-content-between">
       <div>
         <img class="logo" :src="cardInfo.icon" alt="">
@@ -71,6 +72,13 @@ export default {
   height: 1.2rem;
   margin-left: .2rem;
   border-radius: 1.2rem;
+}
+.vip {
+  width: 1.4rem;
+  height: 1.4rem;
+  position: absolute;
+  right: .8rem;
+  top: .8rem;
 }
 .desc {
   margin-bottom: 1rem;

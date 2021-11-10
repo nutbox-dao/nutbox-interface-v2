@@ -14,6 +14,7 @@
                 :style="{ 'border-color': getColor(index)}"
               ></span>
         <span class="name">{{ item.name || "--" }}</span>
+        <!-- <span class="status">{{ index%2 === 0 ? 'remo' : ' active' }}</span> -->
         <span class="value">{{ item.value }}%</span>
       </div>
     </div>
@@ -21,7 +22,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n'
 import {
   Chart,
   ArcElement,
@@ -92,12 +92,7 @@ export default {
             tooltip: {
               callbacks: {
                 label: function (ctx) {
-                  let sum = 0
-                  const dataArr = ctx.chart.data.datasets[0].data
-                  dataArr.map(data => {
-                    sum += Number(data.value)
-                  })
-                  return `${ctx.raw.name}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
+                  return `${ctx.raw.name}: ${(Number(ctx.raw.value)).toFixed(2)}%`
                 }
               }
             },
@@ -112,12 +107,7 @@ export default {
               },
               padding: 6,
               formatter: (value, ctx) => {
-                let sum = 0
-                const dataArr = ctx.chart.data.datasets[0].data
-                dataArr.map(data => {
-                  sum += Number(data.value)
-                })
-                return (Number(value.value) * 100 / sum).toFixed(2) + '%'
+                return Number(value.value).toFixed(2) + '%'
               }
             }
           }
