@@ -29,10 +29,6 @@
               <i id="home-icon" class="menu-icon" />
               <span>Home</span>
             </b-nav-item>
-            <b-nav-item to="/specify/wallet" router-tag="div">
-              <i id="wallet-icon" class="menu-icon" />
-              <span>{{ address || $t("wallet.wallet") }}</span>
-            </b-nav-item>
             <b-nav-item to="/specify/staking" router-tag="div">
               <i id="stake-icon" class="menu-icon" />
               <span>{{ $t("commen.crowdstaking") }}</span>
@@ -48,6 +44,10 @@
             <b-nav-item v-if="showNps" to="/specify/nps">
               <i id="nps-icon" class="menu-icon" />
               <span>{{ $t("nps.nps") }}</span>
+            </b-nav-item>
+            <b-nav-item to="/specify/wallet" router-tag="div">
+              <i id="wallet-icon" class="menu-icon" />
+              <span>{{ address || $t("wallet.wallet") }}</span>
             </b-nav-item>
           </b-nav>
           <div class="bottom">
