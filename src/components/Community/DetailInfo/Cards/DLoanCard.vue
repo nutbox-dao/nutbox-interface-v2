@@ -230,7 +230,8 @@ export default {
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]
       if(!pendingBn) return 0;
       const decimal = this.card.tokenDecimal
-      return parseFloat(pendingBn.toString() / (10 ** decimal)).toFixed(3)
+      console.log(this.card);
+      return parseFloat(pendingBn.toString() / (10 ** 18)).toFixed(3)
     },
     chain () {
       return this.card.chainId == 2 ? 'polkadot' : 'kusama'
