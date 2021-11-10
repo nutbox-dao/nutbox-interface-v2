@@ -84,11 +84,11 @@
               >
                 <b-form-input
                   class="ration-input"
-                  :data-label="chartData.data.datasets[0].data[inputIndex].name"
+                  :data-label="myPools[inputIndex].name"
                   v-model="form.ratios[inputIndex]"
                   :disabled="
-                    chartData.data.datasets[0].data[inputIndex].hasStopped ||
-                    chartData.data.datasets[0].data[inputIndex].hasRemoved
+                    myPools[inputIndex].hasStopped ||
+                    myPools[inputIndex].hasRemoved
                   "
                   @input="inputChange"
                   step="0.01"
@@ -98,16 +98,16 @@
                   class="font12 text-grey mt-1"
                   :style="
                     'color:' +
-                    (chartData.data.datasets[0].data[inputIndex].hasStopped ||
-                    chartData.data.datasets[0].data[inputIndex].hasRemoved
+                    (myPools[inputIndex].hasStopped ||
+                    myPools[inputIndex].hasRemoved
                       ? 'red'
                       : '')
                   "
                   >{{
-                    chartData.data.datasets[0].data[inputIndex].name +
-                    (chartData.data.datasets[0].data[inputIndex].hasRemoved
+                    myPools[inputIndex].name +
+                    (myPools[inputIndex].hasRemoved
                       ? "(" + $t("community.Removed") + ")"
-                      : chartData.data.datasets[0].data[inputIndex].hasStopped
+                      : myPools[inputIndex].hasStopped
                       ? "(" + $t("community.Stopped") + ")"
                       : "")
                   }}</span
@@ -142,25 +142,7 @@
         <div class="divide-box">
           <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
         </div>
-        <div class="row">
-          <div class="col-lg-6 col-md-7">
-            <canvas id="pie"></canvas>
-          </div>
-          <div class="col-lg-6 col-md-5 legend-box">
-            <div
-              class="legend-info"
-              v-for="(item, index) of chartData.data.datasets[0].data"
-              :key="index"
-            >
-              <span
-                class="circle"
-                :style="{ 'border-color': getColor(index)}"
-              ></span>
-              <span class="name">{{ item.name || "--" }}</span>
-              <span class="value">{{ item.value }}</span>
-            </div>
-          </div>
-        </div>
+        <PoolRatio :pools-data="myPools"/>
       </div>
     </div>
   </div>
@@ -182,22 +164,10 @@ import Step from "@/components/ToolsComponents/Step";
 import { mapGetters, mapState } from "vuex";
 import { OfficialAssets } from "@/config";
 import { hexToString } from "@/utils/web3/utils";
-import {
-  Chart,
-  ArcElement,
-  DoughnutController,
-  Tooltip
-} from 'chart.js'
-import ChartDataLabels from 'chartjs-plugin-datalabels'
-Chart.register(
-  ArcElement,
-  DoughnutController,
-  Tooltip
-)
-import i18n from "@/i18n";
+import PoolRatio from "@/components/Community/PoolRatio";
 export default {
   name: "AddPool",
-  components: { Dropdown, Step },
+  components: { Dropdown, Step, PoolRatio },
   data() {
     return {
       isHomeChainAsset: true,
@@ -206,75 +176,10 @@ export default {
       myPools: [],
       NUT: {},
       stakedNUT: 0,
-      colorList: [
-        "#FF7366",
-        "#7CBF4D",
-        "#70ACFF",
-        "#FFE14D",
-        "#CC85FF",
-        "#FF9500",
-        "#00C7D9",
-        "#9D94FF",
-        "#FF73AD",
-      ],
-      chartData: {
-        type: 'doughnut',
-        plugins: [ChartDataLabels],
-        data: {
-          labels: [],
-          datasets: [
-            {
-              data: [{ value: 0, name: "default" }]
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          parsing: {
-            key: 'value'
-          },
-          layout: {
-            padding: 60
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: function(ctx) {
-                  let sum = 0
-                  const dataArr = ctx.chart.data.datasets[0].data
-                  dataArr.map(data => {
-                    sum += Number(data.value)
-                  })
-                  return `${ctx.raw.name}: ${(Number(ctx.parsed) * 100 / sum).toFixed(2)}%`
-                }
-              }
-            },
-            datalabels: {
-              color: 'black',
-              clip: false,
-              anchor: 'end',
-              align: 'end',
-              offset: 10,
-              font: {
-                weight: 'bold'
-              },
-              padding: 6,
-              formatter: (value, ctx) => {
-                let sum = 0
-                const dataArr = ctx.chart.data.datasets[0].data
-                dataArr.map(data => {
-                  sum += Number(data.value)
-                })
-                return (Number(value.value) * 100 / sum).toFixed(2) + '%'
-              }
-            }
-          }
-        }
-      },
       form: {
         assetId: "",
         name: "",
-        ratios: [0],
+        ratios: [],
       },
       selectedKey: "name",
       selectedAddressData: {},
@@ -306,7 +211,7 @@ export default {
   async mounted() {
     try {
       const pools = await getMyOpenedPools();
-      this.initChart(pools);
+      this.setData(pools);
       this.adding = false;
     } catch (e) {
       handleApiErrCode(e, (tip, param) => {
@@ -401,11 +306,11 @@ export default {
     this.assetLoading = false;
   },
   methods: {
-    initChart(pools) {
-      const ctx = document.getElementById('pie')
-      this.chart = new Chart(ctx, this.chartData)
-      this.setData(pools)
-    },
+    // initChart(pools) {
+    //   const ctx = document.getElementById('pie')
+    //   this.chart = new Chart(ctx, this.chartData)
+    //   this.setData(pools)
+    // },
     setData(pools) {
       const data = { value: 0, name: this.form.name, poolRatio: 0, poolName: '' };
       this.myPools = pools.map((pool) => ({
@@ -414,11 +319,6 @@ export default {
         value: pool.hasStopped || pool.hasRemoved ? 0 : pool.poolRatio / 100,
       }));
       this.myPools.push(data);
-      this.chartData.data.datasets = [{
-        data: this.myPools,
-        backgroundColor: this.colorList
-      }]
-      this.chart.update()
       this.form.ratios = this.myPools.map((item) => {
         return item.value;
       });
@@ -429,12 +329,11 @@ export default {
       }
     },
     inputChange: debounce(function () {
-      this.chartData.data.datasets[0].data.map((item, index) => {
+      this.myPools.map((item, index) => {
         item.value = this.form.ratios[index];
       });
-      this.chartData.data.datasets[0].data[this.chartData.data.datasets[0].data.length - 1].name =
+      this.myPools[this.myPools.length - 1].name =
         this.form.name;
-      this.chart.update()
     }, 1500),
     setSelectedData(data) {
       this.selectedAddressData = data;

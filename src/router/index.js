@@ -41,7 +41,7 @@ import CreateProposal from "@/views/Nps/CreateProposal";
 import NpsIndex from "@/views/Nps/Index";
 import GameSetting from "@/views/CommunitySetting/GameSetting";
 import Home from "@/views/Home";
-
+import SubHome from '@/views/Community/Home'
 Vue.use(VueRouter);
 
 const routes = [
@@ -285,8 +285,12 @@ const routes = [
     path: "/specify",
     name: "vertical-layout",
     component: VerticalLayout,
-    redirect: "specify/staking",
+    redirect: "specify/home",
     children: [
+      {
+        path: 'home',
+        component: SubHome
+      },
       {
         path: "wallet",
         redirect: "wallet/bsc",
