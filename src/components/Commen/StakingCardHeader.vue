@@ -9,7 +9,7 @@
     <div class="flex-start-center">
       <div class="card-link-icons">
         <img class="icon1" :src="card.communityIcon" alt="" />
-        <img class="icon2" src="~@/static/images/hive-logo.png" alt="" />
+        <img class="icon2" :src="card.icon" alt="" />
       </div>
       <div class="card-link-title-text font20 font-bold">
         <div class="link-title" @click="openNewTab(card.communityId)">
