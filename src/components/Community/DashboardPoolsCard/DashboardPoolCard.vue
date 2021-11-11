@@ -39,7 +39,7 @@
         {{ $t('community.publishPool')}}
       </button>
       <template v-else>
-        <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="stop">
+        <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="showAttention=true">
           <b-spinner small type="grow" v-show="updating" />
           {{ $t('community.stopPool')}}
         </button>
@@ -56,8 +56,39 @@
           {{ $t('community.Removed')}}
         </button>
       </template>
-      
     </div>
+
+    <!-- showAttention tip -->
+    <b-modal
+      v-model="showAttention"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <h3 style="color: red;text-align:center">{{ $t("tip.attention") }}</h3>
+        <div class="my-5">
+          {{ $t("tip.stopPoolAttention") }}
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button class="primary-btn" @click="receiveAttention" :disabled="uploading">
+            <b-spinner small type="grow" v-show="uploading" />
+            {{ $t("community.stopPool") }}
+          </button>
+          <button
+            class="primary-btn primary-btn-outline"
+            @click="showAttention = false"
+            :disabled="uploading"
+          >
+            <b-spinner small type="grow" v-show="uploading" />
+            {{ $t("commen.cancel") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    
   </div>
 </template>
 
@@ -161,7 +192,9 @@ export default {
       minedToken: 0,
       contract: null,
       published: false,
-      stakedERC20: {}
+      stakedERC20: {},
+      showAttention: false,
+      uploading: false
     }
   },
   props: {
@@ -170,6 +203,10 @@ export default {
     },
   },
   methods: {
+    receiveAttention(){
+      this.stop();
+      this.showAttention = false
+    },
     async confirm() {
       try{
         this.updating = true
@@ -276,6 +313,13 @@ export default {
   &::-webkit-input-placeholder {
     color: #BDBFC2;
   }
+.close-icon {
+  position: absolute;
+  right: -1.4rem;
+  top: -1.4rem;
+  @include icon(1.4rem, 1.4rem);
+  background-image: url("~@/static/images/circle-close.png");
+}
 
 }
 </style>

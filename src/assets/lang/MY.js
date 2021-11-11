@@ -248,6 +248,9 @@ module.exports = {
     gameNameLimit: "El nombre del juego no puede exceder {count} palabras",
     needGameType: "Elige el tipo de juego ",
     completeGameSuccess:" Juego Exitoso ",
+    deployTokenTip: 'Perhatian: ini adalah jumlah mint pre-distribusi ke akaun anda sendiri, bukan keseluruhan bekalan.Tolong berhati-hati.',
+    attention: 'Perhatian!',
+    stopPoolAttention: 'Setelah kau hentikan kolam renang, ia tak boleh dibuka lagi.Sila gunakan fungsi ini dengan berhati-hati!'
   },
   nps: {
     nps:" Governanza ",

@@ -249,6 +249,9 @@ module.exports = {
     gameNameLimit: "게임 이름은 {몇} 개의 단어를 초과할 수 없습니다.",
     needGameType: "게임 유형을 선택해 주세요",
     completeGameSuccess: "게임 성공",
+    deployTokenTip: '주의: 이것 은 총 공 급 량 이 아니 라 귀하 계좌 의 사전 분배 금액 입 니 다.조심 하 세 요.',
+    attention: '주의 하 다.',
+    stopPoolAttention: '일단 연못 을 멈 추 면, 그것 은 다시 열 수 없 을 것 이다.이 기능 을 신중하게 사용 하 세 요!'
   },
   nps: {
     nps: "거버넌스",

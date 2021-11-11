@@ -256,7 +256,9 @@ module.exports = {
     gameNameLimit: "The game name cannot exceed{count}words",
     needGameType: "Please choose game type",
     completeGameSuccess: "Game Success",
-    deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.'
+    deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.',
+    attention: "Attention!",
+    stopPoolAttention: 'Once you stop the pool, it cannot be opened again. Please use this function with caution!'
   },
   nps: {
     nps: "Governance",
