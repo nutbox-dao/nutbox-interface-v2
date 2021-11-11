@@ -1,32 +1,6 @@
 <template>
   <div class="multi-card">
-    <div class="card-link-top-box">
-      <div class="status-container text-right">
-        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
-        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
-      </div>
-      <div class="flex-start-center">
-        <div class="card-link-icons">
-          <img class="icon1" :src="nomination.communityIcon" alt="" />
-          <img class="icon2" :src="nomination.icon" alt="" />
-        </div>
-        <div class="card-link-title-text font20 font-bold">
-          <div
-            class="link-title"
-            @click="
-              openNewTab(nomination.communityId
-              )
-            "
-          >
-            <span>{{ nomination.communityName }}</span>
-            <i class="link-icon"></i>
-          </div>
-          <div class="link-title">
-            <span>{{ nomination.poolName }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <StakingCardHeader :card="nomination"/>
     <div class="c-card">
       <div class="text-left mt-3">
         <span style="color: #717376" class="font-bold">{{
@@ -132,6 +106,7 @@ import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 import { stanfiAddress } from '@/utils/commen/account'
 import { POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
+import StakingCardHeader from '@/components/Commen/StakingCardHeader'
 
 export default {
   name: "CrowdNominateCard",
@@ -159,6 +134,7 @@ export default {
   components: {
     TipBondAndNominator,
     TipNominator,
+    StakingCardHeader
   },
   methods: {
     nominate() {
@@ -231,8 +207,8 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     totalDeposited() {
-      if (!this.card || !this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount']) return 0;
-      const tvl = this.card && this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount'];
+      if (!this.nomination || !this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount']) return 0;
+      const tvl = this.nomination && this.monitorPools[this.nomination.communityId + '-' + this.nomination.pid + '-totalStakedAmount'];
       if(!tvl) return 0;
       const decimal = this.nomination.chainId === 2 ? 10 : 12;
       return (tvl.toString() / (10 ** decimal))

@@ -1,26 +1,6 @@
 <template>
   <div class="multi-card">
-    <div class="card-link-top-box">
-    <div class="status-container text-right">
-        <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
-        <span v-else class="Completed">{{ $t('community.'+status) }}</span>
-      </div>
-      <div class="flex-start-center">
-        <div class="card-link-icons">
-          <img class="icon1" :src="card.communityIcon" alt="" />
-          <img class="icon2" src="~@/static/images/hive-logo.png" alt="" />
-        </div>
-        <div class="card-link-title-text font20 font-bold">
-          <div class="link-title" @click="openNewTab(card.communityId)">
-            <span>{{ card.communityName }}</span>
-            <i class="link-icon"></i>
-          </div>
-          <div class="link-title">
-            <span>{{ card.poolName }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <StakingCardHeader :card="card"/>
     <div class="c-card">
       <div class="text-left mt-3">
         <span style="color: #717376;" class="font-bold">{{ card.tokenSymbol + ' '}}</span>
@@ -89,13 +69,15 @@ import ConnectWalletBtn from '@/components/ToolsComponents/ConnectWalletBtn'
 import Login from '@/components/ToolsComponents/Login'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
+import StakingCardHeader from '@/components/Commen/StakingCardHeader'
 
 export default {
   name: 'HiveDelegateCard',
   components: {
     DelegateModal,
     ConnectWalletBtn,
-    Login
+    Login,
+    StakingCardHeader
   },
   props: {
     card: {
