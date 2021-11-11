@@ -14,7 +14,7 @@ module.exports = {
     update: "업데이트",
     crowdstaking: "스테이킹",
 
-    apy: "APY",
+    apy: "APR",
     withdraw: "수확하기",
     balance: "잔고",
     approveContract: "컨트랙트 승인",
@@ -228,7 +228,7 @@ module.exports = {
     completeCommunityInfoSuccess: "커뮤니티 정보가 성공적으로 업데이트 됐습니다",
     wrongSubstrateAddress: "정확한 {타입} 주소를 입력해 주세요",
     ratioError: "총 스테이킹 비율은 100입니다.",
-    wrongApy: "정확한 APY를 입력해 주세요",
+    wrongApy: "정확한 APR를 입력해 주세요",
     wrongRewardNum: "정확한 리워드량을 입력해 주세요",
     createBlogSuccess: "블로그 생성 성공!",
     communityNameLimit: "커뮤니티의 이름은 {몇} 개의 단어를 초과할 수 없습니다.",
@@ -397,7 +397,7 @@ module.exports = {
     inputName: "커뮤니티 이름을 입력해 주세요",
     inputLink: "커뮤니티 웹사이트 링크를 입력해 주세요",
     inputDesc: "커뮤니티 설명을 입력해 주세요",
-    inputApy: "APY를 입력해 주세요",
+    inputApy: "APR를 입력해 주세요",
     uploadLogo: "로고를 업로드 해주세요",
     picTip:
       "권장하는 사이즈는 {}입니다. 2M 보다 작아야 하며, jpg, png, jpeg 형태로 업로드 해주세요 ",

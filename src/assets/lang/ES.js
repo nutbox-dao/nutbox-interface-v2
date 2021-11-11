@@ -12,7 +12,7 @@ module.exports = {
 
     sptotaldelegate: 'Total Delegado',
     totalpnut: 'NUEZ Total ',
-    apy: 'APY',
+    apy: 'APR',
     pnutprofits: 'Tu NUEZ ganado',
     withdraw: 'Retirar',
     balance: 'Balance',

@@ -76,7 +76,7 @@
           <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name"> APY </span>
+          <span class="name"> APR </span>
           <div class="info">{{ nomination.apy ? nomination.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
       </div>

@@ -14,7 +14,7 @@ module.exports = {
    update:" Actualizar " ,
     crowdstaking: "Staking",
 
-    apy: "APY",
+    apy: "APR",
     withdraw: "Cosechar",
     balance: "Balance",
      approveContrac: "Aprobar Contrato",
@@ -227,7 +227,7 @@ module.exports = {
     completeCommunityInfoSuccess:" Actualización de la información de la comunidad con éxito ",
     wrongSubstrateAddress:" Ingrese la dirección {type} correcta ",
     ratioError:" La proporción total de Staking Pool es 100 ",
-    wrongApy:" Ingrese APY correcto ",
+    wrongApy:" Ingrese APR correcto ",
     wrongRewardNum: "Ingrese las recompensas correctas",
     createBlogSuccess: "¡Crear blog exitoso!",
     communityNameLimit: "El nombre de la comunidad no puede exceder {count} palabras",
@@ -395,7 +395,7 @@ module.exports = {
     commit: "Commit",
     inputName: "Ingrese el nombre de la comunidad",
     inputLink: "Ingrese el vínculo del sitio web de lainputDesc: ",
-    inputApy: " Ingrese Apy ",
+    inputApy: " Ingrese Apr ",
     uploadLogo:" Cargar logotipo ",
     picTip:
       " El tamaño recomendado es {tamaño}, menor que 2M, admite formatos jpg, png, jpeg ",

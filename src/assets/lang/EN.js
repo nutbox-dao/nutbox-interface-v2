@@ -14,7 +14,7 @@ module.exports = {
     update: "Update",
     crowdstaking: "Staking",
 
-    apy: "APY",
+    apy: "APR",
     withdraw: "Harvest",
     balance: "Balance",
     approveContract: "Approve Contract",
@@ -235,7 +235,7 @@ module.exports = {
     completeCommunityInfoSuccess: "Community Information update successfully",
     wrongSubstrateAddress: "Please input correct {type} address",
     ratioError: "The total proportion of Staking Pool is 100",
-    wrongApy: "Please input correct APY",
+    wrongApy: "Please input correct APR",
     wrongRewardNum: "Please input correct rewards",
     createBlogSuccess: "Create Blog Success!",
     communityNameLimit: "The community name cannot exceed {count} words",
@@ -404,7 +404,7 @@ module.exports = {
     inputName: "Please input Community Name",
     inputLink: "Please input Community Website Link",
     inputDesc: "Plese input Community Description ",
-    inputApy: "Please input Apy",
+    inputApy: "Please input Apr",
     uploadLogo: "Upload Logo",
     picTip:
       "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",

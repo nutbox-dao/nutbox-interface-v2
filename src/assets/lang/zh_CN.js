@@ -229,7 +229,7 @@ module.exports = {
     completeCommunityInfoSuccess: "社区信息更新成功",
     wrongSubstrateAddress: "请输入正确的 {type} 地址",
     ratioError: "矿池分润比例总和应为100",
-    wrongApy: "请输入正确的APY",
+    wrongApy: "请输入正确的APR",
     wrongRewardNum: "请输入正确的奖励值",
     createBlogSuccess: "创建成功",
     communityNameLimit: "社区名字不能超过{count}个字",
