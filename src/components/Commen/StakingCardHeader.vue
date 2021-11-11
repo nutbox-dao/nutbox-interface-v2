@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 
 export default {
   name: "StakingCardHeader",
@@ -51,34 +50,9 @@ export default {
     card: {
       type: Object,
     },
-  },
-  computed: {
-      ...mapState('web3', ['monitorPools']),
-    status() {
-      const canRemove =
-        this.monitorPools[
-          this.card.communityId + "-" + this.card.pid + "-canRemove"
-        ];
-      const hasRemoved =
-        this.monitorPools[
-          this.card.communityId + "-" + this.card.pid + "-hasRemoved"
-        ];
-      const hasStopped =
-        this.monitorPools[
-          this.card.communityId + "-" + this.card.pid + "-hasStopped"
-        ];
-      if (!hasStopped) {
-        return "Active";
-      } else if (!canRemove) {
-        return "Stopped";
-      } else {
-        if (hasRemoved) {
-          return "Removed";
-        } else {
-          return "CanRemove";
-        }
-      }
-    },
+    status: {
+      type: String
+    }
   },
   methods: {
     openNewTab (id) {

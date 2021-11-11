@@ -1,6 +1,6 @@
 <template>
   <div class="multi-card">
-    <StakingCardHeader :card="nomination"/>
+    <StakingCardHeader :card="nomination" :status="status"/>
     <div class="c-card">
       <div class="text-left mt-3">
         <span style="color: #717376" class="font-bold">{{
