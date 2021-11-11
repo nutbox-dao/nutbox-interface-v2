@@ -2,7 +2,7 @@
   <div class="card-link-top-box">
     <div class="status-container text-right">
       <span v-if="status === 'Active'" :class="'Active'">{{
-        $t("community." + status)
+        $t((card.type === 'SubstrateCrowdloanAssetRegistry' ? "cl." : 'community.') + status)
       }}</span>
       <span v-else class="Completed">{{ $t("community." + status) }}</span>
     </div>
