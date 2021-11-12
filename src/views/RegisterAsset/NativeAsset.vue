@@ -36,9 +36,8 @@
         <div class="warning-tip">
           <i class="warning-icon"></i>
           <div class="tip-text flex-full font12">
-            Mintable ERC20 means your token contract has supported mint() and burn() method,
-            that means you can assign a contract the mining role permission to mint your token to a
-            specific address, also burn them from a specific address.
+           Mintable ERC20 means this token contract has supported mint() method.
+           And the mint role will grant to a walnut contract that will mint tokens follow the distribution that you set later.
           </div>
         </div>
         <DeployForm :isMintable="true" @deployed="deployed"/>

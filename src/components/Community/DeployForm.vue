@@ -36,7 +36,7 @@
           v-model="form.totalSupply"
           :placeholder="$t('asset.inputDistributionAmount')"
         ></b-form-input>
-        <p style="font-size: .4rem; color: red">{{ $t('tip.deployTokenTip') }}</p>
+        <p style="font-size: .4rem; color: red;margin-top: .4rem">{{ $t('tip.deployTokenTip') }}</p>
       </b-form-group>
       <b-form-group label="Logo" label-for="logo" class="logo-form">
         <b-form-file
@@ -63,6 +63,7 @@
         <b-spinner small type="grow" v-show="deploying" />
         {{ $t('asset.deploy') }}
       </button>
+      
     </div>
     <b-modal
       v-model="modalVisible"

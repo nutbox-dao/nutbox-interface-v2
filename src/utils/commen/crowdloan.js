@@ -264,7 +264,6 @@ export const subscribeAllFundInfo = async (relaychain) => {
   endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHashRelay === genesisHash)
   let paraIds = []
   let tmp = []
-  console.log(relaychain, endpoints);
   // extract endpoints
   for (let e of endpoints) {
     if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
