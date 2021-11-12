@@ -235,6 +235,7 @@
         </button>
       </div>
     </b-modal>
+    <!-- upload community info tip -->
     <b-modal
       v-model="showSignatureTip"
       modal-class="custom-modal"

@@ -8,7 +8,7 @@
     </div>
     <template v-else>
       <div class="view-top-header pb-0">
-        <div class="tip-box">
+        <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
           <div style="text-align: left">
             <Markdown :body="form ? form.remark : ''" />
           </div>
@@ -137,6 +137,7 @@ export default {
     @include card(2rem 1.2rem, rgba(0, 0, 0, 0.2), hidden, fit-content);
     color: white;
     background-image: url('~@/static/images/poster.png');
+    // background-image: url('https://cdn.wherein.mobi/nutbox/v2/1636692518345');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

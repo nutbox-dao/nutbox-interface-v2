@@ -382,7 +382,7 @@ module.exports = {
     communityDesc: "社区介绍",
     communityLogo: "社区Logo",
     communityThemeColor: "社区主题色",
-    communityPoster: "社区封面",
+    communityPoster: "封面",
     communityBalance: "社区余额",
     communityAsset: "社区资产",
     commit: "提交",

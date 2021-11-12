@@ -390,7 +390,7 @@ module.exports = {
     communityDesc: "설명",
     communityLogo: "로고",
     communityThemeColor: "커뮤니티 대표 색깔",
-    communityPoster: "커뮤니티 포스터",
+    communityPoster: "포스터",
     communityBalance: "커뮤니티 잔고",
     communityAsset: "커뮤니티 자산",
     commit: "약속",

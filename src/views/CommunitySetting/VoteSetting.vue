@@ -79,6 +79,61 @@
             </div>
           </div>
         </b-form-group>
+
+        <!-- npm poster -->
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="8"
+          class="cover-form"
+          :label="$t('community.communityPoster')"
+        >
+          <b-form-file
+            v-model="coverImg"
+            @input="updateCover"
+            accept="image/png,image/jpeg,image/jpg"
+            ref="logo-file-input"
+          >
+            <template #placeholder>
+              <div class="input-file-cover">
+                <template v-if="form.poster">
+                  <img class="cover-preview" :src="form.poster" alt="" />
+                  <div class="edit-mask">
+                  <span
+                  >{{ $t("community.edit") }}<br />{{
+                      $t("community.poster")
+                    }}</span
+                  >
+                  </div>
+                </template>
+                <template v-else>
+                  <img
+                    class="add-icon"
+                    src="~@/static/images/add.svg"
+                    alt=""
+                  />
+                  <div class="add-text">
+                    {{ $t("community.uploadPoster") }}
+                  </div>
+                </template>
+              </div>
+            </template>
+            <template #file-name>
+              <div class="input-file-cover">
+                <img
+                  class="cover-preview"
+                  v-if="coverPreviewSrc"
+                  :src="coverPreviewSrc"
+                  alt=""
+                />
+                <UploadLoading v-if="coverUploadLoading" />
+              </div>
+            </template>
+          </b-form-file>
+          <div class="font12 text-grey-light mt-1">
+            {{ $t("community.picTip", { size: "1200*280" }) }}
+          </div>
+        </b-form-group>
+
         <b-form-group label-cols-md="2" content-cols-md="5" label="">
           <button class="primary-btn" @click="submitForm" :disabled="updateing">
             <b-spinner small type="grow" v-show="updateing" />
@@ -87,6 +142,35 @@
         </b-form-group>
       </div>
     </div>
+
+    <!-- crop pic tip -->
+    <b-modal
+      v-model="cropperModal"
+      modal-class="cropper-modal"
+      size="lg"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="cropper-container">
+        <canvas id="cropper-canvas"></canvas>
+        <vueCropper
+          ref="cropper"
+          :infoTrue="true"
+          :autoCrop="true"
+          :img="cropperImgSrc"
+          :fixedNumber="cropFixedNumber"
+          :autoCropWidth="cropImgSize[0]"
+          :fixed="true"
+          :centerBox="true"
+          outputType="png"
+        ></vueCropper>
+      </div>
+      <div class="crop-btn-group">
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
+      </div>
+    </b-modal>
 
     <b-modal
       v-model="noCommunity"
@@ -144,18 +228,23 @@ import {
 import Markdown from "@/components/Commen/Markdown";
 import { nanoid } from "nanoid";
 import { mapState } from 'vuex'
+import { uploadImage } from "@/utils/helper";
+import UploadLoading from "@/components/ToolsComponents/UploadLoading";
+import { VueCropper } from 'vue-cropper'
 
 export default {
   name: "VoteSetting",
   components: {
     Markdown,
+    UploadLoading,
+    VueCropper
   },
   data() {
     return {
       updateing: false,
       communityId: null,
       activeTab: 0,
-      type: "insert",
+      coverImg: null,
       modalNetworksOpen: false,
       modalStrategyOpen: false,
       modelEditStrategyOpen: false,
@@ -166,11 +255,19 @@ export default {
       noCommunity: false,
       notYourCommunity: false,
       strategies: null,
+      uploading: false,
+      cropperModal: false,
+      cropperImgSrc: '',
+      cropFixedNumber: [1, 1],
+      cropImgSize: [1200, 280],
+      coverPreviewSrc: '',
+      coverUploadLoading: false,
       form: {
         communityId: "",
         network: "",
         networkName: "",
         symbol: "",
+        poster: '',
         skin: "",
         admins: "",
         members: "",
@@ -187,6 +284,33 @@ export default {
     ...mapState('web3', ['communityProposalConfig'])
   },
   methods: {
+    onCancel () {
+      this.cropperModal = false
+      if (this.coverUploadLoading) {
+        this.coverImg = null
+        this.coverUploadLoading = false
+      }
+    },
+    completeCropAndUpload () {
+      this.$refs.cropper.getCropData((data) => {
+        this.coverPreviewSrc = data
+        this.cropperModal = false
+      })
+      this.$refs.cropper.getCropBlob(async (data) => {
+        try {
+          this.form.poster = await uploadImage(data)
+          this.coverUploadLoading = false
+        } catch (e) {
+          this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+            title: this.$t('tip.tips'),
+            autoHideDelay: 5000,
+            variant: 'warning'
+          })
+          this.coverImg = null
+          this.form.poster = null
+        }
+      })
+    },
     async submitForm() {
       try {
         this.updateing = true;
@@ -198,8 +322,7 @@ export default {
         );
 
         const resCode = await completeCommunityProposalConfigInfo(
-          this.form,
-          this.type
+          this.form
         );
 
         // go to community dashboard
@@ -216,6 +339,18 @@ export default {
         });
       } finally {
         this.updateing = false;
+      }
+    },
+    async updateCover (file) {
+      if (!this.coverImg) return
+      this.coverUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [30, 7]
+        this.cropImgSize = [1200, 280]
       }
     },
     gotoCreate() {

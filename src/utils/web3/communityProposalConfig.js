@@ -47,21 +47,12 @@ export const getMyCommunityProposalConfigInfo = async (stakingFactoryId) => {
 /**
  * Create or update communityProposalConfig info to backend
  * @param {*} form
- * @param {*} type 'create' / 'edit'
  */
-export const completeCommunityProposalConfigInfo = async (form, type) => {
+export const completeCommunityProposalConfigInfo = async (form) => {
   return new Promise(async (resolve, reject) => {
     let nonce = await getNonce();
     const userId = await getAccounts();
     nonce = nonce ? nonce + 1 : 1;
-
-    try {
-      const distri = await getDistributionEras(true);
-      form.firstBlock = distri[0].startHeight;
-    } catch (e) {
-      reject(e);
-      return;
-    }
 
     const originMessage = JSON.stringify(form);
     let signature = "";
