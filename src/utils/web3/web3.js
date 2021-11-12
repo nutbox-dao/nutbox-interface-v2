@@ -147,22 +147,3 @@ export const addAssetToWallet = async (address, symbol, decimals, image) => {
     }
   }).catch(console.log)
 }
-
-export const test = async () => {
-  
-  // const contract = await getContract('REGISTRYHUB', '0xF6149F38bEA7bB07a779AF30Ee1983566e5E1218')
-  // if (!contract) return 
-  // try{
-  //     const tx = await contract.setWhiteList(
-  //         '0xD8930d33FCb22e9c96D35d7466B86f5801047D4c'
-  //     )
-  // }catch (e) {
-  //     if (e.code === 4001){
-  //         // User cancel transaction
-  //         console.log('User cancel the transaction');
-  //     }
-  // }
-  await testMulticall()
-
-
-}
