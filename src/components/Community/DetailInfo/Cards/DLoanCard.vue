@@ -318,13 +318,13 @@ export default {
   },
   async mounted () {
     this.status = this.getFundInfo?.status || this.card.statusStr || 'Completed'
-
     // check moonbeam legalese
     if (parseInt(this.card.paraId) === MoonbeamParaId){
       try{
         await checkGeoFenced();
         this.isCheckedGeofenced = true;
       }catch(e) {
+        this.moonbeanOk = true;
         this.isCheckedGeofenced = false;
         return;
       }
