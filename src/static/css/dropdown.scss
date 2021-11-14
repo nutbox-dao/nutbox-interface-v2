@@ -76,7 +76,10 @@
   border-radius: .8rem;
   @include coin-shadow();
 }
-
+.account-dropdown .max-limit {
+  max-height: 28.8rem;
+  overflow: auto;
+}
 .setting-dropdown .dropdown-toggle:hover{
   background-color: transparent!important;
 }
