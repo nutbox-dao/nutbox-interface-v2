@@ -27,6 +27,7 @@ import { getAllParachain } from '@/utils/web3/pool'
 import { mapState } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
 import { initApis } from '@/utils/commen/api'
+import { constantKsmCrowdloan } from '@/constant'
 
 export default {
   name: 'DCrowdLoan',
@@ -61,6 +62,9 @@ export default {
       const loadKusama = this.sortedPools.filter(pool => pool.chainId === 3).length > 0
       if (loadPolkadot) initApis('polkadot')
       if (loadKusama) initApis('kusama')
+      if (this.sortedPools[0].communityName === "Kusama × Nutbox Crowdloan"){
+        this.sortedPools = this.sortedPools.concat(constantKsmCrowdloan)
+      }
     }
   },
   mounted () {
@@ -71,6 +75,9 @@ export default {
       const loadKusama = this.sortedPools.filter(pool => pool.chainId === 3).length > 0
       if (loadPolkadot) initApis('polkadot')
       if (loadKusama) initApis('kusama')
+      if (this.sortedPools[0].communityName === "Kusama × Nutbox Crowdloan"){
+        this.sortedPools = this.sortedPools.concat(constantKsmCrowdloan)
+      }
     }).catch(e => {
     })
   },

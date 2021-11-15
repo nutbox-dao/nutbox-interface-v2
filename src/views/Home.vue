@@ -179,7 +179,8 @@ export default {
           }
         }
       }
-      return tvl;
+      const constant = 7760 * this.prices['KSMUSDT']
+      return tvl + constant;
     }
   },
   mounted () {

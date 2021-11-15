@@ -74,3 +74,57 @@ export const ASSET_LOGO_URL = {
     hive: 'https://cdn.wherein.mobi/nutbox/token/logo/hive-logo.png'
 
 }
+
+export const constantKsmCrowdloan = [
+    {
+        isConstant: true,
+        chainId: 3,
+        contract: "0xa970A3D076Bb05dDF62d2bE8d464701435827C35",
+        firstBlock: 399,
+        icon: "https://cdn.wherein.mobi/polkadot/paralogo/k/2004.png",
+        paraId: 2004,
+        poolName: 'Khala Network',
+        statusIndex: 2,
+        statusStr: 'Completed',
+        totalStakedAmount: '2695040099990000',
+        trieIndex: 6,
+        type: 'SubstrateCrowdloanAssetRegistry',
+        communityIcon: "https://cdn.wherein.mobi/nutbox/v2/1636516942582",
+        communityName: "Kusama × Nutbox Crowdloan",
+        tokenSymbol: "NUT"
+    },
+    {
+        isConstant: true,
+        chainId: 3,
+        contract: "0xa970A3D076Bb05dDF62d2bE8d464701435827C35",
+        firstBlock: 399,
+        icon: "https://cdn.wherein.mobi/polkadot/paralogo/k/2001.png",
+        paraId: 2001,
+        poolName: 'Bifrost',
+        statusIndex: 2,
+        statusStr: 'Completed',
+        totalStakedAmount: '5028000000000000',
+        trieIndex: 9,
+        type: 'SubstrateCrowdloanAssetRegistry',
+        communityIcon: "https://cdn.wherein.mobi/nutbox/v2/1636516942582",
+        communityName: "Kusama × Nutbox Crowdloan",
+        tokenSymbol: "NUT"
+    },
+    {
+        isConstant: true,
+        chainId: 3,
+        contract: "0xa970A3D076Bb05dDF62d2bE8d464701435827C35",
+        firstBlock: 399,
+        icon: "https://cdn.wherein.mobi/polkadot/paralogo/k/2084.png",
+        paraId: 2084,
+        poolName: 'Calamari',
+        statusIndex: 2,
+        statusStr: 'Completed',
+        totalStakedAmount: '37100000000000',
+        trieIndex: 3,
+        type: 'SubstrateCrowdloanAssetRegistry',
+        communityIcon: "https://cdn.wherein.mobi/nutbox/v2/1636516942582",
+        communityName: "Kusama × Nutbox Crowdloan",
+        tokenSymbol: "NUT"
+    }
+]

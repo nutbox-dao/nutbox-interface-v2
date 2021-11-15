@@ -1,6 +1,6 @@
 <template>
   <div class="multi-card">
-    <StakingCardHeader :card="card" :status="status"/>
+    <StakingCardHeader :card="card" :status="poolStatus === 'Active' ? status : poolStatus" />
     <div class="c-card">
       <div class="text-left mt-3">
         <span style="color: #717376" class="font-bold">{{
@@ -25,26 +25,32 @@
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
     </div>
     <div class="text-center">
-      <button
-        class="primary-btn"
-        :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !moonbeanOk"
-        @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
-      >
-        <b-spinner small type="grow" v-show="!isConnected || !moonbeanOk"></b-spinner>
-        {{ isCheckedGeofenced ? $t('cl.contribute') : $t('cl.geoDefenced') }}
-      </button>
-      <button
-        class="primary-btn"
-        :disabled="!isConnected"
-        v-show="status === 'Retired'"
-        @click="showWithdraw = true"
-      >
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.withdraw") }}
-      </button>
-      <button class="primary-btn" disabled v-show="status === 'Completed'">
-        <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
-        {{ $t("cl.completed") }}
+      <template v-if="poolStatus === 'Active'">
+        <button
+          class="primary-btn"
+          v-if="status === 'Active'"
+          :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !moonbeanOk"
+          @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
+        >
+          <b-spinner small type="grow" v-show="!isConnected || !moonbeanOk"></b-spinner>
+          {{ isCheckedGeofenced ? $t('cl.contribute') : $t('cl.geoDefenced') }}
+        </button>
+        <button
+          class="primary-btn"
+          :disabled="!isConnected"
+          v-show="status === 'Retired'"
+          @click="showWithdraw = true"
+        >
+          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          {{ $t("cl.withdraw") }}
+        </button>
+        <button class="primary-btn" disabled v-show="status === 'Completed'">
+          <b-spinner small type="grow" v-show="!isConnected"></b-spinner>
+          {{ $t("cl.completed") }}
+        </button>
+      </template>
+      <button class="primary-btn" v-else disabled>
+        {{ $t("community." + poolStatus) }}
       </button>
     </div>
     <!-- pool info -->
@@ -249,6 +255,10 @@ export default {
       return parseFloat(userStakingBn.toString() / 10 ** decimal);
     },
     totalDeposited() {
+      if (this.card && this.card.isConstant){
+        // constant crowdloan
+        return this.card.totalStakedAmount / 1e12
+      }
       if (!this.card || !this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount']) return 0;
       const decimals = this.card.chainId === 2 ? 10 : 12;
       return this.card && this.monitorPools[this.card.communityId + '-' + this.card.pid + '-totalStakedAmount'].toString() / (10 ** decimals);
@@ -307,6 +317,22 @@ export default {
         return 0
       }
     },
+    poolStatus (){
+      const canRemove = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-canRemove']
+      const hasRemoved = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasRemoved']
+      const hasStopped = this.monitorPools[this.card.communityId + '-' + this.card.pid + '-hasStopped']
+      if(!hasStopped){
+        return 'Active'
+      }else if (!canRemove){
+        return 'Stopped'
+      }else{
+        if (hasRemoved){
+          return 'Removed'
+        }else{
+          return 'CanRemove'
+        }
+      }
+    }
   },
   async mounted () {
     this.status = this.getFundInfo?.status || this.card.statusStr

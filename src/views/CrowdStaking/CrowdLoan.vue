@@ -50,6 +50,7 @@ import { mapState, mapGetters } from 'vuex'
 import { sortCRPoolCard } from '@/utils/commen/crowdloan'
 import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import { initApis } from '@/utils/commen/api'
+import { constantKsmCrowdloan } from '@/constant'
 
 export default {
   name: 'DCrowdLoan',
@@ -76,7 +77,7 @@ export default {
       return { poolCards, allParachain }
     },
     showingCards () {
-      return this.sortedPools.filter(pool => pool.chainId === this.activeTab + 2)
+      return this.sortedPools.concat(constantKsmCrowdloan).filter(pool => pool.chainId === this.activeTab + 2)
     }
   },
   watch: {
@@ -94,7 +95,6 @@ export default {
     }
   },
   mounted () {
-    
     // get parachian info from backend
     getAllParachain().then((res) => {
       this.sortedPools = sortCRPoolCard(this.poolCards, this.allParachain)
