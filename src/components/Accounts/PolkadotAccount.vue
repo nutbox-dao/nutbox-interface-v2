@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown class="account-dropdown" right no-caret>
+  <b-dropdown class="account-dropdown" menu-class="max-limit" right no-caret>
     <template #button-content>
       <span>{{account && account.meta && account.meta.name | formatUserAddress}}</span>
       <i class="dropdown-icon ml-3"></i>
