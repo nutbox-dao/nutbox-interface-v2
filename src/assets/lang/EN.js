@@ -440,6 +440,7 @@ module.exports = {
     withdrawPool: "Clear pool",
     removePool: "Remove pool",
     Active: "Active",
+    Completed: "Completed",
     Stopped: "Stopped",
     CanRemove: "Stopped",
     Removed: "Removed",

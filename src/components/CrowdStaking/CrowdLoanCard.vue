@@ -316,6 +316,7 @@ export default {
         await checkGeoFenced();
         this.isCheckedGeofenced = true;
       }catch(e) {
+        this.moonbeanOk = true;
         return;
       }
       this.isCheckedRemark = await checkRemark();
@@ -323,7 +324,6 @@ export default {
         await sleep(0.5);
       }
       this.moonbeanOk = true;
-
     }else{
       this.isCheckedRemark = true;
       this.isCheckedGeofenced = true;

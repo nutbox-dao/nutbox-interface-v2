@@ -4,7 +4,7 @@
       <span v-if="status === 'Active'" :class="'Active'">{{
         $t((card.type === 'SubstrateCrowdloanAssetRegistry' ? "cl." : 'community.') + status)
       }}</span>
-      <span v-else class="Completed">{{ $t("community." + status) }}</span>
+      <span v-else class="Completed">{{ $t((card.type === 'SubstrateCrowdloanAssetRegistry' ? "cl." : 'community.') + status) }}</span>
     </div>
     <div class="flex-start-center">
       <div class="card-link-icons">
