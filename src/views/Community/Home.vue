@@ -33,12 +33,12 @@
               </div>
               <div class="r-item">
                 <div class="label mb-2">{{ $t('asset.totalSupply') }}</div>
-                <div class="value">{{ (ctoken ? ctoken.totalSupply : 0) / 1e18 | amountForm }}</div>
+                <div class="value">{{ (ctoken ? ctoken.totalSupply : 0) / (10 ** ctoken.decimal) | amountForm }}</div>
               </div>
               <div class="r-item">
                 <div class="label mb-2">{{ $t('asset.cap') }}</div>
                 <div class="value">
-                  {{ (ctoken ? (ctoken.totalSupply / 1e18 * ctoken.price) : 0) | formatPrice }}
+                  {{ (ctoken ? (ctoken.totalSupply / (10 ** ctoken.decimal) * ctoken.price) : 0) | formatPrice }}
                 </div>
               </div>
             </div>

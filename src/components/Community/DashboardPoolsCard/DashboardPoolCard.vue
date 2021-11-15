@@ -154,7 +154,7 @@ export default {
             }
           }
         default:
-          return 1e18
+          return this.pool.asset.decimal;
       }
     },
     erc20Price(){

@@ -830,6 +830,11 @@ export const monitorUserBalances = async () => {
         if (tvl === '0') continue;
         if (poolRatio === 0) continue;
         const com = communities[pool.communityId]
+        let ctokenDecimal = pool.decimal ?? 18;
+        let decimal = pool.tokenDecimal ?? 18;
+        ctokenDecimal = 10 ** ctokenDecimal;
+        decimal = 10 ** decimal;
+        
         if (!com) continue;
         const ctokenAddress = com.ctoken
         const ctokenPrice = price[ctokenAddress]
@@ -842,31 +847,31 @@ export const monitorUserBalances = async () => {
             continue
           }          
           //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e18 * p)
+          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / decimal * p)
           pool.apy = 100 * pool.apy;
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
           const steemPrice = parseFloat(price['STEEMETH']) * parseFloat(price['ETHUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToSteem * steemPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToSteem * steemPrice)
           pool.apy = pool.apy * 100;
           continue;
         }
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
           const hivePrice = parseFloat(price['HIVUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToHive * hivePrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToHive * hivePrice)
           pool.apy = 100 * pool.apy;
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
           const dotPrice = parseFloat(price['DOTUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e10 * dotPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e10 * dotPrice)
           pool.apy = 100 * pool.apy;
           continue;
         }
         if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
           const ksmPrice = parseFloat(price['KSMUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / 1e18) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e12 * ksmPrice)
+          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e12 * ksmPrice)
           pool.apy = 100 * pool.apy;
           continue;
         }

@@ -631,7 +631,8 @@ export const monitorCtokenBalance = async (update = false) => {
             logo: t.tokenIcon,
             balance: u.value,
             name: t.tokenName,
-            symbol: t.tokenSymbol
+            symbol: t.tokenSymbol,
+            decimal: t.tokenDecimal
           }
         })
         // console.log('Updates ctoken balances', ctokenBalances);

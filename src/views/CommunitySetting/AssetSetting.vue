@@ -20,11 +20,11 @@
           <div class="token-info-card">
             <div class="row-info">
               <span>{{ $t('asset.totalSupply') }}：</span>
-              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)  | amountForm }} {{ cToken.symbol }}</span>
+              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
             </div>
             <div class="row-info">
               <span>{{ $t('asset.cap') }}：</span>
-              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / 1e18)) | amountForm}}</span>
+              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
             </div>
           </div>
         </div>
@@ -367,7 +367,7 @@ export default {
     ...mapState('steem', ['steemAccount']),
     communityBalanceValue () {
       if (this.communityBalance) {
-        return (this.communityBalance.toString() / 1e18).toFixed(6)
+        return (this.communityBalance.toString() / (10 ** this.cToken.decimal)).toFixed(6)
       } else {
         return 0
       }
@@ -379,7 +379,7 @@ export default {
       if (!this.userBalances || !this.userBalances[this.cTokenAddress]) {
         return 0
       }
-      return this.userBalances[this.cTokenAddress].toString() / 1e18
+      return this.userBalances[this.cTokenAddress].toString() / (10 ** this.cToken.decimal)
     }
   },
   methods: {
@@ -551,7 +551,6 @@ export default {
     this.assets = await getRegitryAssets()
     this.homeAssets = this.assets.filter(a => a.type === 'HomeChainAssetRegistry')
     this.foreignAssets = this.assets.filter(a => a.type !== 'HomeChainAssetRegistry')
-    console.log(this.assets);
   },
 }
 </script>

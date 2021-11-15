@@ -88,8 +88,8 @@ export default {
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
           price: c.price,
-          totalSupply: formatBalance(c.totalSupply.toString() / 1e18),
-          cap: (c.price) * (c.totalSupply.toString() / 1e18)
+          totalSupply: formatBalance(c.totalSupply.toString() / (10 ** c.tokenDecimal)),
+          cap: (c.price) * (c.totalSupply.toString() / (10 ** c.tokenDecimal))
         }))
         : []
       if (this.activeTab === 0) {

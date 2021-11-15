@@ -270,6 +270,16 @@ export const OfficialAssets = [
     type: 'HomeChainAssetRegistry',
     asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
+  },
+  {
+    name: 'Peanut',
+    address: '0x0d66ab1bb0d3e71211829c6d920ef933b8fe5122',
+    symbol: 'PNUT',
+    contract: contractAddress['HomeChainAssetRegistry'],
+    decimal: 6,
+    type: 'HomeChainAssetRegistry',
+    asset: '0x15a1ad3c410045004af3019ba4850a7a3ab6d262195136dc25380cc667a6f80e',
+    icon: 'https://cdn.wherein.mobi/nutbox/v2/1636964890849'
   }
 ];
 

@@ -39,7 +39,7 @@
                   >
                 </div>
               </div>
-              <span class="font16">{{ (v.balance.toString() / 1e18) | amountForm }}</span>
+              <span class="font16">{{ (v.balance.toString() / (10 ** v.decimal)) | amountForm }}</span>
             </div>
           </div>
         </div>
@@ -70,6 +70,7 @@ export default {
           ...this.ctokenBalances[k]
         })
       }
+      console.log(2435, temp);
       return temp.sort((a,b) => a.address === this.NutAddress && b.balance.sub(a.balance))
     }
   },
