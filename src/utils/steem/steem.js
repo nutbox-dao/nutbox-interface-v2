@@ -1,4 +1,4 @@
-// import steem from 'steem'
+import steem from 'steem'
 import { key_utils } from 'steem/lib/auth/ecc'
 import { auth } from 'steem'
 import { errCode, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../../config.js'
