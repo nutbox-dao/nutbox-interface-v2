@@ -1,13 +1,9 @@
-import steem from 'steem'
+// import steem from 'steem'
 import { key_utils } from 'steem/lib/auth/ecc'
 import { auth } from 'steem'
-import { errCode, STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../../config.js'
-import { sleep } from '../helper'
+import { errCode, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../../config.js'
 import store from '@/store'
-
-const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
-window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
-steem.api.setOptions({ url: 'https://api.steemit.com' })
+import axios from "axios"
 
 function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
@@ -123,39 +119,46 @@ export async function steemTransferVest (from, to, amount, address, fee) {
 }
 
 export async function getGlobalProperties () {
-  // return await steem.api.getDynamicGlobalPropertiesAsync()
   return new Promise(async (resolve, reject) => {
-    const a = steem.api.getDynamicGlobalProperties((err, result) => {
-      console.log('getGlobalProperties error', err);
-      if (err){
-        reject(err)
-      }else
-       resolve(result)
+    axios.post('https://api.steemit.com', '{"jsonrpc":"2.0", "method":"database_api.get_dynamic_global_properties", "id":1}').then(res => {
+    if (res.data.result)  
+      resolve(res.data.result)
+    else
+      reject();
+    }).catch(err => {
+      console.log('Get steem global data fail:', err)
+      reject(err)
     })
   })
 }
 
 export async function steemToVest (steemPower) {
   const props = await getGlobalProperties()
-  const totalSteem = Number(props.total_vesting_fund_steem.split(' ')[0])
-  const totalVests = Number(props.total_vesting_shares.split(' ')[0])
+  const totalSteem = Number(props.total_vesting_fund_steem.amount) / (10 ** props.total_vesting_fund_steem.precision)
+  const totalVests = Number(props.total_vesting_shares.amount) / (10 ** props.total_vesting_shares.precision)
   return ((parseFloat(steemPower) * totalVests) / totalSteem).toFixed(6)
 }
 
 export async function vestsToSteem (vests) {
   const props = await getGlobalProperties()
-  const totalSteem = Number(props.total_vesting_fund_steem.split(' ')[0])
-  const totalVests = Number(props.total_vesting_shares.split(' ')[0])
+  const totalSteem = Number(props.total_vesting_fund_steem.amount) / (10 ** props.total_vesting_fund_steem.precision)
+  const totalVests = Number(props.total_vesting_shares.amount) / (10 ** props.total_vesting_shares.precision)
   return ((parseFloat(vests) * totalSteem) / totalVests)
 }
 
 export const getAccountInfo = async (account) => {
-  const results = await steem.api.getAccountsAsync([account])
-  if (results.length === 0) {
-    return null
-  } else {
-    return results[0]
-  }
+  return new Promise((resolve, reject) => {
+    axios.post('https://api.steemit.com', '{"jsonrpc":"2.0", "method":"condenser_api.get_accounts", "params":[["' + account +'"]], "id":1}').then(res => {
+      if (res.data.result)
+        resolve(res.data.result[0])
+      else
+        reject()
+    }).catch(err => {
+      console.log('Get steem global data fail:', err)
+      reject(err)
+    })
+
+  })
 }
 
 export const getSteemBalance = async (username) => {
