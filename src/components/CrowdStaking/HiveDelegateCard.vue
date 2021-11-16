@@ -26,6 +26,7 @@
           <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
+      <ConnectMetaMask v-if="!metamaskConnected && hiveLogin"/>
       <ConnectWalletBtn
           class="op-bottom"
           v-if="!hiveLogin"
@@ -70,6 +71,7 @@ import Login from '@/components/ToolsComponents/Login'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 import StakingCardHeader from '@/components/Commen/StakingCardHeader'
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: 'HiveDelegateCard',
@@ -77,7 +79,8 @@ export default {
     DelegateModal,
     ConnectWalletBtn,
     Login,
-    StakingCardHeader
+    StakingCardHeader,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -86,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState(['prices']),
+    ...mapState(['metamaskConnected', 'prices']),
     ...mapState('web3', ['pendingRewards', 'userStakings', 'loadingUserStakings', 'monitorPools']),
     hiveLogin() {
       return !!this.hiveAccount

@@ -43,15 +43,17 @@
             {{ formatValidatorAccount }}
           </span>
         </div>
-
-        <button
-          class="primary-btn"
-          @click="nominate"
-          :disabled="loadingStaking || status !== 'Active'"
-        >
-          <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
-          >{{ $t("cs.nominate") }}
-        </button>
+        <ConnectMetaMask v-if="!metamaskConnected"/>
+        <template v-else>
+          <button
+            class="primary-btn"
+            @click="nominate"
+            :disabled="loadingStaking || status !== 'Active'"
+          >
+            <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
+            >{{ $t("cs.nominate") }}
+          </button>
+        </template>
         <div class="project-info-container">
           <span class="name"> {{ $t('community.totalDeposit') }} </span>
           <div class="info">{{ totalDeposited | amountForm(4) }}</div>
@@ -107,6 +109,7 @@ import { withdrawReward } from '@/utils/web3/pool'
 import { stanfiAddress } from '@/utils/commen/account'
 import { POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
 import StakingCardHeader from '@/components/Commen/StakingCardHeader'
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: "CrowdNominateCard",
@@ -134,7 +137,8 @@ export default {
   components: {
     TipBondAndNominator,
     TipNominator,
-    StakingCardHeader
+    StakingCardHeader,
+    ConnectMetaMask
   },
   methods: {
     nominate() {
@@ -198,7 +202,7 @@ export default {
       "monitorPools",
       "blockNum",
     ]),
-    ...mapState(["lang"]),
+    ...mapState(['metamaskConnected', "lang"]),
     nominated () {
       const userStakingBn =
         this.userStakings[this.nomination.communityId + "-" + this.nomination.pid];

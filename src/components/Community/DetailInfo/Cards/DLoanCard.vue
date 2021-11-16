@@ -38,7 +38,8 @@
      <div class="btn-row">
       <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
     </div>
-    <div class="text-center">
+    <ConnectMetaMask v-if="!metamaskConnected"/>
+    <div class="text-center" v-else>
       <button v-if="!!countDown" disabled='true' class="primary-btn">
         {{ countDown }}
       </button>
@@ -159,6 +160,7 @@ import { stanfiAddress } from '@/utils/commen/account'
 import { withdrawReward } from "@/utils/web3/pool";
 import { BLOCK_SECOND } from '@/constant'
 import MoonbeamRegister from '@/components/Commen/MoonbeamRegister'
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   data () {
@@ -183,7 +185,8 @@ export default {
     TipWithdraw,
     ContributorsLabel,
     RaisedLabel,
-    MoonbeamRegister
+    MoonbeamRegister,
+    ConnectMetaMask
   },
   methods: {
     async withdraw() {
@@ -227,7 +230,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lang', 'apys', 'prices']),
+    ...mapState(['metamaskConnected', 'lang', 'apys', 'prices']),
     ...mapState('web3', ['pendingRewards', 'blockNum', 'userStakings', 'loadingUserStakings', 'monitorPools']),
     pendingReward(){
       const pendingBn = this.pendingRewards[this.card.communityId + '-' + this.card.pid]

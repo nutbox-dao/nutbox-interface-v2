@@ -19,13 +19,14 @@
         <span style="color: #717376;" class="font-bold">{{ card.assetType == 'sp' ? 'STEEM POWER' : 'HIVE POWER'}}</span>
         <span style="color: #BDBFC2"> DELEGATED</span>
       </div>
-      <div class="btn-row mb-4" v-if="steemLogin">
+      <div class="btn-row mb-4" v-if="steemLogin && metamaskConnected">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
           <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
+      <ConnectMetaMask v-if="!metamaskConnected && steemLogin"/>
       <ConnectWalletBtn
           class="op-bottom"
           v-if="!steemLogin"
@@ -70,6 +71,7 @@ import Login from '@/components/ToolsComponents/Login'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 import StakingCardHeader from '@/components/Commen/StakingCardHeader'
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: 'SteemDelegateCard',
@@ -77,7 +79,8 @@ export default {
     DelegateModal,
     ConnectWalletBtn,
     Login,
-    StakingCardHeader
+    StakingCardHeader,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -86,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState('steem', ['steemAccount', 'vestsToSteem']),
-    ...mapState(['prices']),
+    ...mapState(['metamaskConnected', 'prices']),
     ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools']),
     steemLogin() {
       return !!this.steemAccount

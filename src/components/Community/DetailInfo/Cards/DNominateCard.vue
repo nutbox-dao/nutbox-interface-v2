@@ -58,9 +58,10 @@
             {{ formatValidatorAccount }}
           </span>
         </div>
-
+        <ConnectMetaMask v-if="!metamaskConnected"/>
         <button
           class="primary-btn"
+          v-else
           @click="nominate"
           :disabled="loadingStaking || status !== 'Active'"
         >
@@ -121,6 +122,7 @@ import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 import { stanfiAddress } from '@/utils/commen/account'
 import { POLKADTO_ADDRESS_FORMAT_CODE } from '@/config'
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: "CrowdNominateCard",
@@ -148,6 +150,7 @@ export default {
   components: {
     TipBondAndNominator,
     TipNominator,
+    ConnectMetaMask
   },
   methods: {
     nominate() {
@@ -207,7 +210,7 @@ export default {
       "monitorPools",
       "blockNum",
     ]),
-    ...mapState(["lang", 'prices']),
+    ...mapState(['metamaskConnected', "lang", 'prices']),
     nominated () {
       const userStakingBn =
         this.userStakings[this.nomination.communityId + "-" + this.nomination.pid];

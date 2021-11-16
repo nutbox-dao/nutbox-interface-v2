@@ -1,7 +1,6 @@
 import {
   web3Accounts,
-  web3Enable,
-  web3FromSourc
+  web3Enable
 } from '@polkadot/extension-dapp'
 import keyring from '@polkadot/ui-keyring';
 

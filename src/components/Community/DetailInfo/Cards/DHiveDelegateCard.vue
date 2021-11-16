@@ -37,13 +37,14 @@
         {{ countDown }}
     </button>
     <template v-else>
-      <div class="btn-row mb-4" v-if="hiveLogin">
+      <div class="btn-row mb-4" v-if="hiveLogin && metamaskConnected">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
           <button class="outline-btn" @click="decrease">-</button>
           <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
         </div>
       </div>
+      <ConnectMetaMask v-if="!metamaskConnected && hiveLogin"/>
     <ConnectWalletBtn
       class="op-bottom"
       v-if="!hiveLogin"
@@ -88,14 +89,15 @@ import { formatCountdown } from '@/utils/helper'
 import { handleApiErrCode } from '@/utils/helper'
 import { withdrawReward } from '@/utils/web3/pool'
 import { BLOCK_SECOND } from '@/constant'
-
+import ConnectMetaMask from '@/components/Commen/ConnectMetaMask'
 
 export default {
   name: 'DDelegateCard',
   components: {
     DDelegateModal,
     ConnectWalletBtn,
-    Login
+    Login,
+    ConnectMetaMask
   },
   props: {
     card: {
@@ -104,7 +106,7 @@ export default {
   },
   computed: {
     ...mapState('hive', ['hiveAccount', 'vestsToHive']),
-    ...mapState(['prices']),
+    ...mapState(['metamaskConnected', 'prices']),
     ...mapState('web3',['pendingRewards','userStakings', 'loadingUserStakings', 'monitorPools', 'blockNum']),
     hiveLogin() {
       return !!this.hiveAccount

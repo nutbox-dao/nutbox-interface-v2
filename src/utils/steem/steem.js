@@ -214,15 +214,6 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
   return res
 }
 
-
-export const getKeychain = async () => {
-  if (window.steem_keychain) {
-    return window.steem_keychain
-  }
-  await sleep(2)
-  return window.steem_keychain
-}
-
 /**
  * Generate a new hive account
  */
