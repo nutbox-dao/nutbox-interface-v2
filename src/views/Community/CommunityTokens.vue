@@ -40,8 +40,8 @@
             <template #cell(name)="row">
               <span style="cursor:pointer" @click="openNewTab(row.item)">{{ row.item.name }}</span>
             </template>
-            <template #cell(action)>
-              <button class="action-btn">Buy</button>
+            <template #cell(action)='row'>
+              <button v-if="row && row.item && row.item.lpAddress && row.item.lpAddress.length > 20" class="action-btn primary-btn" @click="openPancake(row.item.lpAddress)">Swap</button>
             </template>
           </b-table>
         </div>
@@ -83,10 +83,11 @@ export default {
           { key: 'price', label: this.$t('asset.price') },
           { key: 'totalSupply', label: this.$t('asset.totalSupply') },
           { key: 'cap', label: this.$t('asset.cap') },
-          // { key: 'action', label: '' }
+          { key: 'action', label: 'Swap' }
         ]
     },
     items (){
+      console.log(235, this.allCommunities);
       let sorted = this.allCommunities ? this.allCommunities.map(c => ({
           ...c,
           price: c.price,
@@ -116,6 +117,9 @@ export default {
   methods: {
     openNewTab (cardInfo) {
       window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
+    },
+    openPancake (address) {
+      window.open(`https://pancakeswap.finance/info/pool/` + address, '_blank')
     }
   },
 }
