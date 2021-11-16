@@ -576,38 +576,6 @@ export const getSpecifyDistributionEras = async (communityId) => {
 }
 
 /**
- *
- * @param {*} communities
- * @returns
- */
-export const fetchAllCommunityDistributions = async (communities) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null;
-    try {
-      stakingFactoryId = await getMyStakingFactory();
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY);
-        return;
-      }
-    } catch (e) {
-      reject(e);
-      return;
-    }
-    const dis = await aggregate(
-      [
-        {
-          target: stakingFactoryId,
-          call: ["distributionEras(uint8)(uint256,uint256,uint256)", 0],
-          returns: [["amount"], ["startHeight"], ["stopHeight"]],
-        },
-      ],
-      Multi_Config
-    );
-    console.log({ dis });
-  });
-};
-
-/**
  * Post community blog tag to backend
  * @param {*} blogTag
  * @returns
