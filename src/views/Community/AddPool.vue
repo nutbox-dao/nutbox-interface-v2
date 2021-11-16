@@ -1,148 +1,150 @@
 <template>
   <div class="page-view-content">
-    <div class="container scroll-content">
-      <div class="view-top-header">
-        <Step v-show="createState !== 0" :current-step="createState"></Step>
-        <div class="page-back-text-icon font20" @click="$router.back()">
-          {{ $t("asset.addPool") }}
+    <div class="scroll-content">
+      <div class="container">
+        <div class="view-top-header">
+          <Step v-show="createState !== 0" :current-step="createState"></Step>
+          <div class="page-back-text-icon font20" @click="$router.back()">
+            {{ $t("asset.addPool") }}
+          </div>
         </div>
-      </div>
-      <div class="pool-card text-left mb-5">
-        <div class="line-card-title">{{ $t("asset.poolRatios") }}</div>
-        <div class="custom-form pool-form">
-          <b-form-group
-            id="input-group-1"
-            :label="$t('asset.stakingAsset')"
-            label-for="input-1"
-          >
-            <Dropdown
-              :menu-options="concatAddressOptions"
-              :loading="assetLoading"
-              :selected-key="selectedKey"
-              :selected-item="selectedAddressData"
-              @setSelectedData="setSelectedData"
+        <div class="pool-card text-left mb-5">
+          <div class="line-card-title">{{ $t("asset.poolRatios") }}</div>
+          <div class="custom-form pool-form">
+            <b-form-group
+              id="input-group-1"
+              :label="$t('asset.stakingAsset')"
+              label-for="input-1"
             >
-              <template v-slot:empty0>
-                <div class="text-center">
-                  <div class="custom-control" style="line-height: 1.5rem">
-                    {{ $t("asset.notRegister") }}
-                    <router-link to="/community-setting/register/native">{{
-                      $t("asset.registerOne")
-                    }}</router-link>
+              <Dropdown
+                :menu-options="concatAddressOptions"
+                :loading="assetLoading"
+                :selected-key="selectedKey"
+                :selected-item="selectedAddressData"
+                @setSelectedData="setSelectedData"
+              >
+                <template v-slot:empty0>
+                  <div class="text-center">
+                    <div class="custom-control" style="line-height: 1.5rem">
+                      {{ $t("asset.notRegister") }}
+                      <router-link to="/community-setting/register/native">{{
+                        $t("asset.registerOne")
+                      }}</router-link>
+                    </div>
                   </div>
+                </template>
+                <template v-slot:drop-item="slotProps">
+                  <img class="prefix-icon" :src="slotProps.item.icon" alt="" />
+                  <div class="flex-full d-flex flex-column">
+                    <span>{{ slotProps.item.symbol }}</span>
+                    <span class="font12 text-grey-light">{{
+                      slotProps.item.asset | formatUserAddress
+                    }}</span>
+                  </div>
+                </template>
+              </Dropdown>
+              <div class="flex-between-center mt-1">
+                <div class="text-left text-grey-light">
+                  <span v-show="form.assetId && isHomeChainAsset"
+                    >* {{ $t("asset.isHomeAsset") }}</span
+                  >
+                  <span v-show="form.assetId && !isHomeChainAsset"
+                    >* {{ $t("asset.isForeignAsset") }}</span
+                  >
                 </div>
-              </template>
-              <template v-slot:drop-item="slotProps">
-                <img class="prefix-icon" :src="slotProps.item.icon" alt="" />
-                <div class="flex-full d-flex flex-column">
-                  <span>{{ slotProps.item.symbol }}</span>
-                  <span class="font12 text-grey-light">{{
-                    slotProps.item.asset | formatUserAddress
-                  }}</span>
-                </div>
-              </template>
-            </Dropdown>
-            <div class="flex-between-center mt-1">
-              <div class="text-left text-grey-light">
-                <span v-show="form.assetId && isHomeChainAsset"
-                  >* {{ $t("asset.isHomeAsset") }}</span
-                >
-                <span v-show="form.assetId && !isHomeChainAsset"
-                  >* {{ $t("asset.isForeignAsset") }}</span
+                <router-link
+                  class="text-right"
+                  to="/community-setting/register/native"
+                  >{{ $t("asset.registerOne") }}</router-link
                 >
               </div>
-              <router-link
-                class="text-right"
-                to="/community-setting/register/native"
-                >{{ $t("asset.registerOne") }}</router-link
-              >
-            </div>
-          </b-form-group>
-          <div class="row">
-            <b-form-group
-              class="col-md-6"
-              id="input-group-2"
-              :label="$t('asset.poolName')"
-              label-for="input-2"
-            >
-              <b-form-input
-                id="input-2"
-                v-model="form.name"
-                :placeholder="$t('asset.inputPoolName')"
-                @input="inputChange"
-                @keyup="poolNameChange"
-                required
-              ></b-form-input>
             </b-form-group>
-          </div>
-          <b-form-group id="input-group-2" :label="$t('asset.poolRatios')">
-            <div class="ratios-box">
-              <div
-                class="text-center item-box"
-                v-for="(inputItem, inputIndex) of form.ratios"
-                :key="inputIndex"
+            <div class="row">
+              <b-form-group
+                class="col-md-6"
+                id="input-group-2"
+                :label="$t('asset.poolName')"
+                label-for="input-2"
               >
                 <b-form-input
-                  class="ration-input"
-                  :data-label="myPools[inputIndex].name"
-                  v-model="form.ratios[inputIndex]"
-                  :disabled="
-                    myPools[inputIndex].hasStopped ||
-                    myPools[inputIndex].hasRemoved
-                  "
+                  id="input-2"
+                  v-model="form.name"
+                  :placeholder="$t('asset.inputPoolName')"
                   @input="inputChange"
-                  step="0.01"
-                  type="number"
+                  @keyup="poolNameChange"
+                  required
                 ></b-form-input>
-                <span
-                  class="font12 text-grey mt-1"
-                  :style="
-                    'color:' +
-                    (myPools[inputIndex].hasStopped ||
-                    myPools[inputIndex].hasRemoved
-                      ? 'red'
-                      : '')
-                  "
-                  >{{
-                    myPools[inputIndex].name +
-                    (myPools[inputIndex].hasRemoved
-                      ? "(" + $t("community.Removed") + ")"
-                      : myPools[inputIndex].hasStopped
-                      ? "(" + $t("community.Stopped") + ")"
-                      : "")
-                  }}</span
+              </b-form-group>
+            </div>
+            <b-form-group id="input-group-2" :label="$t('asset.poolRatios')">
+              <div class="ratios-box">
+                <div
+                  class="text-center item-box"
+                  v-for="(inputItem, inputIndex) of form.ratios"
+                  :key="inputIndex"
                 >
+                  <b-form-input
+                    class="ration-input"
+                    :data-label="myPools[inputIndex].name"
+                    v-model="form.ratios[inputIndex]"
+                    :disabled="
+                      myPools[inputIndex].hasStopped ||
+                      myPools[inputIndex].hasRemoved
+                    "
+                    @input="inputChange"
+                    step="0.01"
+                    type="number"
+                  ></b-form-input>
+                  <span
+                    class="font12 text-grey mt-1"
+                    :style="
+                      'color:' +
+                      (myPools[inputIndex].hasStopped ||
+                      myPools[inputIndex].hasRemoved
+                        ? 'red'
+                        : '')
+                    "
+                    >{{
+                      myPools[inputIndex].name +
+                      (myPools[inputIndex].hasRemoved
+                        ? "(" + $t("community.Removed") + ")"
+                        : myPools[inputIndex].hasStopped
+                        ? "(" + $t("community.Stopped") + ")"
+                        : "")
+                    }}</span
+                  >
+                </div>
+              </div>
+            </b-form-group>
+            <div class="row">
+              <div class="col-md-5">
+                <button v-if="!approved"
+                  class="primary-btn"
+                    @click="approve"
+                    :disabled="isApproving || loadingApprovements">
+                  <b-spinner small type="grow" v-show="isApproving || loadingApprovements" />
+                    {{ $t('commen.approveContract') }}
+                </button>
+                <button
+                  v-else
+                  class="primary-btn"
+                  @click="confirmAdd"
+                  :disabled="adding"
+                >
+                  <b-spinner small type="grow" v-show="adding" />
+                  {{ $t("commen.add") }}
+                </button>
               </div>
             </div>
-          </b-form-group>
-          <div class="row">
-            <div class="col-md-5">
-              <button v-if="!approved"
-                class="primary-btn"
-                  @click="approve"
-                  :disabled="isApproving || loadingApprovements">
-                <b-spinner small type="grow" v-show="isApproving || loadingApprovements" />
-                  {{ $t('commen.approveContract') }}
-              </button>
-              <button
-                v-else
-                class="primary-btn"
-                @click="confirmAdd"
-                :disabled="adding"
-              >
-                <b-spinner small type="grow" v-show="adding" />
-                {{ $t("commen.add") }}
-              </button>
-            </div>
+            <br/>
+            <p>{{ $t('community.createNeedStake') }}{{ stakedNUT | amountForm }} {{ ' ' + NUT.symbol }}</p>
+            <p> {{ $t('commen.balance') + ':' }} {{ userBalances && userBalances[NUT.address] && userBalances[NUT.address].toString() / 1e18 | amountForm }} {{ ' ' + NUT.symbol }}</p>
           </div>
-          <br/>
-          <p>{{ $t('community.createNeedStake') }}{{ stakedNUT | amountForm }} {{ ' ' + NUT.symbol }}</p>
-          <p> {{ $t('commen.balance') + ':' }} {{ userBalances && userBalances[NUT.address] && userBalances[NUT.address].toString() / 1e18 | amountForm }} {{ ' ' + NUT.symbol }}</p>
+          <div class="divide-box">
+            <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
+          </div>
+          <PoolRatio :pools-data="myPools"/>
         </div>
-        <div class="divide-box">
-          <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
-        </div>
-        <PoolRatio :pools-data="myPools"/>
       </div>
     </div>
   </div>

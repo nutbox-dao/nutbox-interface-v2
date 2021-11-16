@@ -1,106 +1,108 @@
 <template>
-  <div class="container scroll-content">
-    <div class="view-top-header">
-      <div class="page-back-text-icon font20" style="line-height: 1rem" @click="$router.back()">
-        {{ $t("nps.voteProposal") }}
-      </div>
-    </div>
-    <div class="row text-left">
-      <div class="custom-form col-md-8 mb-5">
-        <div class="font32 font-bold my-2">{{ proposal.title }}</div>
-        <div class="flag"
-             :class="
-             proposal.status == 0
-              ? 'proposal-pending'
-              : proposal.status == 1
-              ? 'proposal-rolling'
-              : proposal.proposalResult === 1
-              ? 'proposal-pass'
-              : 'proposal-unpass'">
-          {{
-            proposal.status == 0
-              ? $t("nps.propsalVoteStatusWaitStart")
-              : proposal.status == 1
-              ? $t("nps.propsalVoteStatusDoing")
-              : proposal.proposalResult === 1
-              ? $t("nps.pass")
-              : $t("nps.unpass")
-          }}
-        </div>
-        <Markdown :body="proposal.body" />
-        <div class="row mt-4" v-show="!isVoted && proposal.status == 1">
-          <div class="col-6 text-right">
-            <button class="primary-btn w-50"
-                    @click="onVote('agree')"
-                    :disabled="isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
-          </div>
-          <div class="col-6">
-            <button class="primary-btn w-50"
-                    @click="onVote('disagree')"
-                    :disabled="isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
+  <div class="scroll-content">
+    <div class="container">
+        <div class="view-top-header">
+          <div class="page-back-text-icon font20" style="line-height: 1rem" @click="$router.back()">
+            {{ $t("nps.voteProposal") }}
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="c-card">
-          <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
-          <div class="c-card-content">
-            <div class="flex-between-center">
-              <span class="text-grey-light">{{ $t("nps.proposalFirst_Block") }}</span>
-              <span>{{ proposal.first_block }}</span>
+        <div class="row text-left">
+          <div class="custom-form col-md-8 mb-5">
+            <div class="font32 font-bold my-2">{{ proposal.title }}</div>
+            <div class="flag"
+                :class="
+                proposal.status == 0
+                  ? 'proposal-pending'
+                  : proposal.status == 1
+                  ? 'proposal-rolling'
+                  : proposal.proposalResult === 1
+                  ? 'proposal-pass'
+                  : 'proposal-unpass'">
+              {{
+                proposal.status == 0
+                  ? $t("nps.propsalVoteStatusWaitStart")
+                  : proposal.status == 1
+                  ? $t("nps.propsalVoteStatusDoing")
+                  : proposal.proposalResult === 1
+                  ? $t("nps.pass")
+                  : $t("nps.unpass")
+              }}
             </div>
-            <div class="flex-between-center">
-              <span class="text-grey-light">{{ $t("nps.proposalEnd_Block") }}</span>
-              <span>{{ proposal.end_block }}</span>
-            </div>
-            <div class="flex-between-center">
-              <span class="text-grey-light">{{ $t("nps.proposalStart") }}</span>
-              <span>{{ formatDate(proposal.start) }}</span>
-            </div>
-            <div class="flex-between-center">
-              <span class="text-grey-light">{{ $t("nps.proposalEnd") }}</span>
-              <span>{{ formatDate(proposal.end) }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="c-card">
-          <div class="c-card-header font20">{{ $t("nps.proposalVoteResult") }}</div>
-          <div class="c-card-content">
-            <div class="progress-box">
-              <div class="flex-between-center">
-                <span>{{ $t("nps.proposalAgreeBtn") }}</span>
-                <span>{{ voteAgreeTotalScore | amountForm }} ({{ voteAgreeTotalScoreRate.toFixed(2) }}%)</span>
+            <Markdown :body="proposal.body" />
+            <div class="row mt-4" v-show="!isVoted && proposal.status == 1">
+              <div class="col-6 text-right">
+                <button class="primary-btn w-50"
+                        @click="onVote('agree')"
+                        :disabled="isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
               </div>
-              <b-progress :value="voteAgreeTotalScoreRate"
-                          height=".5rem"
-                          variant="success"
-                          class="w-100 my-1"></b-progress>
-            </div>
-            <div class="progress-box">
-              <div class="flex-between-center">
-                <span>{{ $t("nps.proposalDisagreeBtn") }}</span>
-                <span>{{ voteDisagreeTotalScore | amountForm }} ({{ voteDisagreeTotalScoreRate.toFixed(2) }}%)</span>
+              <div class="col-6">
+                <button class="primary-btn w-50"
+                        @click="onVote('disagree')"
+                        :disabled="isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
               </div>
-              <b-progress :value="voteDisagreeTotalScoreRate"
-                          height=".5rem"
-                          variant="danger"
-                          class="w-100 my-1"></b-progress>
             </div>
-            <div class="progress-box">
-              <div class="flex-between-center">
-                <span>{{ $t("nps.proposalVoteResult") }}</span>
-                <span>{{ voteAgreeTotalScore - voteDisagreeTotalScore | amountForm }}</span>
+          </div>
+          <div class="col-md-4">
+            <div class="c-card">
+              <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
+              <div class="c-card-content">
+                <div class="flex-between-center">
+                  <span class="text-grey-light">{{ $t("nps.proposalFirst_Block") }}</span>
+                  <span>{{ proposal.first_block }}</span>
+                </div>
+                <div class="flex-between-center">
+                  <span class="text-grey-light">{{ $t("nps.proposalEnd_Block") }}</span>
+                  <span>{{ proposal.end_block }}</span>
+                </div>
+                <div class="flex-between-center">
+                  <span class="text-grey-light">{{ $t("nps.proposalStart") }}</span>
+                  <span>{{ formatDate(proposal.start) }}</span>
+                </div>
+                <div class="flex-between-center">
+                  <span class="text-grey-light">{{ $t("nps.proposalEnd") }}</span>
+                  <span>{{ formatDate(proposal.end) }}</span>
+                </div>
               </div>
-              <b-progress :value="voteAgreeTotalScoreRate - voteDisagreeTotalScoreRate"
-                          height=".5rem"
-                          variant="info"
-                          class="w-100 my-1"></b-progress>
             </div>
-            <button @click="download" :disabled="loading" class="primary-btn rounded-pill w-75">{{ $t('nps.downloadReport') }}</button>
+            <div class="c-card">
+              <div class="c-card-header font20">{{ $t("nps.proposalVoteResult") }}</div>
+              <div class="c-card-content">
+                <div class="progress-box">
+                  <div class="flex-between-center">
+                    <span>{{ $t("nps.proposalAgreeBtn") }}</span>
+                    <span>{{ voteAgreeTotalScore | amountForm }} ({{ voteAgreeTotalScoreRate.toFixed(2) }}%)</span>
+                  </div>
+                  <b-progress :value="voteAgreeTotalScoreRate"
+                              height=".5rem"
+                              variant="success"
+                              class="w-100 my-1"></b-progress>
+                </div>
+                <div class="progress-box">
+                  <div class="flex-between-center">
+                    <span>{{ $t("nps.proposalDisagreeBtn") }}</span>
+                    <span>{{ voteDisagreeTotalScore | amountForm }} ({{ voteDisagreeTotalScoreRate.toFixed(2) }}%)</span>
+                  </div>
+                  <b-progress :value="voteDisagreeTotalScoreRate"
+                              height=".5rem"
+                              variant="danger"
+                              class="w-100 my-1"></b-progress>
+                </div>
+                <div class="progress-box">
+                  <div class="flex-between-center">
+                    <span>{{ $t("nps.proposalVoteResult") }}</span>
+                    <span>{{ voteAgreeTotalScore - voteDisagreeTotalScore | amountForm }}</span>
+                  </div>
+                  <b-progress :value="voteAgreeTotalScoreRate - voteDisagreeTotalScoreRate"
+                              height=".5rem"
+                              variant="info"
+                              class="w-100 my-1"></b-progress>
+                </div>
+                <button @click="download" :disabled="loading" class="primary-btn rounded-pill w-75">{{ $t('nps.downloadReport') }}</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+    </div>  
 
     <b-modal
       id="modal-vote"

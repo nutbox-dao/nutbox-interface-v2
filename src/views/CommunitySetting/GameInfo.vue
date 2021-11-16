@@ -1,223 +1,225 @@
 <template>
   <div class="page-view-content">
-    <div class="scroll-content container">
-      <div class="view-top-header">
-        <div class="flex-between-center w-100">
-          <div
-            class="font20"
-            :class="
-              $route.query.type === 'create'
-                ? 'page-back-text-icon'
-                : 'page-title-line'
-            "
-            style="line-height: 1rem"
-            @click="isEdit ? (type = null) : $router.back()"
-          >
-            {{
-              (isEdit ? $t("game." + type) : "") + $t("community.communityInfo")
-            }}
-          </div>
-          <div v-if="!isEdit">
-            <button
-              class="primary-btn pl-3 pr-3"
-              :disabled="!canEdit"
-              @click="clickEdit"
+    <div class="scroll-content">
+      <div class="container">
+        <div class="view-top-header">
+          <div class="flex-between-center w-100">
+            <div
+              class="font20"
+              :class="
+                $route.query.type === 'create'
+                  ? 'page-back-text-icon'
+                  : 'page-title-line'
+              "
+              style="line-height: 1rem"
+              @click="isEdit ? (type = null) : $router.back()"
             >
-              {{ $t("community.edit") }}
-            </button>
+              {{
+                (isEdit ? $t("game." + type) : "") + $t("community.communityInfo")
+              }}
+            </div>
+            <div v-if="!isEdit">
+              <button
+                class="primary-btn pl-3 pr-3"
+                :disabled="!canEdit"
+                @click="clickEdit"
+              >
+                {{ $t("community.edit") }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-5">
-        <div class="community-info-card text-left">
-          <!-- game name -->
-          <div class="custom-form pl-md-3">
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('game.gameName')"
-            >
-              <b-form-input
-                :disabled="!isEdit"
-                v-model="form.gameName"
-                :placeholder="$t('game.inputGameName')"
-              ></b-form-input>
-            </b-form-group>
-            <!-- game link -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('game.gameLink')"
-            >
-              <b-form-input
-                :disabled="!isEdit"
-                v-model="form.gameSite"
-                :placeholder="$t('game.inputGameLink')"
-              ></b-form-input>
-            </b-form-group>
-            <!-- game description -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="8"
-              :label="$t('game.gameDesc')"
-            >
-              <b-form-textarea
-                :disabled="!isEdit"
-                v-model="form.gameIntro"
-                :placeholder="$t('game.inputGameDesc')"
-                rows="5"
-              ></b-form-textarea>
-            </b-form-group>
-            <!-- game category -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="3"
-              :label="$t('game.gameCategory')"
-            >
-              <b-dropdown
-                class="c-dropdown w-100"
-                menu-class="full-dropdown-menu"
+        <div class="mb-5">
+          <div class="community-info-card text-left">
+            <!-- game name -->
+            <div class="custom-form pl-md-3">
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="5"
+                :label="$t('game.gameName')"
               >
-                <template #button-content>
-                  <div
-                    class="c-dropdown-btn w-100 d-flex justify-content-between"
-                    style="height: 2.4rem"
+                <b-form-input
+                  :disabled="!isEdit"
+                  v-model="form.gameName"
+                  :placeholder="$t('game.inputGameName')"
+                ></b-form-input>
+              </b-form-group>
+              <!-- game link -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="5"
+                :label="$t('game.gameLink')"
+              >
+                <b-form-input
+                  :disabled="!isEdit"
+                  v-model="form.gameSite"
+                  :placeholder="$t('game.inputGameLink')"
+                ></b-form-input>
+              </b-form-group>
+              <!-- game description -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="8"
+                :label="$t('game.gameDesc')"
+              >
+                <b-form-textarea
+                  :disabled="!isEdit"
+                  v-model="form.gameIntro"
+                  :placeholder="$t('game.inputGameDesc')"
+                  rows="5"
+                ></b-form-textarea>
+              </b-form-group>
+              <!-- game category -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="3"
+                :label="$t('game.gameCategory')"
+              >
+                <b-dropdown
+                  class="c-dropdown w-100"
+                  menu-class="full-dropdown-menu"
+                >
+                  <template #button-content>
+                    <div
+                      class="c-dropdown-btn w-100 d-flex justify-content-between"
+                      style="height: 2.4rem"
+                    >
+                      <span>{{ form.gameType || "Chose" }}</span>
+                      <i class="dropdown-icon ml-3"></i>
+                    </div>
+                  </template>
+                  <b-dropdown-item @click="form.gameType = 'recommend'"
+                    >recommend</b-dropdown-item
                   >
-                    <span>{{ form.gameType || "Chose" }}</span>
-                    <i class="dropdown-icon ml-3"></i>
-                  </div>
-                </template>
-                <b-dropdown-item @click="form.gameType = 'recommend'"
-                  >recommend</b-dropdown-item
-                >
-                <b-dropdown-item @click="form.gameType = 'popular'"
-                  >popular</b-dropdown-item
-                >
-                <b-dropdown-item @click="form.gameType = 'others'"
-                  >others</b-dropdown-item
-                >
-              </b-dropdown>
-            </b-form-group>
-            <!-- game logo -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="8"
-              class="logo-form"
-              :label="$t('game.gameLogo')"
-            >
-              <b-form-file
-                :disabled="!isEdit"
-                v-model="logo"
-                @input="updateLogo"
-                accept="image/png,image/jpeg, image/jpg"
-                ref="logo-file-input"
+                  <b-dropdown-item @click="form.gameType = 'popular'"
+                    >popular</b-dropdown-item
+                  >
+                  <b-dropdown-item @click="form.gameType = 'others'"
+                    >others</b-dropdown-item
+                  >
+                </b-dropdown>
+              </b-form-group>
+              <!-- game logo -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="8"
+                class="logo-form"
+                :label="$t('game.gameLogo')"
               >
-                <template #placeholder>
-                  <div class="input-file-logo">
-                    <template v-if="form.gameLogo">
-                      <img class="cover-preview" :src="form.gameLogo" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
-                        <span>{{ $t("game.edit") }}<br />LOGO</span>
-                      </div>
-                    </template>
-                    <template v-else>
+                <b-form-file
+                  :disabled="!isEdit"
+                  v-model="logo"
+                  @input="updateLogo"
+                  accept="image/png,image/jpeg, image/jpg"
+                  ref="logo-file-input"
+                >
+                  <template #placeholder>
+                    <div class="input-file-logo">
+                      <template v-if="form.gameLogo">
+                        <img class="cover-preview" :src="form.gameLogo" alt="" />
+                        <div v-if="isEdit" class="edit-mask">
+                          <span>{{ $t("game.edit") }}<br />LOGO</span>
+                        </div>
+                      </template>
+                      <template v-else>
+                        <img
+                          class="add-icon"
+                          src="~@/static/images/add.svg"
+                          alt=""
+                        />
+                        <div class="add-text">
+                          {{ $t("community.uploadLogo") }}
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template #file-name>
+                    <div class="input-file-logo">
                       <img
-                        class="add-icon"
-                        src="~@/static/images/add.svg"
+                        class="logo-preview"
+                        v-if="logoPreviewSrc"
+                        :src="logoPreviewSrc"
                         alt=""
                       />
-                      <div class="add-text">
-                        {{ $t("community.uploadLogo") }}
-                      </div>
-                    </template>
-                  </div>
-                </template>
-                <template #file-name>
-                  <div class="input-file-logo">
-                    <img
-                      class="logo-preview"
-                      v-if="logoPreviewSrc"
-                      :src="logoPreviewSrc"
-                      alt=""
-                    />
-                    <UploadLoading v-if="logoUploadLoading" />
-                  </div>
-                </template>
-              </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "200*200" }) }}
-              </div>
-            </b-form-group>
-            <!-- game poster -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="6"
-              class="cover-form"
-              :label="$t('game.gamePoster')"
-            >
-              <b-form-file
-                :disabled="!isEdit"
-                v-model="coverImg"
-                @input="updateCover"
-                accept="image/png,image/jpeg,image/jpg"
-                ref="logo-file-input"
+                      <UploadLoading v-if="logoUploadLoading" />
+                    </div>
+                  </template>
+                </b-form-file>
+                <div class="font12 text-grey-light mt-1" v-if="isEdit">
+                  {{ $t("community.picTip", { size: "200*200" }) }}
+                </div>
+              </b-form-group>
+              <!-- game poster -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="6"
+                class="cover-form"
+                :label="$t('game.gamePoster')"
               >
-                <template #placeholder>
-                  <div class="input-file-cover">
-                    <template v-if="form.gameCover">
-                      <img class="cover-preview" :src="form.gameCover" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
-                        <span
-                          >{{ $t("community.edit") }}<br />{{
-                            $t("community.poster")
-                          }}</span
-                        >
-                      </div>
-                    </template>
-                    <template v-else>
+                <b-form-file
+                  :disabled="!isEdit"
+                  v-model="coverImg"
+                  @input="updateCover"
+                  accept="image/png,image/jpeg,image/jpg"
+                  ref="logo-file-input"
+                >
+                  <template #placeholder>
+                    <div class="input-file-cover">
+                      <template v-if="form.gameCover">
+                        <img class="cover-preview" :src="form.gameCover" alt="" />
+                        <div v-if="isEdit" class="edit-mask">
+                          <span
+                            >{{ $t("community.edit") }}<br />{{
+                              $t("community.poster")
+                            }}</span
+                          >
+                        </div>
+                      </template>
+                      <template v-else>
+                        <img
+                          class="add-icon"
+                          src="~@/static/images/add.svg"
+                          alt=""
+                        />
+                        <div class="add-text">
+                          {{ $t("community.uploadPoster") }}
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template #file-name>
+                    <div class="input-file-cover">
                       <img
-                        class="add-icon"
-                        src="~@/static/images/add.svg"
+                        class="cover-preview"
+                        v-if="coverPreviewSrc"
+                        :src="coverPreviewSrc"
                         alt=""
                       />
-                      <div class="add-text">
-                        {{ $t("community.uploadPoster") }}
-                      </div>
-                    </template>
-                  </div>
-                </template>
-                <template #file-name>
-                  <div class="input-file-cover">
-                    <img
-                      class="cover-preview"
-                      v-if="coverPreviewSrc"
-                      :src="coverPreviewSrc"
-                      alt=""
-                    />
-                    <UploadLoading v-if="coverUploadLoading" />
-                  </div>
-                </template>
-              </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "714 * 250" }) }}
-              </div>
-            </b-form-group>
-            <b-form-group
-              v-if="isEdit"
-              label-cols-md="2"
-              content-cols-md="5"
-              label=""
-            >
-              <button
-                class="primary-btn"
-                @click="submitGame"
-                :disabled="commiting"
+                      <UploadLoading v-if="coverUploadLoading" />
+                    </div>
+                  </template>
+                </b-form-file>
+                <div class="font12 text-grey-light mt-1" v-if="isEdit">
+                  {{ $t("community.picTip", { size: "714 * 250" }) }}
+                </div>
+              </b-form-group>
+              <b-form-group
+                v-if="isEdit"
+                label-cols-md="2"
+                content-cols-md="5"
+                label=""
               >
-                <b-spinner small type="grow" v-show="commiting" />
+                <button
+                  class="primary-btn"
+                  @click="submitGame"
+                  :disabled="commiting"
+                >
+                  <b-spinner small type="grow" v-show="commiting" />
 
-                {{ $t("community.commit") }}
-              </button>
-            </b-form-group>
+                  {{ $t("community.commit") }}
+                </button>
+              </b-form-group>
+            </div>
           </div>
         </div>
       </div>

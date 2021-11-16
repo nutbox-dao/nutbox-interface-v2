@@ -28,8 +28,10 @@
             </b-dropdown>
           </div>
         </div>
-        <div class="container scroll-content">
-          <router-view></router-view>
+        <div class="scroll-content">
+          <div class="container">
+            <router-view></router-view>
+          </div>
         </div>
       </template>
     </div>

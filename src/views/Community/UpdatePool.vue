@@ -1,58 +1,60 @@
 <template>
   <div class="page-view-content">
-    <div class="scroll-content container">
-      <div class="view-top-header">
-        <div class="page-back-text-icon font20 m-0" @click="$router.back()">
-          {{ $t("asset.updatePool") }}
+    <div class="scroll-content">
+      <div class="container">
+        <div class="view-top-header">
+          <div class="page-back-text-icon font20 m-0" @click="$router.back()">
+            {{ $t("asset.updatePool") }}
+          </div>
         </div>
-      </div>
-      <div class="pool-card text-left mb-5">
-        <div class="line-card-title">{{ $t("asset.poolRatios") }}</div>
-        <PoolRatio :pools-data="myPools"/>
-        <div class="divide-box">
-          <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
-        </div>
-        <div class="custom-form pool-form">
-          <b-form-group id="input-group-2" :label="$t('asset.poolRatios')">
-            <div class="ratios-box">
-              <div
-                class="text-center item-box"
-                v-for="(inputItem, inputIndex) of form.ratios"
-                :key="inputIndex"
-              >
-                <b-form-input
-                  class="ration-input"
-                  :data-label="myPools[inputIndex].name"
-                  :disabled="
-                    myPools[inputIndex].hasStopped ||
-                    myPools[inputIndex].hasRemoved
-                  "
-                  v-model="form.ratios[inputIndex]"
-                  @input="inputChange"
-                  step="0.01"
-                  type="number"
-                ></b-form-input>
-                <span class="font12 text-grey mt-1" :style="'color:' + ((myPools[inputIndex].hasRemoved || myPools[inputIndex].hasStopped) ? 'red' : '')">{{
-                  myPools[inputIndex].name +
-                  (myPools[inputIndex].hasRemoved
-                    ? ("(" + $t("community.Removed") + ")")
-                    : (myPools[inputIndex].hasStopped
-                    ? ('(' + $t("community.Stopped") + ')')
-                    : ""))
-                }}</span>
+        <div class="pool-card text-left mb-5">
+          <div class="line-card-title">{{ $t("asset.poolRatios") }}</div>
+          <PoolRatio :pools-data="myPools"/>
+          <div class="divide-box">
+            <div class="line-card-title">{{ $t("asset.poolInfo") }}</div>
+          </div>
+          <div class="custom-form pool-form">
+            <b-form-group id="input-group-2" :label="$t('asset.poolRatios')">
+              <div class="ratios-box">
+                <div
+                  class="text-center item-box"
+                  v-for="(inputItem, inputIndex) of form.ratios"
+                  :key="inputIndex"
+                >
+                  <b-form-input
+                    class="ration-input"
+                    :data-label="myPools[inputIndex].name"
+                    :disabled="
+                      myPools[inputIndex].hasStopped ||
+                      myPools[inputIndex].hasRemoved
+                    "
+                    v-model="form.ratios[inputIndex]"
+                    @input="inputChange"
+                    step="0.01"
+                    type="number"
+                  ></b-form-input>
+                  <span class="font12 text-grey mt-1" :style="'color:' + ((myPools[inputIndex].hasRemoved || myPools[inputIndex].hasStopped) ? 'red' : '')">{{
+                    myPools[inputIndex].name +
+                    (myPools[inputIndex].hasRemoved
+                      ? ("(" + $t("community.Removed") + ")")
+                      : (myPools[inputIndex].hasStopped
+                      ? ('(' + $t("community.Stopped") + ')')
+                      : ""))
+                  }}</span>
+                </div>
               </div>
-            </div>
-          </b-form-group>
-          <div class="row">
-            <div class="col-md-5">
-              <button
-                class="primary-btn"
-                @click="confirmUpdate"
-                :disabled="updating"
-              >
-                <b-spinner small type="grow" v-show="updating" />
-                {{ $t("commen.update") }}
-              </button>
+            </b-form-group>
+            <div class="row">
+              <div class="col-md-5">
+                <button
+                  class="primary-btn"
+                  @click="confirmUpdate"
+                  :disabled="updating"
+                >
+                  <b-spinner small type="grow" v-show="updating" />
+                  {{ $t("commen.update") }}
+                </button>
+              </div>
             </div>
           </div>
         </div>

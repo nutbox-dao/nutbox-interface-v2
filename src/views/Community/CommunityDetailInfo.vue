@@ -1,47 +1,49 @@
 <template>
   <div class="page-view-content">
-    <div class="container scroll-content">
-      <div class="page-view-title-v">{{$t("commen.crowdstaking") }}</div>
-      <div class="community-detail-info mb-5">
-        <div class="loading-bg" v-if="!communityInfo || !pools">
-          <img src="~@/static/images/loading.gif" alt="" />
-          <p class="font16">{{ $t("tip.loading") }}</p>
-        </div>
-        <template v-else>
-          <div class="view-top-header view-top-header-sticky p-view-top-header flex-between-center">
-            <div class="nav-box nav-box-line">
-              <div class="nav mr-5">
-                <span v-for="(item, index) of tabOptions" :key="index"
-                      v-show="showTab(index)"
-                      :class="activeTab===index?'active':''"
-                      @click="activeTab = index">{{item.name}}</span>
+    <div class="scroll-content">
+      <div class="container">
+        <div class="page-view-title-v">{{$t("commen.crowdstaking") }}</div>
+        <div class="community-detail-info mb-5">
+          <div class="loading-bg" v-if="!communityInfo || !pools">
+            <img src="~@/static/images/loading.gif" alt="" />
+            <p class="font16">{{ $t("tip.loading") }}</p>
+          </div>
+          <template v-else>
+            <div class="view-top-header view-top-header-sticky p-view-top-header flex-between-center">
+              <div class="nav-box nav-box-line">
+                <div class="nav mr-5">
+                  <span v-for="(item, index) of tabOptions" :key="index"
+                        v-show="showTab(index)"
+                        :class="activeTab===index?'active':''"
+                        @click="activeTab = index">{{item.name}}</span>
+                </div>
               </div>
+              <component :is='wallet'></component>
             </div>
-            <component :is='wallet'></component>
-          </div>
-          <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
-            <b-dropdown class="top-header-dropdown" no-caret>
-              <template #button-content>
-                <span>{{tabOptions[activeTab].name}}</span>
-                <i class="dropdown-icon ml-2"></i>
-              </template>
-              <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
-                               v-show="showTab(index)"
-                               :class="activeTab===index?'active':''"
-                               @click="activeTab = index">{{item.name}}</b-dropdown-item>
-            </b-dropdown>
-            <component :is='wallet'></component>
-          </div>
-          <div class="card-container tab-container">
-            <component :is="tabOptions[activeTab].component"
-                       :crowdloanPools='crowdloanPools'
-                       :nominatePools='nominatePools'
-                       :steemDelegatePools='steemDelegatePools'
-                       :hiveDelegatePools='hiveDelegatePools'
-                       :erc20Pools='erc20Pools'>
-            </component>
-          </div>
-        </template>
+            <div class="view-top-header view-top-header-sticky m-view-top-header flex-between-center">
+              <b-dropdown class="top-header-dropdown" no-caret>
+                <template #button-content>
+                  <span>{{tabOptions[activeTab].name}}</span>
+                  <i class="dropdown-icon ml-2"></i>
+                </template>
+                <b-dropdown-item v-for="(item, index) of tabOptions" :key="index"
+                                v-show="showTab(index)"
+                                :class="activeTab===index?'active':''"
+                                @click="activeTab = index">{{item.name}}</b-dropdown-item>
+              </b-dropdown>
+              <component :is='wallet'></component>
+            </div>
+            <div class="card-container tab-container">
+              <component :is="tabOptions[activeTab].component"
+                        :crowdloanPools='crowdloanPools'
+                        :nominatePools='nominatePools'
+                        :steemDelegatePools='steemDelegatePools'
+                        :hiveDelegatePools='hiveDelegatePools'
+                        :erc20Pools='erc20Pools'>
+              </component>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>

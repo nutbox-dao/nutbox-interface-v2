@@ -1,116 +1,118 @@
 <template>
-  <div class="container scroll-content">
-    <div class="view-top-header">
-      <div class="page-title-line font20 font-bold">{{ $t('community.communityAsset') }}</div>
-    </div>
-    <div class="c-card">
-      <div class="row">
-        <div class="col-md-6 d-flex align-items-center">
-          <img class="token-icon" :src="cToken.icon" alt="">
-          <div class="info d-flex flex-column align-items-start">
-            <div class="font32">{{ cToken.symbol }}</div>
-            <div class="flex-start-center">
-              <span>{{ cToken.name }}</span>
-              <i class="copy-icon ml-2" @click="copyAddress"></i>
+  <div class="scroll-content">
+    <div class="container">
+      <div class="view-top-header">
+        <div class="page-title-line font20 font-bold">{{ $t('community.communityAsset') }}</div>
+      </div>
+      <div class="c-card">
+        <div class="row">
+          <div class="col-md-6 d-flex align-items-center">
+            <img class="token-icon" :src="cToken.icon" alt="">
+            <div class="info d-flex flex-column align-items-start">
+              <div class="font32">{{ cToken.symbol }}</div>
+              <div class="flex-start-center">
+                <span>{{ cToken.name }}</span>
+                <i class="copy-icon ml-2" @click="copyAddress"></i>
+              </div>
+              <div class="font24">${{ cToken.price | amountForm }}</div>
             </div>
-            <div class="font24">${{ cToken.price | amountForm }}</div>
           </div>
-        </div>
-        <div class="col-md-6 c-mt-1">
-          <div class="token-info-card">
-            <div class="row-info">
-              <span>{{ $t('asset.totalSupply') }}：</span>
-              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
-            </div>
-            <div class="row-info">
-              <span>{{ $t('asset.cap') }}：</span>
-              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
+          <div class="col-md-6 c-mt-1">
+            <div class="token-info-card">
+              <div class="row-info">
+                <span>{{ $t('asset.totalSupply') }}：</span>
+                <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
+              </div>
+              <div class="row-info">
+                <span>{{ $t('asset.cap') }}：</span>
+                <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="c-card mt-3">
-      <Progress :progress-data="progressData"></Progress>
-      <div class="custom-form mt-5">
-        <!-- community balance -->
-        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
-          <div class="d-flex">
-            <div class="c-input-group">
-              <b-form-input
-                :disabled="true"
-                v-model="communityBalanceValue"
-                placeholder="0.000"
-              >
-              </b-form-input>
-              <span class="c-append">{{ cToken.symbol }}</span>
+      <div class="c-card mt-3">
+        <Progress :progress-data="progressData"></Progress>
+        <div class="custom-form mt-5">
+          <!-- community balance -->
+          <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  v-model="communityBalanceValue"
+                  placeholder="0.000"
+                >
+                </b-form-input>
+                <span class="c-append">{{ cToken.symbol }}</span>
+              </div>
+              <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
+                {{$t("community.charge") }}
+              </button>
+              <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
+                {{$t("community.withdraw") }}
+              </button>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
-              {{$t("community.charge") }}
-            </button>
-            <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
-              {{$t("community.withdraw") }}
-            </button>
-          </div>
-        </b-form-group>
-        <!-- community dev address -->
-        <b-form-group label-cols-md="2" content-cols-md="7"
-          :label="$t('community.devAddress')"
-        >
-          <div class="d-flex">
-            <div class="c-input-group">
-              <b-form-input
-                :disabled="true"
-                :placeholder="devAddress || $t('community.devAddress')"
-              >
-              </b-form-input>
-              <span></span>
+          </b-form-group>
+          <!-- community dev address -->
+          <b-form-group label-cols-md="2" content-cols-md="7"
+            :label="$t('community.devAddress')"
+          >
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  :placeholder="devAddress || $t('community.devAddress')"
+                >
+                </b-form-input>
+                <span></span>
+              </div>
+              <button class="primary-btn ml-2" style="width: 5rem" @click="showDevAddressTip = true">
+                {{$t("commen.update") }}
+              </button>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" @click="showDevAddressTip = true">
-              {{$t("commen.update") }}
-            </button>
-          </div>
-        </b-form-group>
-        <!-- community dev ratio -->
-        <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.devRatio')">
-          <div class="d-flex">
-            <div class="c-input-group">
-              <b-form-input
-                :disabled="true"
-                type="number"
-                :placeholder="(devRatio / 100).toFixed(2).toString()"
-              >
-              </b-form-input>
-              <span class="c-append">%</span>
+          </b-form-group>
+          <!-- community dev ratio -->
+          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.devRatio')">
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input
+                  :disabled="true"
+                  type="number"
+                  :placeholder="(devRatio / 100).toFixed(2).toString()"
+                >
+                </b-form-input>
+                <span class="c-append">%</span>
+              </div>
+              <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
+                {{ this.$t("commen.update") }}
+              </button>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
-              {{ this.$t("commen.update") }}
-            </button>
-          </div>
-        </b-form-group>
-      </div>
+          </b-form-group>
+        </div>
 
-    </div>
-    <div class="view-top-header flex-between-center">
-      <div class="page-title-line font20 font-bold">{{ $t('asset.native') }}</div>
-      <div class="c-btn-group" >
-        <button @click="$router.push('/community-setting/register/native')">
-          <i class="add-icon"></i>
-          <span>{{ $t('asset.registerOne') }}</span>
-        </button>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of homeAssets" :key="i">
-        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
+      <div class="view-top-header flex-between-center">
+        <div class="page-title-line font20 font-bold">{{ $t('asset.native') }}</div>
+        <div class="c-btn-group" >
+          <button @click="$router.push('/community-setting/register/native')">
+            <i class="add-icon"></i>
+            <span>{{ $t('asset.registerOne') }}</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="view-top-header">
-      <div class="page-title-line font20 font-bold">{{ $t('asset.foreign') }}</div>
-    </div>
-    <div class="row">
-      <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of foreignAssets" :key="i">
-        <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of homeAssets" :key="i">
+          <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
+        </div>
+      </div>
+      <div class="view-top-header">
+        <div class="page-title-line font20 font-bold">{{ $t('asset.foreign') }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(asset, i) of foreignAssets" :key="i">
+          <AssetCard :logo="asset.icon" :symbol="asset.symbol" :name="asset.name" :address="asset.address" :price="asset.price" :type='asset.type' :chainId="asset.chainId"/>
+        </div>
       </div>
     </div>
     <!-- charge balance tip -->

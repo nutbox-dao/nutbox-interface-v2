@@ -31,6 +31,7 @@
     "nanoid": "^3.1.29",
     "remarkable": "^2.0.1",
     "steem": "^0.7.11",
+    "utf8": "^3.0.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
     "vue-cropper": "^0.5.6",

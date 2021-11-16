@@ -1,56 +1,58 @@
 <template>
-  <div class="container scroll-content py-5">
-    <b-input-group class="search-input">
-        <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
-        <template #append>
-          <i class="search-icon"></i>
-        </template>
-      </b-input-group>
-    <div class="table-card text-left">
-      <div class="tabs">
-        <span class="tab-item font16" :class="activeTab===index?'active':''"
-              v-for="(item, index) of tabOptions" :key="index"
-              @click="activeTab=index">{{ $t('asset.' + item) }}</span>
+  <div class="scroll-content py-5">
+    <div class="container">
+      <b-input-group class="search-input">
+          <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
+          <template #append>
+            <i class="search-icon"></i>
+          </template>
+        </b-input-group>
+      <div class="table-card text-left">
+        <div class="tabs">
+          <span class="tab-item font16" :class="activeTab===index?'active':''"
+                v-for="(item, index) of tabOptions" :key="index"
+                @click="activeTab=index">{{ $t('asset.' + item) }}</span>
+        </div>
+        <div class="empty-bg" v-if="items.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t('asset.noTokens') }}</p>
+        </div>
+        <div class="table-box">
+          <b-table v-show="searchedToken.length > 0"
+                  :items="searchedToken"
+                  :fields="fields"
+                  thead-tr-class="th-cell"
+                  table-class="c-table"
+                  hover
+                  tbody-tr-class="c-tr"
+                  thead-class="c-th"
+          >
+            <template #table-colgroup="scope">
+              <col v-for="field in scope.fields" :key="field.key"
+                  :style="{ width: field.key === 'tokenIcon' ? '3rem' : '' }">
+            </template>
+            <template #cell(tokenIcon)="row">
+              <img class="mr-2" style="width:3rem;height: 3rem" :src="row.item.tokenIcon" alt="">
+            </template>
+            <template #cell(tokenSymbol)="row">
+              <span>{{ row.item.tokenSymbol }}</span>
+            </template>
+            <template #cell(name)="row">
+              <span style="cursor:pointer" @click="openNewTab(row.item)">{{ row.item.name }}</span>
+            </template>
+            <template #cell(action)>
+              <button class="action-btn">Buy</button>
+            </template>
+          </b-table>
+        </div>
+        <!-- <b-pagination v-if="items.length !== 0"
+                      v-model="currentPage"
+                      :total-rows="totalRows"
+                      :per-page="perPage"
+                      align="right"
+                      class="change-page-box"
+        ></b-pagination> -->
       </div>
-      <div class="empty-bg" v-if="items.length === 0">
-        <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t('asset.noTokens') }}</p>
-      </div>
-      <div class="table-box">
-        <b-table v-show="searchedToken.length > 0"
-                 :items="searchedToken"
-                 :fields="fields"
-                 thead-tr-class="th-cell"
-                 table-class="c-table"
-                 hover
-                 tbody-tr-class="c-tr"
-                 thead-class="c-th"
-        >
-          <template #table-colgroup="scope">
-            <col v-for="field in scope.fields" :key="field.key"
-                 :style="{ width: field.key === 'tokenIcon' ? '3rem' : '' }">
-          </template>
-          <template #cell(tokenIcon)="row">
-            <img class="mr-2" style="width:3rem;height: 3rem" :src="row.item.tokenIcon" alt="">
-          </template>
-          <template #cell(tokenSymbol)="row">
-            <span>{{ row.item.tokenSymbol }}</span>
-          </template>
-          <template #cell(name)="row">
-            <span style="cursor:pointer" @click="openNewTab(row.item)">{{ row.item.name }}</span>
-          </template>
-          <template #cell(action)>
-            <button class="action-btn">Buy</button>
-          </template>
-        </b-table>
-      </div>
-      <!-- <b-pagination v-if="items.length !== 0"
-                    v-model="currentPage"
-                    :total-rows="totalRows"
-                    :per-page="perPage"
-                    align="right"
-                    class="change-page-box"
-      ></b-pagination> -->
     </div>
   </div>
 </template>

@@ -1,216 +1,218 @@
 <template>
   <div class="page-view-content" >
-    <div class="scroll-content container">
-      <div class="view-top-header">
-        <Step v-show="showStep" :current-step="2"></Step>
-        <div class="flex-between-center w-100">
-          <div
-            class="font20" :class="$route.query.type==='create'?'page-back-text-icon':'page-title-line'"
-            style="line-height: 1rem"
-            @click="isEdit ? (type = null) : $router.back()"
-          >
-            {{
-              (isEdit ? $t("community." + type) : "") +
-              $t("community.communityInfo")
-            }}
-          </div>
-          <div v-if="!isEdit">
-            <button
-              class="primary-btn pl-3 pr-3"
-              :disabled="!canEdit"
-              @click="clickEdit"
+    <div class="scroll-content">
+      <div class="container">
+        <div class="view-top-header">
+          <Step v-show="showStep" :current-step="2"></Step>
+          <div class="flex-between-center w-100">
+            <div
+              class="font20" :class="$route.query.type==='create'?'page-back-text-icon':'page-title-line'"
+              style="line-height: 1rem"
+              @click="isEdit ? (type = null) : $router.back()"
             >
-              {{ $t("community.edit") }}
-            </button>
+              {{
+                (isEdit ? $t("community." + type) : "") +
+                $t("community.communityInfo")
+              }}
+            </div>
+            <div v-if="!isEdit">
+              <button
+                class="primary-btn pl-3 pr-3"
+                :disabled="!canEdit"
+                @click="clickEdit"
+              >
+                {{ $t("community.edit") }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-5">
-        <div class="community-info-card text-left">
-          <!-- community name -->
-          <div class="custom-form pl-md-3">
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('community.communityName')"
-            >
-              <b-form-input
-                :disabled="!isEdit"
-                v-model="form.name"
-                :placeholder="$t('community.inputName')"
-              ></b-form-input>
-            </b-form-group>
-            <!-- community link -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('community.communityLink')"
-            >
-              <b-form-input
-                :disabled="!isEdit"
-                v-model="form.website"
-                :placeholder="$t('community.inputLink')"
-              ></b-form-input>
-              <span>{{ $t('cl.optional') }}</span>
-            </b-form-group>
-            <!-- community description -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="8"
-              :label="$t('community.communityDesc')"
-            >
-              <b-form-textarea
-                :disabled="!isEdit"
-                v-model="form.description"
-                :placeholder="$t('community.inputDesc')"
-                rows="5"
-              ></b-form-textarea>
-            </b-form-group>
-            <!-- community theme -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="5"
-              :label="$t('community.communityThemeColor')"
-            >
-              <input class="p-2 w-50" type="color" :disabled="!isEdit" v-model="form.color"/>
-            </b-form-group>
-            <!-- community category -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="3"
-              :label="$t('community.communityCategory')"
-            >
-              <b-dropdown
-                class="c-dropdown w-100"
-                menu-class="full-dropdown-menu"
-                :disabled="!isEdit"
+        <div class="mb-5">
+          <div class="community-info-card text-left">
+            <!-- community name -->
+            <div class="custom-form pl-md-3">
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="5"
+                :label="$t('community.communityName')"
               >
-                <template #button-content>
-                  <div
-                    class="c-dropdown-btn w-100 d-flex justify-content-between"
-                    style="height: 2.4rem"
-                  >
-                    <span>{{ form.category || "Chose" }}</span>
-                    <i class="dropdown-icon ml-3"></i>
-                  </div>
-                </template>
-                <b-dropdown-item @click="form.category = c"
-                  v-for="c in categorys" :key="c"
-                  >{{ c }}</b-dropdown-item>
-              </b-dropdown>
-            </b-form-group>
-            <!-- community logo -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="8"
-              class="logo-form"
-              :label="$t('community.communityLogo')"
-            >
-              <b-form-file
-                :disabled="!isEdit"
-                v-model="logo"
-                @input="updateLogo"
-                accept="image/png,image/jpeg, image/jpg"
-                ref="logo-file-input"
+                <b-form-input
+                  :disabled="!isEdit"
+                  v-model="form.name"
+                  :placeholder="$t('community.inputName')"
+                ></b-form-input>
+              </b-form-group>
+              <!-- community link -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="5"
+                :label="$t('community.communityLink')"
               >
-                <template #placeholder>
-                  <div class="input-file-logo">
-                    <template v-if="form.icon">
-                      <img class="cover-preview" :src="form.icon" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
-                        <span>{{ $t("community.edit") }}<br />LOGO</span>
-                      </div>
-                    </template>
-                    <template v-else>
+                <b-form-input
+                  :disabled="!isEdit"
+                  v-model="form.website"
+                  :placeholder="$t('community.inputLink')"
+                ></b-form-input>
+                <span>{{ $t('cl.optional') }}</span>
+              </b-form-group>
+              <!-- community description -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="8"
+                :label="$t('community.communityDesc')"
+              >
+                <b-form-textarea
+                  :disabled="!isEdit"
+                  v-model="form.description"
+                  :placeholder="$t('community.inputDesc')"
+                  rows="5"
+                ></b-form-textarea>
+              </b-form-group>
+              <!-- community theme -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="5"
+                :label="$t('community.communityThemeColor')"
+              >
+                <input class="p-2 w-50" type="color" :disabled="!isEdit" v-model="form.color"/>
+              </b-form-group>
+              <!-- community category -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="3"
+                :label="$t('community.communityCategory')"
+              >
+                <b-dropdown
+                  class="c-dropdown w-100"
+                  menu-class="full-dropdown-menu"
+                  :disabled="!isEdit"
+                >
+                  <template #button-content>
+                    <div
+                      class="c-dropdown-btn w-100 d-flex justify-content-between"
+                      style="height: 2.4rem"
+                    >
+                      <span>{{ form.category || "Chose" }}</span>
+                      <i class="dropdown-icon ml-3"></i>
+                    </div>
+                  </template>
+                  <b-dropdown-item @click="form.category = c"
+                    v-for="c in categorys" :key="c"
+                    >{{ c }}</b-dropdown-item>
+                </b-dropdown>
+              </b-form-group>
+              <!-- community logo -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="8"
+                class="logo-form"
+                :label="$t('community.communityLogo')"
+              >
+                <b-form-file
+                  :disabled="!isEdit"
+                  v-model="logo"
+                  @input="updateLogo"
+                  accept="image/png,image/jpeg, image/jpg"
+                  ref="logo-file-input"
+                >
+                  <template #placeholder>
+                    <div class="input-file-logo">
+                      <template v-if="form.icon">
+                        <img class="cover-preview" :src="form.icon" alt="" />
+                        <div v-if="isEdit" class="edit-mask">
+                          <span>{{ $t("community.edit") }}<br />LOGO</span>
+                        </div>
+                      </template>
+                      <template v-else>
+                        <img
+                          class="add-icon"
+                          src="~@/static/images/add.svg"
+                          alt=""
+                        />
+                        <div class="add-text">{{ $t("community.uploadLogo") }}</div>
+                      </template>
+                    </div>
+                  </template>
+                  <template #file-name>
+                    <div class="input-file-logo">
                       <img
-                        class="add-icon"
-                        src="~@/static/images/add.svg"
+                        class="logo-preview"
+                        v-if="logoPreviewSrc"
+                        :src="logoPreviewSrc"
                         alt=""
                       />
-                      <div class="add-text">{{ $t("community.uploadLogo") }}</div>
-                    </template>
-                  </div>
-                </template>
-                <template #file-name>
-                  <div class="input-file-logo">
-                    <img
-                      class="logo-preview"
-                      v-if="logoPreviewSrc"
-                      :src="logoPreviewSrc"
-                      alt=""
-                    />
-                    <UploadLoading v-if="logoUploadLoading" />
-                  </div>
-                </template>
-              </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "200*200" }) }}
-              </div>
-            </b-form-group>
-            <!-- community poster -->
-            <b-form-group
-              label-cols-md="2"
-              content-cols-md="8"
-              class="cover-form"
-              :label="$t('community.communityPoster')"
-            >
-              <b-form-file
-                :disabled="!isEdit"
-                v-model="coverImg"
-                @input="updateCover"
-                accept="image/png,image/jpeg,image/jpg"
-                ref="logo-file-input"
+                      <UploadLoading v-if="logoUploadLoading" />
+                    </div>
+                  </template>
+                </b-form-file>
+                <div class="font12 text-grey-light mt-1" v-if="isEdit">
+                  {{ $t("community.picTip", { size: "200*200" }) }}
+                </div>
+              </b-form-group>
+              <!-- community poster -->
+              <b-form-group
+                label-cols-md="2"
+                content-cols-md="8"
+                class="cover-form"
+                :label="$t('community.communityPoster')"
               >
-                <template #placeholder>
-                  <div class="input-file-cover">
-                    <template v-if="form.poster">
-                      <img class="cover-preview" :src="form.poster" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
-                      <span
-                      >{{ $t("community.edit") }}<br />{{
-                          $t("community.poster")
-                        }}</span
-                      >
-                      </div>
-                    </template>
-                    <template v-else>
+                <b-form-file
+                  :disabled="!isEdit"
+                  v-model="coverImg"
+                  @input="updateCover"
+                  accept="image/png,image/jpeg,image/jpg"
+                  ref="logo-file-input"
+                >
+                  <template #placeholder>
+                    <div class="input-file-cover">
+                      <template v-if="form.poster">
+                        <img class="cover-preview" :src="form.poster" alt="" />
+                        <div v-if="isEdit" class="edit-mask">
+                        <span
+                        >{{ $t("community.edit") }}<br />{{
+                            $t("community.poster")
+                          }}</span
+                        >
+                        </div>
+                      </template>
+                      <template v-else>
+                        <img
+                          class="add-icon"
+                          src="~@/static/images/add.svg"
+                          alt=""
+                        />
+                        <div class="add-text">
+                          {{ $t("community.uploadPoster") }}
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template #file-name>
+                    <div class="input-file-cover">
                       <img
-                        class="add-icon"
-                        src="~@/static/images/add.svg"
+                        class="cover-preview"
+                        v-if="coverPreviewSrc"
+                        :src="coverPreviewSrc"
                         alt=""
                       />
-                      <div class="add-text">
-                        {{ $t("community.uploadPoster") }}
-                      </div>
-                    </template>
-                  </div>
-                </template>
-                <template #file-name>
-                  <div class="input-file-cover">
-                    <img
-                      class="cover-preview"
-                      v-if="coverPreviewSrc"
-                      :src="coverPreviewSrc"
-                      alt=""
-                    />
-                    <UploadLoading v-if="coverUploadLoading" />
-                  </div>
-                </template>
-              </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "1200*280" }) }}
-              </div>
-            </b-form-group>
-            <b-form-group
-              v-if="isEdit"
-              label-cols-md="2"
-              content-cols-md="5"
-              label=""
-            >
-              <button class="primary-btn" @click="showTips">
-                {{ $t("community.commit") }}
-              </button>
-            </b-form-group>
+                      <UploadLoading v-if="coverUploadLoading" />
+                    </div>
+                  </template>
+                </b-form-file>
+                <div class="font12 text-grey-light mt-1" v-if="isEdit">
+                  {{ $t("community.picTip", { size: "1200*280" }) }}
+                </div>
+              </b-form-group>
+              <b-form-group
+                v-if="isEdit"
+                label-cols-md="2"
+                content-cols-md="5"
+                label=""
+              >
+                <button class="primary-btn" @click="showTips">
+                  {{ $t("community.commit") }}
+                </button>
+              </b-form-group>
+            </div>
           </div>
         </div>
       </div>

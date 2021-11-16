@@ -1,43 +1,45 @@
 <template>
-  <div class="container scroll-content">
-    <div class="view-top-header view-top-header-sticky flex-between-center">
-      <div class="nav-box nav-box-bg">
-        <div class="nav">
-          <span v-for="(item, index) of tabOptions" :key="index"
-                :class="activeTab===index?'active':''"
-                @click="activeTab = index">{{item}}</span>
+  <div class="scroll-content">
+    <div class="container">
+      <div class="view-top-header view-top-header-sticky flex-between-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
+            <span v-for="(item, index) of tabOptions" :key="index"
+                  :class="activeTab===index?'active':''"
+                  @click="activeTab = index">{{item}}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="view-top-header view-top-header-sticky flex-between-center">
-      <b-input-group class="search-input">
-        <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
-        <template #append>
-          <i class="search-icon"></i>
-        </template>
-      </b-input-group>
-      <div class="c-btn-group ml-3" v-if="!loadingCommunity">
-        <button v-if="!communityId" @click="$router.push('/community/tutorials')">
-          <i class="add-icon"></i>
-          <span>{{ $t('community.createYourCommunity') }}</span>
-        </button>
-      </div>
-    </div>
-    <div class="loading-bg" v-if="loading">
-      <img src="~@/static/images/loading.gif" alt="" />
-      <p class="font16">{{ $t("tip.loading") }}</p>
-    </div>
-    <template v-else>
-      <div class="empty-bg" v-if="!filterCommunities || filterCommunities.length === 0">
-        <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t("tip.noCommunities") }}</p>
-      </div>
-      <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of filterCommunities" :key="index">
-          <CommunityCard :card-info="cItem"/>
+      <div class="view-top-header view-top-header-sticky flex-between-center">
+        <b-input-group class="search-input">
+          <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
+          <template #append>
+            <i class="search-icon"></i>
+          </template>
+        </b-input-group>
+        <div class="c-btn-group ml-3" v-if="!loadingCommunity">
+          <button v-if="!communityId" @click="$router.push('/community/tutorials')">
+            <i class="add-icon"></i>
+            <span>{{ $t('community.createYourCommunity') }}</span>
+          </button>
         </div>
       </div>
-    </template>
+      <div class="loading-bg" v-if="loading">
+        <img src="~@/static/images/loading.gif" alt="" />
+        <p class="font16">{{ $t("tip.loading") }}</p>
+      </div>
+      <template v-else>
+        <div class="empty-bg" v-if="!filterCommunities || filterCommunities.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p>{{ $t("tip.noCommunities") }}</p>
+        </div>
+        <div class="row">
+          <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of filterCommunities" :key="index">
+            <CommunityCard :card-info="cItem"/>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 

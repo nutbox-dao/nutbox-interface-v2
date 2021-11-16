@@ -1,52 +1,54 @@
 <template>
   <div class="page-view-content nps">
-    <div class="container scroll-content">
-      <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
-    <div class="loading-bg" v-if="loading">
-      <img src="~@/static/images/loading.gif" alt="" />
-      <p class="font16">{{ $t("tip.loading") }}</p>
-    </div>
-    <template v-else>
-      <div class="view-top-header pb-0">
-        <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
-          <div style="text-align: left">
-            <Markdown :body="form ? form.remark : ''" />
+    <div class="scroll-content">
+      <div class="container">
+        <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
+        <div class="loading-bg" v-if="loading">
+          <img src="~@/static/images/loading.gif" alt="" />
+          <p class="font16">{{ $t("tip.loading") }}</p>
+        </div>
+        <template v-else>
+          <div class="view-top-header pb-0">
+            <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
+              <div style="text-align: left">
+                <Markdown :body="form ? form.remark : ''" />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="view-top-header view-top-header-sticky flex-between-center">
-        <div class="nav-box nav-box-bg">
-          <div class="nav">
-            <span
-              v-for="(item, index) of tabOptions"
-              :key="index"
-              :class="activeTab === index ? 'active' : ''"
-              @click="activeTab = index"
-              >{{ $t('nps.' + item) }}</span
-            >
+          <div class="view-top-header view-top-header-sticky flex-between-center">
+            <div class="nav-box nav-box-bg">
+              <div class="nav">
+                <span
+                  v-for="(item, index) of tabOptions"
+                  :key="index"
+                  :class="activeTab === index ? 'active' : ''"
+                  @click="activeTab = index"
+                  >{{ $t('nps.' + item) }}</span
+                >
+              </div>
+            </div>
+            <div class="c-btn-group">
+              <button @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
+                <i class="add-icon"></i>
+                <span>{{ $t('nps.createProposal') }}</span>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="c-btn-group">
-          <button @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
-            <i class="add-icon"></i>
-            <span>{{ $t('nps.createProposal') }}</span>
-          </button>
-        </div>
-      </div>
 
-      <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
-        <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t("nps.noProposals") }}</p>
-      </div>
-      <div class="mb-5" v-else>
-        <ProposalItem
-          v-for="(proposalItem, index) in proposalitems"
-          :key="proposalItem.id"
-          :proposalItem="proposalItem"
-          :index="index"
-        ></ProposalItem>
-      </div>
-    </template>
+          <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
+            <img src="~@/static/images/empty-data.png" alt="" />
+            <p>{{ $t("nps.noProposals") }}</p>
+          </div>
+          <div class="mb-5" v-else>
+            <ProposalItem
+              v-for="(proposalItem, index) in proposalitems"
+              :key="proposalItem.id"
+              :proposalItem="proposalItem"
+              :index="index"
+            ></ProposalItem>
+          </div>
+        </template>
+        </div>
     </div>
   </div>
 </template>

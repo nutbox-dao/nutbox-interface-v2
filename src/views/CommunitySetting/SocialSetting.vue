@@ -1,87 +1,89 @@
 <template>
-  <div class="container scroll-content">
-    <div class="view-top-header flex-between-center">
-      <div class="page-title-line font20 font-bold">{{ $t('commen.social') }}</div>
-    </div>
-    <div class="c-card mb-5">
-      <div class="custom-form text-left">
-        <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.communityBlog')"
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex">
-            <div class="c-input-group">
-              <b-form-input :disabled='true' :placeholder="blogTag || $t('community.blogTag')"></b-form-input>
+  <div class="scroll-content">
+    <div class="container">
+      <div class="view-top-header flex-between-center">
+        <div class="page-title-line font20 font-bold">{{ $t('commen.social') }}</div>
+      </div>
+      <div class="c-card mb-5">
+        <div class="custom-form text-left">
+          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.communityBlog')"
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input :disabled='true' :placeholder="blogTag || $t('community.blogTag')"></b-form-input>
+              </div>
+              <button class="primary-btn ml-2" v-if="state === 'create'" style="width: 8rem" @click="showBlogTip = true">
+                    {{ $t('community.createBlog') }}
+                  </button>
+                  <button class="primary-btn ml-2" v-if="state === 'connectSteem'" style="width: 8rem" @click="showSteemLogin = true">
+                    {{ $t('wallet.connectSteem') }}
+                  </button>
+                  <button class="primary-btn ml-2" v-if="state === 'publish'" style="width: 8rem" :disabled='publishingBlog' @click="publishBlog">
+                    <b-spinner small type="grow" v-show="publishingBlog" />
+                    {{ $t('community.publishBlog') }}
+                  </button>
             </div>
-            <button class="primary-btn ml-2" v-if="state === 'create'" style="width: 8rem" @click="showBlogTip = true">
-                  {{ $t('community.createBlog') }}
-                </button>
-                <button class="primary-btn ml-2" v-if="state === 'connectSteem'" style="width: 8rem" @click="showSteemLogin = true">
-                  {{ $t('wallet.connectSteem') }}
-                </button>
-                <button class="primary-btn ml-2" v-if="state === 'publish'" style="width: 8rem" :disabled='publishingBlog' @click="publishBlog">
-                  <b-spinner small type="grow" v-show="publishingBlog" />
-                  {{ $t('community.publishBlog') }}
-                </button>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.socialMedial')"
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon twitter">Twitter</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.twitter" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.socialMedial')"
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon twitter">Twitter</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.twitter" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" label=""
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon discord">Discord</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.discord" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" label=""
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon discord">Discord</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.discord" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" label=""
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon telegram">Telegram</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.telegram" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" label=""
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon telegram">Telegram</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.telegram" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" label=""
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon facebook">Facebook</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.facebook" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" label=""
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon facebook">Facebook</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.facebook" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" label=""
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon github">Github</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.github" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" label=""
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon github">Github</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.github" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="7" label=""
-                      label-class="d-flex align-items-center font16 font-bold">
-          <div class="d-flex align-items-center">
-            <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
-            <div class="c-input-group">
-              <b-form-input v-model="socialForm.document" :placeholder="$t('cl.optional')"></b-form-input>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="7" label=""
+                        label-class="d-flex align-items-center font16 font-bold">
+            <div class="d-flex align-items-center">
+              <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
+              <div class="c-input-group">
+                <b-form-input v-model="socialForm.document" :placeholder="$t('cl.optional')"></b-form-input>
+              </div>
             </div>
-          </div>
-        </b-form-group>
-        <b-form-group label-cols-md="2" content-cols-md="5" label="">
-          <button class="primary-btn" @click="showSignatureTip = true">
-            {{ $t("commen.update") }}
-          </button>
-        </b-form-group>
+          </b-form-group>
+          <b-form-group label-cols-md="2" content-cols-md="5" label="">
+            <button class="primary-btn" @click="showSignatureTip = true">
+              {{ $t("commen.update") }}
+            </button>
+          </b-form-group>
+        </div>
       </div>
     </div>
     <b-modal

@@ -1,107 +1,109 @@
 <template>
-  <div class="container scroll-content">
-    <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
-    <div class="view-top-header">
-      <div class="page-back-text-icon font20" @click="$router.back()">
-        {{ $t('nps.createProposal') }}
+  <div class="scroll-content">
+    <div class="container">
+      <div class="page-view-title-v mt-5">{{ $t("nps.nps") }}</div>
+      <div class="view-top-header">
+        <div class="page-back-text-icon font20" @click="$router.back()">
+          {{ $t('nps.createProposal') }}
+        </div>
       </div>
-    </div>
-    <div class="c-card mb-5">
-      <b-alert variant="danger" :show="!isValid">
-        {{
-          $t("nps.validationWarning.basic.minScore", [
-            form.threshold,
-            form.symbol,
-          ])
-        }}</b-alert
-      >
-      <div class="custom-form">
-        <b-form-group
-          :label="$t('nps.title')"
-          label-for="proposalTitleInput"
-          label-class="text-left font16"
+      <div class="c-card mb-5">
+        <b-alert variant="danger" :show="!isValid">
+          {{
+            $t("nps.validationWarning.basic.minScore", [
+              form.threshold,
+              form.symbol,
+            ])
+          }}</b-alert
         >
-          <b-form-input
-            id="proposalTitleInput"
-            required
-            :placeholder="$t('nps.proposalTitleInput')"
-            v-model="proposal.title"
-          ></b-form-input>
-        </b-form-group>
+        <div class="custom-form">
+          <b-form-group
+            :label="$t('nps.title')"
+            label-for="proposalTitleInput"
+            label-class="text-left font16"
+          >
+            <b-form-input
+              id="proposalTitleInput"
+              required
+              :placeholder="$t('nps.proposalTitleInput')"
+              v-model="proposal.title"
+            ></b-form-input>
+          </b-form-group>
 
-        <b-form-group
-          :label="$t('community.currentBlock')"
-          label-for="proposalCurrent"
-          label-class="text-left font16"
-        >
-          <b-form-input
-            id="proposalCurrent"
-            required
-            class="mb-2"
-            :value="blockNum"
-            readonly
-          ></b-form-input>
-        </b-form-group>
+          <b-form-group
+            :label="$t('community.currentBlock')"
+            label-for="proposalCurrent"
+            label-class="text-left font16"
+          >
+            <b-form-input
+              id="proposalCurrent"
+              required
+              class="mb-2"
+              :value="blockNum"
+              readonly
+            ></b-form-input>
+          </b-form-group>
 
-        <b-form-group
-          :label="$t('nps.proposalFirst_Block')"
-          label-for="proposalStart"
-          :description="startTime"
-          label-class="text-left font16"
-        >
-          <b-form-input
-            id="proposalStart"
-            required
-            class="mb-2"
-            :placeholder="$t('nps.proposalFirst_Block')"
-            v-model="proposal.first_block"
-          ></b-form-input>
-        </b-form-group>
+          <b-form-group
+            :label="$t('nps.proposalFirst_Block')"
+            label-for="proposalStart"
+            :description="startTime"
+            label-class="text-left font16"
+          >
+            <b-form-input
+              id="proposalStart"
+              required
+              class="mb-2"
+              :placeholder="$t('nps.proposalFirst_Block')"
+              v-model="proposal.first_block"
+            ></b-form-input>
+          </b-form-group>
 
-        <b-form-group
-          :label="$t('nps.proposalEnd_Block')"
-          label-for="proposalEnd"
-          :description="endTime"
-          label-class="text-left font16"
-        >
-          <b-form-input
-            id="proposalEnd"
-            required
-            class="mb-2"
-            :placeholder="$t('nps.proposalEnd_Block')"
-            v-model="proposal.end_block"
-          ></b-form-input>
-        </b-form-group>
+          <b-form-group
+            :label="$t('nps.proposalEnd_Block')"
+            label-for="proposalEnd"
+            :description="endTime"
+            label-class="text-left font16"
+          >
+            <b-form-input
+              id="proposalEnd"
+              required
+              class="mb-2"
+              :placeholder="$t('nps.proposalEnd_Block')"
+              v-model="proposal.end_block"
+            ></b-form-input>
+          </b-form-group>
 
-        <b-form-group
-          :label="$t('nps.proposalBody')"
-          label-for="proposalBodyInput"
-          label-class="text-left font16"
-        >
-          <b-form-textarea
-            id="proposalBodyInput"
-            required
-            :placeholder="$t('nps.proposalBodyInput')"
-            rows="8"
-            v-model="proposal.body"
-          ></b-form-textarea>
-        </b-form-group>
+          <b-form-group
+            :label="$t('nps.proposalBody')"
+            label-for="proposalBodyInput"
+            label-class="text-left font16"
+          >
+            <b-form-textarea
+              id="proposalBodyInput"
+              required
+              :placeholder="$t('nps.proposalBodyInput')"
+              rows="8"
+              v-model="proposal.body"
+            ></b-form-textarea>
+          </b-form-group>
 
-        <b-form-group
-          :label="$t('nps.proposalBodyPreview')"
-          label-class="text-left font16"
-        >
-          <Markdown :body="proposal.body" class="text-left font16" />
-        </b-form-group>
+          <b-form-group
+            :label="$t('nps.proposalBodyPreview')"
+            label-class="text-left font16"
+          >
+            <Markdown :body="proposal.body" class="text-left font16" />
+          </b-form-group>
 
-        <button
-          class="primary-btn w-75"
-          @click="submitProposal"
-          :disabled="commiting"
-        >
-          <b-spinner small type="grow" v-show="commiting" />
-          {{ $t("community.commit") }}
-        </button>
+          <button
+            class="primary-btn w-75"
+            @click="submitProposal"
+            :disabled="commiting"
+          >
+            <b-spinner small type="grow" v-show="commiting" />
+            {{ $t("community.commit") }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

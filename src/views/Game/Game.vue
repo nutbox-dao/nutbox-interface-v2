@@ -1,47 +1,49 @@
 <template>
   <div class="page-view-content wallet">
-    <div class="container scroll-content">
-      <div class="page-view-title-v">{{ $t('game.game') }}</div>
+    <div class="scroll-content">
+      <div class="container">
+        <div class="page-view-title-v">{{ $t('game.game') }}</div>
 
-      <div class="loading-bg" v-if="loading">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t("tip.loading") }}</p>
-      </div>
-      <template v-else>
-        <div class="view-top-header flex-between-center">
-          <div class="nav-box nav-box-bg" ref="navBox">
-            <div class="nav">
-              <span
-                v-for="tab of tabOptions"
-                :key="tab"
-                :class="activeTab === tab ? 'active' : ''"
-                @click="activeTab = tab"
-                >{{ $t('game.' + tab) }}</span
-              >
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="gameItems.length === 0"
-          class="empty-card mb-5 d-flex flex-column justify-content-center"
-        >
-          <div class="empty-bg">
-            <img src="~@/static/images/empty-data.png" alt="" />
-            <p>{{ $t('game.noGames') }}</p>
-          </div>
+        <div class="loading-bg" v-if="loading">
+          <img src="~@/static/images/loading.gif" alt="" />
+          <p class="font16">{{ $t("tip.loading") }}</p>
         </div>
         <template v-else>
-          <div class="row">
-            <div
-              class="col-xl-4 col-md-6 mb-4"
-              v-for="(game, index) in gameItems"
-              :key="game.id"
-            >
-              <GameCard :game="game" :index="index" />
+          <div class="view-top-header flex-between-center">
+            <div class="nav-box nav-box-bg" ref="navBox">
+              <div class="nav">
+                <span
+                  v-for="tab of tabOptions"
+                  :key="tab"
+                  :class="activeTab === tab ? 'active' : ''"
+                  @click="activeTab = tab"
+                  >{{ $t('game.' + tab) }}</span
+                >
+              </div>
             </div>
           </div>
+          <div
+            v-if="gameItems.length === 0"
+            class="empty-card mb-5 d-flex flex-column justify-content-center"
+          >
+            <div class="empty-bg">
+              <img src="~@/static/images/empty-data.png" alt="" />
+              <p>{{ $t('game.noGames') }}</p>
+            </div>
+          </div>
+          <template v-else>
+            <div class="row">
+              <div
+                class="col-xl-4 col-md-6 mb-4"
+                v-for="(game, index) in gameItems"
+                :key="game.id"
+              >
+                <GameCard :game="game" :index="index" />
+              </div>
+            </div>
+          </template>
         </template>
-      </template>
+      </div>
     </div>
   </div>
 </template>
