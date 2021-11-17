@@ -35,7 +35,6 @@ export const createCrowdloanRemark = (api, chainId, paraId, trieIndex, community
     stakingFeast: stakingFeast.substr(2),
     pid: api.createType('Compact<u8>', pid)
   })
-  console.log(25, remark);
   return api.createType('Bytes', remark.toHex())
 }
 

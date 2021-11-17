@@ -1,11 +1,8 @@
 import BN from "bn.js"
 import store from "@/store"
 import {
-  u8aToHex,
+  hexStripPrefix
 } from "@polkadot/util"
-import {
-  decodeAddress
-} from '@polkadot/util-crypto'
 import {
   DECIMAL
 } from '@/constant'
@@ -57,6 +54,9 @@ export const AcalaParaId = 2000;
 
 // ---------------------------------------  astar -------------------------------------------------
 export const AstarParaId = 2006;
+
+// ---------------------------------------  manta -------------------------------------------------
+export const MantaParaId = 2015;
 
 /**
  * Check if user has been geo-fenced
@@ -351,8 +351,7 @@ export const handleContributors = async (relaychain, api, funds) => {
   try {
     let account = store.state.polkadot.account?.address
     if (!account) return;
-    account = decodeAddress(account)
-    account = u8aToHex(account)
+    account = addressToHex(account);
     const updateFunds = await Promise.all(funds.map(fund => {
       return new Promise(async (resolve, reject) => {
         const pid = fund.paraId
@@ -421,12 +420,11 @@ export const contribute = async (relaychain, paraId, amount, reviousContribution
     signature = await getSignature(from, amount.toString(), reviousContribution.toString());
     signature = signature.data.signature;
     if (store.state.web3.account) {
-      console.log(4444, store.state.web3.account);
       memoTx = api.tx.crowdloan.addMemo(paraId, store.state.web3.account);
     }
   }
-  if (parseInt(paraId) === AstarParaId && relaychain === 'polkadot') {
-     memoTx = api.tx.crowdloan.addMemo(paraId, addressToHex(communityId));
+  if (relaychain === 'polkadot' && (parseInt(paraId) === AstarParaId || parseInt(paraId) === MantaParaId)) {
+     memoTx = api.tx.crowdloan.addMemo(paraId, hexStripPrefix(addressToHex(communityId)));
   }
   paraId = api.createType('Compact<u32>', paraId)
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
