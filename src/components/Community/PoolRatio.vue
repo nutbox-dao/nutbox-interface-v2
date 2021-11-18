@@ -1,7 +1,9 @@
 <template>
   <div class="row">
-    <div class="col-lg-6 col-md-7">
-      <canvas id="pie"></canvas>
+    <div class="col-lg-6 col-md-7" style="overflow-x: auto">
+      <div class="mx-auto" style="width: 22rem">
+        <canvas id="pie"></canvas>
+      </div>
     </div>
     <div class="col-lg-6 col-md-5 legend-box">
       <div
@@ -82,11 +84,12 @@ export default {
         },
         options: {
           responsive: true,
+          cutout: '60%',
           parsing: {
             key: 'value'
           },
           layout: {
-            padding: 60
+            padding: 70
           },
           plugins: {
             tooltip: {
@@ -166,7 +169,8 @@ export default {
 .legend-info {
   display: flex;
   align-items: center;
-
+  width: 100%;
+  max-width: 20rem;
   span {
     display: inline-block;
   }
@@ -179,7 +183,7 @@ export default {
     border: 0.2rem solid;
   }
   .name {
-    width: 10rem;
+    flex: 1;
     text-align: left;
   }
   .value {

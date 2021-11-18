@@ -56,6 +56,8 @@ ponsived {
   font-size: .8rem;
   font-weight: bold;
   color: var(--primary-btn-text-color);
+  white-space: nowrap;
+  min-width: fit-content;
   &:hover {
     background: rgba(var(--primary-custom-rgb), .7);
   }
