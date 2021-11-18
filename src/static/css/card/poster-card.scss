@@ -23,6 +23,7 @@
     border: 1px solid white;
     left: 1.2rem;
     top: -1.2rem;
+    background-color: white;
   }
   .second-card {
     @include card(1.2rem, white, none)

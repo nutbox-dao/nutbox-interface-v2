@@ -143,6 +143,7 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    background-blend-mode: color;
   }
   .nps-card {
     height: 108px;

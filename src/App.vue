@@ -57,7 +57,7 @@ export default {
         }).catch(console.error)
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param) 
+          this.$bvToast.toast(tip, param)
         })
       } finally {
         this.loading = false
@@ -136,7 +136,7 @@ body {
   margin: 0;
 }
 #app {
-  font-family: PingFangSC-Medium, PingFang SC, -apple-system, BlinkMacSystemFont,
+  font-family: PingFang SC, -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue";
   -webkit-font-smoothing: antialiased;

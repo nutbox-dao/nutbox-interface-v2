@@ -57,6 +57,7 @@
         align-items: center;
         white-space: nowrap;
         min-width: fit-content;
+        font-weight: bold;
         &.outline-btn {
           background: white;
         }
@@ -76,18 +77,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    //position: sticky;
-    //top: -1px;
     background-color: var(--background);
     box-sizing: border-box;
     &-line {
       background-color: #f6f7f9;
-      //border-bottom: 1px solid #E2E7EF;
       height: 2.4rem;
       overflow-x: auto;
       .nav .active {
         color: var(--primary-text);
-        @include single-color-bg(3rem .2rem, center bottom)
+        @include single-color-bg(3rem .2rem, center bottom);
+        font-weight: bold;
       }
       a, span {
         height: 2.4rem;
@@ -103,6 +102,7 @@
         background-color: var(--primary-custom);
         border-radius: 1.8rem;
         color: var(--primary-text);
+        font-weight: bold;
       }
       a, span {
         height: 1.8rem;
@@ -119,13 +119,13 @@
         font-size: .8rem;
         color: #666;
         box-sizing: border-box;
-        font-weight: 600;
+        font-weight: normal;
         padding: 0 1.6rem;
         cursor: pointer;
       }
       a:hover, span:hover {
         text-decoration: none;
-        font-weight: 300;
+        font-weight: bold;
       }
     }
   }
