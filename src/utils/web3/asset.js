@@ -229,6 +229,10 @@ export const getAssetMetadata = async (id, assetType) => {
       break;
     case 'SubstrateCrowdloanAssetRegistry':
       icon = 'https://cdn.wherein.mobi/polkadot/paralogo/' + (meta[0] === 2 ? 'p/' : 'k/') + meta[1] + '.png'
+      console.log(436, meta[0], meta[1]);
+      if (meta[0] === 2 && parseInt(meta[1]) === 2002){
+        icon = 'https://cdn.wherein.mobi/polkadot/paralogo/p/clover.png'
+      }
       meta = {
         chainId: meta[0],
         paraId: meta[1],
