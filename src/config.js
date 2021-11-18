@@ -273,12 +273,12 @@ export const OfficialAssets = [
   },
   {
     name: 'Peanut',
-    address: '0x0d66ab1bb0d3e71211829c6d920ef933b8fe5122',
+    address: "0xcCAbddB2a730E6aD40E510AEAAE8444F0Af61B3f",
     symbol: 'PNUT',
     contract: contractAddress['HomeChainAssetRegistry'],
     decimal: 6,
     type: 'HomeChainAssetRegistry',
-    asset: '0x15a1ad3c410045004af3019ba4850a7a3ab6d262195136dc25380cc667a6f80e',
+    asset: "0x554270201a356ad1dab62907543a593e57f1d4f8219140681c0f731fd53951b3",
     icon: 'https://cdn.wherein.mobi/nutbox/v2/1636964890849'
   }
 ];
