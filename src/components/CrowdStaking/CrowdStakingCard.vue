@@ -33,15 +33,15 @@
             {{ (loadingUserStakings ? 0 : staked) | amountForm }}
           </span>
           <div class="right-box">
-            <button class="outline-btn" @click="decrease">-</button>
-            <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
+            <button class="outline-btn" @click="decrease" disabled>-</button>
+            <button class="outline-btn" disabled @click="increase">+</button>
           </div>
         </div>
         <template v-else>
           <button
             class="primary-btn"
             @click="approve"
-            :disabled="isApproving || loadingApprovements || status !== 'Active'"
+            disabled
           >
             <b-spinner
               small

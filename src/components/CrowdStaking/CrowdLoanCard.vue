@@ -11,7 +11,7 @@
       <div class="btn-row">
         <span class="value"> {{ pendingReward | amountForm }} </span>
         <div class="right-box">
-          <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+          <button disabled class="primary-btn m-0" @click="withdraw">
             <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
             {{ $t("commen.withdraw") }}
           </button>
@@ -30,7 +30,7 @@
         <button
           class="primary-btn"
           v-if="status === 'Active'"
-          :disabled="!isConnected || status !== 'Active' || !isCheckedGeofenced || !moonbeanOk"
+          disabled
           @click="isCheckedRemark ? showContribute = true : showMoonbeamRegister = true"
         >
           <b-spinner small type="grow" v-show="!isConnected || !moonbeanOk"></b-spinner>
@@ -38,7 +38,7 @@
         </button>
         <button
           class="primary-btn"
-          :disabled="!isConnected"
+          disabled
           v-show="status === 'Retired'"
           @click="showWithdraw = true"
         >

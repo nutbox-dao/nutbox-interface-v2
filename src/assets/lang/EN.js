@@ -150,6 +150,7 @@ module.exports = {
     Winner: "Winner",
     Retired: "Retired",
     Completed: "Completed",
+    Removed: "Removed",
     chain: "Chain",
     trieIndex: "TrieIndex",
     contributeAmount: "Contribute amount",

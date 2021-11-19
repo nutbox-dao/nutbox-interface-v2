@@ -21,7 +21,7 @@
     <div class="btn-row">
       <span class="value"> {{ pendingReward | amountForm }} </span>
       <div class="right-box">
-        <button :disabled="isWithdrawing" class="primary-btn m-0" @click="withdraw">
+        <button disabled class="primary-btn m-0" @click="withdraw">
           <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
           {{ $t("commen.withdraw") }}
         </button>
@@ -39,8 +39,8 @@
       <div class="btn-row mb-4" v-if="steemLogin && metamaskConnected">
         <span class="value"> {{ (loadingUserStakings ? 0 : staked) | amountForm }} </span>
         <div class="right-box">
-          <button class="outline-btn" @click="decrease">-</button>
-          <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
+          <button class="outline-btn" disabled @click="decrease">-</button>
+          <button class="outline-btn" disabled>+</button>
         </div>
       </div>
       <ConnectMetaMask v-if="!metamaskConnected && steemLogin"/>

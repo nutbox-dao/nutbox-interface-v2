@@ -29,7 +29,7 @@
           <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apyRange }}</div>
         </div>
-        <button class="primary-btn"
+        <button class="primary-btn" disabled
                 @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div>
     </div>

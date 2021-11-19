@@ -2,6 +2,7 @@
 
 <template>
   <div class="page-layout">
+    <p style="background-color: red;padding: .5rem;font-size:1.2rem">Due to recent hacker attacks, Nutbox Walnut decided to close staking related functions in order to ensure the safety of users' assets. Walnut will be put into use again after the upgrade, please stay tuned.</p>
     <div class="page-header-h">
       <b-navbar toggleable="lg">
         <div class="m-logo">
@@ -126,7 +127,7 @@ export default {
       showMessage: false,
       accountsPop: false,
       langActive: false,
-      langOptions: ['zh', 'en', 'kr', 'es', 'my']
+      langOptions: ['en', 'kr', 'es', 'my']
     }
   },
   computed: {

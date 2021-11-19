@@ -48,7 +48,7 @@
           <button
             class="primary-btn"
             @click="nominate"
-            :disabled="loadingStaking || status !== 'Active'"
+            disabled
           >
             <b-spinner small type="grow" v-show="loadingStaking"></b-spinner
             >{{ $t("cs.nominate") }}

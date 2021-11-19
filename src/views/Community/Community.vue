@@ -18,7 +18,7 @@
           </template>
         </b-input-group>
         <div class="c-btn-group ml-3" v-if="!loadingCommunity">
-          <button v-if="!communityId" @click="$router.push('/community/tutorials')">
+          <button v-if="!communityId" disabled @click="$router.push('/community/tutorials')">
             <i class="add-icon"></i>
             <span>{{ $t('community.createYourCommunity') }}</span>
           </button>

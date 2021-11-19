@@ -157,14 +157,14 @@
                   ></b-icon>
                   <span style="font-size: 14px">{{ $t("commen.en") }}</span>
                 </b-dropdown-item>
-                <b-dropdown-item @click="setLanguage('zh')">
+                <!-- <b-dropdown-item @click="setLanguage('zh')">
                   <b-icon
                     style="font-size: 20px"
                     :icon="lang == 'zh' ? 'check' : 'blank'"
                     aria-hidden="true"
                   ></b-icon>
                   <span style="font-size: 14px">{{ $t("commen.zh") }}</span>
-                </b-dropdown-item>
+                </b-dropdown-item> -->
                 <b-dropdown-item @click="setLanguage('kr')">
                   <b-icon
                     style="font-size: 20px"

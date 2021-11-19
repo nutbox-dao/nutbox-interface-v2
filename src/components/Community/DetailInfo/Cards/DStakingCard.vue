@@ -23,7 +23,7 @@
     <div class="btn-row">
       <span class="value"> {{ pendingReward | amountForm }} </span>
       <div class="right-box">
-        <button :disabled="!approved || isWithdrawing" class="primary-btn m-0" @click="withdraw">
+        <button disabled class="primary-btn m-0" @click="withdraw">
           <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
           {{ $t("commen.withdraw") }}
         </button>
@@ -45,8 +45,8 @@
         {{ (loadingUserStakings ? 0 : staked) | amountForm }}
       </span>
       <div class="right-box">
-        <button class="outline-btn" @click="decrease">-</button>
-        <button class="outline-btn" :disabled="status !== 'Active'" @click="increase">+</button>
+        <button class="outline-btn" disabled @click="decrease">-</button>
+        <button class="outline-btn" disabled @click="increase">+</button>
       </div>
     </div>
     <template v-else>
@@ -57,7 +57,7 @@
       v-else
         class="primary-btn"
         @click="approve"
-        :disabled="isApproving || loadingApprovements || status !== 'Active'"
+        disabled
       >
         <b-spinner
           small
