@@ -21,7 +21,7 @@ jobs:
 
       - name: Pin to IPFS
         id: upload
-        uses: anantaramdas/ipfs-pinata-deploy-action@39bbda1ce1fe24c69c6f57861b8038278d53688d
+        uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.3
         with:
           pin-name: Nutbox Interface
           path: './build'
