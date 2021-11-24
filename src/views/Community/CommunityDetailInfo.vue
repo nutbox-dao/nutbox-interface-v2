@@ -55,7 +55,6 @@ import DHiveDelegate from '@/components/Community/DetailInfo/DHiveDelegate'
 import BSCAccount from '@/components/Accounts/BSCAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
-import CommunityBlog from '@/views/Blog/CommunityBlog'
 import { sleep } from '@/utils/helper'
 
 export default {
@@ -66,8 +65,7 @@ export default {
     DHiveDelegate,
     BSCAccount,
     SteemAccount,
-    HiveAccount,
-    CommunityBlog
+    HiveAccount
   },
   props: {},
   data () {
