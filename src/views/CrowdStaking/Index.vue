@@ -3,9 +3,7 @@
     <div class="page-view-sidebar">
       <b-nav vertical>
         <b-nav-item v-if="showStakingPool" to="/crowdstaking/deposit">{{ $t('cs.deposit') }}</b-nav-item>
-        <b-nav-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-nav-item>
         <b-nav-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-nav-item>
-        <b-nav-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-nav-item>
       </b-nav>
     </div>
     <div class="side-page-view-content">
@@ -23,8 +21,6 @@
               </template>
               <b-dropdown-item v-if="showStakingPool" to="/crowdstaking/deposit">{{ $t('cs.deposit') }}</b-dropdown-item>
               <b-dropdown-item v-if="showDelegatePool" to="/crowdstaking/delegate">{{ $t('cs.delegate') }}</b-dropdown-item>
-              <b-dropdown-item v-if="showNominatePool" to="/crowdstaking/nominate">{{ $t('cs.nomination') }}</b-dropdown-item>
-              <b-dropdown-item v-if="showCrowdloanPool" to="/crowdstaking/crowdloan">{{ $t('cs.crowdloan') }}</b-dropdown-item>
             </b-dropdown>
           </div>
         </div>
@@ -60,12 +56,6 @@ export default {
     showDelegatePool() {
       return this.poolCards && this.poolCards.filter(p => p.type === 'SteemHiveDelegateAssetRegistry').length > 0
     },
-    showNominatePool() {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateNominateAssetRegistry').length > 0
-    },
-    showCrowdloanPool () {
-      return this.poolCards && this.poolCards.filter(p => p.type === 'SubstrateCrowdloanAssetRegistry').length > 0
-    }
   },
   methods: {
   },
@@ -83,10 +73,6 @@ export default {
       // this.$router.replace('/crowdstaking/deposit')
     }else if (this.showDelegatePool){
       this.$router.replace('/crowdstaking/delegate')
-    }else if (this.showNominatePool){
-      this.$router.replace('/crowdstaking/nominate')
-    }else if (this.showCrowdloanPool){
-      this.$router.replace('/crowdstaking/crowdloan')
     }
   },
   created () {

@@ -9,7 +9,7 @@
           <div class="d-flex align-items-center">
             <b-navbar-brand to="/home" class="m-0">
               <img class="logo" src="~@/static/images/logo_small.png"
-                   @click="gotoOfficial" alt="nutbox" />
+                  alt="nutbox" />
             </b-navbar-brand >
             <img class="menu ml-2" src="~@/static/images/menu.png" alt=""  v-b-toggle.nav-collapse/>
           </div>
@@ -26,9 +26,6 @@
             </b-nav-item>
             <b-nav-item to="/crowdstaking">
               <span>{{ $t("commen.crowdstaking") }}</span>
-            </b-nav-item>
-            <b-nav-item to="/blog">
-              <span>{{ $t("commen.blog") }}</span>
             </b-nav-item>
             <b-nav-item to="/dapp">
               <span>{{ $t('commen.dappStore') }}</span>
@@ -112,8 +109,7 @@
 
 <script>
 import TipMessage from '../components/ToolsComponents/TipMessage'
-import { mapState, mapMutations, mapActions } from 'vuex'
-import Identicon from '@polkadot/vue-identicon'
+import { mapState, mapActions } from 'vuex'
 import { setupNetwork } from '@/utils/web3/web3'
 import { LOCALE_KEY } from "@/config";
 import { getMyStakingFactory } from '@/utils/web3/community'
@@ -131,15 +127,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('polkadot', [
-      'isConnected',
-      'allAccounts',
-      'account',
-      'crowdstakings',
-      'communitys',
-      'projects',
-      'clCommunitys'
-    ]),
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId']),
     address () {
@@ -149,23 +136,11 @@ export default {
     }
   },
   components: {
-    TipMessage,
-    Identicon
+    TipMessage
   },
   methods: {
-    ...mapMutations('polkadot', [
-      'saveCrowdstakings',
-      'saveCommunitys',
-      'saveProjects',
-      'saveAccount'
-    ]),
-    ...mapMutations('polkadot', ['saveClCommunitys']),
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
-    async gotoOfficial () {
-      console.log(this.prices)
-      window.open('https://nutbox.io', '_blank')
-    },
     setLanguage (lang) {
       this.langActive = false
       localStorage.setItem(LOCALE_KEY, lang)

@@ -35,65 +35,6 @@ export const errCode = {
   SERVER_ERR: 500,
 };
 
-/** ====================================== polkadot ============================================*/
-export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io";
-export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io";
-
-export const PARA_STATUS = {
-  ACTIVE: "Active",
-  RETIRED: "Retired",
-  COMPLETED: "Completed",
-  WINNER: "Winner",
-  OTHER: "Other",
-};
-
-export const POLKADTO_ADDRESS_FORMAT_CODE = {
-  polkadot: 0,
-  kusama: 2,
-  substrate: 42,
-};
-
-// const remark = api.createType('NutboxRemark', {
-//   magic: 'nutbox',
-//   msgType: 'crowdloan',
-//   source: api.createType('Compact<u8>', 2),   // 2: polkadot, 3: kusama
-//   dest: api.createType('Compact<u8>', 0),
-//   sequence: api.createType('Compact<u64>', Date.now()),
-//   paraId: api.createType('Compact<u32>', 2001),
-//   trieIndex: api.createType('Compact<u32>', 1),
-//   communityAccount: 'DzmAoYXo1ka1xW3CCZajTXqJxG5oQUJLqLBbpqDzCUatHBP',
-//   recipient: '0xA29D4E0F035cb50C0d78c8CeBb56Ca292616Ab20'.substr(2),
-//   amount: api.createType('Compact<BalanceOf>', new BN('6000000000000')),
-//   bindAccount: 'HNZata7iMYWmk5RvZRTiAsSDhV8366zq2YGb3tLH5Upf74F',
-//   stakingFeast: '0xef1E390c2108376C45e5e5467Eaf58D454FdE7Ad'.substr(2),
-//   pid: api.createType('Compact<u8>', 0)
-// });
-
-// 添加到交易batch的remark结构
-export const NUTBOX_REMARK_TYPE = {
-  magic: "Text", // 默认为nutbox
-  msgType: 'Text',  // crowdloan
-  source: 'u8',  // 2: polkadot, 3: kusama
-  dest: 'u8',
-  sequence: 'u64',
-  paraId: 'u32',
-  trieIndex: 'u32',
-  communityAccount: 'Text',
-  recipient: 'Text',
-  amount: 'u128',
-  bindAccount: 'Text',
-  stakingFeast: 'Text',
-  pid: 'u8'
-};
-
-// Phala推荐机制 remark
-export const PhalaCrowdloanReferrerRemark = {
-  magic: "Bytes",
-  paraId: "ParaId",
-  referrer: "AccountId",
-  referrerHash: "Bytes",
-};
-
 /**======================================= steem  ====================================*/
 
 // steem node storage
@@ -139,26 +80,6 @@ export const MAIN_COMMUNITY_ID = process.env.VUE_APP_MAIN_COMMUNITY_ID;
 export const DELEGATION_CHAINID_TO_NAME = {
   1: "steem",
   2: "hive",
-};
-
-/**
- * chainId on blockchain to chain name
- */
-export const CROWDLOAN_CHAINID_TO_NAME = {
-  0: "polkadot",
-  1: "polkadot",
-  2: "polkadot",
-  3: "kusama",
-};
-
-/**
- * chainId on blockchain to chain name
- */
-export const VALIDATOR_CHAINID_TO_NAME = {
-  0: "polkadot",
-  1: "polkadot",
-  2: "polkadot",
-  3: "kusama",
 };
 
 export const GasTimes = 1.5;

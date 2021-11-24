@@ -113,7 +113,6 @@
 import { mapGetters, mapState } from "vuex";
 import { handleApiErrCode, blockTimeWithoutUTC } from "@/utils/helper";
 import BSCAccount from "@/components/Accounts/BSCAccount";
-import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
 import Markdown from "@/components/Commen/Markdown";
@@ -129,7 +128,6 @@ export default {
   name: "ProposalCreate",
   components: {
     BSCAccount,
-    PolkadotAccount,
     SteemAccount,
     HiveAccount,
     Markdown,

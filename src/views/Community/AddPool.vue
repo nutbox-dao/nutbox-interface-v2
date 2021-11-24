@@ -159,7 +159,6 @@ import {
   CROWDLOAN_CHAINID_TO_NAME,
   VALIDATOR_CHAINID_TO_NAME,
 } from "@/config";
-import { stanfiAddress } from "@/utils/commen/account";
 import { addPool, getMyOpenedPools, approveNUT, getStakedNUTInfo } from "@/utils/web3/pool";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import Step from "@/components/ToolsComponents/Step";
@@ -253,46 +252,6 @@ export default {
                 this.$t("asset.delegation") +
                 "-" +
                 hexToString(asset.agentAccount),
-              asset: asset.asset,
-              isHomeChainAsset: false,
-            };
-          case "SubstrateCrowdloanAssetRegistry":
-            return {
-              icon: asset.icon,
-              name:
-                CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +
-                " " +
-                this.$t("asset.crowdloan") +
-                ":" +
-                asset.paraId +
-                "-" +
-                asset.trieIndex,
-              symbol:
-                CROWDLOAN_CHAINID_TO_NAME[asset.chainId] +
-                " " +
-                this.$t("asset.crowdloan") +
-                ":" +
-                asset.paraId +
-                "-" +
-                asset.trieIndex,
-              asset: asset.asset,
-              isHomeChainAsset: false,
-            };
-          case "SubstrateNominateAssetRegistry":
-            return {
-              icon: asset.icon,
-              name:
-                VALIDATOR_CHAINID_TO_NAME[asset.chainId] +
-                " " +
-                this.$t("asset.validator") +
-                ":" +
-                stanfiAddress(asset.validatorAccount),
-              symbol:
-                VALIDATOR_CHAINID_TO_NAME[asset.chainId] +
-                " " +
-                this.$t("asset.validator") +
-                ":" +
-                stanfiAddress(asset.validatorAccount),
               asset: asset.asset,
               isHomeChainAsset: false,
             };

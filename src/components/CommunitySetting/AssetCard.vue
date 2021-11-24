@@ -116,12 +116,6 @@ export default {
     formatPrice () {
       if (this.type === 'HomeChainAssetRegistry') {
         return this.price
-      } else if (this.type === 'SubstrateCrowdloanAssetRegistry' || this.type === 'SubstrateNominateAssetRegistry') {
-        if (this.chainId === 2) {
-          return this.prices.DOTUSDT
-        } else if (this.chainId === 3) {
-          return this.prices.KSMUSDT
-        }
       } else if (this.type === 'SteemHiveDelegateAssetRegistry') {
         if (this.chainId === 1) {
           return this.prices.STEEMETH * this.ethPrice
@@ -135,14 +129,6 @@ export default {
     if (this.type === 'HomeChainAssetRegistry') {
       this.showingName = this.name
       this.showingSymbol = this.symbol
-    } else if (this.type === 'SubstrateCrowdloanAssetRegistry' || this.type === 'SubstrateNominateAssetRegistry') {
-      if (this.chainId === 2) {
-        this.showingName = 'Polkadot'
-        this.showingSymbol = 'DOT'
-      } else if (this.chainId === 3) {
-        this.showingName = 'Kusama'
-        this.showingSymbol = 'KSM'
-      }
     } else if (this.type === 'SteemHiveDelegateAssetRegistry') {
       if (this.chainId === 1) {
         this.showingName = 'Steem power'

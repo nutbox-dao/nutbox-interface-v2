@@ -20,10 +20,6 @@
           <p id="wallet-icon" class="my-icon" />
           <span>{{ $t("wallet.wallet") }}</span>
         </b-nav-item>
-        <b-nav-item to="/crowdloan">
-          <p id="farming-icon" class="my-icon" />
-          <span>{{ $t("cl.crowdloan") }}</span>
-        </b-nav-item>
         <b-nav-item to="/crowdstaking" router-tag="div">
           <p id="stake-icon" class="my-icon" />
           <span>{{ $t("cs.crowdstaking") }}</span>

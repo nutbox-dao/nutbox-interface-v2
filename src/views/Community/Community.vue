@@ -57,7 +57,7 @@ export default {
     return {
       loading: false,
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
+      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive'],
       searchText: ''
     }
   },

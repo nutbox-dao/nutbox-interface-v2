@@ -33,10 +33,6 @@
               <i id="stake-icon" class="menu-icon" />
               <span>{{ $t("commen.crowdstaking") }}</span>
             </b-nav-item>
-            <b-nav-item v-if="showBlog" to="/specify/blog">
-              <i id="blog-icon" class="menu-icon" />
-              <span>{{ $t("commen.blog") }}</span>
-            </b-nav-item>
             <b-nav-item v-if="showGame" to="/specify/game">
               <i id="game-icon" class="menu-icon" />
               <span>{{ $t('game.game') }}</span>
@@ -211,7 +207,6 @@
 import { LOCALE_KEY } from "@/config";
 import TipMessage from "../components/ToolsComponents/TipMessage";
 import { mapState, mapMutations, mapActions } from "vuex";
-import Identicon from "@polkadot/vue-identicon";
 
 import { getMyCommunityProposalConfigInfo } from "@/utils/web3/communityProposalConfig";
 import { getAllGame } from "@/utils/web3/game";
@@ -230,15 +225,6 @@ export default {
     };
   },
   computed: {
-    ...mapState("polkadot", [
-      "isConnected",
-      "allAccounts",
-      "account",
-      "crowdstakings",
-      "communitys",
-      "projects",
-    ]),
-    ...mapState("polkadot", ["clCommunitys"]),
     ...mapState(["lang"]),
     ...mapState("web3", ["allCommunities"]),
     address() {
@@ -320,7 +306,6 @@ export default {
   },
   components: {
     TipMessage,
-    Identicon,
   },
   async mounted() {
     const _this = this;
@@ -344,13 +329,6 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("polkadot", [
-      "saveCrowdstakings",
-      "saveCommunitys",
-      "saveProjects",
-      "saveAccount",
-    ]),
-    ...mapMutations("polkadot", ["saveClCommunitys"]),
     ...mapActions("steem", ["setVestsToSteem"]),
     ...mapActions("hive", ["setVestsToHive"]),
     async gotoOfficial() {

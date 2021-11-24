@@ -35,8 +35,6 @@
             </div>
             <div class="card-container tab-container">
               <component :is="tabOptions[activeTab].component"
-                        :crowdloanPools='crowdloanPools'
-                        :nominatePools='nominatePools'
                         :steemDelegatePools='steemDelegatePools'
                         :hiveDelegatePools='hiveDelegatePools'
                         :erc20Pools='erc20Pools'>
@@ -51,13 +49,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import DCrowdLoan from '@/components/Community/DetailInfo/DCrowdLoan'
 import DCrowdStaking from '@/components/Community/DetailInfo/DCrowdStaking'
 import DSteemDelegate from '@/components/Community/DetailInfo/DSteemDelegate'
 import DHiveDelegate from '@/components/Community/DetailInfo/DHiveDelegate'
-import DNominate from '@/components/Community/DetailInfo/DNominate'
 import BSCAccount from '@/components/Accounts/BSCAccount'
-import PolkadotAccount from '@/components/Accounts/PolkadotAccount'
 import SteemAccount from '@/components/Accounts/SteemAccount'
 import HiveAccount from '@/components/Accounts/HiveAccount'
 import CommunityBlog from '@/views/Blog/CommunityBlog'
@@ -66,13 +61,10 @@ import { sleep } from '@/utils/helper'
 export default {
   name: 'CommunityDetailInfo',
   components: {
-    DCrowdLoan,
     DCrowdStaking,
     DSteemDelegate,
     DHiveDelegate,
-    DNominate,
     BSCAccount,
-    PolkadotAccount,
     SteemAccount,
     HiveAccount,
     CommunityBlog
@@ -98,22 +90,12 @@ export default {
           return 'SteemAccount'
         case 2:
           return 'HiveAccount';
-        case 3:
-          return 'PolkadotAccount';
-        case 4:
-          return 'PolkadotAccount';
         default:
           break;
       }
     },
     pools () {
       return this.communityInfo.pools
-    },
-    crowdloanPools () {
-      return this.pools ? this.pools.filter(p => p.type == 'SubstrateCrowdloanAssetRegistry') : []
-    },
-    nominatePools () {
-      return this.pools ? this.pools.filter(p => p.type == 'SubstrateNominateAssetRegistry') : []
     },
     steemDelegatePools () {
       return this.pools ? this.pools.filter(p => p.type == 'SteemHiveDelegateAssetRegistry' && p.assetType == 'sp') : []
@@ -129,16 +111,7 @@ export default {
         { name: this.$t('cs.deposit'), component: 'DCrowdStaking', chain: '' },
         { name: this.$t('cs.steemDelegate'), component: 'DSteemDelegate', chain: '' },
         { name: this.$t('cs.hiveDelegate'), component: 'DHiveDelegate', chain: '' },
-        { name: this.$t('cs.nomination'), component: 'DNominate', chain: '' },
-        { name: this.$t('cs.crowdloan'), component: 'DCrowdLoan', chain: '' }
       ]
-    }
-  },
-  watch: {
-    pools(newValue, oldValue) {
-      if (!oldValue){
-
-      }
     }
   },
   async mounted () {
@@ -154,10 +127,6 @@ export default {
       this.activeTab = 1
     } else if (this.showTab(2)) {
       this.activeTab = 2
-    } else if (this.showTab(3)) {
-      this.activeTab = 3
-    } else if(this.showTab(4)) {
-      this.activeTab = 4
     }
   },
   methods: {
@@ -169,12 +138,6 @@ export default {
           return this.steemDelegatePools.length > 0
         case 2:
           return this.hiveDelegatePools.length > 0
-        case 3:
-          return this.nominatePools.length > 0
-        case 4:
-          return this.crowdloanPools.length > 0
-        case 5:
-          return this.communityInfo.blogTag && this.communityInfo.blogTag.length > 0
       }
     }
   }

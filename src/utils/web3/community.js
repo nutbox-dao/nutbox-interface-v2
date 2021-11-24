@@ -13,7 +13,7 @@ import {
   getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasTimes } from "@/config";
+import { errCode, Multi_Config } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
@@ -574,57 +574,6 @@ export const getSpecifyDistributionEras = async (communityId) => {
     }
   })
 }
-
-/**
- * Post community blog tag to backend
- * @param {*} blogTag
- * @returns
- */
-export const publishBlog = async (blogTag) => {
-  return new Promise(async (resolve, reject) => {
-    let id;
-    try {
-      id = await getMyStakingFactory();
-      if (!id) {
-        reject(errCode.NO_STAKING_FACTORY);
-        return;
-      }
-    } catch (e) {
-      reject(e);
-      return;
-    }
-    let nonce = await getNonce();
-    const userId = await getAccounts();
-    nonce = nonce ? nonce + 1 : 1;
-    const infoStr = JSON.stringify({
-      id,
-      blogTag,
-    });
-    let signature = "";
-    try {
-      signature = await signMessage(infoStr + nonce);
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-        return;
-      }
-    }
-    const params = {
-      userId,
-      infoStr,
-      nonce,
-      signature,
-    };
-    try {
-      let res = await ubt(params);
-      store.commit("web3/saveNonce", nonce);
-      resolve(res);
-    } catch (e) {
-      console.log("Update community blogTag info failed", e);
-      reject(e);
-    }
-  });
-};
 
 /**
  * update social info

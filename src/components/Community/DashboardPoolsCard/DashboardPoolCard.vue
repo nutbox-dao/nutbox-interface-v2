@@ -122,14 +122,6 @@ export default {
               return this.totalDeposited * this.prices['HIVEUSDT']
             }
           }
-        case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
-          {
-            if (this.pool.asset.chainId === 2) { // polkadot
-              return this.totalDeposited * this.prices['DOTUSDT']
-            }else if (this.pool.asset.chainId === 3) { // kusama
-              return this.totalDeposited * this.prices['KSMUSDT']
-            }
-          }
         case 'HomeChainAssetRegistry':
           return this.erc20Price * this.totalDeposited
       }
@@ -143,14 +135,6 @@ export default {
               return 1e6 / this.steemVests
             }else if (this.pool.asset.chainId === 2) { // hive
               return 1e6 / this.hiveVests
-            }
-          }
-        case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
-          {
-            if (this.pool.asset.chainId === 2) { // polkadot
-              return 1e10
-            }else if (this.pool.asset.chainId === 3) { // kusama
-              return 1e12
             }
           }
         default:

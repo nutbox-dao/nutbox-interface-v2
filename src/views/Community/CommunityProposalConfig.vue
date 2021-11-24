@@ -276,7 +276,6 @@ import {
   getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 import BSCAccount from "@/components/Accounts/BSCAccount";
-import PolkadotAccount from "@/components/Accounts/PolkadotAccount";
 import SteemAccount from "@/components/Accounts/SteemAccount";
 import HiveAccount from "@/components/Accounts/HiveAccount";
 import { getMyCommunityInfo } from "@/utils/web3/community";
@@ -293,7 +292,6 @@ export default {
   name: "ProposalCreate",
   components: {
     BSCAccount,
-    PolkadotAccount,
     SteemAccount,
     HiveAccount,
     Networks,
@@ -340,10 +338,6 @@ export default {
           return "SteemAccount";
         case 2:
           return "HiveAccount";
-        case 3:
-          return "PolkadotAccount";
-        case 4:
-          return "PolkadotAccount";
         default:
           break;
       }

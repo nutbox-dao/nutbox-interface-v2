@@ -2,17 +2,12 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import VerticalLayout from "@/layout/VerticalLayout";
 import HorizontalLayout from "@/layout/HorizontalLayout";
-import Blog from "../views/Blog/Blog";
-import CommunityBlog from "../views/Blog/CommunityBlog";
 import CrowdIndex from "../views/CrowdStaking/Index";
 import Wallet from "../views/Wallet/Wallet";
 import BSCWallet from "../views/Wallet/BSC";
-import PolkadotWallet from "../views/Wallet/Polkadot";
-import KusamaWallet from "../views/Wallet/Kusama";
 import SteemWallet from "../views/Wallet/Steem";
 import HiveWallet from "../views/Wallet/Hive";
 import CrowdStaking from "../views/CrowdStaking/CrowdStaking";
-import CrowdLoan from "../views/CrowdStaking/CrowdLoan";
 import CommunityIndex from "../views/Community/Index";
 import Community from "../views/Community/Community";
 import CreateEconomy from "@/views/Community/CreateEconomy";
@@ -26,7 +21,6 @@ import CrossChainAsset from "@/views/RegisterAsset/CrossChainAsset";
 import CommunityInfo from "@/views/Community/CommunityInfo";
 import CommunityDetailInfo from "@/views/Community/CommunityDetailInfo";
 import Delegate from "@/views/CrowdStaking/Delegate";
-import CrowdNominate from "@/views/CrowdStaking/CrowdNominate";
 import Tutorials from "@/views/Community/Tutorials";
 import ProposalSpace from "@/views/Community/ProposalSpace";
 import Proposal from "@/views/Community/Proposal";
@@ -72,16 +66,6 @@ const routes = [
             component: BSCWallet,
           },
           {
-            path: "polkadot",
-            name: "PolkadotWallet",
-            component: PolkadotWallet,
-          },
-          {
-            path: "kusama",
-            name: "PolkadotWallet",
-            component: KusamaWallet,
-          },
-          {
             path: "steem",
             name: "SteemWallet",
             component: SteemWallet,
@@ -99,16 +83,6 @@ const routes = [
         redirect: "/crowdstaking/deposit",
         children: [
           {
-            path: "crowdloan",
-            name: "crowdloan",
-            component: CrowdLoan,
-          },
-          {
-            path: "nominate",
-            name: "nominate",
-            component: CrowdNominate,
-          },
-          {
             path: "delegate",
             name: "delegate",
             component: Delegate,
@@ -119,10 +93,6 @@ const routes = [
             component: CrowdStaking,
           },
         ],
-      },
-      {
-        path: "/blog",
-        component: Blog,
       },
       {
         path: "/nps",
@@ -302,16 +272,6 @@ const routes = [
             component: BSCWallet,
           },
           {
-            path: "polkadot",
-            name: "PolkadotWallet",
-            component: PolkadotWallet,
-          },
-          {
-            path: "kusama",
-            name: "PolkadotWallet",
-            component: KusamaWallet,
-          },
-          {
             path: "steem",
             name: "SteemWallet",
             component: SteemWallet,
@@ -326,10 +286,6 @@ const routes = [
       {
         path: "staking",
         component: CommunityDetailInfo,
-      },
-      {
-        path: "blog",
-        component: CommunityBlog,
       },
       {
         path: "nps",

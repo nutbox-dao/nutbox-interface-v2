@@ -340,7 +340,6 @@ export default {
       categorys: [
         'All',
         CHAIN_NAME,
-        'Polkadot',
         'Steem',
         'Hive'
       ],

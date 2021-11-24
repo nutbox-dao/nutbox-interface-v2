@@ -6,7 +6,6 @@ import store from '@/store'
 import {
   updatePoolInfo,
   getAllPools as gap,
-  getAllParachain as getAP,
   getPricesOnCEX
 } from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
@@ -36,12 +35,6 @@ import {
   getNonce,
   getAllCommunities
 } from './community'
-import {
-  loadFunds as loadKusamaFunds
-} from '../kusama/crowdloan'
-import {
-  loadFunds as loadPolkadotFunds
-} from '../polkadot/crowdloan'
 import BN from 'bn.js'
 import { GasTimes, NutAddress } from '@/config'
 import { ethers } from 'ethers'
@@ -293,30 +286,6 @@ export const publishPool = async (pool) => {
       const res = await updatePoolInfo(params)
       // update nonce in storage
       store.commit('web3/saveNonce', nonce)
-      resolve(res)
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
-
-/**
- * Get All parachain from backend
- */
-export const getAllParachain = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    const allParachian = store.state.allParachain
-    if (!update && allParachian) {
-      resolve(allParachian)
-      return;
-    }
-    try {
-      const res = await getAP()
-      const kusamaCL = res.filter(r => r.chainId === 3)
-      const polkadotCL = res.filter(r => r.chainId === 2)
-      loadKusamaFunds(kusamaCL)
-      // loadPolkadotFunds(polkadotCL)
-      store.commit('saveAllParachain', res)
       resolve(res)
     } catch (e) {
       reject(e)
@@ -860,18 +829,6 @@ export const monitorUserBalances = async () => {
         if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
           const hivePrice = parseFloat(price['HIVUSDT'])
           pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToHive * hivePrice)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
-          const dotPrice = parseFloat(price['DOTUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e10 * dotPrice)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
-          const ksmPrice = parseFloat(price['KSMUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e12 * ksmPrice)
           pool.apy = 100 * pool.apy;
           continue;
         }

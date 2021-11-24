@@ -6,40 +6,20 @@
 
 <script>
 import { LOCALE_KEY } from '@/config'
-import { mapState, mapMutations, mapActions } from 'vuex'
-import { isMobile } from '@/utils/commen/util'
+import { mapState, mapActions } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
-import {
-  loadAccounts as loadPolkadotAccounts
-} from '@/utils/polkadot/account'
 
 export default {
   computed: {
-    ...mapState('polkadot', [
-      'isConnected',
-      'allAccounts',
-      'account',
-      'crowdstakings',
-      'communitys',
-      'projects',
-      'clCommunitys'
-    ]),
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId']),
   },
   methods: {
-    ...mapMutations('polkadot', [
-      'saveCrowdstakings',
-      'saveCommunitys',
-      'saveProjects',
-      'saveAccount'
-    ]),
-    ...mapMutations('polkadot', ['saveClCommunitys']),
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     setLanguage (lang) {
@@ -92,14 +72,6 @@ export default {
     this.setVestsToSteem()
     this.setVestsToHive()
     UpdateApysOfPool()
-
-    // 如果是手机端，直接清空账号缓存，用插件中的第一个地址
-    if (isMobile()) {
-      console.log('Is mobile device')
-      this.$store.commit('polkadot/saveAccount', null)
-    }
-
-    loadPolkadotAccounts()
   }
 }
 </script>

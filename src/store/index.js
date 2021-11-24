@@ -5,8 +5,6 @@ import {
   LOCALE_KEY
 } from '../config'
 
-import polkadot from './polkadot'
-import kusama from './kusama'
 import web3 from './web3'
 import community from '@/store/community'
 import steem from './steem'
@@ -52,8 +50,6 @@ export default new Vuex.Store({
   getters: {
   },
   modules: {
-    polkadot,
-    kusama,
     web3,
     community,
     steem,

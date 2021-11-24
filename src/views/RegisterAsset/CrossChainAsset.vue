@@ -14,18 +14,14 @@
 
 <script>
 import DelegationForm from '@/components/RegisterAsset/DelegationForm'
-import ContributionForm from '@/components/RegisterAsset/ContributionForm'
-import NominationForm from '@/components/RegisterAsset/NominationForm'
 export default {
-  name: 'NativeAsset',
-  components: { DelegationForm, ContributionForm, NominationForm },
+  name: 'CrossChainAsset',
+  components: { DelegationForm },
   data () {
     return {
       activeTab: 0,
       tabOptions: [
-        { name: 'registerSteemTab', id: 0, cName: 'DelegationForm' },
-        { name: 'registerCrowdloanTab', id: 1, cName: 'ContributionForm' },
-        // { name: 'registerValidatorTab', id: 2, cName: 'NominationForm' }
+        { name: 'registerSteemTab', id: 0, cName: 'DelegationForm' }
       ]
     }
   }

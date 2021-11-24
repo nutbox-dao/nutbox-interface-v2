@@ -109,7 +109,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getDataCounts } from '@/apis/api'
 
 export default {
   name: 'Home',
@@ -168,14 +167,6 @@ export default {
             amount = amount.toString() * this.vestsToHive / 1e6
             const price = this.prices['HIVEUSDT'];
             tvl += amount * price;
-          }
-        }else if(pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') {
-          if (pool.chainId === 2) {
-            amount = amount.toString() / 1e10;
-            tvl += amount * this.prices['DOTUSDT']
-          }else {
-            amount = amount.toString() / 1e12;
-            tvl += amount * this.prices['KSMUSDT']
           }
         }
       }

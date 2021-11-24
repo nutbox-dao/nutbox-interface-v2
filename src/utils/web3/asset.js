@@ -8,18 +8,13 @@ import {
   aggregate
 } from '@makerdao/multicall'
 import { sleep } from '@/utils/helper'
-import {
-  addressToHex
-} from '@/utils/commen/account'
 import { getAllCommunities, getMyStakingFactory, getNonce } from '@/utils/web3/community'
 import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
 } from "ethers";
-import { stringToHex } from '@polkadot/util'
 import {
   waitForTx,
-  getGasPrice,
   getProvider
 } from './ethers'
 import {
@@ -28,42 +23,11 @@ import {
 } from '@/apis/api'
 import { ASSET_LOGO_URL } from '@/constant'
 import { errCode,
-    CROWDLOAN_CHAINID_TO_NAME,
     DELEGATION_CHAINID_TO_NAME,
-    Multi_Config,
-    GasTimes
+    Multi_Config
 } from "@/config";
-import { stanfiAddress } from '@/utils/commen/account'
 import { signMessage } from './utils'
 
-/**
- * Judge asset wheather Homechain assets
- * @param {String} address regitsry contract address address 
- */
-const isHomeChainAsset = (address) => {
-  return address === contractAddress['HomeChainAssetRegistry']
-}
-/**
- * Judge asset wheather SteemHive assets
- * @param {String} address regitsry contract address address 
- */
-const isSteemHiveAsset = (address) => {
-  return address === contractAddress['SteemHiveDelegateAssetRegistry']
-}
-/**
- * Judge asset wheather Crowdloan assets
- * @param {String} address regitsry contract address address 
- */
-const isCrowdloanAsset = (address) => {
-  return address === contractAddress['SubstrateCrowdloanAssetRegistry']
-}
-/**
- * Judge asset wheather Nominate assets
- * @param {String} address regitsry contract address address 
- */
-const isNominateAsset = (address) => {
-  return address === contractAddress['SubstrateNominateAssetRegistry']
-}
 /**
  * 获取资产类型
  * @param {*} address 
@@ -227,28 +191,6 @@ export const getAssetMetadata = async (id, assetType) => {
         icon
       }
       break;
-    case 'SubstrateCrowdloanAssetRegistry':
-      icon = 'https://cdn.wherein.mobi/polkadot/paralogo/' + (meta[0] === 2 ? 'p/' : 'k/') + meta[1] + '.png'
-      console.log(436, meta[0], meta[1]);
-      if (meta[0] === 2 && parseInt(meta[1]) === 2002){
-        icon = 'https://cdn.wherein.mobi/polkadot/paralogo/p/clover.png'
-      }
-      meta = {
-        chainId: meta[0],
-        paraId: meta[1],
-        trieIndex: meta[2],
-        communityAccount: stanfiAddress(meta[3], meta[0] === 2 ? 0 : 2),
-        icon
-      }
-      break;
-    case 'SubstrateNominateAssetRegistry':
-      icon = ASSET_LOGO_URL[CROWDLOAN_CHAINID_TO_NAME[meta[0]]].icon;
-      meta = {
-        chainId: meta[0],
-        validatorAccount:stanfiAddress(meta[1], meta[0] === 2 ? 0 : 2),
-        icon
-      }
-      break;
     default:
       break;
   }
@@ -316,163 +258,6 @@ export const getERC20Info = async (address) => {
     }catch(e){
       console.log('Wrong ERC20 address');
       reject(e)
-    }
-  })
-}
-
-/**
- * register homechain asset
- * @param {*} assetAddress
- */
-export const registerHomeChainAsset = async (assetAddress) => {
-  return new Promise(async (resolve, reject) => {
-      // regitster asset
-      let contract;
-      try{
-        contract = await getContract('HomeChainAssetRegistry', null, false);
-      }catch(e) {
-        reject(e);
-        return;
-      }
-
-      // if address a token address
-      try{
-        const erc20 = await getContract('ERC20', assetAddress)
-        const decimals = await erc20.decimals()
-      }catch(e){
-        reject(errCode.NOT_A_TOKEN_CONTRACT)
-        return;
-      }
-
-      try {
-        const tx = await contract.registerAsset(
-          '0x', assetAddress, '0x'
-        )
-        await waitForTx(tx.hash)
-        resolve(tx.hash)
-      } catch (e) {
-        if (e.code === 4001){
-          reject(errCode.USER_CANCEL_SIGNING)
-        }else if (e === errCode.TRANSACTION_FAIL) {
-          reject(errCode.ASSET_EXIST)
-        }else {
-          reject(errCode.BLOCK_CHAIN_ERR)
-        }
-        console.log('Registry Homechain Asset Fail', e);
-      }
-  })
-}
-
-/**
- * Register steem/hive bind asset
- * @param {*} form 
- */
-export const registerSteemHiveAsset = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let contract;
-    try{
-      contract = await getContract('SteemHiveDelegateAssetRegistry', null, false);
-    }catch(e){
-      reject(e);
-      return;
-    }
-  
-    try {
-      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20)
-      const foreignLocation = '0x' +
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(form.chainId), 1).substr(2) +
-        stringToHex(form.chainId === 1 ? 'sp' : 'hp').substr(2) +
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(form.account.length), 4).substr(2) +
-        stringToHex(form.account).substr(2)
-      const tx = await contract.registerAsset(
-        foreignLocation, homeChain, stringToHex(form.assetName)
-      )
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    } catch (e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else if (e === errCode.TRANSACTION_FAIL) {
-        reject(errCode.ASSET_EXIST)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-    }
-  })
-}
-
-/**
- * Register crowdloan on polkadot as a binding asset
- * @param {*} form 
- */
-export const registerCrowdloanAsset = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let contract;
-    try{
-      contract = await getContract('SubstrateCrowdloanAssetRegistry', null, false);
-    }catch(e){
-      reject(e);
-      return;
-    }
-    
-    try {
-      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-      const foreignLocation = '0x' +
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot: 2 ; kusama: 3
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.paraId)), 4).substr(2) + // paraId: 2004
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.trieIndex)), 4).substr(2) + // trieIndex: 4
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +                      // communityAccount length
-        addressToHex(form.communityAddress).substr(2) // communityAccount
-      const tx = await contract.registerAsset(foreignLocation, homeChain, stringToHex(JSON.stringify({
-        name: form.assetName,
-        endingBlock: form.endingBlock
-      })))
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    } catch (e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else if (e === errCode.TRANSACTION_FAIL) {
-        reject(errCode.ASSET_EXIST)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-    }
-  })
-}
-
-/**
- * Register validate node binding asset
- * @param {*} form 
- * @returns 
- */
-export const registerNominateAsset = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let contract;
-    try{
-      contract = await getContract('SubstrateNominateAssetRegistry', null, false);
-    }catch(e){
-      reject(e)
-      return;
-    }
-    
-    try {
-      const homeChain = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 20);
-      const foreignLocation = '0x' +
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(parseInt(form.chainId)), 1).substr(2) + // chainId: polkadot
-        ethers.utils.hexZeroPad(ethers.utils.hexlify(32), 4).substr(2) +
-        addressToHex(form.nodeAddress).substr(2) // node address
-      const tx = await contract.registerAsset(foreignLocation, homeChain, stringToHex(form.assetName))
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    } catch (e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else if (e === errCode.TRANSACTION_FAIL) {
-        reject(errCode.ASSET_EXIST)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
     }
   })
 }
