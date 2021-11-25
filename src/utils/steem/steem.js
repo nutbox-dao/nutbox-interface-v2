@@ -2,7 +2,6 @@
 import { errCode, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../../config.js'
 import store from '@/store'
 import axios from "axios"
-import { ListGroupPlugin } from 'bootstrap-vue'
 
 function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
@@ -127,7 +126,7 @@ export const getAccountInfo = async (account) => {
       else
         reject()
     }).catch(err => {
-      console.log('Get steem global data fail:', err)
+      console.log('Get steem account data fail:', err)
       reject(err)
     })
 
@@ -160,7 +159,6 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
           resolve(0)
           return;
         }
-        console.log(235346, delegations);
         if (delegations[0].delegatee !== targetAccount){
           resolve(0)
         }
@@ -173,28 +171,13 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
       resolve(-1)
     }
   })
-  
 }
 
 async function broadcastOps(ops) {
   return new Promise((resolve, reject) => {
-    console.log(store.state.steem.steemLoginType);
-    if (parseInt(store.state.steem.steemLoginType) === 0){// active key
-        steem.broadcast.send({
-          extensions: [],
-          operations: ops
-        }, [store.getters['steem/steemActiveKey']], (err, res) => {
-          if (err){
-            reject();
-          }else {
-            resolve({success: true})
-          }
-        })
-    }else{ // keychain
-      steem_keychain.requestBroadcast(store.state.steem.steemAccount, ops,
-        'Active', function (response) {
-          resolve(response)
-        })
-    }
+    steem_keychain.requestBroadcast(store.state.steem.steemAccount, ops,
+      'Active', function (response) {
+        resolve(response)
+      })
   })
 }

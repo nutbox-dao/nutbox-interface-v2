@@ -13,6 +13,7 @@ import { subBlockNum } from '@/utils/web3/block'
 import { getAllCommunities } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
+import { getDelegateFromHive } from '@/utils/hive/hive'
 
 export default {
   computed: {
@@ -45,6 +46,7 @@ export default {
     }
   },
   mounted () {
+    getDelegateFromHive('terry3t', 'abcallen').then(res => console.log(23, res))
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {

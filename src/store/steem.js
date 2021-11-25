@@ -6,18 +6,12 @@ import {
   getSbdBalance,
   getVestingShares
 } from '@/utils/steem/steem'
-import {
-  encrpty,
-  decrypt
-} from '@/utils/helper'
 
 export default {
   namespaced: true,
   state: {
     // steem
     steemAccount: Cookie.get('steemAccount'),
-    steemActiveKey: Cookie.get('steemActiveKey'),
-    steemLoginType: Cookie.get('steemLoginType'),
     steemBalance: 0,
     vestsBalance: 0,
     vestsToSteem: 0,
@@ -35,14 +29,6 @@ export default {
     saveSteemAccount: function (state, steemAccount) {
       state.steemAccount = steemAccount
       Cookie.set('steemAccount', steemAccount, '30d')
-    },
-    saveSteemActiveKey: function (state, activeKey) {
-      state.steemActiveKey = encrpty(activeKey)
-      Cookie.set('steemActiveKey', state.steemActiveKey, '30d')
-    },
-    saveSteemLoginType: function (state, steemLoginType) {
-      state.steemLoginType = steemLoginType
-      Cookie.set('steemLoginType', steemLoginType, '30d')
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -72,10 +58,6 @@ export default {
     },
     depositedSP: state => (account) => {
       return parseFloat(state.depositedVestsInt[account] * 1e-6 * state.vestsToSteem).toFixed(6)
-    },
-    steemActiveKey: state => {
-      if (!state.steemActiveKey) return;
-      return decrypt(state.steemActiveKey)
     },
   },
   actions: {
@@ -107,9 +89,8 @@ export default {
     },
     async initializeSteemAccount({
       commit
-    }, { steemAccount, activeKey, steemLoginType }) {
+    }, steemAccount) {
       try {
-        console.log(263489247);
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
         const sbd = parseFloat(account.sbd_balance)
@@ -117,10 +98,6 @@ export default {
         commit('saveSteemBalance', steem)
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
-        commit('saveSteemLoginType', steemLoginType)
-        if(activeKey){
-          commit('saveSteemActiveKey', activeKey)
-        }
         return true
       } catch (err) {
         console.error('initializeSteemAccount Fail:', err.message)

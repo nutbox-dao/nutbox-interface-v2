@@ -3,8 +3,6 @@ module.exports = {
     userlogin: "Ingresar",
     steemAccoutPlaceHolder: "Steem Account",
     hiveAccountPlaceHolder: "Hive account",
-    steemActiveKeyPlaceHolder: "Por favor ingresa tu Activa de Steem",
-    hiveActiveKeyPlaceHolder: "Por favor ingresa tu clave Activa de HIVE ",
     login:" Ingresar ",
     loginByKeychain:" Ingresar por Keychain ",
     loging:" Ingresando ... ",
