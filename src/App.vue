@@ -7,14 +7,17 @@
           <i class="app-icon mt-4" style="opacity: .7"></i>
           <div class="divider-line mx-auto my-4"></div>
           <div class="pt-3">
-            <empty-img width="2.8rem" height="2.8rem" border-radius="50%" class="mb-3"></empty-img>
-            <empty-img width="2.8rem" height="2.8rem" border-radius="50%"></empty-img>
+            <img class="user-avatar rounded-circle w-100 mb-3"
+                 src="~@/static/images/tokens/dot.png" alt="">
+            <img class="user-avatar rounded-circle w-100"
+                 src="~@/static/images/tokens/dot.png" alt="">
           </div>
         </div>
         <div>
           <div class="divider-line mx-auto my-2"></div>
           <i class="add-user-icon mt-4" style="opacity: .7"></i>
-          <empty-img width="2.2rem" height="2.2rem" border-radius="50%" class="my-3"></empty-img>
+          <img class="user-avatar rounded-circle w-75 my-3"
+               src="~@/static/images/home-s2-icon1.svg" alt="">
           <i class="menu-icon" style="opacity: .7"></i>
         </div>
       </div>
@@ -45,7 +48,7 @@ import { getDelegateFromHive } from '@/utils/hive/hive'
 export default {
   computed: {
     ...mapState(['lang', 'prices']),
-    ...mapState('web3', ['allCommunities', 'stakingFactoryId']),
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId'])
   },
   methods: {
     ...mapActions('steem', ['setVestsToSteem']),
@@ -55,7 +58,7 @@ export default {
       this.$store.commit('saveLang', lang)
       this.$i18n.locale = lang
     },
-        // BSC data
+    // BSC data
     async fetchBscData () {
     }
   },
