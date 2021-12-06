@@ -70,39 +70,6 @@
           </div>
         </div>
       </section>
-      <!-- <section class="section4">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-center">
-              <div class="s-title m-auto">Nut</div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="box-item-bg">
-                <div class="box-item-s4">
-                  <div class="label">Price</div>
-                  <div class="value">$10</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="box-item-bg">
-                <div class="box-item-s4">
-                  <div class="label">Market Cap</div>
-                  <div class="value">$1,000,000,00</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-              <div class="box-item-bg">
-                <div class="box-item-s4">
-                  <div class="label">Total Supply</div>
-                  <div class="value">$1,000,000,00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> -->
     </div>
   </div>
 </template>
