@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <router-view></router-view>
   </div>
 </template>
 
@@ -30,32 +29,12 @@ export default {
     },
         // BSC data
     async fetchBscData () {
-      try {
-        this.loading = true
-        getAllCommunities()
-        getAllPools().then(res => {
-          monitorPools()
-        }).catch(console.error)
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.loading = false
-      }
     }
   },
   mounted () {
-    getDelegateFromHive('terry3t', 'abcallen').then(res => console.log(23, res))
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
-    const id = this.$route.query.id
-    if (id) {
-      this.$store.commit('saveCurrentCommunityId', id)
-    }
-    // BSC data
-    this.fetchBscData()
     // bsc related
     try {
       await getAccounts(true)
@@ -73,7 +52,6 @@ export default {
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()
-    UpdateApysOfPool()
   }
 }
 </script>
