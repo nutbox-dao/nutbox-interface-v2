@@ -18,7 +18,7 @@
   flex-direction: column;
   justify-content: space-between;
 }
-@mixin card($pd: 1.2rem, $bg:white, $overflow: hidden, $h: 100%) {
+@mixin card($pd: 1.2rem, $bg:black, $overflow: hidden, $h: 100%) {
   width: 100%;
   height: $h;
   border-radius: 1.4rem;

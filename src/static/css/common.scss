@@ -84,93 +84,18 @@ ponsived {
 .primary-btn:hover {
   cursor: pointer;
 }
-
-.hover-blue:hover {
-  cursor: pointer;
-  color: var(--link)
-}
-
-.flex-between-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.flex-between-start {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.flex-start-center {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.flex-full {
-  flex: 1;
-}
-
-.font56 {
-  font-size: 2.8rem;
-}
-
-.font46 {
-  font-size: 2.3rem;
-}
-
-.font40 {
-  font-size: 2rem;
-}
-
-.font32 {
-  font-size: 1.6rem;
-}
-
-.font28 {
-  font-size: 1.4rem;
-}
-
-.font26 {
-  font-size: 1.3rem;
-}
-
-.font24 {
-  font-size: 1.2rem;
-}
-
-.font20 {
-  font-size: 1rem;
-}
-
-.font18 {
-  font-size: .9rem;
-}
-
-.font16 {
-  font-size: .8rem;
-}
-
-.font14 {
-  font-size: .7rem;
-}
-
-.font12 {
-  font-size: .6rem;
-}
-
 .font-bold {
   font-weight: bold;
 }
-
+.text-primary-0 {
+  color: var(--primary-custom);
+}
 .text-grey-light {
   color: #BDBFC2;
 }
-
 .text-grey {
   color: #464A53;
 }
-
 .text-black {
   color: #242629;
 }

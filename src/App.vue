@@ -1,5 +1,33 @@
 <template>
   <div id="app">
+    <div class="page-layout">
+      <div class="page-side">
+        <div>
+          <empty-img width="2.8rem" height="2.8rem"></empty-img>
+          <i class="app-icon mt-4" style="opacity: .7"></i>
+          <div class="divider-line mx-auto my-4"></div>
+          <div class="pt-3">
+            <empty-img width="2.8rem" height="2.8rem" border-radius="50%" class="mb-3"></empty-img>
+            <empty-img width="2.8rem" height="2.8rem" border-radius="50%"></empty-img>
+          </div>
+        </div>
+        <div>
+          <div class="divider-line mx-auto my-2"></div>
+          <i class="add-user-icon mt-4" style="opacity: .7"></i>
+          <empty-img width="2.2rem" height="2.2rem" border-radius="50%" class="my-3"></empty-img>
+          <i class="menu-icon" style="opacity: .7"></i>
+        </div>
+      </div>
+      <div class="page-container">
+        <div class="page-header d-flex justify-content-between align-items-center">
+          <div class="page-title font-bold font20">Home</div>
+          <div class="account">0x....</div>
+        </div>
+        <div class="page-content">
+          <router-view></router-view>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,23 +85,23 @@ export default {
 </script>
 
 <style lang="scss">
-$blue: #ffdb1b;
 :root {
   --yellow-background: #f5ecd8;
   --primary-custom: #ffdb1b;
   --primary-custom-rgb: 255, 219, 27;
   --primary-hover: #ffeb75;
-  --primary-text: #242629;
+  --primary-text: white;
   --primary-btn-text-color: #242629;
   --secondary-text: #717376;
   --disable: #bdbfc2;
-  --dividers: #e3e5e8;
-  --background: #F5F6F8;
+  --dividers: #737373;
+  --background: #24242d;
   --error: #ff5040;
   --success: #50bf00;
   --link: #408fff;
   --warning: #ff9500;
   --backgroud-state: #b37012;
+  --primary: #ffdb1b;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
@@ -86,6 +114,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  background-color: var(--background);
 }
 #app {
   font-family: PingFang SC, -apple-system, BlinkMacSystemFont,
@@ -100,8 +129,6 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
   font-size: 14px;
   background-color: var(--background);
 }
