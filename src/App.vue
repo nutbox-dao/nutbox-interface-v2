@@ -9,7 +9,6 @@
           <router-link to="/community">
             <i class="app-icon mt-4" style="opacity: .7"></i>
           </router-link>
-          <i class="app-icon mt-4" style="opacity: .7" @click="$router.history.push('/community/community-list')"></i>
           <div class="divider-line mx-auto my-4"></div>
           <div class="pt-3">
             <img class="user-avatar rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png" v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
