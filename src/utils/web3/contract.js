@@ -18,39 +18,21 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0xCf1f551a9eE0270275416a73ae8Af7180F4FFbDf",
-  "ERC20Factory": "0xCd809876f74BD4336E2E5cA34B185AC5bC18AB04",
-  "HomeChainAssetRegistry": "0x27d92bBc27D22e01769a9cE2B603DB61dBB706Ee",
-  "SteemHiveDelegateAssetRegistry": "0x00e5736503ECd2224b472084A55Ea933064CA69e",
-  "SubstrateCrowdloanAssetRegistry": "0xa970A3D076Bb05dDF62d2bE8d464701435827C35",
-  "SubstrateNominateAssetRegistry": "0x2c562026c0821CeE1864343Cc790688A00c4C084",
-  "ERC20AssetHandler": "0x4f0F6ec7f5b1581AF975B002dcaE47E0b2f07095",
-  "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x4c4634DccB5566295245Bc3A298A69658b7F0ca0",
-  "Executor": "0x0DcF533C7a1a83c759293B6f80c8924f96038Fe2",
-  "Bridge": "0xDAfde7eF7673eDc336f41B1A3Fbc4511B629a9bC",
-  "StakingFactory": "0xc6C3b3F90B9d9cA16551EAdE6fF22d874E90B6B3",
-  "LinearCalculator": "0x11f49dad513f0ffc7476F18A58e4A164e6d5247B"
+  "Committee": "0xdBCb7680BA39Cd9A1104eB0DAF38A73bB20d719E",
+  "CommunityFactory": "0xa642F67d96899FbEFcA5191c04f6788f0456B274",
+  "LinearCalculator": "0x269f6Dc36350240ED6A0a3481a4Bf47aD4Bd97bF",
+  "SPStakingFactory": "0xAe221fcd665cFb80ae8ee7beE47ADacfe4C9D6Fd",
+  "ERC20StakingFactory": "0xfb0792bE63F51998a38f432bF3C614c595569952"
 }
 
 // contract file name
 const CONTRACT_ABI_FILE_NAME_LIST = {
-  RegistryHub: 'RegistryHub.json',
-  HomeChainAssetRegistry: 'HomeChainAssetRegistry.json',
-  SteemHiveDelegateAssetRegistry: 'SteemHiveDelegateAssetRegistry.json',
-  SubstrateCrowdloanAssetRegistry: 'SubstrateCrowdloanAssetRegistry.json',
-  SubstrateNominateAssetRegistry: 'SubstrateNominateAssetRegistry.json',
-  ERC20AssetHandler: 'ERC20AssetHandler.json',
-  TrustlessAssetHandler: 'TrustlessAssetHandler.json',
-  Executor: '',
-  Bridge: 'Bridge.json',
-  StakingFactory: 'StakingFactory.json',
-  StakingTemplate: 'StakingTemplate.json',
-  ERC20: 'ERC20.json',
-  SimpleERC20: 'SimpleERC20.json',
-  MintableERC20: 'MintableERC20.json',
-  ERC20Factory: 'ERC20Factory.json',
-  LinearCalculator: 'LinearCalculator.json'
+  "Committee": "Committee.json",
+  "CommunityFactory": "CommunityFactory.json",
+  "LinearCalculator": "LinearCalculator.json",
+  "SPStakingFactory": "SPStakingFactory.json",
+  "ERC20StakingFactory": "ERC20StakingFactory.json",
+  "ERC20": "ERC20.json"
 }
 
 // Get contract Abi

@@ -41,29 +41,21 @@
               </div>
             </div>
           </div>
+          <p>
+            userCount: {{ walnutInfo.totalUsers }}
+          </p>
+          <p>
+            community: {{ walnutInfo.totalCommunities }}
+          </p>
+          <p>
+            pools: {{ walnutInfo.totalPools }}
+          </p>
+          
         </section>
-<!--        <section class="section3">-->
-<!--          <div class="s3-offset">-->
-<!--            <div class="s-box">-->
-<!--              <div class="box-item box-item-s3">-->
-<!--                <div class="label">Pools</div>-->
-<!--                <div class="value">{{ poolsCount | amountForm(0) }}</div>-->
-<!--              </div>-->
-<!--              <div class="box-item box-item-s3">-->
-<!--                <div class="label">Tokens</div>-->
-<!--                <div class="value">{{ tokensCount | amountForm(0) }}</div>-->
-<!--              </div>-->
-<!--              <div class="box-item box-item-s3">-->
-<!--                <div class="label">TVL</div>-->
-<!--                <div class="value">${{ tokensTvl | amountForm(0) }}</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </section>-->
         <section class="section3 mt-4">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="">More >></div>
+            <div class="more" @click="$router.replace('/community/community-list')">More >></div>
           </div>
         </section>
         <section class="my-4 text-primary-0">
@@ -76,6 +68,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getWalnutData } from '@/utils/graphql/committee'
 
 export default {
   name: 'Home',
@@ -90,58 +83,28 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['allCommunities', 'allTokens', 'allPools', 'monitorPools']),
+    ...mapState('web3', ['walnutInfo']),
     ...mapState(['prices']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
     usersCount() {
-      let count = 0;
-      if (!this.allPools || this.allPools.length == 0) return 0;
-      for (let i = 0; i < this.allPools.length; i++){
-        const pool = this.allPools[i];
-        count += this.monitorPools[pool.communityId + '-' + pool.pid + '-stakerCount']
-      }
-      return count
+      return 0
     },
     communityCount() {
-      return this.allCommunities ? this.allCommunities.length : 0
+      return 0
     },
     poolsCount() {
-      return this.allPools ? this.allPools.length : 0
+      return 0
     },
     tokensCount() {
-      return this.allTokens ? this.allTokens.length : 0
+      return 0
     },
     tokensTvl() {
-      let tvl = 0;
-      const vestsToSteem = this.vestsToSteem
-      if (!this.allPools || !this.monitorPools || !this.prices || !this.allTokens) return 0;
-      for (let i = 0; i < this.allPools.length; i++) {
-        const pool = this.allPools[i];
-        let amount = this.monitorPools[pool.communityId + '-' + pool.pid + '-totalStakedAmount'];
-        if (!amount) continue;
-        if (pool.type === 'HomeChainAssetRegistry') {
-          const price = this.allTokens.filter(token => token.address === pool.address)[0].price;
-          tvl += amount / (10 ** pool.tokenDecimal) * price;
-        }else if(pool.type === 'SteemHiveDelegateAssetRegistry') {
-          if (pool.chainId === 1) {
-            if (!vestsToSteem) continue;
-            amount = amount.toString() * vestsToSteem / 1e6
-            const price = this.prices['STEEMETH'] * this.prices['ETHUSDT'];
-            tvl += amount * price;
-          }else {
-            if (!this.vestsToHive) continue;
-            amount = amount.toString() * this.vestsToHive / 1e6
-            const price = this.prices['HIVEUSDT'];
-            tvl += amount * price;
-          }
-        }
-      }
-      const constant = 7760 * this.prices['KSMUSDT']
-      return tvl + constant;
+      return 0
     }
   },
   mounted () {
+    getWalnutData();
   },
 }
 </script>
@@ -219,6 +182,9 @@ $home-primary-color: #F8B62A;
   flex: 1;
   .s3-title {
     margin-left: 8rem;
+  }
+  .more {
+    cursor: pointer;
   }
   .sub-title {
     max-width: 25rem;

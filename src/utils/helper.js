@@ -98,6 +98,30 @@ export function getDateString(now, timezone, extra = 0) {
   return now.toISOString().replace("T", " ").substring(0, 19);
 }
 
+export function parseTimestamp(timestamp) {
+  let nowStamp = (new Date().getTime()) / 1000;
+  if (timestamp > nowStamp) {
+    return getDateString(null, null, timestamp - nowStamp);
+  }else {
+    const diff = nowStamp - timestamp;
+    if (diff < 10) {
+      return 'Now'
+    }else if(diff < 60) {
+      return `${diff} seconds ago`
+    }else if (diff < 3600) {
+      return `${Math.floor(diff / 60)} mins ago`
+    }else if (diff < 3600 * 24) {
+      return `${Math.floor(diff / 3600)} hours ago`
+    }else if (diff < 3600 * 24 * 30) {
+      return `${Math.floor(diff / 3600 / 24)} days ago`
+    }else if (diff < 3600 * 24 * 60) {
+      return '1 month ago'
+    }else {
+      return getDateString(null, null, timestamp - nowStamp)
+    }
+  }
+}
+
 // block time
 export function blockTime(start, end) {
   start = parseInt(start);
