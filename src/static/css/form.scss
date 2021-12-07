@@ -62,12 +62,17 @@
 }
 .c-input-group {
   @include c-flex-between-center;
-  background: #F6F7F9;
+  background: var(--input-bg);
   border-radius: .8rem;
   flex: 1;
+  border: 2px solid var(--input-border);
   .c-append {
     padding: 0 .8rem;
     white-space: nowrap;
+  }
+  input {
+    background: var(--input-bg);
+    color: white;
   }
 }
 .c-date-picker .b-form-datepicker {

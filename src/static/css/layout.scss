@@ -134,33 +134,31 @@
       }
     }
     &-bg {
-      height: 1.8rem;
-      background-color: #E3E5E8;
-      border-radius: 1.8rem;
+      height: 2rem;
+      background-color: var(--nav-tab-bg);
+      border-radius: .4rem;
       .nav .active {
-        background-color: var(--primary-custom);
-        border-radius: 1.8rem;
+        background-color: var(--nav-tab-bg-active);
+        border-radius: .4rem;
         color: var(--primary-text);
         font-weight: bold;
       }
       a, span {
-        height: 1.8rem;
-        line-height: 1.8rem;
+        height: 2rem;
+        line-height: 2rem;
       }
     }
     .nav {
+      flex: 1;
       display: flex;
       flex-wrap: nowrap;
       overflow-y: hidden;
       overflow-x: scroll;
       a, span {
-        border: 0;
         font-size: .8rem;
-        color: #666;
-        box-sizing: border-box;
-        font-weight: normal;
-        padding: 0 1.6rem;
         cursor: pointer;
+        flex: 1;
+        padding: 0 .5rem;
       }
       a:hover, span:hover {
         text-decoration: none;
@@ -176,7 +174,7 @@
       display: none;
     }
     .view-top-header {
-      padding: 2rem .75rem 1rem;
+      padding: 2rem 15px 1rem;
       top: -1.5rem;
     }
   }

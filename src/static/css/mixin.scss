@@ -18,12 +18,12 @@
   flex-direction: column;
   justify-content: space-between;
 }
-@mixin card($pd: 1.2rem, $bg:black, $overflow: hidden, $h: 100%) {
+@mixin card($pd: 1.2rem, $bg:var(--card-bg-primary), $overflow: hidden, $h: 100%) {
   width: 100%;
   height: $h;
-  border-radius: 1.4rem;
+  border-radius: .8rem;
   overflow: $overflow;
-  border: none;
+  border: 1px solid var(--card-broder);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
   position: relative;
   background: $bg;

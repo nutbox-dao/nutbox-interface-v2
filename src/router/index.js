@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home'
+import CommunityIndex from '@/views/community/Index'
+import CommunityHome from '@/views/community/CommunityHome'
+import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 Vue.use(VueRouter)
 
 const routes = [
@@ -8,6 +11,22 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/community',
+    name: 'community',
+    component: CommunityIndex,
+    redirect: '/community/index',
+    children: [
+      {
+        path: 'index',
+        component: CommunityHome
+      },
+      {
+        path: 'deploy-token',
+        component: DeployCommunityToken
+      }
+    ]
   }
 ]
 
