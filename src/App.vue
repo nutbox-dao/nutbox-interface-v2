@@ -3,14 +3,14 @@
     <div class="page-layout">
       <div class="page-side">
         <div>
-          <empty-img width="2.8rem" height="2.8rem"></empty-img>
-          <i class="app-icon mt-4" style="opacity: .7"></i>
+          <div @click="goHome()">
+              <empty-img width="2.8rem" height="2.8rem" @click="goHome()"></empty-img>
+          </div>
+          
+          <i class="app-icon mt-4" style="opacity: .7" @click="$router.history.push('/community/community-list')"></i>
           <div class="divider-line mx-auto my-4"></div>
           <div class="pt-3">
-            <img class="user-avatar rounded-circle w-100 mb-3"
-                 src="~@/static/images/tokens/dot.png" alt="">
-            <img class="user-avatar rounded-circle w-100"
-                 src="~@/static/images/tokens/dot.png" alt="">
+            <img class="user-avatar rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png" v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
         <div>
@@ -40,15 +40,16 @@ import { mapState, mapActions } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getAllCommunities } from '@/utils/web3/community'
+import { getMyStakingFactory } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode } from '@/utils/helper'
 import { getDelegateFromHive } from '@/utils/hive/hive'
+import { getMyJoinedCommunity } from '@/utils/graphql/user'
 
 export default {
   computed: {
     ...mapState(['lang', 'prices']),
-    ...mapState('web3', ['allCommunities', 'stakingFactoryId'])
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo'])
   },
   methods: {
     ...mapActions('steem', ['setVestsToSteem']),
@@ -60,6 +61,11 @@ export default {
     },
     // BSC data
     async fetchBscData () {
+      const stakingId = await getMyStakingFactory();
+      console.log(stakingId);
+    },
+    goHome() {
+      this.$router.replace('/')
     }
   },
   mounted () {
@@ -69,6 +75,7 @@ export default {
     // bsc related
     try {
       await getAccounts(true)
+      getMyJoinedCommunity();
     } catch (e) {
       console.log('Get accounts fail', e)
     }
@@ -80,6 +87,9 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
+    // bsc data
+    this.fetchBscData();
+
     // get steem vests ratio
     this.setVestsToSteem()
     this.setVestsToHive()

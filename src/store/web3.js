@@ -6,7 +6,9 @@ export default {
   namespaced: true,
   state: {
     ethers: null,
+    walnutInfo: {},
     account: Cookie.get("bsc-account"),
+    userGraphInfo: {},
     allAccounts: [],
     abis: {},
     chainId: -1,
@@ -68,8 +70,14 @@ export default {
     saveAccount: (state, account) => {
       (state.account = account), Cookie.set("bsc-account", account, "30d");
     },
+    saveWalnutInfo: (state, walnutInfo) => {
+      state.walnutInfo = walnutInfo;
+    },
     saveAllAccounts: (state, allAccounts) => {
       state.allAccounts = allAccounts;
+    },
+    saveUserGraphInfo: (state, userGraphInfo) => {
+      state.userGraphInfo = userGraphInfo;
     },
     saveAbi: (state, { name, abi }) => {
       state[name] = abi;

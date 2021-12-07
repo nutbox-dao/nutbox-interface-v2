@@ -105,23 +105,19 @@ export const getCToken = async (communityId, update=false) => {
       return;
     }
     let contract;
-    let registerHub;
     try{
-      contract = await getContract('StakingTemplate', communityId)
-      registerHub = await getContract('RegistryHub')
+      contract = await getContract('Community', communityId)
     }catch(e){
       reject(e)
       return
     }
 
     try{
-      const assetId = await contract.rewardAsset()
-      const tokenAddress = await registerHub.getHomeLocation(assetId);
+      const [tokenAddress, isMintable] = await Promise.all([contract.communityToken(), contract.isMintableCommunityToken()])
       try{
         const cToken = await getERC20Info(tokenAddress);
-        cToken["assetId"] = assetId
-        cToken['isMintable'] = await registerHub.mintable(assetId);
-        cTokens[communityId] = cToken
+        cToken['isMintable'] = isMintable;
+        cTokens[communityId] = cToken;
         store.commit('web3/saveCTokens', cTokens)
         resolve(cToken)
       }catch(e){
