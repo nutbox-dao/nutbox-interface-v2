@@ -50,7 +50,7 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <button class="primary-btn mt-5" @click="cardStep=2">Register Token</button>
+                  <button class="primary-btn mt-5" @click="registerToken()">Register Token</button>
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@
         </div>
         <div v-show="cardStep===1" class="form-card">
           <div class="custom-form">
-            <i class="close-icon" @click="cardStep=2"></i>
+            <i class="close-icon" @click="cardStep=0"></i>
             <div class="c-input-group">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
@@ -69,7 +69,7 @@
                 <i class="search-icon" @click="checkTokenAddress"></i>
               </div>
             </div>
-            <div @click="cardStep=2"> v-if="provideName && provideSymbol">
+            <div @click="choseToken()" v-if="provideName && provideSymbol">
               <TokenItem class="my-3"
                          :logo="provideLogo"
                          :token-name="provideName"
@@ -79,7 +79,7 @@
             <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
             <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
             <div style="cursor: pointer" v-for="token of OfficialAssets" :key="token.address"
-                 @click="cardStep=2">
+                 @click="choseToken(token)">
               <TokenItem class="my-3"
                          :logo="token.icon"
                          :token-name="token.name"
@@ -96,17 +96,17 @@
               <div class="row font16 mt-3 mb-1">
                 <div class="col-sm-8">Total distribution by current policy</div>
                 <div class="col-sm-4">
-                  <div class="b-box">10,000,000</div>
+                  <div class="b-box">{{ totalSupply }}</div>
                 </div>
               </div>
               <div class="row font16">
                 <div class="col-sm-8">Current Block height</div>
                 <div class="col-md-4">
-                  <div class="b-box">5978374</div>
+                  <div class="b-box">{{ blockNum }}</div>
                 </div>
               </div>
               <div class="py-4">
-                <Progress :progress-data="progressData"/>
+                <Progress :progress-data="progressData" @delete="deleteData" :is-edit='true'/>
               </div>
               <div class="custom-form">
                 <b-form-group
@@ -120,10 +120,10 @@
                     <b-form-input
                       class=""
                       type="number"
-                      v-model="poolForm.start"
-                      @keyup="startChange($event)"
+                      v-model="distributionForm.start"
+                      @keyup="startChanged($event)"
                       :disabled="progressData.length>0"
-                      :placeholder="$t('community.inputStopBlock')"
+                      :placeholder="$t('placeHolder.inputStopBlock')"
                     >
                     </b-form-input>
                     <div class="b-box mx-2 font12 text-nowrap">{{startTime}}</div>
@@ -134,15 +134,14 @@
                   label-class="overflow-hidden text-grey-7"
                   label-cols-md="3"
                   content-cols-md="9"
-                  :label="$t('community.startBlock')"
+                  :label="$t('community.stopBlock')"
                 >
                   <div class="d-flex c-input-group">
                     <b-form-input
                       type="number"
-                      v-model="poolForm.end"
-                      @keyup="stopChange($event)"
-                      :disabled="progressData.length>0"
-                      :placeholder="$t('community.inputStopBlock')"
+                      v-model="distributionForm.end"
+                      @keyup="stopChanged($event)"
+                      :placeholder="$t('placeHolder.inputStopBlock')"
                     ></b-form-input>
                     <div class="b-box mx-2 font12 text-nowrap">{{stopTime}}</div>
                   </div>
@@ -152,26 +151,26 @@
                   label-class="overflow-hidden text-grey-7"
                   label-cols-md="3"
                   content-cols-md="9"
-                  :label="$t('community.rewardAmount')"
+                  :label="$t('community.mintAmount')"
                 >
-                  <b-form-input
-                    class="input-border"
-                    type="number"
-                    v-model="poolForm.reward"
-                    :placeholder="$t('community.inputBlockReward')"
-                  ></b-form-input>
-                  <span class="block-tip">{{ stopTime }}</span>
+                  <div class="c-input-group">
+                    <b-form-input
+                      type="number"
+                      v-model="distributionForm.reward"
+                      :placeholder="$t('placeHolder.inputMintAmount')"
+                    ></b-form-input>
+                  </div>
                 </b-form-group>
                 <div class="col-md-6 offset-md-3 pt-3">
                   <button class="primary-btn"
-                          :disabled="!poolForm.end || !poolForm.reward || progressData.length>=256 || poolForm.start >= maxBlock"
-                          @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
+                          :disabled="!distributionForm.end || !distributionForm.reward || progressData.length>=256 || distributionForm.start >= maxBlock"
+                          @click="confirmAdd">{{ $t('operation.add') }}</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <button class="next-btn primary-btn w-auto" @click="$router.push('set-profile')">
+        <button class="next-btn primary-btn w-auto" v-show="cardStep === 2" @click="confirmDeploy()">
           <span class="mr-3">Deploy</span>
           <i class="next-icon"></i>
         </button>
@@ -182,7 +181,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
@@ -209,6 +207,7 @@ export default {
       provideSymbol: null,
       provideAddress: null,
       progressData: [],
+      cToken: {},
       form: {
         address: null,
         name: null,
@@ -224,7 +223,7 @@ export default {
         reward: ''
       },
       OfficialAssets: OfficialAssets,
-      cardStep: 2
+      cardStep: 0
     }
   },
   computed: {
@@ -266,6 +265,43 @@ export default {
           })
         }
       }
+    },
+    choseToken (token) {
+      if(!token) {
+        this.cToken = {
+          name: this.provideName,
+          symbol: this.provideSymbol,
+          logo: this.provideLogo,
+          address: this.provideAddress,
+          isMintable: false
+        }
+      }else {
+        this.cToken = {...token, isMintable: false}
+      }
+      this.cardStep = 2;
+    },
+    registerToken() {
+      // check input
+      let tipStr
+      if (!this.form.name) {
+        tipStr = this.$t('tip.needTokenName')
+      }else if(!this.form.symbol) {
+        tipStr = this.$t('tip.needTokenSymbol')
+      }
+      if (tipStr){
+        this.$bvToast.toast(tipStr, {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
+      this.cToken = {
+        name: this.form.name,
+        symbol: this.form.symbol, 
+        supply: this.form.supply,
+        isMintable: true
+      }
+      this.cardStep = 2;
     },
     deleteData () {
       this.progressData.pop()
@@ -332,7 +368,7 @@ export default {
       const count = this.progressData.length
       this.progressData = this.progressData.map((pd, i) => ({
         ...pd,
-        background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`
+        background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`
       }))
     },
     async confirmDeploy () {

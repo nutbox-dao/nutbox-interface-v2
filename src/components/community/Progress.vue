@@ -7,7 +7,7 @@
           :style="{left: `${(blockPosition)*100}%`}">{{blockNum}}</span>
     <div class="c-progress-container" :style="{background: trackColor}">
       <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"
-           :style="{ flex: 1,  background: data.background || `rgba(80, 191, 0, ${(index+1) / progressData.length})`}" >
+           :style="{ flex: 1,  background: data.background || `rgba(255, 149, 0, ${(index+1) / progressData.length})`}" >
         <span class="progress-tooltip"
               :style="{color: (blockNum >= data.startHeight && blockNum < data.stopHeight) ? '#FF5000' : '#50BF00'}">
           {{data.amount}}</span>

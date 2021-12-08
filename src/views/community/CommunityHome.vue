@@ -38,7 +38,7 @@
               <div class="col-md-6"></div>
               <div class="col-md-6">
                 <b-input-group class="search-input">
-                  <b-form-input :placeholder="$t('commen.search')" v-model="searchText"></b-form-input>
+                  <b-form-input :placeholder="$t('operation.search')" v-model="searchText"></b-form-input>
                   <template #append>
                     <i class="search-icon"></i>
                   </template>

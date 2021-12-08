@@ -158,6 +158,8 @@ module.exports = {
     needIcon: "Please upload Community Logo",
     needTokenIcon: "Please upload C-token Logo",
     needPoster: "Please Upload Community Poster",
+    needTokenName: "Please input token name",
+    needTokenSymbol: "Please input token symbol",
     completeCommunityInfoSuccess: "Community Information update successfully",
     wrongSubstrateAddress: "Please input correct {type} address",
     ratioError: "The total proportion of Staking Pool is 100",
@@ -318,6 +320,9 @@ module.exports = {
     inputLink: "Please input Community Website Link",
     inputDesc: "Plese input Community Description ",
     inputApy: "Please input Apr",
+    inputStartBlock: "Please input start block",
+    inputStopBlock: "Please input stop block",
+    inputMintAmount: "Please input mint number"
   },
   community: {
     community: "Community",
@@ -335,6 +340,10 @@ module.exports = {
     communityAsset: "Community Asset",
 
     noCommunity: "You have no community yet",
+
+    startBlock: "Start block",
+    stopBlock: "Stop block",
+    mintAmount: "Mint amount"
   },
   asset: {
     tokenName: "Name",
