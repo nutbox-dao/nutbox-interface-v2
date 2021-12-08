@@ -70,9 +70,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     color: var(--dividers);
+    font-size: .7rem;
     &-checked {
       border-color: var(--primary-custom);
       background-color: var(--primary-custom);
+      color: white;
     }
     &-active {
       border-color: var(--primary-custom);
@@ -83,6 +85,8 @@ export default {
       top: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
+      white-space: nowrap;
+      color: var(--primary-custom);
     }
   }
   .h-line {

@@ -4,6 +4,7 @@ import Home from '../views/Home'
 import CommunityIndex from '@/views/community/Index'
 import CommunityHome from '@/views/community/CommunityHome'
 import DeployCommunityToken from '@/views/community/DeployCommunityToken'
+import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 Vue.use(VueRouter)
 
 const routes = [
@@ -25,6 +26,10 @@ const routes = [
       {
         path: 'deploy-token',
         component: DeployCommunityToken
+      },
+      {
+        path: 'set-profile',
+        component: SetCommunityProfile
       }
     ]
   }
