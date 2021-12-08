@@ -311,6 +311,17 @@
         <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
+    <b-modal
+      v-model="chooseTokenTipModal"
+      modal-class="custom-modal"
+      size="lg"
+      hide-backdrop
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <ChooseTokenTipModal @close="chooseTokenTipModal=false"/>
+    </b-modal>
   </div>
 </template>
 
@@ -326,10 +337,11 @@ import { mapGetters } from 'vuex'
 import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 import Progress from '@/components/community/Progress'
+import ChooseTokenTipModal from '@/components/community/ChooseTokenTipModal'
 
 export default {
   name: 'SetCommunityProfile',
-  components: { UploadLoading, Step, VueCropper, Progress },
+  components: { UploadLoading, Step, VueCropper, Progress, ChooseTokenTipModal },
   data () {
     return {
       logo: null,
@@ -365,6 +377,7 @@ export default {
       cropFixedNumber: [1, 1],
       cropImgSize: [200, 200],
       state: '',
+      chooseTokenTipModal: true
     }
   },
   computed: {
@@ -477,8 +490,8 @@ export default {
       }
     },
     async updateTokenLogo (file) {
-      if(!this.tokenLogo) return;
-      this.tokenLogoUploadLoading = true;
+      if (!this.tokenLogo) return
+      this.tokenLogoUploadLoading = true
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (res) => {
@@ -560,7 +573,7 @@ export default {
     async onConfirm () {
       try {
         this.uploading = true
-        const resCode = await completeCommunityInfo(this.form, "create")
+        const resCode = await completeCommunityInfo(this.form, 'create')
 
         // go to community dashboard
         this.$bvToast.toast(this.$t('tip.completeCommunityInfoSuccess'), {

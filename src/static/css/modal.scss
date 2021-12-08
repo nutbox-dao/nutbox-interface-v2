@@ -1,14 +1,17 @@
 .custom-modal {
   .modal-content {
     border: none;
-    border-radius: 1.2rem;
+    border-radius: .8rem;
+    background-color: var(--input-bg);
+    box-shadow: 0 2px 12px 2px rgba(white, 0.1);
+    color: white;
   }
   .modal-body {
     padding: 1.2rem;
   }
   .modal-h-line {
     height: 1px;
-    background: #F6F7F9;
+    background: var(--dividers);
     margin: 1rem -1.2rem;
   }
   .close-btn {
