@@ -51,7 +51,6 @@ ponsived {
   margin: 0 auto;
   border-color: transparent;
   background: var(--primary-custom);
-  //box-shadow: 0 8px 12px -4px var(--primary-custom);
   border-radius: .8rem;
   font-size: .8rem;
   font-weight: bold;
@@ -59,7 +58,7 @@ ponsived {
   white-space: nowrap;
   min-width: fit-content;
   &:hover {
-    background: rgba(var(--primary-custom-rgb), .7);
+    background: #ffa000;
   }
   &.outline-btn {
     background: white;
@@ -69,13 +68,13 @@ ponsived {
   }
 }
 .primary-btn-outline {
-  background-color: white;
+  background-color: transparent;
   border: 1px solid var(--primary-custom);
   box-shadow: none;
   color: var(--primary-custom);
 }
 .primary-btn:disabled {
-  background: rgba(227, 229, 232, 1);
+  background: rgba(black, .1);
   color: rgba(189, 191, 194, 1);
   box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
   cursor: not-allowed !important;
@@ -90,11 +89,14 @@ ponsived {
 .text-primary-0 {
   color: var(--primary-custom);
 }
-.text-grey-light {
-  color: #BDBFC2;
+.text-grey-7 {
+  color: rgba(white, .7);
 }
-.text-grey {
-  color: #464A53;
+.text-grey-5 {
+  color: rgba(white, .5);
+}
+.text-grey-3 {
+  color: rgba(white, .3);
 }
 .text-black {
   color: #242629;
@@ -181,15 +183,6 @@ input:focus, textarea:focus {
 [role="button"] {
   outline: none;
 }
-.c-form-label label {
-  color: #717376;
-  margin-bottom: .4rem;
-}
-
-.dropdown {
-  outline: none;
-}
-
 .boder-bottom{
   border-bottom: 1px solid var(--dividers);
 }
@@ -262,15 +255,13 @@ input::-webkit-input-placeholder {
 .custom-file-input, .custom-file-label {
   width: 100%!important;
   height: 100%!important;
-  background-color: #F6F7F9!important;
-  border: 1px solid #E3E5E8!important;
+  background-color: var(--input-bg)!important;
+  border: 1px solid var(--input-border)!important;
   padding: 0!important;
   box-sizing: content-box;
 }
 .custom-file-label::after{
   display: none!important;
-  //content: ''!important;
-  //padding: 0!important;
 }
 .form-file-text {
   width: 100%;
@@ -291,7 +282,6 @@ input::-webkit-input-placeholder {
 .cover-form .custom-file-input, .cover-form .custom-file-label {
   border-radius: .8rem;
 }
-@import "dropdown";
 
 .cropper-container {
   height: 500px;

@@ -5,49 +5,32 @@
         <div class="view-top-header">
           <Step :current-step="1" :step-label="['Deploy community', 'setupProfile']"></Step>
         </div>
-        <div class="form-card">
+        <div v-show="!isChooseToken" class="form-card">
           <div class="form text-left">
             <div class="font-bold font20">Chose an asset</div>
             <div class="font16 my-3">If you want to use an exist token</div>
             <div class="custom-form">
-              <Dropdown :menu-options="concatAddressOptions"
-                        :loading="assetLoading"
-                        :selected-key="selectedKey"
-                        :selected-item="selectedAddressData"
-                        @setSelectedData="setSelectedData">
-                <template v-slot:empty0>
-                  <div class="text-center">
-                    <div class="custom-control" style="line-height: 1.5rem">
-                      {{ $t('asset.notRegister') }}
-                      <router-link to="/community/register-ctoken">{{ $t('asset.registerOne') }}</router-link>
-                    </div>
-                  </div>
-                </template>
-                <template v-slot:drop-item="slotProps">
-                  <img class="prefix-icon" :src="slotProps.item.icon" alt="">
-                  <div class="flex-full d-flex flex-column">
-                    <span>{{ slotProps.item.symbol }}</span>
-                    <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
-                  </div>
-                </template>
-              </Dropdown>
+              <button class="primary-btn" @click="isChooseToken=true">Choose Token</button>
             </div>
           </div>
-          <div class="my-5 mx-auto divide-line font-bold">OR</div>
+          <div class="my-5 mx-auto divide-line font-bold text-center">OR</div>
           <div class="form text-left">
             <div class="font-bold font20">Register an asset</div>
             <div class="font16 my-3">If you want to create a new token</div>
             <div class="custom-form">
               <div class="row">
                 <div class="col-sm-6">
+                  <div class="font14 mb-1">Token Name</div>
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
-                               :placeholder="$t('asset.tokenName')" v-model="poolForm.end"></b-input>
+                               :placeholder="$t('asset.tokenName')"
+                               v-model="poolForm.end"></b-input>
                     </b-input-group>
                   </div>
                 </div>
                 <div class="col-sm-6 mt-2 mt-sm-0">
+                  <div class="font14 mb-1">Token Symbol</div>
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
@@ -56,6 +39,7 @@
                   </div>
                 </div>
                 <div class="col-12 mt-2">
+                  <div class="font14 mb-1">Premine amount</div>
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
@@ -70,13 +54,43 @@
             </div>
           </div>
         </div>
+        <div v-show="isChooseToken" class="form-card">
+          <div class="custom-form">
+            <i class="close-icon" @click="isChooseToken=false"></i>
+            <div class="c-input-group">
+              <b-input-group class="d-flex flex-between-center">
+                <b-input class="flex-full"
+                         :placeholder="$t('asset.tokenName')"
+                         v-model="poolForm.end"></b-input>
+              </b-input-group>
+              <div class="c-append">
+                <i class="search-icon"></i>
+              </div>
+            </div>
+            <div @click="$router.push('set-profile')">
+              <TokenItem class="my-3"
+                         logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
+                         token-name="Peanut"
+                         token-symbol="PNUT"
+                         token-address="0x1111111111111111111111111"/>
+            </div>
+            <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
+            <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
+            <div v-for="i of 4" :key="i" @click="$router.push('set-profile')">
+              <TokenItem class="my-3"
+                         logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
+                         token-name="Peanut"
+                         token-symbol="PNUT"
+                         token-address="0x1111111111111111111111111"/>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Dropdown from '@/components/common/Dropdown'
 import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
@@ -84,10 +98,11 @@ import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from '@/components/common/Step'
+import TokenItem from '@/components/community/TokenItem'
 
 export default {
   name: 'CreateEconomy',
-  components: { Dropdown, Step },
+  components: { Step, TokenItem },
   data () {
     return {
       selectedKey: 'name',
@@ -107,7 +122,8 @@ export default {
         start: '1001',
         end: '',
         reward: ''
-      }
+      },
+      isChooseToken: true
     }
   },
   computed: {
@@ -242,8 +258,10 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .form-card {
-  @include card(2rem 15%);
+  @include card(4rem 15% 2rem);
   margin-bottom: 1.2rem;
+  min-height: 30rem;
+  position: relative;
 }
 .divide-line {
   width: 50%;
@@ -253,5 +271,12 @@ export default {
     linear-gradient(to right, var(--card-broder), var(--card-broder));;
   background-size: 30% 2px, 30% 2px;
   background-position: left center, right center;
+}
+.close-icon {
+  @include icon(1.4rem, 1.4rem);
+  background-image: url("~@/static/images/close.svg");
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
 }
 </style>

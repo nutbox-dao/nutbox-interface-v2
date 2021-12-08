@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/unfold/s</title>
-    <g id="notbox-v2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="NUTBOX备份-6" transform="translate(-1026.000000, -392.000000)">
-            <g id="编组-10" transform="translate(618.000000, 350.000000)">
-                <g id="icon/unfold/s" transform="translate(408.000000, 42.000000)">
-                    <rect id="Rectangle-82" x="0" y="0" width="12" height="12"></rect>
-                    <path d="M3.04031242,4 L8.95968758,4 C9.23582995,4 9.45968758,4.22385763 9.45968758,4.5 C9.45968758,4.61353575 9.4210472,4.723691 9.35012198,4.81234752 L6.3904344,8.51195699 C6.21792963,8.72758796 5.90328344,8.76254865 5.68765248,8.59004388 C5.65882012,8.56697799 5.63263148,8.54078935 5.6095656,8.51195699 L2.64987802,4.81234752 C2.47737324,4.59671656 2.51233393,4.28207037 2.7279649,4.1095656 C2.81662142,4.03864038 2.92677668,4 3.04031242,4 Z" id="Rectangle-84" fill="#242629"></path>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1638948396613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3199" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64"><defs><style type="text/css"></style></defs><path d="M904.533333 311.466667c-17.066667-17.066667-42.666667-17.066667-59.733333 0L512 644.266667 179.2 311.466667c-17.066667-17.066667-42.666667-17.066667-59.733333 0-17.066667 17.066667-17.066667 42.666667 0 59.733333l362.666666 362.666667c8.533333 8.533333 19.2 12.8 29.866667 12.8s21.333333-4.266667 29.866667-12.8l362.666666-362.666667c17.066667-17.066667 17.066667-42.666667 0-59.733333z" p-id="3200" fill="#ffffff"></path></svg>

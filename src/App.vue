@@ -11,7 +11,8 @@
           </router-link>
           <div class="divider-line mx-auto my-4"></div>
           <div class="pt-3">
-            <img class="user-avatar rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png" v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
+            <img class="user-avatar rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png"
+                 v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
         <div>
@@ -145,6 +146,7 @@ export default {
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
 @import "static/css/responsive";
+@import "static/css/font";
 @import "static/css/common.scss";
 @import "static/css/layout";
 @import "static/css/modal";
@@ -162,7 +164,6 @@ body {
     "Droid Sans", "Helvetica Neue";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: var(--primary-text);
   position: absolute;
   left: 0;
