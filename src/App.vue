@@ -45,7 +45,7 @@ import { mapState, mapActions } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getMyStakingFactory } from '@/utils/web3/community'
+import { getMyCommunityContract } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getDelegateFromHive } from '@/utils/hive/hive'
@@ -73,7 +73,7 @@ export default {
     },
     // BSC data
     async fetchBscData () {
-      const stakingId = await getMyStakingFactory();
+      const stakingId = await getMyCommunityContract();
       console.log(stakingId);
     },
     goHome() {

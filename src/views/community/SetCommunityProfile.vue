@@ -3,7 +3,7 @@
     <div class="container">
       <div class="col-md-8 mx-auto mt-3 mb-5">
         <div class="view-top-header">
-          <Step :current-step="2" :step-label="['Deploy community', 'setupProfile']"></Step>
+          <Step :current-step="2" :step-label="['Deploy community', 'Complete info']"></Step>
         </div>
         <div class="community-info-card text-left">
           <!-- community name -->
@@ -16,9 +16,8 @@
               :label="$t('community.communityName')"
             >
               <b-form-input
-                :disabled="!isEdit"
                 v-model="form.name"
-                :placeholder="$t('community.inputName')"
+                :placeholder="$t('placeHolder.inputName')"
               ></b-form-input>
             </b-form-group>
             <!-- community link -->
@@ -30,11 +29,10 @@
               :label="$t('community.communityLink')"
             >
               <b-form-input
-                :disabled="!isEdit"
                 v-model="form.website"
-                :placeholder="$t('community.inputLink')"
+                :placeholder="$t('placeHolder.inputLink')"
               ></b-form-input>
-              <span>{{ $t('cl.optional') }}</span>
+              <span>{{ $t('commen.optional') }}</span>
             </b-form-group>
             <!-- community description -->
             <b-form-group
@@ -45,9 +43,8 @@
               :label="$t('community.communityDesc')"
             >
               <b-form-textarea
-                :disabled="!isEdit"
                 v-model="form.description"
-                :placeholder="$t('community.inputDesc')"
+                :placeholder="$t('placeHolder.inputDesc')"
                 rows="5"
               ></b-form-textarea>
             </b-form-group>
@@ -60,34 +57,57 @@
               :label="$t('community.communityThemeColor')"
             >
               <input class="p-2 w-100 form-control" type="color"
-                     :disabled="!isEdit" v-model="form.color"/>
+                     v-model="form.color"/>
             </b-form-group>
-            <!-- community category -->
+            
+            <!-- token logo -->
             <b-form-group
-              class="mb-4"
+              class="mb-4 logo-form"
               label-class="overflow-hidden text-grey-7"
               label-cols-md="3"
-              content-cols-md="4"
-              :label="$t('community.communityCategory')"
+              content-cols-md="9"
+              :label="$t('community.cTokenLogo')"
             >
-              <b-dropdown
-                class="c-dropdown w-100"
-                menu-class="full-dropdown-menu"
-                :disabled="!isEdit"
+              <b-form-file
+                :disabled="!!form.tokenLogo"
+                v-model="tokenLogo"
+                @input="updateTokenLogo"
+                accept="image/png,image/jpeg, image/jpg"
+                ref="logo-file-input"
               >
-                <template #button-content>
-                  <div
-                    class="c-dropdown-btn primary-btn w-100 d-flex justify-content-between"
-                    style="height: 2.4rem"
-                  >
-                    <span>{{ form.category || "Chose" }}</span>
-                    <i class="dropdown-icon ml-3"></i>
+                <template #placeholder>
+                  <div class="input-file-logo">
+                    <template v-if="!!form.tokenLogo">
+                      <img class="cover-preview" :src="form.tokenLogo" alt="" />
+                      <div class="edit-mask">
+                        <span>{{ $t("community.edit") }}<br />C-Token LOGO</span>
+                      </div>
+                    </template>
+                    <template v-else>
+                      <img
+                        class="add-icon"
+                        src="~@/static/images/add.svg"
+                        alt=""
+                      />
+                      <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
+                    </template>
                   </div>
                 </template>
-                <b-dropdown-item @click="form.category = c"
-                                 v-for="c in categorys" :key="c"
-                >{{ c }}</b-dropdown-item>
-              </b-dropdown>
+                <template #file-name>
+                  <div class="input-file-logo">
+                    <img
+                      class="logo-preview"
+                      v-if="tokenLogoPreviewSrc"
+                      :src="tokenLogoPreviewSrc"
+                      alt=""
+                    />
+                    <UploadLoading v-if="tokenLogoUploadLoading" />
+                  </div>
+                </template>
+              </b-form-file>
+              <div class="font12 text-grey-light mt-2">
+                {{ $t("tip.picTip", { size: "200*200" }) }}
+              </div>
             </b-form-group>
             <!-- community logo -->
             <b-form-group
@@ -98,7 +118,6 @@
               :label="$t('community.communityLogo')"
             >
               <b-form-file
-                :disabled="!isEdit"
                 v-model="logo"
                 @input="updateLogo"
                 accept="image/png,image/jpeg, image/jpg"
@@ -108,7 +127,7 @@
                   <div class="input-file-logo">
                     <template v-if="form.icon">
                       <img class="cover-preview" :src="form.icon" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
+                      <div class="edit-mask">
                         <span>{{ $t("community.edit") }}<br />LOGO</span>
                       </div>
                     </template>
@@ -118,7 +137,7 @@
                         src="~@/static/images/add.svg"
                         alt=""
                       />
-                      <div class="add-text">{{ $t("community.uploadLogo") }}</div>
+                      <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
                     </template>
                   </div>
                 </template>
@@ -134,8 +153,8 @@
                   </div>
                 </template>
               </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "200*200" }) }}
+              <div class="font12 text-grey-light mt-2">
+                {{ $t("tip.picTip", { size: "200*200" }) }}
               </div>
             </b-form-group>
             <!-- community poster -->
@@ -147,7 +166,6 @@
               :label="$t('community.communityPoster')"
             >
               <b-form-file
-                :disabled="!isEdit"
                 v-model="coverImg"
                 @input="updateCover"
                 accept="image/png,image/jpeg,image/jpg"
@@ -157,7 +175,7 @@
                   <div class="input-file-cover">
                     <template v-if="form.poster">
                       <img class="cover-preview" :src="form.poster" alt="" />
-                      <div v-if="isEdit" class="edit-mask">
+                      <div class="edit-mask">
                         <span
                         >{{ $t("community.edit") }}<br />{{
                             $t("community.poster")
@@ -172,7 +190,7 @@
                         alt=""
                       />
                       <div class="add-text">
-                        {{ $t("community.uploadPoster") }}
+                        {{ $t("operation.uploadPoster") }}
                       </div>
                     </template>
                   </div>
@@ -189,12 +207,11 @@
                   </div>
                 </template>
               </b-form-file>
-              <div class="font12 text-grey-light mt-1" v-if="isEdit">
-                {{ $t("community.picTip", { size: "1200*280" }) }}
+              <div class="font12 text-grey-light mt-2">
+                {{ $t("tip.picTip", { size: "1200*280" }) }}
               </div>
             </b-form-group>
             <b-form-group
-              v-if="isEdit"
               label-class="overflow-hidden text-grey-7"
               label-cols-md="3"
               content-cols-md="9"
@@ -202,7 +219,7 @@
               label=""
             >
               <button class="primary-btn w-50" @click="showTips">
-                {{ $t("community.commit") }}
+                {{ $t("operation.commit") }}
               </button>
             </b-form-group>
           </div>
@@ -210,25 +227,6 @@
       </div>
     </div>
     <!------------------------------------------- tips --------------------------------------------->
-    <!-- noCommunity tip -->
-    <b-modal
-      v-model="noCommunity"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center my-5">
-          {{ $t("community.noCommunity") }}
-        </div>
-        <button class="primary-btn" @click="gotoCreate">
-          {{ $t("community.gotoCreate") }}
-        </button>
-      </div>
-    </b-modal>
     <!-- upload community info tip -->
     <b-modal
       v-model="showSignatureTip"
@@ -273,7 +271,7 @@
         <canvas id="cropper-canvas"></canvas>
         <vueCropper
           ref="cropper"
-          :class="logoUploadLoading?'cropper-rounded-circle':''"
+          :class="coverUploadLoading?'':'cropper-rounded-circle'"
           :infoTrue="true"
           :autoCrop="true"
           :img="cropperImgSrc"
@@ -312,95 +310,45 @@ export default {
     return {
       logo: null,
       coverImg: null,
-      chargeValue: 0,
-      inputDevAddress: '',
-      inputDevRatio: '',
-      inputBlogTag: '',
+      tokenLogo: null,
+      
       form: {
         id: '',
         name: '',
         website: '',
         description: '',
+        tokenLogo: '',
         icon: '',
         category: '',
         poster: '',
-        pools: [],
-        blogTag: '',
         color: '#ffdb1b'
       },
-      categorys: [
-        'All',
-        CHAIN_NAME,
-        'Polkadot',
-        'Steem',
-        'Hive'
-      ],
+
+      tokenLogoPreviewSrc: '',
       logoPreviewSrc: '',
-      logoUploadLoading: false,
       coverPreviewSrc: '',
+
+      logoUploadLoading: false,
+      tokenLogoUploadLoading: false,
       coverUploadLoading: false,
-      type: null,
-      isEdit: true,
-      canEdit: false,
-      noCommunity: false,
+      
       showSignatureTip: false,
-      showChargeTip: false,
-      showDevAddressTip: false,
-      showDevRatioTip: false,
-      showBlogTip: false,
       uploading: false,
-      approving: false,
-      charging: false,
-      publishingBlog: false,
-      creatingBlog: false,
       cToken: {},
       isMintable: true,
       cTokenAddress: '',
-      updatingAddress: false,
-      updatingDevRatio: false,
-      showStep: false,
+
       cropperModal: false,
       cropperImgSrc: '',
       cropFixedNumber: [1, 1],
       cropImgSize: [200, 200],
-      blogTag: '',
-      blogMainPassword: '',
-      blogBtnName: '',
       state: '',
-      showSteemLogin: false
     }
   },
   computed: {
     ...mapGetters('web3', ['createState'])
   },
-  watch: {
-    type (newValue, oldValue) {
-      // type : null , create, edit
-      this.isEdit = !!newValue
-    }
-  },
   async mounted () {
-    // this.type = this.$route.query.type
-    // this.isEdit = !!this.type
-    // try {
-    //   const communityInfo = await getMyCommunityInfo()
-    //   if (!communityInfo) {
-    //     // Havn't create feast
-    //     this.noCommunity = true
-    //     return
-    //   }
-    //   this.canEdit = true
-    //   this.form = { ...communityInfo }
-    //   this.form.color = this.form.color ?? '#ffdb1b'
-    //   if (!communityInfo.name) {
-    //     this.form.id = communityInfo.id
-    //     return
-    //   }
-    // } catch (e) {
-    //   handleApiErrCode(e, (info, params) => {
-    //     this.$bvToast.toast(info, params)
-    //   })
-    // }
   },
   methods: {
     onCancel () {
@@ -412,6 +360,10 @@ export default {
       if (this.coverUploadLoading) {
         this.coverImg = null
         this.coverUploadLoading = false
+      }
+      if (this.tokenLogoUploadLoading) {
+        this.tokenLogo = null
+        this.tokenLogoUploadLoading = false
       }
     },
     clipCircleImg (imgSrc) {
@@ -459,7 +411,7 @@ export default {
             }
           })
         })
-      } else {
+      } else if (this.coverUploadLoading) {
         this.$refs.cropper.getCropData((data) => {
           this.coverPreviewSrc = data
           this.cropperModal = false
@@ -476,12 +428,43 @@ export default {
             })
             this.coverImg = null
             this.form.poster = null
+            this.coverUploadLoading = false
           }
+        })
+      } else if (this.tokenLogoUploadLoading) {
+        this.$refs.cropper.getCropData(async (data) => {
+          const canvas = await this.clipCircleImg(data)
+          this.tokenLogoPreviewSrc = canvas.toDataURL('image/png')
+          this.cropperModal = false
+          canvas.toBlob(async data => {
+            try {
+              this.form.tokenLogo = await uploadImage(data)
+              this.tokenLogoUploadLoading = false
+            } catch (e) {
+              this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+                title: this.$t('tip.tips'),
+                autoHideDelay: 5000,
+                variant: 'warning'
+              })
+              this.logo = null
+              this.form.tokenLogo = null
+              this.tokenLogoUploadLoading = false
+            }
+          })
         })
       }
     },
-    clickEdit () {
-      this.type = this.form.name ? 'edit' : 'create'
+    async updateTokenLogo (file) {
+      if(!this.tokenLogo) return;
+      this.tokenLogoUploadLoading = true;
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [1, 1]
+        this.cropImgSize = [200, 200]
+      } 
     },
     async updateLogo (file) {
       if (!this.logo) return
@@ -546,7 +529,6 @@ export default {
       return false
     },
     async showTips () {
-      console.log(this.form)
       if (this.valideInfos()) {
         this.showSignatureTip = true
       }

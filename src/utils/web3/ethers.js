@@ -63,3 +63,11 @@ export const waitForTx = async (hash) => {
         }
     })
 }
+
+export const getAddress = (address) => {
+    try{
+        return ethers.utils.getAddress(address);
+    }catch(err) {
+        return false
+    }
+}

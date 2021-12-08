@@ -4,19 +4,19 @@
          v-for="step in totalStep" :key="step">
       <template v-if="currentStep>step">
         <div class="box box-checked">
-          <span class="text-grey-light">Step{{step}}</span>
+          <span class="text-grey-light">Step {{step}}</span>
           <span class="step-label">{{stepLabel[step-1]}}</span>
         </div>
       </template>
       <template v-else-if="currentStep===step">
         <div class="box box-active">
-          <span>Step{{step}}</span>
+          <span>Step {{step}}</span>
           <span class="step-label">{{stepLabel[step-1]}}</span>
         </div>
       </template>
       <template v-else >
         <div class="box">
-          <span class="text-grey-light">Step{{step}}</span>
+          <span class="text-grey-light">Step {{step}}</span>
           <span class="step-label">{{stepLabel[step-1]}}</span>
         </div>
       </template>

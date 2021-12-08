@@ -31,7 +31,7 @@ import {
   getERC20Info
 } from './asset'
 import {
-  getMyStakingFactory,
+  getMyCommunityContract,
   getNonce,
   getAllCommunities
 } from './community'
@@ -81,7 +81,7 @@ export const getMyOpenedPools = async (update = false) => {
     }
     let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyStakingFactory()
+      stakingFactoryId = await getMyCommunityContract()
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -172,7 +172,7 @@ export const addPool = async (form) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyStakingFactory()
+      stakingFactoryId = await getMyCommunityContract()
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY)
         return;
@@ -212,7 +212,7 @@ export const updatePoolsRatio = async (form) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyStakingFactory()
+      stakingFactoryId = await getMyCommunityContract()
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY)
         return;
@@ -248,7 +248,7 @@ export const publishPool = async (pool) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyStakingFactory()
+      stakingFactoryId = await getMyCommunityContract()
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY)
         return;

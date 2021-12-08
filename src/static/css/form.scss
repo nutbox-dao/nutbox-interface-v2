@@ -71,6 +71,7 @@
   .search-icon {
     @include icon();
     background-image: url("~@/static/images/search-icon.svg");
+    cursor: pointer;
   }
 }
 .c-date-picker .b-form-datepicker {
