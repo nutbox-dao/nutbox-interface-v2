@@ -299,7 +299,6 @@ import {
   getAllCommunities
 } from '@/utils/web3/community'
 import { mapGetters } from 'vuex'
-import { CHAIN_NAME } from '@/config'
 import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 
@@ -334,9 +333,7 @@ export default {
       
       showSignatureTip: false,
       uploading: false,
-      cToken: {},
       isMintable: true,
-      cTokenAddress: '',
 
       cropperModal: false,
       cropperImgSrc: '',
@@ -491,7 +488,7 @@ export default {
       }
     },
     valideInfos () {
-      const { name, website, description, icon, poster } = this.form
+      const { name, website, description, icon, poster, tokenLogo } = this.form
       let tips = null
       if (website && website.length > 0) {
         const regUrl = '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]'
@@ -514,6 +511,8 @@ export default {
         tips = this.$t('tip.communityNameLimit', { count: 32 })
       } else if (!description || description.length === 0) {
         tips = this.$t('tip.needDescription')
+      } else if (!tokenLogo || tokenLogo.length === 0) {
+        tips = this.$t('tip.needTokenIcon')
       } else if (!icon || icon.length === 0) {
         tips = this.$t('tip.needIcon')
       } else if (!poster || poster.length === 0) {
@@ -536,7 +535,7 @@ export default {
     async onConfirm () {
       try {
         this.uploading = true
-        const resCode = await completeCommunityInfo(this.form, this.type)
+        const resCode = await completeCommunityInfo(this.form, "create")
 
         // go to community dashboard
         this.$bvToast.toast(this.$t('tip.completeCommunityInfoSuccess'), {

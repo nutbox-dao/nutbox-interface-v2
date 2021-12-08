@@ -156,6 +156,7 @@ module.exports = {
     needWebsit: "Please input Community Website",
     needDescription: "Please input Community Description",
     needIcon: "Please upload Community Logo",
+    needTokenIcon: "Please upload C-token Logo",
     needPoster: "Please Upload Community Poster",
     completeCommunityInfoSuccess: "Community Information update successfully",
     wrongSubstrateAddress: "Please input correct {type} address",
