@@ -3,7 +3,7 @@
     <div class="container">
       <div class="col-md-10 mx-auto">
         <div class="view-top-header">
-          <Step :current-step="1" :step-label="['Deploy community', 'setupProfile']"></Step>
+          <Step :current-step="1" :step-label="['Deploy community', 'Complete info']"></Step>
         </div>
       </div>
       <div class="col-md-7 mx-auto position-relative">
@@ -25,9 +25,9 @@
                   <div class="font14 mb-1">Token Name</div>
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
-                      <b-input class="flex-full" type="number"
+                      <b-input class="flex-full" type="text"
                                :placeholder="$t('asset.tokenName')"
-                               v-model="poolForm.end"></b-input>
+                               v-model="form.name"></b-input>
                     </b-input-group>
                   </div>
                 </div>
@@ -35,8 +35,8 @@
                   <div class="font14 mb-1">Token Symbol</div>
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
-                      <b-input class="flex-full" type="number"
-                               :placeholder="$t('asset.tokenSymbol')" v-model="poolForm.end"></b-input>
+                      <b-input class="flex-full" type="text" @keyup="upcaseSymbol()"
+                               :placeholder="$t('asset.tokenSymbol')" v-model="form.symbol"></b-input>
                     </b-input-group>
                   </div>
                 </div>
@@ -45,7 +45,7 @@
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
-                               :placeholder="$t('asset.distributionAmount')" v-model="poolForm.end"></b-input>
+                               :placeholder="$t('asset.distributionAmount')" v-model="form.supply"></b-input>
                     </b-input-group>
                   </div>
                 </div>
@@ -62,28 +62,29 @@
             <div class="c-input-group">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
-                         :placeholder="$t('asset.tokenName')"
-                         v-model="poolForm.end"></b-input>
+                         :placeholder="$t('asset.tokenAddress')"
+                         v-model="provideAddress"></b-input>
               </b-input-group>
               <div class="c-append">
-                <i class="search-icon"></i>
+                <i class="search-icon" @click="checkTokenAddress"></i>
               </div>
             </div>
-            <div @click="cardStep=2">
+            <div @click="cardStep=2"> v-if="provideName && provideSymbol">
               <TokenItem class="my-3"
-                         logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
-                         token-name="Peanut"
-                         token-symbol="PNUT"
-                         token-address="0x1111111111111111111111111"/>
+                         :logo="provideLogo"
+                         :token-name="provideName"
+                         :token-symbol="provideSymbol"
+                         :token-address="provideAddress"/>
             </div>
             <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
             <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-            <div v-for="i of 4" :key="i" @click="cardStep=2">
+            <div style="cursor: pointer" v-for="token of OfficialAssets" :key="token.address"
+                 @click="cardStep=2">
               <TokenItem class="my-3"
-                         logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
-                         token-name="Peanut"
-                         token-symbol="PNUT"
-                         token-address="0x1111111111111111111111111"/>
+                         :logo="token.icon"
+                         :token-name="token.name"
+                         :token-symbol="token.symbol"
+                         :token-address="token.address"/>
             </div>
           </div>
         </div>
@@ -189,6 +190,8 @@ import { OfficialAssets } from '@/config'
 import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
+import { getAddress } from '@/utils/web3/ethers'
+import { getERC20Info } from '@/utils/web3/asset'
 
 export default {
   name: 'CreateEconomy',
@@ -201,22 +204,26 @@ export default {
       maxBlock: MaxBlockNum,
       startTime: '',
       stopTime: '',
-      progressData: [
-        // { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
-        // { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
-        // { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
-      ],
+      provideLogo: null,
+      provideName: null,
+      provideSymbol: null,
+      provideAddress: null,
+      progressData: [],
       form: {
         address: null,
-        isMint: false,
+        name: null,
+        symbol: null,
+        supply: null,
+        isMintable: false,
         decimal: null,
-        poolData: []
+        distributionData: []
       },
-      poolForm: {
+      distributionForm: {
         start: '1001',
         end: '',
         reward: ''
       },
+      OfficialAssets: OfficialAssets,
       cardStep: 2
     }
   },
@@ -237,57 +244,69 @@ export default {
     }
   },
   async mounted () {
-    this.poolForm.start = this.blockNum + 100
+    this.distributionForm.start = this.blockNum + 100
     this.startTime = blockTime(0, 100)
   },
   methods: {
-    setSelectedData (data) {
-      this.selectedAddressData = data
-      this.form.assetId = data.asset
-      isMintableAsset(data.asset).then(res => {
-        this.isMint = res
-      })
+    upcaseSymbol() {
+      this.form.symbol = this.form.symbol.toUpperCase();
+    },
+    async checkTokenAddress () {
+      this.provideAddress = getAddress(this.provideAddress);
+      if (this.provideAddress) {
+        try {
+          const tokenInfo = await getERC20Info(this.provideAddress);
+          console.log(4, tokenInfo);
+          this.provideName = tokenInfo.name;
+          this.provideSymbol = tokenInfo.symbol;
+          this.provideLogo = tokenInfo.icon;
+        }catch (err) {
+          handleApiErrCode(err, (tip, param) => {
+            this.$bvToast.toast(tip, param)
+          })
+        }
+      }
     },
     deleteData () {
       this.progressData.pop()
       this.updateProgressColor()
       if (this.progressData.length === 0) {
-        this.poolForm.start = this.blockNum + 100
+        this.distributionForm.start = this.blockNum + 100
       } else {
-        this.poolForm.start = this.progressData[this.progressData.length - 1].stopHeight
+        this.distributionForm.start = this.progressData[this.progressData.length - 1].stopHeight
       }
-      this.poolForm.end = ''
+      this.distributionForm.end = ''
       this.stopTime = blockTime(1, 0)
-      this.startTime = blockTime(this.blockNum, this.poolForm.start)
+      this.startTime = blockTime(this.blockNum, this.distributionForm.start)
     },
-    startChange (e) {
+    startChanged (e) {
       const value = e.target.value
       this.startTime = blockTime(this.blockNum, value)
     },
-    stopChange (e) {
+    stopChanged (e) {
       const value = e.target.value
       this.stopTime = blockTime(this.blockNum, value)
     },
     max () {
-      this.poolForm.end = this.maxBlock
+      this.distributionForm.end = this.maxBlock
     },
     confirmAdd () {
-      if (parseInt(this.poolForm.start) <= this.blockNum) {
+      if (parseInt(this.distributionForm.start) <= this.blockNum) {
         this.$bvToast.toast(this.$t('tip.wrongStartBlockNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
         })
         return
       }
-      if (parseInt(this.poolForm.end) <= parseInt(this.poolForm.start)) {
+      if (parseInt(this.distributionForm.end) <= parseInt(this.distributionForm.start)) {
         this.$bvToast.toast(this.$t('tip.wrongStopBlockNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
         })
         return
       }
-      if (parseFloat(this.poolForm.reward) <= 0) {
-        console.log(this.poolForm.reward)
+      if (parseFloat(this.distributionForm.reward) <= 0) {
+        console.log(this.distributionForm.reward)
         this.$bvToast.toast(this.$t('tip.wrongRewardNum'), {
           title: this.$t('tip.tips'),
           variant: 'info'
@@ -295,19 +314,19 @@ export default {
         return
       }
       const barData = {
-        startHeight: Number(this.poolForm.start),
-        stopHeight: Number(this.poolForm.end),
-        amount: Number(this.poolForm.reward),
-        percentage: Number(this.poolForm.end) - Number(this.poolForm.start)
+        startHeight: Number(this.distributionForm.start),
+        stopHeight: Number(this.distributionForm.end),
+        amount: Number(this.distributionForm.reward),
+        percentage: Number(this.distributionForm.end) - Number(this.distributionForm.start)
       }
       this.progressData.push(barData)
       this.updateProgressColor()
       // if (this.progressData.length > 2) return
-      this.poolForm.start = Number(barData.stopHeight) + 1
-      this.poolForm.end = ''
-      this.poolForm.reward = ''
+      this.distributionForm.start = Number(barData.stopHeight) + 1
+      this.distributionForm.end = ''
+      this.distributionForm.reward = ''
       this.stopTime = blockTime(this.blockNum, 0)
-      this.startTime = blockTime(this.blockNum, this.poolForm.start)
+      this.startTime = blockTime(this.blockNum, this.distributionForm.start)
     },
     updateProgressColor () {
       const count = this.progressData.length
@@ -317,8 +336,8 @@ export default {
       }))
     },
     async confirmDeploy () {
-      this.form.poolData = this.progressData
-      if (!this.form.assetId || this.form.poolData.length === 0) {
+      this.form.distributionData = this.progressData
+      if (!this.form.assetId || this.form.distributionData.length === 0) {
         this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
           title: this.$t('tip.tips'),
           variant: 'info'
@@ -335,7 +354,7 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
-          this.$router.replace('/community/community-info?type=create')
+          this.$router.replace('set-profile')
         }
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {

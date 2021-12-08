@@ -1,6 +1,6 @@
 import store from "@/store";
 import {
-  getMyStakingFactory,
+  getMyCommunityContract,
   getNonce,
   getDistributionEras,
 } from "./community";

@@ -8,7 +8,7 @@ import {
   aggregate
 } from '@makerdao/multicall'
 import { sleep } from '@/utils/helper'
-import { getAllCommunities, getMyStakingFactory, getNonce } from '@/utils/web3/community'
+import { getAllCommunities, getMyCommunityContract, getNonce } from '@/utils/web3/community'
 import { getAccounts } from '@/utils/web3/account'
 import {
   ethers
@@ -204,7 +204,7 @@ export const getERC20Info = async (address) => {
       return;
     }
     try{
-      const tokens = await getAllTokenFromBackend()
+      const tokens = [] //await getAllTokenFromBackend()
       let infos = await aggregate([{
         target: address,
         call: ['name()(string)'],
@@ -234,7 +234,6 @@ export const getERC20Info = async (address) => {
           ['totalSupply']  
         ]
       }], Multi_Config)
-
       const tokenFromBackend = tokens?.filter(token => token.address === address)
       let icon = null
       let price = null
@@ -252,7 +251,7 @@ export const getERC20Info = async (address) => {
         icon
       })
     }catch(e){
-      console.log('Wrong ERC20 address');
+      console.log('Wrong ERC20 address', e);
       reject(e)
     }
   })
@@ -309,7 +308,7 @@ export const updateTokenIcon = async (token) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyStakingFactory()
+      stakingFactoryId = await getMyCommunityContract()
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY)
         return;

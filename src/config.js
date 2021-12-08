@@ -93,12 +93,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-// export const NutAddress = "0xb22adDAF41D4d656B37577E5f2549559B4A8c0ef";
+export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 
 // bsc net
-export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
-export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+// export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+// export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 // Register by nutbox
 export const OfficialAssets = [
@@ -106,92 +106,64 @@ export const OfficialAssets = [
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",
-    asset: "0x60c0b04ec025fa4158044f22dc3590f6c64baf13a4f9ca4a280982ee3d8e2bed",
-    contract: contractAddress["HomeChainAssetRegistry"],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
     icon: "https://cdn.wherein.mobi/nutbox/v2/1633769085901",
   },
   {
     name: 'Wrapped BNB',
     address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     symbol: 'WBNB',
-    asset: '0xb90fe532b37240954353f38fe729360f365263ffb3674bab1d07fe43d92573c0',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
     icon: 'https://cdn.wherein.mobi/nutbox/v2/bnb.png'
   },
   {
     name: 'Ethereum Token',
     address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
     symbol: 'ETH',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
-    asset: '0x4c606d65f6a51160a91ba185988f4cc6749e6422c79bdb2f63b1b36bfa44b515',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/eth.png'
   },
   {
     name: 'PancakeSwap Token',
     address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
     symbol: 'CAKE',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
-    asset: '0xcb3d2d4130630a838634786f5fe28f13b8b061ebc9987587a9099e487c9c0cdf',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/cake.png'
   },
   {
     name: 'BTCB Token',
     address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
     symbol: 'BTCB',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: "HomeChainAssetRegistry",
-    asset: '0x36be4d0a728a4a0ad58ffcf89f440e13f4db370fd7d0ab22528b929ec955f237',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/btc.png'
-  },
-  {
-    name: 'Mint Club',
-    address: '0x1f3Af095CDa17d63cad238358837321e95FC5915',
-    symbol: 'MINT',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: 'HomeChainAssetRegistry',
-    asset: '0xcd7d1928ba1ec24587cc3904f5fbfef77489c68f0369ec29813dfbec4a3cf216',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
-  },
-  {
-    name: 'Mint Club Grant',
-    address: '0x58764cE77f0140F9678bA6dED9D9697c979F4E0f',
-    symbol: 'GRANT',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: 'HomeChainAssetRegistry',
-    asset: '0xfba9ce2c26f6f71630e94ec0e0363f3d8bf2cf4399e01a3c4570567d37e00e7a',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-grant.png'
-  },
-  {
-    name: 'Mint Club DAO',
-    address: '0x558810B46101DE82b579DD1950E9C717dCc28338',
-    symbol: 'MINTDAO',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: 'HomeChainAssetRegistry',
-    asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-dao.png'
-  },
-  {
-    name: 'Mint Club Creator',
-    address: '0x9f3C60dC06f66b3e0ea1Eb05866F9c1A74d43D67',
-    symbol: 'CREATOR',
-    contract: contractAddress['HomeChainAssetRegistry'],
-    decimal: 18,
-    type: 'HomeChainAssetRegistry',
-    asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
   }
+  // {
+  //   name: 'Mint Club',
+  //   address: '0x1f3Af095CDa17d63cad238358837321e95FC5915',
+  //   symbol: 'MINT',
+  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
+  // },
+  // {
+  //   name: 'Mint Club Grant',
+  //   address: '0x58764cE77f0140F9678bA6dED9D9697c979F4E0f',
+  //   symbol: 'GRANT',
+  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-grant.png'
+  // },
+  // {
+  //   name: 'Mint Club DAO',
+  //   address: '0x558810B46101DE82b579DD1950E9C717dCc28338',
+  //   symbol: 'MINTDAO',
+  //   contract: contractAddress['HomeChainAssetRegistry'],
+  //   decimal: 18,
+  //   type: 'HomeChainAssetRegistry',
+  //   asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
+  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-dao.png'
+  // },
+  // {
+  //   name: 'Mint Club Creator',
+  //   address: '0x9f3C60dC06f66b3e0ea1Eb05866F9c1A74d43D67',
+  //   symbol: 'CREATOR',
+  //   contract: contractAddress['HomeChainAssetRegistry'],
+  //   decimal: 18,
+  //   type: 'HomeChainAssetRegistry',
+  //   asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
+  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
+  // }
 ];
 
 export const Multi_Config = {

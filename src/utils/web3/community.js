@@ -7,25 +7,21 @@ import {
   insertCommunity,
   updateCommunity,
   getAllCommunities as gac,
-  updateBlogTag as ubt,
   updateSocial,
-  getCommunityToken as gct,
-  getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config } from "@/config";
-import { waitForTx, getGasPrice } from "./ethers";
+import { waitForTx } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
-import BN from "bn.js";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
  * Get community admin's staking factory id
  * @returns
  */
-export const getMyStakingFactory = async (update = false) => {
+export const getMyCommunityContract = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     const id = store.state.web3.stakingFactoryId;
     if (!update && id) {
@@ -73,7 +69,7 @@ export const getMyCommunityInfo = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null;
     try {
-      stakingFactoryId = await getMyStakingFactory(update);
+      stakingFactoryId = await getMyCommunityContract(update);
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -155,10 +151,10 @@ export const updateAllCommunitiesFromBackend = async () => {
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
  */
-export const createStakingFeast = async (form) => {
+export const createCommunity = async (form) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const comId = await getMyStakingFactory();
+      const comId = await getMyCommunityContract();
       if (comId) {
         console.log("Can only register one community for an account");
         reject(errCode.CONTRACT_CREATE_FAIL);
@@ -181,7 +177,7 @@ export const createStakingFeast = async (form) => {
       // make params
       const account = await getAccounts();
       const isMintable = form.isMintable;
-      let distribution = form.poolData;
+      let distribution = form.distributionData;
       let distributionStr =
         "0x" +
         ethers.utils
@@ -296,7 +292,7 @@ export const chargeCommunityBalance = async (amount) => {
     let stakingFactoryId = null;
     let erc20;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -331,7 +327,7 @@ export const withdrawCommunityBalance = async (amount) =>  {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -368,7 +364,7 @@ export const setDevRatio = async (ratio) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -405,7 +401,7 @@ export const getDistributionEras = async (update = false) => {
 
     let stakingFactoryId = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -524,7 +520,7 @@ export const udpateSocialInfo = async (social) => {
   return new Promise(async (resolve, reject) => {
     let id;
     try {
-      id = await getMyStakingFactory();
+      id = await getMyCommunityContract();
       if (!id) {
         reject(errCode.NO_STAKING_FACTORY);
         return;

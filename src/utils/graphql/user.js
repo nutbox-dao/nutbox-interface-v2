@@ -44,12 +44,12 @@ export async function getMyJoinedCommunity() {
     }
 }
 
-// fetch first 20 history of user
+// fetch first 100 history of user
 export async function getNewUserStakingHistory(account) {
     const query = gql`
         query getHistory($id: String!) {
             user(id: $id) {
-                stakingHistory(orderBy: timestamp, orderDirection: asc, first: 20) {
+                stakingHistory(orderBy: timestamp, orderDirection: desc, first: 100) {
                     type 
                     community
                     poolFactory
@@ -64,7 +64,7 @@ export async function getNewUserStakingHistory(account) {
         }
     `
     try{
-        const user = await client.request(query, {id: accout.toLowerCase()});
+        const user = await client.request(query, {id: account.toLowerCase()});
         if (user && user.stakingHistory) {
             return user.stakingHistory
         }
@@ -78,7 +78,7 @@ export async function updateStakingHistory(account, timestamp) {
     const query = gql`
         query fetchNewHistory($id: String!, $lasttime: Int!) {
             user(id: $id) {
-                stakingHistory(orderBy: timestamp, orderDirection: asc, where:{timestamp_gt: $lasttime}) {
+                stakingHistory(orderBy: timestamp, orderDirection: desc, where:{timestamp_gt: $lasttime}) {
                     type 
                     community
                     poolFactory
@@ -93,7 +93,7 @@ export async function updateStakingHistory(account, timestamp) {
         }
     `
     try{
-        const user = await client.request(query, {id: accout.toLowerCase(), lasttime: timestamp});
+        const user = await client.request(query, {id: accout.toLowerCase(), lasttime: parseInt(timestamp)});
         if (user && user.stakingHistory) {
             return user.stakingHistory
         }
@@ -107,7 +107,7 @@ export async function getMoreStakingHistory(account, timestamp) {
     const query = gql`
         query getHistory($id: String!, $lasttime:Int!) {
             user(id: $id) {
-                stakingHistory(orderBy: timestamp, orderDirection: asc, first: 20, where:{timestamp_lt:$lasttime}) {
+                stakingHistory(orderBy: timestamp, orderDirection: desc, first: 20, where:{timestamp_lt:$lasttime}) {
                     type 
                     community
                     poolFactory
@@ -122,7 +122,7 @@ export async function getMoreStakingHistory(account, timestamp) {
         }
     `
     try{
-        const user = await client.request(query, {id: accout.toLowerCase(), lasttime: timestamp});
+        const user = await client.request(query, {id: accout.toLowerCase(), lasttime: parseInt(timestamp)});
         if (user && user.stakingHistory) {
             return user.stakingHistory
         }

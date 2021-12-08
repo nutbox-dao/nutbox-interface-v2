@@ -1,29 +1,18 @@
 module.exports = {
   commen: {
-    userlogin: "Login",
     steemAccoutPlaceHolder: "Steem Account",
     hiveAccountPlaceHolder: "Hive account",
-    login: "Login",
     loginByKeychain: "Login by Keychain",
     loging: "Logging in...",
-    cancel: "Cancel",
-    confirm: "Confirm",
-    add: "Add",
-    update: "Update",
     crowdstaking: "Staking",
+    optional: "(Optional)",
 
     apy: "APR",
-    withdraw: "Harvest",
     balance: "Balance",
-    approveContract: "Approve Contract",
     max: "Max",
-    delegatecharge: "Delegate Charge",
-    logout: "Log out",
-    input: "Input",
-    copy: "Copy",
     complete: "Complete",
     now: "Now",
-    connectMetamask: "Connect Metamask",
+    poster: "Poster",
 
     whitePaper: "White Paper",
     nps: "Nutbox Proposal System",
@@ -33,7 +22,6 @@ module.exports = {
     discord: "Discord",
     blog: "Blog",
     contractAddr: "Contract Address",
-    search: "Search",
     dashboard: "Dashboard",
     auditReport: "Audit Report",
     language: "Language",
@@ -47,18 +35,25 @@ module.exports = {
     goToHome: "Back to homepage",
     home: 'Home',
   },
-  tutorial: {
-    createProcess: "Create Process",
-    step0: "Step0: Register Asset",
-    step1: "Step1: Choose asset & Set distribution strategy",
-    step2: "Step2: Fill in community info",
-    step3: "Step3: Create staking pool",
-    demoVideo: "Demo Video",
-    getStart: "Get Started",
-    watchVideo: "Watch Demo Video",
-    videoTip1:
-      "In this video, we will walk you through the staking pool generation process, from start to finish. It takes less than {min} minutes.",
-    videoTip2: "Click on the play button to start the video",
+  operation: {
+    withdraw: "Harvest",
+    approveContract: "Approve Contract",
+    connectMetamask: "Connect Metamask",
+    search: "Search",
+    userlogin: "Login",
+    uploadLogo: "Upload Logo",
+    uploadPoster: "Upload Poster",
+    sign: "Sign and upload",
+    cancel: "Cancel",
+    commit: "Commit",
+    confirm: "Confirm",
+    add: "Add",
+    update: "Update",
+    delegatecharge: "Delegate Charge",
+    login: "Login",
+    logout: "Log out",
+    input: "Input",
+    copy: "Copy",
   },
   wallet: {
     wallet: "Wallet",
@@ -118,6 +113,8 @@ module.exports = {
     noCommunities: "No Registered Communities ",
     noCrowdloan: "No ongoing Crowdloan",
     noStakingProject: "No validators",
+    picTip:
+    "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
     tokenSafeTip:
       "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
     belowMinContribution:
@@ -127,6 +124,8 @@ module.exports = {
     wrongTransferAddress: "Wrong Transfer Address",
     inputAddressType: "Please Input {relaychain} Address",
     insufficientBalance: "Insufficient Balance",
+    editTip:
+    "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
     outOfCap: "Out of cap",
     tips: "Tips",
     error: "Error！",
@@ -157,6 +156,7 @@ module.exports = {
     needWebsit: "Please input Community Website",
     needDescription: "Please input Community Description",
     needIcon: "Please upload Community Logo",
+    needTokenIcon: "Please upload C-token Logo",
     needPoster: "Please Upload Community Poster",
     completeCommunityInfoSuccess: "Community Information update successfully",
     wrongSubstrateAddress: "Please input correct {type} address",
@@ -308,11 +308,38 @@ module.exports = {
     tokenDeploying:
       "There's token in deploying, please wait or refresh page to try.",
   },
+  // navigator
+  router: {
+
+  },
+  // placeHolder tip
+  placeHolder: {
+    inputName: "Please input Community Name",
+    inputLink: "Please input Community Website Link",
+    inputDesc: "Plese input Community Description ",
+    inputApy: "Please input Apr",
+  },
   community: {
+    community: "Community",
+    social: "Social",
+    communityList: "Community List",
+    communityTokenList: "C-Token List",
+    communityName: "Name",
+    communityLink: "Offcial Link",
+    communityDesc: "Description",
+    communityLogo: "Logo",
+    cTokenLogo: "C-Token Logo",
+    communityThemeColor: "Theme color",
+    communityPoster: "Poster",
+    communityBalance: "Community Balance",
+    communityAsset: "Community Asset",
+
+    noCommunity: "You have no community yet",
   },
   asset: {
     tokenName: "Name",
     tokenSymbol: "Symbol",
+    tokenAddress: "Token address",
     distributionAmount: "Premine amount"
   }
 };
