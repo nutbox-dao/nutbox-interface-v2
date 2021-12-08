@@ -14,7 +14,9 @@ export default {
   namespaced: true,
   state: {
     userDeployTokens: getUserDeployTokens(),
-    userEconomy: getUserEconomy()
+    userEconomy: getUserEconomy(),
+    // community op list
+    communityHistory: {},
   },
   mutations: {
     setUserDeployToken (state, data) {
@@ -24,6 +26,15 @@ export default {
     setUserDeployEconomy (state, data) {
       state.userEconomy = data
       localStorage.setItem('userDeployEconomy', JSON.stringify(data))
+    },
+    saveCommunityHistory (state, data) {
+      state.communityHistory[data.community] = data.history;
+      state.commityHistory = {...state.communityHistory};
+    },
+  },
+  getters: {
+    getCommunityOPHistory: (state) => (community) => {
+     return state.communityHistory[community];
     }
   }
 }

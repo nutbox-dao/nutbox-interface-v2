@@ -7,18 +7,14 @@ import {
   insertCommunity,
   updateCommunity,
   getAllCommunities as gac,
-  updateBlogTag as ubt,
   updateSocial,
-  getCommunityToken as gct,
-  getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config } from "@/config";
-import { waitForTx, getGasPrice } from "./ethers";
+import { waitForTx } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
-import BN from "bn.js";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
