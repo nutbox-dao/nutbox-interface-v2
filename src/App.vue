@@ -2,7 +2,7 @@
   <div id="app">
     <div class="page-layout">
       <div class="page-side">
-        <div>
+        <div class="text-center">
           <div @click="goHome()">
               <empty-img width="2.8rem" height="2.8rem" @click="goHome()"></empty-img>
           </div>
@@ -15,7 +15,7 @@
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
-        <div>
+        <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
           <i class="add-user-icon mt-4" style="opacity: .7"></i>
           <img class="user-avatar rounded-circle w-75 my-3"
@@ -142,6 +142,7 @@ export default {
   --nav-tab-bg-active: #69696f;
   --input-border: #4e5054;
   --input-bg: #1b1e23;
+  --block-bg: #3c3c40;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";

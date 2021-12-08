@@ -74,8 +74,10 @@ ponsived {
   color: var(--primary-custom);
 }
 .primary-btn:disabled {
-  background: rgba(black, .1);
-  color: rgba(189, 191, 194, 1);
+  &:hover {
+    background: var(--primary-custom);
+  }
+  opacity: .7;
   box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
   cursor: not-allowed !important;
 }
@@ -268,8 +270,8 @@ input::-webkit-input-placeholder {
   height: 100%;
 }
 .logo-form .custom-file {
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
 }
 .logo-form .custom-file-input, .logo-form .custom-file-label {
   border-radius: 50%;

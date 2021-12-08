@@ -21,6 +21,10 @@
   @include coin-shadow;
   transform: none!important;
   top: 2.6rem!important;
+  background-color: var(--block-bg);
+}
+.c-dropdown .dropdown-item {
+  color: rgba(white, .7);
 }
 .c-dropdown .dropdown-header {
   font-weight: bolder;

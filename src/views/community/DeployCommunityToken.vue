@@ -1,16 +1,18 @@
 <template>
   <div class="scroll-content">
     <div class="container">
-      <div class="col-md-8 mx-auto">
+      <div class="col-md-10 mx-auto">
         <div class="view-top-header">
           <Step :current-step="1" :step-label="['Deploy community', 'setupProfile']"></Step>
         </div>
-        <div v-show="!isChooseToken" class="form-card">
-          <div class="form text-left">
+      </div>
+      <div class="col-md-7 mx-auto position-relative">
+        <div v-show="cardStep===0" class="form-card">
+          <div class="text-left">
             <div class="font-bold font20">Chose an asset</div>
             <div class="font16 my-3">If you want to use an exist token</div>
             <div class="custom-form">
-              <button class="primary-btn" @click="isChooseToken=true">Choose Token</button>
+              <button class="primary-btn" @click="cardStep=1">Choose Token</button>
             </div>
           </div>
           <div class="my-5 mx-auto divide-line font-bold text-center">OR</div>
@@ -48,15 +50,15 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <button class="primary-btn mt-5">Register Token</button>
+                  <button class="primary-btn mt-5" @click="cardStep=2">Register Token</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div v-show="isChooseToken" class="form-card">
+        <div v-show="cardStep===1" class="form-card">
           <div class="custom-form">
-            <i class="close-icon" @click="isChooseToken=false"></i>
+            <i class="close-icon" @click="cardStep=2"></i>
             <div class="c-input-group">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
@@ -67,7 +69,7 @@
                 <i class="search-icon"></i>
               </div>
             </div>
-            <div @click="$router.push('set-profile')">
+            <div @click="cardStep=2">
               <TokenItem class="my-3"
                          logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
                          token-name="Peanut"
@@ -76,7 +78,7 @@
             </div>
             <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
             <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-            <div v-for="i of 4" :key="i" @click="$router.push('set-profile')">
+            <div v-for="i of 4" :key="i" @click="cardStep=2">
               <TokenItem class="my-3"
                          logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
                          token-name="Peanut"
@@ -85,6 +87,93 @@
             </div>
           </div>
         </div>
+        <div v-show="cardStep===2" class="form-card">
+          <div class="custom-form">
+            <i class="back-icon" @click="cardStep=0"></i>
+            <div class="text-left">
+              <div class="font-bold font20">Setting your asset distribution</div>
+              <div class="row font16 mt-3 mb-1">
+                <div class="col-sm-8">Total distribution by current policy</div>
+                <div class="col-sm-4">
+                  <div class="b-box">10,000,000</div>
+                </div>
+              </div>
+              <div class="row font16">
+                <div class="col-sm-8">Current Block height</div>
+                <div class="col-md-4">
+                  <div class="b-box">5978374</div>
+                </div>
+              </div>
+              <div class="py-4">
+                <Progress :progress-data="progressData"/>
+              </div>
+              <div class="custom-form">
+                <b-form-group
+                  class="mb-4"
+                  label-class="overflow-hidden text-grey-7"
+                  label-cols-md="3"
+                  content-cols-md="9"
+                  :label="$t('community.startBlock')"
+                >
+                  <div class="d-flex c-input-group">
+                    <b-form-input
+                      class=""
+                      type="number"
+                      v-model="poolForm.start"
+                      @keyup="startChange($event)"
+                      :disabled="progressData.length>0"
+                      :placeholder="$t('community.inputStopBlock')"
+                    >
+                    </b-form-input>
+                    <div class="b-box mx-2 font12 text-nowrap">{{startTime}}</div>
+                  </div>
+                </b-form-group>
+                <b-form-group
+                  class="mb-4"
+                  label-class="overflow-hidden text-grey-7"
+                  label-cols-md="3"
+                  content-cols-md="9"
+                  :label="$t('community.startBlock')"
+                >
+                  <div class="d-flex c-input-group">
+                    <b-form-input
+                      type="number"
+                      v-model="poolForm.end"
+                      @keyup="stopChange($event)"
+                      :disabled="progressData.length>0"
+                      :placeholder="$t('community.inputStopBlock')"
+                    ></b-form-input>
+                    <div class="b-box mx-2 font12 text-nowrap">{{stopTime}}</div>
+                  </div>
+                </b-form-group>
+                <b-form-group
+                  class="mb-4"
+                  label-class="overflow-hidden text-grey-7"
+                  label-cols-md="3"
+                  content-cols-md="9"
+                  :label="$t('community.rewardAmount')"
+                >
+                  <b-form-input
+                    class="input-border"
+                    type="number"
+                    v-model="poolForm.reward"
+                    :placeholder="$t('community.inputBlockReward')"
+                  ></b-form-input>
+                  <span class="block-tip">{{ stopTime }}</span>
+                </b-form-group>
+                <div class="col-md-6 offset-md-3 pt-3">
+                  <button class="primary-btn"
+                          :disabled="!poolForm.end || !poolForm.reward || progressData.length>=256 || poolForm.start >= maxBlock"
+                          @click="confirmAdd">{{ $t('community.comfirmAdd') }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="next-btn primary-btn w-auto" @click="$router.push('set-profile')">
+          <span class="mr-3">Deploy</span>
+          <i class="next-icon"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -99,10 +188,11 @@ import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
+import Progress from '@/components/community/Progress'
 
 export default {
   name: 'CreateEconomy',
-  components: { Step, TokenItem },
+  components: { Step, TokenItem, Progress },
   data () {
     return {
       selectedKey: 'name',
@@ -111,7 +201,11 @@ export default {
       maxBlock: MaxBlockNum,
       startTime: '',
       stopTime: '',
-      progressData: [],
+      progressData: [
+        // { percentage: '10', amount: 200, start: 0, stopHeight: 2000, background: 'rgba(80, 191, 0, 0.3)' },
+        // { percentage: '30', amount: 300, start: 2001, stopHeight: 4000, background: 'rgba(80, 191, 0, 0.6)' },
+        // { percentage: '50', amount: 400, start: 4001, stopHeight: 2000, background: 'rgba(80, 191, 0, 1)' }
+      ],
       form: {
         address: null,
         isMint: false,
@@ -123,7 +217,7 @@ export default {
         end: '',
         reward: ''
       },
-      isChooseToken: true
+      cardStep: 2
     }
   },
   computed: {
@@ -258,9 +352,8 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .form-card {
-  @include card(4rem 15% 2rem);
-  margin-bottom: 1.2rem;
-  min-height: 30rem;
+  @include card(4rem 10% 2rem);
+  height: 40rem;
   position: relative;
 }
 .divide-line {
@@ -278,5 +371,31 @@ export default {
   position: absolute;
   top: 1.2rem;
   right: 1.5rem;
+}
+.back-icon {
+  @include icon(1.4rem, 1.4rem);
+  background-image: url("~@/static/images/back.svg");
+  position: absolute;
+  top: 1.2rem;
+  left: 1.5rem;
+}
+.b-box {
+  border: 1px solid var(--input-border);
+  min-width: fit-content;
+  padding: .2rem;
+  border-radius: .4rem;
+  text-align: center;
+  background-color: rgba(white, .1);
+}
+.next-btn {
+  position: absolute;
+  top: 50%;
+  left: 110%;
+  display: flex;
+  align-items: center;
+  .next-icon {
+    @include icon(1.2rem, 1.2rem);
+    background-image: url("~@/static/images/next.svg");
+  }
 }
 </style>

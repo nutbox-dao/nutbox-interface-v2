@@ -2,13 +2,7 @@
   <div class="step-container">
     <div class="step-item" :class="step<currentStep?'active':''"
          v-for="step in totalStep" :key="step">
-      <template v-if="currentStep>step">
-        <div class="box box-checked">
-          <span class="text-grey-light">Step{{step}}</span>
-          <span class="step-label">{{stepLabel[step-1]}}</span>
-        </div>
-      </template>
-      <template v-else-if="currentStep===step">
+      <template v-if="currentStep===step">
         <div class="box box-active">
           <span>Step{{step}}</span>
           <span class="step-label">{{stepLabel[step-1]}}</span>
@@ -69,13 +63,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: var(--dividers);
+    color: rgba(white, .9);
     font-size: .7rem;
-    &-checked {
-      border-color: var(--primary-custom);
-      background-color: var(--primary-custom);
-      color: white;
-    }
     &-active {
       border-color: var(--primary-custom);
       color: var(--primary-custom);
@@ -86,16 +75,12 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       white-space: nowrap;
-      color: var(--primary-custom);
     }
   }
   .h-line {
     flex: 1;
     height: 4px;
     @include single-color-bg(60% 2px, center, #3a3b40);
-  }
-  &.active .h-line {
-    @include single-color-bg(60% 4px);
   }
 }
 @media (max-width: 760px) {
