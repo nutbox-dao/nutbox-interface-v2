@@ -11,7 +11,7 @@
                   Link Community <br>
                   to Web3.0
                 </div>
-                <button @click="$router.replace('/community/community-list')" class="s1-btn">Explore</button>
+                <button @click="$router.replace('/community/index')" class="s1-btn">Explore</button>
                 <div class="row mt-3">
                   <div class="col-sm-4">Staking-based Bootstrap</div>
                   <div class="col-sm-4">DAO Goverance</div>
@@ -55,7 +55,7 @@
         <section class="section3 mt-4">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="more" @click="$router.replace('/community/community-list')">More >></div>
+            <div class="more" @click="$router.replace('/community/index')">More >></div>
           </div>
         </section>
         <section class="my-4 text-primary-0">
@@ -69,6 +69,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
+import { getNewCommunityOPHistory } from '@/utils/graphql/community'
 
 export default {
   name: 'Home',
@@ -105,6 +106,7 @@ export default {
   },
   mounted () {
     getWalnutData();
+    getNewCommunityOPHistory('0xf234E84e9f1F83105A120351dFEa179AC4Ad8730');
   },
 }
 </script>

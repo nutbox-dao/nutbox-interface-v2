@@ -1,43 +1,27 @@
 import { client } from './index';
 import store from '@/store'
-import { getAccounts } from '../web3/account';
 import { gql } from 'graphql-request'
 
 
 // get user summary: include all joined communities and pools
-export async function getMyJoinedCommunity() {
-    const account = await getAccounts();
+export async function getNewCommunityOPHistory(community) {
     const query = gql`
-        query getUser($id: String!) {
-            user(id: $id) {
-                createdAt
-                inCommunities {
-                    id
-                    feeRatio
-                    cToken
-                    usersCount
-                    poolsCount
-                    activedPoolCount
-                }
-                inPools {
-                    id
-                    name
-                    poolFactory
-                    community{
-                        id
-                    }
-                    ratio
-                    asset
-                    chainId
-                    stakersCount
+        query getManagerHistory($id: String!) {
+            community(id: $id) {
+                manageHistory(orderBy: timestamp, orderDirection: asc, first: 10){
+                    type
+                    amount
+                    pool
+                    tx
+                    timestamp
                 }
             }
         }
     `
     try{
-        const userInfo = await client.request(query, {id: account.toLowerCase()});
-        if (userInfo && userInfo.user) {
-            store.commit('web3/saveUserGraphInfo', userInfo.user)
+        const manageHistory = await client.request(query, {id: community.toLowerCase()})
+        if (manageHistory && manageHistory.manageHistory) {
+            
         }
         return;
     }catch(err) {

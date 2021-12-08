@@ -3,12 +3,12 @@
     <div class="container">
       <div class="col-md-8 mx-auto">
         <div class="view-top-header">
-          <Step :current-step="1" :step-label="['deployToken', 'setupProfile']"></Step>
+          <Step :current-step="1" :step-label="['Deploy community', 'setupProfile']"></Step>
         </div>
         <div class="form-card">
           <div class="form text-left">
-            <div class="font-bold font20">Choose an asset</div>
-            <div class="font16 my-3">If you want to use deployed token</div>
+            <div class="font-bold font20">Chose an asset</div>
+            <div class="font16 my-3">If you want to use an exist token</div>
             <div class="custom-form">
               <Dropdown :menu-options="concatAddressOptions"
                         :loading="assetLoading"
@@ -26,7 +26,7 @@
                 <template v-slot:drop-item="slotProps">
                   <img class="prefix-icon" :src="slotProps.item.icon" alt="">
                   <div class="flex-full d-flex flex-column">
-                    <span>{{slotProps.item.symbol}}</span>
+                    <span>{{ slotProps.item.symbol }}</span>
                     <span class="font12 text-grey-light">{{slotProps.item.asset | formatUserAddress}}</span>
                   </div>
                 </template>
@@ -42,24 +42,24 @@
                 <div class="col-sm-6">
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
-                      <b-input class="flex-full" @keyup="stopChange($event)" type="number"
-                               :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+                      <b-input class="flex-full" type="number"
+                               :placeholder="$t('asset.tokenName')" v-model="poolForm.end"></b-input>
                     </b-input-group>
                   </div>
                 </div>
                 <div class="col-sm-6 mt-2 mt-sm-0">
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
-                      <b-input class="flex-full" @keyup="stopChange($event)" type="number"
-                               :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+                      <b-input class="flex-full" type="number"
+                               :placeholder="$t('asset.tokenSymbol')" v-model="poolForm.end"></b-input>
                     </b-input-group>
                   </div>
                 </div>
                 <div class="col-12 mt-2">
                   <div class="c-input-group">
                     <b-input-group class="d-flex flex-between-center">
-                      <b-input class="flex-full" @keyup="stopChange($event)" type="number"
-                               :placeholder="$t('community.inputStopBlock')" v-model="poolForm.end"></b-input>
+                      <b-input class="flex-full" type="number"
+                               :placeholder="$t('asset.distributionAmount')" v-model="poolForm.end"></b-input>
                     </b-input-group>
                   </div>
                 </div>
@@ -81,7 +81,7 @@ import { mapState, mapGetters } from 'vuex'
 import { getRegitryAssets, isMintableAsset } from '@/utils/web3/asset'
 import { createStakingFeast } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
-import { MaxBlockNum, MAX_DISTRIBUTION_COUNT } from '@/constant'
+import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
 import Step from '@/components/common/Step'
 
@@ -92,26 +92,13 @@ export default {
     return {
       selectedKey: 'name',
       selectedAddressData: {},
-      assets: null,
       deploying: false,
       maxBlock: MaxBlockNum,
-      isMint: false,
       startTime: '',
       stopTime: '',
-      concatAddressOptions: [
-        {
-          categoryName: 'personal',
-          items: []
-        },
-        {
-          categoryName: 'official',
-          items: OfficialAssets
-        }
-      ],
-      assetLoading: true,
       progressData: [],
       form: {
-        assetId: null,
+        address: null,
         isMint: false,
         decimal: null,
         poolData: []
@@ -140,12 +127,8 @@ export default {
     }
   },
   async mounted () {
-    this.assets = await getRegitryAssets()
     this.poolForm.start = this.blockNum + 100
     this.startTime = blockTime(0, 100)
-    console.log({ assets: this.assets })
-    this.concatAddressOptions[0].items = this.assets.filter(asset => asset.type === 'HomeChainAssetRegistry')
-    this.assetLoading = false
   },
   methods: {
     setSelectedData (data) {

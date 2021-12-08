@@ -13,7 +13,8 @@
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
             <div class="mx-3 my-md-0 my-3">OR</div>
-            <button class="primary-btn d-flex justify-content-center align-items-center"
+            <ConnectMetaMask v-if="!metamaskConnected"/>
+            <button v-else class="primary-btn d-flex justify-content-center align-items-center"
                     @click="$router.push('/community/deploy-token')">
               <i class="add-icon mr-2"></i>
               <span>Create Community</span>
@@ -69,10 +70,15 @@
 <script>
 import CommunityCard from '@/components/community/CommunityCard'
 import { errCode, CHAIN_NAME } from '@/config'
+import { mapState } from "vuex";
+import ConnectMetaMask from '@/components/common/ConnectMetaMask'
 
 export default {
   name: 'CommunityIndex',
-  components: { CommunityCard },
+  components: { CommunityCard, ConnectMetaMask },
+  computed: {
+    ...mapState(['metamaskConnected', 'prices']),
+  },
   data () {
     return {
       loading: false,

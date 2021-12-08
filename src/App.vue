@@ -59,7 +59,6 @@ export default {
       if (this.$store.state.web3.account) {
         return formatUserAddress(this.$store.state.web3.account, false)
       }
-      return '...'
     }
   },
   mixins: [showToastMixin],

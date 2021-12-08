@@ -310,5 +310,10 @@ module.exports = {
   },
   community: {
   },
+  asset: {
+    tokenName: "Name",
+    tokenSymbol: "Symbol",
+    distributionAmount: "Premine amount"
+  }
 };
 
