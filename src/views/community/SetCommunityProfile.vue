@@ -3,28 +3,51 @@
     <div class="container">
       <div class="col-md-10 mx-auto">
         <div class="view-top-header">
-          <Step :current-step="2" :step-label="['Deploy community', 'Complete info']"></Step>
+          <Step :current-step="2" :step-label="['Community asset deployed', 'Complete info']"></Step>
         </div>
       </div>
       <div class="row mt-3 mb-5">
         <div class="col-md-4">
           <div class="token-card">
-            <div class="mt-2 mb-4 text-center">Token Deploy Success !</div>
-            <div class="d-flex justify-content-between align-items-center font14">
+            <div class="mt-2 mb-4 text-center">Community asset info</div>
+
+            <div class="d-flex justify-content-between align-items-center font14" v-if="premining > 0">
+              <span class="font-bold">Premining</span>
+              <div class="d-flex align-items-center">
+                <img class="rounded-circle"
+                    v-show="communityInfo && communityInfo.cToken.icon"
+                     style="width: 1.2rem;height: 1.2rem"
+                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                <span class="ml-2">{{ premining }}</span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center font14  my-3">
+              <span class="font-bold">Distribution</span>
+              <div class="d-flex align-items-center">
+                <img class="rounded-circle"
+                    v-show="communityInfo && communityInfo.cToken.icon"
+                     style="width: 1.2rem;height: 1.2rem"
+                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                <span class="ml-2">{{ distributeAmount }}</span>
+              </div>
+            </div>
+
+             <div class="d-flex justify-content-between align-items-center font14">
               <span class="font-bold">Community token</span>
               <div class="d-flex align-items-center">
                 <img class="rounded-circle"
+                    v-show="communityInfo && communityInfo.cToken.icon"
                      style="width: 1.2rem;height: 1.2rem"
-                     src="~@/static/images/tokens/dot.png" alt="">
-                <span class="ml-2">PNUT</span>
+                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                <span class="ml-2">{{ communityInfo && communityInfo.cToken && communityInfo.cToken.symbol }}</span>
               </div>
             </div>
+
             <div class="d-flex justify-content-between align-items-center font14 my-3">
-              <span class="font-bold">Community token</span>
-              <span>100000000</span>
             </div>
             <div class="font14 font-bold">Distribution Stratage</div>
-            <Progress :progress-data="[]"/>
+            <Progress :progress-data="distributions || []"/>
           </div>
         </div>
         <div class="col-md-7 offset-md-1">
@@ -72,7 +95,7 @@
                 ></b-form-textarea>
               </b-form-group>
               <!-- community theme -->
-              <b-form-group
+              <!-- <b-form-group
                 class="mb-4"
                 label-class="overflow-hidden"
                 label-cols-md="3"
@@ -81,57 +104,7 @@
               >
                 <input class="p-2 w-100 form-control" type="color"
                        v-model="form.color"/>
-              </b-form-group>
-
-              <!-- token logo -->
-              <b-form-group
-                class="mb-4 logo-form"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.cTokenLogo')"
-              >
-                <b-form-file
-                  :disabled="!!form.tokenLogo"
-                  v-model="tokenLogo"
-                  @input="updateTokenLogo"
-                  accept="image/png,image/jpeg, image/jpg"
-                  ref="logo-file-input"
-                >
-                  <template #placeholder>
-                    <div class="input-file-logo">
-                      <template v-if="!!form.tokenLogo">
-                        <img class="cover-preview" :src="form.tokenLogo" alt="" />
-                        <div class="edit-mask">
-                          <span>{{ $t("community.edit") }}<br />C-Token LOGO</span>
-                        </div>
-                      </template>
-                      <template v-else>
-                        <img
-                          class="add-icon"
-                          src="~@/static/images/add.svg"
-                          alt=""
-                        />
-                        <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                      </template>
-                    </div>
-                  </template>
-                  <template #file-name>
-                    <div class="input-file-logo">
-                      <img
-                        class="logo-preview"
-                        v-if="tokenLogoPreviewSrc"
-                        :src="tokenLogoPreviewSrc"
-                        alt=""
-                      />
-                      <UploadLoading v-if="tokenLogoUploadLoading" />
-                    </div>
-                  </template>
-                </b-form-file>
-                <div class="font12 text-grey-5 mt-2">
-                  {{ $t("tip.picTip", { size: "200*200" }) }}
-                </div>
-              </b-form-group>
+              </b-form-group> -->
               <!-- community logo -->
               <b-form-group
                 class="mb-4 logo-form"
@@ -151,7 +124,7 @@
                       <template v-if="form.icon">
                         <img class="cover-preview" :src="form.icon" alt="" />
                         <div class="edit-mask">
-                          <span>{{ $t("community.edit") }}<br />LOGO</span>
+                          <span>{{ $t("operation.edit") }}<br />LOGO</span>
                         </div>
                       </template>
                       <template v-else>
@@ -176,10 +149,48 @@
                     </div>
                   </template>
                 </b-form-file>
-                <div class="font12 text-grey-5 mt-2">
-                  {{ $t("tip.picTip", { size: "200*200" }) }}
-                </div>
+                <span>
+                  {{$t('community.cTokenLogo')}}
+                  </span>
+                <b-form-file
+                  :disabled="!!tokenLogo"
+                  v-model="tokenLogo"
+                  @input="updateTokenLogo"
+                  accept="image/png,image/jpeg, image/jpg"
+                  ref="logo-file-input"
+                >
+                  <template #placeholder>
+                    <div class="input-file-logo">
+                      <template v-if="!!form.tokenLogo">
+                        <img class="cover-preview" :src="form.tokenLogo" alt="" />
+                        <div class="edit-mask">
+                          <span>{{ $t("tip.edit") }}<br />C-Token LOGO</span>
+                        </div>
+                      </template>
+                      <template v-else>
+                        <img
+                          class="add-icon"
+                          src="~@/static/images/add.svg"
+                          alt=""
+                        />
+                        <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
+                      </template>
+                    </div>
+                  </template>
+                  <template #file-name>
+                    <div class="input-file-logo">
+                      <img
+                        class="logo-preview"
+                        v-if="tokenLogoPreviewSrc"
+                        :src="tokenLogoPreviewSrc"
+                        alt=""
+                      />
+                      <UploadLoading v-if="tokenLogoUploadLoading" />
+                    </div>
+                  </template>
+                </b-form-file>
               </b-form-group>
+
               <!-- community poster -->
               <b-form-group
                 label-class="overflow-hidden"
@@ -200,7 +211,7 @@
                         <img class="cover-preview" :src="form.poster" alt="" />
                         <div class="edit-mask">
                         <span
-                        >{{ $t("community.edit") }}<br />{{
+                        >{{ $t("operation.edit") }}<br />{{
                             $t("community.poster")
                           }}</span
                         >
@@ -264,12 +275,12 @@
         <!-- <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/> -->
         <div class="my-5">
-          {{ $t("community.editTip") }}
+          {{ $t("tip.editTip") }}
         </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("community.sign") }}
+            Sign and uplaod
           </button>
           <button
             class="primary-btn primary-btn-outline"
@@ -277,7 +288,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("commen.cancel") }}
+            {{ $t("operation.cancel") }}
           </button>
         </div>
       </div>
@@ -307,8 +318,8 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
-        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('operation.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('operation.complete') }}</button>
       </div>
     </b-modal>
     <b-modal
@@ -331,9 +342,10 @@ import UploadLoading from '@/components/common/UploadLoading'
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
-  getAllCommunities
+  getAllCommunities,
+  getDistributionEras
 } from '@/utils/web3/community'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 import Progress from '@/components/community/Progress'
@@ -370,20 +382,39 @@ export default {
 
       showSignatureTip: false,
       uploading: false,
-      isMintable: true,
 
       cropperModal: false,
       cropperImgSrc: '',
       cropFixedNumber: [1, 1],
       cropImgSize: [200, 200],
       state: '',
-      chooseTokenTipModal: true
+      chooseTokenTipModal: false,
     }
   },
   computed: {
-    ...mapGetters('web3', ['createState'])
+    ...mapState('community', ['communityInfo', 'distributions']),
+    distributeAmount () {
+      if (!this.distributions) {
+        return 0;
+      }
+      return this.distributions.reduce((t, p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseFloat(p.amount), 0)
+    },
+    premining () {
+      if (!this.communityInfo){
+        return 0;
+      }
+      const ctoken = this.communityInfo && this.communityInfo.cToken;
+      return ctoken.totalSupply.toString() / 1e18;
+    }
+  },
+  watch: {
+    communityInfo(newValue, oldValue) {
+      this.tokenLogo = newValue && newValue.cToken && newValue.cToken.icon
+      this.form.tokenLogo = this.tokenLogo
+    }
   },
   async mounted () {
+    getDistributionEras()
   },
   methods: {
     onCancel () {

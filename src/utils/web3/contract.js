@@ -29,6 +29,7 @@ export const contractAddress = {
 const CONTRACT_ABI_FILE_NAME_LIST = {
   "Committee": "Committee.json",
   "CommunityFactory": "CommunityFactory.json",
+  "Community": "Community.json",
   "LinearCalculator": "LinearCalculator.json",
   "SPStakingFactory": "SPStakingFactory.json",
   "ERC20StakingFactory": "ERC20StakingFactory.json",

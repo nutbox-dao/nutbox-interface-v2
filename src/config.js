@@ -5,8 +5,8 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
-// export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
 
@@ -21,6 +21,7 @@ export const errCode = {
   TRANSACTION_FAIL: 105,
   ASSET_EXIST: 106,
   TOKEN_DEPLOYING: 107,
+  INSUFIENT_BALANCE: 108,
 
   BLOCK_CHAIN_ERR: 351,
   CONTRACT_CREATE_FAIL: 352,
@@ -28,6 +29,7 @@ export const errCode = {
   NOT_CONNECT_METAMASK: 354,
   UNLOCK_METAMASK: 355,
   WRONG_CHAIN_ID: 356,
+  HAVE_CREATED_COMMUNITY: 357,
 
   SIGNATURE_FAILED: 451,
   INVALID_NONCE: 452,

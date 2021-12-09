@@ -15,6 +15,9 @@ export default {
   state: {
     userDeployTokens: getUserDeployTokens(),
     userEconomy: getUserEconomy(),
+    // my community info data
+    communityInfo: null,
+    distributions: null,
     // community op list
     communityHistory: {},
   },
@@ -31,6 +34,12 @@ export default {
       state.communityHistory[data.community] = data.history;
       state.commityHistory = {...state.communityHistory};
     },
+    saveCommunityInfo (state, data) {
+      state.communityInfo = data;
+    },
+    saveDistributions (state,distr) {
+      state.distributions = distr
+    }
   },
   getters: {
     getCommunityOPHistory: (state) => (community) => {

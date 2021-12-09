@@ -42,7 +42,7 @@ export const getMyCommunityContract = async (update = false) => {
     }
     try {
       stakingFactoryId = await contract.ownerCommunity(account);
-      if (!stakingFactoryId) {
+      if (!stakingFactoryId || stakingFactoryId === '0x0000000000000000000000000000000000000000') {
         store.commit("web3/saveStakingFactoryId", null);
         store.commit("web3/saveLoadingCommunity", false);
         resolve(null);
@@ -79,26 +79,28 @@ export const getMyCommunityInfo = async (update = false) => {
       reject(e);
       return;
     }
-    if (!update && store.state.web3.communityInfo) {
-      resolve(store.state.web3.communityInfo);
+    if (!update && store.state.community.communityInfo) {
+      resolve(store.state.community.communityInfo);
       return;
     }
     let communityInfo = null;
     try {
       communityInfo = await gci(stakingFactoryId);
+      const cToken = await getCToken(stakingFactoryId);
 
       if (communityInfo && communityInfo.length > 0) {
-        store.commit("web3/saveCommunityInfo", communityInfo[0]);
+        communityInfo[0].cToken = cToken;
+        store.commit("community/saveCommunityInfo", communityInfo[0]);
         resolve(communityInfo[0]);
         return;
       } else {
         console.log("first get communityInfo");
-        store.commit("web3/saveCommunityInfo", { id: stakingFactoryId });
-        resolve({ id: stakingFactoryId });
+        store.commit("community/saveCommunityInfo", { id: stakingFactoryId, cToken });
+        resolve({ id: stakingFactoryId, cToken });
       }
     } catch (e) {
       console.log("Get community info from backend fail", e);
-      store.commit("web3/saveCommunityInfo", null);
+      store.commit("community/saveCommunityInfo", null);
       reject(e);
     }
   });
@@ -151,13 +153,13 @@ export const updateAllCommunitiesFromBackend = async () => {
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
  */
-export const createCommunity = async (form) => {
+export const createCommunity = async (cToken, distribution) => {
   return new Promise(async (resolve, reject) => {
     try {
       const comId = await getMyCommunityContract();
       if (comId) {
-        console.log("Can only register one community for an account");
-        reject(errCode.CONTRACT_CREATE_FAIL);
+        console.log("Can only register one community for an account", comId);
+        reject(errCode.HAVE_CREATED_COMMUNITY);
         return;
       }
     } catch (e) {
@@ -176,13 +178,12 @@ export const createCommunity = async (form) => {
     try {
       // make params
       const account = await getAccounts();
-      const isMintable = form.isMintable;
-      let distribution = form.distributionData;
+      const isMintable = cToken.isMintable;
       let distributionStr =
         "0x" +
         ethers.utils
           .hexZeroPad(ethers.utils.hexlify(distribution.length), 1)
-          .substr(2);
+          .substring(2);
       for (let dis of distribution) {
         distributionStr +=
           ethers.utils
@@ -190,35 +191,42 @@ export const createCommunity = async (form) => {
               ethers.BigNumber.from(dis.startHeight).toHexString(),
               32
             )
-            .substr(2) +
+            .substring(2) +
           ethers.utils
             .hexZeroPad(ethers.BigNumber.from(dis.stopHeight).toHexString(), 32)
-            .substr(2) +
+            .substring(2) +
           ethers.utils
             .hexZeroPad(
               ethers.utils
-                .parseUnits(dis.amount.toString(), form.decimal)
+                .parseUnits(dis.amount.toString(), 18)
                 .toHexString(),
               32
             )
-            .substr(2);
+            .substring(2);
       }
       contract.on('CommunityCreated', async (user, community, token) => {
         if (account.toLowerCase() === user.toLowerCase()){
           console.log('Create new staking feast', community, 'ctoken:', token);
-          store.commit("web3/saveStakingFactoryId", ethers.utils.getAddress(community));
-          await monitorCommunity();
-          contract.removeAllListeners('StakingFeastCreated');
-          resolve(feast);
+          contract.removeAllListeners('CommunityCreated');
+          const communityInfo = {
+            id: ethers.utils.getAddress(community),
+            cToken,
+            firstBlock: distribution[0].startHeight
+          }
+          // Created a new community
+          store.commit('community/saveCommunityInfo', communityInfo)
+          store.commit("community/saveDistributions", distribution);
+          resolve(communityInfo);
         }
       })
-      // call contract
+      // call contract 
+      const preMine = (cToken && cToken.supply) ? cToken.supply.toString() : "0"
       const res = await contract.createCommunity(
-        isMintable ? "0x0000000000000000000000000000000000000000" : form.token,
+        isMintable ? "0x0000000000000000000000000000000000000000" : cToken.address,
         {
-          name: form.name,
-          symbol: form.symbol,
-          supply: ethers.utils.parseUnits(form.supply.toString(), 18),
+          name: cToken.name,
+          symbol: cToken.symbol,
+          supply: ethers.utils.parseUnits(preMine, 18),
           owner: account
         },
         contractAddress["LinearCalculator"],
@@ -241,9 +249,13 @@ export const completeCommunityInfo = async (form, type) => {
   return new Promise(async (resolve, reject) => {
     let nonce = await getNonce();
     const userId = await getAccounts();
+    const communityId = await getMyCommunityContract();
+    form.id = communityId;
     nonce = nonce ? nonce + 1 : 1;
     try {
       const distri = await getDistributionEras(true);
+      const ctoken = await getCToken(form.id)
+      form.tokenAddress = ctoken.address;
       form.firstBlock = distri[0].startHeight;
     } catch (e) {
       reject(e);
@@ -259,6 +271,7 @@ export const completeCommunityInfo = async (form, type) => {
         return;
       }
     }
+    console.log(333, form);
     const params = {
       userId,
       infoStr: originMessage,
@@ -289,24 +302,29 @@ export const completeCommunityInfo = async (form, type) => {
  */
 export const chargeCommunityBalance = async (amount) => {
   return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null;
+    let communityId = null;
     let erc20;
     try {
-      stakingFactoryId = await getMyCommunityContract();
+      communityId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }
-      const ctoken = await getCToken(stakingFactoryId);
+      const ctoken = await getCToken(communityId);
       erc20 = await getContract('ERC20', ctoken.address, false);
     } catch (e) {
       reject(e);
       return;
     }
 
-
     try {
-      const tx = await erc20.transfer(stakingFactoryId, ethers.utils.parseUnits(amount.toString(), 18));
+      let account = await getAccounts();
+      const balance = await erc20.balanceOf(account);
+      if (balance.toString() / 1e18 <= parseFloat(amount)){
+        reject(errCode.INSUFIENT_BALANCE);
+        return;
+      }
+      const tx = await erc20.transfer(communityId, ethers.utils.parseUnits(amount.toString(), 18));
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
@@ -393,7 +411,7 @@ export const setDevRatio = async (ratio) => {
  */
 export const getDistributionEras = async (update = false) => {
   return new Promise(async (resolve, reject) => {
-    const distribuitons = store.state.web3.distributions;
+    const distribuitons = store.state.community.distributions;
     if (!update && distribuitons) {
       resolve(distribuitons);
       return;
@@ -443,9 +461,9 @@ export const getDistributionEras = async (update = false) => {
           amount: item.amount.toString() / 10 ** decimal,
           startHeight: item.startHeight.toString(),
           stopHeight: item.stopHeight.toString(),
-          background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`,
+          background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`,
         }));
-        store.commit("web3/saveDistributions", distri);
+        store.commit("community/saveDistributions", distri);
         resolve(distri);
       }
     } catch (e) {
@@ -462,7 +480,7 @@ export const getDistributionEras = async (update = false) => {
  */
 export const getSpecifyDistributionEras = async (communityId) => {
   return new Promise(async (resolve, reject) => {
-    const distribuitons = store.state.web3.specifyDistributionEras;
+    const distribuitons = store.state.community.specifyDistributionEras;
     if (distribuitons) {
       resolve(distribuitons);
       return;
@@ -499,9 +517,9 @@ export const getSpecifyDistributionEras = async (communityId) => {
           amount: item.amount.toString() / 10 ** decimal,
           startHeight: item.startHeight.toString(),
           stopHeight: item.stopHeight.toString(),
-          background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`,
+          background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`,
         }));
-        store.commit("web3/saveSpecifyDistributionEras", distri);
+        store.commit("community/saveSpecifyDistributionEras", distri);
         resolve(distri);
       }
     } catch (e) {

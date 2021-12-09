@@ -3,7 +3,7 @@
     <div class="container">
       <div class="col-md-10 mx-auto">
         <div class="view-top-header">
-          <Step :current-step="1" :step-label="['Deploy community', 'Complete info']"></Step>
+          <Step :current-step="1" :step-label="['Deploy community asset', 'Complete info']"></Step>
         </div>
       </div>
       <div class="col-md-7 mx-auto position-relative">
@@ -90,7 +90,7 @@
         </div>
         <div v-show="cardStep===2" class="form-card">
           <div class="custom-form">
-            <i class="back-icon" @click="cardStep=0"></i>
+            <i class="back-icon" @click="goBackTo0()"></i>
             <div class="text-left">
               <div class="font-bold font20">Setting your asset distribution</div>
               <div class="row font16 mt-3 mb-1">
@@ -122,7 +122,7 @@
                       type="number"
                       v-model="distributionForm.start"
                       @keyup="startChanged($event)"
-                      :disabled="progressData.length>0"
+                      :disabled="progressData.length>0 || deploying"
                       :placeholder="$t('placeHolder.inputStopBlock')"
                     >
                     </b-form-input>
@@ -134,6 +134,7 @@
                   label-class="overflow-hidden text-grey-7"
                   label-cols-md="3"
                   content-cols-md="9"
+                  :disabled="deploying"
                   :label="$t('community.stopBlock')"
                 >
                   <div class="d-flex c-input-group">
@@ -170,7 +171,12 @@
             </div>
           </div>
         </div>
-        <button class="next-btn primary-btn w-auto" v-show="cardStep === 2" @click="confirmDeploy()">
+        <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2" @click="confirmDeploy()">
+          <b-spinner
+              small
+              type="grow"
+              v-show="deploying"
+            ></b-spinner>
           <span class="mr-3">Deploy</span>
           <i class="next-icon"></i>
         </button>
@@ -181,7 +187,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { createStakingFeast } from '@/utils/web3/community'
+import { createCommunity } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
@@ -190,6 +196,7 @@ import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
 import { getAddress } from '@/utils/web3/ethers'
 import { getERC20Info } from '@/utils/web3/asset'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: 'CreateEconomy',
@@ -240,6 +247,12 @@ export default {
   watch: {
     userDeployTokens (val) {
       this.concatAddressOptions[0].items = val.filter(asset => asset.type === 'HomeChainAssetRegistry')
+    },
+    blockNum  (val, old) {
+      if (!old || old === 0) {
+        this.distributionForm.start = this.blockNum + 100
+        this.startTime = blockTime(0, 100)
+      }
     }
   },
   async mounted () {
@@ -248,14 +261,18 @@ export default {
   },
   methods: {
     upcaseSymbol() {
+      if (!this.form.symbol) return;
       this.form.symbol = this.form.symbol.toUpperCase();
+    },
+    goBackTo0() {
+      if (this.deploying) return;
+      this.cardStep = 0;
     },
     async checkTokenAddress () {
       this.provideAddress = getAddress(this.provideAddress);
       if (this.provideAddress) {
         try {
           const tokenInfo = await getERC20Info(this.provideAddress);
-          console.log(4, tokenInfo);
           this.provideName = tokenInfo.name;
           this.provideSymbol = tokenInfo.symbol;
           this.provideLogo = tokenInfo.icon;
@@ -271,7 +288,7 @@ export default {
         this.cToken = {
           name: this.provideName,
           symbol: this.provideSymbol,
-          logo: this.provideLogo,
+          icon: this.provideLogo,
           address: this.provideAddress,
           isMintable: false
         }
@@ -304,6 +321,9 @@ export default {
       this.cardStep = 2;
     },
     deleteData () {
+      if (this.deploying) {
+        return;
+      }
       this.progressData.pop()
       this.updateProgressColor()
       if (this.progressData.length === 0) {
@@ -372,24 +392,22 @@ export default {
       }))
     },
     async confirmDeploy () {
-      this.form.distributionData = this.progressData
-      if (!this.form.assetId || this.form.distributionData.length === 0) {
-        this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
-          title: this.$t('tip.tips'),
-          variant: 'info'
-        })
-        return
-      }
+      // if (Object.keys(this.cToken).length === 0 || this.progressData.length === 0) {
+      //   this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
+      //     title: this.$t('tip.tips'),
+      //     variant: 'info'
+      //   })
+      //   return
+      // }
       try {
         this.deploying = true
-        const decimal = this.selectedAddressData.decimal
-        this.form.decimal = decimal
-        const hash = await createStakingFeast(this.form)
-        if (hash) {
+        const [community, tokenAddress] = ['1', '2'];// await createCommunity(this.cToken, this.progressData)
+        if (community && tokenAddress) {
           this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
+          await sleep(3)
           this.$router.replace('set-profile')
         }
       } catch (e) {

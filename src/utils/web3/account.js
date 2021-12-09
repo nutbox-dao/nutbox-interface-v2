@@ -25,10 +25,12 @@ export const getAccounts = async (update=false) => {
 /**
  * Monitor BSC account change event
  */
-export const accountChanged = async () => {
+export const accountChanged = async (refresh) => {
     const metamask = await getEthWeb()
     metamask.on('accountsChanged', (accounts) => {
         console.log('Changed accounts', accounts);
+        refresh();
+        return;
         store.commit('web3/saveAccount', ethers.utils.getAddress(accounts[0]))
         store.commit('web3/saveStakingFactoryId', null)
         store.commit('web3/saveMyPools', null)

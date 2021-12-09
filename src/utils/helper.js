@@ -185,6 +185,8 @@ export function formatCountdown(end, currentBlockNum, blockInterval) {
  */
 export const uploadImage = async (img) => {
   return new Promise((resolve, reject) => {
+    resolve('https://cdn.wherein.mobi/nutbox/v2/1636516942582');
+    return;
     let param = new FormData();
     param.append("file", img);
     const config = {
@@ -220,6 +222,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t("error.blockChainError");
   } else if (code === errCode.CONTRACT_CREATE_FAIL) {
     tipStr = $t("error.blockChainError");
+  } else if (code === errCode.HAVE_CREATED_COMMUNITY) {
+    tipStr = $t("error.haveCreatedCommunity")
   } else if (code === errCode.USER_CANCEL_SIGNING) {
     tipStr = $t("error.cancelSigning");
   } else if (code === errCode.TRANSACTION_FAIL) {

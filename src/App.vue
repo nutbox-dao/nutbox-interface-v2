@@ -17,7 +17,7 @@
         </div>
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <i class="add-user-icon mt-4" style="opacity: .7"></i>
+          <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingCommunity"></i>
           <img class="user-avatar rounded-circle w-75 my-3"
                src="~@/static/images/home-s2-icon1.svg" alt="">
           <i class="menu-icon" style="opacity: .7"></i>
@@ -45,7 +45,7 @@ import { mapState, mapActions } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getMyCommunityContract } from '@/utils/web3/community'
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getDelegateFromHive } from '@/utils/hive/hive'
@@ -66,6 +66,7 @@ export default {
   methods: {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
+    ...mapState('web3', ['loadingCommunity']),
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
       this.$store.commit('saveLang', lang)
@@ -73,8 +74,12 @@ export default {
     },
     // BSC data
     async fetchBscData () {
-      const stakingId = await getMyCommunityContract();
-      console.log(stakingId);
+      try {
+        const c = await getMyCommunityInfo();
+        console.log('My community info', c);
+      }catch (e) {
+        
+      }
     },
     goHome() {
       this.$router.replace('/')
@@ -103,7 +108,9 @@ export default {
     try {
       setupNetwork()
       chainChanged()
-      accountChanged()
+      accountChanged(() => {
+        this.$router.go(0);
+      })
       subBlockNum()
     } catch (e) {
       console.log(533, e)

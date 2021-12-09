@@ -46,6 +46,7 @@ module.exports = {
     sign: "Sign and upload",
     cancel: "Cancel",
     commit: "Commit",
+    complete: "Complete",
     confirm: "Confirm",
     add: "Add",
     update: "Update",
@@ -263,6 +264,7 @@ module.exports = {
     changeDepsitFail: "Change deposition fail",
     delegateFail: "Delegate fail",
     changeDelegateFail: "Change delegation fail",
+    haveCreatedCommunity: "You already created a community. Please refresh for try!",
     approveFail: "Approve fail",
     accountChanged:
       "Steem and Tron address mismatch，Please confirm whether the wallet account is switched",
@@ -286,6 +288,7 @@ module.exports = {
     inputLinkIllegal: "Please input correct link",
     notEnoughFee: "Insufficient fee",
     insufficentPnut: "Insufficient PNUT",
+    insufficentErc20: "Insufficient {symbol}",
     hasVoted: "Your post has been voted by nutbox.mine",
     pleaseRetry: "Please try agian",
     signatureFailed: "Signature fail，Please refresh the page and retry",
@@ -338,7 +341,7 @@ module.exports = {
     communityPoster: "Poster",
     communityBalance: "Community Balance",
     communityAsset: "Community Asset",
-
+    
     noCommunity: "You have no community yet",
 
     startBlock: "Start block",

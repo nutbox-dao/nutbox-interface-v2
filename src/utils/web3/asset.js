@@ -442,3 +442,21 @@ export const getBalance = async () => {
   const account = await getAccounts()
   return await provider.getBalance(account);
 }
+
+/**
+ * get specil erc20 of user
+ * @param {*} erc20 
+ * @returns 
+ */
+export const getERC20Balance = async (erc20) => {
+  return new Promise(async (resolve) => {
+    try{
+      const erc20Contract = await getContract('ERC20', erc20);
+      const account = await getAccounts();
+      const balanceBI = await erc20Contract.balanceOf(account);
+      return balanceBI.toString() / 1e18;
+    }catch(e) {
+      resolve(-1);
+    }
+  })
+}
