@@ -134,6 +134,10 @@ export default {
   }
   .sub-page-content {
     flex-direction: column;
+    overflow: scroll;
+    .page-view {
+      padding: 0 .8rem;
+    }
     .activity-banner {
       width: 100%;
       height: fit-content;
