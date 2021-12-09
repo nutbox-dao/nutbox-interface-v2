@@ -30,6 +30,11 @@
     @include icon(2rem, 2rem);
     background-image: url("~@/static/images/menu-icon.svg");
   }
+  .setting-icon {
+    @include icon(2rem, 2rem);
+    background-image: url("~@/static/images/setting-icon.svg");
+    opacity: .7;
+  }
 }
 .page-container {
   flex: 1;
@@ -79,22 +84,6 @@
       display: flex;
       gap: .4rem;
       justify-content: flex-end;
-      button {
-        border-radius: .6rem;
-        height: 2.4rem;
-        padding: 0 .8rem;
-        font-size: .8rem;
-        border: 1px solid var(--primary-custom);
-        background: var(--primary-custom);
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-        min-width: fit-content;
-        font-weight: bold;
-        &.outline-btn {
-          background: white;
-        }
-      }
       .add-icon {
         @include icon;
         min-width: 1rem;

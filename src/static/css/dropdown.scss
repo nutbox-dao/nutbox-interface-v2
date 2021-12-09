@@ -79,6 +79,9 @@
   max-height: 28.8rem;
   overflow: auto;
 }
+.setting-dropdown .dropdown-toggle {
+  padding: 0!important;
+}
 .setting-dropdown .dropdown-toggle:hover{
   background-color: transparent!important;
 }
@@ -87,6 +90,7 @@
   border-radius: .8rem;
   position: absolute!important;
   @include coin-shadow();
+  background-color: transparent;
 }
 .setting-dropdown .dropdown-item {
   display: flex;

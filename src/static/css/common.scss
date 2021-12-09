@@ -60,18 +60,12 @@ ponsived {
   &:hover {
     background: #ffa000;
   }
-  &.outline-btn {
-    background: white;
+  &-outline {
+    background-color: transparent;
     border: 1px solid var(--primary-custom);
     box-shadow: none;
     color: var(--primary-custom);
   }
-}
-.primary-btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--primary-custom);
-  box-shadow: none;
-  color: var(--primary-custom);
 }
 .primary-btn:disabled {
   &:hover {
