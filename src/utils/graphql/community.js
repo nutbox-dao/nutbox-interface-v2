@@ -1,7 +1,56 @@
 import { client } from './index';
 import store from '@/store'
 import { gql } from 'graphql-request'
-import { ListGroupPlugin } from 'bootstrap-vue';
+
+export async function getSpecifyCommunityInfo(community) {
+    const query = gql`
+        query Community($id: String!) {
+            community(id: "0xf234e84e9f1f83105a120351dfea179ac4ad8730") {
+                id
+                createdAt
+                feeRatio
+                cToken
+                pools {
+                    id
+                    status
+                    name
+                    asset
+                    poolFactory
+                    ratio
+                    chainId
+                    stakers(first: 10){
+                        id
+                    }
+                    stakersCount
+                }
+                operationCount
+                operationHistory(first: 20) {
+                    type
+                    timestamp
+                    poolFactory
+                    pool
+                    user
+                    chainId
+                    asset
+                    amount
+                    timestamp
+                    tx
+                }
+            }
+        }
+    `
+    try{
+        const data = await client.request(query, {id: community.toLowerCase()})
+        if (data && data.community) {
+            const community = data.community
+            console.log(123, community);
+            // store.commit('currentCommunity/save', )
+            return data.community
+        }
+    }catch(e) {
+        console.log('Get community from graph fail:', e);
+    }
+}
 
 // get user summary: include all joined communities and pools
 export async function getNewCommunityOPHistory(community) {

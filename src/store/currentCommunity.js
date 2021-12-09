@@ -5,8 +5,11 @@ export default {
     state: {
       communityId: null,
       communityInfo: null,
+      allPools: null,
+      cToken: null,
       operationHistory: null,
-
+      feeRatio: 0,
+      operationCount: 0,
     },
     mutations: {
       saveCommunityId (state, communityId) {
@@ -17,6 +20,18 @@ export default {
       },
       saveOperationHistory (state, operationHistory) {
           state.operationHistory = operationHistory
+      },
+      saveAllPools (state, allPools) {
+        state.allPools = allPools
+      },
+      saveCtoken (state, cToken) {
+        state.cToken = cToken
+      },
+      saveFeeRatio (state, feeRatio) {
+        state.feeRatio = feeRatio
+      },
+      saveOperationCount (state, operationCount) {
+        state.operationCount = operationCount
       },
       
       clearData (state) {

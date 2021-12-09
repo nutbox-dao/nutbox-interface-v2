@@ -31,13 +31,13 @@
           <i class="menu-icon" style="opacity: .7"></i>
         </div>
       </div>
-      <!--  -->
+      <!-- right part -->
       <div class="page-container">
         <div class="page-header d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center" v-if="$route.path.indexOf('sub-community')>=0">
             <img class="community-logo rounded-circle mr-2"
-                 src="~@/static/images/tokens/dot.png" alt="">
-            <span>Community name</span>
+                 :src="communityInfo && communityInfo.logo" alt="">
+            <span>{{ communityInfo && communityInfo.name }}</span>
           </div>
           <div v-else class="page-title font-bold font20">{{$route.name}}</div>
           <div class="address-box" @click="connect">
@@ -70,6 +70,7 @@ export default {
   computed: {
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo']),
+    ...mapState('currentCommunity', ['communityInfo']),
     address () {
       if (this.$store.state.web3.account) {
         return formatUserAddress(this.$store.state.web3.account, false)

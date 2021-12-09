@@ -1,18 +1,18 @@
 <template>
   <div class="scroll-content">
     <div class="p-card">
-      <img class="poster" :src="communityInfo.poster" alt="">
+      <img class="poster" :src="communityInfo && communityInfo.poster" alt="">
       <div class="second-card">
-        <img class="large-logo" :src="communityInfo.icon" alt=""/>
+        <img class="large-logo" :src="communityInfo && communityInfo.icon" alt=""/>
         <div class="project-info text-left">
           <div class="d-flex align-items-center">
             <a class="font20 font-bold title icon-title official-link-icon m-0"
-               :href="communityInfo.website"
-               target="_blank">{{ communityInfo.name || 'Nutbox' }}</a>
-            <i class="v-line" v-show="communityInfo.website && communityInfo.website.length > 4"></i>
+               :href="communityInfo && communityInfo.website"
+               target="_blank">{{ communityInfo && communityInfo.name }}</a>
+            <i class="v-line" v-show="communityInfo && communityInfo.website && communityInfo.website.length > 4"></i>
           </div>
           <div class="desc font14 mt-2"
-               v-html="(communityInfo.description)"></div>
+               v-html="(communityInfo && communityInfo.description)"></div>
         </div>
       </div>
     </div>
@@ -21,25 +21,25 @@
         <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
         <div class="row">
           <div class="col-md-4 d-flex align-items-center token-base-info">
-            <img class="token-logo" :src="communityInfo.icon" alt=""/>
-            <span class="px-3">{{ ctoken ? ctoken.symbol : '-' }}</span>
-            <div class="token-address" @click="copyAddress(ctoken ? ctoken.address : null)">
-              {{ ctoken ? ctoken.name : '-' }}
+            <img class="token-logo" :src="cToken && cToken.icon" alt=""/>
+            <span class="px-3">{{ cToken ? cToken.symbol : '-' }}</span>
+            <div class="token-address" @click="copyAddress(cToken ? cToken.address : null)">
+              {{ cToken ? cToken.name : '-' }}
             </div>
           </div>
           <div class="col-md-8 d-flex justify-content-between align-items-center text-center">
             <div class="r-item">
               <div class="label mb-2">{{ $t('asset.price') }}</div>
-              <div class="value">{{ (ctoken ? ctoken.price : 0) | formatPrice }}</div>
+              <div class="value">{{ (cToken ? cToken.price : 0) | formatPrice }}</div>
             </div>
             <div class="r-item">
               <div class="label mb-2">{{ $t('asset.totalSupply') }}</div>
-              <div class="value">{{ (ctoken ? ctoken.totalSupply : 0) / (10 ** ctoken.decimal) | amountForm }}</div>
+              <div class="value">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}</div>
             </div>
             <div class="r-item">
               <div class="label mb-2">{{ $t('asset.cap') }}</div>
               <div class="value">
-                {{ (ctoken ? (ctoken.totalSupply / (10 ** ctoken.decimal) * ctoken.price) : 0) | formatPrice }}
+                {{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal) * cToken.price) : 0) | formatPrice }}
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@
         <div class="title mb-3">DAO Fund</div>
         <div class="custom-form form-row-align-center">
           <!-- community balance -->
-          <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7"
+          <b-form-group v-if="!(cToken && cToken.isMintable)" label-cols-md="2" content-cols-md="7"
                         class="align-items-center"
                         label-align="left"
                         :label="$t('community.communityBalance')">
@@ -75,7 +75,7 @@
                   placeholder="0.000"
                 >
                 </b-form-input>
-                <span class="c-append">{{ ctoken ? ctoken.symbol : '' }}</span>
+                <span class="c-append">{{ cToken ? cToken.symbol : '' }}</span>
               </div>
             </div>
           </b-form-group>
@@ -87,7 +87,7 @@
               <div class="c-input-group">
                 <b-form-input
                   :disabled="true"
-                  :placeholder="devAddress"
+                  :placeholder="communityId"
                 >
                 </b-form-input>
                 <span></span>
@@ -103,7 +103,7 @@
                 <b-form-input
                   :disabled="true"
                   type="number"
-                  :placeholder="(devRatio / 100).toFixed(2).toString()"
+                  :placeholder="(feeRatio / 100).toFixed(2).toString()"
                 >
                 </b-form-input>
                 <span class="c-append">%</span>
@@ -122,7 +122,7 @@ import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getCToken } from '@/utils/web3/asset'
 import { sleep, formatBalance } from '@/utils/helper'
-import { getSpecifyDistributionEras, getCommunityBalance, getCommunityDaoInfo } from '@/utils/web3/community'
+import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 
 export default {
   name: 'Home',
@@ -132,28 +132,17 @@ export default {
   },
   data () {
     return {
-      communityId: null,
-      ctoken: {},
-      isMintable: true,
       distributin: [],
-      communityBalanceValue: 0,
-      devAddress: '',
-      devRatio: 0
+      communityBalanceValue: 0
     }
   },
   computed: {
-    ...mapState(['currentCommunityId']),
-    ...mapState('web3', ['cTokens', 'allPools']),
-    ...mapGetters('web3', ['communityById']),
-    communityInfo () {
-      const com = this.communityById(this.currentCommunityId)
-      return com
-    },
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken']),
     poolsData () {
       if (!this.allPools) return []
-      return this.allPools.filter(pool => pool.communityId === this.currentCommunityId).map(pool => ({
-        name: pool.poolName,
-        value: parseFloat(pool.poolRatio) / 100
+      return this.allPools.filter(pool => pool.status === 'OPENED').map(pool => ({
+        name: pool.name,
+        value: parseFloat(pool.ratio) / 100
       }))
     }
   },
@@ -190,24 +179,21 @@ export default {
     },
   },
   async mounted () {
-    while (!this.currentCommunityId) {
+    while (!this.communityId) {
       await sleep(0.2)
     }
-    this.ctoken = this.cTokens[this.currentCommunityId]
-    getCToken(this.currentCommunityId, true).then(async (res) => {
-      this.ctoken = res
-      this.isMintable = res.isMintable
-      if (!this.isMintable) {
-        const bb = await getCommunityBalance(this.currentCommunityId, res)
+    getCToken(this.communityId, true).then(async (res) => {
+      if (!res.isMintable) {
+        const bb = await getCommunityBalance(this.communityId, res)
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
-    })
-    getSpecifyDistributionEras(this.currentCommunityId).then(res => this.distributin = res)
-    getCommunityDaoInfo(this.currentCommunityId).then(res => {
-      this.devAddress = res.dev
-      this.devRatio = res.ratio
-    })
-  }
+    }).catch(e => {})
+    getSpecifyDistributionEras(this.communityId).then(res => this.distributin = res)
+  },
+  beforeDestroy () {
+    // clear monitor
+
+  },
 }
 </script>
 

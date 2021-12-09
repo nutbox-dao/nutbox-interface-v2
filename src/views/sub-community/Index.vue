@@ -35,7 +35,7 @@
         <div class="activity-banner">
           <div class="a-banner-card">
             <div class="mt-2 mb-4">Activities</div>
-            <ActivityItem class="mt-3" v-for="i of 4" :key="i"/>
+            <ActivityItem class="mt-3" v-for="i of 14" :key="i"/>
           </div>
         </div>
       </div>
@@ -46,13 +46,16 @@
 <script>
 import ActivityItem from '@/components/community/ActivityItem'
 import { mapState, mapMutations } from 'vuex'
+import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
+import { handleApiErrCode } from '@/utils/helper';
+import { getCToken } from '@/utils/web3/asset';
 
 export default {
   name: 'Index',
   components: { ActivityItem },
   computed: {
     ...mapState(
-      'currentCommunity', ['communityId', 'communityInfo']
+      'currentCommunity', ['communityId']
     )
   },
   data () {
@@ -65,16 +68,31 @@ export default {
     if (!this.communityId) {
       this.$router.replace('/');
     }
+    console.log("Specify community id", this.communityId);
     try {
+      this.loading = true;
+      getSpecifyCommunityInfo(this.communityId).then(community => {
+        getCToken(community.id).then(ctoken => {
+          this.saveCtoken(ctoken)
+        }).catch(e => {
+          console.log('get ctoken fail');
+        })
+        this.saveFeeRatio(community.feeRatio)
+        this.saveOperationCount(community.operationCount)
+        this.saveAllPools(community.pools)
+        this.saveOperationHistory(community.operationHistory)
 
+        this.loading = false
+      })
     }catch (e){
-
-    }finally{
-      this.loading = true
+      handleApiErrCode(e, (tip, params) => {
+        this.$bvToast.toast(tip, params)
+      })
+      this.loading = false
     }
   },
   methods: {
-    ...mapMutations('currentCommunity', ['clearData'])
+    ...mapMutations('currentCommunity', ['clearData', 'saveCtoken', 'saveAllPools', 'saveFeeRatio', 'saveOperationCount', 'saveOperationHistory'])
   },
   beforeDestroy () {
     this.clearData();
