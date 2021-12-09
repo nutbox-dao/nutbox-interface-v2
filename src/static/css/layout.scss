@@ -50,15 +50,9 @@
   }
 }
 .page-content {
-  .page-view-title {
-    text-align: left;
-    font-size: 1.8rem;
-    font-weight: bold;
-    line-height: 1.8rem;
-  }
   .page-back-text-icon {
     padding-left: 1.8rem;
-    background-image: url("~@/static/images/back-blcak-arrow.svg");
+    background-image: url("~@/static/images/back.svg");
     background-position: left center;
     background-size: 1.2rem 1.2rem;
     background-repeat: no-repeat;
@@ -105,7 +99,7 @@
         @include icon;
         min-width: 1rem;
         margin-right: .2rem;
-        background-image: url("~@/static/images/add-icon.svg");
+        background-image: url("~@/static/images/add-white-icon.svg");
       }
     }
   }
@@ -159,6 +153,7 @@
         cursor: pointer;
         flex: 1;
         padding: 0 .5rem;
+        text-align: center;
       }
       a:hover, span:hover {
         text-decoration: none;
@@ -166,6 +161,10 @@
       }
     }
   }
+}
+#sidebar-menu {
+  width: 12rem;
+  height: 100%;
 }
 //pc
 @media (min-width: 992px) {
@@ -177,6 +176,14 @@
       padding: 2rem 15px 1rem;
       top: -1.5rem;
     }
+  }
+  .b-sidebar-outer {
+    position: unset;
+  }
+  #sidebar-menu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
   }
 }
 //h5
@@ -199,41 +206,3 @@
   }
 }
 
-.top-header-dropdown .dropdown-toggle {
-  height: 1.8rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  &.c-icon-toggle {
-    width: 1.8rem;
-    padding: 0;
-  }
-  &.c-text-toggle {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1.8rem;
-  }
-  &.c-text-toggle-outline {
-    border: 1px solid var(--primary-custom);
-    background-color: transparent;
-  }
-  &.c-text-toggle-outline:hover {
-    background-color: transparent;
-  }
-  .dropdown-icon {
-    @include icon(.8rem, .8rem);
-    background-image: url("~@/static/images/dropdown-icon.svg");
-    margin-left: .2rem;
-  }
-}
-.top-header-dropdown .dropdown-menu {
-  border: transparent;
-  border-radius: .8rem;
-  @include coin-shadow;
-}
-.top-header-dropdown .active .dropdown-item {
-  color: var(--primary-custom);
-}

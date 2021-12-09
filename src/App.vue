@@ -10,8 +10,14 @@
             <i class="app-icon mt-4" style="opacity: .7"></i>
           </router-link>
           <div class="divider-line mx-auto my-4"></div>
-          <div class="pt-3">
-            <img class="user-avatar rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png"
+          <div class="pt-3 communities-bar">
+            <router-link to="/sub-community/home">
+              <div class="community-logo-box">
+                <img class="rounded-circle"
+                     src="~@/static/images/tokens/dot.png" alt="">
+              </div>
+            </router-link>
+            <img class="rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
@@ -25,7 +31,12 @@
       </div>
       <div class="page-container">
         <div class="page-header d-flex justify-content-between align-items-center">
-          <div class="page-title font-bold font20">Home</div>
+          <div class="d-flex align-items-center" v-if="$route.path.indexOf('sub-community')>=0">
+            <img class="community-logo rounded-circle mr-2"
+                 src="~@/static/images/tokens/dot.png" alt="">
+            <span>Community name</span>
+          </div>
+          <div v-else class="page-title font-bold font20">{{$route.name}}</div>
           <div class="address-box" @click="connect">
             <i class="wallet-icon"></i>
             <div class="font12">{{ address || $t("commen.connectMetamask") }}</div>
@@ -101,7 +112,7 @@ export default {
     // bsc related
     try {
       await getAccounts(true)
-      getMyJoinedCommunity();
+      await getMyJoinedCommunity();
     } catch (e) {
       console.log('Get accounts fail', e)
     }
@@ -180,6 +191,28 @@ body {
   bottom: 0;
   background-color: var(--background);
 }
+.communities-bar {
+  .active .community-logo-box {
+    border: 2px solid var(--primary-custom);
+    border-radius: 2.8rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+  .community-logo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .community-logo-box img {
+    max-width: 2.4rem;
+    max-height: 2.4rem;
+    width: 100%;
+    height: 100%;
+  }
+}
 .address-box {
   height: 2rem;
   border: 1px solid var(--card-broder);
@@ -199,8 +232,12 @@ body {
     &::after {
       content: '';
       @include icon;
-      background-image: url("~@/static/images/wallet.png");
+      background-image: url("~@/static/images/wallet.svg");
     }
   }
+}
+.community-logo {
+  width: 2rem;
+  height: 2rem;
 }
 </style>

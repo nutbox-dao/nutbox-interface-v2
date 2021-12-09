@@ -26,7 +26,7 @@
     background-color: white;
   }
   .second-card {
-    @include card(1.2rem, white, none)
+    @include card(1.2rem, var(--card-bg-primary), none)
   }
   .project-info {
     margin-left: 4.2rem;
