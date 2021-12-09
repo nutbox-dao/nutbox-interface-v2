@@ -25,6 +25,17 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
+          <router-link v-if="screenWidth>991" to="/manage-community">
+            <i class="setting-icon mt-4"></i>
+          </router-link>
+          <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
+            <template #button-content>
+              <i class="setting-icon"></i>
+            </template>
+            <template #default>
+              <ManageCommunityMenu/>
+            </template>
+          </b-dropdown>
           <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingCommunity"></i>
           <img class="user-avatar rounded-circle w-75 my-3"
                src="~@/static/images/home-s2-icon1.svg" alt="">
@@ -65,8 +76,10 @@ import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getDelegateFromHive } from '@/utils/hive/hive'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
+import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
 
 export default {
+  components: { ManageCommunityMenu },
   computed: {
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo']),
@@ -75,6 +88,11 @@ export default {
       if (this.$store.state.web3.account) {
         return formatUserAddress(this.$store.state.web3.account, false)
       }
+    }
+  },
+  data() {
+    return {
+      screenWidth: document.body.clientWidth,
     }
   },
   mixins: [showToastMixin],
@@ -93,7 +111,7 @@ export default {
         const c = await getMyCommunityInfo();
         console.log('My community info', c);
       }catch (e) {
-        
+
       }
     },
     gotoCommunity(communityId) {

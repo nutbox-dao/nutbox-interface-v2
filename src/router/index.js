@@ -7,6 +7,12 @@ import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
+import ManageCommunityIndex from '@/views/manage-community/Index'
+import CommunityProfile from '@/views/manage-community/CommunityProfile'
+import CommunityAsset from '@/views/manage-community/CommunityAsset'
+import CommunityStaking from '@/views/manage-community/CommunityStaking'
+import CommunitySocial from '@/views/manage-community/CommunitySocial'
+import CommunityVote from '@/views/manage-community/CommunityVote'
 Vue.use(VueRouter)
 
 const routes = [
@@ -44,6 +50,34 @@ const routes = [
       {
         path: 'home',
         component: SubCommunityHome
+      }
+    ]
+  },
+  {
+    path: '/manage-community',
+    name: 'manageCommunity',
+    component: ManageCommunityIndex,
+    redirect: '/manage-community/profile',
+    children: [
+      {
+        path: 'profile',
+        component: CommunityProfile
+      },
+      {
+        path: 'asset',
+        component: CommunityAsset
+      },
+      {
+        path: 'staking',
+        component: CommunityStaking
+      },
+      {
+        path: 'social',
+        component: CommunitySocial
+      },
+      {
+        path: 'vote',
+        component: CommunityVote
       }
     ]
   }

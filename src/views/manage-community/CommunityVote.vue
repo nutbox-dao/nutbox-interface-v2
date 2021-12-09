@@ -1,0 +1,419 @@
+<template>
+  <div class="scroll-content d-flex flex-column">
+    <div class="container">
+      <div class="c-card col-md-9 mx-auto">
+        <div class="custom-form text-left">
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="10"
+            :label="$t('nps.remark')"
+            label-for="remarkInput"
+            label-class="d-flex font16 font-bold "
+          >
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-textarea
+                  id="remark"
+                  :placeholder="$t('nps.remarkInput')"
+                  v-model="form.remark"
+                  rows="10"
+                  max="2046"
+                ></b-form-textarea>
+              </div>
+            </div>
+          <div class="mt-3">{{ $t('nps.markdownTip') }}</div>
+          </b-form-group>
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="10"
+            :label="$t('nps.proposalBodyPreview')"
+            label-for="remarkInput"
+            label-class="d-flex font16 font-bold "
+          >
+            <div class="d-flex">
+              <div class="c-input-group p-3" style="min-height: 2.4rem">
+                <Markdown :body="form.remark" />
+              </div>
+            </div>
+          </b-form-group>
+
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="5"
+            :label="$t('nps.proposalThreshold')"
+            label-for="proposalThresholdInput"
+            label-class="d-flex align-items-center font16 font-bold "
+          >
+            <div class="d-flex">
+              <div class="c-input-group">
+                <b-form-input
+                  id="proposalThreshold"
+                  :placeholder="$t('nps.proposalThresholdInput')"
+                  v-model="form.threshold"
+                  type="number"
+                ></b-form-input>
+                <span class="c-append">{{ form.symbol }}</span>
+              </div>
+            </div>
+          </b-form-group>
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="5"
+            :label="$t('nps.proposalPassThreshold')"
+            label-for="proposalPassThresholdInput"
+            label-class="d-flex align-items-center font16 font-bold"
+          >
+            <div class="d-flex align-items-center">
+              <div class="c-input-group">
+                <b-form-input
+                  id="proposalPassThreshold"
+                  :placeholder="$t('nps.proposalPassThresholdInput')"
+                  v-model="form.passthreshold"
+                  type="number"
+                ></b-form-input>
+                <span class="c-append">{{ form.symbol }}</span>
+              </div>
+            </div>
+          </b-form-group>
+
+          <!-- npm poster -->
+          <b-form-group
+            label-cols-md="2"
+            content-cols-md="10"
+            class="cover-form"
+            :label="$t('community.communityPoster')"
+          >
+            <b-form-file
+              v-model="coverImg"
+              @input="updateCover"
+              accept="image/png,image/jpeg,image/jpg"
+              ref="logo-file-input"
+            >
+              <template #placeholder>
+                <div class="input-file-cover">
+                  <template v-if="form.poster">
+                    <img class="cover-preview" :src="form.poster" alt="" />
+                    <div class="edit-mask">
+                    <span
+                    >{{ $t("community.edit") }}<br />{{
+                        $t("community.poster")
+                      }}</span
+                    >
+                    </div>
+                  </template>
+                  <template v-else>
+                    <img
+                      class="add-icon"
+                      src="~@/static/images/add-white-icon.svg"
+                      alt=""
+                    />
+                    <div class="add-text">
+                      {{ $t("community.uploadPoster") }}
+                    </div>
+                  </template>
+                </div>
+              </template>
+              <template #file-name>
+                <div class="input-file-cover">
+                  <img
+                    class="cover-preview"
+                    v-if="coverPreviewSrc"
+                    :src="coverPreviewSrc"
+                    alt=""
+                  />
+                  <UploadLoading v-if="coverUploadLoading" />
+                </div>
+              </template>
+            </b-form-file>
+            <div class="font12 text-grey-light mt-1">
+              {{ $t("community.picTip", { size: "1200*280" }) }}
+            </div>
+          </b-form-group>
+
+          <b-form-group label-cols-md="2" content-cols-md="10" label="">
+            <div class="text-center mt-4">
+              <button class="primary-btn col-md-6" @click="submitForm" :disabled="updateing">
+                <b-spinner small type="grow" v-show="updateing" />
+                {{ $t("commen.update") }}
+              </button>
+            </div>
+          </b-form-group>
+        </div>
+      </div>
+    </div>
+
+    <!-- crop pic tip -->
+    <b-modal
+      v-model="cropperModal"
+      modal-class="cropper-modal"
+      size="lg"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="cropper-container">
+        <canvas id="cropper-canvas"></canvas>
+        <vueCropper
+          ref="cropper"
+          :infoTrue="true"
+          :autoCrop="true"
+          :img="cropperImgSrc"
+          :fixedNumber="cropFixedNumber"
+          :autoCropWidth="cropImgSize[0]"
+          :fixed="true"
+          :centerBox="true"
+          outputType="png"
+        ></vueCropper>
+      </div>
+      <div class="crop-btn-group">
+        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
+      </div>
+    </b-modal>
+
+    <b-modal
+      v-model="noCommunity"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center my-5">
+          {{ $t("community.noCommunity") }}
+        </div>
+        <button class="primary-btn" @click="gotoCreate">
+          {{ $t("community.gotoCreate") }}
+        </button>
+      </div>
+    </b-modal>
+
+    <b-modal
+      v-model="notYourCommunity"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="tip-modal">
+        <div class="font20 font-bold text-center my-5">
+          {{ $t("community.notYourCommunity") }}
+        </div>
+        <button class="primary-btn" @click="goToHome">
+          {{ $t("commen.goToHome") }}
+        </button>
+      </div>
+    </b-modal>
+  </div>
+</template>
+
+<script>
+import {
+  completeCommunityProposalConfigInfo,
+  getMyCommunityProposalConfigInfo
+} from '@/utils/web3/communityProposalConfig'
+import { handleApiErrCode, uploadImage } from '@/utils/helper'
+import { getCToken } from '@/utils/web3/asset'
+import { getMyCommunityInfo } from '@/utils/web3/community'
+import {
+  BSC_CHAIN_ID,
+  BSC_CHAIN_NAME,
+  BSC_STRATEGIES_NAME
+} from '@/config'
+import Markdown from '@/components/common/Markdown'
+import { nanoid } from 'nanoid'
+import { mapState } from 'vuex'
+import UploadLoading from '@/components/common/UploadLoading'
+import { VueCropper } from 'vue-cropper'
+
+export default {
+  name: 'CommunityVote',
+  components: {
+    Markdown,
+    UploadLoading,
+    VueCropper
+  },
+  data () {
+    return {
+      updateing: false,
+      communityId: null,
+      activeTab: 0,
+      coverImg: null,
+      modalNetworksOpen: false,
+      modalStrategyOpen: false,
+      modelEditStrategyOpen: false,
+      currentStrategyControlId: '',
+      currentStrategyKey: '',
+      currentStrategyParams: '',
+      strategyControlItems: [],
+      noCommunity: false,
+      notYourCommunity: false,
+      strategies: null,
+      uploading: false,
+      cropperModal: false,
+      cropperImgSrc: '',
+      cropFixedNumber: [1, 1],
+      cropImgSize: [1200, 280],
+      coverPreviewSrc: '',
+      coverUploadLoading: false,
+      form: {
+        communityId: '',
+        network: '',
+        networkName: '',
+        symbol: '',
+        poster: '',
+        skin: '',
+        admins: '',
+        members: '',
+        strategies: '',
+        threshold: 0,
+        passthreshold: 0,
+        validation: 'basic',
+        onlyMembers: 0,
+        userId: ''
+      }
+    }
+  },
+  computed: {
+    ...mapState('web3', ['communityProposalConfig'])
+  },
+  methods: {
+    onCancel () {
+      this.cropperModal = false
+      if (this.coverUploadLoading) {
+        this.coverImg = null
+        this.coverUploadLoading = false
+      }
+    },
+    completeCropAndUpload () {
+      this.$refs.cropper.getCropData((data) => {
+        this.coverPreviewSrc = data
+        this.cropperModal = false
+      })
+      this.$refs.cropper.getCropBlob(async (data) => {
+        try {
+          this.form.poster = await uploadImage(data)
+          this.coverUploadLoading = false
+        } catch (e) {
+          this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+            title: this.$t('tip.tips'),
+            autoHideDelay: 5000,
+            variant: 'warning'
+          })
+          this.coverImg = null
+          this.form.poster = null
+        }
+      })
+    },
+    async submitForm () {
+      try {
+        this.updateing = true
+
+        this.form.strategies = JSON.stringify(
+          this.strategyControlItems,
+          null,
+          4
+        )
+
+        const resCode = await completeCommunityProposalConfigInfo(
+          this.form
+        )
+
+        // go to community dashboard
+        this.$bvToast.toast(
+          this.$t('tip.completeCommunityProposalConfigSuccess'),
+          {
+            title: this.$t('tip.tips'),
+            variant: 'success'
+          }
+        )
+      } catch (e) {
+        const handleRes = handleApiErrCode(e, (info, params) => {
+          this.$bvToast.toast(info, params)
+        })
+      } finally {
+        this.updateing = false
+      }
+    },
+    async updateCover (file) {
+      if (!this.coverImg) return
+      this.coverUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [30, 7]
+        this.cropImgSize = [1200, 280]
+      }
+    },
+    gotoCreate () {
+      this.$router.push('/community/create-economy')
+    },
+    goToHome () {
+      this.$router.push('/')
+    }
+  },
+  async mounted () {
+    try {
+      const communityInfo = await getMyCommunityInfo()
+
+      if (!communityInfo) {
+        // Havn't create feast
+        this.noCommunity = true
+        return
+      }
+
+      this.form.id = communityInfo.id
+      this.form.communityId = communityInfo.id
+
+      const token = await getCToken(communityInfo.id)
+
+      const strategyParamsObj = {}
+      strategyParamsObj.address = token.address
+      strategyParamsObj.symbol = token.symbol
+      strategyParamsObj.decimals = token.token_decimal
+      this.form.symbol = token.symbol
+
+      const currentItem = {
+        strategyControlId: nanoid(),
+        strategyKey: BSC_STRATEGIES_NAME,
+        strategyParams: JSON.stringify(strategyParamsObj, null, 4),
+        strategies: {
+          name: BSC_STRATEGIES_NAME,
+          params: strategyParamsObj
+        }
+      }
+
+      this.strategyControlItems.push(currentItem)
+      this.form.network = BSC_CHAIN_ID
+      this.form.networkName = BSC_CHAIN_NAME
+      this.form = this.communityProposalConfig ?? this.form
+      getMyCommunityProposalConfigInfo(communityInfo.id).then(res => {
+        if (res) {
+          this.form = res
+          this.strategyControlItems = JSON.parse(this.form.strategies)
+        }
+      })
+
+      if (this.form.strategies) { this.strategyControlItems = JSON.parse(this.form.strategies) }
+    } catch (e) {
+      handleApiErrCode(e, (info, params) => {
+        this.$bvToast.toast(info, params)
+      })
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+@import "src/static/css/form";
+.c-card {
+  //@include card(2rem 1.2rem, var(--card-bg-primary), none, auto);
+  flex: 1;
+}
+</style>
