@@ -9,6 +9,7 @@ import web3 from './web3'
 import community from '@/store/community'
 import steem from './steem'
 import hive from './hive'
+import currentCommunity from './currentCommunity'
 
 Vue.use(Vuex)
 
@@ -20,8 +21,6 @@ export default new Vuex.Store({
     prices: {},
     metamaskConnected: false,
     apys: {},
-    // exist in child community page
-    currentCommunityId: null
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -43,9 +42,6 @@ export default new Vuex.Store({
     saveApys: (state, apys) => {
       state.apys = apys
     },
-    saveCurrentCommunityId: (state, currentCommunityId) => {
-      state.currentCommunityId = currentCommunityId
-    }
   },
   getters: {
   },
@@ -53,6 +49,7 @@ export default new Vuex.Store({
     web3,
     community,
     steem,
-    hive
+    hive,
+    currentCommunity
   }
 })

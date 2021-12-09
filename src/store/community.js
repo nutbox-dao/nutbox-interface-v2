@@ -37,7 +37,7 @@ export default {
     saveCommunityInfo (state, data) {
       state.communityInfo = data;
     },
-    saveDistributions (state,distr) {
+    saveDistributions (state, distr) {
       state.distributions = distr
     }
   },

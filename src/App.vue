@@ -10,17 +10,19 @@
             <i class="app-icon mt-4" style="opacity: .7"></i>
           </router-link>
           <div class="divider-line mx-auto my-4"></div>
+          <!-- joined community -->
           <div class="pt-3 communities-bar">
-            <router-link to="/sub-community/home">
+            <!-- <router-link to="/sub-community/home">
               <div class="community-logo-box">
                 <img class="rounded-circle"
                      src="~@/static/images/tokens/dot.png" alt="">
               </div>
-            </router-link>
-            <img class="rounded-circle w-100 mb-3" src="~@/static/images/tokens/dot.png"
+            </router-link> -->
+            <img class="rounded-circle w-100 mb-3" @click="gotoCommunity(community.id)" src="~@/static/images/tokens/dot.png"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
+        <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
           <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingCommunity"></i>
@@ -29,6 +31,7 @@
           <i class="menu-icon" style="opacity: .7"></i>
         </div>
       </div>
+      <!--  -->
       <div class="page-container">
         <div class="page-header d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center" v-if="$route.path.indexOf('sub-community')>=0">
@@ -91,6 +94,10 @@ export default {
       }catch (e) {
         
       }
+    },
+    gotoCommunity(communityId) {
+      this.$store.commit('currentCommunity/saveCommunityId', communityId);
+      this.$router.replace('/sub-community/home')
     },
     goHome() {
       this.$router.replace('/')

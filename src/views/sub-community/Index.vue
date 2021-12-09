@@ -45,18 +45,40 @@
 
 <script>
 import ActivityItem from '@/components/community/ActivityItem'
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   name: 'Index',
   components: { ActivityItem },
+  computed: {
+    ...mapState(
+      'currentCommunity', ['communityId', 'communityInfo']
+    )
+  },
   data () {
     return {
-      screenWidth: document.body.clientWidth
-
+      screenWidth: document.body.clientWidth,
+      loading: false
     }
   },
   mounted () {
+    if (!this.communityId) {
+      this.$router.replace('/');
+    }
+    try {
 
-  }
+    }catch (e){
+
+    }finally{
+      this.loading = true
+    }
+  },
+  methods: {
+    ...mapMutations('currentCommunity', ['clearData'])
+  },
+  beforeDestroy () {
+    this.clearData();
+  },
 }
 </script>
 

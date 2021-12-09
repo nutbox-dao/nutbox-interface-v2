@@ -340,8 +340,8 @@ module.exports = {
     communityThemeColor: "Theme color",
     communityPoster: "Poster",
     communityBalance: "Community Balance",
-    communityAsset: "Community Asset",
-    
+    communityAsset: "Community Token",
+
     noCommunity: "You have no community yet",
 
     startBlock: "Start block",
