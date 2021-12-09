@@ -120,7 +120,7 @@ export default {
 }
 .add-icon {
   @include icon();
-  background-image: url("~@/static/images/add-icon.svg");
+  background-image: url("~@/static/images/add-white-icon.svg");
 }
 @media (max-width: 767px) {
   .banner-card .v-line {

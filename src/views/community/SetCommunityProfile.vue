@@ -109,7 +109,7 @@
                       <template v-else>
                         <img
                           class="add-icon"
-                          src="~@/static/images/add.svg"
+                          src="~@/static/images/add-white-icon.svg"
                           alt=""
                         />
                         <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
@@ -157,7 +157,7 @@
                       <template v-else>
                         <img
                           class="add-icon"
-                          src="~@/static/images/add.svg"
+                          src="~@/static/images/add-white-icon.svg"
                           alt=""
                         />
                         <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
@@ -209,7 +209,7 @@
                       <template v-else>
                         <img
                           class="add-icon"
-                          src="~@/static/images/add.svg"
+                          src="~@/static/images/add-white-icon.svg"
                           alt=""
                         />
                         <div class="add-text">

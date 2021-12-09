@@ -5,6 +5,8 @@ import CommunityIndex from '@/views/community/Index'
 import CommunityHome from '@/views/community/CommunityHome'
 import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 import SetCommunityProfile from '@/views/community/SetCommunityProfile'
+import SubCommunityIndex from '@/views/sub-community/Index'
+import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 Vue.use(VueRouter)
 
 const routes = [
@@ -30,6 +32,18 @@ const routes = [
       {
         path: 'set-profile',
         component: SetCommunityProfile
+      }
+    ]
+  },
+  {
+    path: '/sub-community',
+    name: 'subCommunity',
+    component: SubCommunityIndex,
+    redirect: '/sub-community/home',
+    children: [
+      {
+        path: 'home',
+        component: SubCommunityHome
       }
     ]
   }
