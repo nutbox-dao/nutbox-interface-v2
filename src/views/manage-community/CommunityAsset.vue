@@ -477,6 +477,7 @@ export default {
       }
     }
     this.cToken = await getCToken(communityInfo.id)
+    console.log('ctoken', communityInfo.id, this.cToken);
     this.isMintable = this.cToken.isMintable
 
     this.assets = await getRegitryAssets()
