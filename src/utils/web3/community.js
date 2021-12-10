@@ -130,8 +130,13 @@ export const getAllCommunities = async (update = false) => {
     }
     try {
       const communities = await gac();
-      store.commit("community/saveAllCommunityInfo", communities);
-      resolve(communities);
+      let comms = {}
+      communities.map(c => {
+        comms[c.id.toLowerCase()] = c
+      })
+      console.log('all community', comms);
+      store.commit("community/saveAllCommunityInfo", comms);
+      resolve(comms);
     } catch (e) {
       console.log("Get all community fail", e);
       reject(e);
@@ -478,8 +483,8 @@ export const getDistributionEras = async (update = false) => {
  */
 export const getSpecifyDistributionEras = async (communityId) => {
   return new Promise(async (resolve, reject) => {
-    const distribuitons = store.state.community.specifyDistributionEras;
-    if (distribuitons) {
+    const distribuitons = store.state.currentCommunity.specifyDistributionEras;
+    if (distribuitons && distribuitons.length > 0) {
       resolve(distribuitons);
       return;
     }
@@ -517,7 +522,7 @@ export const getSpecifyDistributionEras = async (communityId) => {
           stopHeight: item.stopHeight.toString(),
           background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`,
         }));
-        store.commit("community/saveSpecifyDistributionEras", distri);
+        store.commit("currentCommunity/saveSpecifyDistributionEras", distri);
         resolve(distri);
       }
     } catch (e) {

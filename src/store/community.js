@@ -51,8 +51,7 @@ export default {
   },
   getters: {
     getCommunityInfoById: (state) => (communityId) => {
-      return state.communityInfo[communityId]
+      return state.allCommunityInfo[communityId]
     }
-
   }
 }

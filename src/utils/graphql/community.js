@@ -10,7 +10,7 @@ import { gql } from 'graphql-request'
 export async function getSpecifyCommunityInfo(community) {
     const query = gql`
         query Community($id: String!) {
-            community(id: "0xf234e84e9f1f83105a120351dfea179ac4ad8730") {
+            community(id: $id) {
                 id
                 createdAt
                 feeRatio
@@ -49,7 +49,7 @@ export async function getSpecifyCommunityInfo(community) {
         if (data && data.community) {
             const community = data.community
             store.commit('currentCommunity/saveCommunityInfo', community)
-            return data.community
+            return community
         }
     }catch(e) {
         console.log('Get community from graph fail:', e);

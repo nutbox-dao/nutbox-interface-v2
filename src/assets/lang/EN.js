@@ -352,6 +352,9 @@ module.exports = {
     tokenName: "Name",
     tokenSymbol: "Symbol",
     tokenAddress: "Token address",
+    price: "Price",
+    totalSupply: 'Supply',
+    cap: 'Mk Cap',
     distributionAmount: "Premine amount"
   }
 };

@@ -10,6 +10,7 @@ export default {
       operationHistory: null,
       feeRatio: 0,
       operationCount: 0,
+      specifyDistributionEras: []
     },
     mutations: {
       saveCommunityId (state, communityId) {
@@ -33,11 +34,19 @@ export default {
       saveOperationCount (state, operationCount) {
         state.operationCount = operationCount
       },
+      saveSpecifyDistributionEras (state, specifyDistributionEras) {
+        state.specifyDistributionEras = specifyDistributionEras
+      },
       
       clearData (state) {
           state.communityId = null;
           state.communityInfo = null;
           state.operationHistory = null;
+          state.feeRatio = 0;
+          state.allPools = null;
+          state.cToken = null;
+          state.operationCount = 0;
+          state.specifyDistributionEras = [];
       }
     }
   }

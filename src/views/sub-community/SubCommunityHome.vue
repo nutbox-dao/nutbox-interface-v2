@@ -1,18 +1,18 @@
 <template>
   <div class="scroll-content">
     <div class="p-card">
-      <img class="poster" :src="communityInfo && communityInfo.poster" alt="">
+      <img class="poster" :src="baseInfo && baseInfo.poster" alt="">
       <div class="second-card">
-        <img class="large-logo" :src="communityInfo && communityInfo.icon" alt=""/>
+        <img class="large-logo" :src="baseInfo && baseInfo.icon" alt=""/>
         <div class="project-info text-left">
           <div class="d-flex align-items-center">
             <a class="font20 font-bold title icon-title official-link-icon m-0"
-               :href="communityInfo && communityInfo.website"
-               target="_blank">{{ communityInfo && communityInfo.name }}</a>
-            <i class="v-line" v-show="communityInfo && communityInfo.website && communityInfo.website.length > 4"></i>
+               :href="baseInfo && baseInfo.website"
+               target="_blank">{{ baseInfo && baseInfo.name }}</a>
+            <i class="v-line" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
           </div>
           <div class="desc font14 mt-2"
-               v-html="(communityInfo && communityInfo.description)"></div>
+               v-html="(baseInfo && baseInfo.description)"></div>
         </div>
       </div>
     </div>
@@ -48,13 +48,13 @@
     </div>
     <div class="c-card">
       <div class="content2 mb-5">
-        <div class="title mb-3">{{ $t('community.tokenRelease') }}</div>
-        <Progress :progress-data="distributin"></Progress>
+        <div class="title mb-3">Distribution Stratage</div>
+        <Progress :progress-data="specifyDistributionEras"></Progress>
       </div>
     </div>
     <div class="c-card">
       <div class="content3 mb-5">
-        <div class="title mb-3">{{ $t('asset.poolRatios') }}</div>
+        <div class="title mb-3">Pools</div>
         <PoolRatio :pools-data="poolsData"/>
       </div>
     </div>
@@ -132,18 +132,24 @@ export default {
   },
   data () {
     return {
-      distributin: [],
-      communityBalanceValue: 0
+      communityBalanceValue: 0,
+      opHistoryWatcher: {}
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken']),
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras']),
+    ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
       return this.allPools.filter(pool => pool.status === 'OPENED').map(pool => ({
         name: pool.name,
         value: parseFloat(pool.ratio) / 100
       }))
+    },
+    baseInfo () {
+      if (this.communityId) {
+        return this.getCommunityInfoById(this.communityId)
+      }
     }
   },
   methods: {
@@ -182,17 +188,23 @@ export default {
     while (!this.communityId) {
       await sleep(0.2)
     }
+    // start watch history
+    
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res)
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
     }).catch(e => {})
-    getSpecifyDistributionEras(this.communityId).then(res => this.distributin = res)
+    getSpecifyDistributionEras(this.communityId).then(res => {
+      console.log('dis', res);
+    })
   },
   beforeDestroy () {
     // clear monitor
-
+    try{
+      opHistoryWatcher.stop();
+    }catch(e){}
   },
 }
 </script>

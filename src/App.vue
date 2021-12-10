@@ -18,7 +18,7 @@
                      src="~@/static/images/tokens/dot.png" alt="">
               </div>
             </router-link> -->
-            <img class="rounded-circle w-100 mb-3" @click="gotoCommunity(community.id)" src="~@/static/images/tokens/dot.png"
+            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" src="~@/static/images/tokens/dot.png"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
@@ -51,8 +51,8 @@
         <div class="page-header d-flex justify-content-between align-items-center">
           <div class="d-flex align-items-center" v-if="$route.path.indexOf('sub-community')>=0">
             <img class="community-logo rounded-circle mr-2"
-                 :src="communityInfo && communityInfo.logo" alt="">
-            <span>{{ communityInfo && communityInfo.name }}</span>
+                 :src="currentCommunityInfo && currentCommunityInfo.icon" alt="">
+            <span>{{ currentCommunityInfo && currentCommunityInfo.name }}</span>
           </div>
           <div v-else class="page-title font-bold font20">{{$route.name}}</div>
           <div class="address-box" @click="connect">
@@ -70,7 +70,7 @@
 
 <script>
 import { LOCALE_KEY } from '@/config'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
@@ -86,15 +86,22 @@ export default {
   computed: {
     ...mapState(['lang', 'prices']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo', 'loadingCommunity', 'account']),
-    ...mapState('currentCommunity', ['communityInfo']),
-    ...mapState('community', ['loadingMyCommunityInfo']),
+    ...mapState('community', ['loadingMyCommunityInfo', 'communityInfo']),
+    ...mapState('currentCommunity', ['communityId']),
+    ...mapGetters('community', ['getCommunityInfoById']),
     address () {
       if (this.account) {
         return formatUserAddress(this.account, false)
       }
     },
+    currentCommunityInfo() {
+      if (this.communityId){
+        return this.getCommunityInfoById(this.communityId)
+      } 
+      return null
+    },
     settingStep () {
-      const c = this.$store.state.community.communityInfo
+      const c = this.communityInfo
       if (!this.stakingFactoryId){
         return 1;
       }
