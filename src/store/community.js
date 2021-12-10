@@ -1,28 +1,17 @@
-const getUserDeployTokens = () => {
-  const t = localStorage.getItem('userDeployTokens')
-  if (!t) return []
-  return JSON.parse(t)
-}
-
-const getUserEconomy = () => {
-  const t = localStorage.getItem('userDeployEconomy')
-  if (!t) return null
-  return JSON.parse(t)
-}
 
 export default {
   namespaced: true,
   state: {
-    userDeployTokens: getUserDeployTokens(),
-    userEconomy: getUserEconomy(),
-    // my community info data
+    // my community info data from backend
     communityInfo: null,
     distributions: null,
     loadingMyCommunityInfo: false,
+    // all i joined community from graph
+    joinedCommunityData: null,
+    // my community data from grapg
+    communityData: null,
     // all community from backend
     allCommunityInfo: null,
-    // all i joined community from graph
-    joinedCommunityData: null
   },
   mutations: {
     setUserDeployToken (state, data) {
@@ -44,6 +33,9 @@ export default {
     },
     saveAllCommunityInfo (state, allCommunityInfo) {
       state.allCommunityInfo = allCommunityInfo
+    },
+    saveCommunityData (state, communityData) {
+      state.communityData = communityData
     },
     saveJoinedCommunityData (state, joinedCommunityData) {
       state.joinedCommunityData = joinedCommunityData

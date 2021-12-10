@@ -44,6 +44,47 @@ export async function getMyJoinedCommunity() {
     }
 }
 
+
+/**
+ * get current user's community
+ * @param {*} community 
+ * @returns 
+ */
+ export async function getMyCommunityData() {
+    if (store.state.web3.stakingFactoryId) {
+        const query = gql`
+            query Community($id: String!) {
+                community(id: $id) {
+                    id
+                    feeRatio
+                    pools {
+                        id
+                        status
+                        name
+                        asset
+                        poolFactory
+                        ratio
+                        chainId
+                        stakersCount
+                    }
+                }
+            }
+        `
+        try{
+            const data = await client.request(query, {id: store.state.web3.stakingFactoryId.toLowerCase()})
+            if (data && data.community) {
+                const community = data.community
+                store.commit('community/saveCommunityData', community)
+                console.log('my community data', community);
+                return community
+            }
+        }catch(e) {
+            console.log('Get my community data from graph fail:', e);
+        }
+    }
+    return {}
+}
+
 // fetch first 100 history of user
 export async function getNewUserStakingHistory(account) {
     const query = gql`

@@ -780,7 +780,8 @@ export const monitorUserBalances = async () => {
   // token price = 0 or ctoken price = 0 => apy = 0
   const update = async () => {
     try{
-      let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
+      let price = store.state.prices
+      let [pools, communities] = await Promise.all([getAllPools(), getAllCommunities()])
       const monitorPools = store.state.web3.monitorPools
       let temp = {}
       for (let c of communities) {
@@ -840,26 +841,6 @@ export const monitorUserBalances = async () => {
     setTimeout(update, 10000)
   }
   update()
-}
-
-const getPrices = async () => {
-  // tokenPrices is against eth price
-  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend()])
-  binancePrice = binancePrice.filter(p => 
-    PRICES_SYMBOL.indexOf(p.symbol) !== -1
-  )
-  let res = {}
-  for (let p of binancePrice) {
-    if (p.symbol === 'ETHUSDT'){
-      store.commit('saveEthPrice', parseFloat(p.price))
-    }
-    res[p.symbol] = p.price
-  }
-  for (let p of tokenPrices) {
-    res[p.address] = p.price
-  }
-  store.commit('savePrices', res)
-  return res
 }
 
 /**

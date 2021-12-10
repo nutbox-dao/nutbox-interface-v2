@@ -77,7 +77,7 @@ export default {
   name: 'CommunityIndex',
   components: { CommunityCard, ConnectMetaMask },
   computed: {
-    ...mapState(['metamaskConnected', 'prices']),
+    ...mapState(['metamaskConnected']),
   },
   data () {
     return {

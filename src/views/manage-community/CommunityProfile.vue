@@ -222,17 +222,6 @@
         <button class="primary-btn" @click="completeCropAndUpload">{{ $t('operation.complete') }}</button>
       </div>
     </b-modal>
-    <b-modal
-      v-model="chooseTokenTipModal"
-      modal-class="custom-modal"
-      size="lg"
-      hide-backdrop
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop>
-      <ChooseTokenTipModal @close="chooseTokenTipModal=false"/>
-    </b-modal>
   </div>
 </template>
 
@@ -241,18 +230,16 @@ import { uploadImage, handleApiErrCode, sleep } from '@/utils/helper'
 import UploadLoading from '@/components/common/UploadLoading'
 import {
   completeCommunityInfo,
-  getMyCommunityInfo,
-  getDistributionEras
+  getMyCommunityInfo
 } from '@/utils/web3/community'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 import Progress from '@/components/community/Progress'
-import ChooseTokenTipModal from '@/components/community/ChooseTokenTipModal'
 
 export default {
   name: 'SetCommunityProfile',
-  components: { UploadLoading, Step, VueCropper, Progress, ChooseTokenTipModal },
+  components: { UploadLoading, Step, VueCropper, Progress },
   data () {
     return {
       logo: null,
@@ -264,9 +251,7 @@ export default {
         name: '',
         website: '',
         description: '',
-        tokenLogo: '',
         icon: '',
-        category: '',
         poster: '',
         color: '#ffdb1b'
       },
@@ -287,33 +272,15 @@ export default {
       cropFixedNumber: [1, 1],
       cropImgSize: [200, 200],
       state: '',
-      chooseTokenTipModal: false,
     }
   },
   computed: {
-    ...mapState('community', ['communityInfo', 'distributions']),
-    distributeAmount () {
-      if (!this.distributions) {
-        return 0;
-      }
-      return this.distributions.reduce((t, p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseFloat(p.amount), 0)
-    },
-    premining () {
-      if (!this.communityInfo){
-        return 0;
-      }
-      const ctoken = this.communityInfo && this.communityInfo.cToken;
-      return ctoken.totalSupply.toString() / 1e18;
-    }
-  },
-  watch: {
-    communityInfo(newValue, oldValue) {
-      this.tokenLogo = newValue && newValue.cToken && newValue.cToken.icon
-      this.form.tokenLogo = this.tokenLogo
-    }
+    ...mapState('community', ['communityInfo']),
   },
   async mounted () {
-    getDistributionEras()
+    this.form = {...this.communityInfo}
+    await getMyCommunityInfo(true)
+    this.form = {...this.communityInfo}
   },
   methods: {
     onCancel () {
@@ -461,7 +428,6 @@ export default {
       if (website && website.length > 0) {
         const regUrl = '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]'
         const res = website.match(regUrl)
-        console.log({ res })
         if (!res) {
           tips = this.$t('tip.needRightUrl')
           this.$bvToast.toast(tips, {
@@ -479,8 +445,6 @@ export default {
         tips = this.$t('tip.communityNameLimit', { count: 32 })
       } else if (!description || description.length === 0) {
         tips = this.$t('tip.needDescription')
-      } else if (!tokenLogo || tokenLogo.length === 0) {
-        tips = this.$t('tip.needTokenIcon')
       } else if (!icon || icon.length === 0) {
         tips = this.$t('tip.needIcon')
       } else if (!poster || poster.length === 0) {
@@ -503,19 +467,15 @@ export default {
     async onConfirm () {
       try {
         this.uploading = true
-        const resCode = await completeCommunityInfo(this.form, 'create')
+        const resCode = await completeCommunityInfo(this.form, 'edit')
 
         // go to community dashboard
         this.$bvToast.toast(this.$t('tip.completeCommunityInfoSuccess'), {
           title: this.$t('tip.tips'),
           variant: 'success'
         })
-        await sleep(2)
-        await Promise.all([
-          getMyCommunityInfo(true)
-        ])
-        await sleep(1)
-        this.$router.replace('/community-setting/staking')
+        this.showSignatureTip = false
+        await getMyCommunityInfo(true)
       } catch (e) {
         const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params)

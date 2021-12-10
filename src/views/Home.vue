@@ -85,7 +85,6 @@ export default {
   },
   computed: {
     ...mapState('web3', ['walnutInfo']),
-    ...mapState(['prices']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
     usersCount() {
