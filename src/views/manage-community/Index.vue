@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative">
+  <div class="manage-index-page">
     <div class="m-menu">
       <ManageCommunityMenu/>
     </div>
@@ -18,28 +18,30 @@ export default {
   name: 'Index',
   components: { ManageCommunityMenu },
   async mounted () {
-    try{
-      await getMyCommunityContract()
-      getMyCommunityData();
-    }catch(e) {
-      // no registered
-      this.$router.replace('/')
-    }
+    // try{
+    //   await getMyCommunityContract()
+    //   getMyCommunityData();
+    // }catch(e) {
+    //   // no registered
+    //   this.$router.replace('/')
+    // }
   },
 }
 </script>
 
 <style scoped lang="scss">
-.m-menu {
-  position: absolute;
-  left: .8rem;
-}
-@media (min-width: 992px) {
+.manage-index-page {
+  height: 100%;
+  display: flex;
+  .m-menu {
+    height: fit-content;
+    margin: 0 .8rem .8rem;
+  }
   .m-page {
-    margin: 0 11.6rem;
+    flex: 1;
   }
 }
-@media (max-width: 991px) {
+@media (max-width: 767px) {
   .m-menu {
     display: none;
   }
