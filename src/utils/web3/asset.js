@@ -101,6 +101,7 @@ export const getRegitryAssets = async (update = false) => {
  */
 export const getCToken = async (communityId, update=false) => {
   return new Promise(async (resolve, reject) => {
+    communityId = communityId.toLowerCase()
     let cTokens = store.state.web3.cTokens
     if (!update && cTokens[communityId]){
       resolve(cTokens[communityId])
