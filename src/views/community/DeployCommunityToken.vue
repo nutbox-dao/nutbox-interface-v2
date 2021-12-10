@@ -187,7 +187,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { createCommunity } from '@/utils/web3/community'
+import { createCommunity, getMyCommunityContract } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
 import { OfficialAssets } from '@/config'
@@ -235,9 +235,9 @@ export default {
   },
   computed: {
     ...mapState({
-      userDeployTokens: state => state.web3.allAssetsOfUser,
       blockNum: state => state.web3.blockNum
     }),
+    ...mapState('web3', ['stakingFactoryId']),
     ...mapGetters('web3', ['createState']),
     // total supply of the distribution that user designed
     totalSupply () {
@@ -245,17 +245,28 @@ export default {
     }
   },
   watch: {
-    userDeployTokens (val) {
-      this.concatAddressOptions[0].items = val.filter(asset => asset.type === 'HomeChainAssetRegistry')
-    },
     blockNum  (val, old) {
       if (!old || old === 0) {
         this.distributionForm.start = this.blockNum + 100
         this.startTime = blockTime(0, 100)
       }
+    }, 
+    communityInfo (val) {
+      if (val && val.name && val.name.length) {
+        this.$router.replace('/')
+      }
     }
   },
   async mounted () {
+    try{
+      const id = await getMyCommunityContract()
+      if (id) {
+        this.$router.replace('set-profile')
+        return;
+      }
+    }catch(e) {
+      console.log(5425, e);
+    }
     this.distributionForm.start = this.blockNum + 100
     this.startTime = blockTime(0, 100)
   },
@@ -392,17 +403,17 @@ export default {
       }))
     },
     async confirmDeploy () {
-      // if (Object.keys(this.cToken).length === 0 || this.progressData.length === 0) {
-      //   this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
-      //     title: this.$t('tip.tips'),
-      //     variant: 'info'
-      //   })
-      //   return
-      // }
+      if (Object.keys(this.cToken).length === 0 || this.progressData.length === 0) {
+        this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return
+      }
       try {
         this.deploying = true
-        const [community, tokenAddress] = ['1', '2'];// await createCommunity(this.cToken, this.progressData)
-        if (community && tokenAddress) {
+        const communityInfo = await createCommunity(this.cToken, this.progressData)
+        if (communityInfo.cToken && communityInfo.cToken.address) {
           this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
             title: this.$t('tip.tips'),
             variant: 'success'

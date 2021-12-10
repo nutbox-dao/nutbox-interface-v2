@@ -3,7 +3,7 @@
     <div class="page-layout">
       <div class="page-side">
         <div class="text-center">
-          <div @click="goHome()">
+          <div @click="goHome()" class="hover">
               <empty-img width="2.8rem" height="2.8rem" @click="goHome()"></empty-img>
           </div>
           <router-link to="/community">
@@ -25,7 +25,7 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link v-if="screenWidth>991" to="/manage-community">
+          <router-link v-if="screenWidth>991" v-show="!loadingMyCommunityInfo && settingStep === 3" to="/manage-community">
             <i class="setting-icon mt-4"></i>
           </router-link>
           <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
@@ -36,10 +36,14 @@
               <ManageCommunityMenu/>
             </template>
           </b-dropdown>
-          <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingCommunity"></i>
-          <img class="user-avatar rounded-circle w-75 my-3"
+          <div class="hover" @click="gotoCreateCommunity()">
+            <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3 "></i>
+          </div>
+          <img class="user-avatar hover rounded-circle w-75 my-3"
                src="~@/static/images/home-s2-icon1.svg" alt="">
-          <i class="menu-icon" style="opacity: .7"></i>
+          <div class="hover">
+            <i class="menu-icon" style="opacity: .7"></i>
+          </div>
         </div>
       </div>
       <!-- right part -->
@@ -70,10 +74,9 @@ import { mapState, mapActions } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getMyCommunityInfo } from '@/utils/web3/community'
-import { getAllPools, monitorPools, UpdateApysOfPool } from '@/utils/web3/pool'
+import { getMyCommunityInfo, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
+import { updateAllTokensFromBackend } from '@/utils/web3/asset'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
-import { getDelegateFromHive } from '@/utils/hive/hive'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
@@ -82,11 +85,23 @@ export default {
   components: { ManageCommunityMenu },
   computed: {
     ...mapState(['lang', 'prices']),
-    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo']),
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo', 'loadingCommunity', 'account']),
     ...mapState('currentCommunity', ['communityInfo']),
+    ...mapState('community', ['loadingMyCommunityInfo']),
     address () {
-      if (this.$store.state.web3.account) {
-        return formatUserAddress(this.$store.state.web3.account, false)
+      if (this.account) {
+        return formatUserAddress(this.account, false)
+      }
+    },
+    settingStep () {
+      const c = this.$store.state.community.communityInfo
+      if (!this.stakingFactoryId){
+        return 1;
+      }
+      if (c && c.name && c.name.length > 0) {
+        return 3;
+      }else {
+        return 2;
       }
     }
   },
@@ -99,19 +114,16 @@ export default {
   methods: {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
-    ...mapState('web3', ['loadingCommunity']),
     setLanguage (lang) {
       localStorage.setItem(LOCALE_KEY, lang)
       this.$store.commit('saveLang', lang)
       this.$i18n.locale = lang
     },
-    // BSC data
-    async fetchBscData () {
-      try {
-        const c = await getMyCommunityInfo();
-        console.log('My community info', c);
-      }catch (e) {
-
+    gotoCreateCommunity()  {
+      if (this.settingStep === 1) {
+        this.$router.push('/community/deploy-token')
+      }else if (this.settingStep === 2) {
+        this.$router.push('/community/set-profile')
       }
     },
     gotoCommunity(communityId) {
@@ -137,8 +149,13 @@ export default {
   async created () {
     // bsc related
     try {
+      updateAllCommunitiesFromBackend();
+      updateAllTokensFromBackend();
       await getAccounts(true)
-      await getMyJoinedCommunity();
+      getMyJoinedCommunity();
+      getMyCommunityInfo().catch(e => {
+        console.log('No created token by current user');
+      });
     } catch (e) {
       console.log('Get accounts fail', e)
     }
@@ -152,8 +169,6 @@ export default {
     } catch (e) {
       console.log(533, e)
     }
-    // bsc data
-    this.fetchBscData();
 
     // get steem vests ratio
     this.setVestsToSteem()

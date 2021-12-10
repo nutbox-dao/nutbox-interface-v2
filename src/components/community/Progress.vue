@@ -70,17 +70,17 @@ export default {
   methods: {
     formatNum (num) {
       if (!this.isNumeric(num)) return 'Max'
-      num = parseInt(num)
+      num = parseFloat(num).toFixed(2)
       if (num < 1e5) {
         return num
       }
       if (num < 1e6) {
-        return `${(num / 1e3).toFixed(2)}K`
+        return `${(parseFloat(num) / 1e3).toFixed(2)}K`
       }
       if (num < 1e9) {
-        return `${(num / 1e6).toFixed(2)}M`
+        return `${(parseFloat(num) / 1e6).toFixed(2)}M`
       }
-      return `${(num / 1e9).toFixed(2)}G`
+      return `${(parseFloat(num) / 1e9).toFixed(2)}G`
     },
     isNumeric (val) {
       return val !== null && val !== '' && !isNaN(val)

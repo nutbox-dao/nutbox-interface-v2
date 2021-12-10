@@ -68,6 +68,7 @@ export const getMyCommunityContract = async (update = false) => {
 export const getMyCommunityInfo = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null;
+    store.commit('community/saveLoadingMyCommunityInfo', true)
     try {
       stakingFactoryId = await getMyCommunityContract(update);
       if (!stakingFactoryId) {
@@ -78,9 +79,13 @@ export const getMyCommunityInfo = async (update = false) => {
       console.log("Get my staking factory fail", e);
       reject(e);
       return;
+    } finally{
+      store.commit('community/saveLoadingMyCommunityInfo', false)
     }
+
     if (!update && store.state.community.communityInfo) {
       resolve(store.state.community.communityInfo);
+      store.commit('community/saveLoadingMyCommunityInfo', false)
       return;
     }
     let communityInfo = null;
@@ -95,13 +100,17 @@ export const getMyCommunityInfo = async (update = false) => {
         return;
       } else {
         console.log("first get communityInfo");
-        store.commit("community/saveCommunityInfo", { id: stakingFactoryId, cToken });
-        resolve({ id: stakingFactoryId, cToken });
+        // get first distribution
+        const dis = await getDistributionEras();
+        store.commit("community/saveCommunityInfo", { id: stakingFactoryId, cToken, firstBlock: dis[0].startHeight });
+        resolve({ id: stakingFactoryId, cToken, firstBlock: dis[0].startHeight });
       }
     } catch (e) {
       console.log("Get community info from backend fail", e);
       store.commit("community/saveCommunityInfo", null);
       reject(e);
+    } finally{
+      store.commit('community/saveLoadingMyCommunityInfo', false)
     }
   });
 };
@@ -113,29 +122,18 @@ export const getAllCommunities = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     if (
       !update &&
-      store.state.web3.allCommunities &&
-      store.state.web3.allCommunities.length > 0
+      store.state.community.allCommunityInfo &&
+      store.state.community.allCommunityInfo.length > 0
     ) {
-      resolve(store.state.web3.allCommunities);
+      resolve(store.state.community.allCommunityInfo);
       return;
     }
     try {
-      if(store.state.web3.loadingAllCommunities){
-        while(store.state.web3.loadingAllCommunities) {
-          await sleep(0.2)
-        }
-        resolve(store.state.web3.allCommunities)
-        return;
-      }
-      store.commit('web3/saveLoadingAllCommunities', true);
-      const currentCommunityId = store.state.currentCommunityId;
-      const communities = await gac(currentCommunityId);
-      store.commit("web3/saveAllCommunities", communities);
-      store.commit('web3/saveLoadingAllCommunities', false);
+      const communities = await gac();
+      store.commit("community/saveAllCommunityInfo", communities);
       resolve(communities);
     } catch (e) {
       console.log("Get all community fail", e);
-      store.commit('web3/saveLoadingAllCommunities', false);
       reject(e);
     }
   });
@@ -144,8 +142,8 @@ export const getAllCommunities = async (update = false) => {
 /**update tokens info from db */
 export const updateAllCommunitiesFromBackend = async () => {
   while (true) {
-    await sleep(18);
     await getAllCommunities(true);
+    await sleep(18);
   }
 };
 
@@ -210,7 +208,7 @@ export const createCommunity = async (cToken, distribution) => {
           contract.removeAllListeners('CommunityCreated');
           const communityInfo = {
             id: ethers.utils.getAddress(community),
-            cToken,
+            cToken: {...cToken, address: ethers.utils.getAddress(token)},
             firstBlock: distribution[0].startHeight
           }
           // Created a new community
@@ -306,7 +304,7 @@ export const chargeCommunityBalance = async (amount) => {
     let erc20;
     try {
       communityId = await getMyCommunityContract();
-      if (!stakingFactoryId) {
+      if (!communityId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }

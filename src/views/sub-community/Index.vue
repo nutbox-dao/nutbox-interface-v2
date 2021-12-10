@@ -92,7 +92,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('currentCommunity', ['clearData', 'saveCtoken', 'saveAllPools', 'saveFeeRatio', 'saveOperationCount', 'saveOperationHistory'])
+    ...mapMutations('currentCommunity', [
+      'clearData',
+      'saveCtoken', 
+      'saveAllPools', 
+      'saveFeeRatio', 
+      'saveOperationCount', 
+      'saveOperationHistory'])
   },
   beforeDestroy () {
     this.clearData();

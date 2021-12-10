@@ -13,7 +13,6 @@ export default {
     abis: {},
     chainId: -1,
     stakingFactoryId: null,
-    communityInfo: null,
     allAssetsOfUser: null,
     allTokens: null,
     blockNum: null,
@@ -87,9 +86,6 @@ export default {
     },
     saveStakingFactoryId: (state, stakingFactoryId) => {
       state.stakingFactoryId = stakingFactoryId;
-    },
-    saveCommunityInfo: (state, communityInfo) => {
-      state.communityInfo = communityInfo;
     },
     saveAllAssetsOfUser: (state, allAssetsOfUser) => {
       state.allAssetsOfUser = allAssetsOfUser;
@@ -206,69 +202,10 @@ export default {
     saveGames: (state, games) => {
       state.games = games;
     },
-    saveSpecifyDistributionEras: (state, specifyDistributionEras) => {
-      state.specifyDistributionEras = specifyDistributionEras
-    }
   },
   getters: {
     isMainChain: (state) => {
       return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID);
-    },
-    // Get tourist step of user
-    createState: (state) => {
-      // if loading, do not show tourist
-      if (state.loadingCommunity) {
-        return 0;
-      }
-      if (state.myPools && state.myPools.length > 0) {
-        return 0;
-      }
-      if (state.communityInfo?.name) {
-        return 3;
-      }
-      if (state.stakingFactoryId) {
-        return 2;
-      } else {
-        return 1;
-      }
-    },
-    communityCard: (state) => {
-      const allPools = state.allPools;
-      const allCommunities = state.allCommunities;
-      if (!allPools || !allCommunities) return [];
-      const cardInfo = allCommunities.map((c) => {
-        const pools = allPools.filter((pool) => pool.communityId === c.id);
-        return {
-          ...c,
-          assetLogos: pools.map((p) => p.icon),
-          apys: pools.map((p) => p.apy),
-        };
-      });
-      return cardInfo;
-    },
-    /**
-     * Get community's info contains pools info
-     * @param {*} state
-     * @returns
-     */
-    communityById: (state) => (communityId) => {
-      if (!state.allCommunities || !state.allPools) return {};
-      let community = state.allCommunities.filter((c) => c.id === communityId);
-      const pools = state.allPools.filter((p) => p.communityId === communityId);
-      if (!community || community.length === 0) {
-        return {};
-      }
-      community = community[0];
-      community.pools = pools;
-      return community;
-    },
-    poolCards: (state) => {
-      const showingPools = state.allPools
-        ? state.allPools.filter(
-            (p) => parseInt(p.firstBlock) <= parseInt(state.blockNum)
-          )
-        : [];
-      return showingPools;
     },
   },
 };

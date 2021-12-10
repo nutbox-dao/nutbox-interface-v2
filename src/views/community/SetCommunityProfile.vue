@@ -18,7 +18,7 @@
                     v-show="communityInfo && communityInfo.cToken.icon"
                      style="width: 1.2rem;height: 1.2rem"
                      :src="communityInfo && communityInfo.cToken.icon" alt="">
-                <span class="ml-2">{{ premining }}</span>
+                <span class="ml-2">{{ premining.toFixed(0) }}</span>
               </div>
             </div>
 
@@ -343,7 +343,8 @@ import {
   completeCommunityInfo,
   getMyCommunityInfo,
   getAllCommunities,
-  getDistributionEras
+  getDistributionEras,
+  getMyCommunityContract
 } from '@/utils/web3/community'
 import { mapState } from 'vuex'
 import Step from '@/components/common/Step'
@@ -393,6 +394,7 @@ export default {
   },
   computed: {
     ...mapState('community', ['communityInfo', 'distributions']),
+
     distributeAmount () {
       if (!this.distributions) {
         return 0;
@@ -404,6 +406,7 @@ export default {
         return 0;
       }
       const ctoken = this.communityInfo && this.communityInfo.cToken;
+      if (!ctoken) return 0;
       return ctoken.totalSupply.toString() / 1e18;
     }
   },
@@ -411,10 +414,19 @@ export default {
     communityInfo(newValue, oldValue) {
       this.tokenLogo = newValue && newValue.cToken && newValue.cToken.icon
       this.form.tokenLogo = this.tokenLogo
-    }
+      this.chooseTokenTipModal = this.communityInfo.cToken.isMintable;
+    },
   },
   async mounted () {
-    getDistributionEras()
+    try{
+      await getMyCommunityContract()
+    }catch(e) {
+      this.$router.replace('deploy-token')
+      return;
+    }
+    if (this.communityInfo && this.communityInfo.cToken){
+      getDistributionEras();
+    }
   },
   methods: {
     onCancel () {

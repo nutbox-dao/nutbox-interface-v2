@@ -13,9 +13,6 @@ export const getDataCounts = async () => {
 export const getMyCommunityInfo = async (communityId) =>
   get(BACKEND_API_URL + "/community/get", { id: communityId });
 
-export const getStakingFeast = async (userId) => 
-  get(BACKEND_API_URL + "/stakingfeast/get", { userId });
-
 export const insertCommunity = async (params) =>
   post(BACKEND_API_URL + "/community/insert", params);
 
@@ -24,17 +21,8 @@ export const updateCommunity = async (params) =>
 
 export const getAllTokens = async () => get(BACKEND_API_URL + "/token/get");
 
-export const getCommunityToken = async (address) =>
-  get(BACKEND_API_URL + "/token/get", { address: address });
-
 export const getNonce = async (accountId) =>
   get(BACKEND_API_URL + "/user/getnonce", { id: accountId });
-
-export const updatePoolInfo = async (params) =>
-  put(BACKEND_API_URL + "/pool/update", params);
-
-export const getAllParachain = async () =>
-  get(BACKEND_API_URL + "/parachain/getall");
 
 export const getMyCommunityProposalConfigInfo = async (communityId) =>
   get(BACKEND_API_URL + "/communityProposalConfig/get", { id: communityId });
@@ -50,6 +38,7 @@ export const insertProposal = async (params) =>
 
 export const updateProposal = async (params) =>
   post(BACKEND_API_URL + "/proposal/update", params);
+  
 export const getAllCommunities = async (communityId = null) =>
   get(BACKEND_API_URL + "/community/get", { id: communityId });
 

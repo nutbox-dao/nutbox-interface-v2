@@ -18,8 +18,11 @@ export default {
     // my community info data
     communityInfo: null,
     distributions: null,
-    // community op list
-    communityHistory: {},
+    loadingMyCommunityInfo: false,
+    // all community from backend
+    allCommunityInfo: null,
+    // all i joined community from graph
+    joinedCommunityData: null
   },
   mutations: {
     setUserDeployToken (state, data) {
@@ -30,20 +33,26 @@ export default {
       state.userEconomy = data
       localStorage.setItem('userDeployEconomy', JSON.stringify(data))
     },
-    saveCommunityHistory (state, data) {
-      state.communityHistory[data.community] = data.history;
-      state.commityHistory = {...state.communityHistory};
-    },
     saveCommunityInfo (state, data) {
       state.communityInfo = data;
     },
     saveDistributions (state, distr) {
       state.distributions = distr
+    },
+    saveLoadingMyCommunityInfo (state, loadingMyCommunityInfo) {
+      state.loadingMyCommunityInfo = loadingMyCommunityInfo;
+    },
+    saveAllCommunityInfo (state, allCommunityInfo) {
+      state.allCommunityInfo = allCommunityInfo
+    },
+    saveJoinedCommunityData (state, joinedCommunityData) {
+      state.joinedCommunityData = joinedCommunityData
     }
   },
   getters: {
-    getCommunityOPHistory: (state) => (community) => {
-     return state.communityHistory[community];
+    getCommunityInfoById: (state) => (communityId) => {
+      return state.communityInfo[communityId]
     }
+
   }
 }

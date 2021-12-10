@@ -2,6 +2,11 @@ import { client } from './index';
 import store from '@/store'
 import { gql } from 'graphql-request'
 
+/**
+ * Get a specify community info 
+ * @param {*} community 
+ * @returns 
+ */
 export async function getSpecifyCommunityInfo(community) {
     const query = gql`
         query Community($id: String!) {
@@ -43,8 +48,7 @@ export async function getSpecifyCommunityInfo(community) {
         const data = await client.request(query, {id: community.toLowerCase()})
         if (data && data.community) {
             const community = data.community
-            console.log(123, community);
-            // store.commit('currentCommunity/save', )
+            store.commit('currentCommunity/saveCommunityInfo', community)
             return data.community
         }
     }catch(e) {
@@ -52,7 +56,7 @@ export async function getSpecifyCommunityInfo(community) {
     }
 }
 
-// get user summary: include all joined communities and pools
+// get specify community's op history
 export async function getNewCommunityOPHistory(community) {
     const query = gql`
         query getOperationHistory($id: String!) {
@@ -77,7 +81,7 @@ export async function getNewCommunityOPHistory(community) {
     try{
         const userOperationHistories = await client.request(query, {id: community.toLowerCase()})
         if (userOperationHistories && userOperationHistories.userOperationHistories) {
-            store.commit('community/saveCommunityHistory', {community, history:userOperationHistories.userOperationHistories})
+            store.commit('currentCommunity/saveOperationHistory', userOperationHistories.userOperationHistories)
         }
         return;
     }catch(err) {
@@ -106,16 +110,17 @@ export async function getUpdateCommunityOPHistory(community) {
             }
         }
     `
-    const existHistory = store.getters['community/getCommunityOPHistory'](community)
+    const existHistory = store.state.currentCommunity.operationHistory
     if (!existHistory || existHistory.length === 0){
         await getNewCommunityOPHistory(community);
         return
     }
+    console.log(45, existHistory);
     const lastTime = existHistory[0].timestamp;
     try{
         let newOps = await client.request(query, { id: community.toLowerCase(), timestamp: parseInt(lastTime) });
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('community/saveCommunityHistory', {community, history: newOps.concat(existHistory)});
+            store.commit('currentCommunity/saveOperationHistory', newOps.concat(existHistory));
         }else {
             console.log('no update');
         }
@@ -145,7 +150,7 @@ export async function getMoreCommunityOPHistory(community) {
             }
         }
     `
-    const oldHistory = store.getters['community/getCommunityOPHistory'](community)
+    const oldHistory = store.state.currentCommunity.operationHistory
     if (!oldHistory || oldHistory.length === 0){
         await getNewCommunityOPHistory(community);
         return
@@ -154,7 +159,7 @@ export async function getMoreCommunityOPHistory(community) {
     try{
         let newOps = await client.request(query, {id: community.toLowerCase(), timestamp: parseInt(lastTime)});
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('community/saveCommunityHistory', {community, history: oldHistory.concat(newOps)});
+            store.commit('currentCommunity/saveOperationHistory', oldHistory.concat(newOps));
         }else {
             console.log('no update');
         }

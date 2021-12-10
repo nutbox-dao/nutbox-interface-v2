@@ -242,7 +242,6 @@ import UploadLoading from '@/components/common/UploadLoading'
 import {
   completeCommunityInfo,
   getMyCommunityInfo,
-  getAllCommunities,
   getDistributionEras
 } from '@/utils/web3/community'
 import { mapState } from 'vuex'
@@ -513,7 +512,6 @@ export default {
         })
         await sleep(2)
         await Promise.all([
-          getAllCommunities(true),
           getMyCommunityInfo(true)
         ])
         await sleep(1)
