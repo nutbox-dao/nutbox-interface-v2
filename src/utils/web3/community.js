@@ -11,7 +11,7 @@ import {
 } from "@/apis/api";
 import { signMessage } from "./utils";
 import { errCode, Multi_Config } from "@/config";
-import { waitForTx } from "./ethers";
+import { waitForTx, getGasPrice } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
@@ -396,7 +396,10 @@ export const setDevRatio = async (ratio) => {
     }
 
     try {
-      const tx = await contract.adminSetFeeRatio(ratio);
+      const tx = await contract.adminSetFeeRatio(ratio, {
+        gasLimit: 10000000,
+        gasPrice: await getGasPrice()
+      });
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {

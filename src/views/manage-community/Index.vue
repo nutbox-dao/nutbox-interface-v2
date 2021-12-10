@@ -11,9 +11,21 @@
 
 <script>
 import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
+import { getMyCommunityData } from '@/utils/graphql/user'
+import { getMyCommunityContract } from '@/utils/web3/community'
+
 export default {
   name: 'Index',
-  components: { ManageCommunityMenu }
+  components: { ManageCommunityMenu },
+  async mounted () {
+    try{
+      await getMyCommunityContract()
+      getMyCommunityData();
+    }catch(e) {
+      // no registered
+      this.$router.replace('/')
+    }
+  },
 }
 </script>
 

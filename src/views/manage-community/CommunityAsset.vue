@@ -1,6 +1,7 @@
 <template>
   <div class="scroll-content">
     <div class="container">
+      <!-- token info -->
       <div class="c-card">
         <div class="row">
           <div class="col-md-6 d-flex flex-column justify-content-between">
@@ -32,12 +33,14 @@
           </div>
         </div>
       </div>
+      <!-- strategy -->
       <div class="c-card mt-3">
         <div class="font20 font-bold">Token Release Strategy</div>
         <Progress :progress-data="progressData"></Progress>
       </div>
+      <!-- fund info -->
       <div class="c-card mt-3">
-        <div class="font20 font-bold">Other Assets Info</div>
+        <div class="font20 font-bold">Dao Fund Info</div>
         <div class="custom-form mt-5">
           <!-- community balance -->
           <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
@@ -61,41 +64,37 @@
           </b-form-group>
           <!-- community dev address -->
           <b-form-group label-cols-md="2" content-cols-md="7"
-            :label="$t('community.devAddress')"
+            :label="$t('community.fundAddress')"
           >
             <div class="d-flex">
               <div class="c-input-group">
                 <b-form-input
                   :disabled="true"
-                  :placeholder="devAddress || $t('community.devAddress')"
+                  :placeholder="stakingFactoryId"
                 >
                 </b-form-input>
                 <span></span>
               </div>
-              <button class="primary-btn ml-2" style="width: 5rem" @click="showDevAddressTip = true">
-                {{$t("commen.update") }}
-              </button>
             </div>
           </b-form-group>
           <!-- community dev ratio -->
-          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.devRatio')">
+          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.fundRatio')">
             <div class="d-flex">
               <div class="c-input-group">
                 <b-form-input
                   :disabled="true"
                   type="number"
-                  :placeholder="(devRatio / 100).toFixed(2).toString()"
+                  :placeholder="((communityData ? communityData.feeRatio : 0) / 100).toFixed(2).toString()"
                 >
                 </b-form-input>
                 <span class="c-append">%</span>
               </div>
               <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
-                {{ this.$t("commen.update") }}
+                {{ this.$t("operation.update") }}
               </button>
             </div>
           </b-form-group>
         </div>
-
       </div>
     </div>
     <!-- charge balance tip -->
@@ -139,32 +138,14 @@
           </div>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
-          <button
-            class="primary-btn primary-btn-outline"
-            @click="showChargeTip = false"
-            :disabled="charging || approving"
-          >
-            <b-spinner small type="grow" v-show="charging || approving" />
-            {{ $t('commen.cancel') }}
-          </button>
-          <button class="primary-btn" @click="charge" :disabled="charging" v-if="ctokenApprovement">
+          <button class="primary-btn" @click="charge" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("community.confirmCharge") }}
-          </button>
-          <button
-            v-else
-            class="primary-btn"
-            @click="approve"
-            :disabled="approving"
-          >
-            <b-spinner small type="grow" v-show="approving" />
-            {{ $t('commen.approveContract') }}
           </button>
         </div>
       </div>
     </b-modal>
     <!-- withdraw balance tip -->
-
     <b-modal
       v-model="showWithdrawTip"
       modal-class="custom-modal"
@@ -220,45 +201,6 @@
         </div>
       </div>
     </b-modal>
-    <!-- dev address tip -->
-    <b-modal
-      v-model="showDevAddressTip"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center mb-4">
-          {{ $t("community.devAddress") }}
-        </div>
-        <div class="input-group-box mb-4">
-          <div class="input-box flex-between-center">
-            <input
-              style="flex: 1"
-              v-model="inputDevAddress"
-              :placeholder="$t('community.inputDevAddress')"
-            />
-          </div>
-        </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button
-            class="primary-btn primary-btn-outline"
-            @click="showDevAddressTip = false"
-            :disabled="updatingAddress"
-          >
-            <b-spinner small type="grow" v-show="updatingAddress" />
-            {{ $t('commen.cancel') }}
-          </button>
-          <button class="primary-btn" @click="updateAddress" :disabled="updatingAddress">
-            <b-spinner small type="grow" v-show="charging" />
-            {{ $t("commen.confirm") }}
-          </button>
-        </div>
-      </div>
-    </b-modal>
     <!-- dev ratio tip -->
     <b-modal
       v-model="showDevRatioTip"
@@ -271,7 +213,7 @@
     >
       <div class="tip-modal">
         <div class="font20 font-bold text-center mb-4">
-          {{ $t("community.devRatio") }}
+          {{ $t("community.fundRatio") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
@@ -282,7 +224,7 @@
                 :max="100"
                 type="number"
                 v-model="inputDevRatio"
-                :placeholder="$t('community.inputDevRatio')"
+                :placeholder="$t('placeHolder.inputDevRatio')"
               />
               <span class="c-append">%</span>
             </div>
@@ -295,11 +237,11 @@
             :disabled="updatingDevRatio"
           >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t('commen.cancel') }}
+            {{ $t('operation.cancel') }}
           </button>
           <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
             <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t("commen.confirm") }}
+            {{ $t("operation.confirm") }}
           </button>
         </div>
       </div>
@@ -316,6 +258,7 @@ import { getRegitryAssets, getCToken } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapGetters, mapState } from 'vuex'
 import { errCode } from '@/config'
+import { getMyCommunityData } from '@/utils/graphql/user'
 
 export default {
   name: 'CommunityAsset',
@@ -346,9 +289,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['communityBalance', 'userBalances', 'ctokenApprovement', 'devAddress', 'devRatio']),
-    ...mapGetters('web3', ['createState']),
-    ...mapState('steem', ['steemAccount']),
+    ...mapState('web3', ['stakingFactoryId']),
+    ...mapState('community', ['communityData']),
     communityBalanceValue () {
       if (this.communityBalance) {
         return (this.communityBalance.toString() / (10 ** this.cToken.decimal)).toFixed(6)
@@ -493,9 +435,14 @@ export default {
     },
     async updateDevRatio () {
       try {
+        console.log(3);
         this.updatingDevRatio = true
         const r = parseInt(parseFloat(this.inputDevRatio) * 100)
+        console.log(1);
         await setDevRatio(r)
+        console.log(2);
+        this.communityData.feeRatio = r;
+        this.$store.commit('community/saveCommunityData', this.communityData)
         this.$bvToast.toast(this.$t(), {
           title: this.$t('tip.success'),
           variant: 'success'

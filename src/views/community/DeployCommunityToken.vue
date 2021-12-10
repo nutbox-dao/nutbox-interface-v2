@@ -197,6 +197,7 @@ import Progress from '@/components/community/Progress'
 import { getAddress } from '@/utils/web3/ethers'
 import { getERC20Info } from '@/utils/web3/asset'
 import { sleep } from '@/utils/helper'
+import { ethers } from "ethers";
 
 export default {
   name: 'CreateEconomy',
@@ -327,6 +328,7 @@ export default {
         name: this.form.name,
         symbol: this.form.symbol, 
         supply: this.form.supply,
+        totalSupply: ethers.utils.parseUnits(this.form.supply, 18),
         isMintable: true
       }
       this.cardStep = 2;

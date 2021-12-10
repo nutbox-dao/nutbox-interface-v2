@@ -11,13 +11,13 @@
               <i id="home-icon" class="menu-icon" />
               <span>Home</span>
             </b-nav-item>
-            <b-nav-item to="/community/home">
+            <b-nav-item to="/sub-community/home">
               <i id="stake-icon" class="menu-icon" />
-              <span>{{ $t("commen.crowdstaking") }}</span>
+              <span>{{ $t("router.staking") }}</span>
             </b-nav-item>
-            <b-nav-item to="/community/home">
+            <b-nav-item to="/sub-community/home">
               <i id="blog-icon" class="menu-icon" />
-              <span>{{ $t("commen.blog") }}</span>
+              <span>{{ $t("router.blog") }}</span>
             </b-nav-item>
           </b-nav>
         </div>
@@ -67,6 +67,7 @@ export default {
   mounted () {
     if (!this.communityId) {
       this.$router.replace('/');
+      return;
     }
     console.log("Specify community id", this.communityId);
     try {

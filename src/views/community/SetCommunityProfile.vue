@@ -15,9 +15,9 @@
               <span class="font-bold">Premining</span>
               <div class="d-flex align-items-center">
                 <img class="rounded-circle"
-                    v-show="communityInfo && communityInfo.cToken.icon"
+                    v-show="communityInfo && communityInfo.cToken && communityInfo.cToken.icon"
                      style="width: 1.2rem;height: 1.2rem"
-                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                     :src="communityInfo && communityInfo.cToken && communityInfo.cToken.icon" alt="">
                 <span class="ml-2">{{ premining.toFixed(0) }}</span>
               </div>
             </div>
@@ -26,9 +26,9 @@
               <span class="font-bold">Distribution</span>
               <div class="d-flex align-items-center">
                 <img class="rounded-circle"
-                    v-show="communityInfo && communityInfo.cToken.icon"
+                    v-show="communityInfo && communityInfo.cToken && communityInfo.cToken.icon"
                      style="width: 1.2rem;height: 1.2rem"
-                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                     :src="communityInfo && communityInfo.cToken && communityInfo.cToken.icon" alt="">
                 <span class="ml-2">{{ distributeAmount }}</span>
               </div>
             </div>
@@ -37,9 +37,9 @@
               <span class="font-bold">Community token</span>
               <div class="d-flex align-items-center">
                 <img class="rounded-circle"
-                    v-show="communityInfo && communityInfo.cToken.icon"
+                    v-show="communityInfo && communityInfo.cToken && communityInfo.cToken.icon"
                      style="width: 1.2rem;height: 1.2rem"
-                     :src="communityInfo && communityInfo.cToken.icon" alt="">
+                     :src="communityInfo && communityInfo.cToken && communityInfo.cToken.icon" alt="">
                 <span class="ml-2">{{ communityInfo && communityInfo.cToken && communityInfo.cToken.symbol }}</span>
               </div>
             </div>

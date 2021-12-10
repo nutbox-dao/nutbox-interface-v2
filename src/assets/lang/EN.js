@@ -319,7 +319,9 @@ module.exports = {
     asset: "Asset",
     pool: "Pool",
     social: "Social",
-    governance: "Governance"
+    governance: "Governance",
+    staking: "Staking",
+    blog: "Blog"
   },
   // placeHolder tip
   placeHolder: {
@@ -329,7 +331,8 @@ module.exports = {
     inputApy: "Please input Apr",
     inputStartBlock: "Please input start block",
     inputStopBlock: "Please input stop block",
-    inputMintAmount: "Please input mint number"
+    inputMintAmount: "Please input mint number",
+    inputDevRatio: "Please input DAO fund ratio"
   },
   community: {
     community: "Community",
@@ -345,6 +348,8 @@ module.exports = {
     communityPoster: "Poster",
     communityBalance: "Community Balance",
     communityAsset: "Community Token",
+    fundAddress: "Fund address",
+    fundRatio: "Fund ratio",
 
     noCommunity: "You have no community yet",
 

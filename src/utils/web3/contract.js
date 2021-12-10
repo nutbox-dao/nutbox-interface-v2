@@ -18,11 +18,11 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0xfdAf7185A944a575c9dF7186c0cf879f93806eF8",
-  "CommunityFactory": "0xF2D0AC8699e84eaA52Db8dd6Af30Eb635EaF2Cb2",
-  "LinearCalculator": "0xF5E73a003069c51205cDbAd5fdE64710101bed33",
-  "SPStakingFactory": "0x3C011D3808aE6b456E2f6BDf10b81043e7FA7E6D",
-  "ERC20StakingFactory": "0x7b448d1213f0d998Adb940b3338D4cAb12a79a5e"
+  "Committee": "0x48Bbd83F8812665082A75c2aE775adB25278Be49",
+  "CommunityFactory": "0x47007f713197439426C5e15375d12FfB1E87b699",
+  "LinearCalculator": "0x260e03D06b038b1c4989D2070f8d0A34747Ec084",
+  "SPStakingFactory": "0x97462511DbDcBE01E47Dc85C041A96EDC3C09a1e",
+  "ERC20StakingFactory": "0x992e36F2DE0192A0D2a9B583F33b03d78eF91837"
 }
 
 // contract file name
