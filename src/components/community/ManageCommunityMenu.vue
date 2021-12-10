@@ -1,11 +1,11 @@
 <template>
   <div class="m-menu-card">
     <b-nav vertical class="overflow-hidden">
-      <b-nav-item to="/manage-community/profile">{{ $t('community.communityInfo') }}</b-nav-item>
-      <b-nav-item to="/manage-community/asset">{{ $t('asset.asset') }}</b-nav-item>
-      <b-nav-item to="/manage-community/staking">{{ $t('community.pool') }}</b-nav-item>
-      <b-nav-item to="/manage-community/social">{{ $t('community.social') }}</b-nav-item>
-      <b-nav-item to="/manage-community/vote">{{ $t('nps.nps') }}</b-nav-item>
+      <b-nav-item to="/manage-community/profile">{{ $t('router.information') }}</b-nav-item>
+      <b-nav-item to="/manage-community/asset">{{ $t('router.asset') }}</b-nav-item>
+      <b-nav-item to="/manage-community/staking">{{ $t('router.pool') }}</b-nav-item>
+      <b-nav-item to="/manage-community/social">{{ $t('router.social') }}</b-nav-item>
+      <b-nav-item to="/manage-community/vote">{{ $t('router.governance') }}</b-nav-item>
 <!--      <b-nav-item to="/manage-community/game">{{ $t('game.game') }}</b-nav-item>-->
     </b-nav>
   </div>

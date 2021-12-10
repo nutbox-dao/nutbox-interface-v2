@@ -346,6 +346,7 @@ import {
   getDistributionEras,
   getMyCommunityContract
 } from '@/utils/web3/community'
+import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { mapState } from 'vuex'
 import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
@@ -626,6 +627,7 @@ export default {
         await sleep(2)
         await Promise.all([
           getAllCommunities(true),
+          getMyJoinedCommunity(),
           getMyCommunityInfo(true)
         ])
         await sleep(1)

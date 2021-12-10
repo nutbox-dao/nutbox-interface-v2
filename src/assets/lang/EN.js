@@ -315,7 +315,11 @@ module.exports = {
   },
   // navigator
   router: {
-
+    information: "Information",
+    asset: "Asset",
+    pool: "Pool",
+    social: "Social",
+    governance: "Governance"
   },
   // placeHolder tip
   placeHolder: {

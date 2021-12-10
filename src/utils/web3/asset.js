@@ -19,12 +19,14 @@ import {
 } from './ethers'
 import {
   getAllTokens,
-  updateTokenIcon as uti
+  updateTokenIcon as uti,
+  getPricesOnCEX
 } from '@/apis/api'
-import { ASSET_LOGO_URL } from '@/constant'
-import { errCode,
-    DELEGATION_CHAINID_TO_NAME,
-    Multi_Config
+import { ASSET_LOGO_URL, PRICES_SYMBOL } from '@/constant'
+import { 
+  errCode,
+  DELEGATION_CHAINID_TO_NAME,
+  Multi_Config
 } from "@/config";
 import { signMessage } from './utils'
 
@@ -204,7 +206,7 @@ export const getERC20Info = async (address) => {
       return;
     }
     try{
-      const tokens = [] //await getAllTokenFromBackend()
+      const tokens = await getAllTokenFromBackend()
       let infos = await aggregate([{
         target: address,
         call: ['name()(string)'],
@@ -375,9 +377,29 @@ export const getAllTokenFromBackend = async (update = false) => {
 /**update tokens info from db */
 export const updateAllTokensFromBackend = async () => {
   while(true){
-    await sleep(10)
-    await getAllTokenFromBackend(true)
+    await getPrices()
+    await sleep(5)
   }
+}
+
+const getPrices = async () => {
+  // tokenPrices is against eth price
+  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend(true)])
+  binancePrice = binancePrice.filter(p => 
+    PRICES_SYMBOL.indexOf(p.symbol) !== -1
+  )
+  let res = {}
+  for (let p of binancePrice) {
+    if (p.symbol === 'ETHUSDT'){
+      store.commit('saveEthPrice', parseFloat(p.price))
+    }
+    res[p.symbol] = p.price
+  }
+  for (let p of tokenPrices) {
+    res[p.address] = p.price
+  }
+  store.commit('savePrices', res)
+  return res
 }
 
 /**

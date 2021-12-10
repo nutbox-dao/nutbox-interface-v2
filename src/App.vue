@@ -18,24 +18,24 @@
                      src="~@/static/images/tokens/dot.png" alt="">
               </div>
             </router-link> -->
-            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" src="~@/static/images/tokens/dot.png"
+            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" :src="getCommunityInfoById(community.id).icon"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link v-if="screenWidth>991" v-show="!loadingMyCommunityInfo && settingStep === 3" to="/manage-community">
+          <router-link v-show="!loadingMyCommunityInfo && settingStep === 3" to="/manage-community">
             <i class="setting-icon mt-4"></i>
           </router-link>
-          <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
+          <!-- <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
             <template #button-content>
               <i class="setting-icon"></i>
             </template>
             <template #default>
               <ManageCommunityMenu/>
             </template>
-          </b-dropdown>
+          </b-dropdown> -->
           <div class="hover" @click="gotoCreateCommunity()">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3 "></i>
           </div>

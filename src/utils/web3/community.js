@@ -134,7 +134,6 @@ export const getAllCommunities = async (update = false) => {
       communities.map(c => {
         comms[c.id.toLowerCase()] = c
       })
-      console.log('all community', comms);
       store.commit("community/saveAllCommunityInfo", comms);
       resolve(comms);
     } catch (e) {
