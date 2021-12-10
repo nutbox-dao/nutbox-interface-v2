@@ -12,12 +12,12 @@
           <div class="divider-line mx-auto my-4"></div>
           <!-- joined community -->
           <div class="pt-3 communities-bar">
-            <!-- <router-link to="/sub-community/home">
+            <router-link to="/sub-community/home">
               <div class="community-logo-box">
                 <img class="rounded-circle"
                      src="~@/static/images/tokens/dot.png" alt="">
               </div>
-            </router-link> -->
+            </router-link>
             <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" src="~@/static/images/tokens/dot.png"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
@@ -97,7 +97,7 @@ export default {
     currentCommunityInfo() {
       if (this.communityId){
         return this.getCommunityInfoById(this.communityId)
-      } 
+      }
       return null
     },
     settingStep () {

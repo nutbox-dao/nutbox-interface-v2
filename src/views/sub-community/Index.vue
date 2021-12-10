@@ -28,23 +28,12 @@
         <img class="menu-toggle ml-2"
              src="~@/static/images/menu-icon.svg" alt="" v-b-toggle.sidebar-menu/>
       </div>
-      <div class="sub-page-content d-flex">
-        <div class="page-view">
-          <router-view></router-view>
-        </div>
-        <div class="activity-banner">
-          <div class="a-banner-card">
-            <div class="mt-2 mb-4">Activities</div>
-            <ActivityItem class="mt-3" v-for="i of 14" :key="i"/>
-          </div>
-        </div>
-      </div>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import ActivityItem from '@/components/community/ActivityItem'
 import { mapState, mapMutations } from 'vuex'
 import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
 import { handleApiErrCode } from '@/utils/helper';
@@ -52,7 +41,6 @@ import { getCToken } from '@/utils/web3/asset';
 
 export default {
   name: 'Index',
-  components: { ActivityItem },
   computed: {
     ...mapState(
       'currentCommunity', ['communityId']
@@ -65,9 +53,9 @@ export default {
     }
   },
   mounted () {
-    if (!this.communityId) {
-      this.$router.replace('/');
-    }
+    // if (!this.communityId) {
+    //   this.$router.replace('/');
+    // }
     console.log("Specify community id", this.communityId);
     try {
       this.loading = true;
@@ -94,10 +82,10 @@ export default {
   methods: {
     ...mapMutations('currentCommunity', [
       'clearData',
-      'saveCtoken', 
-      'saveAllPools', 
-      'saveFeeRatio', 
-      'saveOperationCount', 
+      'saveCtoken',
+      'saveAllPools',
+      'saveFeeRatio',
+      'saveOperationCount',
       'saveOperationHistory'])
   },
   beforeDestroy () {
@@ -149,20 +137,6 @@ export default {
     }
   }
 }
-.sub-page-content {
-  width: 100%;
-  .page-view {
-    flex: 1;
-  }
-  .activity-banner {
-    width: 25%;
-    min-width: 16rem;
-    padding: 0 .8rem .8rem;
-  }
-  .a-banner-card {
-    @include card();
-  }
-}
 @media (min-width: 992px) {
   .slider-content {
     margin: 0 .8rem .8rem;
@@ -177,17 +151,6 @@ export default {
   .sub-page-container {
     padding-left: 0;
     flex-direction: column;
-  }
-  .sub-page-content {
-    flex-direction: column;
-    overflow: scroll;
-    .page-view {
-      padding: 0 .8rem;
-    }
-    .activity-banner {
-      width: 100%;
-      height: fit-content;
-    }
   }
 }
 .menu-icon {
