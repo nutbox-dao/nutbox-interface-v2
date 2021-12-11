@@ -151,10 +151,6 @@
     }
   }
 }
-#sidebar-menu {
-  width: 12rem;
-  height: 100%;
-}
 //pc
 @media (min-width: 992px) {
   .page-container {
@@ -168,11 +164,6 @@
   }
   .b-sidebar-outer {
     position: unset;
-  }
-  #sidebar-menu {
-    position: absolute;
-    top: 0;
-    bottom: 0;
   }
 }
 //h5
