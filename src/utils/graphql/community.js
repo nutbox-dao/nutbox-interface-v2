@@ -45,6 +45,7 @@ export async function getSpecifyCommunityInfo(community) {
         }
     `
     try{
+        store.commit('currentCommunity/saveLoadingCommunityInfo' ,true)
         const data = await client.request(query, {id: community.toLowerCase()})
         if (data && data.community) {
             const community = data.community
@@ -53,6 +54,8 @@ export async function getSpecifyCommunityInfo(community) {
         }
     }catch(e) {
         console.log('Get community from graph fail:', e);
+    }finally{
+        store.commit('currentCommunity/saveLoadingCommunityInfo' ,false)
     }
 }
 
@@ -115,14 +118,13 @@ export async function getUpdateCommunityOPHistory(community) {
         await getNewCommunityOPHistory(community);
         return
     }
-    console.log(45, existHistory);
     const lastTime = existHistory[0].timestamp;
     try{
         let newOps = await client.request(query, { id: community.toLowerCase(), timestamp: parseInt(lastTime) });
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('currentCommunity/saveOperationHistory', newOps.concat(existHistory));
+            store.commit('currentCommunity/saveOperationHistory', newOps.userOperationHistories.concat(existHistory));
         }else {
-            console.log('no update');
+            // console.log('no update');
         }
     }catch(err) {
         console.log('Get op history fail', err);
@@ -159,7 +161,7 @@ export async function getMoreCommunityOPHistory(community) {
     try{
         let newOps = await client.request(query, {id: community.toLowerCase(), timestamp: parseInt(lastTime)});
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('currentCommunity/saveOperationHistory', oldHistory.concat(newOps));
+            store.commit('currentCommunity/saveOperationHistory', oldHistory.concat(newOps.userOperationHistories));
         }else {
             console.log('no update');
         }

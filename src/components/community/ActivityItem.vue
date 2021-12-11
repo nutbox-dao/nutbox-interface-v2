@@ -20,10 +20,19 @@ export default {
       type: Object
     }
   },
-  computed: {
-    time() {
-      return parseTimestamp(this.operation.timestamp)
+  data() {
+    return {
+      time: ''
     }
+  },
+  mounted () {
+    this.time = parseTimestamp(this.operation.timestamp)
+    const interval = setInterval(() => {
+      this.time = parseTimestamp(this.operation.timestamp)
+    }, 5000);
+    this.$once('hook:beforeDestroy', () => {
+      window.clearInterval(interval)
+    })
   },
 }
 </script>

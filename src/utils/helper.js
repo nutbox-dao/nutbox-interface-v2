@@ -103,6 +103,8 @@ export function parseTimestamp(timestamp) {
     return ''
   }
   let nowStamp = (new Date().getTime()) / 1000;
+  nowStamp = parseInt(nowStamp)
+  timestamp = parseInt(timestamp)
   if (timestamp > nowStamp) {
     return getDateString(null, null, timestamp - nowStamp);
   }else {

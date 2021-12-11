@@ -18,7 +18,7 @@
                      src="~@/static/images/tokens/dot.png" alt="">
               </div>
             </router-link> -->
-            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
+            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" v-show="getCommunityInfoById(community.id)" :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
           </div>
         </div>
