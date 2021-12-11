@@ -7,7 +7,7 @@ export default {
     },
     getters: {
         getUserByAddress: state => (address) => {
-            return state.users[address]
+            return state.users ? state.users[address] : null;
         }
     },
     mutations: {
