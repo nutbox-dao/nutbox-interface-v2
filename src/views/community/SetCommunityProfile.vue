@@ -411,21 +411,18 @@ export default {
       return ctoken.totalSupply.toString() / 1e18;
     }
   },
-  watch: {
-    communityInfo(newValue, oldValue) {
-      this.tokenLogo = newValue && newValue.cToken && newValue.cToken.icon
-      this.form.tokenLogo = this.tokenLogo
-      this.chooseTokenTipModal = this.communityInfo.cToken.isMintable;
-    },
-  },
   async mounted () {
     try{
-      await getMyCommunityContract()
+      await getMyCommunityInfo()
     }catch(e) {
       this.$router.replace('deploy-token')
       return;
     }
+
     if (this.communityInfo && this.communityInfo.cToken){
+      this.tokenLogo = this.communityInfo.cToken.icon
+      this.form.tokenLogo = this.tokenLogo
+      this.chooseTokenTipModal = this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }
   },

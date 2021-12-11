@@ -3,82 +3,64 @@
     <div class="container">
       <div class=" col-md-9 mx-auto">
         <div class="custom-form text-left">
-          <b-form-group label-cols-md="3" content-cols-md="9" :label="$t('community.communityBlog')"
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex">
-              <div class="c-input-group">
-                <b-form-input :disabled='true' :placeholder="blogTag || $t('community.blogTag')"></b-form-input>
-              </div>
-              <button class="primary-btn ml-2" v-if="state === 'create'" style="width: 8rem" @click="showBlogTip = true">
-                    {{ $t('community.createBlog') }}
-                  </button>
-                  <button class="primary-btn ml-2" v-if="state === 'connectSteem'" style="width: 8rem" @click="showSteemLogin = true">
-                    {{ $t('wallet.connectSteem') }}
-                  </button>
-                  <button class="primary-btn ml-2" v-if="state === 'publish'" style="width: 8rem" :disabled='publishingBlog' @click="publishBlog">
-                    <b-spinner small type="grow" v-show="publishingBlog" />
-                    {{ $t('community.publishBlog') }}
-                  </button>
-            </div>
-          </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" :label="$t('community.socialMedial')"
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon twitter">Twitter</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.twitter" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.twitter" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label=""
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon discord">Discord</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.discord" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.discord" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label=""
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon telegram">Telegram</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.telegram" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.telegram" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label=""
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon facebook">Facebook</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.facebook" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.facebook" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label=""
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon github">Github</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.github" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.github" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label=""
+          <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
               <div class="c-input-group">
-                <b-form-input v-model="socialForm.document" :placeholder="$t('cl.optional')"></b-form-input>
+                <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
           </b-form-group>
-          <b-form-group label-cols-md="3" content-cols-md="9" label="">
+          <b-form-group label-cols-md="0" content-cols-md="12" label="">
             <div class="text-center mt-4">
               <button class="primary-btn col-md-6" @click="showSignatureTip = true">
-                {{ $t("commen.update") }}
+                {{ $t("operation.update") }}
               </button>
             </div>
           </b-form-group>
@@ -97,12 +79,12 @@
         <!-- <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/> -->
         <div class="my-5">
-          {{ $t("community.editTip") }}
+          {{ $t("tip.editTip") }}
         </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("community.sign") }}
+            {{ $t("operation.sign") }}
           </button>
           <button
             class="primary-btn primary-btn-outline"
@@ -110,104 +92,17 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t('commen.cancel') }}
+            {{ $t('operation.cancel') }}
           </button>
         </div>
       </div>
     </b-modal>
-     <b-modal
-      v-model="showBlogTip"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center mb-4">
-          {{ $t("community.createBlog") }}
-        </div>
-        <div class="input-group-box mb-4">
-          <div class="input-box flex-between-center">
-            <p>
-              {{ $t('community.createBlogMemo') }}
-            </p>
-          </div>
-        </div>
-        <div class="c-text-info">
-          <span>{{ $t('community.communityName') }}:</span>
-          <p>{{ communityInfo.name }}</p>
-        </div>
-        <div class="c-text-info">
-          <span>{{ $t('community.blogTag') }}:</span>
-          <p>{{ newBlogTag }}</p>
-        </div>
-        <div class="c-text-info">
-          <span>{{ $t('community.blogMainPassword') }}:</span>
-          <p>{{ blogMainPassword }}</p>
-        </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button
-            class="primary-btn primary-btn-outline"
-            @click="showBlogTip = false"
-            :disabled="creatingBlog"
-          >
-            <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t('commen.cancel') }}
-          </button>
-          <button class="primary-btn" @click="createBlog" :disabled="creatingBlog">
-            <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t("commen.confirm") }}
-          </button>
-        </div>
-      </div>
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center mb-4" style="margin-top:1.2rem">
-          {{ $t("community.bindBlog") }}
-        </div>
-         <div class="input-group-box mb-4">
-          <div class="input-box flex-between-center">
-            <p>
-              {{ $t('community.bindBlogMemo') }}
-            </p>
-          </div>
-        </div>
-        <div class="input-group-box mb-4">
-          <div class="input-box flex-between-center">
-            <div class="c-input-group">
-            <input
-              style="flex: 1"
-              v-model="inputBlogTag"
-              :placeholder="$t('community.inputBlogTag')"
-            />
-            </div>
-          </div>
-        </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button
-            class="primary-btn primary-btn-outline"
-            @click="showBlogTip = false"
-            :disabled="creatingBlog"
-          >
-            <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t('commen.cancel') }}
-          </button>
-          <button class="primary-btn" @click="bindBlog" :disabled="creatingBlog">
-            <b-spinner small type="grow" v-show="creatingBlog" />
-            {{ $t("commen.confirm") }}
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <Login type='STEEM' v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { getMyCommunityInfo, udpateSocialInfo, publishBlog } from '@/utils/web3/community'
-import { generateNewHiveAccount, generatePassword, createNewCommunity, setCommunityInfo, subscribeCommunity } from "@/utils/steem/steem"
+import { getMyCommunityInfo, udpateSocialInfo } from '@/utils/web3/community'
 import Login from '@/components/common/Login'
 import { handleApiErrCode } from '@/utils/helper'
 
@@ -271,86 +166,6 @@ export default {
         this.uploading = false
       }
     },
-    async bindBlog() {
-      const check = this.inputBlogTag.split('-')
-      const maxNum = Math.ceil(Math.random()*3998999) + 10000
-      if (check.length !== 2 || check[0] !== 'hive' || parseInt(check[1]) > 3999999 || parseInt(check[1] < 10000)){
-        this.$bvToast.toast(this.$t('tip.inputRightBlogTag'), {
-          title: this.$t('tip.tips'),
-          variant:'warning'
-        })
-        return;
-      }
-      try{
-        this.creatingBlog = true
-        await publishBlog(this.inputBlogTag)
-        this.state = ''
-        this.blogTag = this.inputBlogTag;
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-        this.showBlogTip = false
-      }catch(e){
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.creatingBlog = false;
-      }
-    },
-    async createBlog(){
-      try{
-        this.creatingBlog = true
-        // create new account
-        const res = await createNewCommunity(this.steemAccount, this.newBlogTag, this.blogMainPassword)
-        if(res && res.success){
-          // set community info
-          setCommunityInfo(this.steemAccount, this.newBlogTag, this.blogMainPassword, this.communityInfo.name, this.communityInfo.description)
-          // subscribe account
-          const res = await subscribeCommunity(this.steemAccount, this.newBlogTag)
-          if (res && res.success){
-            this.showBlogTip = false;
-            this.$bvToast.toast(this.$t('tip.createBlogSuccess'), {
-              title: this.$t('tip.success'),
-              variant: 'success'
-            })
-            // update
-            this.state = 'publish'
-            this.blogTag = this.newBlogTag
-          }else if(res && !res.success){
-            this.$bvToast.toast(res.message, {
-              title: res.error,
-              variant: 'error'
-            })
-          }
-        }
-      }catch(e){
-        console.log('create account fail', e);
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.creatingBlog = false;
-      }
-    },
-    async publishBlog(){
-      try{
-        this.publishingBlog = true
-        await publishBlog(this.blogTag)
-        this.state = ''
-        this.$bvToast.toast(this.$t('community.publishBlogSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-      }catch(e){
-        handleApiErrCode(e, (info, params) => {
-          this.$bvToast.toast(info, params);
-        });
-      }finally{
-        this.publishingBlog = false
-      }
-    },
     fixNullOfSocial(){
       this.socialForm = {...this.communityInfo}
       if (!this.socialForm) return;
@@ -374,13 +189,6 @@ export default {
         }
       }
      this.fixNullOfSocial()
-      // create hive account
-      try{
-        this.newBlogTag = await generateNewHiveAccount()
-        this.blogMainPassword = generatePassword()
-      }catch(e) {
-        console.log('generateNewHiveAccount fail',e)
-      }
   },
 }
 </script>
