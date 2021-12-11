@@ -4,6 +4,8 @@ export default {
     namespaced: true,
     state: {
       communityId: null,
+      // loading community info from graph flag
+      loadingCommunityInfo: false,
       communityInfo: null,
       allPools: null,
       cToken: null,
@@ -15,6 +17,9 @@ export default {
     mutations: {
       saveCommunityId (state, communityId) {
         state.communityId = communityId;
+      },
+      saveLoadingCommunityInfo (state, loadingCommunityInfo) {
+        state.loadingCommunityInfo = loadingCommunityInfo
       },
       saveCommunityInfo (state, communityInfo) {
           state.communityInfo = communityInfo

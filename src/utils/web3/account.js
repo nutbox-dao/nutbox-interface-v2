@@ -48,3 +48,13 @@ export const accountChanged = async (refresh) => {
         monitorPools()
     })
 }
+
+/**
+ * Get users by ids from backend
+ * @param {*} users 
+ */
+export const getUsers = async (users)  => {
+    return new Promise(async (resolve, reject) => {
+
+    })
+}
