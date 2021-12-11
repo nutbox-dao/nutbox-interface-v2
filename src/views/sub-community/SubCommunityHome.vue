@@ -123,8 +123,8 @@
         <button @click="add" class="primary-btn">Add Test</button>
         <transition-group name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
-                        v-for="(i, index) of activitiesList" :key="i"
-                        :content="i.toString() + index"/>
+                        v-for="operation of operationHistory" :key="operation.tx"
+                        :operation="operation"/>
         </transition-group>
       </div>
     </div>
@@ -155,7 +155,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras']),
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []

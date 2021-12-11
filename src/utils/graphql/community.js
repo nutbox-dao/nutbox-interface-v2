@@ -29,7 +29,7 @@ export async function getSpecifyCommunityInfo(community) {
                     stakersCount
                 }
                 operationCount
-                operationHistory(first: 20) {
+                operationHistory(first: 60, orderBy: timestamp, orderDirection: desc) {
                     type
                     timestamp
                     poolFactory

@@ -1,33 +1,30 @@
 <template>
   <div class="activity-card">
-    <div class="content">{{content}}</div>
+    <div class="content">{{ operation.type }}</div>
     <div class="d-flex justify-content-between align-items-center mt-2">
-      <img v-if="avatar" class="rounded-circle"
+      <img v-if="operation.user.length > 0" class="rounded-circle"
            style="width: 2rem; height: 2rem"
-           :src="avatar" alt="">
-      <empty-img width="2rem" height="2rem" class="rounded-circle mx-0"></empty-img>
-      <span>{{time}}</span>
+           :src="operation.user" alt="">
+      <span>{{ time }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import { parseTimestamp } from '@/utils/helper'
+
 export default {
   name: 'ActivityItem',
   props: {
-    avatar: {
-      type: String,
-      default: ''
-    },
-    time: {
-      type: String,
-      default: new Date().toLocaleDateString()
-    },
-    content: {
-      type: String,
-      default: 'Bill Warren voted Yes on Minion Erc20 Token Transfer Proposal Bill Warren voted Yes on Minion Erc20 Token Transfer Proposal'
+    operation: {
+      type: Object
     }
-  }
+  },
+  computed: {
+    time() {
+      return parseTimestamp(this.operation.timestamp)
+    }
+  },
 }
 </script>
 

@@ -99,6 +99,9 @@ export function getDateString(now, timezone, extra = 0) {
 }
 
 export function parseTimestamp(timestamp) {
+  if (!timestamp) {
+    return ''
+  }
   let nowStamp = (new Date().getTime()) / 1000;
   if (timestamp > nowStamp) {
     return getDateString(null, null, timestamp - nowStamp);
