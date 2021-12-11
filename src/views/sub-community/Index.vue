@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="sub-page-container">
-      <div class="sub-page-header view-top-header-sticky px-2 py-3" v-if="screenWidth < 992">
+      <div class="sub-page-header view-top-header-sticky px-2 py-3">
         <b-dropdown variant="text" class="setting-dropdown" toggle-class="p-0">
           <template #button-content>
             <img class="menu-toggle ml-2"
@@ -72,22 +72,14 @@ export default {
   },
   data () {
     return {
-      screenWidth: document.body.clientWidth,
       loading: false
     }
   },
   mounted () {
-    const _this = this
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth
-        _this.screenWidth = window.screenWidth
-      })()
+    if (!this.communityId) {
+      this.$router.replace('/');
+      return;
     }
-    // if (!this.communityId) {
-    //   this.$router.replace('/');
-    //   return;
-    // }
     console.log("Specify community id", this.communityId);
     try {
       this.loading = true;
@@ -177,13 +169,19 @@ export default {
   }
 }
 @media (min-width: 992px) {
-  .slider-content {
-
+  .sub-page-side {
+    display: block;
+  }
+  .sub-page-header {
+    display: none;
   }
 }
 @media (max-width: 991px) {
   .sub-page-side {
     display: none;
+  }
+  .sub-page-header {
+    display: block;
   }
   .sub-page-container {
     flex-direction: column;
