@@ -1,11 +1,11 @@
 <template>
   <div class="row">
-    <div class="col-lg-6 col-md-7" style="overflow-x: auto">
-      <div class="mx-auto" style="width: 22rem">
+    <div class="col-lg-6 p-0" :class="showLegendInfo?'col-md-7':''" style="overflow-x: auto">
+      <div class="mx-auto" style="width: 100%">
         <canvas id="pie"></canvas>
       </div>
     </div>
-    <div class="col-lg-6 col-md-5 legend-box">
+    <div v-if="showLegendInfo" class="col-lg-6 col-md-5 legend-box">
       <div
         class="legend-info"
         v-for="(item, index) of chartData.data.datasets[0].data"
@@ -100,7 +100,7 @@ export default {
               }
             },
             datalabels: {
-              color: 'black',
+              color: 'white',
               clip: false,
               anchor: 'end',
               align: 'end',
@@ -131,6 +131,10 @@ export default {
       default: () => {
         return []
       }
+    },
+    showLegendInfo: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {

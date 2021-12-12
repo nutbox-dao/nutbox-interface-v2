@@ -1,10 +1,12 @@
 <template>
-  <div class="manage-index-page">
-    <div class="m-menu">
-      <ManageCommunityMenu/>
-    </div>
-    <div class="m-page">
-      <router-view></router-view>
+  <div class="container h-100">
+    <div class="manage-index-page">
+      <div class="m-menu">
+        <ManageCommunityMenu/>
+      </div>
+      <div class="m-page">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +25,7 @@ export default {
       getMyCommunityData();
     }catch(e) {
       // no registered
-      this.$router.replace('/')
+      // this.$router.replace('/')
     }
   },
 }

@@ -1,59 +1,57 @@
 <template>
-  <div>
-  </div>
-</template>
-<template>
-  <div class="sub-community-page">
-    <div class="sub-page-side">
-      <div class="slider-content">
-        <div class="menu-items">
-          <b-nav vertical align="center" class="top">
-            <b-nav-item to="/sub-community/home">
-              <i class="menu-icon home-icon" />
-              <span>Home</span>
-            </b-nav-item>
-            <b-nav-item to="/sub-community/home">
-              <i class="menu-icon stake-icon" />
-              <span>{{ $t("router.staking") }}</span>
-            </b-nav-item>
-            <b-nav-item to="/sub-community/home">
-              <i class="menu-icon blog-icon" />
-              <span>{{ $t("router.blog") }}</span>
-            </b-nav-item>
-          </b-nav>
+  <div class="container h-100">
+    <div class="sub-community-page">
+      <div class="sub-page-side">
+        <div class="slider-content">
+          <div class="menu-items">
+            <b-nav vertical align="center" class="top">
+              <b-nav-item to="/sub-community/home">
+                <i class="menu-icon home-icon" />
+                <span>Home</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/home">
+                <i class="menu-icon stake-icon" />
+                <span>{{ $t("router.staking") }}</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/home">
+                <i class="menu-icon blog-icon" />
+                <span>{{ $t("router.blog") }}</span>
+              </b-nav-item>
+            </b-nav>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="sub-page-container">
-      <div class="sub-page-header view-top-header-sticky px-2 py-3">
-        <b-dropdown variant="text" class="setting-dropdown" toggle-class="p-0">
-          <template #button-content>
-            <img class="menu-toggle ml-2"
-                 src="~@/static/images/menu-icon.svg" alt="" v-b-toggle.sidebar-menu/>
-          </template>
-          <template #default>
-            <div class="slider-content">
-              <div class="menu-items">
-                <b-nav vertical align="center" class="top">
-                  <b-nav-item to="/sub-community/home">
-                    <i class="menu-icon home-icon" />
-                    <span>Home</span>
-                  </b-nav-item>
-                  <b-nav-item to="/sub-community/home">
-                    <i class="menu-icon stake-icon" />
-                    <span>{{ $t("router.staking") }}</span>
-                  </b-nav-item>
-                  <b-nav-item to="/sub-community/home">
-                    <i class="menu-icon blog-icon" />
-                    <span>{{ $t("router.blog") }}</span>
-                  </b-nav-item>
-                </b-nav>
+      <div class="sub-page-container">
+        <div class="sub-page-header view-top-header-sticky px-2 py-3">
+          <b-dropdown variant="text" class="setting-dropdown" toggle-class="p-0">
+            <template #button-content>
+              <img class="menu-toggle ml-2"
+                   src="~@/static/images/menu-icon.svg" alt="" v-b-toggle.sidebar-menu/>
+            </template>
+            <template #default>
+              <div class="slider-content">
+                <div class="menu-items">
+                  <b-nav vertical align="center" class="top">
+                    <b-nav-item to="/sub-community/home">
+                      <i class="menu-icon home-icon" />
+                      <span>Home</span>
+                    </b-nav-item>
+                    <b-nav-item to="/sub-community/home">
+                      <i class="menu-icon stake-icon" />
+                      <span>{{ $t("router.staking") }}</span>
+                    </b-nav-item>
+                    <b-nav-item to="/sub-community/home">
+                      <i class="menu-icon blog-icon" />
+                      <span>{{ $t("router.blog") }}</span>
+                    </b-nav-item>
+                  </b-nav>
+                </div>
               </div>
-            </div>
-          </template>
-        </b-dropdown>
+            </template>
+          </b-dropdown>
+        </div>
+        <router-view></router-view>
       </div>
-      <router-view></router-view>
     </div>
   </div>
 </template>

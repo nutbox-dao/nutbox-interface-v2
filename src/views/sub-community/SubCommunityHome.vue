@@ -120,7 +120,6 @@
     <div class="activity-banner">
       <div class="a-banner-card">
         <div class="mt-2 mb-4">Activities</div>
-        <button @click="add" class="primary-btn">Add Test</button>
         <transition-group name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
                         v-for="operation of operationHistory" :key="operation.tx"
@@ -177,9 +176,6 @@ export default {
     }
   },
   methods: {
-    add: function () {
-      this.activitiesList.unshift(new Date().getTime())
-    },
     formatUserAddress (address, long = true) {
       if (!address) return 'Loading Account'
       if (long) {
