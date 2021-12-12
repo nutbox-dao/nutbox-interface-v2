@@ -23,7 +23,6 @@ export default {
       getMyCommunityData();
     }catch(e) {
       // no registered
-      console.log(222);
       this.$router.replace('/')
     }
   },

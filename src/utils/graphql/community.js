@@ -70,6 +70,7 @@ export async function getNewCommunityOPHistory(community) {
                 }
                 pool{
                     id
+                    name
                 }
                 poolFactory
                 chainId
@@ -102,6 +103,7 @@ export async function getUpdateCommunityOPHistory(community) {
                 }
                 pool{
                     id
+                    name
                 }
                 poolFactory
                 chainId
@@ -141,6 +143,7 @@ export async function getMoreCommunityOPHistory(community) {
                 }
                 pool{
                     id
+                    name
                 }
                 poolFactory
                 chainId
