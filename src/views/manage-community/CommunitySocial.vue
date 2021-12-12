@@ -177,18 +177,8 @@ export default {
     }
   },
   async mounted () {
-    this.communityInfo = await getMyCommunityInfo();
-     this.blogTag = this.communityInfo.blogTag;
-      if (this.blogTag){
-        this.state = ''
-      }else{
-        if(!this.steemAccount){
-          this.state = 'connectSteem'
-        }else{
-          this.state = 'create'
-        }
-      }
-     this.fixNullOfSocial()
+    getMyCommunityInfo().then(res => this.communityInfo = res).catch();
+    this.fixNullOfSocial()
   },
 }
 </script>

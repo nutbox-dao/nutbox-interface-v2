@@ -45,7 +45,7 @@ export const getMyCommunityContract = async (update = false) => {
       if (!stakingFactoryId || stakingFactoryId === '0x0000000000000000000000000000000000000000') {
         store.commit("web3/saveStakingFactoryId", null);
         store.commit("web3/saveLoadingCommunity", false);
-        resolve(null);
+        reject(errCode.NO_STAKING_FACTORY);
         return;
       }
     } catch (e) {

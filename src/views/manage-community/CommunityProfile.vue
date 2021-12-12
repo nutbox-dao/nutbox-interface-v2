@@ -279,8 +279,10 @@ export default {
   },
   async mounted () {
     this.form = {...this.communityInfo}
-    await getMyCommunityInfo(true)
-    this.form = {...this.communityInfo}
+    try {
+      await getMyCommunityInfo(true)
+      this.form = {...this.communityInfo}
+    }catch (e) {}
   },
   methods: {
     onCancel () {

@@ -19,10 +19,11 @@ export default {
   components: { ManageCommunityMenu },
   async mounted () {
     try{
-      await getMyCommunityContract()
+      const res = await getMyCommunityContract()
       getMyCommunityData();
     }catch(e) {
       // no registered
+      console.log(222);
       this.$router.replace('/')
     }
   },

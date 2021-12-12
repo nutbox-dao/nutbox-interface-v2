@@ -5,8 +5,7 @@ import {
 import store from '@/store'
 import {
   updatePoolInfo,
-  getAllPools as gap,
-  getPricesOnCEX
+  getAllPools as gap
 } from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
 import {

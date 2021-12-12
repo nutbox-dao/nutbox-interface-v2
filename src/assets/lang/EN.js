@@ -187,6 +187,7 @@ module.exports = {
     completeGameSuccess: "Game Success",
     deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.',
     attention: "Attention!",
+    markdownTip: "You can use markdown format.",
     stopPoolAttention: 'Once you stop the pool, it cannot be opened again. Please use this function with caution!'
   },
   nps: {
@@ -252,9 +253,7 @@ module.exports = {
       customValidation:
         "You need to pass the proposal validation in order to submit a proposal.",
     },
-    remarkInput: "Please input intro",
     remark: "Intro",
-    markdownTip: "Your use markdown format.",
     downloadReport: "Download Report.",
   },
   error: {
@@ -332,7 +331,8 @@ module.exports = {
     inputStartBlock: "Please input start block",
     inputStopBlock: "Please input stop block",
     inputMintAmount: "Please input mint number",
-    inputDevRatio: "Please input DAO fund ratio"
+    inputDevRatio: "Please input DAO fund ratio",
+    remarkInput: "Please input introduce",
   },
   community: {
     community: "Community",
