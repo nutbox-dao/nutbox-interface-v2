@@ -24,9 +24,9 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 text-right">
+          <!-- <div class="col-md-6 text-right">
             <button class="primary-btn w-auto" style="height: 2rem">Inactive Pool</button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div v-if="stakingPools && stakingPools.length===0"
@@ -85,14 +85,14 @@
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { getDistributionEras, getMyCommunityInfo } from '@/utils/web3/community'
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import { handleApiErrCode } from '@/utils/helper'
-import { getMyOpenedPools } from '@/utils/web3/pool'
 import { CHAIN_NAME, errCode } from '@/config'
 import StakingPoolType from '@/components/community/StakingPoolType'
 import StakingBSCPool from '@/components/community/StakingBSCPool'
 import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
+import { mapState } from 'vuex'
 
 export default {
   name: 'CommunitySetting',
@@ -100,7 +100,7 @@ export default {
   data () {
     return {
       stakingPools: [],
-      tabOptions: ['All', 'Polkadot', 'Steem', 'Hive'],
+      tabOptions: ['Active', 'Inactive'],
       activeTab: 0,
       poolTypeModal: false,
       createPoolStep: 1,
@@ -108,22 +108,24 @@ export default {
       configPoolModal: false
     }
   },
-  async mounted () {
-    try {
-      this.loadingPool = true
-      await getMyCommunityInfo()
-      getDistributionEras().then(dist => {
-        this.progressData = dist
-      }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
-      // const assets = await getRegitryAssets()
-      const myPools = await getMyOpenedPools()
-      console.log('my pools', myPools)
-      this.stakingPools = [...myPools]
-      this.stakingPools.reverse()
-    } catch (e) {
-    } finally {
-      this.loadingPool = false
+  computed: {
+    ...mapState('community', ['communityData']),
+    pools() {
+      return this.communityData.pools
+    },
+    activePool() {
+      return this.pools.filter(p => p.status === 'OPENED')
+    },
+    stakingPool() {
+      switch(this.activeTab) {
+        case 0:
+          return this.activePool
+        case 1:
+          return this.pool.filter(p => p.status === 'CLOSED')
+      }
     }
+  },
+  async mounted () {
   },
   methods: {
     selectPoolType (type) {
@@ -131,6 +133,7 @@ export default {
       this.createPoolStep = 2
     },
     selectPoolToken (tokenData) {
+      console.log(3, tokenData);
       this.createPoolStep = 3
     }
   }
