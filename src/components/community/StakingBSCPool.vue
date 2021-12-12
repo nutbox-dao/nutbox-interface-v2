@@ -24,7 +24,7 @@
         <template v-else>
           <div v-if="searchResult==='error'" class="text-center">地址输入错误</div>
           <div v-if="provideName && provideSymbol"
-               @click="$emit('confirm')">
+               @click="$emit('confirm', provideAddress)">
             <TokenItem class="my-3"
                        logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
                        token-name="Peanut"
@@ -34,12 +34,12 @@
         </template>
         <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
         <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-        <div style="cursor: pointer" v-for="token of 13" :key="token" @click="$emit('confirm')">
+        <div style="cursor: pointer" v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token.address)">
           <TokenItem class="my-3"
-                     logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
-                     token-name="Peanut"
-                     token-symbol="PNUT"
-                     token-address="0x1111111111111111111111111"/>
+                     :logo="token.icon"
+                     :token-name="token.name"
+                     :token-symbol="token.symbol"
+                     :token-address="token.address"/>
         </div>
       </div>
     </div>
@@ -48,6 +48,8 @@
 
 <script>
 import TokenItem from '@/components/community/TokenItem'
+import { mapState } from 'vuex'
+
 export default {
   name: 'StakingBSCPool',
   components: { TokenItem },
@@ -59,6 +61,12 @@ export default {
       provideName: null,
       provideSymbol: null,
       provideAddress: null
+    }
+  },
+  computed: {
+    ...mapState('web3', ['allTokens']),
+    recommendToken() {
+      return this.allTokens.filter(t => t.isRecommend)
     }
   },
   methods: {

@@ -7,11 +7,11 @@
         <div class="mb-2">Your {{delegateType}} delegate account</div>
         <div class="c-input-group">
           <b-input-group class="d-flex flex-between-center">
-            <b-input class="flex-full"></b-input>
+            <b-input class="flex-full" v-model="delegatee"></b-input>
           </b-input-group>
         </div>
         <div class="col-md-6 mx-auto mt-5">
-          <button class="primary-btn" @click="$emit('confirm')">Confirm</button>
+          <button class="primary-btn" @click="$emit('confirm', delegatee)">Confirm</button>
         </div>
       </div>
     </div>
@@ -23,7 +23,12 @@ export default {
   name: 'StakingDelegatePool',
   props: {
     delegateType: String
-  }
+  },
+  data() {
+    return {
+      delegatee: ''
+    }
+  },
 }
 </script>
 

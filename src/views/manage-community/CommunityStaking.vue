@@ -66,7 +66,8 @@
       <StakingPoolConfig v-if="createPoolStep===3"
                          type="create"
                          @back="createPoolStep=2"
-                         @close="poolTypeModal=false"/>
+                         @close="poolTypeModal=false"
+                         @create="create"/>
     </b-modal>
     <b-modal
       v-model="configPoolModal"
@@ -78,7 +79,6 @@
       no-close-on-backdrop>
       <StakingPoolConfig :enable-back="false"
                          type="config"
-                         :form="{assetId: '',name: '',ratios: []}"
                          :my-pools="[]"
                          @close="configPoolModal=false"/>
     </b-modal>
@@ -95,6 +95,8 @@ import StakingBSCPool from '@/components/community/StakingBSCPool'
 import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
 import { mapState } from 'vuex'
+import { contractAddress } from '@/utils/web3/contract'
+import { ethers } from 'ethers'
 
 export default {
   name: 'CommunitySetting',
@@ -107,7 +109,8 @@ export default {
       poolTypeModal: false,
       createPoolStep: 1,
       poolType: '',
-      configPoolModal: false
+      configPoolModal: false,
+      stakeAsset: ''
     }
   },
   computed: {
@@ -135,8 +138,27 @@ export default {
       this.createPoolStep = 2
     },
     selectPoolToken (tokenData) {
-      console.log(3, tokenData);
+      if (this.poolType === 'bsc') {
+        this.stakeAsset = tokenData
+      }else if (this.poolType === 'steem') {
+        this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      }else if (this.poolType === 'hive') {
+        this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      }
       this.createPoolStep = 3
+    },
+    // create new pool
+    create (pool) {
+      console.log(6666, pool);
+      const poolFactory = this.poolType === 'bsc' ? contractAddress['ERC20StaingFactory'] : contractAddress['SPStakingFactory']
+      let form = {
+        poolFactory, 
+        ratios: pool.ratios, 
+        name: pool[pool.length - 1].name, 
+        asset: this.stakeAsset
+      }
+      console.log(777, form);
+
     }
   }
 }

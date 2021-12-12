@@ -110,7 +110,7 @@ export const approveNUT = async (pool) => {
 
 /**
  * Add new pool
- * @param {Object} form {name, ratios,poolFactory, asset}
+ * @param {Object} form {name, ratios, poolFactory, asset}
  */
 export const addPool = async (form) => {
   return new Promise(async (resolve, reject) => {

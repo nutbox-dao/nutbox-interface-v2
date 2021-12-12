@@ -17,7 +17,7 @@
               ></span>
         <span class="name">{{ item.name || "--" }}</span>
         <!-- <span class="status">{{ index%2 === 0 ? 'remo' : ' active' }}</span> -->
-        <span class="value">{{ item.value }}%</span>
+        <span class="value">{{ parseFloat(item.ratio) }}%</span>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ export default {
           labels: [],
           datasets: [
             {
-              data: [{ value: 0, name: 'default' }]
+              data: [{ ratio: 0, name: 'default' }]
             }
           ]
         },
@@ -86,7 +86,7 @@ export default {
           responsive: true,
           cutout: '60%',
           parsing: {
-            key: 'value'
+            key: 'ratio'
           },
           layout: {
             padding: 70
@@ -95,7 +95,7 @@ export default {
             tooltip: {
               callbacks: {
                 label: function (ctx) {
-                  return `${ctx.raw.name}: ${(Number(ctx.raw.value)).toFixed(2)}%`
+                  return `${ctx.raw.name}: ${(Number(ctx.raw.raio)).toFixed(2)}%`
                 }
               }
             },
@@ -110,7 +110,7 @@ export default {
               },
               padding: 6,
               formatter: (value, ctx) => {
-                return Number(value.value).toFixed(2) + '%'
+                return Number(value.ratio).toFixed(2) + '%'
               }
             }
           }
