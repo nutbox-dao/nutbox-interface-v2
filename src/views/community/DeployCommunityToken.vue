@@ -69,14 +69,20 @@
                 <i class="search-icon" @click="checkTokenAddress"></i>
               </div>
             </div>
-            <div @click="choseToken()" v-if="provideName && provideSymbol">
-              <TokenItem class="my-3"
-                         :logo="provideLogo"
-                         :token-name="provideName"
-                         :token-symbol="provideSymbol"
-                         :token-address="provideAddress"/>
+            <div v-if="loading" class="text-center">
+              <b-spinner label="Spinning"></b-spinner>
             </div>
-            <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
+            <template v-else>
+              <div v-if="searchResult==='error'" class="text-center mt-2">地址输入错误</div>
+              <div @click="choseToken()" v-if="provideName && provideSymbol">
+                <TokenItem class="my-3"
+                           :logo="provideLogo"
+                           :token-name="provideName"
+                           :token-symbol="provideSymbol"
+                           :token-address="provideAddress"/>
+              </div>
+            </template>
+            <div class="mt-4 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
             <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
             <div style="cursor: pointer" v-for="token of OfficialAssets" :key="token.address"
                  @click="choseToken(token)">
@@ -231,7 +237,9 @@ export default {
         reward: ''
       },
       OfficialAssets: OfficialAssets,
-      cardStep: 0
+      cardStep: 0,
+      loading: false,
+      searchResult: ''
     }
   },
   computed: {
@@ -251,7 +259,7 @@ export default {
         this.distributionForm.start = this.blockNum + 100
         this.startTime = blockTime(0, 100)
       }
-    }, 
+    },
     communityInfo (val) {
       if (val && val.name && val.name.length) {
         this.$router.replace('/')
@@ -282,8 +290,11 @@ export default {
     },
     async checkTokenAddress () {
       this.provideAddress = getAddress(this.provideAddress);
+      console.log(this.provideAddress)
       if (this.provideAddress) {
         try {
+          this.loading = true
+          this.searchResult = ''
           const tokenInfo = await getERC20Info(this.provideAddress);
           this.provideName = tokenInfo.name;
           this.provideSymbol = tokenInfo.symbol;
@@ -292,7 +303,11 @@ export default {
           handleApiErrCode(err, (tip, param) => {
             this.$bvToast.toast(tip, param)
           })
+        } finally {
+          this.loading = false
         }
+      } else {
+        this.searchResult = 'error'
       }
     },
     choseToken (token) {
@@ -326,7 +341,7 @@ export default {
       }
       this.cToken = {
         name: this.form.name,
-        symbol: this.form.symbol, 
+        symbol: this.form.symbol,
         supply: this.form.supply,
         totalSupply: ethers.utils.parseUnits(this.form.supply, 18),
         isMintable: true
