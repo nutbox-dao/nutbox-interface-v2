@@ -8,6 +8,13 @@
 .custom-form input {
   height: 2.4rem;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 .custom-form::-webkit-input-placeholder {
   color: #BDBFC2;
 }
