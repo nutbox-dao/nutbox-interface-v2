@@ -36,7 +36,7 @@
       <!-- strategy -->
       <div class="c-card mt-3">
         <div class="font20 font-bold">Token Release Strategy</div>
-        <Progress :progress-data="progressData"></Progress>
+        <Progress :progress-data="distributions"></Progress>
       </div>
       <!-- fund info -->
       <div class="c-card mt-3">
@@ -253,21 +253,17 @@
 import Progress from '@/components/community/Progress'
 import AssetCard from '@/components/community/AssetCard'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, withdrawCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras, monitorCommunity } from '@/utils/web3/community'
-import { getRegitryAssets, getCToken } from '@/utils/web3/asset'
+import { approveCommunityBalance, chargeCommunityBalance, withdrawCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
+import { getCToken } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { errCode } from '@/config'
-import { getMyCommunityData } from '@/utils/graphql/user'
 
 export default {
   name: 'CommunityAsset',
   components: { Progress, AssetCard },
   data () {
     return {
-      progressData: [
-
-      ],
       showChargeTip: false,
       showWithdrawTip: false,
       showDevAddressTip: false,
@@ -282,15 +278,12 @@ export default {
       updatingAddress: false,
       updatingDevRatio: false,
       cToken: {},
-      isMintable: true,
-      assets: [],
-      homeAssets: [],
-      foreignAssets: []
+      isMintable: true
     }
   },
   computed: {
     ...mapState('web3', ['stakingFactoryId']),
-    ...mapState('community', ['communityData']),
+    ...mapState('community', ['communityData', 'distributions']),
     communityBalanceValue () {
       if (this.communityBalance) {
         return (this.communityBalance.toString() / (10 ** this.cToken.decimal)).toFixed(6)
@@ -463,26 +456,12 @@ export default {
     let communityInfo
     try {
       communityInfo = await getMyCommunityInfo()
-      getDistributionEras().then(dist => {
-        this.progressData = dist
-      }).catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
-      monitorCommunity()
+      getDistributionEras().catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
     } catch (e) {
-      if (e === errCode.NO_STAKING_FACTORY) {
-        this.noCommunity = true
-      } else {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }
     }
     this.cToken = await getCToken(communityInfo.id)
     console.log('ctoken', communityInfo.id, this.cToken);
     this.isMintable = this.cToken.isMintable
-
-    this.assets = await getRegitryAssets()
-    this.homeAssets = this.assets.filter(a => a.type === 'HomeChainAssetRegistry')
-    this.foreignAssets = this.assets.filter(a => a.type !== 'HomeChainAssetRegistry')
   }
 }
 </script>

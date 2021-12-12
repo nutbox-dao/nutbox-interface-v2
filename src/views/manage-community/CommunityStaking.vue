@@ -77,13 +77,6 @@ export default {
       this.stakingPools = [...myPools]
       this.stakingPools.reverse()
     } catch (e) {
-      if (e === errCode.NO_STAKING_FACTORY) {
-        this.noCommunity = true
-      } else {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      }
     } finally {
       this.loadingPool = false
     }

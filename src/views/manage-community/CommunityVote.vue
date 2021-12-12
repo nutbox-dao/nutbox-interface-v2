@@ -170,44 +170,6 @@
         <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
-
-    <b-modal
-      v-model="noCommunity"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center my-5">
-          {{ $t("community.noCommunity") }}
-        </div>
-        <button class="primary-btn" @click="gotoCreate">
-          {{ $t("community.gotoCreate") }}
-        </button>
-      </div>
-    </b-modal>
-
-    <b-modal
-      v-model="notYourCommunity"
-      modal-class="custom-modal"
-      size="m"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="tip-modal">
-        <div class="font20 font-bold text-center my-5">
-          {{ $t("community.notYourCommunity") }}
-        </div>
-        <button class="primary-btn" @click="goToHome">
-          {{ $t("commen.goToHome") }}
-        </button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -359,12 +321,6 @@ export default {
   async mounted () {
     try {
       const communityInfo = await getMyCommunityInfo()
-
-      if (!communityInfo) {
-        // Havn't create feast
-        this.noCommunity = true
-        return
-      }
 
       this.form.id = communityInfo.id
       this.form.communityId = communityInfo.id
