@@ -64,6 +64,7 @@
                              @back="createPoolStep=1"/>
       </div>
       <StakingPoolConfig v-if="createPoolStep===3"
+                         type="create"
                          @back="createPoolStep=2"
                          @close="poolTypeModal=false"/>
     </b-modal>
@@ -76,6 +77,7 @@
       hide-footer
       no-close-on-backdrop>
       <StakingPoolConfig :enable-back="false"
+                         type="config"
                          :form="{assetId: '',name: '',ratios: []}"
                          :my-pools="[]"
                          @close="configPoolModal=false"/>

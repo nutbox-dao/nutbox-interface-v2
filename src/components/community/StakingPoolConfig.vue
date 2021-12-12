@@ -5,32 +5,32 @@
       <div v-else class="text-right">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
-      <div class="mt-2 mb-4 text-center">Pool Configuration</div>
+      <div class="mt-2 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
       <div class="col-lg-10 mx-auto flex-fill overflow-auto">
         <div class="custom-form pool-form">
           <b-form-group class="mb-4"
+                        v-if="type === 'create' && activePools.length > 0"
                         label-class="overflow-hidden text-grey-7"
                         label-cols-md="3" content-cols-md="9"
                         label="Pool Name">
-            <b-form-input class="input-border" type="number" v-model="form.name"></b-form-input>
+            <b-form-input class="input-border" type="text" v-model="activePools[activePools.length-1].name"></b-form-input>
           </b-form-group>
-          <div class="mb-2">Profit Sharing Ratio</div>
+          <div class="mb-2">Pool Ratios</div>
           <div class="row">
             <div class="col-md-6">
-              <b-form-group :label="myPools[inputIndex].name"
+              <b-form-group :label="pool.name"
                             label-cols="4" content-cols="8"
-                            v-for="(inputItem, inputIndex) of form.ratios" :key="inputIndex">
+                            v-for="(pool, inputIndex) of activePools" :key="inputIndex">
                 <div class="c-input-group d-flex">
-                  <b-form-input :data-label="myPools[inputIndex].name"
-                                v-model="form.ratios[inputIndex]"
-                                :disabled="myPools[inputIndex].hasStopped || myPools[inputIndex].hasRemoved"
+                  <b-form-input :data-label="pool.name"
+                                v-model="pool.ratio"
                                 @input="inputChange" step="0.01" type="number"></b-form-input>
                   <span class="c-append">%</span>
                 </div>
               </b-form-group>
             </div>
             <div class="col-md-6 p-0">
-              <PoolRatio style="margin-top: -3rem" :pools-data="myPools" :show-legend-info="false"/>
+              <PoolRatio style="margin-top: -3rem" :pools-data="activePools.map(p => (p.ratio / 10000).toFixed(2))" :show-legend-info="false"/>
             </div>
           </div>
           <div class="d-flex mt-3">
@@ -46,6 +46,8 @@
 <script>
 import debounce from 'lodash.debounce'
 import PoolRatio from '@/components/community/PoolRatio'
+import { mapState } from 'vuex'
+
 export default {
   name: 'StakingPoolConfig',
   components: { PoolRatio },
@@ -54,15 +56,9 @@ export default {
       type: Boolean,
       default: true
     },
-    myPools: {
-      type: Array,
-      default: () => {
-        return [
-          { name: 'aaa', value: '10' },
-          { name: 'bbb', value: '20' },
-          { name: 'ccc', value: '30' }
-        ]
-      }
+    type: {
+      type: String,
+      default: "config" // create
     },
     form: {
       type: Object,
@@ -75,19 +71,33 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('community', ['communityData'])
+  },
   data () {
     return {
+      activePools:[],
     }
   },
   methods: {
     inputChange: debounce(function () {
-      this.myPools.map((item, index) => {
+      this.activePools.map((item, index) => {
         item.value = this.form.ratios[index]
       })
-      this.myPools[this.myPools.length - 1].name =
+      this.activePools[this.activePools.length - 1].name =
         this.form.name
     }, 1500)
-  }
+  },
+  mounted () {
+    console.log(124, this.communityData);
+    this.activePools = this.communityData.pools.filter(p => p.status === 'OPENED');
+    console.log(this.type);
+    if (this.type === 'create'){
+      console.log(this.type);
+      this.activePools.push({name: 'test', ratio: 1000})
+      console.log(444, this.activePools);
+    }
+  },
 }
 </script>
 
