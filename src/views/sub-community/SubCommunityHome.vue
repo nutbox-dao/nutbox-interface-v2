@@ -138,6 +138,7 @@ import { getCToken } from '@/utils/web3/asset'
 import { sleep, formatBalance } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
+import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 
 export default {
   name: 'Home',
@@ -149,12 +150,10 @@ export default {
   data () {
     return {
       communityBalanceValue: 0,
-      opHistoryWatcher: {},
-      activitiesList: []
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
@@ -208,29 +207,29 @@ export default {
     }
   },
   async mounted () {
-    // setInterval(() => {
-    //   this.activitiesList.unshift(new Date().getTime())
-    // }, 5000)
     while (!this.communityId) {
       await sleep(0.2)
     }
-    // start watch history
 
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res)
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
+      // start watch history
+      while (this.loadingCommunityInfo) {
+        await sleep(0.1)
+      }
+      const interval = setInterval(() => {
+        getUpdateCommunityOPHistory(this.communityId)
+      }, 3000)
+      this.$once('hook:beforeDestroy', () => {
+        window.clearInterval(interval)
+      })
     }).catch(e => {})
     getSpecifyDistributionEras(this.communityId).then(res => {
       console.log('dis', res);
     })
-  },
-  beforeDestroy () {
-    // clear monitor
-    try{
-      opHistoryWatcher.stop();
-    }catch(e){}
   },
 }
 </script>

@@ -82,7 +82,7 @@ export default {
     try {
       this.loading = true;
       getSpecifyCommunityInfo(this.communityId).then(community => {
-        getCToken(community.id).then(ctoken => {
+        getCToken(community.id, true).then(ctoken => {
           console.log(1, community.id, ctoken);
           this.saveCtoken(ctoken)
         }).catch(e => {

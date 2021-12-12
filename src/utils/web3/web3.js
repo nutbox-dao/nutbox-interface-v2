@@ -106,7 +106,7 @@ export const chainChanged = async () => {
       getProvider(true)
       store.commit('saveMetamaskConnected', true)
       getRegitryAssets(true)
-      getMyCommunityInfo(true)
+      getMyCommunityInfo(true).catch(e=>{})
       getMyOpenedPools(true)
     }
   })

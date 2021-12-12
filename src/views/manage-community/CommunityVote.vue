@@ -14,14 +14,14 @@
               <div class="c-input-group">
                 <b-form-textarea
                   id="remark"
-                  :placeholder="$t('nps.remarkInput')"
+                  :placeholder="$t('placeHolder.remarkInput')"
                   v-model="form.remark"
                   rows="10"
                   max="2046"
                 ></b-form-textarea>
               </div>
             </div>
-          <div class="mt-3">{{ $t('nps.markdownTip') }}</div>
+          <div class="mt-3">{{ $t('tip.markdownTip') }}</div>
           </b-form-group>
           <b-form-group
             label-cols-md="2"
@@ -96,7 +96,7 @@
                     <div class="edit-mask">
                     <span
                     >{{ $t("community.edit") }}<br />{{
-                        $t("community.poster")
+                        $t("community.communityPoster")
                       }}</span
                     >
                     </div>
@@ -108,7 +108,7 @@
                       alt=""
                     />
                     <div class="add-text">
-                      {{ $t("community.uploadPoster") }}
+                      {{ $t("operation.uploadPoster") }}
                     </div>
                   </template>
                 </div>
@@ -126,7 +126,7 @@
               </template>
             </b-form-file>
             <div class="font12 text-grey-light mt-1">
-              {{ $t("community.picTip", { size: "1200*280" }) }}
+              {{ $t("tip.picTip", { size: "1200*280" }) }}
             </div>
           </b-form-group>
 
@@ -134,7 +134,7 @@
             <div class="text-center mt-4">
               <button class="primary-btn col-md-6" @click="submitForm" :disabled="updateing">
                 <b-spinner small type="grow" v-show="updateing" />
-                {{ $t("commen.update") }}
+                {{ $t("operation.update") }}
               </button>
             </div>
           </b-form-group>
@@ -250,8 +250,6 @@ export default {
       currentStrategyKey: '',
       currentStrategyParams: '',
       strategyControlItems: [],
-      noCommunity: false,
-      notYourCommunity: false,
       strategies: null,
       uploading: false,
       cropperModal: false,

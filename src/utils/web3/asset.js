@@ -385,16 +385,26 @@ export const updateAllTokensFromBackend = async () => {
 
 const getPrices = async () => {
   // tokenPrices is against eth price
-  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend(true)])
-  binancePrice = binancePrice.filter(p => 
-    PRICES_SYMBOL.indexOf(p.symbol) !== -1
-  )
+  let tokenPrices = await getAllTokenFromBackend(true)
+  let binancePrice
+  try {
+    // maybe fail with the network status
+    binancePrice = await getPricesOnCEX();
+  }catch(e) {
+    // get price from binance fail
+    console.log('Get price from binance fail', e);
+  }
   let res = {}
-  for (let p of binancePrice) {
-    if (p.symbol === 'ETHUSDT'){
-      store.commit('saveEthPrice', parseFloat(p.price))
+  if (binancePrice) {
+    binancePrice = binancePrice.filter(p => 
+      PRICES_SYMBOL.indexOf(p.symbol) !== -1
+    )
+    for (let p of binancePrice) {
+      if (p.symbol === 'ETHUSDT'){
+        store.commit('saveEthPrice', parseFloat(p.price))
+      }
+      res[p.symbol] = p.price
     }
-    res[p.symbol] = p.price
   }
   for (let p of tokenPrices) {
     res[p.address] = p.price

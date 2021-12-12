@@ -5,11 +5,11 @@
         <div class="c-btn-group" >
           <button class="primary-btn primary-btn-outline w-auto mr-2"
                   @click="configPoolModal=true">
-            {{ $t('community.updatePools') }}</button>
+            {{ $t('pool.updatePoolRatios') }}</button>
           <button class="primary-btn w-auto mx-0 d-flex align-items-center"
                   @click="poolTypeModal=true, createPoolStep=1">
             <i class="add-icon"></i>
-            <span>{{ $t('community.addPool') }}</span>
+            <span>{{ $t('pool.addPool') }}</span>
           </button>
         </div>
       </div>
@@ -33,7 +33,7 @@
           class="empty-card mb-5 d-flex flex-column justify-content-center">
         <div class="empty-bg">
           <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t('community.noPools') }}</p>
+          <p>{{ $t('pool.noPools') }}</p>
         </div>
       </div>
       <template v-else>

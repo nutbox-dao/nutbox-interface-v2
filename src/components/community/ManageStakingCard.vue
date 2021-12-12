@@ -34,28 +34,22 @@
         <span class="name">{{ $t('community.hasMined') }}</span>
         <div class="info">{{ minedToken | amountForm }}</div>
       </div> -->
-      <button class="primary-btn" :disabled="updating" v-if='!published' @click="confirm">
+      <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.publishPool')}}
+        {{ $t('community.stopPool')}}
       </button>
-      <template v-else>
-        <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="showAttention=true">
-          <b-spinner small type="grow" v-show="updating" />
-          {{ $t('community.stopPool')}}
-        </button>
-        <button class="primary-btn" :disabled="updating" v-else-if="status === 'CanRemove'" @click="remove">
-          <b-spinner small type="grow" v-show="updating" />
-          {{ $t('community.removePool')}}
-        </button>
-        <button class="primary-btn" :disabled="updating" v-else-if="status === 'Stopped'" @click="withdraw">
-          <b-spinner small type="grow" v-show="updating" />
-          {{ $t('community.withdrawPool')}}
-        </button>
-        <button class="primary-btn" :disabled="true" v-else-if="status === 'Removed'" @click="withdraw">
-          <b-spinner small type="grow" v-show="updating" />
-          {{ $t('community.Removed')}}
-        </button>
-      </template>
+      <button class="primary-btn" :disabled="updating" v-else-if="status === 'CanRemove'" @click="remove">
+        <b-spinner small type="grow" v-show="updating" />
+        {{ $t('community.removePool')}}
+      </button>
+      <button class="primary-btn" :disabled="updating" v-else-if="status === 'Stopped'" @click="withdraw">
+        <b-spinner small type="grow" v-show="updating" />
+        {{ $t('community.withdrawPool')}}
+      </button>
+      <button class="primary-btn" :disabled="true" v-else-if="status === 'Removed'" @click="withdraw">
+        <b-spinner small type="grow" v-show="updating" />
+        {{ $t('community.Removed')}}
+      </button>
     </div>
 
     <!-- showAttention tip -->
@@ -95,7 +89,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
-import { publishPool, getAllPools, getMyOpenedPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
+import { getAllPools, getMyOpenedPools, monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
 import { getAssetMetadata } from '@/utils/web3/asset'
 
 export default {
@@ -206,27 +200,6 @@ export default {
     receiveAttention () {
       this.stop()
       this.showAttention = false
-    },
-    async confirm () {
-      try {
-        this.updating = true
-        await publishPool(this.pool)
-        this.published = true
-        // 更新本地矿池数据
-        await sleep(2)
-        const aa = await getAllPools(true)
-        await monitorPools()
-        this.$bvToast.toast(this.$t('community.updatePoolSuccess'), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.updating = false
-      }
     },
     async stop () {
       try {

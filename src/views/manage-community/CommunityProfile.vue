@@ -112,7 +112,7 @@
                         <div class="edit-mask">
                         <span
                         >{{ $t("operation.edit") }}<br />{{
-                            $t("community.poster")
+                            $t("community.communityPoster")
                           }}</span
                         >
                         </div>
@@ -279,8 +279,10 @@ export default {
   },
   async mounted () {
     this.form = {...this.communityInfo}
-    await getMyCommunityInfo(true)
-    this.form = {...this.communityInfo}
+    try {
+      await getMyCommunityInfo(true)
+      this.form = {...this.communityInfo}
+    }catch (e) {}
   },
   methods: {
     onCancel () {
