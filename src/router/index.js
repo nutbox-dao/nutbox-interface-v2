@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home'
+import Home from '@/views/Home'
+import Profile from '@/views/Profile'
 import CommunityIndex from '@/views/community/Index'
 import CommunityHome from '@/views/community/CommunityHome'
 import DeployCommunityToken from '@/views/community/DeployCommunityToken'
@@ -20,6 +21,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile
   },
   {
     path: '/community',

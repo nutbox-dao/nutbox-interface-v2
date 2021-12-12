@@ -67,7 +67,7 @@ export default {
       activePools:[],
       newName: '',
       ratios: []
-    } 
+    }
   },
   methods: {
     inputChange: debounce(function () {
@@ -151,7 +151,8 @@ export default {
   .pool-data-box {
     overflow: auto;
     padding-right: 1rem;
-    min-width: 10rem;
+    min-width: 50%;
+    width: 50%;
   }
 }
 @media (max-width: 991px) {

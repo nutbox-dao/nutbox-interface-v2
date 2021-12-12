@@ -39,8 +39,10 @@
           <div class="hover" @click="gotoCreateCommunity()">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3 "></i>
           </div>
-          <img class="user-avatar hover rounded-circle w-75 my-3"
-               src="~@/static/images/home-s2-icon1.svg" alt="">
+          <router-link to="/profile">
+            <img class="user-avatar hover rounded-circle w-75 my-3"
+                 src="~@/static/images/home-s2-icon1.svg" alt="">
+          </router-link>
           <div class="hover">
             <i class="menu-icon" style="opacity: .7"></i>
           </div>
@@ -167,7 +169,7 @@ export default {
       console.log('Get accounts fail', e)
     }
     try {
-      setupNetwork()
+      // setupNetwork()
       chainChanged(() => {
         this.$router.go(0);
       })

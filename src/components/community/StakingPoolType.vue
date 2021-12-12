@@ -1,11 +1,11 @@
 <template>
   <div class="pool-type-modal position-relative">
-    <div class="pool-type-modal-content col-lg-10 mx-auto d-flex flex-column">
+    <div class="pool-type-modal-content d-flex flex-column">
       <div class="text-right">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
       <div class="mt-2 text-center">Choose a pool type</div>
-      <div class="flex-fill d-flex my-4 align-items-center h-100">
+      <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100">
         <div class="type-box" @click="$emit('onType', 'bsc')">BSC <br> Staking</div>
         <div class="type-box" @click="$emit('onType', 'steem')">Steem <br> Staking</div>
         <div class="type-box" @click="$emit('onType', 'hive')">Hive <br> Staking</div>
