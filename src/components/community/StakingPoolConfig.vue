@@ -5,40 +5,37 @@
       <div v-else class="text-right">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
-      <div class="mt-2 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
-      <div class="col-lg-10 mx-auto flex-fill overflow-auto">
-        <div class="custom-form pool-form">
-          <b-form-group class="mb-4"
-                        v-if="type === 'create' && activePools.length > 0"
-                        label-class="overflow-hidden text-grey-7"
-                        label-cols-md="3" content-cols-md="9"
-                        label="Pool Name">
-            <b-form-input class="input-border" type="text" v-model="activePools[activePools.length-1].name"></b-form-input>
-          </b-form-group>
-          <div class="mb-2">Pool Ratios</div>
-          <div class="row">
-            <div class="col-md-6">
-              <b-form-group :label="pool.name"
-                            label-cols="4" content-cols="8"
-                            v-for="(pool, inputIndex) of activePools" :key="inputIndex">
-                <div class="c-input-group d-flex">
-                  <b-form-input :data-label="pool.name"
-                                v-model="pool.ratio"
-                                @input="inputChange" step="0.01" type="number"></b-form-input>
-                  <span class="c-append">%</span>
-                </div>
-              </b-form-group>
-            </div>
-            <div class="col-md-6 p-0">
-              <PoolRatio style="margin-top: -3rem" :pools-data="activePools.map(p => (p.ratio / 10000).toFixed(2))" :show-legend-info="false"/>
-            </div>
+      <div class="mt-2 mb-4 text-center">Pool Configuration</div>
+      <div class="col-lg-10 mx-auto custom-form overflow-hidden flex-fill d-flex flex-column">
+        <b-form-group class="mb-4"
+                      label-class="overflow-hidden text-grey-7"
+                      label-cols-md="3" content-cols-md="9"
+                      label="Pool Name">
+          <b-form-input class="input-border" type="number" v-model="form.name"></b-form-input>
+        </b-form-group>
+        <div class="mb-2">Profit Sharing Ratio</div>
+        <div class="pool-chart-box w-100 d-flex">
+          <div class="pool-data-box">
+            <b-form-group :label="myPools[inputIndex].name"
+                          label-cols="4" content-cols="8"
+                          v-for="(inputItem, inputIndex) of form.ratios" :key="inputIndex">
+              <div class="c-input-group d-flex">
+                <b-form-input :data-label="myPools[inputIndex].name"
+                              v-model="form.ratios[inputIndex]"
+                              :disabled="myPools[inputIndex].hasStopped || myPools[inputIndex].hasRemoved"
+                              @input="inputChange" step="0.01" type="number"></b-form-input>
+                <span class="c-append">%</span>
+              </div>
+            </b-form-group>
           </div>
-          <div class="d-flex mt-3">
-            <button class="primary-btn mx-2">OK</button>
-            <button class="primary-btn mx-2" @click="$emit('close')">Cancel</button>
-          </div>
+          <PoolRatio class="flex-fill" style="margin-top: -2rem" :pools-data="myPools" :show-legend-info="false"/>
+        </div>
+        <div class="d-flex mt-3">
+          <button class="primary-btn mx-2">OK</button>
+          <button class="primary-btn mx-2" @click="$emit('close')">Cancel</button>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -60,13 +57,28 @@ export default {
       type: String,
       default: "config" // create
     },
+    myPools: {
+      type: Array,
+      default: () => {
+        return [
+          { name: 'aaa', value: '10' },
+          { name: 'bbb', value: '20' },
+          { name: 'ccc', value: '30' },
+          { name: 'ccc', value: '30' },
+          { name: 'ccc', value: '30' },
+          { name: 'ccc', value: '30' },
+          { name: 'ccc', value: '30' },
+          { name: 'ccc', value: '30' }
+        ]
+      }
+    },
     form: {
       type: Object,
       default: () => {
         return {
           assetId: '',
           name: '',
-          ratios: [10, 20, 30]
+          ratios: [10, 20, 30, 10, 10, 10, 10]
         }
       }
     }
@@ -139,5 +151,24 @@ export default {
     }
   }
 }
-
+@media (min-width: 992px) {
+  .pool-chart-box {
+    flex: 1;
+    overflow: hidden;
+  }
+  .pool-data-box {
+    overflow: auto;
+    padding-right: 1rem;
+    min-width: 10rem;
+  }
+}
+@media (max-width: 991px) {
+  .pool-chart-box {
+    flex-direction: column;
+    overflow: auto;
+  }
+  .pool-data-box {
+    box-sizing: border-box;
+  }
+}
 </style>

@@ -18,13 +18,20 @@
         </div>
       </div>
       <div class="col-lg-8 mx-auto flex-fill overflow-auto">
-        <div @click="$emit('confirm')">
-          <TokenItem class="my-3"
-                     logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
-                     token-name="Peanut"
-                     token-symbol="PNUT"
-                     token-address="0x1111111111111111111111111"/>
+        <div v-if="loading" class="text-center">
+          <b-spinner label="Spinning"></b-spinner>
         </div>
+        <template v-else>
+          <div v-if="searchResult==='error'" class="text-center">地址输入错误</div>
+          <div v-if="provideName && provideSymbol"
+               @click="$emit('confirm')">
+            <TokenItem class="my-3"
+                       logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
+                       token-name="Peanut"
+                       token-symbol="PNUT"
+                       token-address="0x1111111111111111111111111"/>
+          </div>
+        </template>
         <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
         <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
         <div style="cursor: pointer" v-for="token of 13" :key="token" @click="$emit('confirm')">
@@ -46,11 +53,24 @@ export default {
   components: { TokenItem },
   data () {
     return {
+      loading: false,
+      searchResult: '',
+      provideLogo: null,
+      provideName: null,
+      provideSymbol: null,
       provideAddress: null
     }
   },
   methods: {
-    checkTokenAddress () {}
+    checkTokenAddress () {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.provideName = 'Pnut'
+        this.provideSymbol = 'Pnut'
+        // this.searchResult = 'error'
+      }, 2000)
+    }
   }
 }
 </script>
