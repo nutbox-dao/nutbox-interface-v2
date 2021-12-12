@@ -212,7 +212,7 @@
                         <div class="edit-mask">
                         <span
                         >{{ $t("operation.edit") }}<br />{{
-                            $t("community.poster")
+                            $t("community.communityPoster")
                           }}</span
                         >
                         </div>
