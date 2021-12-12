@@ -74,6 +74,19 @@
     },
     {
       "inputs": [],
+      "name": "community",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "name",
       "outputs": [
         {
@@ -86,12 +99,20 @@
       "type": "function"
     },
     {
-      "inputs": [
+      "inputs": [],
+      "name": "stakeToken",
+      "outputs": [
         {
           "internalType": "address",
-          "name": "depositor",
+          "name": "",
           "type": "address"
-        },
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
         {
           "internalType": "uint256",
           "name": "amount",
@@ -105,11 +126,6 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "depositor",
-          "type": "address"
-        },
         {
           "internalType": "uint256",
           "name": "amount",

@@ -4,12 +4,15 @@ export default {
   state: {
     // my community info data from backend
     communityInfo: null,
+    // my community data from grapg
+    communityData: null,
+    // my ctoken distributions
     distributions: null,
+    // loading flag
     loadingMyCommunityInfo: false,
     // all i joined community from graph
     joinedCommunityData: null,
-    // my community data from grapg
-    communityData: null,
+
     // all community from backend
     allCommunityInfo: null,
   },

@@ -152,6 +152,24 @@ export const updateAllCommunitiesFromBackend = async () => {
 };
 
 /**
+ * get operation fee amount by op type
+ * CREATING_COMMUNITY
+ * CREATING_POOL
+ * STAKING
+ */
+export const getOperationFee = async (type) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const committe = await getContract('Committe');
+      const feeAmount = await committe.getFee(type)
+      resolve(feeAmount);
+    }catch(e){
+      reject(errCode.BLOCK_CHAIN_ERR);
+    }
+  })
+}
+
+/**
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
  */
@@ -165,8 +183,6 @@ export const createCommunity = async (cToken, distribution) => {
         return;
       }
     } catch (e) {
-      reject(e);
-      return;
     }
 
     let contract;

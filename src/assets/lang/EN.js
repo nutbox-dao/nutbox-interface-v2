@@ -358,6 +358,11 @@ module.exports = {
     stopBlock: "Stop block",
     mintAmount: "Mint amount"
   },
+  pool: {
+    updatePoolRatios: "Configure Pools",
+    addPool: "Add Pool",
+    noPools: 'No pool created'
+  },
   asset: {
     tokenName: "Name",
     tokenSymbol: "Symbol",

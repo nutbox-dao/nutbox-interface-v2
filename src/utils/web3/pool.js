@@ -4,13 +4,9 @@ import {
 } from './contract'
 import store from '@/store'
 import {
-  updatePoolInfo,
   getAllPools as gap
 } from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
-import {
-  signMessage
-} from './utils'
 import {
   errCode,
   Multi_Config,
@@ -31,8 +27,8 @@ import {
 } from './asset'
 import {
   getMyCommunityContract,
-  getNonce,
-  getAllCommunities
+  getAllCommunities,
+  getOperationFee
 } from './community'
 import BN from 'bn.js'
 import { GasTimes, NutAddress } from '@/config'
@@ -144,101 +140,6 @@ export const getMyOpenedPools = async (update = false) => {
 }
 
 /**
- * Get info for create a pool
- * Include erc20token info and amount
- * @returns 
- */
-export const getStakedNUTInfo = async () => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      const registryHub = await getContract('RegistryHub')
-      let NUT = await registryHub.getNUT();
-      NUT = await registryHub.getHomeLocation(NUT);
-      NUT = await getERC20Info(NUT)
-      const stakedNUT = await registryHub.getStakedNUT();
-      resolve([NUT, stakedNUT])
-    }catch(e) {
-      reject(e);
-    }
-  })
-}
-
-/**
- * Add new pool
- * @param {*} form 
- */
-export const addPool = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyCommunityContract()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-    let contract;
-    try {
-      contract = await getContract('StakingTemplate', stakingFactoryId, false)
-    } catch (e) {
-      reject(e);
-      return
-    }
-
-    console.log(466, form);
-
-    try {
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
-      await waitForTx(tx.hash)
-      // re monitor
-      resolve(tx.hash)
-    } catch (e) {
-      console.log('Create pool fail', e);
-      reject(errCode.BLOCK_CHAIN_ERR)
-    }
-  })
-}
-
-/**
- * Update Pools ratios
- * @param {*} form 
- * @returns 
- */
-export const updatePoolsRatio = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyCommunityContract()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-    let contract;
-    try {
-      contract = await getContract('StakingTemplate', stakingFactoryId, false)
-    } catch (e) {
-      reject(e);
-      return;
-    }
-    try {
-      const tx = await contract.setPoolRatios(form.map(val => val * 100))
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    } catch (e) {
-      reject(errCode.CONTRACT_CREATE_FAIL)
-    }
-
-  })
-}
-
-/**
  * Approve pool staking token to pool
  * @param {*} pool 
  */
@@ -251,10 +152,9 @@ export const approvePool = async (pool) => {
         reject(e);
         return;
       }
-     
-      const erc20Handler = contractAddress['ERC20AssetHandler']
+      
       try{
-        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString())
+        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(pool.decimal + 50)).toString())
         await waitForTx(tx.hash)
         resolve(tx.hash)
       }catch(e){
@@ -284,27 +184,128 @@ export const approveNUT = async (pool) => {
 }
 
 /**
- * Deposit homechain asset
- * @param {*} communityId  
- * @param {*} pid 
- * @param {*} amount formed amount can directly as a param of contract
+ * Add new pool
+ * @param {Object} form {name, ratios,poolFactory, asset}
  */
-export const deposit = async (communityId, pid, amount, boundAccount) => {
+export const addPool = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyCommunityContract()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+    let contract;
+    try {
+      contract = await getContract('Community', stakingFactoryId, false)
+    } catch (e) {
+      reject(e);
+      return
+    }
+
+    console.log(466, form);
+
+    try {
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), form.poolFactory, form.asset)
+      await waitForTx(tx.hash)
+      // re monitor
+      resolve(tx.hash)
+    } catch (e) {
+      console.log('Create pool fail', e);
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+  })
+}
+
+/**
+ * Update Pools ratios
+ * @param {Array} form ratios array
+ * @returns 
+ */
+export const updatePoolsRatio = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyCommunityContract()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+    let contract;
+    try {
+      contract = await getContract('Community', stakingFactoryId, false)
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      reject(errCode.CONTRACT_CREATE_FAIL)
+    }
+
+  })
+}
+
+/**
+ * Remove Pool
+ * Can't be reopened if do this operation
+ * @param {Object} form {poolAddress,activedPools,ratios} 
+ * @returns 
+ */
+export const removePool = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    const communityId = store.state.web3.stakingFactoryId
+    let contract = null
+    try{
+      contract = await getContract('Community', communityId, false)
+    }catch(e) {
+      reject(e)
+      return;
+    }
+    try{
+      const tx = await contract.adminClosePool(form.poolAddress, form.activedPools, form.ratios.map(r => r * 100))
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('RemovePool pool Fail', e);
+    }
+  })
+}
+
+/**
+ * Deposit homechain asset
+ * @param {*} poolId
+ * @param {*} amount
+ */
+export const deposit = async (poolId, amount) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('ERC20Staking', poolId, false)
     }catch(e){
       reject(e)
       return;
     }
-    const account = await getAccounts();
-    if (!boundAccount){
-      boundAccount = ethers.utils.keccak256(account)
-    }
 
     try{
-      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount)
+      const tx = await contract.deposit(ethers.utils.formatUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -319,25 +320,23 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
 }
 
 /**
- * Withdraw deposit
- * @param {*} communityId 
- * @param {*} pid 
- * @param {*} amount formed amount can directly as a param of contract
+ * Withdraw 
+ * @param {*} poolId 
+ * @param {*} amount
  * @returns 
  */
-export const withdraw = async (communityId, pid, amount) => {
+export const withdraw = async (poolId, amount) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('ERC20Staking', poolId, false)
     }catch(e){
       reject(e)
       return;
     }
 
     try{
-      const account = await getAccounts();
-      const tx = await contract.withdraw(pid, account, amount.toString())
+      const tx = await contract.withdraw(ethers.utils.formatUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -356,18 +355,18 @@ export const withdraw = async (communityId, pid, amount) => {
  * @param {*} communityId 
  * @param {*} pid 
  */
-export const withdrawReward = async (communityId, pid) => {
+export const withdrawReward = async (communityId, poolId) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('Community', communityId, false)
     }catch(e){
       reject(e)
       return;
     }
 
     try{
-      const tx = await contract.withdrawPoolRewards(pid)
+      const tx = await contract.withdrawPoolsRewards([poolId])
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -377,96 +376,6 @@ export const withdrawReward = async (communityId, pid) => {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
       console.log('Withdraw reward Fail', e);
-    }
-  })
-}
-
-/**
- * Stop pool
- * @param {*} pid 
- * @returns 
- */
-export const stopPool = async (pid) => {
-  return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
-    try{
-      contract = await getContract('StakingTemplate', communityId, false)
-    }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.stopPool(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log('Stop pool Fail', e);
-    }
-  })
-}
-
-/**
- * tryWithdraw
- * @param {*} pid 
- * @returns 
- */
-export const tryWithdraw = async (pid) => {
-  return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
-    try{
-      contract = await getContract('StakingTemplate', communityId, false)
-    }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.tryWithdraw(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log('tryWithdraw pool Fail', e);
-    }
-  })
-}
-
-/**
- * removePool
- * @param {*} pid 
- * @returns 
- */
-export const removePool = async (pid) => {
-  return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
-    try{
-      contract = await getContract('StakingTemplate', communityId, false)
-    }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.removePool(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log('RemovePool pool Fail', e);
     }
   })
 }

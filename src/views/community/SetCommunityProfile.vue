@@ -422,7 +422,7 @@ export default {
     if (this.communityInfo && this.communityInfo.cToken){
       this.tokenLogo = this.communityInfo.cToken.icon
       this.form.tokenLogo = this.tokenLogo
-      this.chooseTokenTipModal = this.communityInfo.cToken.isMintable;
+      this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }
   },
@@ -628,7 +628,7 @@ export default {
           getMyCommunityInfo(true)
         ])
         await sleep(1)
-        this.$router.replace('/community-setting/staking')
+        this.$router.replace('/manage-community/profile')
       } catch (e) {
         const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params)
