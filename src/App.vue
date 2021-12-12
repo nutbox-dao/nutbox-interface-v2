@@ -168,7 +168,9 @@ export default {
     }
     try {
       setupNetwork()
-      chainChanged()
+      chainChanged(() => {
+        this.$router.go(0);
+      })
       accountChanged(() => {
         this.$router.go(0);
       })

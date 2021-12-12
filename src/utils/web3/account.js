@@ -1,7 +1,7 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce, getDistributionEras } from './community'
-import { getMyOpenedPools, monitorPools } from './pool'
+import { monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
 import { updateUserInfo as uui, getSomeUsers, getAllUsers } from '@/apis/api'
@@ -43,7 +43,6 @@ export const accountChanged = async (refresh) => {
         getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
             if (res){
-                getMyOpenedPools(true)
                 getNonce(true)
                 getDistributionEras(true)
             }

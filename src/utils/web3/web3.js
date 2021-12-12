@@ -11,7 +11,6 @@ import { getProvider } from './ethers'
 import { getAccounts } from "./account"
 import { getRegitryAssets } from './asset'
 import { getMyCommunityInfo } from './community'
-import { getMyOpenedPools } from './pool'
 
 /**
  * Add bsc to metamask
@@ -89,12 +88,14 @@ export const connectMetamask = async () => {
 /**
  * User changed chain
  */
-export const chainChanged = async () => {
+export const chainChanged = async (refresh) => {
   
   const metamask = await getEthWeb()
   metamask.on('chainChanged', async(chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
+    refresh();
+    this.go
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)

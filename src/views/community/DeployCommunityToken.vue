@@ -190,7 +190,6 @@ import { mapState, mapGetters } from 'vuex'
 import { createCommunity, getMyCommunityContract } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
-import { OfficialAssets } from '@/config'
 import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
@@ -230,7 +229,6 @@ export default {
         end: '',
         reward: ''
       },
-      OfficialAssets: OfficialAssets,
       cardStep: 0
     }
   },
@@ -239,7 +237,10 @@ export default {
       blockNum: state => state.web3.blockNum
     }),
     ...mapState('web3', ['stakingFactoryId']),
-    ...mapGetters('web3', ['createState']),
+    ...mapGetters('web3', ['createState', 'allTokens']),
+    OfficialAssets() {
+      return this.allTokens.filter(c => c.isRecommend)
+    },
     // total supply of the distribution that user designed
     totalSupply () {
       return this.progressData.reduce((t, p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseFloat(p.amount), 0)
