@@ -1,12 +1,12 @@
 <template>
   <div class="activity-card">
-    <div class="content">{{ operation.type }}</div>
-    <div class="content">{{ description }}</div>
+    <div class="title">{{ operation.type }}</div>
+    <div class="content hover" @click="gotoTransaction()">{{ description }}</div>
     <div class="d-flex justify-content-between align-items-center mt-2">
-      <img v-if="operation.user.length > 0" class="rounded-circle"
+      <img v-if="operation.user.length > 0" class="rounded-circle hover"
            style="width: 2rem; height: 2rem"
            :src="operation.user" alt="">
-      <span>{{ time }}</span>
+      <span class="hover">{{ time }}</span>
     </div>
   </div>
 </template>
@@ -14,8 +14,9 @@
 <script>
 import { parseTimestamp } from '@/utils/helper'
 import { ethers } from 'ethers'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { contractAddress } from '@/utils/web3/contract'
+import { VUE_APP_TX_BROWER } from '@/config'
 
 export default {
   name: 'ActivityItem',
@@ -34,6 +35,11 @@ export default {
     ...mapState('web3', ['allTokens']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive'])
+  },
+  methods: {
+    gotoTransaction() {
+      window.open(VUE_APP_TX_BROWER + this.operation.tx, '_blank')
+    }
   },
   mounted () {
     // timestamp
