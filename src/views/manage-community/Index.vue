@@ -20,13 +20,13 @@ export default {
   name: 'Index',
   components: { ManageCommunityMenu },
   async mounted () {
-    // try{
-    //   const res = await getMyCommunityContract()
-    //   getMyCommunityData();
-    // }catch(e) {
-    //   // no registered
-    //   this.$router.replace('/')
-    // }
+    try{
+      const res = await getMyCommunityContract()
+      getMyCommunityData();
+    }catch(e) {
+      // no registered
+      this.$router.replace('/')
+    }
   },
 }
 </script>

@@ -169,7 +169,7 @@ export default {
       console.log('Get accounts fail', e)
     }
     try {
-      // setupNetwork()
+      setupNetwork()
       chainChanged(() => {
         this.$router.go(0);
       })
