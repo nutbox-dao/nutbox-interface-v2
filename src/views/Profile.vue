@@ -37,6 +37,7 @@
           <div class="col-md-4"></div>
         </div>
         <div class="font-bold mt-5 mb-3">Staked Pools</div>
+        <StakedPools class="mb-3"/>
       </div>
     </div>
   </div>
@@ -44,9 +45,10 @@
 
 <script>
 import PoolRatio from '@/components/community/PoolRatio'
+import StakedPools from '@/components/profile/StakedPools'
 export default {
   name: 'Profile',
-  components: { PoolRatio },
+  components: { PoolRatio, StakedPools },
   data () {
     return {
       userName: 'AAA',
@@ -62,6 +64,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.profile-page {
+  overflow: hidden;
+  height: 100%;
+}
 .user-avatar {
   width: 6rem;
   height: 6rem;
