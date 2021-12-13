@@ -15,6 +15,9 @@ export async function getSpecifyCommunityInfo(community) {
                 createdAt
                 feeRatio
                 cToken
+                owner{
+                    id
+                }
                 pools {
                     id
                     status

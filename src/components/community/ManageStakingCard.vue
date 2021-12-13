@@ -87,7 +87,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
-import { removePool } from '@/utils/web3/pool'
+import { closePool } from '@/utils/web3/pool'
 import { getAssetMetadata, getERC20Info } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
@@ -162,9 +162,11 @@ export default {
 
     async closePool () {
       try {
+        this.updating = true
         if (this.pool.ratio === 10000 && this.communityData.pools.length === 1) {
             // remove only one pool
-            const res = await closePool(pool.id, [], []);
+            const res = await closePool({poolAddress: this.pool.id, activedPools: [], ratios: []});
+            this.communityData.pools[0].status = 'CLOSED';
             return;
         }
         if (this.pool.ratio !== 0) {
@@ -174,7 +176,6 @@ export default {
           })
           return
         }
-        this.updating = true
         const res = await closePool(this.pool.pid)
         this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
           title: this.$t('tip.tips'),

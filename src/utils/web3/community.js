@@ -316,7 +316,7 @@ export const completeCommunityInfo = async (form, type) => {
 /**
  * Charge community's balance
  * Only non-mintable ctoken need to charge balance
- * @param {*} amount
+ * @param {*} amount origin data, no need to convert to big int
  */
 export const chargeCommunityBalance = async (amount) => {
   return new Promise(async (resolve, reject) => {
@@ -373,7 +373,6 @@ export const withdrawCommunityBalance = async (amount) =>  {
       reject(e);
       return;
     }
-
     try {
       const tx = await contract.adminWithdrawReward(ethers.utils.parseUnits(amount.toString(), 18));
       await waitForTx(tx.hash);
@@ -617,29 +616,6 @@ export const getNonce = async (update = false) => {
 };
 
 /**
- * get community balance by ctoken
- * @param {*} ctoken 
- * @returns 
- */
-export const getCommunityBalance = async (communityId, ctoken) => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      const address = ctoken.address;
-      let contract;
-      try{
-        contract = await getContract("ERC20", address);
-      }catch(e) {
-        reject(e);
-      }
-      const balance = await contract.balanceOf(communityId);
-      resolve(balance);
-    }catch(e) {
-      reject(e)
-    }
-  })
-}
-
-/**
  * get specify community dao fund ratio
  * @param {*} communityId 
  */
@@ -656,71 +632,19 @@ export const getCommunityDaoRatio = async (communityId) => {
 }
 
 /**
- * monityor Community balance and allowance
- * If cToken of this community is not a mintable token, he may need to charge balance of community
+ * get Community balance and allowance
+ * @param {String} communityId  community address
+ * @param {String} ctokenaddress c token address
  */
-export const monitorCommunityBalance = async (communityInfo) => {
+export const getCommunityBalance = async (communityId, ctokenAddress) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const cToken = await getCToken(communityInfo.id);
-      if (cToken.isMintable) {
-        resolve();
-        return;
-      }
-      store.commit("web3/saveLoadingCommunityBalance", true);
-      store.commit("web3/saveLoadingApprovementCtoken", true);
-      let watchers = store.state.web3.watchers;
-      let watcher = watchers["communityBalance"];
-      const erc20HandlerAddress = contractAddress["ERC20AssetHandler"];
-      watcher && watcher.stop();
-      const account = await getAccounts();
-      watcher = createWatcher(
-        [
-          {
-            target: erc20HandlerAddress,
-            call: [
-              "getBalance(bytes32)(uint256)",
-              ethers.utils.keccak256(
-                "0x" +
-                  communityInfo.id.substr(2) +
-                  cToken.assetId.substr(2) +
-                  "61646d696e"
-              ),
-            ],
-            returns: [["communityBalance"]],
-          },
-          {
-            target: cToken.address,
-            call: [
-              "allowance(address,address)(uint256)",
-              account,
-              erc20HandlerAddress,
-            ],
-            returns: [["allowance", (val) => val / 1e18 > 1e10]],
-          },
-        ],
-        Multi_Config
-      );
-      watcher.subscribe((update) => {
-        const type = update.type;
-        const value = update.value;
-        if (type === "communityBalance") {
-          // console.log('Updates community balance', update);
-          store.commit("web3/saveCommunityBalance", value);
-        } else if (type === "allowance") {
-          // console.log('Updates community approvement', update);
-          store.commit("web3/saveCtokenApprovement", value);
-        }
-      });
-      watcher.start();
-      watchers["communityBalance"] = watcher;
-      store.commit("web3/saveWatchers", { ...watchers });
-      resolve();
+      const contract = await getContract('ERC20', ctokenAddress)
+      const balance = contract.balanceOf(communityId)
+      resolve(balance)
     } catch (e) {
       reject(e);
     } finally {
-      store.commit("web3/saveLoadingCommunityBalance", false);
-      store.commit("web3/saveLoadingApprovementCtoken", false);
     }
   });
 };
@@ -773,20 +697,4 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
       store.commit("web3/saveLoadingDevInfo", false);
     }
   });
-};
-
-export const monitorCommunity = async () => {
-  let communityInfo;
-  try {
-    communityInfo = await getMyCommunityInfo();
-    if (!communityInfo) {
-      return;
-    }
-  } catch (e) {
-    return;
-  }
-  await Promise.all([
-    monitorCommunityBalance(communityInfo),
-    monitorCommunityDevInfo(communityInfo),
-  ]).catch(console.error);
 };

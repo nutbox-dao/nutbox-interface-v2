@@ -37,7 +37,8 @@ module.exports = {
     home: 'Home',
   },
   operation: {
-    withdraw: "Harvest",
+    withdraw: "Withdraw",
+    harvest: "Harvest",
     approveContract: "Approve Contract",
     connectMetamask: "Connect Metamask",
     search: "Search",
@@ -56,7 +57,8 @@ module.exports = {
     logout: "Log out",
     input: "Input",
     copy: "Copy",
-    edit: "Edit"
+    edit: "Edit",
+    charge: 'Charge'
   },
   wallet: {
     wallet: "Wallet",
@@ -152,6 +154,7 @@ module.exports = {
     deployFactoryFail: "Factory Fail to delpoy, Please try agian",
     deploySuccess: "Deloy Success",
     createPoolSuccess: "Create pool success",
+    chargeSuccess: 'Charge success',
     storeTokenAddress:
       "Please confirm the information and store Token Address immediately",
     needName: "Please input Community Name",
@@ -167,13 +170,14 @@ module.exports = {
     ratioError: "The total proportion of Staking Pool is 100",
     wrongApy: "Please input correct APR",
     wrongRewardNum: "Please input correct rewards",
-    createBlogSuccess: "Create Blog Success!",
+    deployCommunitySuccess: "Deploy success!",
     communityNameLimit: "The community name cannot exceed {count} words",
     needRightUrl: "Please input right url.",
     selectCowdloan: "Please select a crowdloan project.",
     inputRightBlogTag:
       "Please input a right Steem community tag. eg:hive-12345.",
-    withdrawSuccess: "Harvest success!",
+    withdrawSuccess: "Withdraw success!",
+    harvestSuccess: "Harvest success!",
     deploying: "Deploying, may take some time, please wait for a moment.",
     stopPoolOk: "Pool has been stopped",
     removePoolOk: "Pool has been removed",

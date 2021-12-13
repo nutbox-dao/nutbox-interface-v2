@@ -433,7 +433,7 @@ export default {
         this.deploying = true
         const communityInfo = await createCommunity(this.cToken, this.progressData)
         if (communityInfo.cToken && communityInfo.cToken.address) {
-          this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
+          this.$bvToast.toast(this.$t('tip.deployCommunitySuccess'), {
             title: this.$t('tip.tips'),
             variant: 'success'
           })

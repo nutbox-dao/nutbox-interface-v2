@@ -169,7 +169,7 @@ export default {
       try {
         this.creating  = true
         const newPool = await addPool(form)
-        newPool.poolIndex = form.ratios.length;
+        newPool.poolIndex = form.ratios.length - 1;
         this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
           title:this.$t('tip.success'),
           variant: 'success'
