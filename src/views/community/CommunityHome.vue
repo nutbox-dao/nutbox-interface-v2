@@ -91,6 +91,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/static/css/form";
 .banner-card {
   @include card();
   border: 1px solid var(--card-broder);
@@ -98,24 +99,6 @@ export default {
     width: 1px;
     height: 3rem;
     background-color: var(--dividers);
-  }
-}
-.search-input {
-  background: var(--nav-tab-bg);
-  @include c-flex-between-center;
-  border-radius: .4rem;
-  height: 2rem;
-  input {
-    border: none;
-    height: 2rem;
-    outline: none;
-    border-radius: .4rem;
-    background-color: var(--nav-tab-bg);
-  }
-  .search-icon {
-    @include icon(1.2rem, 1.2rem);
-    margin-right: .8rem;
-    background-image: url("~@/static/images/search-icon.svg");
   }
 }
 .add-icon {
