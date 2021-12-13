@@ -1,6 +1,7 @@
 import {
   getContract,
-  contractAddress
+  contractAddress,
+  getPoolFactory
 } from './contract'
 import store from '@/store'
 import {
@@ -126,22 +127,59 @@ export const addPool = async (form) => {
       return
     }
     let contract;
+    let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
+      factory = await getContract(form.type === 'bsc' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
     } catch (e) {
       reject(e);
       return
     }
 
-    console.log(466, form);
-
     try {
-      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), form.poolFactory, form.asset)
-      await waitForTx(tx.hash)
-      // re monitor
-      resolve(tx.hash)
+      if (form.type === 'bsc') {
+        factory.on('ERC20StakingCreated', (pool, community, name, token) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.pool.ratios[form.pool.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('ERC20StakingCreated')
+          }
+        })
+      }else {
+        factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.pool.ratios[form.ratios.length - 1] * 100,
+              chainId,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('SPStakingCreated')
+          }
+        })
+      }
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
     } catch (e) {
       console.log('Create pool fail', e);
+      if (form.type === 'bsc') {
+        factory.removeAllListeners('ERC20StakingCreated')
+      }else{
+        factory.removeAllListeners('SPStakingCreated')
+      }
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })

@@ -25,6 +25,14 @@ export const contractAddress = {
   "ERC20StakingFactory": "0x6BA0fFFCBaded83edE48Cd22df47B710311A64b1"
 }
 
+export const getPoolFactory = (type) => {
+  if (type === 'bsc') {
+    return contractAddress.ERC20StakingFactory
+  }else if (type === 'steem' || type === 'hive') {
+    return contractAddress.SPStakingFactory
+  }
+}
+
 // contract file name
 const CONTRACT_ABI_FILE_NAME_LIST = {
   "Committee": "Committee.json",

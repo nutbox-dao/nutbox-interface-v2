@@ -21,6 +21,7 @@ export async function getSpecifyCommunityInfo(community) {
                     name
                     asset
                     poolFactory
+                    totalAmount
                     ratio
                     chainId
                     stakers(first: 10){

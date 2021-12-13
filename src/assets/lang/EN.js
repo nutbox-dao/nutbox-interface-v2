@@ -143,15 +143,14 @@ module.exports = {
     deloyTokenFail: "Token fail to deloy, Please try again",
     notContractAddress: "Please Provide Deploy Token Contract Address",
     registryAssetFail: "Registry Asset Fail",
-    registryAssetSuccess: "Registry Asset Success",
     wrongStartBlockNum:
       "Start BlockNum must be larger than the current BlockNum",
     wrongStopBlockNum: "Stop BlcokNum must be larger than the Start BlockNum",
     youHaveCreatedCommunity: "You Have Created Community",
     pleaseFillData: "Please select delpoy asset and distribution policies",
     deployFactoryFail: "Factory Fail to delpoy, Please try agian",
-    deployFactorySuccess: "Factory deloy Success, Please wait",
     deploySuccess: "Deloy Success",
+    createPoolSuccess: "Create pool success",
     storeTokenAddress:
       "Please confirm the information and store Token Address immediately",
     needName: "Please input Community Name",
@@ -312,6 +311,7 @@ module.exports = {
     hiveAccountActiveKeyEmpty: "Hive account or active key missing",
     tokenDeploying:
       "There's token in deploying, please wait or refresh page to try.",
+    wrongConfirmInfo: "Wrong confirm info!"
   },
   // navigator
   router: {
@@ -334,6 +334,7 @@ module.exports = {
     inputMintAmount: "Please input mint number",
     inputDevRatio: "Please input DAO fund ratio",
     remarkInput: "Please input introduce",
+    confirmInfo: 'Please input {info} to confirm.'
   },
   community: {
     community: "Community",
@@ -356,12 +357,19 @@ module.exports = {
 
     startBlock: "Start block",
     stopBlock: "Stop block",
-    mintAmount: "Mint amount"
+    mintAmount: "Mint amount",
+    
+    opened: 'Opened',
+    closed: 'Closed'
   },
   pool: {
     updatePoolRatios: "Configure Pools",
     addPool: "Add Pool",
-    noPools: 'No pool created'
+    noPools: 'No pool created',
+    userCount: 'User count',
+    totalDeposit: 'Total deposit',
+    tvl: 'TVL',
+    closePool: "Close"
   },
   asset: {
     tokenName: "Name",

@@ -2,7 +2,7 @@
   <div class="pool-config-modal">
     <div class="pool-config-modal-content overflow-hidden d-flex flex-column">
       <i v-if="enableBack" class="modal-back-icon" @click="$emit('back')"></i>
-      <div v-else class="text-right">
+      <div v-else class="text-right" :disable="!enableOp">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
       <div class="mt-2 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
@@ -12,7 +12,7 @@
                       label-class="overflow-hidden text-grey-7"
                       label-cols-md="3" content-cols-md="9"
                       label="Pool Name">
-          <b-form-input class="input-border" type="text" @input="nameChange" v-model="newName"></b-form-input>
+          <b-form-input class="input-border" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
         </b-form-group>
         <div class="mb-2">Profit Sharing Ratio</div>
         <div class="pool-chart-box w-100 d-flex">
@@ -31,8 +31,14 @@
           <PoolRatio class="flex-fill" style="margin-top: -2rem" :pools-data="activePools" :show-legend-info="false"/>
         </div>
         <div class="d-flex mt-3">
-          <button class="primary-btn mx-2" @click="create()">OK</button>
-          <button class="primary-btn mx-2" @click="$emit('close')">Cancel</button>
+          <button class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
+             <b-spinner small type="grow" v-show="!enableOp" />
+            OK
+          </button>
+          <button class="primary-btn mx-2" :disabled="!enableOp" @click="$emit('close')">
+            <b-spinner small type="grow" v-show="!enableOp" />
+            Cancel
+          </button>
         </div>
       </div>
 
@@ -51,6 +57,10 @@ export default {
   components: { PoolRatio },
   props: {
     enableBack: {
+      type: Boolean,
+      default: true
+    },
+    enableOp: {
       type: Boolean,
       default: true
     },
@@ -88,6 +98,13 @@ export default {
         })
         return;
       }
+      if (this.type === 'create' && (!this.newName || this.newName.length === 0)) {
+        this.$bvToast.toast('Please input pool name', {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
       this.$emit('create', this.activePools)
     }
   },
@@ -96,9 +113,9 @@ export default {
       await sleep(0.3)
     }
     this.activePools = this.communityData.pools.filter(p => p.status === 'OPENED').map(p => ({...p, ratio: ratio / 100}));
-    this.newName = 'test'
+    this.newName = ''
     if (this.type === 'create'){
-      this.activePools.push({name: this.newName, ratio: 10})
+      this.activePools.push({name: this.newName, ratio: 100})
     }
     this.ratios = this.activePools.map(p => p.ratio)
   },

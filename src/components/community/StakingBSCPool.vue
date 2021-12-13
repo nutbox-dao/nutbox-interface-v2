@@ -22,19 +22,19 @@
           <b-spinner label="Spinning"></b-spinner>
         </div>
         <template v-else>
-          <div v-if="searchResult==='error'" class="text-center">地址输入错误</div>
-          <div v-if="provideName && provideSymbol"
-               @click="$emit('confirm', provideAddress)">
+          <div v-if="!searchResult" class="text-center">No search token</div>
+          <div class="hover" v-else
+               @click="$emit('confirm', searchResult)">
             <TokenItem class="my-3"
-                       logo="https://cdn.wherein.mobi/nutbox/v2/1634804654420"
-                       token-name="Peanut"
-                       token-symbol="PNUT"
-                       token-address="0x1111111111111111111111111"/>
+                       :logo="searchResult.icon"
+                       :token-name="searchResult.name"
+                       :token-symbol="searchResult.symbol"
+                       :token-address="searchResult.address"/>
           </div>
         </template>
         <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
         <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-        <div style="cursor: pointer" v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token.address)">
+        <div style="cursor: pointer" v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token)">
           <TokenItem class="my-3"
                      :logo="token.icon"
                      :token-name="token.name"
@@ -49,6 +49,7 @@
 <script>
 import TokenItem from '@/components/community/TokenItem'
 import { mapState } from 'vuex'
+import { getERC20Info } from '@/utils/web3/asset'
 
 export default {
   name: 'StakingBSCPool',
@@ -56,7 +57,7 @@ export default {
   data () {
     return {
       loading: false,
-      searchResult: '',
+      searchResult: null,
       provideLogo: null,
       provideName: null,
       provideSymbol: null,
@@ -70,14 +71,17 @@ export default {
     }
   },
   methods: {
-    checkTokenAddress () {
+    async checkTokenAddress () {
       this.loading = true
-      setTimeout(() => {
+      try{
+        const token = await getERC20Info(this.provideAddress);
+        console.log(23, token);
+        this.searchResult = token
+      }catch(err){
+        this.searchResult = null
+      }finally {
         this.loading = false
-        this.provideName = 'Pnut'
-        this.provideSymbol = 'Pnut'
-        // this.searchResult = 'error'
-      }, 2000)
+      }
     }
   }
 }

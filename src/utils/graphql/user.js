@@ -65,7 +65,8 @@ export async function getMyJoinedCommunity() {
                         poolFactory
                         ratio
                         chainId
-                        stakersCount
+                        stakersCount,
+                        totalAmount
                     }
                 }
             }

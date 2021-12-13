@@ -198,6 +198,7 @@ export const getAssetMetadata = async (id, assetType) => {
 
 // get ERC20 info from home chain.
 export const getERC20Info = async (address) => {
+  address = '0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468'
   return new Promise(async (resolve, reject) => {
     let contract;
     try{
