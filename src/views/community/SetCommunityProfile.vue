@@ -342,6 +342,7 @@ import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 import Progress from '@/components/community/Progress'
 import ChooseTokenTipModal from '@/components/community/ChooseTokenTipModal'
+import { errCode } from '@/config';
 
 export default {
   name: 'SetCommunityProfile',
@@ -407,8 +408,10 @@ export default {
     try{
       await getMyCommunityInfo()
     }catch(e) {
-      this.$router.replace('deploy-token')
-      return;
+      if(e == errCode.NO_STAKING_FACTORY){
+        this.$router.replace('deploy-token')
+        return;
+      }
     }
 
     if (this.communityInfo && this.communityInfo.cToken){

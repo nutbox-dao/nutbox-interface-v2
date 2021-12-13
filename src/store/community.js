@@ -46,6 +46,7 @@ export default {
   },
   getters: {
     getCommunityInfoById: (state) => (communityId) => {
+      if (!state.allCommunityInfo) return null
       return state.allCommunityInfo[communityId]
     }
   }

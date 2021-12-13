@@ -37,7 +37,7 @@
             </template>
           </b-dropdown> -->
           <div class="hover" @click="gotoCreateCommunity()">
-            <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3 "></i>
+            <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
           </div>
           <router-link to="/profile">
             <img class="user-avatar hover rounded-circle w-75 my-3"

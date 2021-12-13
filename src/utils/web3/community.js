@@ -73,14 +73,14 @@ export const getMyCommunityInfo = async (update = false) => {
       stakingFactoryId = await getMyCommunityContract(update);
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
+        store.commit('community/saveLoadingMyCommunityInfo', false)
         return;
       }
     } catch (e) {
       console.log("Get my staking factory fail", e);
+      store.commit('community/saveLoadingMyCommunityInfo', false)
       reject(e);
       return;
-    } finally{
-      store.commit('community/saveLoadingMyCommunityInfo', false)
     }
 
     if (!update && store.state.community.communityInfo) {
