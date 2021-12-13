@@ -43,27 +43,27 @@
         <div class="font20 font-bold">Dao Fund Info</div>
         <div class="custom-form mt-5">
           <!-- community balance -->
-          <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="7" :label="$t('community.communityBalance')">
+          <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8" :label="$t('community.communityBalance')">
             <div class="d-flex">
               <div class="c-input-group">
                 <b-form-input
                   :disabled="true"
-                  v-model="communityBalanceValue"
+                  v-model="communityBalance"
                   placeholder="0.000"
                 >
                 </b-form-input>
                 <span class="c-append">{{ cToken.symbol }}</span>
               </div>
               <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
-                {{$t("community.charge") }}
+                {{$t("operation.charge") }}
               </button>
               <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
-                {{$t("community.withdraw") }}
+                {{$t("operation.withdraw") }}
               </button>
             </div>
           </b-form-group>
           <!-- community dev address -->
-          <b-form-group label-cols-md="2" content-cols-md="7"
+          <b-form-group label-cols-md="2" content-cols-md="8"
             :label="$t('community.fundAddress')"
           >
             <div class="d-flex">
@@ -78,7 +78,7 @@
             </div>
           </b-form-group>
           <!-- community dev ratio -->
-          <b-form-group label-cols-md="2" content-cols-md="7" :label="$t('community.fundRatio')">
+          <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.fundRatio')">
             <div class="d-flex">
               <div class="c-input-group">
                 <b-form-input
@@ -109,14 +109,14 @@
     >
       <div class="tip-modal">
         <div class="font20 font-bold text-center mb-4">
-          {{ $t("community.communityCharge") }}
+          {{ $t("operation.charge") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="label flex-between-start">
-            <span>{{ $t("community.charge") }}</span>
+            <span>{{ $t("operation.charge") }} </span>&nbsp;
             <span class="text-right"
             >{{ $t("wallet.balance") }}:
-              {{ cTokenBalance | amountForm }}</span
+              {{ adminBalance | amountForm }}</span
             >
           </div>
           <div class="input-box flex-between-center">
@@ -126,21 +126,18 @@
               v-model="chargeValue"
               placeholder="0"
             />
-            <div class="ml-2">
-              <button
-                class="primary-btn"
-                @click="fillMax"
-                :disabled="charging"
-              >
-                {{ $t("commen.max") }}
-              </button>
-            </div>
           </div>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="charge" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
-            {{ $t("community.confirmCharge") }}
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+        <div class="flex-between-center" style="gap: 2rem">
+          <button class="primary-btn primary-btn-outline" @click="showChargeTip = false" :disabled="charging">
+            <b-spinner small type="grow" v-show="charging" />
+            {{ $t("operation.cancel") }}
           </button>
         </div>
       </div>
@@ -157,14 +154,14 @@
     >
       <div class="tip-modal">
         <div class="font20 font-bold text-center mb-4">
-          {{ $t("community.withdraw") }}
+          {{ $t("operation.withdraw") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="label flex-between-start">
-            <span>{{ $t("community.withdraw") }}</span>
+            <span>{{ $t("operation.withdraw") }} </span>&nbsp;
             <span class="text-right"
             >{{ $t("wallet.balance") }}:
-              {{ communityBalanceValue | amountForm }}</span
+              {{ communityBalance | amountForm }}</span
             >
           </div>
           <div class="input-box flex-between-center">
@@ -174,29 +171,20 @@
               v-model="withdrawValue"
               placeholder="0"
             />
-            <div class="ml-2">
-              <button
-                class="primary-btn"
-                @click="fillMax"
-                :disabled="withdrawing"
-              >
-                {{ $t("commen.max") }}
-              </button>
-            </div>
           </div>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
+          <button class="primary-btn" @click="withdraw" :disabled="withdrawing">
+            <b-spinner small type="grow" v-show="withdrawing" />
+            {{ $t("operation.withdraw") }}
+          </button>
           <button
             class="primary-btn primary-btn-outline"
             @click="showWithdrawTip = false"
             :disabled="withdrawing"
           >
             <b-spinner small type="grow" v-show="withdrawing" />
-            {{ $t('commen.cancel') }}
-          </button>
-          <button class="primary-btn" @click="withdraw" :disabled="withdrawing">
-            <b-spinner small type="grow" v-show="withdrawing" />
-            {{ $t("community.withdraw") }}
+            {{ $t('operation.cancel') }}
           </button>
         </div>
       </div>
@@ -231,6 +219,10 @@
           </div>
         </div>
         <div class="flex-between-center" style="gap: 2rem">
+          <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
+            <b-spinner small type="grow" v-show="updatingDevRatio" />
+            {{ $t("operation.confirm") }}
+          </button>
           <button
             class="primary-btn primary-btn-outline"
             @click="showDevRatioTip = false"
@@ -238,10 +230,6 @@
           >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t('operation.cancel') }}
-          </button>
-          <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
-            <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t("operation.confirm") }}
           </button>
         </div>
       </div>
@@ -253,8 +241,15 @@
 import Progress from '@/components/community/Progress'
 import AssetCard from '@/components/community/AssetCard'
 import BN from 'bn.js'
-import { approveCommunityBalance, chargeCommunityBalance, withdrawCommunityBalance, setDevAddress, setDevRatio, getMyCommunityInfo, getDistributionEras } from '@/utils/web3/community'
-import { getCToken } from '@/utils/web3/asset'
+import { 
+  approveCommunityBalance, 
+  chargeCommunityBalance, 
+  withdrawCommunityBalance, 
+  setDevRatio, 
+  getMyCommunityInfo, 
+  getDistributionEras, 
+  getCommunityBalance } from '@/utils/web3/community'
+import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { errCode } from '@/config'
@@ -268,8 +263,8 @@ export default {
       showWithdrawTip: false,
       showDevAddressTip: false,
       showDevRatioTip: false,
-      chargeValue: 0,
-      withdrawValue: 0,
+      chargeValue: null,
+      withdrawValue: null,
       inputDevAddress: '',
       inputDevRatio: '',
       charging: false,
@@ -278,19 +273,14 @@ export default {
       updatingAddress: false,
       updatingDevRatio: false,
       cToken: {},
-      isMintable: true
+      isMintable: true,
+      communityBalance: 0,
+      adminBalance: 0
     }
   },
   computed: {
     ...mapState('web3', ['stakingFactoryId']),
     ...mapState('community', ['communityData', 'distributions']),
-    communityBalanceValue () {
-      if (this.communityBalance) {
-        return (this.communityBalance.toString() / (10 ** this.cToken.decimal)).toFixed(6)
-      } else {
-        return 0
-      }
-    },
     cTokenAddress () {
       return this.cToken.address
     },
@@ -335,9 +325,6 @@ export default {
         console.log(e)
       })
     },
-    fillMax () {
-      this.chargeValue = this.cTokenBalance
-    },
     async charge () {
       try {
         this.charging = true
@@ -350,13 +337,20 @@ export default {
           })
           return
         }
-        const decimal = new BN(10).pow(new BN(18))
-        const amount = new BN(Number(this.chargeValue * 1e6)).mul(decimal).divn(1e6)
-        const hash = await chargeCommunityBalance(amount)
-        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
+        if (chargeValue >= this.adminBalance) {
+           this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+            title: this.$t('tip.tips'),
+            autoHideDelay: 5000,
+            variant: 'warning'
+          })
+          return
+        }
+        const hash = await chargeCommunityBalance(chargeValue)
+        this.$bvToast.toast(this.$t('tip.chargeSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
+        this.chargeValue = ''
         setTimeout(() => {
           this.showChargeTip = false
         }, 2000)
@@ -372,7 +366,6 @@ export default {
       try {
         this.withdrawing = true
         const withdrawValue = Number(this.withdrawValue)
-        console.log(232, withdrawValue)
         if (!withdrawValue || withdrawValue <= 0) {
           this.$bvToast.toast(this.$t('error.inputError'), {
             title: this.$t('tip.tips'),
@@ -381,7 +374,7 @@ export default {
           })
           return
         }
-        if (withdrawValue > this.communityBalanceValue) {
+        if (withdrawValue > this.communityBalance) {
           this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
             title: this.$t('tip.tips'),
             autoHideDelay: 5000,
@@ -389,13 +382,12 @@ export default {
           })
           return
         }
-        const decimal = new BN(10).pow(new BN(18))
-        const amount = new BN(Number(this.withdrawValue * 1e6)).mul(decimal).divn(1e6)
-        const hash = await withdrawCommunityBalance(amount)
-        this.$bvToast.toast(this.$t('community.chargeSuccess'), {
+        const hash = await withdrawCommunityBalance(withdrawValue)
+        this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
+        this.withdrawValue = ''
         setTimeout(() => {
           this.showWithdrawTip = false
         }, 2000)
@@ -407,33 +399,11 @@ export default {
         this.withdrawing = false
       }
     },
-    async updateAddress () {
-      try {
-        this.updatingAddress = true
-        await setDevAddress(this.inputDevAddress)
-        this.$bvToast.toast(this.$t(), {
-          title: this.$t('tip.success'),
-          variant: 'success'
-        })
-        setTimeout(() => {
-          this.showDevAddressTip = false
-        }, 1000)
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.updatingAddress = false
-      }
-    },
     async updateDevRatio () {
       try {
-        console.log(3);
         this.updatingDevRatio = true
         const r = parseInt(parseFloat(this.inputDevRatio) * 100)
-        console.log(1);
         await setDevRatio(r)
-        console.log(2);
         this.communityData.feeRatio = r;
         this.$store.commit('community/saveCommunityData', this.communityData)
         this.$bvToast.toast(this.$t(), {
@@ -462,6 +432,24 @@ export default {
     this.cToken = await getCToken(communityInfo.id)
     console.log('ctoken', communityInfo.id, this.cToken);
     this.isMintable = this.cToken.isMintable
+    if (!this.isMintable) {
+        // updating balances of admin and community
+        const interval = setInterval(() => {
+          // update admin's balance
+          getERC20Balance(this.cToken.address).then(res => {
+            this.adminBalance = res.toString() / 1e18
+          }).catch(res => {
+            console.log(33, res);
+          })
+          // update dao fund balance
+          getCommunityBalance(communityInfo.id, this.cToken.address).then(res => {
+            this.communityBalance = res.toString() / 1e18
+          }).catch()
+        }, 1000)
+        this.$once('hook:beforeDestroy', () => {
+          window.clearInterval(interval)
+        })
+    }
   }
 }
 </script>

@@ -1,6 +1,7 @@
 import {
   getContract,
-  contractAddress
+  contractAddress,
+  getPoolFactory
 } from './contract'
 import store from '@/store'
 import {
@@ -9,8 +10,7 @@ import {
 import { getAccounts } from '@/utils/web3/account'
 import {
   errCode,
-  Multi_Config,
-  OfficialAssets
+  Multi_Config
 } from '@/config'
 import {
   waitForTx,
@@ -110,7 +110,7 @@ export const approveNUT = async (pool) => {
 
 /**
  * Add new pool
- * @param {Object} form {name, ratios, poolFactory, asset}
+ * @param {Object} form {name, ratios, type, asset}
  */
 export const addPool = async (form) => {
   return new Promise(async (resolve, reject) => {
@@ -126,22 +126,59 @@ export const addPool = async (form) => {
       return
     }
     let contract;
+    let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
+      factory = await getContract(form.type === 'bsc' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
     } catch (e) {
       reject(e);
       return
     }
 
-    console.log(466, form);
-
     try {
-      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), form.poolFactory, form.asset)
-      await waitForTx(tx.hash)
-      // re monitor
-      resolve(tx.hash)
+      if (form.type === 'bsc') {
+        factory.on('ERC20StakingCreated', (pool, community, name, token) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('ERC20StakingCreated')
+          }
+        })
+      }else {
+        factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('SPStakingCreated')
+          }
+        })
+      }
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
     } catch (e) {
       console.log('Create pool fail', e);
+      if (form.type === 'bsc') {
+        factory.removeAllListeners('ERC20StakingCreated')
+      }else{
+        factory.removeAllListeners('SPStakingCreated')
+      }
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })
@@ -167,17 +204,21 @@ export const updatePoolsRatio = async (form) => {
     }
     let contract;
     try {
+      console.log(2);
       contract = await getContract('Community', stakingFactoryId, false)
     } catch (e) {
       reject(e);
       return;
     }
     try {
+      console.log(3);
       const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
+      console.log('Update pool ratios', tx.hash);
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
-      reject(errCode.CONTRACT_CREATE_FAIL)
+      console.log(e);
+      reject(errCode.BLOCK_CHAIN_ERR)
     }
 
   })
@@ -189,7 +230,7 @@ export const updatePoolsRatio = async (form) => {
  * @param {Object} form {poolAddress,activedPools,ratios} 
  * @returns 
  */
-export const removePool = async (form) => {
+export const closePool = async (form) => {
   return new Promise(async (resolve, reject) => {
     const communityId = store.state.web3.stakingFactoryId
     let contract = null
@@ -209,7 +250,7 @@ export const removePool = async (form) => {
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
-      console.log('RemovePool pool Fail', e);
+      console.log('Close pool Fail', e);
     }
   })
 }

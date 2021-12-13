@@ -18,11 +18,19 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0x7253aa68dfdC5650700B0D3109eb5281a0a378bb",
-  "CommunityFactory": "0xcC3eB10bF8267c2A860c440D35E26c5f4Baf5C67",
-  "LinearCalculator": "0x21969c6239A5f65D56e95c123BD2B611b3C76Cf1",
-  "SPStakingFactory": "0xad1fE9af534e80Ea42E9b8711422cbaAb4e7D58E",
-  "ERC20StakingFactory": "0x6BA0fFFCBaded83edE48Cd22df47B710311A64b1"
+  "Committee": "0xd07f5eF8AAc5BA569641cA883c51FD85c9365133",
+  "CommunityFactory": "0x719bB34dEd002f2EAa1F0c21e1Dc7f48778290b5",
+  "LinearCalculator": "0x525643736678323f3551425c1034429F2a80A5a0",
+  "SPStakingFactory": "0x17F10FAC484AE8990b5eC9a4CC97d3CF2F395bbd",
+  "ERC20StakingFactory": "0x90dF809AfD52935483213BE5c7943f7AD7e85e3A"
+}
+
+export const getPoolFactory = (type) => {
+  if (type === 'bsc') {
+    return contractAddress.ERC20StakingFactory
+  }else if (type === 'steem' || type === 'hive') {
+    return contractAddress.SPStakingFactory
+  }
 }
 
 // contract file name

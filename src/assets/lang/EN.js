@@ -6,6 +6,7 @@ module.exports = {
     loging: "Logging in...",
     crowdstaking: "Staking",
     optional: "(Optional)",
+    connectMetamask: 'Connect Metamask',
 
     apy: "APR",
     balance: "Balance",
@@ -36,7 +37,8 @@ module.exports = {
     home: 'Home',
   },
   operation: {
-    withdraw: "Harvest",
+    withdraw: "Withdraw",
+    harvest: "Harvest",
     approveContract: "Approve Contract",
     connectMetamask: "Connect Metamask",
     search: "Search",
@@ -55,7 +57,8 @@ module.exports = {
     logout: "Log out",
     input: "Input",
     copy: "Copy",
-    edit: "Edit"
+    edit: "Edit",
+    charge: 'Charge'
   },
   wallet: {
     wallet: "Wallet",
@@ -143,15 +146,15 @@ module.exports = {
     deloyTokenFail: "Token fail to deloy, Please try again",
     notContractAddress: "Please Provide Deploy Token Contract Address",
     registryAssetFail: "Registry Asset Fail",
-    registryAssetSuccess: "Registry Asset Success",
     wrongStartBlockNum:
       "Start BlockNum must be larger than the current BlockNum",
     wrongStopBlockNum: "Stop BlcokNum must be larger than the Start BlockNum",
     youHaveCreatedCommunity: "You Have Created Community",
     pleaseFillData: "Please select delpoy asset and distribution policies",
     deployFactoryFail: "Factory Fail to delpoy, Please try agian",
-    deployFactorySuccess: "Factory deloy Success, Please wait",
     deploySuccess: "Deloy Success",
+    createPoolSuccess: "Create pool success",
+    chargeSuccess: 'Charge success',
     storeTokenAddress:
       "Please confirm the information and store Token Address immediately",
     needName: "Please input Community Name",
@@ -167,13 +170,14 @@ module.exports = {
     ratioError: "The total proportion of Staking Pool is 100",
     wrongApy: "Please input correct APR",
     wrongRewardNum: "Please input correct rewards",
-    createBlogSuccess: "Create Blog Success!",
+    deployCommunitySuccess: "Deploy success!",
     communityNameLimit: "The community name cannot exceed {count} words",
     needRightUrl: "Please input right url.",
     selectCowdloan: "Please select a crowdloan project.",
     inputRightBlogTag:
       "Please input a right Steem community tag. eg:hive-12345.",
-    withdrawSuccess: "Harvest success!",
+    withdrawSuccess: "Withdraw success!",
+    harvestSuccess: "Harvest success!",
     deploying: "Deploying, may take some time, please wait for a moment.",
     stopPoolOk: "Pool has been stopped",
     removePoolOk: "Pool has been removed",
@@ -189,7 +193,7 @@ module.exports = {
     deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.',
     attention: "Attention!",
     markdownTip: "You can use markdown format.",
-    stopPoolAttention: 'Once you stop the pool, it cannot be opened again. Please use this function with caution!'
+    stopPoolAttention: 'Once you close the pool, it cannot be opened again. Please use this function with caution!'
   },
   nps: {
     nps: "Governance",
@@ -312,6 +316,7 @@ module.exports = {
     hiveAccountActiveKeyEmpty: "Hive account or active key missing",
     tokenDeploying:
       "There's token in deploying, please wait or refresh page to try.",
+    wrongConfirmInfo: "Wrong confirm info!"
   },
   // navigator
   router: {
@@ -334,6 +339,9 @@ module.exports = {
     inputMintAmount: "Please input mint number",
     inputDevRatio: "Please input DAO fund ratio",
     remarkInput: "Please input introduce",
+    confirmInfo: 'Please input "{info}" to confirm.',
+    inputPoolName: 'Please input pool name.',
+    inputDelegatee: 'Please input delegatee account'
   },
   community: {
     community: "Community",
@@ -356,12 +364,20 @@ module.exports = {
 
     startBlock: "Start block",
     stopBlock: "Stop block",
-    mintAmount: "Mint amount"
+    mintAmount: "Mint amount",
+    
+    opened: 'Opened',
+    closed: 'Closed'
   },
   pool: {
     updatePoolRatios: "Configure Pools",
     addPool: "Add Pool",
-    noPools: 'No pool created'
+    noPools: 'No pool created',
+    userCount: 'User count',
+    totalDeposit: 'Total deposit',
+    tvl: 'TVL',
+    closePool: "Close",
+    ratio: 'Ratio'
   },
   asset: {
     tokenName: "Name",

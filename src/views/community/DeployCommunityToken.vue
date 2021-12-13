@@ -84,7 +84,7 @@
             </template>
             <div class="mt-4 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
             <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-            <div style="cursor: pointer" v-for="token of OfficialAssets" :key="token.address"
+            <div style="cursor: pointer" v-for="token of OfficialAssets ? OfficialAssets : []" :key="token.address"
                  @click="choseToken(token)">
               <TokenItem class="my-3"
                          :logo="token.icon"
@@ -236,7 +236,6 @@ export default {
         reward: ''
       },
       cardStep: 0,
-      OfficialAssets: OfficialAssets,
       cardStep: 0,
       loading: false,
       searchResult: ''
@@ -246,9 +245,9 @@ export default {
     ...mapState({
       blockNum: state => state.web3.blockNum
     }),
-    ...mapState('web3', ['stakingFactoryId']),
-    ...mapGetters('web3', ['createState', 'allTokens']),
+    ...mapState('web3', ['stakingFactoryId', 'allTokens']),
     OfficialAssets() {
+      if (!this.allTokens) return []
       return this.allTokens.filter(c => c.isRecommend)
     },
     // total supply of the distribution that user designed
@@ -434,7 +433,7 @@ export default {
         this.deploying = true
         const communityInfo = await createCommunity(this.cToken, this.progressData)
         if (communityInfo.cToken && communityInfo.cToken.address) {
-          this.$bvToast.toast(this.$t('tip.deployFactorySuccess'), {
+          this.$bvToast.toast(this.$t('tip.deployCommunitySuccess'), {
             title: this.$t('tip.tips'),
             variant: 'success'
           })

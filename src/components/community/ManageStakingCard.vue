@@ -1,54 +1,40 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
-      <span v-if="status === 'Active'" :class="'Active'">{{ $t('community.'+status) }}</span>
-      <span v-else class="Completed">{{ $t('community.'+status) }}</span>
+      {{ pool.poolIndex }}
+      <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
+      <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
     </div>
     <div class="card-top mt-4">
       <div class="card-title-box d-flex align-items-center">
         <div class="card-single-icon">
-         <img class="icon1" :src="pool.asset.icon" alt="">
+         <img class="icon1" :src="icon" alt="">
         </div>
         <div class="title-text font20 font-bold ml-2">
-          <span>{{ pool.poolName || '--' }}</span>
+          <span>{{ pool.name || '--' }}</span>
         </div>
       </div>
       <div class="h-line mt-4 mb-3"></div>
       <div class="project-info-container">
-        <span class="name">{{ $t('community.userCount') }}</span>
-       <div class="info">{{ stakerCount }}</div>
+        <span class="name">{{ $t('pool.userCount') }}</span>
+       <div class="info">{{ pool.stakerCount || 0 }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">{{ $t('community.totalDeposit') }}</span>
+        <span class="name">{{ $t('pool.totalDeposit') }}</span>
        <div class="info">{{ totalDeposited | amountForm }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">{{ $t('community.totalDepositDollor') }}</span>
+        <span class="name">{{ $t('pool.tvl') }}</span>
        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">{{ $t('stake.staked') + (stakedERC20 ? stakedERC20.symbol : 'NUT') }}</span>
-       <div class="info">{{ ((pool.stakedNUT ? pool.stakedNUT.toString() : 0) / 1e18) | amountForm }}</div>
+        <span class="name">{{ $t('pool.ratio') }}</span>
+       <div class="info">{{pool.ratio / 100}}%</div>
       </div>
-      <!-- <div class="project-info-container">
-        <span class="name">{{ $t('community.hasMined') }}</span>
-        <div class="info">{{ minedToken | amountForm }}</div>
-      </div> -->
-      <button class="primary-btn" :disabled="updating" v-if="status === 'Active'" @click="showAttention=true">
+    
+      <button class="primary-btn" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.stopPool')}}
-      </button>
-      <button class="primary-btn" :disabled="updating" v-else-if="status === 'CanRemove'" @click="remove">
-        <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.removePool')}}
-      </button>
-      <button class="primary-btn" :disabled="updating" v-else-if="status === 'Stopped'" @click="withdraw">
-        <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.withdrawPool')}}
-      </button>
-      <button class="primary-btn" :disabled="true" v-else-if="status === 'Removed'" @click="withdraw">
-        <b-spinner small type="grow" v-show="updating" />
-        {{ $t('community.Removed')}}
+        {{ $t('pool.closePool')}}
       </button>
     </div>
 
@@ -66,10 +52,22 @@
         <div class="my-5">
           {{ $t("tip.stopPoolAttention") }}
         </div>
+        <div class="my-5">
+          {{ `Please input pool name: "${pool.name}" to close this pool.` }}
+        </div>
+
+        <div class="c-input-group">
+          <b-input-group class="d-flex flex-between-center">
+            <b-input class="flex-full"
+                      :placeholder="$t('placeHolder.confirmInfo', {info: pool.name})"
+                      v-model="confirmInfo"></b-input>
+          </b-input-group>
+        </div>
+
         <div class="flex-between-center" style="gap: 2rem">
           <button class="primary-btn" @click="receiveAttention" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("community.stopPool") }}
+            {{ $t("pool.closePool") }}
           </button>
           <button
             class="primary-btn primary-btn-outline"
@@ -77,7 +75,7 @@
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
-            {{ $t("commen.cancel") }}
+            {{ $t("operation.cancel") }}
           </button>
         </div>
       </div>
@@ -89,13 +87,16 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
-import { monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
-import { getAssetMetadata } from '@/utils/web3/asset'
+import { closePool } from '@/utils/web3/pool'
+import { getAssetMetadata, getERC20Info } from '@/utils/web3/asset'
+import { getPoolFactory } from '@/utils/web3/contract'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: 'ManageStakingCard',
   computed: {
     ...mapState('web3', ['stakingFactoryId', 'blockNum', 'allPools', 'allTokens', 'monitorPools']),
+    ...mapState('community', ['communityData']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
       hiveVests: state => state.hive.vestsToHive,
@@ -103,7 +104,7 @@ export default {
     }),
     totalDeposited () {
       if (!this.pool || !this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount']) return 0
-      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount'] / this.decimals
+      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount'] / this.vert
     },
     tvl () {
       if (!this.pool) return '--'
@@ -128,67 +129,18 @@ export default {
           return this.erc20Price * this.totalDeposited
       }
     },
-    decimals () {
-      if (!this.pool) return 1e18
-      switch (this.pool.asset.type) {
-        case 'SteemHiveDelegateAssetRegistry':
-        {
-          if (this.pool.asset.chainId === 1) { // steem
-            return 1e6 / this.steemVests
-          } else if (this.pool.asset.chainId === 2) { // hive
-            return 1e6 / this.hiveVests
-          }
-        }
-        case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
-        {
-          if (this.pool.asset.chainId === 2) { // polkadot
-            return 1e10
-          } else if (this.pool.asset.chainId === 3) { // kusama
-            return 1e12
-          }
-        }
-        default:
-          return this.pool.asset.decimal
-      }
-    },
-    erc20Price () {
-      if (!this.pool || this.pool.asset.type !== 'HomeChainAssetRegistry') return null
-      return this.allTokens.filter(({ address }) => address === this.pool.asset.address)[0]?.price
-    },
-    stakerCount () {
-      return this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-stakerCount']
-    },
-    status () {
-      if (!this.pool) return 'loading'
-      if (this.published) {
-        const canRemove = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-canRemove']
-        const hasRemoved = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasRemoved']
-        const hasStopped = this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-hasStopped']
-        if (!hasStopped) {
-          return 'Active'
-        } else if (!canRemove) {
-          return 'Stopped'
-        } else {
-          if (hasRemoved) {
-            return 'Removed'
-          } else {
-            return 'CanRemove'
-          }
-        }
-      } else {
-        return 'unPublished'
-      }
-    }
   },
   data () {
     return {
       updating: false,
       minedToken: 0,
       contract: null,
-      published: false,
       stakedERC20: {},
       showAttention: false,
-      uploading: false
+      uploading: false,
+      icon: null,
+      vert: 1e18,
+      confirmInfo: ''
     }
   },
   props: {
@@ -198,57 +150,39 @@ export default {
   },
   methods: {
     receiveAttention () {
-      this.stop()
-      this.showAttention = false
+      if (this.confirmInfo !== this.pool.name) {
+        this.$bvToast.toast(this.$t('error.wrongConfirmInfo'), {
+          title: this.$t('error.error'),
+          variant: "danger"
+        })
+        return;
+      }
+      this.closePool()
     },
-    async stop () {
+
+    async closePool () {
       try {
-        if (this.pool.poolRatio !== 0 && this.pool.poolRatio !== 10000) {
+        this.updating = true
+        if (this.pool.ratio === 10000 && this.communityData.pools.length === 1) {
+            // remove only one pool
+            const res = await closePool({poolAddress: this.pool.id, activedPools: [], ratios: []});
+            this.communityData.pools[0].status = 'CLOSED';
+            return;
+        }
+        if (this.pool.ratio !== 0) {
           this.$bvToast.toast(this.$t('tip.stopPoolTips'), {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
           return
         }
-        this.updating = true
-        const res = await stopPool(this.pool.pid)
+        const res = await closePool(this.pool.pid)
         this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
           title: this.$t('tip.tips'),
           variant: 'success'
         })
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.updating = false
-      }
-    },
-    async withdraw () {
-      try {
-        this.updating = true
-        const res = await tryWithdraw(this.pool.pid)
-        this.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
-          title: this.$t('tip.tips'),
-          variant: 'success'
-        })
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.updating = false
-      }
-    },
-    async remove () {
-      try {
-        this.updating = true
-        const res = await removePool(this.pool.pid)
-        this.pool.stakedNUT = 0
-        this.$bvToast.toast(this.$t('tip.removePoolOk'), {
-          title: this.$t('tip.tips'),
-          variant: 'success'
-        })
+        await sleep(2)
+        this.showAttention = false
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -258,14 +192,19 @@ export default {
       }
     }
   },
+
   async mounted () {
-    if (this.allPools) {
-      const p = this.allPools.filter(pool => pool.pid === this.pool.pid && pool.communityId === this.stakingFactoryId)
-      if (p.length > 0) {
-        this.published = true
-      }
+    this.stakedERC20 = await getERC20Info(this.pool.asset)
+    switch (this.pool.poolFactory.toLowerCase()){
+      case getPoolFactory('bsc').toLowerCase():
+        this.icon = this.stakedERC20.icon
+        this.vert = (10 ** this.stakedERC20.decimal)
+        break;
+      case getPoolFactory('steem').toLowerCase():
+        const chainId = this.pool.chainId
+        this.icon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
+        this.vert = this.pool.chainId === 1 ? 1e6 / this.steemVests : 1e6 / this.hiveVests
     }
-    this.stakedERC20 = await getAssetMetadata(this.pool.NUT, 'HomeChainAssetRegistry')
   }
 }
 </script>

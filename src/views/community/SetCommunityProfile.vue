@@ -94,18 +94,7 @@
                   rows="5"
                 ></b-form-textarea>
               </b-form-group>
-              <!-- community theme -->
-              <!-- <b-form-group
-                class="mb-4"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.communityThemeColor')"
-              >
-                <input class="p-2 w-100 form-control" type="color"
-                       v-model="form.color"/>
-              </b-form-group> -->
-              <!-- community logo -->
+              <!-- logo -->
               <b-form-group
                 class="mb-4 logo-form"
                 label-class="overflow-hidden"
@@ -149,11 +138,12 @@
                     </div>
                   </template>
                 </b-form-file>
+                <!-- token logo -->
                 <span>
                   {{$t('community.cTokenLogo')}}
                   </span>
                 <b-form-file
-                  :disabled="!!tokenLogo"
+                  :disabled="!editToken"
                   v-model="tokenLogo"
                   @input="updateTokenLogo"
                   accept="image/png,image/jpeg, image/jpg"
@@ -163,8 +153,8 @@
                     <div class="input-file-logo">
                       <template v-if="!!form.tokenLogo">
                         <img class="cover-preview" :src="form.tokenLogo" alt="" />
-                        <div class="edit-mask">
-                          <span>{{ $t("tip.edit") }}<br />C-Token LOGO</span>
+                        <div class="edit-mask" v-show="editToken">
+                          <span>{{ $t("operation.edit") }}<br />LOGO</span>
                         </div>
                       </template>
                       <template v-else>
@@ -378,6 +368,8 @@ export default {
       logoPreviewSrc: '',
       coverPreviewSrc: '',
 
+      editToken: true,
+
       logoUploadLoading: false,
       tokenLogoUploadLoading: false,
       coverUploadLoading: false,
@@ -407,7 +399,7 @@ export default {
         return 0;
       }
       const ctoken = this.communityInfo && this.communityInfo.cToken;
-      if (!ctoken) return 0;
+      if (!ctoken || !ctoken.totalSupply) return 0;
       return ctoken.totalSupply.toString() / 1e18;
     }
   },
@@ -420,8 +412,9 @@ export default {
     }
 
     if (this.communityInfo && this.communityInfo.cToken){
-      this.tokenLogo = this.communityInfo.cToken.icon
-      this.form.tokenLogo = this.tokenLogo
+      // this.tokenLogo = this.communityInfo.cToken.icon
+      this.form.tokenLogo = this.communityInfo.cToken.icon
+      this.editToken = false
       this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }

@@ -15,12 +15,16 @@ export async function getSpecifyCommunityInfo(community) {
                 createdAt
                 feeRatio
                 cToken
+                owner{
+                    id
+                }
                 pools {
                     id
                     status
                     name
                     asset
                     poolFactory
+                    totalAmount
                     ratio
                     chainId
                     stakers(first: 10){

@@ -1,12 +1,12 @@
 <template>
-  <div class="c-progress" :class="progressData.length>0?'mt-5':'mt-3'">
+  <div class="c-progress" :class="(progressData && progressData.length>0) ? 'mt-5' : 'mt-3'">
     <span class="progress-num-min" v-b-tooltip.hover :title="min">{{formatNum(min)}}</span>
     <span class="progress-num-max" v-b-tooltip.hover :title="max">{{formatNum(max)}}</span>
     <span v-if="blockNum"
-          class="current-block" v-show="progressData.length > 0 && blockNum>progressData[0].startHeight"
+          class="current-block" v-show="(progressData && progressData.length > 0) && blockNum>progressData[0].startHeight"
           :style="{left: `${(blockPosition)*100}%`}">{{blockNum}}</span>
     <div class="c-progress-container" :style="{background: trackColor}">
-      <div class="c-progress-bar" v-for="(data, index) of progressData" :key="index"
+      <div class="c-progress-bar" v-for="(data, index) of (progressData ? progressData : [])" :key="index"
            :style="{ flex: 1,  background: data.background || `rgba(255, 149, 0, ${(index+1) / progressData.length})`}" >
         <span class="progress-tooltip"
               :style="{color: (blockNum >= data.startHeight && blockNum < data.stopHeight) ? '#FF5000' : '#50BF00'}">
@@ -31,7 +31,8 @@ export default {
       default: 'transparent'
     },
     progressData: {
-      type: Array
+      type: Array,
+      default: []
     },
     isEdit: {
       type: Boolean,
@@ -41,11 +42,11 @@ export default {
   computed: {
     ...mapState('web3', ['blockNum']),
     min () {
-      if (this.progressData.length === 0) return 0
+      if (!this.progressData || this.progressData.length === 0) return 0
       return this.progressData[0].startHeight
     },
     max () {
-      if (this.progressData.length === 0 || this.progressData[this.progressData.length - 1].stopHeight >= MaxBlockNum) return this.$t('commen.max')
+      if (!this.progressData || this.progressData.length === 0 || this.progressData[this.progressData.length - 1].stopHeight >= MaxBlockNum) return this.$t('commen.max')
       return this.progressData[this.progressData.length - 1].stopHeight
     },
     blockPosition () {

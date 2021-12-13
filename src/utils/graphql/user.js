@@ -57,15 +57,17 @@ export async function getMyJoinedCommunity() {
                 community(id: $id) {
                     id
                     feeRatio
-                    pools {
+                    pools(orderBy: poolIndex) {
                         id
                         status
                         name
                         asset
                         poolFactory
+                        poolIndex
                         ratio
                         chainId
-                        stakersCount
+                        stakersCount,
+                        totalAmount
                     }
                 }
             }

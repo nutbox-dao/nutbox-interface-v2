@@ -121,7 +121,7 @@
         <div class="mt-2 mb-4">Activities</div>
         <transition-group name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
-                        v-for="operation of operationHistory" :key="operation.tx"
+                        v-for="operation of operationHistory" :key="operation.tx + operation.type"
                         :operation="operation"/>
         </transition-group>
       </div>
@@ -155,21 +155,11 @@ export default {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
-      // if (!this.allPools) return []
-      // return this.allPools.filter(pool => pool.status === 'OPENED').map(pool => ({
-      //   name: pool.name,
-      //   value: parseFloat(pool.ratio) / 100
-      // }))
-      return [
-        {name: 'aaaaaaaaaaaaaaaaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-        {name: 'aaa', ratio: '10'},
-      ]
+      if (!this.allPools) return []
+      return this.allPools.filter(pool => pool.status === 'OPENED').map(pool => ({
+        name: pool.name,
+        ratio: parseFloat(pool.ratio) / 100
+      }))
     },
     baseInfo () {
       if (this.communityId) {

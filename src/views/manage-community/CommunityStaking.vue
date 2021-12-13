@@ -4,6 +4,7 @@
       <div class="view-top-header flex-between-center">
         <div class="c-btn-group" >
           <button class="primary-btn primary-btn-outline w-auto mr-2"
+                  v-show="activePool.length > 1"
                   @click="configPoolModal=true">
             {{ $t('pool.updatePoolRatios') }}</button>
           <button class="primary-btn w-auto mx-0 d-flex align-items-center"
@@ -67,6 +68,8 @@
                          type="create"
                          @back="createPoolStep=2"
                          @close="poolTypeModal=false"
+                         :enable-op="!creating"
+                         :enable-back="!creating"
                          @create="create"/>
     </b-modal>
     <b-modal
@@ -80,6 +83,8 @@
       <StakingPoolConfig :enable-back="false"
                          type="config"
                          :my-pools="[]"
+                         :enable-op="!updating"
+                         @update='update'
                          @close="configPoolModal=false"/>
     </b-modal>
   </div>
@@ -87,50 +92,51 @@
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { getMyCommunityInfo } from '@/utils/web3/community'
-import { handleApiErrCode } from '@/utils/helper'
-import { CHAIN_NAME, errCode } from '@/config'
+import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
+import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
 import StakingBSCPool from '@/components/community/StakingBSCPool'
 import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
 import { mapState } from 'vuex'
-import { contractAddress } from '@/utils/web3/contract'
 import { ethers } from 'ethers'
+import { contractAddress } from '@/utils/web3/contract'
 
 export default {
   name: 'CommunitySetting',
   components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
   data () {
     return {
-      stakingPools: [],
       tabOptions: ['Active', 'Inactive'],
       activeTab: 0,
       poolTypeModal: false,
       createPoolStep: 1,
       poolType: '',
       configPoolModal: false,
-      stakeAsset: ''
+      stakeAsset: '',
+      creating: false,
+      updating: false
     }
   },
   computed: {
     ...mapState('community', ['communityData']),
     pools() {
-      return this.communityData.pools
+      return this.communityData ? this.communityData.pools : []
     },
     activePool() {
       return this.pools.filter(p => p.status === 'OPENED')
     },
-    stakingPool() {
+    stakingPools() {
       switch(this.activeTab) {
         case 0:
           return this.activePool
         case 1:
-          return this.pool.filter(p => p.status === 'CLOSED')
+          return this.pools.filter(p => p.status === 'CLOSED')
       }
     }
   },
   async mounted () {
+    console.log(333, this.communityData);
   },
   methods: {
     selectPoolType (type) {
@@ -139,7 +145,12 @@ export default {
     },
     selectPoolToken (tokenData) {
       if (this.poolType === 'bsc') {
-        this.stakeAsset = tokenData
+        if (tokenData.icon) {
+          this.stakeAsset = tokenData.address
+        }else {
+          // need to upload token icon
+
+        }
       }else if (this.poolType === 'steem') {
         this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
       }else if (this.poolType === 'hive') {
@@ -148,17 +159,54 @@ export default {
       this.createPoolStep = 3
     },
     // create new pool
-    create (pool) {
-      console.log(6666, pool);
-      const poolFactory = this.poolType === 'bsc' ? contractAddress['ERC20StaingFactory'] : contractAddress['SPStakingFactory']
+    async create (pool) {
       let form = {
-        poolFactory, 
-        ratios: pool.ratios, 
+        type: this.poolType, 
+        ratios: pool.map(p => p.ratio), 
         name: pool[pool.length - 1].name, 
         asset: this.stakeAsset
       }
-      console.log(777, form);
-
+      try {
+        this.creating  = true
+        const newPool = await addPool(form)
+        newPool.poolIndex = form.ratios.length - 1;
+        this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.communityData.pools.push(newPool)
+        await sleep(2);
+        this.poolTypeModal = false
+      }catch (err) {
+        handleApiErrCode(err, (tip, params) => {
+          this.$bvToast.toast(tip, params)
+        })
+      }finally{
+        this.creating = false
+      }
+    },
+    // update pool ratios
+    async update(ratios) {
+      try {
+        this.updating  = true
+        const res = await updatePoolsRatio(ratios)
+        this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        await sleep(2);
+        // update pool ratios
+        this.communityData.pools.map((pool, index) => {
+          pool.ratio = ratios[index] * 100
+        })
+        this.configPoolModal = false
+      }catch (err) {
+        handleApiErrCode(err, (tip, params) => {
+          this.$bvToast.toast(tip, params)
+        })
+      }finally{
+        this.updating = false
+      }
     }
   }
 }
