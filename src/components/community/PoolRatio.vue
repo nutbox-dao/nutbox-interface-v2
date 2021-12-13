@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex ratio-container">
     <div class="flex-fill overflow-hidden">
       <div class="mx-auto" style="width: 100%">
         <canvas id="pie"></canvas>

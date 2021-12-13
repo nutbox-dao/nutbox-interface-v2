@@ -9,7 +9,7 @@
                 <i class="menu-icon home-icon" />
                 <span>Home</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/home">
+              <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
@@ -26,25 +26,23 @@
           <b-dropdown variant="text" class="setting-dropdown" toggle-class="p-0">
             <template #button-content>
               <img class="menu-toggle ml-2"
-                   src="~@/static/images/menu-icon.svg" alt="" v-b-toggle.sidebar-menu/>
+                   src="~@/static/images/menu-icon.svg" alt=""/>
             </template>
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-nav vertical align="center" class="top">
-                    <b-nav-item to="/sub-community/home">
-                      <i class="menu-icon home-icon" />
-                      <span>Home</span>
-                    </b-nav-item>
-                    <b-nav-item to="/sub-community/home">
-                      <i class="menu-icon stake-icon" />
-                      <span>{{ $t("router.staking") }}</span>
-                    </b-nav-item>
-                    <b-nav-item to="/sub-community/home">
-                      <i class="menu-icon blog-icon" />
-                      <span>{{ $t("router.blog") }}</span>
-                    </b-nav-item>
-                  </b-nav>
+                  <b-dropdown-item to="/sub-community/home">
+                    <i class="menu-icon home-icon" />
+                    <span>Home</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/staking">
+                    <i class="menu-icon stake-icon" />
+                    <span>{{ $t("router.staking") }}</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/home">
+                    <i class="menu-icon blog-icon" />
+                    <span>{{ $t("router.blog") }}</span>
+                  </b-dropdown-item>
                 </div>
               </div>
             </template>
@@ -74,33 +72,33 @@ export default {
     }
   },
   mounted () {
-    if (!this.communityId) {
-      this.$router.replace('/');
-      return;
-    }
-    console.log("Specify community id", this.communityId);
-    try {
-      this.loading = true;
-      getSpecifyCommunityInfo(this.communityId).then(community => {
-        getCToken(community.id, true).then(ctoken => {
-          console.log(1, community.id, ctoken);
-          this.saveCtoken(ctoken)
-        }).catch(e => {
-          console.log('get ctoken fail');
-        })
-        this.saveFeeRatio(community.feeRatio)
-        this.saveOperationCount(community.operationCount)
-        this.saveAllPools(community.pools)
-        this.saveOperationHistory(community.operationHistory)
-
-        this.loading = false
-      })
-    }catch (e){
-      handleApiErrCode(e, (tip, params) => {
-        this.$bvToast.toast(tip, params)
-      })
-      this.loading = false
-    }
+    // if (!this.communityId) {
+    //   this.$router.replace('/');
+    //   return;
+    // }
+    // console.log("Specify community id", this.communityId);
+    // try {
+    //   this.loading = true;
+    //   getSpecifyCommunityInfo(this.communityId).then(community => {
+    //     getCToken(community.id, true).then(ctoken => {
+    //       console.log(1, community.id, ctoken);
+    //       this.saveCtoken(ctoken)
+    //     }).catch(e => {
+    //       console.log('get ctoken fail');
+    //     })
+    //     this.saveFeeRatio(community.feeRatio)
+    //     this.saveOperationCount(community.operationCount)
+    //     this.saveAllPools(community.pools)
+    //     this.saveOperationHistory(community.operationHistory)
+    //
+    //     this.loading = false
+    //   })
+    // }catch (e){
+    //   handleApiErrCode(e, (tip, params) => {
+    //     this.$bvToast.toast(tip, params)
+    //   })
+    //   this.loading = false
+    // }
   },
   methods: {
     ...mapMutations('currentCommunity', [

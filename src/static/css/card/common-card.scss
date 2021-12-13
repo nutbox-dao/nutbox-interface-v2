@@ -14,9 +14,6 @@
     text-align: left;
     @include text-multi-line(2);
   }
-  .primary-btn {
-    margin-top: 1rem;
-  }
 }
 .card-single-icon img{
   @include card-icon;
@@ -46,10 +43,10 @@
   align-items: center;
 }
 .card-link-top-box {
-  border-top-left-radius: 1.4rem;
-  border-top-right-radius: 1.4rem;
-  background-image: linear-gradient(to bottom, #ffffff, #F6F7F9);
-  padding: .8rem 1.2rem 2.2rem;
+  border-top-left-radius: .8rem;
+  border-top-right-radius: .8rem;
+  background-image: linear-gradient(to bottom, #141414, #1D1E1F);
+  padding: .8rem 1.2rem 2.6rem;
   overflow: hidden;
 }
 .card-link-icons {
@@ -79,11 +76,6 @@
       @include text-multi-line;
       text-align: left;
       margin-right: .4rem;
-    }
-    .link-icon {
-      @include icon(.8rem, .8rem);
-      min-width: .8rem;
-      background-image: url("~@/static/images/link-icon.png");
     }
   }
 }
@@ -131,6 +123,7 @@
     border: 1px solid;
     padding: .1rem .3rem;
     border-radius: 2rem;
+    font-size: .6rem;
   }
   .Active {
     color: rgba(80, 191, 0, 1);
@@ -148,4 +141,19 @@
     color: rgba(80, 191, 0, 1);
     background: rgba(80, 191, 0, .05);
   }
+}
+
+.symbol-btn {
+  height: 2rem;
+  max-height: 2rem;
+  width: 2rem;
+  min-width: 2rem;
+  color: white;
+  border-radius: .4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-custom);
+  border: none;
+  font-size: 1.4rem;
 }

@@ -16,25 +16,27 @@
             </div>
           </div>
           <div class="col-md-7">
-            <div class="asset-card row">
-              <div class="col-sm-6 d-flex flex-column justify-content-between">
-                <div class="mb-3">
-                  <div>Total Asset Value</div>
-                  <div class="font28 mt-2">$850</div>
+            <div class="asset-card">
+              <div class="row">
+                <div class="col-sm-6 d-flex flex-column justify-content-between">
+                  <div class="mb-3">
+                    <div>Total Asset Value</div>
+                    <div class="font28 mt-2">$850</div>
+                  </div>
+                  <button class="primary-btn mb-2">Detail</button>
                 </div>
-                <button class="primary-btn mb-2">Detail</button>
-              </div>
-              <div class="col-sm-6 position-relative">
-                <PoolRatio class="asset-chart"
-                           style="top: -3rem; width: 100%; max-width: 16rem"
-                           :pools-data="assetValue" :show-legend-info="false"/>
+                <div class="col-sm-6 position-relative">
+                  <PoolRatio class="asset-chart" :pools-data="assetValue" :show-legend-info="false"/>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="font-bold mt-5 mb-3">Joined Communities</div>
         <div class="row">
-          <div class="col-md-4"></div>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of 4" :key="index">
+            <CommunityCard :card-info="communityMockData"/>
+          </div>
         </div>
         <div class="font-bold mt-5 mb-3">Staked Pools</div>
         <StakedPools class="mb-3"/>
@@ -46,9 +48,10 @@
 <script>
 import PoolRatio from '@/components/community/PoolRatio'
 import StakedPools from '@/components/profile/StakedPools'
+import CommunityCard from '@/components/community/CommunityCard'
 export default {
   name: 'Profile',
-  components: { PoolRatio, StakedPools },
+  components: { PoolRatio, StakedPools, CommunityCard },
   data () {
     return {
       userName: 'AAA',
@@ -57,7 +60,20 @@ export default {
         { name: 'PNUT', ratio: 20 },
         { name: 'PNUT', ratio: 20 },
         { name: 'PNUT', ratio: 20 }
-      ]
+      ],
+      communityMockData: {
+        poster: 'https://cdn.wherein.mobi/nutbox/v2/1635409796111',
+        is_vip: true,
+        icon: 'https://cdn.wherein.mobi/nutbox/v2/1635409783017',
+        name: '银禾社区',
+        website: 'https://nutbox.io',
+        description: '全球最大游戏公会',
+        assetLogos: [
+          'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
+        ],
+        apys: ['100'],
+        isOfficial: true
+      }
     }
   }
 }
@@ -86,20 +102,28 @@ export default {
 }
 .asset-card {
   @include card();
-  height: 13rem;
+  height: 12rem;
   .asset-chart {
     position: absolute;
+    width: 100%;
+    max-width: 14rem;
+    top: -3rem;
+    right: 1.2rem;
   }
 }
 @media (max-width: 576px) {
   .asset-card {
-    height: auto;
+    height: 24rem;
     .asset-chart {
-      display: none;
+      position: relative;
+      margin: auto;
+      top: 0;
+      right: 0;
+      width: 16rem;
     }
   }
 }
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 577px) and (max-width: 991px) {
   .asset-card {
     height: 10rem;
   }

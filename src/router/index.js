@@ -8,6 +8,7 @@ import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
+import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
@@ -56,6 +57,10 @@ const routes = [
       {
         path: 'home',
         component: SubCommunityHome
+      },
+      {
+        path: 'staking',
+        component: SubCommunityStaking
       }
     ]
   },

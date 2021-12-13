@@ -5,7 +5,7 @@
       <span v-else class="Completed">{{ $t('community.'+status) }}</span>
     </div>
     <div class="card-top mt-4">
-      <div class="card-title-box flex-start-center">
+      <div class="card-title-box d-flex align-items-center">
         <div class="card-single-icon">
          <img class="icon1" :src="pool.asset.icon" alt="">
         </div>

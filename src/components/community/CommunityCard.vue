@@ -2,14 +2,16 @@
   <div class="p-card">
     <img class="poster" :src="cardInfo.poster" alt="">
     <img class="vip" src="~@/static/images/vip.svg" v-show="cardInfo.is_vip" alt="">
-    <div class="second-card d-flex flex-column justify-content-between">
+    <div class="second-card border-0 d-flex flex-column justify-content-between">
       <div>
         <img class="logo" :src="cardInfo.icon" alt="">
-        <div class="flex-between-center mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
-          <a :href="cardInfo.website" target="_blank" v-show="cardInfo.website">
-            <div class="more-text-icon">{{ $t('community.more') }}</div>
-          </a>
+<!--          <a :href="cardInfo.website" target="_blank" v-show="cardInfo.website">-->
+<!--            <div class="more-text-icon">{{ $t('community.more') }}</div>-->
+<!--          </a>-->
+          <span v-if="cardInfo['isOfficial']"
+                class="official-tag font12 px-1">Official</span>
         </div>
         <div class="desc font14 text-grey-light text-left">{{ cardInfo.description }}</div>
       </div>
@@ -29,7 +31,7 @@
           <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apyRange }}</div>
         </div>
-        <button class="primary-btn" disabled
+        <button class="primary-btn primary-btn-no-bg" disabled
                 @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div>
     </div>
@@ -86,5 +88,9 @@ export default {
 }
 .primary-btn {
   margin-top: 1rem;
+}
+.official-tag {
+  background-color: #5087ec;
+  border-radius: .4rem;
 }
 </style>

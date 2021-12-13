@@ -99,12 +99,14 @@
   padding: 0 .8rem;
   font-size: .7rem;
   cursor: pointer;
+  &:hover {
+    background-color: transparent;
+  }
+  &.active {
+    background-color: transparent;
+  }
   .dropdown-item-icon {
     @include icon(1.2rem, 1.2rem);
-  }
-  span {
-    font-size: .8rem;
-    margin-left: .8rem;
   }
 }
 .top-header-dropdown .dropdown-toggle {

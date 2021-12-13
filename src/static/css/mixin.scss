@@ -57,7 +57,7 @@
   background: $color;
   border-radius: $br;
 }
-@mixin card-poster-bg($h: 6.2rem, $br: 1.4rem 1.4rem 0 0) {
+@mixin card-poster-bg($h: 6.2rem, $br: .8rem .8rem 0 0) {
   border-radius: $br ;
   height: $h;
   max-height: $h;
