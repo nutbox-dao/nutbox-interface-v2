@@ -1,6 +1,7 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
+      {{ pool.poolIndex }}
       <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
       <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
     </div>
@@ -26,7 +27,11 @@
         <span class="name">{{ $t('pool.tvl') }}</span>
        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
-
+      <div class="project-info-container">
+        <span class="name">{{ $t('pool.ratio') }}</span>
+       <div class="info">{{pool.ratio / 100}}%</div>
+      </div>
+    
       <button class="primary-btn" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('pool.closePool')}}
@@ -48,7 +53,7 @@
           {{ $t("tip.stopPoolAttention") }}
         </div>
         <div class="my-5">
-          {{ `Please input pool name: ${pool.name} to close this pool.` }}
+          {{ `Please input pool name: "${pool.name}" to close this pool.` }}
         </div>
 
         <div class="c-input-group">
@@ -82,7 +87,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
-import { monitorPools, stopPool, tryWithdraw, removePool } from '@/utils/web3/pool'
+import { removePool } from '@/utils/web3/pool'
 import { getAssetMetadata, getERC20Info } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
@@ -91,6 +96,7 @@ export default {
   name: 'ManageStakingCard',
   computed: {
     ...mapState('web3', ['stakingFactoryId', 'blockNum', 'allPools', 'allTokens', 'monitorPools']),
+    ...mapState('community', ['communityData']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
       hiveVests: state => state.hive.vestsToHive,
@@ -151,12 +157,17 @@ export default {
         })
         return;
       }
-      this.stop()
+      this.closePool()
     },
 
-    async stop () {
+    async closePool () {
       try {
-        if (this.pool.poolRatio !== 0 && this.pool.poolRatio !== 10000) {
+        if (this.pool.ratio === 10000 && this.communityData.pools.length === 1) {
+            // remove only one pool
+            const res = await closePool(pool.id, [], []);
+            return;
+        }
+        if (this.pool.ratio !== 0) {
           this.$bvToast.toast(this.$t('tip.stopPoolTips'), {
             title: this.$t('tip.tips'),
             variant: 'info'
@@ -164,7 +175,7 @@ export default {
           return
         }
         this.updating = true
-        const res = await stopPool(this.pool.pid)
+        const res = await closePool(this.pool.pid)
         this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
           title: this.$t('tip.tips'),
           variant: 'success'

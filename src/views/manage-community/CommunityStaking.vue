@@ -84,6 +84,7 @@
                          type="config"
                          :my-pools="[]"
                          :enable-op="!updating"
+                         @update='update'
                          @close="configPoolModal=false"/>
     </b-modal>
   </div>
@@ -91,7 +92,7 @@
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { addPool } from '@/utils/web3/pool'
+import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
 import StakingBSCPool from '@/components/community/StakingBSCPool'
@@ -167,12 +168,13 @@ export default {
       }
       try {
         this.creating  = true
-        const pool = await addPool(form)
+        const newPool = await addPool(form)
+        newPool.poolIndex = form.ratios.length;
         this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
           title:this.$t('tip.success'),
           variant: 'success'
         })
-        this.communityData.pool.push(pool)
+        this.communityData.pools.push(newPool)
         await sleep(2);
         this.poolTypeModal = false
       }catch (err) {
@@ -181,6 +183,29 @@ export default {
         })
       }finally{
         this.creating = false
+      }
+    },
+    // update pool ratios
+    async update(ratios) {
+      try {
+        this.updating  = true
+        const res = await updatePoolsRatio(ratios)
+        this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
+          title:this.$t('tip.success'),
+          variant: 'success'
+        })
+        await sleep(2);
+        // update pool ratios
+        this.communityData.pools.map((pool, index) => {
+          pool.ratio = ratios[index] * 100
+        })
+        this.configPoolModal = false
+      }catch (err) {
+        handleApiErrCode(err, (tip, params) => {
+          this.$bvToast.toast(tip, params)
+        })
+      }finally{
+        this.updating = false
       }
     }
   }

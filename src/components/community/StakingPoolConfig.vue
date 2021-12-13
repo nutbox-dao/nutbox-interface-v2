@@ -12,7 +12,7 @@
                       label-class="overflow-hidden text-grey-7"
                       label-cols-md="3" content-cols-md="9"
                       label="Pool Name">
-          <b-form-input class="input-border" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
+          <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
         </b-form-group>
         <div class="mb-2">Profit Sharing Ratio</div>
         <div class="pool-chart-box w-100 d-flex">
@@ -90,29 +90,41 @@ export default {
     }, 1500),
     // create new pool
     create() {
-      const res = this.activePools.reduce((t, r) => t + parseFloat(r.ratio), 0)
-      if (res !== 100) {
-        this.$bvToast.toast('Ratios summary must be 100', {
-          title: this.$t('tip.tips'),
-          variant: 'info'
-        })
-        return;
+      if (this.type == 'create') {
+        const res = this.activePools.reduce((t, r) => t + parseFloat(r.ratio), 0)
+        if (res !== 100) {
+          this.$bvToast.toast('Ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.type === 'create' && (!this.newName || this.newName.length === 0)) {
+          this.$bvToast.toast('Please input pool name', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        this.$emit('create', this.activePools)
+      }else {
+        const res = this.activePools.reduce((t, r) => t + parseFloat(r.ratio), 0)
+        if (res !== 100) {
+          this.$bvToast.toast('Ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        this.$emit('update', this.activePools.map(p => p.ratio))
       }
-      if (this.type === 'create' && (!this.newName || this.newName.length === 0)) {
-        this.$bvToast.toast('Please input pool name', {
-          title: this.$t('tip.tips'),
-          variant: 'info'
-        })
-        return;
-      }
-      this.$emit('create', this.activePools)
     }
   },
   async mounted () {
     while(!this.communityData) {
       await sleep(0.3)
     }
-    this.activePools = this.communityData.pools.filter(p => p.status === 'OPENED').map(p => ({...p, ratio: ratio / 100}));
+    this.activePools = this.communityData.pools.filter(p => p.status === 'OPENED').map(p => ({...p, ratio: p.ratio / 100}));
     this.newName = ''
     if (this.type === 'create'){
       this.activePools.push({name: this.newName, ratio: 100})

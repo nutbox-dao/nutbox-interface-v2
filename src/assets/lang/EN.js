@@ -6,6 +6,7 @@ module.exports = {
     loging: "Logging in...",
     crowdstaking: "Staking",
     optional: "(Optional)",
+    connectMetamask: 'Connect Metamask',
 
     apy: "APR",
     balance: "Balance",
@@ -188,7 +189,7 @@ module.exports = {
     deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.',
     attention: "Attention!",
     markdownTip: "You can use markdown format.",
-    stopPoolAttention: 'Once you stop the pool, it cannot be opened again. Please use this function with caution!'
+    stopPoolAttention: 'Once you close the pool, it cannot be opened again. Please use this function with caution!'
   },
   nps: {
     nps: "Governance",
@@ -334,7 +335,9 @@ module.exports = {
     inputMintAmount: "Please input mint number",
     inputDevRatio: "Please input DAO fund ratio",
     remarkInput: "Please input introduce",
-    confirmInfo: 'Please input {info} to confirm.'
+    confirmInfo: 'Please input "{info}" to confirm.',
+    inputPoolName: 'Please input pool name.',
+    inputDelegatee: 'Please input delegatee account'
   },
   community: {
     community: "Community",
@@ -369,7 +372,8 @@ module.exports = {
     userCount: 'User count',
     totalDeposit: 'Total deposit',
     tvl: 'TVL',
-    closePool: "Close"
+    closePool: "Close",
+    ratio: 'Ratio'
   },
   asset: {
     tokenName: "Name",

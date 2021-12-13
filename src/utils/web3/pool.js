@@ -10,8 +10,7 @@ import {
 import { getAccounts } from '@/utils/web3/account'
 import {
   errCode,
-  Multi_Config,
-  OfficialAssets
+  Multi_Config
 } from '@/config'
 import {
   waitForTx,
@@ -111,7 +110,7 @@ export const approveNUT = async (pool) => {
 
 /**
  * Add new pool
- * @param {Object} form {name, ratios, poolFactory, asset}
+ * @param {Object} form {name, ratios, type, asset}
  */
 export const addPool = async (form) => {
   return new Promise(async (resolve, reject) => {
@@ -147,7 +146,7 @@ export const addPool = async (form) => {
               name,
               asset: form.asset,
               poolFactory: getPoolFactory(form.type),
-              ratio: form.pool.ratios[form.pool.ratios.length - 1] * 100,
+              ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId: 0,
               stakersCount: 0
             })
@@ -164,7 +163,7 @@ export const addPool = async (form) => {
               name,
               asset: form.asset,
               poolFactory: getPoolFactory(form.type),
-              ratio: form.pool.ratios[form.ratios.length - 1] * 100,
+              ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId,
               stakersCount: 0
             })
@@ -205,17 +204,21 @@ export const updatePoolsRatio = async (form) => {
     }
     let contract;
     try {
+      console.log(2);
       contract = await getContract('Community', stakingFactoryId, false)
     } catch (e) {
       reject(e);
       return;
     }
     try {
+      console.log(3);
       const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
+      console.log('Update pool ratios', tx.hash);
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
-      reject(errCode.CONTRACT_CREATE_FAIL)
+      console.log(e);
+      reject(errCode.BLOCK_CHAIN_ERR)
     }
 
   })
@@ -227,7 +230,7 @@ export const updatePoolsRatio = async (form) => {
  * @param {Object} form {poolAddress,activedPools,ratios} 
  * @returns 
  */
-export const removePool = async (form) => {
+export const closePool = async (form) => {
   return new Promise(async (resolve, reject) => {
     const communityId = store.state.web3.stakingFactoryId
     let contract = null
@@ -247,7 +250,7 @@ export const removePool = async (form) => {
       }else {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
-      console.log('RemovePool pool Fail', e);
+      console.log('Close pool Fail', e);
     }
   })
 }
