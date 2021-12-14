@@ -156,6 +156,7 @@ module.exports = {
     deployFactoryFail: "Factory Fail to delpoy, Please try agian",
     deploySuccess: "Deloy Success",
     createPoolSuccess: "Create pool success",
+    updatePoolSuccess: 'Update pool ratios success',
     chargeSuccess: 'Charge success',
     storeTokenAddress:
       "Please confirm the information and store Token Address immediately",

@@ -41,7 +41,6 @@ export const setupNetwork = async () => {
         }],
       })
     }catch(error){
-      console.log(333, error);
       store.commit('web3/saveChainId', chainId)
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)

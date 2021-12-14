@@ -18,7 +18,7 @@
         <button class="primary-btn" v-if="needLogin" @click="showLogin = true">
             {{ type === 'STEEM' ? $t('wallet.connectSteem') : $t('wallet.connectHive') }}
         </button>
-        <button v-else class="primary-btn" @click="approve" :disabled="approved">
+        <button v-else class="primary-btn" @click="approve" :disabled="approved || isApproving">
           <b-spinner
             small
             type="grow"
@@ -51,9 +51,10 @@
 <script>
 import { mapState } from "vuex";
 import { CHAIN_NAME } from "@/config";
-import { getPoolType } from '@/utils/web3/pool'
+import { getPoolType, approvePool } from '@/utils/web3/pool'
 import Login from '@/components/common/Login'
 import ConnectMetaMask from '@/components/common/ConnectMetaMask'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   name: "PoolOperation",
@@ -89,10 +90,10 @@ export default {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
     needLogin() {
-        console.log(235, this.steemAccount);
         if (this.type === 'STEEM') {
             return !this.steemAccount
         }else if(this.type === 'HIVE') {
+          console.log(325, this.hiveAccount);
             return !this.hiveAccount
         }
         return false
@@ -108,9 +109,9 @@ export default {
       if (this.type === CHAIN_NAME) {
         return userStakingBn.toString() / 1e18;
       } else if (this.type === "STEEM") {
-        return 0;
+        return userStakingBn.toString() / 1e6 * this.vestsToSteem;
       } else if (this.type === "HIVE") {
-        return 0;
+        return userStakingBn.toString() / 1e6 * this.vestsToHive;
       }
       return 0;
     },

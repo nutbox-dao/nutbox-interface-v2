@@ -32,7 +32,7 @@
        <div class="info">{{pool.ratio / 100}}%</div>
       </div>
     
-      <button class="primary-btn" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
+      <button class="primary-btn my-3" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('pool.closePool')}}
       </button>
@@ -95,7 +95,7 @@ import { ASSET_LOGO_URL } from '@/constant'
 export default {
   name: 'ManageStakingCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId', 'blockNum', 'allPools', 'allTokens', 'monitorPools']),
+    ...mapState('web3', ['stakingFactoryId', 'allTokens']),
     ...mapState('community', ['communityData']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
@@ -103,31 +103,10 @@ export default {
       prices: state => state.prices
     }),
     totalDeposited () {
-      if (!this.pool || !this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount']) return 0
-      return this.pool && this.monitorPools[this.stakingFactoryId + '-' + this.pool.pid + '-totalStakedAmount'] / this.vert
+      return this.pool.totalAmount ? this.pool.totalAmount.toString() / this.vert : 0
     },
     tvl () {
-      if (!this.pool) return '--'
-      switch (this.pool.asset.type) {
-        case 'SteemHiveDelegateAssetRegistry':
-        {
-          if (this.pool.asset.chainId === 1) { // steem
-            return this.totalDeposited * this.prices.STEEMETH * this.prices.ETHUSDT
-          } else if (this.pool.asset.chainId === 2) { // hive
-            return this.totalDeposited * this.prices.HIVEUSDT
-          }
-        }
-        case 'SubstrateCrowdloanAssetRegistry' || 'SubstrateNominateAssetRegistry':
-        {
-          if (this.pool.asset.chainId === 2) { // polkadot
-            return this.totalDeposited * this.prices.DOTUSDT
-          } else if (this.pool.asset.chainId === 3) { // kusama
-            return this.totalDeposited * this.prices.KSMUSDT
-          }
-        }
-        case 'HomeChainAssetRegistry':
-          return this.erc20Price * this.totalDeposited
-      }
+      return 0
     },
   },
   data () {
@@ -212,9 +191,9 @@ export default {
   },
 
   async mounted () {
-    this.stakedERC20 = await getERC20Info(this.pool.asset)
     switch (this.pool.poolFactory.toLowerCase()){
       case getPoolFactory('bsc').toLowerCase():
+        this.stakedERC20 = await getERC20Info(this.pool.asset)
         this.icon = this.stakedERC20.icon
         this.vert = (10 ** this.stakedERC20.decimal)
         break;

@@ -67,7 +67,7 @@ export default {
         case 2:
           return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
         case 3:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive') && parseInt(p.chainId) == 2)
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive')) && parseInt(p.chainId) == 2)
       }
     },
     activedPools() {

@@ -136,7 +136,6 @@ export default {
     }
   },
   async mounted () {
-    console.log(333, this.communityData);
   },
   methods: {
     selectPoolType (type) {
@@ -162,7 +161,7 @@ export default {
     async create (pool) {
       let form = {
         type: this.poolType, 
-        ratios: pool.map(p => p.ratio), 
+        ratios: pool.map(p => parseFloat(p.ratio)), 
         name: pool[pool.length - 1].name, 
         asset: this.stakeAsset
       }
@@ -175,8 +174,11 @@ export default {
           variant: 'success'
         })
         this.communityData.pools.push(newPool)
-        this.communityData.pools.map((pool, i) => {
-          pool.ratio = form.ratios[i] * 100
+        let index = 0
+        this.communityData.pools.map(pool => {
+          if (pool.status === 'OPENED'){
+            pool.ratio = parseFloat(form.ratios[index++]) * 100
+          }
         })
         await sleep(2);
         this.poolTypeModal = false
@@ -193,14 +195,17 @@ export default {
       try {
         this.updating  = true
         const res = await updatePoolsRatio(ratios)
-        this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
+        this.$bvToast.toast(this.$t('tip.updatePoolSuccess'), {
           title:this.$t('tip.success'),
           variant: 'success'
         })
         await sleep(2);
         // update pool ratios
-        this.communityData.pools.map((pool, index) => {
-          pool.ratio = ratios[index] * 100
+        let index = 0
+        this.communityData.pools.map(pool => {
+          if (pool.status === 'OPENED') {
+            pool.ratio = ratios[index++] * 100
+          }
         })
         this.configPoolModal = false
       }catch (err) {

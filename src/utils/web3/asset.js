@@ -238,7 +238,7 @@ export const getERC20Info = async (address) => {
           ['totalSupply']  
         ]
       }], Multi_Config)
-      const tokenFromBackend = tokens?.filter(token => token.address === address)
+      const tokenFromBackend = tokens?.filter(token => token.address.toLowerCase() === address.toLowerCase())
       let icon = null
       let price = null
       if (tokenFromBackend && tokenFromBackend.length > 0) {

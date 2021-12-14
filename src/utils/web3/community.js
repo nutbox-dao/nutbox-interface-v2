@@ -289,7 +289,6 @@ export const completeCommunityInfo = async (form, type) => {
         return;
       }
     }
-    console.log(333, form);
     const params = {
       userId,
       infoStr: originMessage,

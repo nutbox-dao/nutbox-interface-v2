@@ -68,7 +68,9 @@ export const getPoolFactoryAddress = (type) => {
   switch (type){
     case 'main':
       return contractAddress['ERC20StakingFactory'].toLowerCase()
-    case 'steem' || 'hive':
+    case 'steem':
+      return contractAddress['SPStakingFactory'].toLowerCase()
+    case 'hive':
       return contractAddress['SPStakingFactory'].toLowerCase()
   }
 }
@@ -79,9 +81,9 @@ export const getPoolType = (factory, chainId) => {
     case contractAddress['ERC20StakingFactory']:
       return CHAIN_NAME
     case contractAddress['SPStakingFactory']:
-      if (chainId === 1) {
+      if (parseInt(chainId) === 1) {
         return 'STEEM'
-      }else if (chainId === 2) {
+      }else if (parseInt(chainId) === 2) {
         return 'HIVE'
       }
   }
@@ -95,14 +97,14 @@ export const approvePool = async (pool) => {
   return new Promise(async (resolve, reject) => {
       let contract;
       try {
-        contract = await getContract('ERC20', pool.address, false)
+        contract = await getContract('ERC20', pool.asset, false)
       } catch (e) {
         reject(e);
         return;
       }
       
       try{
-        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(pool.decimal + 50)).toString())
+        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(60)).toString())
         await waitForTx(tx.hash)
         resolve(tx.hash)
       }catch(e){
@@ -188,7 +190,8 @@ export const addPool = async (form) => {
               poolFactory: getPoolFactory(form.type),
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId,
-              stakersCount: 0
+              stakersCount: 0,
+              totalAmount: 0
             })
             factory.removeAllListeners('SPStakingCreated')
           }
@@ -373,6 +376,7 @@ export const withdrawReward = async (communityId, poolId) => {
  * @returns 
  */
 export const updatePoolsByPolling = async (pools) => {
+    pools = pools.filter(p => p.status === 'OPENED')  
     const stakingWatcher = await monitorUserStakings(pools).catch();
     const rewardWatcher = await monitorPendingRewards(pools).catch();
     const approvementsWatcher = await monitorApprovements(pools).catch();
@@ -467,10 +471,10 @@ export const monitorApprovements = async (pools) => {
         call: [
           'allowance(address,address)(uint256)',
           account,
-          pool.community.id
+          pool.id
         ],
         returns: [
-          [pool.id, val => val / 1e18 > 1e10]
+          [pool.id, val => val.toString() / 1e18 > 1e10]
         ]
       }))
       const watcher = createWatcher(calls, Multi_Config)
