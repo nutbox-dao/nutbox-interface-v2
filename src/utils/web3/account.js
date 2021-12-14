@@ -6,7 +6,8 @@ import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
 import { updateUserInfo as uui, getSomeUsers, getAllUsers } from '@/apis/api'
 import { sleep } from '../helper.js'
-import { errCode } from '../../config.js'
+import { errCode } from '@/config.js'
+import { signMessage } from './utils'
 
 /**
  * Get metamask accounts
@@ -52,6 +53,13 @@ export const accountChanged = async (refresh) => {
     })
 }
 
+export const updateAllUsersByPolling = async () => {
+    while(true) {
+        await getUsers()
+        await sleep(10)
+    }
+}
+
 /**
  * Get users by ids from backend
  * @param {*} users get all if users is null
@@ -59,7 +67,7 @@ export const accountChanged = async (refresh) => {
 export const getUsers = async (users)  => {
     return new Promise(async (resolve, reject) => {
         while(store.state.user.loadingUsers) {
-            sleep(0.3)
+            await sleep(0.3)
         }
         store.commit('user/saveLoadingUsers', true);
         try{
@@ -91,7 +99,7 @@ export const getUserBaseInfo = async (user) => {
     return new Promise(async (resolve, reject) => {
         try{
             while(store.state.user.loadingUsers) {
-                sleep(0.3)
+                await sleep(0.3)
             }
             user = ethers.utils.getAddress(user)
             const info = store.getters['user/getUserByAddress'](user)
@@ -109,6 +117,7 @@ export const getUserBaseInfo = async (user) => {
                 resolve(null)
             }
         }catch(e){
+            console.log('Get user info fail:', e);
             reject(errCode)
         }
     })
@@ -116,39 +125,40 @@ export const getUserBaseInfo = async (user) => {
 
 /**
  * update user's name and avatar
- * @param {*} form 
+ * @param {*} form {avatar, name}
  * @returns 
  */
 export const updateUserInfo = async (form) => {
-    const account = await getAccounts(); 
-    let nonce = await getNonce();
-    const originMessage = JSON.stringify(form);
-    let signature = "";
-    nonce = nonce ? nonce + 1 : 1;
-
-    try {
-      signature = await signMessage(originMessage + nonce);
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-        return;
-      }
-    }
-
-    const params = {
-        userId,
-        infoStr: originMessage,
-        nonce,
-        signature,
-      };
-      try {
-        let res = await uui(params)
-        // update nonce in storage
-        store.commit("web3/saveNonce", nonce);
-        resolve(res);
-      } catch (e) {
-        console.log("Insert community info failed", e);
-        reject(e);
-      }
-
+    return new Promise(async (resolve, reject) => {
+        const userId = await getAccounts(); 
+        let nonce = await getNonce();
+        const originMessage = JSON.stringify(form);
+        let signature = "";
+        nonce = nonce ? nonce + 1 : 1;
+    
+        try {
+          signature = await signMessage(originMessage + nonce);
+        } catch (e) {
+          if (e.code === 4001) {
+            reject(errCode.USER_CANCEL_SIGNING);
+            return;
+          }
+        }
+    
+        const params = {
+            userId,
+            infoStr: originMessage,
+            nonce,
+            signature,
+        };
+        try {
+            let res = await uui(params)
+            // update nonce in storage
+            store.commit("web3/saveNonce", nonce);
+            resolve(res);
+        } catch (e) {
+            console.log("update user info failed", e);
+            reject(e);
+        }
+    })
 }

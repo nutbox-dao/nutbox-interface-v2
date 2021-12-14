@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="c-card mt-3">
-      <div v-for="(item, index) of 4" :key="index">
+      <div v-for="(pool, index) of joinedPool" :key="index" v-show="getCommunityInfoById(pool.community.id)">
         <div class="c-header-grid py-3 px-4">
           <div class="d-flex align-items-center" style="grid-area: avatar">
             <div class="logo-group mr-3">
@@ -107,6 +107,7 @@
 
 <script>
 import { CHAIN_NAME } from '@/config'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'StakedPools',
@@ -116,6 +117,16 @@ export default {
       tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: '',
       poolStatus: 'active'
+    }
+  },
+  computed: {
+    ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapState('community', ['allCommunityInfo']),
+    ...mapState('web3', ['userGraphInfo']),
+    joinedPool() {
+      if (!this.userGraphInfo || !this.userGraphInfo.inPools) return [];
+      console.log(23, this.userGraphInfo.inPools);
+      return this.userGraphInfo.inPools
     }
   }
 }

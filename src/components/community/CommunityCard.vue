@@ -15,7 +15,7 @@
         </div>
         <div class="desc font14 text-grey-light text-left">{{ cardInfo.description }}</div>
       </div>
-      <div>
+      <!-- <div>
         <div class="project-info-container">
           <span class="name">{{ $t('asset.stakingAsset') }}</span>
           <div class="info flex-start-center">
@@ -23,45 +23,53 @@
             <img v-else class="info-icon" :src="icon" v-for="(icon, index) in new Set(cardInfo.assetLogos)" :key="index" alt="">
           </div>
         </div>
-        <!-- <div class="project-info-container">
+        <div class="project-info-container">
           <span class="name">{{ $t('community.totalDepositDollor') }}</span>
           <div class="info">--</div>
-        </div> -->
+        </div>
         <div class="project-info-container">
           <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apyRange }}</div>
         </div>
         <button class="primary-btn primary-btn-no-bg" disabled
                 @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
-      </div>
+      </div> -->
+      <button class="primary-btn primary-btn-no-bg"
+                @click="gotoCommunity()">{{ $t('operation.enter') }}</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'CommunityCard',
   props: {
     cardInfo: Object
   },
   computed: {
-    apyRange () {
-      let apys = this.cardInfo.apys
-      apys = apys.filter(apy => apy > 0 && apy < 1e12)
-      if (!apys || apys.length === 0) return '--'
-      const max = Math.max.apply(0, apys)
-      const min = Math.min.apply(0, apys)
-      if (max === min) {
-        return max.toFixed(2) + '%'
-      } else {
-        return min.toFixed(2) + '-' + max.toFixed(2) + '%'
-      }
-    }
+    // apyRange () {
+    //   let apys = this.cardInfo.apys
+    //   apys = apys.filter(apy => apy > 0 && apy < 1e12)
+    //   if (!apys || apys.length === 0) return '--'
+    //   const max = Math.max.apply(0, apys)
+    //   const min = Math.min.apply(0, apys)
+    //   if (max === min) {
+    //     return max.toFixed(2) + '%'
+    //   } else {
+    //     return min.toFixed(2) + '-' + max.toFixed(2) + '%'
+    //   }
+    // },
+  },
+  mounted () {
+    console.log(23, this.cardInfo);;
   },
   methods: {
-    openNewTab (cardInfo) {
-      window.open(`${window.location.origin}/#/specify?id=${cardInfo.id}`, '_blank')
-    }
+    gotoCommunity() {
+      this.$store.commit('currentCommunity/saveCommunityId', this.cardInfo.id);
+      this.$router.replace('/sub-community/home')
+    },
   }
 }
 </script>

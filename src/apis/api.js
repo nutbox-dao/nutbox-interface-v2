@@ -67,17 +67,11 @@ export const updateTokenIcon = async (params) =>
 export const getNonce = async (accountId) =>
   get(BACKEND_API_URL + "/user/getnonce", { id: accountId });
 
-export const updateUserInfo = async (params) => {
-  post(BACKEND_API_URL + "user/updateUser", params)
-}
+export const updateUserInfo = async (params) => post(BACKEND_API_URL + "/user/updateUser", params)
 
-export const getAllUsers = async () => {
-  get(BACKEND_API_URL + "user/users");
-}
+export const getAllUsers = async () => get(BACKEND_API_URL + "/user/users");
 
-export const getSomeUsers = async (ids) => {
-  post(BACKEND_API_URL + "user/getsomeusers", ids)
-}
+export const getSomeUsers = async (ids) => post(BACKEND_API_URL + "/user/getsomeusers", {ids})
 
 // ============================================ strategies ============================================
 

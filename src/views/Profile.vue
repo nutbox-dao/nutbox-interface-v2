@@ -4,15 +4,18 @@
       <div class="container">
         <div class="row">
           <div class="col-md-5 text-left d-flex flex-column justify-content-center">
-            <img class="user-avatar hover rounded-circle"
+            <img v-if="user.avatar" class="user-avatar hover rounded-circle"
+                 :src="user.avatar" alt="">
+            <img v-else class="user-avatar hover rounded-circle"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
             <div class="d-flex align-items-center mt-2">
               <b-input class="bg-transparent text-white name-input text-center"
                        :class="isEditName?'edit':''"
                        :disabled="!isEditName"
-                       v-model="userName"></b-input>
-              <i v-if="!isEditName" class="edit-icon" @click="isEditName=true"></i>
-              <span v-else @click="isEditName=false">Save</span>
+                       placeholder="Input name"
+                       v-model="user.name"></b-input>
+              <i v-if="!isEditName" class="edit-icon hover" @click="isEditName=true"></i>
+              <span class="hover" v-else @click="updateUser">Save</span>
             </div>
           </div>
           <div class="col-md-7">
@@ -34,13 +37,13 @@
         </div>
         <div class="font-bold mt-5 mb-3">Joined Communities</div>
         <div class="row">
-          <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of 4" :key="index">
-            <CommunityCard :card-info="communityMockData"/>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
+            <CommunityCard :card-info="community"/>
           </div>
         </div>
         <div class="font-bold mt-5 mb-3">Staked Pools</div>
-        <StakedPools class="mb-3"/>
-      </div>
+          <StakedPools class="mb-3"/>
+        </div>
     </div>
   </div>
 </template>
@@ -48,12 +51,17 @@
 <script>
 import PoolRatio from '@/components/community/PoolRatio'
 import StakedPools from '@/components/profile/StakedPools'
+import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import CommunityCard from '@/components/community/CommunityCard'
+import { getUserBaseInfo, updateUserInfo } from '@/utils/web3/account'
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'Profile',
   components: { PoolRatio, StakedPools, CommunityCard },
   data () {
     return {
+      user:{},
       userName: 'AAA',
       isEditName: false,
       assetValue: [
@@ -61,21 +69,55 @@ export default {
         { name: 'PNUT', ratio: 20 },
         { name: 'PNUT', ratio: 20 }
       ],
-      communityMockData: {
-        poster: 'https://cdn.wherein.mobi/nutbox/v2/1635409796111',
-        is_vip: true,
-        icon: 'https://cdn.wherein.mobi/nutbox/v2/1635409783017',
-        name: '银禾社区',
-        website: 'https://nutbox.io',
-        description: '全球最大游戏公会',
-        assetLogos: [
-          'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
-        ],
-        apys: ['100'],
-        isOfficial: true
+    }
+  },
+  computed: {
+    ...mapState('web3', ['account', 'userGraphInfo']),
+    ...mapState('community', ['allCommunityInfo']),
+    joinedCommunity() {
+      if (!this.userGraphInfo || !this.userGraphInfo.inCommunities) return [];
+      if (!this.allCommunityInfo || this.allCommunityInfo.length === 0) return [];
+      let communities = []
+      for (let i = 0; i < this.userGraphInfo.inCommunities.length; i++) {
+        const community = this.userGraphInfo.inCommunities[i]
+        if (this.allCommunityInfo[community.id]){
+          communities.push({
+            ...community,
+            ...this.allCommunityInfo[community.id]
+          })
+        }
+      }
+      return communities
+    }
+  },
+  methods: {
+    async updateUser () {
+      console.log(this.user);
+      try {
+        await updateUserInfo(this.user);
+        this.$bvToast.toast(this.$t('tip.success'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+      }catch(e) {
+        console.log(e)
+      }finally{
+        this.isEditName = false;
       }
     }
-  }
+  },
+  async mounted () {
+    getUserBaseInfo(this.account).then(user => {
+      console.log('get my user info', user);
+      if (user) {
+        this.user = user
+      }
+    }).catch(err => {
+      console.log('get my user info fail:', err)
+    })
+    await getMyJoinedCommunity();
+
+  },
 }
 </script>
 

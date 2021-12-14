@@ -29,6 +29,7 @@ export async function getMyJoinedCommunity() {
                     asset
                     chainId
                     stakersCount
+                    totalAmount
                 }
             }
         }

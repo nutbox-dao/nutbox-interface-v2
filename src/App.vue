@@ -74,7 +74,7 @@
 import { LOCALE_KEY } from '@/config'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { setupNetwork, chainChanged } from '@/utils/web3/web3'
-import { accountChanged, getAccounts } from '@/utils/web3/account'
+import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getMyCommunityInfo, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
 import { updateAllTokensFromBackend } from '@/utils/web3/asset'
@@ -160,6 +160,7 @@ export default {
     try {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();
+      updateAllUsersByPolling();
       await getAccounts(true)
       getMyJoinedCommunity();
       getMyCommunityInfo().catch(e => {

@@ -69,7 +69,6 @@
 <script>
 import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
-import { getNewCommunityOPHistory, getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 
 export default {
   name: 'Home',
@@ -105,9 +104,6 @@ export default {
   },
   mounted () {
     getWalnutData();
-    getNewCommunityOPHistory('0xf234E84e9f1F83105A120351dFEa179AC4Ad8730').then(r => {
-      getUpdateCommunityOPHistory('0xf234E84e9f1F83105A120351dFEa179AC4Ad8730')
-    });
   },
 }
 </script>

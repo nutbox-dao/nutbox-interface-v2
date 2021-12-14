@@ -58,7 +58,8 @@ module.exports = {
     input: "Input",
     copy: "Copy",
     edit: "Edit",
-    charge: 'Charge'
+    charge: 'Charge',
+    enter: 'Enter'
   },
   wallet: {
     wallet: "Wallet",

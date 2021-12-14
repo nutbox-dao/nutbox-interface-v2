@@ -10,6 +10,7 @@ import community from '@/store/community'
 import steem from './steem'
 import hive from './hive'
 import currentCommunity from './currentCommunity'
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -50,6 +51,7 @@ export default new Vuex.Store({
     community,
     steem,
     hive,
-    currentCommunity
+    currentCommunity,
+    user
   }
 })
