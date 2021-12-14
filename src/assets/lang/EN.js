@@ -59,7 +59,8 @@ module.exports = {
     copy: "Copy",
     edit: "Edit",
     charge: 'Charge',
-    enter: 'Enter'
+    enter: 'Enter',
+    approve: 'Approve'
   },
   wallet: {
     wallet: "Wallet",
@@ -360,6 +361,7 @@ module.exports = {
     communityAsset: "Community Token",
     fundAddress: "Fund address",
     fundRatio: "Fund ratio",
+    totalDeposit: 'Total amount',
 
     noCommunity: "You have no community yet",
 
@@ -378,7 +380,9 @@ module.exports = {
     totalDeposit: 'Total deposit',
     tvl: 'TVL',
     closePool: "Close",
-    ratio: 'Ratio'
+    ratio: 'Ratio',
+    opened: 'Active',
+    closed: 'Closed'
   },
   asset: {
     tokenName: "Name",

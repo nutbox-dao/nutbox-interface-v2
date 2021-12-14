@@ -172,5 +172,5 @@ export const OfficialAssets = [
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
   multicallAddress: MultiAddress,
-  interval: 5000,
+  interval: 3000,
 };

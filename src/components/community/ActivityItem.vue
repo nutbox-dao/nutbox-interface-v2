@@ -1,7 +1,14 @@
 <template>
   <div class="activity-card">
     <div class="title">{{ operation.type }}</div>
-    <div class="content hover" @click="gotoTransaction()">{{ description }}</div>
+    <div class="content hover" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
+    <b-popover
+          :target="operation.tx + operation.type"
+          triggers="hover focus"
+          placement="top"
+        >
+          {{ description }}
+        </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
       <img v-if="operation.user.length > 0" class="rounded-circle hover"
            style="width: 2rem; height: 2rem"
@@ -50,15 +57,17 @@ export default {
     this.$once('hook:beforeDestroy', () => {
       window.clearInterval(interval)
     })
-    const accName = this.operation.user.substring(0, 6) + '...' + this.operation.user.substring(this.operation.user.length - 6, 6)
+    const accName = this.operation.user.substring(0, 4) + '...' + this.operation.user.substring(this.operation.user.length - 4, this.operation.user.length)
     let symbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
       try{
         const tokenAddress = ethers.utils.getAddress(this.operation.asset)
-        const token = this.allTokens.filter(t => t.address.toLowerCase() == tokenAddress)[0]
+        const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
+        console.log(token);
         symbol = token.symbol;
       }catch(e){
+        console.log(e);
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
@@ -77,10 +86,7 @@ export default {
         }
         break;
       case "WITHDROW":
-        this.description = accName + ` withdraw ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from ${this.operation.pool.name}`
-        break;
-      case "HARVEST":
-        if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
+         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = accName + ` withdraw ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           if (parseInt(this.operation.chainId) === 1){
@@ -89,6 +95,9 @@ export default {
             this.description = `${accName} minus ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
+        break;
+      case "HARVEST":
+       this.description = accName + ` withdraw ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
         this.description = accName + ` harvest all ${symbol}`

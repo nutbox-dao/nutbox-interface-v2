@@ -13,10 +13,10 @@
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/home">
+              <!-- <b-nav-item to="/sub-community/home">
                 <i class="menu-icon blog-icon" />
                 <span>{{ $t("router.blog") }}</span>
-              </b-nav-item>
+              </b-nav-item> -->
             </b-nav>
           </div>
         </div>
@@ -76,12 +76,10 @@ export default {
       this.$router.replace('/');
       return;
     }
-    console.log("Specify community id", this.communityId);
     try {
       this.loading = true;
       getSpecifyCommunityInfo(this.communityId).then(community => {
         getCToken(community.id, true).then(ctoken => {
-          console.log(1, community.id, ctoken);
           this.saveCtoken(ctoken)
         }).catch(e => {
           console.log('get ctoken fail');

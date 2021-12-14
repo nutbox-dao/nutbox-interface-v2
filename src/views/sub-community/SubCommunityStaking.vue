@@ -12,10 +12,10 @@
           </div>
         </div>
         <div class="col-md-6 text-right">
-          <button class="primary-btn w-auto" style="height: 2rem">Inactive Pool</button>
+          <button class="primary-btn w-auto" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
         </div>
       </div>
-      <div class="loading-bg" v-if="loadingAllPools">
+      <div class="loading-bg" v-if="loadingCommunityInfo">
         <img src="~@/static/images/loading.gif" alt="" />
         <p class="font16">{{ $t('tip.loading') }}</p>
       </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="cards-container no-view-top-header">
           <div class="row">
-            <div class="col-xl-4 col-md-6 mb-4" v-for="(cardInfo, index) of stakingCards" :key="index">
+            <div class="col-xl-4 col-md-6 mb-4" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
               <CommunityStakingCard :card="cardInfo"/>
             </div>
           </div>
@@ -40,6 +40,9 @@
 <script>
 import { CHAIN_NAME } from '@/config'
 import CommunityStakingCard from '@/components/community/CommunityStakingCard'
+import  { mapState, mapGetters } from 'vuex'
+import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: 'SubCommunityStaking',
@@ -47,13 +50,54 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
-      loadingAllPools: false,
-      stakingCards: [],
-      mockData: {
-
-      }
+      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive'],
     }
+  },
+  computed: {
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
+    ...mapGetters('community', ['getCommunityInfoById']),
+    stakingCards() {
+      switch(this.activeTab) {
+        case -1:
+          return this.inActivedPools;
+        case 0:
+          return this.activedPools;
+        case 1:
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
+        case 2:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
+        case 3:
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive') && parseInt(p.chainId) == 2)
+      }
+    },
+    activedPools() {
+      if (!this.allPools || this.allPools.length === 0) return [];
+      return this.allPools.filter(p => p.status === 'OPENED')
+    },
+    inActivedPools() {
+      if (!this.allPools || this.allPools.length === 0) return [];
+      return this.allPools.filter(p => p.status === 'CLOSED')
+    }
+  },
+  async mounted() {
+    while(true) {
+      if (this.allPools) {
+        break;
+      }
+      await sleep(0.3)
+    }
+    // monitor pools info 
+    const watchers = await updatePoolsByPolling(this.allPools)
+
+    this.$once('hook:beforeDestoryed', () => {
+        watchers.map(w => {
+            try{
+              w.stop()
+            }catch(e){
+              
+            }
+          })
+    })
   }
 }
 </script>

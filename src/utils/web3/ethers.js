@@ -53,6 +53,7 @@ export const waitForTx = async (hash) => {
                 sleep(1)
             }
             const trx = await provider.getTransactionReceipt(hash)
+            console.log(643, trx);
             if (trx.status !== 0) {
                 resolve()
             }else{

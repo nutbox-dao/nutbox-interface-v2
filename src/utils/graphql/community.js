@@ -31,6 +31,9 @@ export async function getSpecifyCommunityInfo(community) {
                         id
                     }
                     stakersCount
+                    community{
+                        id
+                    }
                 }
                 operationCount
                 operationHistory(first: 60, orderBy: timestamp, orderDirection: desc) {

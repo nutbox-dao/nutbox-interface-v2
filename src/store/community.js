@@ -1,3 +1,4 @@
+import { ethers } from "ethers"
 
 export default {
   namespaced: true,
@@ -47,6 +48,7 @@ export default {
   getters: {
     getCommunityInfoById: (state) => (communityId) => {
       if (!state.allCommunityInfo) return null
+      communityId = communityId.toLowerCase();
       return state.allCommunityInfo[communityId]
     }
   }

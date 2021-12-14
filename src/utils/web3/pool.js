@@ -31,7 +31,7 @@ import {
   getOperationFee
 } from './community'
 import BN from 'bn.js'
-import { GasTimes, NutAddress } from '@/config'
+import { GasTimes, NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
 import {
   BLOCK_SECOND,
@@ -62,6 +62,29 @@ export const getAllPools = async (update = false) => {
       return
     }
   })
+}
+
+export const getPoolFactoryAddress = (type) => {
+  switch (type){
+    case 'main':
+      return contractAddress['ERC20StakingFactory'].toLowerCase()
+    case 'steem' || 'hive':
+      return contractAddress['SPStakingFactory'].toLowerCase()
+  }
+}
+
+export const getPoolType = (factory, chainId) => {
+  factory = ethers.utils.getAddress(factory)
+  switch (factory) {
+    case contractAddress['ERC20StakingFactory']:
+      return CHAIN_NAME
+    case contractAddress['SPStakingFactory']:
+      if (chainId === 1) {
+        return 'STEEM'
+      }else if (chainId === 2) {
+        return 'HIVE'
+      }
+  }
 }
 
 /**
@@ -344,44 +367,48 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
-/** 
- * monitor users staking
+/**
+ * update pools info
+ * @param {*} pools 
+ * @returns 
  */
-export const monitorUserStakings = async () => {
+export const updatePoolsByPolling = async (pools) => {
+    const stakingWatcher = await monitorUserStakings(pools).catch();
+    const rewardWatcher = await monitorPendingRewards(pools).catch();
+    const approvementsWatcher = await monitorApprovements(pools).catch();
+
+    return [stakingWatcher, rewardWatcher, approvementsWatcher]
+}
+
+/** 
+ * monitor users staking and pool's total staked
+ */
+export const monitorUserStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pools = await getAllPools()
-      store.commit('web3/saveLoadingUserStakings', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['userStakings']
-      watcher && watcher.stop()
       const account = await getAccounts();
-      watcher = createWatcher(pools.map(p => {
+      const watcher = createWatcher(pools.map(p => {
         return {
-          target: p.communityId,
+          target: p.id,
           call: [
-            'getUserStakedAmount(uint8,address)(uint256)',
-            p.pid,
+            'getUserStakedAmount(address)(uint256)',
             account
           ],
           returns: [
-            [p.communityId + '-' + p.pid]
+            [p.id]
           ]
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        // console.log('Updates user staking', updates);
-        store.commit('web3/saveLoadingUserStakings', false)
-        let userStakings = store.state.web3.userStakings
+        let userStakings = {}
         updates.map(u => {
           userStakings[u.type] = u.value
         })
-        store.commit('web3/saveUserStakings', {...userStakings})
+        console.log('Updates user staking', userStakings);
+        store.commit('pool/saveUserStaked', userStakings)
       });
       watcher.start()
-      watchers['userStakings'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(watcher)
     } catch (e) {
       console.log('monitorUserStaking fail', e);
       reject(e)
@@ -393,39 +420,31 @@ export const monitorUserStakings = async () => {
  * monitor users pending rewards
  * @returns 
  */
-export const monitorPendingRewards = async () => {
+export const monitorPendingRewards = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pools = await getAllPools()
-      store.commit('web3/saveLoadingPendingRewards', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['pendingRewards']
-      watcher && watcher.stop()
       const account = await getAccounts();
-      watcher = createWatcher(pools.map(p => ({
-          target: p.communityId,
+      const watcher = createWatcher(pools.map(p => ({
+          target: p.community.id,
           call: [
-            'getUserPendingRewards(uint8,address)(uint256)',
-            p.pid,
+            'getPoolPendingRewards(address,address)(uint256)',
+            p.id,
             account
           ],
           returns: [
-            [p.communityId + '-' + p.pid]
+            [p.id]
           ]
         })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        // console.log('Updates pending rewards', updates);
-        store.commit('web3/saveLoadingPendingRewards', false)
-        let pendingRewards = store.state.web3.pendingRewards
+        let pendingRewards = {}
         updates.map(u => {
           pendingRewards[u.type] = u.value
         })
-        store.commit('web3/savePendingRewards', {...pendingRewards})
+        console.log('Updates pending rewards', pendingRewards);
+        store.commit('pool/saveUserReward', pendingRewards)
       });
       watcher.start()
-      watchers['pendingRewards'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(watcher)
     } catch (e) {
       console.log('monitorPendingreward fail', e);
       reject(e)
@@ -437,108 +456,37 @@ export const monitorPendingRewards = async () => {
  * Monitor users token approvement
  * @returns 
  */
-export const monitorApprovements = async () => {
+export const monitorApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let pools = await getAllPools()
-      const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
-      pools = pools.filter(pool => pool.type === "HomeChainAssetRegistry")
-      store.commit('web3/saveLoadingApprovements', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['approvements']
-      watcher && watcher.stop()
+      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
+      store.commit('pool/saveLoadingApprovements', true)
       const account = await getAccounts();
       let calls = pools.map(pool => ({
-        target: pool.address,
+        target: pool.asset,
         call: [
           'allowance(address,address)(uint256)',
           account,
-          erc20HandlerAddress
+          pool.community.id
         ],
         returns: [
-          [pool.communityId + '-' + pool.pid, val => val / (10 ** pool.decimal) > 1e10]
+          [pool.id, val => val / 1e18 > 1e10]
         ]
       }))
-      calls.push({
-        target: NutAddress,
-        call: [
-          'allowance(address,address)(uint256)',
-          account,
-          erc20HandlerAddress
-        ],
-        returns: [
-          ['NUTAllowance', val => val / (1e18) > 1e10]
-        ]
-      })
-      watcher = createWatcher(calls, Multi_Config)
+      const watcher = createWatcher(calls, Multi_Config)
       watcher.batch().subscribe(updates => {
-        store.commit('web3/saveLoadingApprovements', false)
-        let approvements = store.state.web3.approvements
+        store.commit('pool/saveLoadingApprovements', false)
+        let approvements = {}
         updates.map(u => {
           approvements[u.type] = u.value
         })
-        // console.log('Updates approve', approvements);
-        store.commit('web3/saveApprovements', {...approvements})
+        console.log('Updates approve', approvements);
+        store.commit('pool/saveApprovements', approvements)
       });
       watcher.start()
-      watchers['Updates approve'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(watcher)
     } catch (e) {
       console.log('Monitor approvment fail', e);
-      reject(e)
-    }
-  })
-}
-
-/**
- * Monitor all pools info
- */
-export const monitorPoolInfos = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const pools = await getAllPools()
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['poolInfos']
-      watcher && watcher.stop()
-      watcher = createWatcher(pools.map(p => {
-        return {
-          target: p.communityId,
-          call: [
-            'openedPools(uint256)(uint8,bytes32,uint256,uint64,string,bool,bool,bool,bool,uint16,bytes32,uint256,uint256)',
-            p.pid,
-          ],
-          returns: [
-            [p.communityId + '-' + p.pid + "-pid", pid => parseInt(pid)],
-            [p.communityId + '-' + p.pid + "-NUT"],
-            [p.communityId + '-' + p.pid + "-stakedNUT", val => val.toString() / 1e18],
-            [p.communityId + '-' + p.pid + "-stakerCount", count => parseInt(count)],
-            [p.communityId + '-' + p.pid + "-poolName"],
-            [p.communityId + '-' + p.pid + "-hasActived"],
-            [p.communityId + '-' + p.pid + "-hasStopped"],
-            [p.communityId + '-' + p.pid + "-canRemove"],
-            [p.communityId + '-' + p.pid + "-hasRemoved"],
-            [p.communityId + '-' + p.pid + "-poolRatio", ratio => parseInt(ratio)],
-            [p.communityId + '-' + p.pid + "-stakingPair"],
-            [p.communityId + '-' + p.pid + "-shareAcc"],
-            [p.communityId + '-' + p.pid + "-totalStakedAmount", amount => amount.toString()]
-          ]
-        }
-      }), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        // console.log('update pools info', updates);
-        let monitorPools = store.state.web3.monitorPools 
-        updates.map(u => {
-          monitorPools[u.type] = u.value
-        })
-        store.commit('web3/saveMonitorPools', {...monitorPools})
-      });
-      watcher.start()
-      watchers['poolInfos'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
-    } catch (e) {
-      console.log('monitor pools info fail', e);
       reject(e)
     }
   })
@@ -589,7 +537,7 @@ export const monitorUserBalances = async () => {
 /**
  * Monitor pools apy by polling
  */
- export const UpdateApysOfPool = async () => {
+ export const UpdateApysOfPool = async (pools) => {
   // apy calculate:
   // need token price, ctoken price, poolRatio, devRatio, currentblockreward, tvl
   // a pool's apy = a year's reward / tvl
