@@ -31,7 +31,10 @@ ponsived {
   border-left: 1px solid rgba(246, 247, 249, 1);
   border-right: 2px solid rgba(246, 247, 249, 1);
 }
-
+.asset-tr td, .asset-tr th {
+  vertical-align: middle;
+  padding: .4rem;
+}
 .page-item .page-link {
   border-color: rgba(246, 247, 249, 1) !important;
 }
@@ -93,7 +96,7 @@ ponsived {
   color: var(--primary-custom);
 }
 .text-grey-7 {
-  color: rgba(white, .7);
+  color: var(--text-grey-7);
 }
 .text-grey-5 {
   color: rgba(white, .5);

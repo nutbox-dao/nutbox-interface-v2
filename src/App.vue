@@ -200,7 +200,7 @@ export default {
   --secondary-text: #717376;
   --disable: #bdbfc2;
   --dividers: #737373;
-  --background: #24252e;
+  --background: #1D1E1F;
   --error: #ff5040;
   --success: #50bf00;
   --link: #408fff;
@@ -208,12 +208,13 @@ export default {
   --backgroud-state: #b37012;
   --primary: #f8b62a;
   --card-broder: #37383c;
-  --card-bg-primary: #1b1e23;
+  --card-bg-primary: #161718;
   --nav-tab-bg: #3c3c40;
   --nav-tab-bg-active: #69696f;
   --input-border: #4e5054;
   --input-bg: #1b1e23;
-  --block-bg: #3c3c40;
+  --block-bg: #2C2D2E;
+  --text-grey-7: #747576;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
