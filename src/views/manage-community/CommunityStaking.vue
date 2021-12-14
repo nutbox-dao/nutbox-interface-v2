@@ -175,6 +175,9 @@ export default {
           variant: 'success'
         })
         this.communityData.pools.push(newPool)
+        this.communityData.pools.map((pool, i) => {
+          pool.ratio = form.ratios[i] * 100
+        })
         await sleep(2);
         this.poolTypeModal = false
       }catch (err) {

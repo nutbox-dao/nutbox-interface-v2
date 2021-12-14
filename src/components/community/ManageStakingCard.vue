@@ -65,16 +65,16 @@
         </div>
 
         <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="receiveAttention" :disabled="uploading">
-            <b-spinner small type="grow" v-show="uploading" />
+          <button class="primary-btn" @click="receiveAttention" :disabled="updating">
+            <b-spinner small type="grow" v-show="updating" />
             {{ $t("pool.closePool") }}
           </button>
           <button
             class="primary-btn primary-btn-outline"
             @click="showAttention = false"
-            :disabled="uploading"
+            :disabled="updating"
           >
-            <b-spinner small type="grow" v-show="uploading" />
+            <b-spinner small type="grow" v-show="updating" />
             {{ $t("operation.cancel") }}
           </button>
         </div>
@@ -137,7 +137,6 @@ export default {
       contract: null,
       stakedERC20: {},
       showAttention: false,
-      uploading: false,
       icon: null,
       vert: 1e18,
       confirmInfo: ''
@@ -176,12 +175,31 @@ export default {
           })
           return
         }
-        const res = await closePool(this.pool.pid)
+        let pools = []
+        let activedPools = []
+        let ratios = []
+        let index = 0
+        for(let i = 0; i < this.communityData.pools.length; i++){
+          const pool = {...this.communityData.pools[i]}
+          if (pool.id !== this.pool.id) {
+            if(pool.status === 'OPENED'){
+              pool.poolIndex = index++;
+              activedPools.push(pool.id)
+              ratios.push(pool.ratio);
+            }
+          }else {
+            pool.status = 'CLOSED'
+          }
+          pools.push(pool)
+        }
+        const res = await closePool({poolAddress: this.pool.id, activedPools, ratios})
         this.$bvToast.toast(this.$t('tip.stopPoolOk'), {
           title: this.$t('tip.tips'),
           variant: 'success'
         })
+        this.communityData.pools = pools
         await sleep(2)
+
         this.showAttention = false
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {

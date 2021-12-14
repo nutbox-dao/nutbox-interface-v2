@@ -37,7 +37,10 @@ export async function getSpecifyCommunityInfo(community) {
                     type
                     timestamp
                     poolFactory
-                    pool
+                    pool{
+                        id
+                        name
+                    }
                     user
                     chainId
                     asset

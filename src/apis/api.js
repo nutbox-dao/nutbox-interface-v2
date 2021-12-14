@@ -21,21 +21,6 @@ export const updateCommunity = async (params) =>
 
 export const getAllTokens = async () => get(BACKEND_API_URL + "/token/get");
 
-export const getNonce = async (accountId) =>
-  get(BACKEND_API_URL + "/user/getnonce", { id: accountId });
-
-export const updateUserInfo = async (params) => {
-  post(BACKEND_API_URL + "user/updateUser", params)
-}
-
-export const getAllUsers = async () => {
-  get(BACKEND_API_URL + "user/users");
-}
-
-export const getSomeUsers = async (ids) => {
-  post(BACKEND_API_URL + "user/getsomeusers", ids)
-}
-
 export const getMyCommunityProposalConfigInfo = async (communityId) =>
   get(BACKEND_API_URL + "/communityProposalConfig/get", { id: communityId });
 
@@ -77,6 +62,22 @@ export const insertToken = async (params) =>
 
 export const updateTokenIcon = async (params) =>
   put(BACKEND_API_URL + "/token/update", params);
+
+// ============================================ user ============================================
+export const getNonce = async (accountId) =>
+  get(BACKEND_API_URL + "/user/getnonce", { id: accountId });
+
+export const updateUserInfo = async (params) => {
+  post(BACKEND_API_URL + "user/updateUser", params)
+}
+
+export const getAllUsers = async () => {
+  get(BACKEND_API_URL + "user/users");
+}
+
+export const getSomeUsers = async (ids) => {
+  post(BACKEND_API_URL + "user/getsomeusers", ids)
+}
 
 // ============================================ strategies ============================================
 

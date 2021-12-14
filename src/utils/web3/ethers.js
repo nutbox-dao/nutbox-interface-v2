@@ -56,9 +56,11 @@ export const waitForTx = async (hash) => {
             if (trx.status !== 0) {
                 resolve()
             }else{
+                console.log('tx fail status:', trx.status);
                 reject(errCode.TRANSACTION_FAIL)
             }
         }catch(err) {
+            console.log('tx fail:', err);
             reject(errCode.TRANSACTION_FAIL)
         }
     })

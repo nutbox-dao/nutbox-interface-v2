@@ -204,14 +204,12 @@ export const updatePoolsRatio = async (form) => {
     }
     let contract;
     try {
-      console.log(2);
       contract = await getContract('Community', stakingFactoryId, false)
     } catch (e) {
       reject(e);
       return;
     }
     try {
-      console.log(3);
       const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
       console.log('Update pool ratios', tx.hash);
       await waitForTx(tx.hash)
@@ -241,7 +239,7 @@ export const closePool = async (form) => {
       return;
     }
     try{
-      const tx = await contract.adminClosePool(form.poolAddress, form.activedPools, form.ratios.map(r => r * 100))
+      const tx = await contract.adminClosePool(form.poolAddress, form.activedPools, form.ratios)
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e) {

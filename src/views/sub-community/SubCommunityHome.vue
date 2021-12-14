@@ -212,7 +212,7 @@ export default {
 
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
-        const bb = await getCommunityBalance(this.communityId, res)
+        const bb = await getCommunityBalance(this.communityId, res.address)
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
       // start watch history
@@ -225,7 +225,9 @@ export default {
       this.$once('hook:beforeDestroy', () => {
         window.clearInterval(interval)
       })
-    }).catch(e => {})
+    }).catch(e => {
+      console.log('[Sub community home]: get ctoken fail', e);
+    })
     getSpecifyDistributionEras(this.communityId).then(res => {
       console.log('dis', res);
     })

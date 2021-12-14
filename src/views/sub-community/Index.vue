@@ -72,33 +72,33 @@ export default {
     }
   },
   mounted () {
-    // if (!this.communityId) {
-    //   this.$router.replace('/');
-    //   return;
-    // }
-    // console.log("Specify community id", this.communityId);
-    // try {
-    //   this.loading = true;
-    //   getSpecifyCommunityInfo(this.communityId).then(community => {
-    //     getCToken(community.id, true).then(ctoken => {
-    //       console.log(1, community.id, ctoken);
-    //       this.saveCtoken(ctoken)
-    //     }).catch(e => {
-    //       console.log('get ctoken fail');
-    //     })
-    //     this.saveFeeRatio(community.feeRatio)
-    //     this.saveOperationCount(community.operationCount)
-    //     this.saveAllPools(community.pools)
-    //     this.saveOperationHistory(community.operationHistory)
-    //
-    //     this.loading = false
-    //   })
-    // }catch (e){
-    //   handleApiErrCode(e, (tip, params) => {
-    //     this.$bvToast.toast(tip, params)
-    //   })
-    //   this.loading = false
-    // }
+    if (!this.communityId) {
+      this.$router.replace('/');
+      return;
+    }
+    console.log("Specify community id", this.communityId);
+    try {
+      this.loading = true;
+      getSpecifyCommunityInfo(this.communityId).then(community => {
+        getCToken(community.id, true).then(ctoken => {
+          console.log(1, community.id, ctoken);
+          this.saveCtoken(ctoken)
+        }).catch(e => {
+          console.log('get ctoken fail');
+        })
+        this.saveFeeRatio(community.feeRatio)
+        this.saveOperationCount(community.operationCount)
+        this.saveAllPools(community.pools)
+        this.saveOperationHistory(community.operationHistory)
+    
+        this.loading = false
+      })
+    }catch (e){
+      handleApiErrCode(e, (tip, params) => {
+        this.$bvToast.toast(tip, params)
+      })
+      this.loading = false
+    }
   },
   methods: {
     ...mapMutations('currentCommunity', [

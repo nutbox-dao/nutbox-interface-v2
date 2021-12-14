@@ -105,7 +105,7 @@ export default {
       case "ADMINCLOSEPOOL":
         this.description = `Admin close a pool: ${this.operation.pool.name}`
         break;
-      case "ADMINSETRATION":
+      case "ADMINSETRATIO":
         this.description = `Admin reset the pool ratios.`
         break;
     }

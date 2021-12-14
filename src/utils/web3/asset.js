@@ -204,6 +204,7 @@ export const getERC20Info = async (address) => {
     try{
       contract = await getContract('ERC20', address);
     }catch (e) {
+      console.log(666);
       reject(e);
       return;
     }
