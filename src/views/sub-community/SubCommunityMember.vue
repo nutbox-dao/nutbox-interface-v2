@@ -43,19 +43,19 @@
             <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem">Creator</button>
           </div>
           <div class="text-center mt-3 pb-3">
-            <img v-if="user.avatar" class="user-avatar hover rounded-circle"
+            <img v-if="user && user.avatar" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
             <img v-else class="user-avatar hover rounded-circle"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
-            <div class="my-1 font20 font-bold">{{user.name}}</div>
+            <div class="my-1 font20 font-bold">{{ getName(user.address) }}</div>
             <div class="mb-3 font12 text-grey-7 d-flex align-items-center justify-content-center">
-              <span>{{user.address}}</span>
-              <i class="copy-icon ml-2"></i>
+              <span>{{ user ? (user.address.substring(0, 6) + '...' + user.address.substring(user.address.length - 6, user.address.length)) : '--' }}</span>
+              <i class="copy-icon ml-2" @click="copy"></i>
             </div>
             <div class="s-card d-flex text-center font12">
               <div class="flex-1 overflow-hidden">
                 <div class="font14 text-grey-7">Join Date</div>
-                <div class="font24 font-bold mt-2">2021/12/14</div>
+                <div class="font24 font-bold mt-2">{{ user ? getDateString(user.createdAt) : '--' }}</div>
               </div>
               <div class="flex-1">
                 <div class="font14 text-grey-7">PNUT</div>
@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="flex-fill overflow-auto">
-            <div class="mt-2">Activities</div>
+            <div class="mt-2">{{ user ? user.operationCount : '' }} Activities</div>
             <div v-if="activitiesLoading" class="mt-4 text-center">
               <b-spinner></b-spinner>
             </div>
@@ -84,7 +84,7 @@
 <script>
 import ActivityItem from '@/components/community/ActivityItem'
 import { mapState } from 'vuex'
-import { sleep, getDateString as gds } from '@/utils/helper'
+import { sleep } from '@/utils/helper'
 import { watchMemberBalance } from '@/utils/web3/community'
 
 export default {
@@ -125,12 +125,20 @@ export default {
   watch: {
     allUsers (newValue, oldValue) {
       try {
+        this.user = newValue[0]
+        this.selectIndex = 0
+        this.$refs.selectableTable.selectRow(0)
         this.balanceWatcher.restart()
       } catch (e) {}
     }
   },
   async mounted () {
     this.balanceWatcher = await watchMemberBalance()
+    if (this.allUsers && this.allUsers.length > 0){
+      this.user = this.allUsers[0]
+      this.selectIndex = 0
+      this.$refs.selectableTable.selectRow(0)
+    }
   },
   methods: {
     onSelectUser (data, index) {
@@ -144,10 +152,18 @@ export default {
       }, 1500)
     },
     getName(address) {
+      if (!address) return '--'
       return address.substring(0,6) + '...'
     },
     getDateString(timestamp) {
-      return new Date(parseInt(timestamp) * 1e3).toISOString().replace("T", " ").substring(0, 19)
+      try {
+        return new Date(parseInt(timestamp) * 1e3).toISOString().replace("T", " ").substring(0, 19)
+      }catch(e) {
+        return '--'
+      }
+    },
+    copy(){
+      console.log(55);
     }
   }
 
