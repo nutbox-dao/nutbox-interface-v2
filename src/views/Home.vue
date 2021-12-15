@@ -5,20 +5,19 @@
         <section class="section1">
           <div class="s1-card">
             <div class="row">
-              <div class="col-md-8 text-left d-flex flex-column justify-content-center box-left">
+              <div class="col-md-8 text-left d-flex flex-column justify-content-between">
                 <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt="">
-                <div class="s1-title">
-                  Link Community <br>
-                  to Web3.0
+                <div>
+                  <div class="s1-title s-title">Link Community to Web3.0</div>
+                  <div class="row text-grey-7 font-bold">
+                    <div class="col-sm-4">Staking-based Bootstrap</div>
+                    <div class="col-sm-4">DAO Goverance</div>
+                    <div class="col-sm-4">Community Service</div>
+                  </div>
                 </div>
-                <button @click="$router.replace('/community/index')" class="s1-btn">Explore</button>
-                <div class="row mt-3">
-                  <div class="col-sm-4">Staking-based Bootstrap</div>
-                  <div class="col-sm-4">DAO Goverance</div>
-                  <div class="col-sm-4">Community Service</div>
-                </div>
+                <button @click="$router.replace('/community/index')" class="s1-btn">Explore Communities</button>
               </div>
-              <div class="col-md-4 box-right">
+              <div class="col-md-4 text-right">
                 <img class="home-img1" src="~@/static/images/home-s1-img1.png" alt="">
               </div>
             </div>
@@ -41,16 +40,26 @@
               </div>
             </div>
           </div>
-          <p>
-            userCount: {{ walnutInfo.totalUsers }}
-          </p>
-          <p>
-            community: {{ walnutInfo.totalCommunities }}
-          </p>
-          <p>
-            pools: {{ walnutInfo.totalPools }}
-          </p>
-          
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <div class="s2-card2">
+                <div class="font56 font-bold">{{ walnutInfo.totalCommunities }}</div>
+                <div class="text-grey-7">Community</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="s2-card2">
+                <div class="font56 font-bold">{{ walnutInfo.totalUsers }}</div>
+                <div class="text-grey-7">Member</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="s2-card2">
+                <div class="font56 font-bold">{{ walnutInfo.totalPools }}</div>
+                <div class="text-grey-7">TVL</div>
+              </div>
+            </div>
+          </div>
         </section>
         <section class="section3 mt-4">
           <div class="d-flex justify-content-between align-items-center">
@@ -58,7 +67,7 @@
             <div class="more" @click="$router.replace('/community/index')">More >></div>
           </div>
         </section>
-        <section class="my-4 text-primary-0">
+        <section class="my-4 font-bold font20 text-center">
           About Nutbox
         </section>
       </div>
@@ -128,53 +137,47 @@ $home-primary-color: #F8B62A;
   background-repeat: no-repeat;
   background-position: left top, right top;
   .s1-card {
-    @include card(1.2rem, var(--background));
-    background-image:
-      linear-gradient(135deg, #5B98D6, rgba(66, 44, 148, 0.8), rgba(22, 34, 59, 0) 100%),
-      url("~@/static/images/home-s1-img3.svg");
-  }
-  .box-left {
-    text-align: left;
+    @include card(2rem 3rem);
+    border-radius: .8rem 5rem .8rem 5rem;
   }
   .text-logo {
     height: 1.2rem;
     width: fit-content;
     object-fit: contain;
-    margin-bottom: 2.5rem;
     object-position: left;
   }
   .s1-title {
-    font-size: 3.4rem;
+    font-size: 1.8rem;
     line-height: 3.6rem;
     font-weight: bolder;
     width: fit-content;
-    padding-bottom: .8rem;
-    background-image: url("~@/static/images/home-s1-img2.svg");
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: auto 1.7rem;
-    margin-bottom: 1rem;
   }
   .home-img1 {
-    margin-top: 3rem;
     width: 60%;
   }
   .s1-btn {
-    height: 3.2rem;
+    height: 2.4rem;
     padding: 0 2.5rem;
-    color: #242629;
-    background: $home-primary-color;
+    color: white;
+    background-image: linear-gradient(to right, #D252CB, #4826DF);
     border-radius: 3.2rem;
     border: transparent;
     width: fit-content;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bolder;
   }
 }
 .section2 {
   .s2-card {
     @include card();
-    border: 2px solid var(--dividers);
+    background-image:
+      linear-gradient(-150deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+  }
+  .s2-card2 {
+    @include card();
   }
 }
 .section3 {
@@ -231,8 +234,7 @@ $home-primary-color: #F8B62A;
   }
 }
 .s-title {
-  font-size: 2.8rem;
-  background-image:-webkit-linear-gradient(left,#3F75D5,#D27947);
+  background-image:-webkit-linear-gradient(left,#FADDC5,#B6B9F8);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   width: fit-content;

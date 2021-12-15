@@ -7,7 +7,8 @@
 .page-side {
   width: 3.8rem;
   height: 100%;
-  border-right: 1px solid var(--dividers);
+  background: var(--card-bg-primary);
+  //border-right: 1px solid var(--dividers);
   padding: .5rem;
   display: flex;
   flex-direction: column;

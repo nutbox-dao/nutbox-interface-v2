@@ -26,7 +26,7 @@
                     <div>Total Asset Value</div>
                     <div class="font28 mt-2">$850</div>
                   </div>
-                  <button class="primary-btn mb-2">Detail</button>
+                  <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
                   <PoolRatio class="asset-chart" :pools-data="assetValue" :show-legend-info="false"/>
@@ -45,6 +45,15 @@
           <StakedPools class="mb-3"/>
         </div>
     </div>
+    <b-modal
+      v-model="assetModalVisible"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <AssetDetailModal @close="assetModalVisible=false"/>
+    </b-modal>
   </div>
 </template>
 
@@ -55,10 +64,11 @@ import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import CommunityCard from '@/components/community/CommunityCard'
 import { getUserBaseInfo, updateUserInfo } from '@/utils/web3/account'
 import { mapState, mapGetters } from 'vuex'
+import AssetDetailModal from '@/components/profile/AssetDetailModal'
 
 export default {
   name: 'Profile',
-  components: { PoolRatio, StakedPools, CommunityCard },
+  components: { PoolRatio, StakedPools, CommunityCard, AssetDetailModal },
   data () {
     return {
       user:{},
@@ -69,6 +79,7 @@ export default {
         { name: 'PNUT', ratio: 20 },
         { name: 'PNUT', ratio: 20 }
       ],
+      assetModalVisible: false
     }
   },
   computed: {

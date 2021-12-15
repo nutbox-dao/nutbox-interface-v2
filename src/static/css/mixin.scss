@@ -23,7 +23,7 @@
   height: $h;
   border-radius: .8rem;
   overflow: $overflow;
-  border: 1px solid var(--card-broder);
+  border: 1px solid transparent;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
   position: relative;
   background: $bg;

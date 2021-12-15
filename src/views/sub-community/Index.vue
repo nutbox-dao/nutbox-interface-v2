@@ -13,10 +13,10 @@
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
-              <!-- <b-nav-item to="/sub-community/home">
+              <b-nav-item to="/sub-community/member">
                 <i class="menu-icon blog-icon" />
-                <span>{{ $t("router.blog") }}</span>
-              </b-nav-item> -->
+                <span>{{ $t("router.member") }}</span>
+              </b-nav-item>
             </b-nav>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default {
         this.saveOperationCount(community.operationCount)
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
-    
+
         this.loading = false
       })
     }catch (e){
@@ -178,6 +178,7 @@ export default {
     display: block;
   }
   .sub-page-container {
+    display: flex;
     flex-direction: column;
   }
 }
