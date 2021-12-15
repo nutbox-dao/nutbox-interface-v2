@@ -35,6 +35,10 @@
           <span class="name"> APR </span>
           <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
         </div>
+        <div class="project-info-container">
+          <span class="name"> Stakers </span>
+          <div class="info">{{ card.stakersCount }}</div>
+        </div>
       </div>
     </div>
   </div>

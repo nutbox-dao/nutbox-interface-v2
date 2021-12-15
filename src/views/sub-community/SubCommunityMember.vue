@@ -56,11 +56,16 @@
 
 <script>
 import ActivityItem from '@/components/community/ActivityItem'
+import { mapState } from 'vuex'
+import { sleep } from '@/utils/helper'
+import { watchMemberBalance } from '@/utils/web3/community'
+
 export default {
   name: 'SubCommunityMember',
   components: { ActivityItem },
   data () {
     return {
+      balanceWatcher: {},
       fields: [
         { key: 'avatar', label: '' },
         { key: 'nickname', label: 'Nickname' },
@@ -68,14 +73,14 @@ export default {
         { key: 'value', label: 'Value', class: 'text-right' }
       ],
       memberList: [
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 },
-        { avatar: '', nickname: 'user name', date: '2021/12/14', value: 1000 }
+        { avatar: '', nickname: 'user name1', date: '2021/12/141', value: 1000 },
+        { avatar: '', nickname: 'user name2', date: '2021/12/142', value: 1000 },
+        { avatar: '', nickname: 'user name3', date: '2021/12/143', value: 1000 },
+        { avatar: '', nickname: 'user name4', date: '2021/12/14', value: 1000 },
+        { avatar: '', nickname: 'user name5', date: '2021/12/14', value: 1000 },
+        { avatar: '', nickname: 'user name6', date: '2021/12/14', value: 1000 },
+        { avatar: '', nickname: 'user name7', date: '2021/12/14', value: 1000 },
+        { avatar: '', nickname: 'user name8', date: '2021/12/14', value: 1000 }
       ],
       user: {
         avatar: '',
@@ -84,7 +89,23 @@ export default {
       },
       activitiesList: []
     }
-  }
+  },
+  computed: {
+    ...mapState('currentCommunity', ['communityInfo', 'allUsers'])
+  },
+  watch: {
+    allUsers(newValue, oldValue) {
+        try{
+          this.balanceWatcher.restart()
+        }catch(e) {}
+    }
+  },
+  async mounted () {
+      this.balanceWatcher = await watchMemberBalance();
+
+
+  },
+
 }
 </script>
 

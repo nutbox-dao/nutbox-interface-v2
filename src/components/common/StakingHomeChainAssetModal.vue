@@ -40,6 +40,8 @@ import { mapState } from "vuex";
 import { deposit, withdraw } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
 import { getERC20Balance } from '@/utils/web3/asset'
+import { getMyJoinedCommunity } from '@/utils/graphql/user'
+import { getAllCommunities } from '@/utils/web3/community'
 
 export default {
   data () {
@@ -50,8 +52,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['userBalances', 'userStakings', 'account']),
     ...mapState('pool', ['userStaked']),
+    ...mapState('web3', ['userGraphInfo']),
+    ...mapState('currentCommunity', ['communityId']),
     staked(){
       if (!this.userStaked) return 0;
       return this.userStaked[this.card.id] ?? 0
@@ -114,8 +117,13 @@ export default {
           variant: 'success'
         })
         setTimeout(() => {
+          if (this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
+            // first join
+            getAllCommunities(true)
+            getMyJoinedCommunity()
+          }
           this.$emit("hideStakeMask");
-        }, 2000);
+        }, 3000);
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -127,7 +135,7 @@ export default {
   },
   async mounted () {
     // get user's balance
-    console.log(this.card);
+    console.log(this.userGraphInfo);
     this.balance = await getERC20Balance(this.card.asset)
   },
 }

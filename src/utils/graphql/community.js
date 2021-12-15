@@ -35,6 +35,12 @@ export async function getSpecifyCommunityInfo(community) {
                         id
                     }
                 }
+                users {
+                    id
+                    createdAt
+                    address
+                    operationCount
+                }
                 operationCount
                 operationHistory(first: 60, orderBy: timestamp, orderDirection: desc) {
                     type

@@ -88,6 +88,7 @@ export default {
         this.saveOperationCount(community.operationCount)
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
+        this.saveAllUsers(community.users)
 
         this.loading = false
       })
@@ -105,7 +106,8 @@ export default {
       'saveAllPools',
       'saveFeeRatio',
       'saveOperationCount',
-      'saveOperationHistory'])
+      'saveOperationHistory',
+      'saveAllUsers'])
   },
   beforeDestroy () {
     this.clearData();

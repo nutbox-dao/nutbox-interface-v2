@@ -11,6 +11,7 @@ export default {
       allPools: null,
       cToken: null,
       operationHistory: null,
+      allUsers: null,
       feeRatio: 0,
       operationCount: 0,
       specifyDistributionEras: []
@@ -44,6 +45,9 @@ export default {
       saveSpecifyDistributionEras (state, specifyDistributionEras) {
         state.specifyDistributionEras = specifyDistributionEras
       },
+      saveAllUsers(state, allUsers) {
+        state.allUsers = allUsers
+      },
       
       clearData (state) {
           state.communityId = null;
@@ -52,6 +56,7 @@ export default {
           state.feeRatio = 0;
           state.allPools = null;
           state.cToken = null;
+          state.allUsers = null;
           state.operationCount = 0;
           state.specifyDistributionEras = [];
       }

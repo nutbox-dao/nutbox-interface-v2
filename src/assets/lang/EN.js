@@ -329,7 +329,8 @@ module.exports = {
     social: "Social",
     governance: "Governance",
     staking: "Staking",
-    blog: "Blog"
+    blog: "Blog",
+    member: "Member"
   },
   // placeHolder tip
   placeHolder: {

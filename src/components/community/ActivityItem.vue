@@ -84,7 +84,7 @@ export default {
           }
         }
         break;
-      case "WITHDROW":
+      case "WITHDRAW":
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = accName + ` withdraw ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
