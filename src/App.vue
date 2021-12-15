@@ -213,7 +213,7 @@ export default {
   --nav-tab-bg-active: #69696f;
   --input-border: #4e5054;
   --input-bg: #1b1e23;
-  --block-bg: #2C2D2E;
+  --block-bg: #1C1D1E;
   --text-grey-7: #747576;
 }
 @import "~bootstrap/scss/bootstrap.scss";
@@ -244,6 +244,11 @@ body {
   right: 0;
   bottom: 0;
   background-color: var(--background);
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 75%;
+  }
 }
 .communities-bar {
   .active .community-logo-box {

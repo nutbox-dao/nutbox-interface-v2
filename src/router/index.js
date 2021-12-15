@@ -10,6 +10,7 @@ import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
+import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
@@ -66,6 +67,10 @@ const routes = [
       {
         path: 'member',
         component: SubCommunityMember
+      },
+      {
+        path: 'governance',
+        component: SubCommunityGovernance
       }
     ]
   },

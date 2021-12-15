@@ -6,7 +6,7 @@
           <Step :current-step="1" :step-label="['Deploy community asset', 'Complete info']"></Step>
         </div>
       </div>
-      <div class="col-md-7 mx-auto position-relative">
+      <div class="col-md-7 mx-auto position-relative mb-5">
         <div v-show="cardStep===0" class="form-card">
           <div class="text-left">
             <div class="font-bold font20">Chose an asset</div>
