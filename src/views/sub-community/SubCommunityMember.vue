@@ -3,7 +3,7 @@
     <div class="row">
       <div class="block col-md-7 col-sm-7 pr-sm-0">
         <div class="member-card">
-          <b-table :fields="fields" :items="memberList"
+          <b-table :fields="fields" :items="allUsers"
                    ref="selectableTable"
                    thead-tr-class="asset-tr text-grey-7"
                    tbody-tr-class="asset-tr tr-light"
@@ -16,6 +16,16 @@
             <template #table-colgroup="scope">
               <col v-for="field in scope.fields" :key="field.key"
                    :style="{ width: field.key === 'avatar' ? '2rem' : '' }">
+            </template>
+            <template #cell(address)="row">
+              <span>
+                {{ getName(row.item.address) }}
+              </span>
+            </template>
+            <template #cell(createdAt)="row">
+              <span>
+                {{ getDateString(row.item.createdAt) }}
+              </span>
             </template>
             <template #cell(avatar)="row">
               <img v-if="row.item.avatar"
@@ -74,7 +84,7 @@
 <script>
 import ActivityItem from '@/components/community/ActivityItem'
 import { mapState } from 'vuex'
-import { sleep } from '@/utils/helper'
+import { sleep, getDateString as gds } from '@/utils/helper'
 import { watchMemberBalance } from '@/utils/web3/community'
 
 export default {
@@ -85,9 +95,9 @@ export default {
       balanceWatcher: {},
       fields: [
         { key: 'avatar', label: '' },
-        { key: 'name', label: 'Nickname' },
-        { key: 'date', label: 'Date', class: 'text-center' },
-        { key: 'value', label: 'Value', class: 'text-right' }
+        { key: 'address', label: 'Nickname' },
+        { key: 'createdAt', label: 'Joined At', class: 'text-center' },
+        { key: 'value', label: 'Balance', class: 'text-right' }
       ],
       memberList: [
         { avatar: '', name: 'user name1', date: '2021/12/141', value: 1000 },
@@ -132,6 +142,12 @@ export default {
       setTimeout(() => {
         this.activitiesLoading = false
       }, 1500)
+    },
+    getName(address) {
+      return address.substring(0,6) + '...'
+    },
+    getDateString(timestamp) {
+      return new Date(parseInt(timestamp) * 1e3).toISOString().replace("T", " ").substring(0, 19)
     }
   }
 

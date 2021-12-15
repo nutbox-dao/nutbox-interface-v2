@@ -6,7 +6,7 @@ import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
 import { updateUserInfo as uui, getSomeUsers, getAllUsers } from '@/apis/api'
 import { sleep } from '../helper.js'
-import { errCode } from '@/config.js'
+import { errCode, BSC_CHAIN_ID } from '@/config.js'
 import { signMessage } from './utils'
 
 /**
@@ -17,12 +17,19 @@ export const getAccounts = async (update=false) => {
     if (store.state.web3.account && !update) {
         return store.state.web3.account;
     }
+    const chainId = store.state.chainId;
+    if (chainId && (parseInt(chainId) !== parseInt(BSC_CHAIN_ID))) {
+        console.log(25, chainId, BSC_CHAIN_ID);
+        store.commit('web3/saveAccount', null)
+        return;
+    }
     const metamask = await getEthWeb()
     const accounts = await metamask.request({ method: 'eth_requestAccounts' })
     let account = accounts[0]
     account = ethers.utils.getAddress(account)
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
+    console.log(776, accounts);
     return accounts[0]
 }
 

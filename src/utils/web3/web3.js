@@ -94,7 +94,7 @@ export const chainChanged = async (refresh) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
     refresh();
-    this.go
+    return;
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)

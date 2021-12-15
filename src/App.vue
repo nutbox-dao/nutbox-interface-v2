@@ -25,7 +25,7 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link v-show="!loadingMyCommunityInfo && settingStep === 3" to="/manage-community">
+          <router-link v-show="!loadingMyCommunityInfo && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
           </router-link>
           <!-- <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
@@ -36,10 +36,10 @@
               <ManageCommunityMenu/>
             </template>
           </b-dropdown> -->
-          <div class="hover" @click="gotoCreateCommunity()">
+          <div class="hover" @click="gotoCreateCommunity()" v-show="metamaskConnected">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
           </div>
-          <router-link to="/profile">
+          <router-link to="/profile" v-show="metamaskConnected">
             <img class="user-avatar hover rounded-circle w-75 my-3"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
           </router-link>
@@ -86,7 +86,7 @@ import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
 export default {
   components: { ManageCommunityMenu },
   computed: {
-    ...mapState(['lang', 'prices']),
+    ...mapState(['lang', 'prices', 'metamaskConnected']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo', 'loadingCommunity', 'account']),
     ...mapState('community', ['loadingMyCommunityInfo', 'communityInfo']),
     ...mapState('currentCommunity', ['communityId']),
@@ -143,7 +143,7 @@ export default {
       this.$router.replace('/')
     },
     connect () {
-      if (this.address) {
+      if (this.metamaskConnected) {
         this.onCopy(this.$t('tip.copyAddress', {
           address: formatUserAddress(this.address)
         }), { title: this.$t('tip.clipboard') })
@@ -245,7 +245,7 @@ body {
   bottom: 0;
   background-color: var(--background);
 }
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
   .container {
     max-width: 75%;
   }
