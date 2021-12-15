@@ -95,7 +95,7 @@ export default {
             tooltip: {
               callbacks: {
                 label: function (ctx) {
-                  return `${ctx.raw.name}: ${(Number(ctx.raw.raio)).toFixed(2)}%`
+                  return `${ctx.raw.name}: ${(Number(ctx.raw.ratio)).toFixed(2)}%`
                 }
               }
             },
