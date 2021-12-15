@@ -55,7 +55,7 @@
             </div>
             <div class="col-md-4">
               <div class="s2-card2">
-                <div class="font56 font-bold">{{ walnutInfo.totalPools }}</div>
+                <div class="font56 font-bold">{{ tokensTvl }}</div>
                 <div class="text-grey-7">TVL</div>
               </div>
             </div>
@@ -83,30 +83,10 @@ export default {
   name: 'Home',
   data() {
     return {
-      counts: {
-        tokenCount: 0,
-        userCount: 0,
-        poolCount: 0,
-        communityCount: 0
-      }
     }
   },
   computed: {
     ...mapState('web3', ['walnutInfo']),
-    ...mapState('steem', ['vestsToSteem']),
-    ...mapState('hive', ['vestsToHive']),
-    usersCount() {
-      return 0
-    },
-    communityCount() {
-      return 0
-    },
-    poolsCount() {
-      return 0
-    },
-    tokensCount() {
-      return 0
-    },
     tokensTvl() {
       return 0
     }
