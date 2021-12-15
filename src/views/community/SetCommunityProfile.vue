@@ -333,8 +333,7 @@ import {
   completeCommunityInfo,
   getMyCommunityInfo,
   getAllCommunities,
-  getDistributionEras,
-  getMyCommunityContract
+  getDistributionEras
 } from '@/utils/web3/community'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { mapState } from 'vuex'
@@ -417,7 +416,7 @@ export default {
     if (this.communityInfo && this.communityInfo.cToken){
       // this.tokenLogo = this.communityInfo.cToken.icon
       this.form.tokenLogo = this.communityInfo.cToken.icon
-      this.editToken = false
+      if (this.form.tokenLogo) this.editToken = false
       this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }

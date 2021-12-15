@@ -1,9 +1,10 @@
 
+import Cookie from 'vue-cookies'
 
 export default {
     namespaced: true,
     state: {
-      communityId: null,
+      communityId: Cookie.get('currentCommunityId'),
       // loading community info from graph flag
       loadingCommunityInfo: false,
       communityInfo: null,
@@ -17,6 +18,7 @@ export default {
     mutations: {
       saveCommunityId (state, communityId) {
         state.communityId = communityId;
+        Cookie.set('currentCommunityId', communityId, '30d')
       },
       saveLoadingCommunityInfo (state, loadingCommunityInfo) {
         state.loadingCommunityInfo = loadingCommunityInfo

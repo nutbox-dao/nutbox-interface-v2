@@ -31,12 +31,13 @@ import {
   getOperationFee
 } from './community'
 import BN from 'bn.js'
-import { GasTimes, NutAddress, CHAIN_NAME } from '@/config'
+import { NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
 import {
   BLOCK_SECOND,
   PRICES_SYMBOL
 } from "@/constant"
+import { sleep } from '@/utils/helper'
 
 /**
  * Get all pools that user have upload to backend
@@ -295,7 +296,7 @@ export const deposit = async (poolId, amount) => {
     }
 
     try{
-      const tx = await contract.deposit(ethers.utils.formatUnits(amount.toString(), 18))
+      const tx = await contract.deposit(ethers.utils.parseUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -326,7 +327,7 @@ export const withdraw = async (poolId, amount) => {
     }
 
     try{
-      const tx = await contract.withdraw(ethers.utils.formatUnits(amount.toString(), 18))
+      const tx = await contract.withdraw(ethers.utils.parseUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -404,12 +405,12 @@ export const monitorUserStakings = async (pools) => {
         }
       }), Multi_Config)
       watcher.batch().subscribe(updates => {
-        let userStakings = {}
+        console.log('Updates user staking', updates);
+        let userStakings = store.state.pool.userStaked || {}
         updates.map(u => {
           userStakings[u.type] = u.value
         })
-        console.log('Updates user staking', userStakings);
-        store.commit('pool/saveUserStaked', userStakings)
+        store.commit('pool/saveUserStaked', {...userStakings})
       });
       watcher.start()
       resolve(watcher)
@@ -440,12 +441,12 @@ export const monitorPendingRewards = async (pools) => {
           ]
         })), Multi_Config)
       watcher.batch().subscribe(updates => {
-        let pendingRewards = {}
+        console.log('Updates pending rewards', updates);
+        let pendingRewards = store.state.pool.pendingRewards || {}
         updates.map(u => {
           pendingRewards[u.type] = u.value
         })
-        console.log('Updates pending rewards', pendingRewards);
-        store.commit('pool/saveUserReward', pendingRewards)
+        store.commit('pool/saveUserReward', {...pendingRewards})
       });
       watcher.start()
       resolve(watcher)
@@ -479,13 +480,13 @@ export const monitorApprovements = async (pools) => {
       }))
       const watcher = createWatcher(calls, Multi_Config)
       watcher.batch().subscribe(updates => {
+        console.log('Updates approve', updates);
         store.commit('pool/saveLoadingApprovements', false)
-        let approvements = {}
+        let approvements = store.state.pool.approvements || {};
         updates.map(u => {
           approvements[u.type] = u.value
         })
-        console.log('Updates approve', approvements);
-        store.commit('pool/saveApprovements', approvements)
+        store.commit('pool/saveApprovements', {...approvements})
       });
       watcher.start()
       resolve(watcher)

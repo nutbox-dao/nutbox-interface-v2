@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ConnectMetaMask v-if="!metamaskConnected" />
+    <ConnectMetaMask :disable="card.status === 'CLOSED'" v-if="!metamaskConnected" />
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center mb-4"
@@ -11,14 +11,14 @@
         </span>
         <div class="d-flex">
           <button class="symbol-btn hover" @click="decrease">-</button>
-          <button class="symbol-btn hover" @click="increase">+</button>
+          <button class="symbol-btn hover" :disabled="card.status === 'CLOSED'" @click="increase">+</button>
         </div>
       </div>
       <template v-else>
         <button class="primary-btn" v-if="needLogin" @click="showLogin = true">
             {{ type === 'STEEM' ? $t('wallet.connectSteem') : $t('wallet.connectHive') }}
         </button>
-        <button v-else class="primary-btn" @click="approve" :disabled="approved || isApproving">
+        <button v-else class="primary-btn" @click="approve" :disabled="approved || isApproving || card.status === 'CLOSED'">
           <b-spinner
             small
             type="grow"
@@ -55,6 +55,7 @@ import { getPoolType, approvePool } from '@/utils/web3/pool'
 import Login from '@/components/common/Login'
 import ConnectMetaMask from '@/components/common/ConnectMetaMask'
 import { handleApiErrCode } from '@/utils/helper'
+import StakingHomeChainAssetModal from '@/components/common/StakingHomeChainAssetModal'
 
 export default {
   name: "PoolOperation",
@@ -65,7 +66,8 @@ export default {
   },
   components: {
       Login,
-      ConnectMetaMask
+      ConnectMetaMask,
+      StakingHomeChainAssetModal
   },
   data() {
       return {
@@ -93,7 +95,6 @@ export default {
         if (this.type === 'STEEM') {
             return !this.steemAccount
         }else if(this.type === 'HIVE') {
-          console.log(325, this.hiveAccount);
             return !this.hiveAccount
         }
         return false
@@ -119,11 +120,11 @@ export default {
   methods: {
     increase() {
       this.operate = "add";
-      this.showModal = true;
+      this.updateStaking = true;
     },
     decrease() {
       this.operate = "minus";
-      this.showModal = true;
+      this.updateStaking = true;
     },
     // Approve contract
     async approve() {

@@ -18,11 +18,11 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0xd07f5eF8AAc5BA569641cA883c51FD85c9365133",
-  "CommunityFactory": "0x719bB34dEd002f2EAa1F0c21e1Dc7f48778290b5",
-  "LinearCalculator": "0x525643736678323f3551425c1034429F2a80A5a0",
-  "SPStakingFactory": "0x17F10FAC484AE8990b5eC9a4CC97d3CF2F395bbd",
-  "ERC20StakingFactory": "0x90dF809AfD52935483213BE5c7943f7AD7e85e3A"
+  "Committee": "0xdcA68eB43d45281Ce48fAfd7b189F641819c3B9a",
+  "CommunityFactory": "0x662507a2CBf7e9A6DDdcfC75FE85d9Ed2BE41ccC",
+  "LinearCalculator": "0x04C625921cCA87F850590FB835FDC57691a1A808",
+  "SPStakingFactory": "0x216fc0FdEE5e40a95a37874C960D65531848194d",
+  "ERC20StakingFactory": "0x8B84f7C99619fF5264Eb3BA425efd36307EF225A"
 }
 
 export const getPoolFactory = (type) => {
@@ -41,6 +41,7 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "LinearCalculator": "LinearCalculator.json",
   "SPStakingFactory": "SPStakingFactory.json",
   "ERC20StakingFactory": "ERC20StakingFactory.json",
+  "ERC20Staking": "ERC20Staking.json",
   "ERC20": "ERC20.json"
 }
 

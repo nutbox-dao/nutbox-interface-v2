@@ -87,16 +87,12 @@ export default {
       await sleep(0.3)
     }
     // monitor pools info 
-    const watchers = await updatePoolsByPolling(this.allPools)
+    const [stake, reward, approve] = await updatePoolsByPolling(this.allPools)
 
-    this.$once('hook:beforeDestoryed', () => {
-        watchers.map(w => {
-            try{
-              w.stop()
-            }catch(e){
-              
-            }
-          })
+    this.$once('hook:beforeDestroy', () => {
+        stake.stop();
+        reward.stop();
+        approve.stop();
     })
   }
 }

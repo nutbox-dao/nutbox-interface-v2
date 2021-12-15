@@ -11,11 +11,6 @@
     <div class="modal-h-line"></div>
     <div class="input-group-box mb-4">
       <div class="label flex-between-start">
-        <span>{{
-              operate === "add"
-                ? $t("stake.stake")
-                : $t("stake.unStake")
-            }}</span>
         <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
       </div>
       <div class="input-box flex-between-center">
@@ -31,46 +26,43 @@
     </div>
     <div class="btn-group btn-group-2">
       <button class="primary-btn outline-btn" @click="hide" :disabled='loading'>{{
-            $t("commen.cancel")
+            $t("operation.cancel")
           }}</button>
       <button class="primary-btn" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
-            >{{ $t("commen.confirm") }}</button>
+            >{{ $t("operation.confirm") }}</button>
     </div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
-
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { deposit, withdraw } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
-import BN from 'bn.js'
+import { getERC20Balance } from '@/utils/web3/asset'
 
 export default {
   data () {
     return {
       stakingValue: '',
       loading: false,
+      balance: 0
     }
   },
   computed: {
     ...mapState('web3', ['userBalances', 'userStakings', 'account']),
-    balance(){
-      return this.userBalances[this.card.address] ?? 0
-    },
+    ...mapState('pool', ['userStaked']),
     staked(){
-      return this.userStakings[this.card.communityId + '-' + this.card.pid] ?? 0
+      if (!this.userStaked) return 0;
+      return this.userStaked[this.card.id] ?? 0
     },
     formBalance(){
       const balance = this.balance;
-      const decimal = this.card.decimal;
-      return parseFloat(balance.toString() / (10 ** decimal));
+      return parseFloat(balance.toString() / (1e18));
     },
     formStaked(){
       const staked = this.staked;
-      const decimal = this.card.decimal;
-      return parseFloat(staked.toString() / (10 ** decimal))
+      return parseFloat(staked.toString() / (1e18))
     }
 
   },
@@ -108,16 +100,13 @@ export default {
     async confirm(){
       if (!this.checkInputValue()) return;
       this.loading = true;
-      const decimal = new BN(10).pow(new BN(this.card.decimal))
-      const amount = new BN(Number(this.stakingValue * 1e6)).mul(decimal).divn(1e6)
       try{
-        let res;
         let message;
         if (this.operate === 'add'){
-          res = await deposit(this.card.communityId, this.card.pid, amount)
+          await deposit(this.card.id, this.stakingValue)
           message = this.$t('transaction.depositOk')
         }else{
-          res = await withdraw(this.card.communityId, this.card.pid, amount)
+          await withdraw(this.card.id, this.stakingValue)
           message = this.$t('transaction.withdrawOk')
         }
         this.$bvToast.toast(message, {
@@ -136,7 +125,10 @@ export default {
       }
     },
   },
-  mounted () {
+  async mounted () {
+    // get user's balance
+    console.log(this.card);
+    this.balance = await getERC20Balance(this.card.asset)
   },
 }
 </script>

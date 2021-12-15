@@ -64,7 +64,6 @@ export default {
       try{
         const tokenAddress = ethers.utils.getAddress(this.operation.asset)
         const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
-        console.log(token);
         symbol = token.symbol;
       }catch(e){
         console.log(e);

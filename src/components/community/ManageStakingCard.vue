@@ -17,7 +17,7 @@
       <div class="h-line mt-4 mb-3"></div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.userCount') }}</span>
-       <div class="info">{{ pool.stakerCount || 0 }}</div>
+       <div class="info">{{ pool.stakersCount || 0 }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.totalDeposit') }}</span>
