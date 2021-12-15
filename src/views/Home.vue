@@ -117,8 +117,10 @@ $home-primary-color: #F8B62A;
   background-repeat: no-repeat;
   background-position: left top, right top;
   .s1-card {
-    @include card(2rem 3rem);
+    @include card(2rem 3rem, transparent);
     border-radius: .8rem 5rem .8rem 5rem;
+    background-image:
+      linear-gradient(to bottom, rgba(191, 191, 191, 0.05), rgba(255, 255, 255, 0.05));
   }
   .text-logo {
     height: 1.2rem;
@@ -151,7 +153,7 @@ $home-primary-color: #F8B62A;
   .s2-card {
     @include card();
     background-image:
-      linear-gradient(-150deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%);
+      linear-gradient(-120deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%);
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: right bottom;

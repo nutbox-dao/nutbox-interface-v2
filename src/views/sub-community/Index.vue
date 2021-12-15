@@ -13,6 +13,10 @@
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
+              <b-nav-item to="/sub-community/governance">
+                <i class="menu-icon blog-icon" />
+                <span>{{ $t("router.governance") }}</span>
+              </b-nav-item>
               <b-nav-item to="/sub-community/member">
                 <i class="menu-icon blog-icon" />
                 <span>{{ $t("router.member") }}</span>
@@ -89,7 +93,6 @@ export default {
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
         this.saveAllUsers(community.users)
-
         this.loading = false
       })
     }catch (e){
@@ -142,7 +145,6 @@ export default {
   background-color: var(--card-bg-primary);
   padding: 1rem 0;
   border-radius: .8rem;
-  border: 1px solid var(--card-broder);
   .menu-items {
     .nav-link {
       display: flex;
@@ -153,15 +155,20 @@ export default {
       opacity: .8;
     }
     span {
-      color: rgba(white, .8);
+      color: var(--text-grey-7);
     }
     .active span {
-      color: white;
+      color: var(--primary-custom);
       font-weight: bold;
     }
     .active i {
       opacity: 1;
     }
+  }
+}
+@media (min-width: 1200px) {
+  .sub-page-side {
+    width: 16rem;
   }
 }
 @media (min-width: 992px) {

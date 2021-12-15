@@ -35,6 +35,11 @@ ponsived {
   vertical-align: middle;
   padding: .4rem;
 }
+.tr-light.b-table-row-selected {
+  background-color: rgba(white, 0.5)!important;
+  //border: 1px solid var(--primary-custom);
+  //border-radius: .4rem;
+}
 .page-item .page-link {
   border-color: rgba(246, 247, 249, 1) !important;
 }
@@ -110,7 +115,9 @@ ponsived {
 .text-red {
   color: #FF5040;
 }
-
+.flex-1 {
+  flex: 1;
+}
 .carousel,
 .carousel-inner,
 .carousel-item {
