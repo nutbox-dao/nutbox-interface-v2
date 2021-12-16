@@ -14,11 +14,11 @@
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/governance">
-                <i class="menu-icon blog-icon" />
+                <i class="menu-icon governance-icon" />
                 <span>{{ $t("router.governance") }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/member">
-                <i class="menu-icon blog-icon" />
+                <i class="menu-icon member-icon" />
                 <span>{{ $t("router.member") }}</span>
               </b-nav-item>
             </b-nav>
@@ -76,33 +76,33 @@ export default {
       loading: false
     }
   },
-  mounted () {
-    if (!this.communityId) {
-      this.$router.replace('/');
-      return;
-    }
-    try {
-      this.loading = true;
-      getSpecifyCommunityInfo(this.communityId).then(community => {
-        getCToken(community.id, true).then(ctoken => {
-          this.saveCtoken(ctoken)
-        }).catch(e => {
-          console.log('get ctoken fail');
-        })
-        this.saveFeeRatio(community.feeRatio)
-        this.saveOperationCount(community.operationCount)
-        this.saveAllPools(community.pools)
-        this.saveOperationHistory(community.operationHistory)
-        this.saveAllUsers(community.users)
-        this.loading = false
-      })
-    }catch (e){
-      handleApiErrCode(e, (tip, params) => {
-        this.$bvToast.toast(tip, params)
-      })
-      this.loading = false
-    }
-  },
+  // mounted () {
+  //   if (!this.communityId) {
+  //     this.$router.replace('/');
+  //     return;
+  //   }
+  //   try {
+  //     this.loading = true;
+  //     getSpecifyCommunityInfo(this.communityId).then(community => {
+  //       getCToken(community.id, true).then(ctoken => {
+  //         this.saveCtoken(ctoken)
+  //       }).catch(e => {
+  //         console.log('get ctoken fail');
+  //       })
+  //       this.saveFeeRatio(community.feeRatio)
+  //       this.saveOperationCount(community.operationCount)
+  //       this.saveAllPools(community.pools)
+  //       this.saveOperationHistory(community.operationHistory)
+  //       this.saveAllUsers(community.users)
+  //       this.loading = false
+  //     })
+  //   }catch (e){
+  //     handleApiErrCode(e, (tip, params) => {
+  //       this.$bvToast.toast(tip, params)
+  //     })
+  //     this.loading = false
+  //   }
+  // },
   methods: {
     ...mapMutations('currentCommunity', [
       'clearData',
@@ -203,5 +203,14 @@ export default {
 }
 .stake-icon {
   background-image: url("~@/static/images/menu-stake.svg");
+}
+.dapp-icon {
+  background-image: url("~@/static/images/menu-dapp.svg");
+}
+.governance-icon {
+  background-image: url("~@/static/images/menu-governance.svg");
+}
+.member-icon {
+  background-image: url("~@/static/images/menu-member.svg");
 }
 </style>
