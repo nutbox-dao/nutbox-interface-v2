@@ -94,7 +94,6 @@ export default {
 @import "src/static/css/form";
 .banner-card {
   @include card();
-  border: 1px solid var(--card-broder);
   .v-line {
     width: 1px;
     height: 3rem;

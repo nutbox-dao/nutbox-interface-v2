@@ -208,7 +208,7 @@ export default {
   --backgroud-state: #b37012;
   --primary: #f8b62a;
   --card-broder: #37383c;
-  --card-bg-primary: #161718;
+  --card-bg-primary: #141414;
   --nav-tab-bg: #3c3c40;
   --nav-tab-bg-active: #69696f;
   --input-border: #4e5054;
