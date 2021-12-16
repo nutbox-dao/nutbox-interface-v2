@@ -57,7 +57,7 @@ const routes = [
     redirect: '/sub-community/home',
     children: [
       {
-        path: 'home',
+        path: 'home/:id',
         component: SubCommunityHome
       },
       {

@@ -120,6 +120,9 @@ export const getMyCommunityInfo = async (update = false) => {
  */
 export const getAllCommunities = async (update = false) => {
   return new Promise(async (resolve, reject) => {
+    while(store.state.community.loadingAllCommunityInfo) {
+      await sleep(0.5)
+    }
     if (
       !update &&
       store.state.community.allCommunityInfo &&
@@ -128,6 +131,7 @@ export const getAllCommunities = async (update = false) => {
       resolve(store.state.community.allCommunityInfo);
       return;
     }
+    store.commit('community/saveLoadingAllCommunityInfo', true)
     try {
       const communities = await gac();
       let comms = {}
@@ -139,6 +143,8 @@ export const getAllCommunities = async (update = false) => {
     } catch (e) {
       console.log("Get all community fail", e);
       reject(e);
+    } finally{
+      store.commit('community/saveLoadingAllCommunityInfo', false)
     }
   });
 };

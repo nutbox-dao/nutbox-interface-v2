@@ -88,6 +88,7 @@ export default {
       return parseFloat(pendingBn.toString() / 1e18).toFixed(3)
     },
     totalDeposited () {
+      return this.card.totalAmount.toString() / 1e18
       if (!this.userStaked) return 0;
       const userStakingBn =
         this.userStaked[this.card.id]

@@ -239,7 +239,6 @@
 
 <script>
 import Progress from '@/components/community/Progress'
-import AssetCard from '@/components/community/AssetCard'
 import BN from 'bn.js'
 import { 
   approveCommunityBalance, 
@@ -256,7 +255,7 @@ import { errCode } from '@/config'
 
 export default {
   name: 'CommunityAsset',
-  components: { Progress, AssetCard },
+  components: { Progress },
   data () {
     return {
       showChargeTip: false,

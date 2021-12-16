@@ -67,9 +67,9 @@
             <div class="more" @click="$router.replace('/community/index')">More >></div>
           </div>
           <div class="row mt-3">
-            <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of 4" :key="index">
+            <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of recommendCommunity" :key="index">
               <CommunityCard btn-class="gradient-outline-btn"
-                             :card-info="communityMockData"/>
+                             :card-info="cItem"/>
             </div>
           </div>
         </section>
@@ -85,35 +85,41 @@
 import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
 import CommunityCard from '@/components/community/CommunityCard'
+import { getAllCommunities } from '@/utils/web3/community'
 
 export default {
   name: 'Home',
   components: { CommunityCard },
   data () {
     return {
-      communityMockData: {
-        poster: 'https://cdn.wherein.mobi/nutbox/v2/1635409796111',
-        is_vip: true,
-        icon: 'https://cdn.wherein.mobi/nutbox/v2/1635409783017',
-        name: '银禾社区',
-        website: 'https://nutbox.io',
-        description: '全球最大游戏公会',
-        assetLogos: [
-          'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
-        ],
-        apys: ['100'],
-        isOfficial: true
-      }
+      loadingAllCommunity: true
     }
   },
   computed: {
     ...mapState('web3', ['walnutInfo']),
+    ...mapState('community', ['allCommunityInfo']),
     tokensTvl () {
       return 0
+    },
+    recommendCommunity () {
+      if (!this.allCommunityInfo) {
+        this.loadingAllCommunity = false
+        return [];
+      }
+      let rcs = []
+      for (let c in this.allCommunityInfo) {
+        const community = this.allCommunityInfo[c]
+        if (community.isRecommend === 1){
+          rcs.push(community)
+        }
+      }
+      this.loadingAllCommunity = false
+      return rcs;
     }
   },
   mounted () {
     getWalnutData()
+    getAllCommunities()
   }
 }
 </script>

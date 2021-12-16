@@ -1,7 +1,6 @@
 <template>
   <div class="c-card">
     <div class="status-container text-right">
-      {{ pool.poolIndex }}
       <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
       <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
     </div>

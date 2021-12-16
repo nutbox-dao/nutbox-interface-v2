@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center">
       <div class="card-link-icons">
         <img class="icon1" :src="communityInfo.icon" alt="" />
-        <img class="icon2" :src="cToken ? cToken.icon : ''" alt="" />
+        <img class="icon2" :src="icon" alt="" />
       </div>
       <div class="card-link-title-text font20 font-bold">
         <div class="link-title">
@@ -45,6 +45,9 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { getPoolType } from '@/utils/web3/pool'
+import { getPoolFactory } from '@/utils/web3/contract'
+import { getERC20Info } from '@/utils/web3/asset'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: "StakingCardHeader",
@@ -53,22 +56,37 @@ export default {
       type: Object,
     }
   },
+  data() {
+    return {
+    }
+  },
   computed: {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapState('currentCommunity', ['communityId', 'cToken']),
+    ...mapState('web3', ['tokenIcons']),
     communityInfo() {
       if (!this.communityId || !this.getCommunityInfoById(this.communityId)) return {};
       return this.getCommunityInfoById(this.communityId)
     },
+    icon() {
+      switch (this.card.poolFactory.toLowerCase()){
+        case getPoolFactory('bsc').toLowerCase():
+          console.log(325, this.tokenIcons);
+          return this.tokenIcons[this.card.asset]
+        case getPoolFactory('steem').toLowerCase():
+          const chainId = this.card.chainId
+          return ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
+      }
+    },
     poolType() {
       return getPoolType(this.card.poolFactory, this.card.chainId)
-    }
+    },
   },
   methods: {
     openNewTab (id) {
     }
   },
-  mounted () {
+  async mounted () {
   },
 };
 </script>

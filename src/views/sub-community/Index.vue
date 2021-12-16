@@ -5,7 +5,7 @@
         <div class="slider-content">
           <div class="menu-items">
             <b-nav vertical align="center" class="top">
-              <b-nav-item to="/sub-community/home">
+              <b-nav-item :to="'/sub-community/home/' + (communityId ? communityId.substring(0,10) : '')">
                 <i class="menu-icon home-icon" />
                 <span>Home</span>
               </b-nav-item>
@@ -35,7 +35,7 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item to="/sub-community/home">
+                  <b-dropdown-item :to="'/sub-community/home' + (communityId ? communityId.substring(0,10): '')">
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
                   </b-dropdown-item>
@@ -43,10 +43,14 @@
                     <i class="menu-icon stake-icon" />
                     <span>{{ $t("router.staking") }}</span>
                   </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/home">
+                  <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon blog-icon" />
-                    <span>{{ $t("router.blog") }}</span>
-                  </b-dropdown-item>
+                    <span>{{ $t("router.governance") }}</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/member">
+                    <i class="menu-icon blog-icon" />
+                    <span>{{ $t("router.member") }}</span>
+                  </b-nav-item>
                 </div>
               </div>
             </template>
@@ -83,6 +87,7 @@ export default {
     }
     try {
       this.loading = true;
+      this.clearData()
       getSpecifyCommunityInfo(this.communityId).then(community => {
         getCToken(community.id, true).then(ctoken => {
           this.saveCtoken(ctoken)
@@ -95,6 +100,8 @@ export default {
         this.saveOperationHistory(community.operationHistory)
         this.saveAllUsers(community.users)
         this.loading = false
+      }).catch(e => {
+        console.log(42643, e)
       })
     }catch (e){
       handleApiErrCode(e, (tip, params) => {
@@ -112,9 +119,6 @@ export default {
       'saveOperationCount',
       'saveOperationHistory',
       'saveAllUsers'])
-  },
-  beforeDestroy () {
-    this.clearData();
   },
 }
 </script>

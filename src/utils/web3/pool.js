@@ -37,7 +37,6 @@ import {
   BLOCK_SECOND,
   PRICES_SYMBOL
 } from "@/constant"
-import { sleep } from '@/utils/helper'
 
 /**
  * Get all pools that user have upload to backend
@@ -377,12 +376,12 @@ export const withdrawReward = async (communityId, poolId) => {
  * @returns 
  */
 export const updatePoolsByPolling = async (pools) => {
-    pools = pools.filter(p => p.status === 'OPENED')  
-    const stakingWatcher = await monitorUserStakings(pools).catch();
-    const rewardWatcher = await monitorPendingRewards(pools).catch();
-    const approvementsWatcher = await monitorApprovements(pools).catch();
+  pools = pools.filter(p => p.status === 'OPENED')  
+  const stakingWatcher = await monitorUserStakings(pools).catch();
+  const rewardWatcher = await monitorPendingRewards(pools).catch();
+  const approvementsWatcher = await monitorApprovements(pools).catch();
 
-    return [stakingWatcher, rewardWatcher, approvementsWatcher]
+  return [stakingWatcher, rewardWatcher, approvementsWatcher]
 }
 
 /** 
@@ -503,7 +502,7 @@ export const monitorApprovements = async (pools) => {
 export const monitorUserBalances = async () => {
   return new Promise(async (resolve, reject) => {
     try{
-      const allTokens = await getAllTokenFromBackend(true)
+      const allTokens = await getAllTokenFromBackend()
       store.commit('web3/saveLoadingUserBalances', true)
       let watchers = store.state.web3.watchers
       let watcher = watchers['userBalances']

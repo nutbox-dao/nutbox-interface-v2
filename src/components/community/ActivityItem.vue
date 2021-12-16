@@ -21,7 +21,7 @@
 <script>
 import { parseTimestamp } from '@/utils/helper'
 import { ethers } from 'ethers'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { contractAddress } from '@/utils/web3/contract'
 import { VUE_APP_TX_BROWER } from '@/config'
 
@@ -44,8 +44,10 @@ export default {
   },
   computed: {
     ...mapState('web3', ['allTokens']),
+    ...mapState('user', ['users']),
     ...mapState('steem', ['vestsToSteem']),
-    ...mapState('hive', ['vestsToHive'])
+    ...mapState('hive', ['vestsToHive']),
+    ...mapGetters('user', ['getUserByAddress']),
   },
   methods: {
     gotoTransaction() {
@@ -61,7 +63,8 @@ export default {
     this.$once('hook:beforeDestroy', () => {
       window.clearInterval(interval)
     })
-    const accName = this.operation.user.substring(0, 4) + '...' + this.operation.user.substring(this.operation.user.length - 4, this.operation.user.length)
+    let accName = this.operation.user.substring(0, 4) + '...' + this.operation.user.substring(this.operation.user.length - 4, this.operation.user.length)
+    accName = this.getUserByAddress(this.operation.user).name;
     let symbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
@@ -106,19 +109,19 @@ export default {
         this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${symbol}`
         break;
       case "ADMINCREATE":
-        this.description = (this.showName ?  + 'Admin creat' : 'Create') + ` this community`
+        this.description = (this.showName ? 'Admin creat' : 'Create') + ` this community`
         break;
       case "ADMINSETFEE":
-        this.description = (this.showName ?  + 'Admin change' : 'Change') + ` change DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
+        this.description = (this.showName ? 'Admin change' : 'Change') + ` change DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
         break;
       case "ADMINADDPOOL":
-        this.description = (this.showName ?  + 'Admin creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? 'Admin creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
         break;
       case "ADMINCLOSEPOOL":
-        this.description = (this.showName ?  + 'Admin close' : 'Close') + ` a pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? 'Admin close' : 'Close') + ` a pool: ${this.operation.pool.name}`
         break;
       case "ADMINSETRATIO":
-        this.description = (this.showName ?  + 'Admin reset' : 'Reset') + ` the pool ratios.`
+        this.description = (this.showName ? 'Admin reset' : 'Reset') + ` the pool ratios.`
         break;
     }
   },

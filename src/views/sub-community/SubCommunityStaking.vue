@@ -43,6 +43,7 @@ import CommunityStakingCard from '@/components/community/CommunityStakingCard'
 import  { mapState, mapGetters } from 'vuex'
 import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
 import { sleep } from '@/utils/helper'
+import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 
 export default {
   name: 'SubCommunityStaking',
@@ -87,12 +88,21 @@ export default {
       await sleep(0.3)
     }
     // monitor pools info 
+    console.log(111);
     const [stake, reward, approve] = await updatePoolsByPolling(this.allPools)
+    console.log(22);
+    const interval = setInterval(() => {
+      console.log(62,3);
+      getPoolsFromGraph(this.allPools.map(p => p.id))
+    }, 6000)
 
     this.$once('hook:beforeDestroy', () => {
         stake.stop();
+        console.log(1, 'close');
         reward.stop();
         approve.stop();
+        window.clearInterval(interval)
+        console.log(2, 'closed');
     })
   }
 }

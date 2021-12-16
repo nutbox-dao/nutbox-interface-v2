@@ -11,6 +11,7 @@ export default {
     distributions: null,
     // loading flag
     loadingMyCommunityInfo: false,
+    loadingAllCommunityInfo: false,
     // all i joined community from graph
     joinedCommunityData: null,
 
@@ -34,6 +35,9 @@ export default {
     },
     saveLoadingMyCommunityInfo (state, loadingMyCommunityInfo) {
       state.loadingMyCommunityInfo = loadingMyCommunityInfo;
+    },
+    saveLoadingAllCommunityInfo (state, loadingAllCommunityInfo) {
+      state.loadingAllCommunityInfo = loadingAllCommunityInfo
     },
     saveAllCommunityInfo (state, allCommunityInfo) {
       state.allCommunityInfo = allCommunityInfo

@@ -69,7 +69,7 @@ export default {
   methods: {
     gotoCommunity () {
       this.$store.commit('currentCommunity/saveCommunityId', this.cardInfo.id)
-      this.$router.replace('/sub-community/home')
+      this.$router.push('/sub-community/home/' + this.cardInfo.id.substring(0, 10))
     }
   }
 }

@@ -19,7 +19,6 @@ export const getAccounts = async (update=false) => {
     }
     const chainId = store.state.chainId;
     if (chainId && (parseInt(chainId) !== parseInt(BSC_CHAIN_ID))) {
-        console.log(25, chainId, BSC_CHAIN_ID);
         store.commit('web3/saveAccount', null)
         return;
     }
@@ -29,7 +28,6 @@ export const getAccounts = async (update=false) => {
     account = ethers.utils.getAddress(account)
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
-    console.log(776, accounts);
     return accounts[0]
 }
 

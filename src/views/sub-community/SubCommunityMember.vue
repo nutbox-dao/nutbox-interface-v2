@@ -81,7 +81,7 @@
             <div v-if="activitiesLoading" class="mt-4 text-center">
               <b-spinner></b-spinner>
             </div>
-            <transition-group name="list-complete">
+            <transition-group v-show="!activitiesLoading" name="list-complete">
               <ActivityItem class="mt-3 list-complete-item"
                             :operation="active"
                             :showName="false"

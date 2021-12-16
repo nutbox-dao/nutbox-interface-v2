@@ -31,70 +31,6 @@ import {
 import { signMessage } from './utils'
 
 /**
- * 获取资产类型
- * @param {*} address 
- * @returns 
- */
-const assetType = (address) => {
-  for (let contract in contractAddress) {
-    if (contractAddress[contract].toLowerCase() === address.toLowerCase()) {
-      return contract
-    }
-  }
-}
-
-/**
- * Get regisryAssets of user
- * Restore these infos to cache
- * @returns assets list contains detail infos
- */
-export const getRegitryAssets = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    let assets = store.state.web3.allAssetsOfUser
-    if (!update && assets && Object.keys(assets).length > 0) {
-      resolve(assets)
-      return;
-    }
-    const account = await getAccounts()
-    let contract;
-    try{
-      contract = await getContract('RegistryHub', null);
-    }catch(e){
-      reject(e);
-      return 
-    }
-    try{
-      const assetCount = await contract.registryCounter(account);
-      if (assetCount === 0){
-        store.commit('web3/saveAllAssetsOfUser', [])
-        resolve([])
-        return;
-      }
-      // get register assets
-      assets = await Promise.all((new Array(assetCount).toString().split(',').map((item, i) => contract.registryHub(account, i))))
-
-      // get assets contract and type
-      const registryContract = await Promise.all(assets.map(asset => contract.getRegistryContract(asset)))
-      assets = assets.map((asset, index) => ({
-        asset,
-        contract: registryContract[index],
-        type: assetType(registryContract[index])
-      }));
-      // get metadata of assets
-      const metadatas = await Promise.all(assets.map(asset => getAssetMetadata(asset.asset, asset.type)))
-      assets = assets.filter(asset => asset).map((asset, index) => ({
-        ...asset,
-        ...metadatas[index]
-      }))
-      store.commit('web3/saveAllAssetsOfUser', assets)
-      resolve(assets)
-    }catch(e){
-      reject(errCode.BLOCK_CHAIN_ERR)
-    }
-  })
-}
-
-/**
  * Get community ctoken info
  * @param {*} update 
  * @returns 
@@ -154,46 +90,6 @@ export const isMintableAsset = async (assetId) => {
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })
-}
-
-/**
- * get asset meta data
- * @param {String} id asset id 
- * @param {String} assetType asset contract address
- */
-export const getAssetMetadata = async (id, assetType) => {
-  let contract;
-  try{
-    contract = await getContract(assetType === 'HomeChainAssetRegistry' ? 'RegistryHub' : assetType)
-  }catch(e){
-    reject(e);
-    return;
-  }
-  if (assetType === 'HomeChainAssetRegistry') {
-    const homeLocation = await contract.getHomeLocation(id)
-    try{
-      const tokenInfo = await getERC20Info(homeLocation)
-      return tokenInfo
-    }catch(e){
-      return null;
-    }
-  }
-  let meta = await contract.idToMetadata(id)
-  let icon = ''
-  switch(assetType){
-    case 'SteemHiveDelegateAssetRegistry':
-      icon = ASSET_LOGO_URL[DELEGATION_CHAINID_TO_NAME[meta[0]]]
-      meta = {
-        chainId: meta[0],
-        assetType: meta[1],
-        agentAccount: meta[2],
-        icon
-      }
-      break;
-    default:
-      break;
-  }
-  return meta
 }
 
 // get ERC20 info from home chain.
@@ -380,7 +276,7 @@ export const getAllTokenFromBackend = async (update = false) => {
 export const updateAllTokensFromBackend = async () => {
   while(true){
     await getPrices()
-    await sleep(5)
+    await sleep(10)
   }
 }
 

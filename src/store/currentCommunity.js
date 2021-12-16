@@ -50,9 +50,8 @@ export default {
       },
       
       clearData (state) {
-          state.communityId = null;
           state.communityInfo = null;
-          state.operationHistory = null;
+          state.operationHistory = [];
           state.feeRatio = 0;
           state.allPools = null;
           state.cToken = null;

@@ -15,6 +15,7 @@ export default {
     stakingFactoryId: null,
     allAssetsOfUser: null,
     allTokens: null,
+    tokenIcons: {},
     blockNum: null,
     nonce: null,
     allCommunities: null,
@@ -92,6 +93,11 @@ export default {
     },
     saveAllTokens: (state, allTokens) => {
       state.allTokens = allTokens;
+      let icons = {}
+      for (let i in allTokens) {
+        icons[allTokens[i].address.toLowerCase()] = allTokens[i].icon;
+      }
+      state.tokenIcons = icons;
     },
     saveBlockNum: (state, blockNum) => {
       state.blockNum = blockNum;

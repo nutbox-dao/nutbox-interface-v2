@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="page-content">
-          <router-view></router-view>
+          <router-view :key="communityId"></router-view>
         </div>
       </div>
     </div>
@@ -137,7 +137,7 @@ export default {
     },
     gotoCommunity(communityId) {
       this.$store.commit('currentCommunity/saveCommunityId', communityId);
-      this.$router.replace('/sub-community/home')
+      this.$router.push('/sub-community/home/' + communityId.substring(0, 10))
     },
     goHome() {
       this.$router.replace('/')

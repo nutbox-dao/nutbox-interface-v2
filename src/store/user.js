@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 export default {
     namespaced: true,
     state: {
@@ -7,6 +9,7 @@ export default {
     },
     getters: {
         getUserByAddress: state => (address) => {
+            address = ethers.utils.getAddress(address)
             return state.users ? state.users[address] : null;
         }
     },
