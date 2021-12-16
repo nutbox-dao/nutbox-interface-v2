@@ -3,30 +3,33 @@
   @include c-col-flex-between-center;
   position: relative;
   .poster{
-    @include card-poster-bg(6.2rem);
-    min-height: 6.2rem;
+    @include card-poster-bg(5.2rem);
+    min-height: 5.2rem;
     background-color: white;
   }
   .large-poster{
     @include card-poster-bg(9.6rem);
   }
+  .logo-box {
+    position: absolute;
+    top: -1rem;
+    left: 1rem;
+  }
   .logo {
     @include card-icon;
-    position: absolute;
-    top: -2rem;
-    left: 1.2rem;
-    border: 1px solid white;
+    border: 2px solid white;
   }
   .large-logo {
     @include card-icon(3.6rem, 3.6rem);
     position: absolute;
     border: 1px solid white;
-    left: 1.2rem;
-    top: -1.2rem;
+    left: 1rem;
+    top: -.2rem;
     background-color: white;
   }
   .second-card {
-    @include card(1.2rem .8rem, var(--card-bg-primary), none);
+    @include card(3rem 1rem 1.2rem, var(--card-bg-primary), none);
+    margin-top: -.8rem;
   }
   .project-info {
     margin-left: 4.2rem;

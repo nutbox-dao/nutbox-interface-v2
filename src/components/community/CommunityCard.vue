@@ -1,19 +1,19 @@
 <template>
   <div class="p-card">
     <img class="poster" :src="cardInfo.poster" alt="">
-    <img class="vip" src="~@/static/images/vip.svg" v-show="cardInfo.is_vip" alt="">
     <div class="second-card border-0 d-flex flex-column justify-content-between">
       <div>
-        <img class="logo" :src="cardInfo.icon" alt="">
+        <div class="d-flex align-items-end logo-box">
+          <img class="logo" :src="cardInfo.icon" alt="">
+          <img class="vip" style="margin-left: -1rem"
+               src="~@/static/images/vip.svg" v-show="cardInfo.is_vip" alt="">
+        </div>
         <div class="d-flex justify-content-between align-items-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
-<!--          <a :href="cardInfo.website" target="_blank" v-show="cardInfo.website">-->
-<!--            <div class="more-text-icon">{{ $t('community.more') }}</div>-->
-<!--          </a>-->
-          <span v-if="cardInfo['isOfficial']"
-                class="official-tag font12 px-1">Official</span>
         </div>
-        <div class="desc font14 text-grey-light text-left">{{ cardInfo.description }}</div>
+        <div class="desc font14 text-left text-grey-7">
+          {{ cardInfo.description }}
+        </div>
       </div>
       <!-- <div>
         <div class="project-info-container">
@@ -34,7 +34,7 @@
         <button class="primary-btn primary-btn-no-bg" disabled
                 @click="openNewTab(cardInfo)">{{ $t('community.join') }}</button>
       </div> -->
-      <button class="primary-btn primary-btn-no-bg"
+      <button class="mx-3" :class="btnClass || 'default-btn'"
                 @click="gotoCommunity()">{{ $t('operation.enter') }}</button>
     </div>
   </div>
@@ -46,7 +46,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'CommunityCard',
   props: {
-    cardInfo: Object
+    cardInfo: Object,
+    btnClass: String
   },
   computed: {
     // apyRange () {
@@ -63,13 +64,13 @@ export default {
     // },
   },
   mounted () {
-    console.log(23, this.cardInfo);;
+    console.log(23, this.cardInfo)
   },
   methods: {
-    gotoCommunity() {
-      this.$store.commit('currentCommunity/saveCommunityId', this.cardInfo.id);
+    gotoCommunity () {
+      this.$store.commit('currentCommunity/saveCommunityId', this.cardInfo.id)
       this.$router.replace('/sub-community/home')
-    },
+    }
   }
 }
 </script>
@@ -86,9 +87,6 @@ export default {
 .vip {
   width: 1.4rem;
   height: 1.4rem;
-  position: absolute;
-  right: .8rem;
-  top: .8rem;
 }
 .desc {
   margin-bottom: 1rem;
@@ -100,5 +98,23 @@ export default {
 .official-tag {
   background-color: #5087ec;
   border-radius: .4rem;
+}
+.default-btn {
+  height: 2.4rem;
+  background-color: var(--block-bg);
+  border: transparent;
+  color: white;
+  font-weight: bold;
+  border-radius: .6rem;
+}
+.gradient-outline-btn {
+  color: white;
+  font-weight: bold;
+  height: 2.4rem;
+  border-radius: .6rem;
+  border: 1px solid transparent;
+  background-image: linear-gradient(to right, #3F75D5, #D27947);
+  background-origin: border-box;
+  box-shadow: 2px 1000px 1px var(--card-bg-primary) inset;
 }
 </style>

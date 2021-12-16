@@ -66,6 +66,12 @@
             <div class="font-bold">Featured Communities</div>
             <div class="more" @click="$router.replace('/community/index')">More >></div>
           </div>
+          <div class="row mt-3">
+            <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of 4" :key="index">
+              <CommunityCard btn-class="gradient-outline-btn"
+                             :card-info="communityMockData"/>
+            </div>
+          </div>
         </section>
         <section class="my-4 font-bold font20 text-center">
           About Nutbox
@@ -78,22 +84,37 @@
 <script>
 import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
+import CommunityCard from '@/components/community/CommunityCard'
 
 export default {
   name: 'Home',
-  data() {
+  components: { CommunityCard },
+  data () {
     return {
+      communityMockData: {
+        poster: 'https://cdn.wherein.mobi/nutbox/v2/1635409796111',
+        is_vip: true,
+        icon: 'https://cdn.wherein.mobi/nutbox/v2/1635409783017',
+        name: '银禾社区',
+        website: 'https://nutbox.io',
+        description: '全球最大游戏公会',
+        assetLogos: [
+          'https://cdn.wherein.mobi/nutbox/v2/1633769085901'
+        ],
+        apys: ['100'],
+        isOfficial: true
+      }
     }
   },
   computed: {
     ...mapState('web3', ['walnutInfo']),
-    tokensTvl() {
+    tokensTvl () {
       return 0
     }
   },
   mounted () {
-    getWalnutData();
-  },
+    getWalnutData()
+  }
 }
 </script>
 
