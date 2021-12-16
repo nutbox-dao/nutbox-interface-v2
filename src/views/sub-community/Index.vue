@@ -63,6 +63,7 @@ import { mapState, mapMutations } from 'vuex'
 import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
 import { handleApiErrCode } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
+
 export default {
   name: 'Index',
   computed: {

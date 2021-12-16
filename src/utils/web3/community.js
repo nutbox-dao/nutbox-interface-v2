@@ -549,32 +549,31 @@ export const getSpecifyDistributionEras = async (communityId) => {
   })
 }
 
-export const watchMemberBalance = async () => {
-  return new Promise(async (resolve, reject) => {
+export const watchMemberBalance = (callback) => {
+  return setInterval(async () => {
     try{
-      const users = store.state.currentCommunity.users;
-      const ctokenAddress = store.state.currentCommunity?.cToken?.address;
-      if (!users || users.length === 0 || !ctokenAddress) {
-        resolve({});
+      const users = store.state.currentCommunity.communityInfo.users;
+      const ctoken = await getCToken(store.state.currentCommunity.communityId)
+      if (!users || users.length === 0 || !ctoken) {
+        callback({});
         return
       }
-      let watcher = createWatcher(users.map(u => ({
-        target: ctokenAddress,
-        calls: [
+      let res = await aggregate(users.map(u => ({
+        target: ctoken.address,
+        call: [
           'balanceOf(address)(uint256)',
           u.address
+        ],
+        returns: [
+          [u.address]
         ]
       })), Multi_Config)
-      watcher.batch().subscribe(update => {
-
-      })
-      watcher.start();
-      resolve(watcher);
+      callback(res.results.transformed)
     }catch(err) {
       console.log('Watch members balance fail:', err);
       reject(err);
     }
-  })
+  }, 3000)
 }
 
 /**

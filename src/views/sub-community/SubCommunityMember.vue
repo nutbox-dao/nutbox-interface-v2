@@ -18,13 +18,25 @@
                    :style="{ width: field.key === 'avatar' ? '2rem' : '' }">
             </template>
             <template #cell(address)="row">
-              <span>
+              <span :id="row.item.address">
                 {{ getName(row.item.address) }}
               </span>
+              <b-popover
+                :target="row.item.address"
+                triggers="hover focus"
+                placement="top"
+              >
+                {{ row.item.address }}
+              </b-popover>
             </template>
             <template #cell(createdAt)="row">
               <span>
                 {{ getDateString(row.item.createdAt) }}
+              </span>
+            </template>
+            <template #cell(value)="row">
+              <span>
+                {{ getBalance(row.item.address) | amountForm(2) }}
               </span>
             </template>
             <template #cell(avatar)="row">
@@ -36,18 +48,19 @@
           </b-table>
         </div>
       </div>
+      <!-- right part -->
       <div class="block col-md-5 col-sm-5">
         <div class="user-card d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center">
-            <span class="font20 font-bold">001</span>
-            <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem">Creator</button>
+            <span></span>
+            <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Creator</button>
           </div>
           <div class="text-center mt-3 pb-3">
             <img v-if="user && user.avatar" class="user-avatar hover rounded-circle"
-                 :src="user.avatar" alt="">
+                 :src="user && user.avatar" alt="">
             <img v-else class="user-avatar hover rounded-circle"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
-            <div class="my-1 font20 font-bold">{{ getName(user.address) }}</div>
+            <div class="my-1 font20 font-bold">{{ getName(user ? user.address : null) }}</div>
             <div class="mb-3 font12 text-grey-7 d-flex align-items-center justify-content-center">
               <span>{{ user ? (user.address.substring(0, 6) + '...' + user.address.substring(user.address.length - 6, user.address.length)) : '--' }}</span>
               <i class="copy-icon ml-2" @click="copy"></i>
@@ -55,22 +68,24 @@
             <div class="s-card d-flex text-center font12">
               <div class="flex-1 overflow-hidden">
                 <div class="font14 text-grey-7">Join Date</div>
-                <div class="font24 font-bold mt-2">{{ user ? getDateString(user.createdAt) : '--' }}</div>
+                <div class="font24 font-bold mt-2">{{ user ? getDateString(user.createdAt).substring(0, 10) : '--' }}</div>
               </div>
               <div class="flex-1">
-                <div class="font14 text-grey-7">PNUT</div>
-                <div class="font24 font-bold mt-2">1000</div>
+                <div class="font14 text-grey-7">{{ cToken && cToken.symbol }}</div>
+                <div class="font24 font-bold mt-2">{{ (user ? getBalance(user.address) : 0) | amountForm(2) }}</div>
               </div>
             </div>
           </div>
+          <div class="mt-2">{{ user ? user.operationCount : '' }} Activities</div>
           <div class="flex-fill overflow-auto">
-            <div class="mt-2">{{ user ? user.operationCount : '' }} Activities</div>
             <div v-if="activitiesLoading" class="mt-4 text-center">
               <b-spinner></b-spinner>
             </div>
             <transition-group name="list-complete">
               <ActivityItem class="mt-3 list-complete-item"
-                            v-for="i of activitiesList" :key="i"/>
+                            :operation="active"
+                            :showName="false"
+                            v-for="(active, i) of activitiesList" :key="active.tx + i"/>
             </transition-group>
             <div v-if="!activitiesLoading && activitiesList.length===0"
                  class="text-grey-5 text-center mt-4">no data</div>
@@ -86,6 +101,8 @@ import ActivityItem from '@/components/community/ActivityItem'
 import { mapState } from 'vuex'
 import { sleep } from '@/utils/helper'
 import { watchMemberBalance } from '@/utils/web3/community'
+import { ethers } from 'ethers'
+import { getNewUserStakingHistory } from '@/utils/graphql/user'
 
 export default {
   name: 'SubCommunityMember',
@@ -99,46 +116,36 @@ export default {
         { key: 'createdAt', label: 'Joined At', class: 'text-center' },
         { key: 'value', label: 'Balance', class: 'text-right' }
       ],
-      memberList: [
-        { avatar: '', name: 'user name1', date: '2021/12/141', value: 1000 },
-        { avatar: '', name: 'user name2', date: '2021/12/142', value: 1000 },
-        { avatar: '', name: 'user name3', date: '2021/12/143', value: 1000 },
-        { avatar: '', name: 'user name4', date: '2021/12/14', value: 1000 },
-        { avatar: '', name: 'user name5', date: '2021/12/14', value: 1000 },
-        { avatar: '', name: 'user name6', date: '2021/12/14', value: 1000 },
-        { avatar: '', name: 'user name7', date: '2021/12/14', value: 1000 },
-        { avatar: '', name: 'user name8', date: '2021/12/14', value: 1000 }
-      ],
-      user: {
-        avatar: '',
-        name: 'user name',
-        address: '0xxxxxxxxxxxx'
-      },
+      user: null,
       activitiesList: [],
-      activitiesLoading: false,
-      selectIndex: -1
+      activitiesLoading: true,
+      selectIndex: 0,
+      balances: {}
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityInfo', 'allUsers'])
-  },
-  watch: {
-    allUsers (newValue, oldValue) {
-      try {
-        this.user = newValue[0]
-        this.selectIndex = 0
-        this.$refs.selectableTable.selectRow(0)
-        this.balanceWatcher.restart()
-      } catch (e) {}
-    }
+    ...mapState('currentCommunity', ['communityInfo', 'allUsers', 'communityId', 'cToken']),
+    ...mapState('user', ['users']),
   },
   async mounted () {
-    this.balanceWatcher = await watchMemberBalance()
-    if (this.allUsers && this.allUsers.length > 0){
-      this.user = this.allUsers[0]
-      this.selectIndex = 0
-      this.$refs.selectableTable.selectRow(0)
+    if (!this.communityId) {
+      return;
     }
+    while (!this.communityInfo) {
+      await sleep(0.3)
+    }
+    const interval = watchMemberBalance((res) => {
+      this.balances = res
+    })
+    this.user = this.allUsers[0]
+    this.getUserActive().then(res => {
+      this.activitiesList = res
+    })
+    this.selectIndex = 0
+    this.$refs.selectableTable.selectRow(0)
+    this.$once('hook:beforeDestroy', () => {
+      window.clearInterval(interval)
+    })
   },
   methods: {
     onSelectUser (data, index) {
@@ -146,14 +153,7 @@ export default {
       this.user = data
       this.selectIndex = index
       this.$refs.selectableTable.selectRow(index)
-      this.activitiesLoading = true
-      setTimeout(() => {
-        this.activitiesLoading = false
-      }, 1500)
-    },
-    getName(address) {
-      if (!address) return '--'
-      return address.substring(0,6) + '...'
+      this.getUserActive()
     },
     getDateString(timestamp) {
       try {
@@ -162,9 +162,34 @@ export default {
         return '--'
       }
     },
+    getBalance(address) {
+      if (!address || !this.balances || Object.keys(this.balances).length === 0) return '0';
+      return this.balances[address.toLowerCase()].toString() / 1e18
+    },
+    getName(address) {
+      if (!address) return '--'
+      address = ethers.utils.getAddress(address)
+      const u = this.users[address]
+      if (u) {
+        return u.name;
+      }
+      return address.substring(0,6) + '...'
+    },
+    async getUserActive() {
+      try{
+        if (!this.user) return [];
+        this.activitiesLoading = true
+        const res = await getNewUserStakingHistory(this.user.id)
+        return res
+      } catch (e){
+
+      } finally {
+        this.activitiesLoading = false
+      }
+    },
     copy(){
       console.log(55);
-    }
+    },
   }
 
 }

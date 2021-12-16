@@ -86,7 +86,7 @@ export const getUsers = async (users)  => {
                 news = await getAllUsers()
             }
             for (let i = 0; i < news.length; i++){
-                originInfo[news.id] = news
+                originInfo[news[i].id] = news[i]
             }
             store.commit('user/saveUsers', originInfo)
         }catch(e) {

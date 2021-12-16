@@ -30,6 +30,10 @@ export default {
   props: {
     operation: {
       type: Object
+    },
+    showName: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -75,46 +79,46 @@ export default {
     switch (this.operation.type) {
       case "DEPOSIT":
         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = accName + ` deposit ${amount} ${symbol} to ${this.operation.pool.name}`
+          this.description = (this.showName ? accName + ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           if (parseInt(this.operation.chainId) === 1){
-            this.description = `${accName} add ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = `${accName} add ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
       case "WITHDRAW":
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = accName + ` withdraw ${amount} ${symbol} to ${this.operation.pool.name}`
+          this.description = (this.showName ? accName + ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           if (parseInt(this.operation.chainId) === 1){
-            this.description = `${accName} minus ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = `${accName} minus ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
       case "HARVEST":
-       this.description = accName + ` withdraw ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from pool: ${this.operation.pool.name}`
+       this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
-        this.description = accName + ` harvest all ${symbol}`
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${symbol}`
         break;
       case "ADMINCREATE":
-        this.description = `Admin create this community`
+        this.description = (this.showName ?  + 'Admin creat' : 'Create') + ` this community`
         break;
       case "ADMINSETFEE":
-        this.description = `Admin change DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
+        this.description = (this.showName ?  + 'Admin change' : 'Change') + ` change DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
         break;
       case "ADMINADDPOOL":
-        this.description = `Admin create a new pool: ${this.operation.pool.name}`
+        this.description = (this.showName ?  + 'Admin creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
         break;
       case "ADMINCLOSEPOOL":
-        this.description = `Admin close a pool: ${this.operation.pool.name}`
+        this.description = (this.showName ?  + 'Admin close' : 'Close') + ` a pool: ${this.operation.pool.name}`
         break;
       case "ADMINSETRATIO":
-        this.description = `Admin reset the pool ratios.`
+        this.description = (this.showName ?  + 'Admin reset' : 'Reset') + ` the pool ratios.`
         break;
     }
   },
