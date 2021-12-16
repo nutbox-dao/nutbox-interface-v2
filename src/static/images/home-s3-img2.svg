@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>community</title>
+    <title>编组 5</title>
     <defs>
         <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="56.6874186%" id="radialGradient-1">
             <stop stop-color="#000000" stop-opacity="0.0475305944" offset="0%"></stop>
@@ -14,25 +14,25 @@
             <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.2 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
         </filter>
         <path d="M0,0 L12,0 C18.627417,-1.21743675e-15 24,5.372583 24,12 L24,36 C24,42.627417 18.627417,48 12,48 L0,48 L0,48 L0,0 Z" id="path-4"></path>
-        <filter x="-26.5%" y="-27.5%" width="152.9%" height="154.9%" filterUnits="objectBoundingBox" id="filter-6">
+        <filter x="-26.5%" y="-28.1%" width="152.9%" height="156.3%" filterUnits="objectBoundingBox" id="filter-6">
             <feGaussianBlur stdDeviation="3" in="SourceGraphic"></feGaussianBlur>
         </filter>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Nutbox-Home备份-3" transform="translate(-140.000000, -610.000000)">
+        <g id="Nutbox-Home备份-3" transform="translate(-572.000000, -608.000000)">
             <g id="编组-2" transform="translate(120.000000, 584.000000)">
-                <g id="community" transform="translate(20.000000, 26.000000)">
+                <g id="编组-5" transform="translate(452.000000, 24.000000)">
                     <g id="矩形">
                         <use fill="url(#radialGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
                         <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
                     </g>
-                    <path d="M24,8 L24,34 L22,34 L14.6643638,40.5205655 C14.4813127,40.6832776 14.2449142,40.7731562 14,40.7731562 C13.4871642,40.7731562 13.0644928,40.387116 13.0067277,39.8897773 L13,39.7731562 L13,34 C9.6862915,34 7,31.3137085 7,28 L7,14 C7,10.6862915 9.6862915,8 13,8 L24,8 Z" id="形状结合" fill="#FFB13A"></path>
+                    <path d="M24,27 L24,39.983 L14.8480114,39.983642 C14.1503059,39.983642 13.474156,39.9970221 12.8306541,39.9995477 L12.4066114,39.9993574 C9.26439229,39.9818802 7,39.558402 7,35.6995867 C7,30.8975054 18.0765625,27 22.417358,27 L24,27 Z M24,8 L24,24 L24,24 C19.581722,24 16,20.418278 16,16 C16,11.581722 19.581722,8 24,8 Z" id="形状结合" fill="#B275F9" fill-rule="nonzero"></path>
                     <g id="形状结合" transform="translate(24.000000, 0.000000)">
                         <mask id="mask-5" fill="white">
                             <use xlink:href="#path-4"></use>
                         </mask>
                         <use id="蒙版" fill-opacity="0.1" fill="#FFFFFF" xlink:href="#path-4"></use>
-                        <path d="M-17,28 L-17,14 C-17,10.6862915 -14.3137085,8 -11,8 L11,8 C14.3137085,8 17,10.6862915 17,14 L17,28 C17,31.3137085 14.3137085,34 11,34 L-2,34 L-9.33563616,40.5205655 C-9.51868729,40.6832776 -9.75508584,40.7731562 -10,40.7731562 C-10.5522847,40.7731562 -11,40.3254409 -11,39.7731562 L-11,39.7731562 L-11,34 C-14.3137085,34 -17,31.3137085 -17,28 Z" fill="#FFB13A" filter="url(#filter-6)" mask="url(#mask-5)"></path>
+                        <path d="M1.45369318,27 C5.77323864,27 17,30.8989827 17,35.7005715 C17,39.5589911 14.7356077,39.9820736 11.5933886,39.9994106 L11.1693459,39.9995838 C10.525844,39.9970348 9.84969409,39.983642 9.15198864,39.983642 L-9.15198864,39.983642 C-9.84969409,39.983642 -10.525844,39.9970221 -11.1693459,39.9995477 L-11.5933886,39.9993574 C-14.7356077,39.9818802 -17,39.558402 -17,35.6995867 C-17,30.8975054 -5.9234375,27 -1.58264205,27 L1.45369318,27 Z M0,8 C4.418278,8 8,11.581722 8,16 C8,20.418278 4.418278,24 0,24 C-4.418278,24 -8,20.418278 -8,16 C-8,11.581722 -4.418278,8 0,8 Z" fill="#B275F9" filter="url(#filter-6)" mask="url(#mask-5)"></path>
                     </g>
                 </g>
             </g>

@@ -1,6 +1,8 @@
 <template>
-  <div class="custom-modal tip-modal">
-    <img class="close-btn" src="~@/static/images/close.svg" alt="" @click="hide"/>
+  <div class="">
+    <div class="text-right">
+      <img class="modal-close-icon" src="~@/static/images/close.svg" alt="" @click="hide"/>
+    </div>
     <div class="text-center font20 font-bold" >
       {{
         operate === "add"
@@ -8,27 +10,29 @@
           : $t("stake.unStake")
       }}
     </div>
-    <div class="modal-h-line"></div>
-    <div class="input-group-box mb-4">
-      <div class="label flex-between-start">
-        <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
-      </div>
-      <div class="input-box flex-between-center">
-        <input style="flex: 1"
-          type="number"
-          v-model="stakingValue"
-          placeholder="0"
-        />
-        <div class="ml-2">
-          <button class="primary-btn input-btn" @click="fillMax">{{ $t("commen.max") }}</button>
+    <div class="custom-form my-3">
+      <div class="input-group-box mb-4">
+        <div class="label">
+          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
+        </div>
+        <div class="c-input-group input-border d-flex">
+          <input style="flex: 1"
+                 type="number"
+                 v-model="stakingValue"
+                 placeholder="0"
+          />
+          <div class="c-append">
+            <button class="primary-btn input-btn px-2" style="height: 1.6rem"
+                    @click="fillMax">{{ $t("commen.max") }}</button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="btn-group btn-group-2">
-      <button class="primary-btn outline-btn" @click="hide" :disabled='loading'>{{
+    <div class="d-flex" style="margin: 0 -1rem">
+      <button class="primary-btn outline-btn mx-3" @click="hide" :disabled='loading'>{{
             $t("operation.cancel")
           }}</button>
-      <button class="primary-btn" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
+      <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("operation.confirm") }}</button>
     </div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
@@ -143,5 +147,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/static/css/modal";
-
+@import "src/static/css/form";
 </style>

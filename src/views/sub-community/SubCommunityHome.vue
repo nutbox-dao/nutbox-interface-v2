@@ -18,17 +18,19 @@
         </div>
       </div>
       <div class="c-card">
-        <div class="content1 mb-5">
+        <div class="content1">
           <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
           <div class="row">
-            <div class="col-md-5 d-flex align-items-center token-base-info">
-              <img class="token-logo" :src="cToken && cToken.icon" alt=""/>
-              <span class="px-3">{{ cToken ? cToken.symbol : '-' }}</span>
-              <div class="token-address" @click="copyAddress(cToken ? cToken.address : null)">
-                {{ cToken ? cToken.name : '-' }}
+            <div class="col-md-4 d-flex token-base-info">
+              <img class="token-logo mr-3" :src="cToken && cToken.icon" alt=""/>
+              <div>
+                <span>{{ cToken ? cToken.symbol : '-' }}</span>
+                <div class="token-address" @click="copyAddress(cToken ? cToken.address : null)">
+                  {{ cToken ? cToken.name : '-' }}
+                </div>
               </div>
             </div>
-            <div class="col-md-7 d-flex justify-content-between align-items-center text-center">
+            <div class="col-md-8 base-value-info d-flex justify-content-between align-items-center text-center">
               <div class="r-item">
                 <div class="label mb-2">{{ $t('asset.price') }}</div>
                 <div class="value">{{ (cToken ? cToken.price : 0) | formatPrice }}</div>
@@ -286,8 +288,10 @@ export default {
   }
 
   .token-logo {
-    height: 5rem;
-    width: 5rem;
+    height: 2.4rem;
+    width: 2.4rem;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
     @include coin-shadow();
     border-radius: 3rem;
   }
@@ -303,6 +307,7 @@ export default {
 
   .token-base-info {
     border-right: 1px solid var(--dividers);
+    align-items: center;
   }
 
   .r-item {
@@ -335,6 +340,14 @@ export default {
   .ratio-container {
     flex-direction: column;
   }
+  .base-value-info {
+    flex-direction: column;
+  }
+  .r-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 @media (max-width: 991px) {
   .sub-home-page {
@@ -347,6 +360,16 @@ export default {
       width: 100%;
       height: fit-content;
     }
+  }
+}
+@media (max-width: 500px) {
+  .base-value-info {
+    flex-direction: column;
+  }
+  .r-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>

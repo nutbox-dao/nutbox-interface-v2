@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="616px" height="616px" viewBox="0 0 616 616" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>椭圆形</title>
+    <defs>
+        <filter x="-40.3%" y="-40.3%" width="180.6%" height="180.6%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="50" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nutbox-Home备份-3" transform="translate(-348.000000, -186.000000)" fill="#543725">
+            <circle id="椭圆形" filter="url(#filter-1)" cx="656" cy="494" r="186"></circle>
+        </g>
+    </g>
+</svg>

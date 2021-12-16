@@ -7,7 +7,7 @@
               <empty-img width="2.8rem" height="2.8rem" @click="goHome()"></empty-img>
           </div>
           <router-link to="/community">
-            <i class="app-icon mt-4" style="opacity: .7"></i>
+            <i class="app-icon mt-4"></i>
           </router-link>
           <div class="divider-line mx-auto my-4"></div>
           <!-- joined community -->

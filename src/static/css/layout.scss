@@ -16,7 +16,7 @@
   min-height: fit-content;
   .app-icon {
     @include icon(2rem, 2rem);
-    background-image: url("~@/static/images/apps-icon.svg");
+    background-image: url("~@/static/images/apps-icon.png");
   }
   .divider-line {
     width: 2.2rem;
