@@ -3,7 +3,7 @@
     <div class="scroll-content page-view">
       <div class="p-card">
         <img class="poster" :src="baseInfo && baseInfo.poster" alt="">
-        <div class="second-card border-0">
+        <div class="second-card-home border-0">
           <img class="large-logo" :src="baseInfo && baseInfo.icon" alt=""/>
           <div class="project-info text-left">
             <div class="d-flex align-items-center">

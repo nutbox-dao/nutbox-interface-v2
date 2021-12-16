@@ -1,1 +1,16 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1638948396613" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3199" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64"><defs><style type="text/css"></style></defs><path d="M904.533333 311.466667c-17.066667-17.066667-42.666667-17.066667-59.733333 0L512 644.266667 179.2 311.466667c-17.066667-17.066667-42.666667-17.066667-59.733333 0-17.066667 17.066667-17.066667 42.666667 0 59.733333l362.666666 362.666667c8.533333 8.533333 19.2 12.8 29.866667 12.8s21.333333-4.266667 29.866667-12.8l362.666666-362.666667c17.066667-17.066667 17.066667-42.666667 0-59.733333z" p-id="3200" fill="#ffffff"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>arrow</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nutbox-Community" transform="translate(-1144.000000, -310.000000)">
+            <g id="二级导航" transform="translate(120.000000, 290.000000)">
+                <g id="编组-21备份" transform="translate(920.000000, 10.000000)">
+                    <g id="icon/arrow/m" transform="translate(104.000000, 10.000000)">
+                        <rect id="Rectangle-55" x="0" y="0" width="16" height="16"></rect>
+                        <path d="M5.67126465,13.8415527 C5.37837143,14.134446 4.9034977,14.134446 4.61060448,13.8415527 C4.31771126,13.5486595 4.31771126,13.0737858 4.61060448,12.7808926 L9.38400683,8.00749021 L4.61207186,3.23555523 C4.31917864,2.94266201 4.31917864,2.46778828 4.61207186,2.17489506 C4.90496508,1.88200184 5.37983881,1.88200184 5.67273203,2.17489506 L10.9760329,7.47819592 C11.2689261,7.77108914 11.2689261,8.24596287 10.9760329,8.53885609 C10.9648089,8.55008013 10.9533176,8.56087405 10.9415795,8.57123785 L5.67126465,13.8415527 Z" id="Combined-Shape" fill="#BDBFC2" fill-rule="nonzero" transform="translate(7.793319, 8.008224) rotate(-270.000000) translate(-7.793319, -8.008224) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

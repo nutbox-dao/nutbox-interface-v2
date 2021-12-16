@@ -199,7 +199,7 @@ export default {
   --primary-btn-text-color: #242629;
   --secondary-text: #717376;
   --disable: #bdbfc2;
-  --dividers: #737373;
+  --dividers: #242526;
   --background: #1D1E1F;
   --error: #ff5040;
   --success: #50bf00;
@@ -209,8 +209,8 @@ export default {
   --primary: #f8b62a;
   --card-broder: #37383c;
   --card-bg-primary: #141414;
-  --nav-tab-bg: #3c3c40;
-  --nav-tab-bg-active: #69696f;
+  --nav-tab-bg: #2C2D2E;
+  --nav-tab-bg-active: #141414;
   --input-border: #4e5054;
   --input-bg: #1b1e23;
   --block-bg: #1C1D1E;

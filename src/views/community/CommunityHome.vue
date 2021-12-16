@@ -12,7 +12,7 @@
             <div class="v-line mx-auto"></div>
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
-            <div class="mx-3 my-md-0 my-3">OR</div>
+            <div class="mx-3 my-md-0 my-3 font-bold">OR</div>
             <ConnectMetaMask v-if="!metamaskConnected"/>
             <button v-else class="primary-btn d-flex justify-content-center align-items-center"
                     @click="$router.push('/community/deploy-token')">
@@ -24,8 +24,8 @@
       </div>
       <div class="view-top-header view-top-header-sticky">
         <div class="row">
-          <div class="col-md-6">
-            <div class="nav-box nav-box-bg mb-3 mb-md-0">
+          <div class="col-lg-6">
+            <div class="nav-box nav-box-bg">
               <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
@@ -33,10 +33,24 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6 mt-lg-0 mt-3">
             <div class="row">
-              <div class="col-md-6"></div>
-              <div class="col-md-6">
+              <div class="col-sm-7 d-flex justify-content-end">
+                <div class="d-flex align-items-center">
+                  <span class="mr-2 font12">Official only</span>
+                  <ToggleSwitch v-model="isOfficial"/>
+                </div>
+                <b-dropdown variant="text" class="top-header-dropdown ml-3" toggle-class="p-0">
+                  <template #button-content>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="mr-4">{{selectType}}</span>
+                      <i class="dropdown-icon"></i>
+                    </div>
+                  </template>
+                  <b-dropdown-item @click="selectType='TVL'">TVL</b-dropdown-item>
+                </b-dropdown>
+              </div>
+              <div class="col-sm-5 mt-sm-0 mt-3">
                 <b-input-group class="search-input">
                   <b-form-input :placeholder="$t('operation.search')" v-model="searchText"></b-form-input>
                   <template #append>
@@ -72,10 +86,11 @@ import CommunityCard from '@/components/community/CommunityCard'
 import { errCode, CHAIN_NAME } from '@/config'
 import { mapState } from "vuex";
 import ConnectMetaMask from '@/components/common/ConnectMetaMask'
+import ToggleSwitch from '@/components/common/ToggleSwitch'
 
 export default {
   name: 'CommunityIndex',
-  components: { CommunityCard, ConnectMetaMask },
+  components: { CommunityCard, ConnectMetaMask, ToggleSwitch },
   computed: {
     ...mapState(['metamaskConnected']),
   },
@@ -84,7 +99,9 @@ export default {
       loading: false,
       activeTab: 0,
       tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
-      searchText: ''
+      searchText: '',
+      isOfficial: false,
+      selectType: 'TVL'
     }
   }
 }
@@ -98,6 +115,7 @@ export default {
     width: 1px;
     height: 3rem;
     background-color: var(--dividers);
+    border-radius: 50%;
   }
 }
 .add-icon {

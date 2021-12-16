@@ -120,16 +120,18 @@
     &-bg {
       height: 2rem;
       background-color: var(--nav-tab-bg);
-      border-radius: .4rem;
+      border-radius: .6rem;
+      padding: 0 2px;
       .nav .active {
         background-color: var(--nav-tab-bg-active);
-        border-radius: .4rem;
-        color: var(--primary-text);
+        border-radius: .6rem;
+        color: var(--primary-custom);
         font-weight: bold;
       }
       a, span {
-        height: 2rem;
-        line-height: 2rem;
+        height: 1.8rem;
+        line-height: 1.8rem;
+        color: var(--text-grey-7);
       }
     }
     .nav {

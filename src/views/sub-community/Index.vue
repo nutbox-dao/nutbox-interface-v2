@@ -14,11 +14,11 @@
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/governance">
-                <i class="menu-icon blog-icon" />
+                <i class="menu-icon governance-icon" />
                 <span>{{ $t("router.governance") }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/member">
-                <i class="menu-icon blog-icon" />
+                <i class="menu-icon member-icon" />
                 <span>{{ $t("router.member") }}</span>
               </b-nav-item>
             </b-nav>
@@ -207,5 +207,14 @@ export default {
 }
 .stake-icon {
   background-image: url("~@/static/images/menu-stake.svg");
+}
+.dapp-icon {
+  background-image: url("~@/static/images/menu-dapp.svg");
+}
+.governance-icon {
+  background-image: url("~@/static/images/menu-governance.svg");
+}
+.member-icon {
+  background-image: url("~@/static/images/menu-member.svg");
 }
 </style>
