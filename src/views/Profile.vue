@@ -3,6 +3,7 @@
     <div class="scroll-content">
       <div class="container">
         <div class="row">
+          <!-- header -->
           <div class="col-md-5 text-left d-flex flex-column justify-content-center">
             <img v-if="user.avatar" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
@@ -18,6 +19,7 @@
               <span class="hover" v-else @click="updateUser">Save</span>
             </div>
           </div>
+          <!-- token list -->
           <div class="col-md-7">
             <div class="asset-card">
               <div class="row">
@@ -36,17 +38,20 @@
             </div>
           </div>
         </div>
+        <!-- community -->
         <div class="font-bold mt-5 mb-3">Joined Communities</div>
-        <div class="c-loading"></div>
-        <div class="row">
+        <div class="row" v-if="joinedCommunity">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>
           </div>
         </div>
+        <div class="c-loading" v-else></div>
+        <!-- pools -->
         <div class="font-bold mt-5 mb-3">Staked Pools</div>
           <StakedPools class="mb-3"/>
         </div>
     </div>
+    <!-- token list -->
     <b-modal
       v-model="assetModalVisible"
       modal-class="custom-modal"

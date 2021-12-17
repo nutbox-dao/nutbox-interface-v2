@@ -24,6 +24,7 @@ export async function getMyJoinedCommunity() {
                     poolFactory
                     community{
                         id
+                        cToken
                     }
                     ratio
                     asset

@@ -378,7 +378,6 @@ export const withdrawReward = async (communityId, poolId) => {
  * @returns 
  */
 export const updatePoolsByPolling = (pools) => {
-  pools = pools.filter(p => p.status === 'OPENED')  
   const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
     store.commit('pool/saveUserStaked', res)
   })

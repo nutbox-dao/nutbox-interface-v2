@@ -24,7 +24,6 @@
         </div>
       </div>
     </div>
-    <div class="c-loading my-5"></div>
     <div class="c-card mt-3" v-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index" v-show="getCommunityInfoById(pool.community.id)">
         <div class="c-header-grid py-3 px-4">
@@ -103,6 +102,7 @@
         </b-collapse>
       </div>
     </div>
+    <div class="c-loading my-5" v-else></div>
   </div>
 </template>
 
@@ -115,7 +115,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
+      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive', 'Inactive'],
       searchText: '',
       poolStatus: 'active'
     }
@@ -126,6 +126,7 @@ export default {
     ...mapState('web3', ['userGraphInfo']),
     joinedPool() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools) return [];
+      console.log(45, this.userGraphInfo.inPools);
       return this.userGraphInfo.inPools
     }
   }
