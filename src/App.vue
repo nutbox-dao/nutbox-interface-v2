@@ -4,7 +4,7 @@
       <div class="page-side">
         <div class="text-center">
           <div @click="goHome()" class="hover">
-              <empty-img width="2.8rem" height="2.8rem" @click="goHome()"></empty-img>
+            <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" @click="goHome()" alt="">
           </div>
           <router-link to="/community">
             <i class="app-icon mt-4"></i>
