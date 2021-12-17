@@ -107,35 +107,25 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="custom-form">
         <div class="font20 font-bold text-center mb-4">
           {{ $t("operation.charge") }}
         </div>
-        <div class="input-group-box mb-4">
-          <div class="label flex-between-start">
+        <div class="mb-4">
+          <div class="label mb-2">
             <span>{{ $t("operation.charge") }} </span>&nbsp;
-            <span class="text-right"
-            >{{ $t("wallet.balance") }}:
-              {{ adminBalance | amountForm }}</span
-            >
+            <span class="text-right">{{ $t("wallet.balance") }}:{{ adminBalance | amountForm }}</span>
           </div>
-          <div class="input-box flex-between-center">
-            <input
-              style="flex: 1"
-              type="number"
-              v-model="chargeValue"
-              placeholder="0"
-            />
+          <div class="c-input-group">
+            <input type="number" v-model="chargeValue" placeholder="0"/>
           </div>
         </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="charge" :disabled="charging">
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="primary-btn mx-3" @click="charge" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("operation.confirm") }}
           </button>
-        </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn primary-btn-outline" @click="showChargeTip = false" :disabled="charging">
+          <button class="primary-btn primary-btn-outline mx-3" @click="showChargeTip = false" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("operation.cancel") }}
           </button>
@@ -152,34 +142,26 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="custom-form">
         <div class="font20 font-bold text-center mb-4">
           {{ $t("operation.withdraw") }}
         </div>
-        <div class="input-group-box mb-4">
-          <div class="label flex-between-start">
+        <div class="mb-4">
+          <div class="label mb-2">
             <span>{{ $t("operation.withdraw") }} </span>&nbsp;
-            <span class="text-right"
-            >{{ $t("wallet.balance") }}:
-              {{ communityBalance | amountForm }}</span
-            >
+            <span class="text-right">{{ $t("wallet.balance") }}:{{ communityBalance | amountForm }}</span>
           </div>
-          <div class="input-box flex-between-center">
-            <input
-              style="flex: 1"
-              type="number"
-              v-model="withdrawValue"
-              placeholder="0"
-            />
+          <div class="c-input-group">
+            <input type="number" v-model="withdrawValue" placeholder="0"/>
           </div>
         </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="withdraw" :disabled="withdrawing">
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="primary-btn mx-3" @click="withdraw" :disabled="withdrawing">
             <b-spinner small type="grow" v-show="withdrawing" />
             {{ $t("operation.withdraw") }}
           </button>
           <button
-            class="primary-btn primary-btn-outline"
+            class="primary-btn primary-btn-outline mx-3"
             @click="showWithdrawTip = false"
             :disabled="withdrawing"
           >
@@ -199,7 +181,7 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="custom-form">
         <div class="font20 font-bold text-center mb-4">
           {{ $t("community.fundRatio") }}
         </div>
@@ -207,7 +189,6 @@
           <div class="input-box flex-between-center">
             <div class="c-input-group">
               <input
-                style="flex: 1"
                 :step="0.01"
                 :max="100"
                 type="number"
@@ -218,13 +199,13 @@
             </div>
           </div>
         </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="updateDevRatio" :disabled="updatingDevRatio">
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t("operation.confirm") }}
           </button>
           <button
-            class="primary-btn primary-btn-outline"
+            class="primary-btn primary-btn-outline mx-3"
             @click="showDevRatioTip = false"
             :disabled="updatingDevRatio"
           >
@@ -240,13 +221,13 @@
 <script>
 import Progress from '@/components/community/Progress'
 import BN from 'bn.js'
-import { 
-  approveCommunityBalance, 
-  chargeCommunityBalance, 
-  withdrawCommunityBalance, 
-  setDevRatio, 
-  getMyCommunityInfo, 
-  getDistributionEras, 
+import {
+  approveCommunityBalance,
+  chargeCommunityBalance,
+  withdrawCommunityBalance,
+  setDevRatio,
+  getMyCommunityInfo,
+  getDistributionEras,
   getCommunityBalance } from '@/utils/web3/community'
 import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
@@ -261,7 +242,7 @@ export default {
       showChargeTip: false,
       showWithdrawTip: false,
       showDevAddressTip: false,
-      showDevRatioTip: false,
+      showDevRatioTip: true,
       chargeValue: null,
       withdrawValue: null,
       inputDevAddress: '',
