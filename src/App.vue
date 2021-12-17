@@ -40,7 +40,8 @@
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
           </div>
           <router-link to="/profile" v-show="metamaskConnected">
-            <img class="user-avatar hover rounded-circle w-75 my-3"
+            <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
+            <img v-else class="user-avatar hover rounded-circle w-75 my-3"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
           </router-link>
           <div class="hover">
@@ -91,6 +92,7 @@ export default {
     ...mapState('community', ['loadingMyCommunityInfo', 'communityInfo']),
     ...mapState('currentCommunity', ['communityId']),
     ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapGetters('user', ['getUserByAddress']),
     address () {
       if (this.account) {
         return formatUserAddress(this.account, false)
@@ -101,6 +103,12 @@ export default {
         return this.getCommunityInfoById(this.communityId)
       }
       return null
+    },
+    avatar() {
+      const user = this.getUserByAddress(this.account)
+      if (user) {
+        return user.avatar
+      }
     },
     settingStep () {
       const c = this.communityInfo

@@ -8,12 +8,19 @@
           placement="top"
         >
           {{ description }}
+          {{ operation.user }}
         </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
-      <img v-if="operation.user.length > 0" class="rounded-circle hover"
+      <img class="rounded-circle hover"
            style="width: 2rem; height: 2rem"
-           :src="operation.user" alt="">
-      <span class="hover">{{ time }}</span>
+           :src="userAvatar" alt="">
+      <span :id="operation.tx + operation.type + operation.timestamp" class="hover">{{ time }}</span>
+      <b-popover :target="operation.tx + operation.type + operation.timestamp"
+        triggers="hover focus"
+        placement="top"
+      >
+        {{ getDateString(operation.timestamp) }}
+      </b-popover>
     </div>
   </div>
 </template>
@@ -40,6 +47,7 @@ export default {
     return {
       time: '',
       description: '',
+      userAvatar: ''
     }
   },
   computed: {
@@ -52,7 +60,14 @@ export default {
   methods: {
     gotoTransaction() {
       window.open(VUE_APP_TX_BROWER + this.operation.tx, '_blank')
-    }
+    },
+    getDateString(timestamp) {
+      try {
+        return new Date(parseInt(timestamp) * 1e3).toISOString().replace("T", " ").substring(0, 19)
+      }catch(e) {
+        return '--'
+      }
+    },
   },
   mounted () {
     // timestamp
@@ -64,7 +79,11 @@ export default {
       window.clearInterval(interval)
     })
     let accName = this.operation.user.substring(0, 4) + '...' + this.operation.user.substring(this.operation.user.length - 4, this.operation.user.length)
-    accName = this.getUserByAddress(this.operation.user).name;
+    const user = this.getUserByAddress(this.operation.user);
+    if (user) {
+      accName = user.name;
+      this.userAvatar = user.avatar
+    }
     let symbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){

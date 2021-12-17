@@ -3,8 +3,9 @@
     <div class="row">
       <div class="block col-md-7 col-sm-7 pr-sm-0">
         <div class="member-card position-relative">
-          <div class="c-loading c-loading-bg c-loading-absolute"></div>
+          <div class="c-loading c-loading-bg c-loading-absolute" v-if="allUsers && allUsers.length == 0"></div>
           <b-table :fields="fields" :items="allUsers"
+                    v-else
                    ref="selectableTable"
                    thead-tr-class="asset-tr text-grey-7"
                    tbody-tr-class="asset-tr tr-light"
@@ -41,9 +42,10 @@
               </span>
             </template>
             <template #cell(avatar)="row">
-              <img v-if="row.item.avatar"
+              <img v-if="getAvatar(row.item.address)"
                    style="width:2rem;height: 2rem"
-                   :src="row.item.avatar" alt="">
+                   class="user-avatar rounded-circle"
+                   :src="getAvatar(row.item.address)" alt="">
               <empty-img v-else width="2rem" height="2rem" class="rounded-circle"></empty-img>
             </template>
           </b-table>
@@ -57,9 +59,9 @@
             <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Creator</button>
           </div>
           <div class="text-center mt-3 pb-3">
-            <img v-if="user && user.avatar" class="user-avatar hover rounded-circle"
-                 :src="user && user.avatar" alt="">
-            <img v-else class="user-avatar hover rounded-circle"
+            <img v-if="getAvatar(user && user.address)" class="user-avatar rounded-circle" style="height:4.8rem;width:4.8rem"
+                 :src="getAvatar(user && user.address)" alt="">
+            <img v-else class="user-avatar rounded-circle"
                  src="~@/static/images/home-s2-icon1.svg" alt="">
             <div class="my-1 font20 font-bold">{{ getName(user ? user.address : null) }}</div>
             <div class="mb-3 font12 text-grey-7 d-flex align-items-center justify-content-center">
@@ -150,9 +152,12 @@ export default {
     onSelectUser (data, index) {
       if (this.activitiesLoading || this.selectIndex === index) return
       this.user = data
+      console.log(this.user.id);
       this.selectIndex = index
       this.$refs.selectableTable.selectRow(index)
-      this.getUserActive()
+      this.getUserActive().then(res => {
+        this.activitiesList = res
+      })
     },
     getDateString(timestamp) {
       try {
@@ -164,6 +169,15 @@ export default {
     getBalance(address) {
       if (!address || !this.balances || Object.keys(this.balances).length === 0) return '0';
       return this.balances[address.toLowerCase()].toString() / 1e18
+    },
+    getAvatar(address) {
+      if (!address) return null
+      address = ethers.utils.getAddress(address);
+      const u = this.users[address]
+      if (u) {
+        return u.avatar;
+      }
+      return null;
     },
     getName(address) {
       if (!address) return '--'
@@ -187,7 +201,22 @@ export default {
       }
     },
     copy(){
-      console.log(55);
+      let address = this.user.id
+      address = ethers.utils.getAddress(address)
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: address
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
     },
   }
 

@@ -129,9 +129,9 @@
   <!-- history -->
     <div class="activity-banner">
       <div class="a-banner-card">
-        <div class="mt-2 mb-4">Activities</div>
-        <div class="c-loading c-loading-absolute c-loading-bg" v-show="!operationHistory || (operationHistory.length === 0)"></div>
-        <transition-group name="list-complete">
+        <div class="mt-2 mb-4">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-if="!operationHistory || (operationHistory.length === 0)"></div>
+        <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
                         v-for="operation of operationHistory" :key="operation.tx + operation.type"
                         :operation="operation"/>
@@ -186,6 +186,11 @@ export default {
         return false;
       }
       return !this.cToken.isMintable
+    }
+  },
+  watch: {
+    operationHistory(newValue, oldValue) {
+        console.log(234, newValue);
     }
   },
   methods: {

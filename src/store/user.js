@@ -11,7 +11,7 @@ export default {
         getUserByAddress: state => (address) => {
             address = ethers.utils.getAddress(address)
             return state.users ? state.users[address] : null;
-        }
+        },
     },
     mutations: {
         saveUsers(state, users) {
