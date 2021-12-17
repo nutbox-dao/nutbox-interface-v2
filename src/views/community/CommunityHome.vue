@@ -15,9 +15,9 @@
             <div class="mx-3 my-md-0 my-3 font-bold">OR</div>
             <ConnectMetaMask v-if="!metamaskConnected"/>
             <button v-else class="primary-btn d-flex justify-content-center align-items-center"
-                    @click="$router.push('/community/deploy-token')">
+                    @click="manageCommunity">
               <i class="add-icon mr-2"></i>
-              <span>Create Community</span>
+              <span>{{ settingStep === 3 ? 'Manage Community' : 'Create Community' }}</span>
             </button>
           </div>
         </div>
@@ -40,7 +40,7 @@
                   <span class="mr-2 font12">Official only</span>
                   <ToggleSwitch v-model="isOfficial"/>
                 </div>
-                <b-dropdown variant="text" class="top-header-dropdown ml-3" toggle-class="p-0">
+                <!-- <b-dropdown variant="text" class="top-header-dropdown ml-3" toggle-class="p-0">
                   <template #button-content>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="mr-4">{{selectType}}</span>
@@ -48,10 +48,9 @@
                     </div>
                   </template>
                   <b-dropdown-item @click="selectType='TVL'">TVL</b-dropdown-item>
-                  <b-dropdown-item @click="selectType='MEMBER'">MEMBER</b-dropdown-item>
-                  <b-dropdown-item @click="selectType='TTT'">TTT</b-dropdown-item>
+                  <b-dropdown-item @click="selectType='USER'">USER</b-dropdown-item>
                   <b-dropdown-item @click="selectType='POOL'">POOL</b-dropdown-item>
-                </b-dropdown>
+                </b-dropdown> -->
               </div>
               <div class="col-sm-5 mt-sm-0 mt-3">
                 <b-input-group class="search-input">
@@ -96,30 +95,40 @@ export default {
   components: { CommunityCard, ConnectMetaMask, ToggleSwitch },
   computed: {
     ...mapState(['metamaskConnected']),
-    ...mapState('community', ['loadingAllCommunityInfo', 'allCommunityInfo']),
+    ...mapState('web3', ['stakingFactoryId']),
+    ...mapState('community', ['loadingAllCommunityInfo', 'allCommunityInfo', 'communityInfo']),
     showingCommunity() {
       let communities = this.allCommunityInfo
       if (!communities || Object.keys(communities).length === 0) return [];
       communities = Object.values(communities)
       if(this.isOfficial) {
-        console.log(communities);
         communities = communities.filter(c => parseInt(c.isVip) == 1) 
-      }else {
-        communities = communities.filter(c => parseInt(c.isVip) == 0) 
       }
+      
       if (this.searchText && this.searchText.length > 0) {
-        communities.filter(c => c.name.toLowerCase().indexOf(this.searchText.toLowerCase()) !== -1)
+        communities = communities.filter(c => c.name.toLowerCase().indexOf(this.searchText.toLowerCase()) !== -1)
       }
       switch (this.selectType) {
         case "TVL":
           break;
-        case "MEMBER":
+        case "USER":
           break;
         case "POOL": 
         break;
       }
       return communities
     },
+    settingStep () {
+      const c = this.communityInfo
+      if (!this.stakingFactoryId){
+        return 1;
+      }
+      if (c && c.name && c.name.length > 0) {
+        return 3;
+      }else {
+        return 2;
+      }
+    }
   },
   watch: {
     loadingAllCommunityInfo(newValue, oldValue) {
@@ -139,10 +148,19 @@ export default {
       loading: true,
       tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: '',
-      isOfficial: true,
+      isOfficial: false,
       selectType: 'TVL'
     }
-  }
+  },
+  methods: {
+    manageCommunity() {
+      if (this.settingStep === 3) {
+        this.$router.push('/manage-community')
+      }else {
+        this.$router.push('/community/deploy-token')
+      }
+    }
+  },
 }
 </script>
 
