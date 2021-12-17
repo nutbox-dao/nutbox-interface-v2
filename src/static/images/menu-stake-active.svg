@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/normal/Blog</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Community-Pool" transform="translate(-140.000000, -220.000000)" fill="#FFDB1B">
+            <g id="社区一级导航备份" transform="translate(120.000000, 100.000000)">
+                <g id="编组-2备份-2" transform="translate(0.000000, 108.000000)">
+                    <g id="menuicon_home" transform="translate(20.000000, 12.000000)">
+                        <path d="M11.0003032,3.05489527 L11,12 C11,12.5128358 11.3860402,12.9355072 11.8833789,12.9932723 L12,13 L20.9449943,13.0006955 C20.4472338,17.5003111 16.632315,21 12,21 C7.02943725,21 3,16.9705627 3,12 C3,7.3673423 6.50020676,3.5522017 11.0003032,3.05489527 Z M13,2 C17.8818027,2 21.8557914,5.88681368 21.9961629,10.7346377 L22,11 L14,11 C13.4477153,11 13,10.5522847 13,10 L13,2 Z" id="形状结合"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

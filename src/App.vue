@@ -6,20 +6,20 @@
           <div @click="goHome()" class="hover">
             <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" alt="">
           </div>
-          <router-link to="/community">
+          <router-link to="/community" class="apps-icon-box">
             <i class="app-icon mt-4"></i>
           </router-link>
           <div class="divider-line mx-auto my-4"></div>
           <!-- joined community -->
           <div class="pt-3 communities-bar">
-            <!-- <router-link to="/sub-community/home">
-              <div class="community-logo-box">
-                <img class="rounded-circle"
-                     src="~@/static/images/tokens/dot.png" alt="">
-              </div>
-            </router-link> -->
-            <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)" v-show="getCommunityInfoById(community.id)" :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
-                 v-for="community of userGraphInfo.inCommunities" :key="community.id" alt="">
+            <div class="community-logo-box"
+                 :class="'active'"
+                 v-for="community of userGraphInfo.inCommunities" :key="community.id">
+              <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)"
+                   v-show="getCommunityInfoById(community.id)"
+                   :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
+                  alt="">
+            </div>
           </div>
         </div>
         <!-- bottom -->
@@ -259,19 +259,20 @@ body {
   }
 }
 .communities-bar {
-  .active .community-logo-box {
-    border: 2px solid var(--primary-custom);
-    border-radius: 2.8rem;
-    width: 2.8rem;
-    height: 2.8rem;
-    padding: 2px;
-    box-sizing: border-box;
-  }
   .community-logo-box {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    padding: 1px;
+  }
+  .active {
+    border: 1px solid var(--primary-custom);
+    border-radius: 2.8rem;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 1px;
+    box-sizing: border-box;
   }
   .community-logo-box img {
     max-width: 2.4rem;

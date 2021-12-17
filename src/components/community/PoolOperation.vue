@@ -10,8 +10,8 @@
           {{ staked | amountForm }}
         </span>
         <div class="d-flex">
-          <button class="symbol-btn hover" @click="decrease">-</button>
-          <button class="symbol-btn hover" :disabled="card.status === 'CLOSED'" @click="increase">+</button>
+          <button class="symbol-btn hover mr-2" @click="decrease">-</button>
+          <button class="symbol-btn hover " :disabled="card.status === 'CLOSED'" @click="increase">+</button>
         </div>
       </div>
       <template v-else>
@@ -42,6 +42,22 @@
         :card="card"
         @hideStakeMask="updateStaking = false"
       />
+    </b-modal>
+    <b-modal
+      v-model="tipModal"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="p-4">
+        Your Steem account haven't binding with current BSC account, please change Steem account in your wallet first.
+        <br>
+        Your binding Steem account is: 3r2fsd9283y23r8u2083r0293r0293ru0ru
+      </div>
+      <div class="text-center">
+        <button class="primary-btn w-50" @click="tipModal=false">OK</button>
+      </div>
     </b-modal>
 
     <Login :type='type' v-if="showLogin" @hideMask="showLogin = false" />
@@ -74,7 +90,8 @@ export default {
         isApproving: false,
         updateStaking: false,
         operate: 'add',
-        showLogin: false
+        showLogin: false,
+        tipModal: false
       }
   },
   computed: {

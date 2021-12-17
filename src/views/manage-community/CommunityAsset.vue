@@ -112,7 +112,7 @@
           {{ $t("operation.charge") }}
         </div>
         <div class="mb-4">
-          <div class="label mb-2">
+          <div class="label mb-2 d-flex justify-content-between">
             <span>{{ $t("operation.charge") }} </span>&nbsp;
             <span class="text-right">{{ $t("wallet.balance") }}:{{ adminBalance | amountForm }}</span>
           </div>
@@ -147,7 +147,7 @@
           {{ $t("operation.withdraw") }}
         </div>
         <div class="mb-4">
-          <div class="label mb-2">
+          <div class="label mb-2 d-flex justify-content-between">
             <span>{{ $t("operation.withdraw") }} </span>&nbsp;
             <span class="text-right">{{ $t("wallet.balance") }}:{{ communityBalance | amountForm }}</span>
           </div>

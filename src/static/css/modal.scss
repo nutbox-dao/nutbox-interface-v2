@@ -15,3 +15,6 @@
     background-image: url("~@/static/images/back.svg");
   }
 }
+.cropper-modal .modal-content {
+  background-color: var(--input-bg);
+}

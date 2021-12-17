@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex ratio-container">
     <div class="flex-fill overflow-hidden">
-      <div class="mx-auto" style="width: 100%">
+      <div class="mx-auto" style="width: 100%; max-width: 20rem">
         <canvas id="pie"></canvas>
       </div>
     </div>

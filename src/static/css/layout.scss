@@ -16,7 +16,14 @@
   min-height: fit-content;
   .app-icon {
     @include icon(2rem, 2rem);
-    background-image: url("~@/static/images/apps-icon.png");
+  }
+  .apps-icon-box {
+    .app-icon {
+      background-image: url("~@/static/images/apps-white-icon.png");
+    }
+    &.active .app-icon {
+      background-image: url("~@/static/images/apps-icon.png");
+    }
   }
   .divider-line {
     width: 2.2rem;
@@ -161,7 +168,7 @@
       display: none;
     }
     .view-top-header {
-      padding: 2rem 15px 1rem;
+      padding: 1rem 15px 1rem;
       top: -1.5rem;
     }
   }

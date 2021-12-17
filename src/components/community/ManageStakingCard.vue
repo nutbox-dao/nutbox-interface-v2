@@ -30,7 +30,7 @@
         <span class="name">{{ $t('pool.ratio') }}</span>
        <div class="info">{{pool.ratio / 100}}%</div>
       </div>
-    
+
       <button class="primary-btn my-3" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('pool.closePool')}}
@@ -46,24 +46,22 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="custom-form">
         <h3 style="color: red;text-align:center">{{ $t("tip.attention") }}</h3>
-        <div class="my-5">
+        <div class="my-3">
           {{ $t("tip.stopPoolAttention") }}
         </div>
-        <div class="my-5">
+        <div class="mb-4">
           {{ `Please input pool name: "${pool.name}" to close this pool.` }}
         </div>
 
         <div class="c-input-group">
-          <b-input-group class="d-flex flex-between-center">
-            <b-input class="flex-full"
-                      :placeholder="$t('placeHolder.confirmInfo', {info: pool.name})"
-                      v-model="confirmInfo"></b-input>
-          </b-input-group>
+          <b-input class="flex-1"
+                   :placeholder="$t('placeHolder.confirmInfo', {info: pool.name})"
+                   v-model="confirmInfo"></b-input>
         </div>
 
-        <div class="flex-between-center" style="gap: 2rem">
+        <div class="d-flex justify-content-between" style="gap: 2rem">
           <button class="primary-btn" @click="receiveAttention" :disabled="updating">
             <b-spinner small type="grow" v-show="updating" />
             {{ $t("pool.closePool") }}
@@ -207,6 +205,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/static/css/card/common-card";
+@import "src/static/css/form";
 .apy-input {
   width: 50%;
   border: none;

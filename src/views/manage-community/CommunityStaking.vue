@@ -1,19 +1,6 @@
 <template>
   <div class="scroll-content">
     <div class="container">
-      <div class="view-top-header flex-between-center">
-        <div class="c-btn-group" >
-          <button class="primary-btn primary-btn-outline w-auto mr-2"
-                  v-show="activePool.length > 1"
-                  @click="configPoolModal=true">
-            {{ $t('pool.updatePoolRatios') }}</button>
-          <button class="primary-btn w-auto mx-0 d-flex align-items-center"
-                  @click="poolTypeModal=true, createPoolStep=1">
-            <i class="add-icon"></i>
-            <span>{{ $t('pool.addPool') }}</span>
-          </button>
-        </div>
-      </div>
       <div class="view-top-header view-top-header-sticky">
         <div class="row">
           <div class="col-md-6">
@@ -25,9 +12,21 @@
               </div>
             </div>
           </div>
-          <!-- <div class="col-md-6 text-right">
-            <button class="primary-btn w-auto" style="height: 2rem">Inactive Pool</button>
-          </div> -->
+          <div class="col-md-6">
+            <div class="c-btn-group" >
+              <button class="primary-btn primary-btn-outline w-auto mr-2"
+                      style="height: 2rem"
+                      v-show="activePool.length > 1"
+                      @click="configPoolModal=true">
+                {{ $t('pool.updatePoolRatios') }}</button>
+              <button class="primary-btn w-auto mx-0 d-flex align-items-center"
+                      style="height: 2rem"
+                      @click="poolTypeModal=true, createPoolStep=1">
+                <i class="add-icon"></i>
+                <span>{{ $t('pool.addPool') }}</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div v-if="stakingPools && stakingPools.length===0"
@@ -112,7 +111,7 @@ export default {
       poolTypeModal: false,
       createPoolStep: 1,
       poolType: '',
-      configPoolModal: false,
+      configPoolModal: true,
       stakeAsset: '',
       creating: false,
       updating: false,

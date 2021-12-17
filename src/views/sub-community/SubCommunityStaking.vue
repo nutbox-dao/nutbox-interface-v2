@@ -1,18 +1,20 @@
 <template>
   <div class="sub-staking-page">
     <div class="scroll-content position-relative">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="nav-box nav-box-bg mb-3 mb-md-0">
-            <div class="nav">
+      <div class="view-top-header-sticky">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="nav-box nav-box-bg mb-3 mb-md-0">
+              <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
                       @click="activeTab = index">{{item}}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 text-right">
-          <button class="primary-btn w-auto" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
+          <div class="col-md-6 text-right">
+            <button class="primary-btn w-auto" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
+          </div>
         </div>
       </div>
       <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>

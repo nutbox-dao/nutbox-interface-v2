@@ -14,6 +14,49 @@
                       label="Pool Name">
           <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
         </b-form-group>
+        <b-form-group
+          class="mb-4 logo-form"
+          label-class="overflow-hidden text-grey-7"
+          label-cols-md="3" content-cols-md="9"
+          :label="$t('community.communityLogo')">
+          <b-form-file
+            v-model="logo"
+            @input="updateLogo"
+            accept="image/png,image/jpeg, image/jpg"
+            ref="logo-file-input"
+          >
+            <template #placeholder>
+              <div class="input-file-logo">
+                <template v-if="propsIcon">
+                  <img class="cover-preview" :src="propsIcon" alt="" />
+                  <div class="edit-mask">
+                    <span>{{ $t("operation.edit") }}<br />LOGO</span>
+                  </div>
+                </template>
+                <template v-else>
+                  <img
+                    class="add-icon"
+                    src="~@/static/images/add-white-icon.svg"
+                    alt=""
+                  />
+                  <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
+                </template>
+              </div>
+            </template>
+            <template #file-name>
+              <div class="input-file-logo">
+                <img
+                  class="logo-preview"
+                  v-if="logoPreviewSrc"
+                  :src="logoPreviewSrc"
+                  alt=""
+                />
+                <UploadLoading v-if="logoUploadLoading" />
+              </div>
+            </template>
+          </b-form-file>
+        </b-form-group>
+
         <div class="mb-2">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
         <div class="pool-chart-box w-100 d-flex">
           <div class="pool-data-box">
@@ -41,8 +84,36 @@
           </button>
         </div>
       </div>
-
     </div>
+    <!-- crop pic tip -->
+    <b-modal
+      v-model="cropperModal"
+      modal-class="cropper-modal"
+      size="lg"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="cropper-container">
+        <canvas id="cropper-canvas"></canvas>
+        <vueCropper
+          ref="cropper"
+          class="cropper-rounded-circle"
+          :infoTrue="true"
+          :autoCrop="true"
+          :img="cropperImgSrc"
+          :fixedNumber="cropFixedNumber"
+          :autoCropWidth="cropImgSize[0]"
+          :fixed="true"
+          :centerBox="true"
+          outputType="png"
+        ></vueCropper>
+      </div>
+      <div class="crop-btn-group">
+        <button class="primary-btn" @click="onCancel">{{ $t('operation.cancel') }}</button>
+        <button class="primary-btn" @click="completeCropAndUpload">{{ $t('operation.complete') }}</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -50,11 +121,13 @@
 import debounce from 'lodash.debounce'
 import PoolRatio from '@/components/community/PoolRatio'
 import { mapState } from 'vuex'
-import { sleep } from '@/utils/helper'
+import { sleep, uploadImage } from '@/utils/helper'
+import UploadLoading from '@/components/common/UploadLoading'
+import { VueCropper } from 'vue-cropper'
 
 export default {
   name: 'StakingPoolConfig',
-  components: { PoolRatio },
+  components: { PoolRatio, UploadLoading, VueCropper },
   props: {
     enableBack: {
       type: Boolean,
@@ -76,10 +149,57 @@ export default {
     return {
       activePools:[],
       newName: '',
-      ratios: []
+      ratios: [],
+      propsIcon: '',
+      logo: null,
+      logoPreviewSrc: '',
+      logoUploadLoading: false,
+      cropperModal: false,
+      cropperImgSrc: '',
+      cropFixedNumber: [1, 1],
+      cropImgSize: [200, 200]
     }
   },
   methods: {
+    async updateLogo (file) {
+      if (!this.logo) return
+      this.logoUploadLoading = true
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (res) => {
+        this.cropperImgSrc = res.target.result
+        this.cropperModal = true
+        this.cropFixedNumber = [1, 1]
+        this.cropImgSize = [200, 200]
+      }
+    },
+    onCancel () {
+      this.cropperModal = false
+      this.logo = null
+      this.logoUploadLoading = false
+    },
+    completeCropAndUpload() {
+      this.$refs.cropper.getCropData(async (data) => {
+        const canvas = await this.clipCircleImg(data)
+        this.logoPreviewSrc = canvas.toDataURL('image/png')
+        this.cropperModal = false
+        canvas.toBlob(async data => {
+          try {
+            this.propsIcon = await uploadImage(data)
+            this.logoUploadLoading = false
+          } catch (e) {
+            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
+              title: this.$t('tip.tips'),
+              autoHideDelay: 5000,
+              variant: 'warning'
+            })
+            this.logo = null
+            this.propsIcon = null
+            this.logoUploadLoading = false
+          }
+        })
+      })
+    },
     inputChange: debounce(function () {
       this.activePools.map((item, index) => {
         item.ratio = this.ratios[index]

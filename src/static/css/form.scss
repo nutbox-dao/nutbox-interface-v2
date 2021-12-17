@@ -78,6 +78,7 @@ input[type="number"] {
   input {
     background: var(--input-bg);
     color: white;
+    flex: 1;
   }
   .search-icon {
     @include icon();

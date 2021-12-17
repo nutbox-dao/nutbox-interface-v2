@@ -23,6 +23,11 @@
               </b-nav-item>
             </b-nav>
           </div>
+          <div class="link-items">
+            <img src="~@/static/images/h-github.svg" alt="">
+            <img src="~@/static/images/h-twitter.svg" alt="">
+            <img src="~@/static/images/h-telegram.svg" alt="">
+          </div>
         </div>
       </div>
       <div class="sub-page-container">
@@ -51,6 +56,11 @@
                     <i class="menu-icon blog-icon" />
                     <span>{{ $t("router.member") }}</span>
                   </b-nav-item>
+                  <div class="link-items">
+                    <img src="~@/static/images/h-github.svg" alt="">
+                    <img src="~@/static/images/h-twitter.svg" alt="">
+                    <img src="~@/static/images/h-telegram.svg" alt="">
+                  </div>
                 </div>
               </div>
             </template>
@@ -154,6 +164,9 @@ export default {
   background-color: var(--card-bg-primary);
   padding: 1rem 0;
   border-radius: .8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .menu-items {
     .nav-link {
       display: flex;
@@ -172,6 +185,13 @@ export default {
     }
     .active i {
       opacity: 1;
+    }
+  }
+  .link-items {
+    display: flex;
+    justify-content: center;
+    img {
+      margin: 0.5rem;
     }
   }
 }
@@ -220,5 +240,25 @@ export default {
 }
 .member-icon {
   background-image: url("~@/static/images/menu-member.svg");
+}
+.active {
+  .home-icon {
+    background-image: url("~@/static/images/menu-home-active.svg");
+  }
+  .blog-icon {
+    background-image: url("~@/static/images/menu-blog.svg");
+  }
+  .stake-icon {
+    background-image: url("~@/static/images/menu-stake-active.svg");
+  }
+  .dapp-icon {
+    background-image: url("~@/static/images/menu-dapp.svg");
+  }
+  .governance-icon {
+    background-image: url("~@/static/images/menu-governance-active.svg");
+  }
+  .member-icon {
+    background-image: url("~@/static/images/menu-member-active.svg");
+  }
 }
 </style>
