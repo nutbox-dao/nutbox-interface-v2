@@ -23,34 +23,35 @@
         <div class="content1">
           <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
           <div class="row">
-            <div class="col-md-4 d-flex token-base-info">
+            <div class="col-md-5 d-flex token-base-info">
               <img class="token-logo mr-3" :src="cToken && cToken.icon" alt=""/>
               <div>
-                <span>{{ cToken ? cToken.symbol : '-' }}</span>
-                <div class="token-address" @click="copyAddress(cToken ? cToken.address : null)">
-                  {{ cToken ? cToken.name : '-' }}
+                <span>{{ cToken ? cToken.symbol : '-' }}token token</span>
+                <div class="token-address font12 text-grey-7"
+                     @click="copyAddress(cToken ? cToken.address : null)">
+                  {{ cToken ? cToken.name : '-' }}token name token name
                 </div>
               </div>
             </div>
-            <div class="col-md-8 base-value-info d-flex justify-content-between align-items-center text-center">
+            <div class="col-md-7 base-value-info d-flex text-center">
               <div class="r-item">
-                <div class="label mb-2">{{ $t('asset.price') }}</div>
-                <div class="value">{{ (cToken ? cToken.price : 0) | formatPrice }}</div>
+                <div class="label font12 text-grey-7">{{ $t('asset.price') }}</div>
+                <div class="value font-bold">{{ (cToken ? cToken.price : 0) | formatPrice }}</div>
               </div>
               <div class="r-item">
-                <div class="label mb-2">{{ $t('asset.totalSupply') }}</div>
-                <div class="value">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}</div>
+                <div class="label font12 text-grey-7">{{ $t('asset.totalSupply') }}</div>
+                <div class="value font-bold">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}0000000000</div>
               </div>
               <div class="r-item">
-                <div class="label mb-2">{{ $t('asset.cap') }}</div>
-                <div class="value">
+                <div class="label font12 text-grey-7">{{ $t('asset.cap') }}</div>
+                <div class="value font-bold">
                   {{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal) * cToken.price) : 0) | formatPrice }}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="c-loading c-loading-absolute c-loading-bg" v-show="!cToken"></div>
+<!--        <div class="c-loading c-loading-absolute c-loading-bg" v-show="!cToken"></div>-->
       </div>
       <!-- distribution -->
       <div class="c-card">
@@ -320,9 +321,11 @@ export default {
     border-right: 1px solid var(--dividers);
     align-items: center;
   }
-
   .r-item {
     flex: 1;
+  }
+  .r-item .value {
+    margin-top: .5rem;
   }
   .v-middle {
     position: relative;
@@ -337,17 +340,12 @@ export default {
       border: none;
       margin-bottom: 1rem;
     }
-
-    .r-item:nth-child(2) {
-      border-left: 1px solid var(--dividers);
-      border-right: 1px solid var(--dividers);
-    }
   }
   .ratio-container {
     flex-direction: column;
   }
 }
-@media (min-width: 992px) and (max-width: 1200px) {
+@media (min-width: 992px) and (max-width: 1600px) {
   .ratio-container {
     flex-direction: column;
   }
@@ -358,6 +356,9 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+  }
+  .r-item .value {
+    margin-top: 0!important;
   }
 }
 @media (max-width: 991px) {
@@ -381,6 +382,9 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+  }
+  .r-item .value {
+    margin-top: 0!important;
   }
 }
 </style>
