@@ -32,10 +32,12 @@
                   <PoolRatio class="asset-chart" :pools-data="assetValue" :show-legend-info="false"/>
                 </div>
               </div>
+              <div class="c-loading c-loading-bg c-loading-absolute"></div>
             </div>
           </div>
         </div>
         <div class="font-bold mt-5 mb-3">Joined Communities</div>
+        <div class="c-loading"></div>
         <div class="row">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>

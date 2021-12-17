@@ -2,7 +2,8 @@
   <div class="sub-member-page">
     <div class="row">
       <div class="block col-md-7 col-sm-7 pr-sm-0">
-        <div class="member-card">
+        <div class="member-card position-relative">
+          <div class="c-loading c-loading-bg c-loading-absolute"></div>
           <b-table :fields="fields" :items="allUsers"
                    ref="selectableTable"
                    thead-tr-class="asset-tr text-grey-7"
@@ -78,9 +79,7 @@
           </div>
           <div class="mt-2">{{ user ? user.operationCount : '' }} Activities</div>
           <div class="flex-fill overflow-auto">
-            <div v-if="activitiesLoading" class="mt-4 text-center">
-              <b-spinner></b-spinner>
-            </div>
+            <div class="c-loading" v-if="activitiesLoading"></div>
             <transition-group v-show="!activitiesLoading" name="list-complete">
               <ActivityItem class="mt-3 list-complete-item"
                             :operation="active"

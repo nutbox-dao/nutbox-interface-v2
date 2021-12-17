@@ -48,18 +48,21 @@
             </div>
           </div>
         </div>
+        <div class="c-loading c-loading-absolute c-loading-bg"></div>
       </div>
       <div class="c-card">
         <div class="content2 mb-5">
           <div class="title mb-3">Distribution Stratage</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
         </div>
+        <div class="c-loading c-loading-absolute c-loading-bg"></div>
       </div>
       <div class="c-card">
         <div class="content3 mb-5">
           <div class="title mb-3">Pools</div>
           <PoolRatio :pools-data="poolsData"/>
         </div>
+        <div class="c-loading c-loading-absolute c-loading-bg"></div>
       </div>
       <div class="c-card">
         <div class="content3 mb-5">
@@ -121,6 +124,7 @@
     <div class="activity-banner">
       <div class="a-banner-card">
         <div class="mt-2 mb-4">Activities</div>
+        <div class="c-loading c-loading-absolute c-loading-bg"></div>
         <transition-group name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
                         v-for="operation of operationHistory" :key="operation.tx + operation.type"

@@ -1,6 +1,6 @@
 <template>
   <div class="sub-staking-page">
-    <div class="scroll-content">
+    <div class="scroll-content position-relative">
       <div class="row">
         <div class="col-md-6">
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
@@ -15,10 +15,7 @@
           <button class="primary-btn w-auto" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
         </div>
       </div>
-      <div class="loading-bg" v-if="loadingCommunityInfo">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t('tip.loading') }}</p>
-      </div>
+      <div class="c-loading c-loading-absolute" v-if="loadingCommunityInfo"></div>
       <template v-else>
         <div v-if="stakingCards.length > 0"></div>
         <div class="empty-bg" v-else>
@@ -78,12 +75,6 @@ export default {
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
       return this.allPools.filter(p => p.status === 'CLOSED')
-    }
-  },
-  methods: {
-    async test() {
-        await sleep(3);
-        return 5;
     }
   },
   async mounted() {
