@@ -50,14 +50,14 @@ export default {
       },
       
       clearData (state) {
-          state.communityInfo = null;
-          state.operationHistory = [];
-          state.feeRatio = 0;
-          state.allPools = null;
-          state.cToken = null;
-          state.allUsers = null;
-          state.operationCount = 0;
-          state.specifyDistributionEras = [];
+        state.communityInfo = null;
+        state.operationHistory = null;
+        state.feeRatio = 0;
+        state.allPools = null;
+        state.cToken = null;
+        state.allUsers = null;
+        state.operationCount = 0;
+        state.specifyDistributionEras = [];
       }
     }
   }
