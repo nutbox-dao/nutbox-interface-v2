@@ -26,10 +26,10 @@
             <div class="col-md-5 d-flex token-base-info">
               <img class="token-logo mr-3" :src="cToken && cToken.icon" alt=""/>
               <div>
-                <span>{{ cToken ? cToken.symbol : '-' }}token token</span>
+                <span class="font20">{{ cToken ? cToken.symbol : '-' }}</span>
                 <div class="token-address font12 text-grey-7"
                      @click="copyAddress(cToken ? cToken.address : null)">
-                  {{ cToken ? cToken.name : '-' }}token name token name
+                  {{ cToken ? cToken.name : '-' }}
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
               </div>
               <div class="r-item">
                 <div class="label font12 text-grey-7">{{ $t('asset.totalSupply') }}</div>
-                <div class="value font-bold">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}0000000000</div>
+                <div class="value font-bold">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}</div>
               </div>
               <div class="r-item">
                 <div class="label font12 text-grey-7">{{ $t('asset.cap') }}</div>
