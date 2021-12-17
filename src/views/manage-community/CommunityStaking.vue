@@ -87,6 +87,23 @@
                          @update='update'
                          @close="configPoolModal=false"/>
     </b-modal>
+    <b-modal
+      v-model="tipModal"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="p-4">
+        这是提示内容
+        这是提示内容
+        这是提示内容
+        这是提示内容
+      </div>
+      <div class="text-center">
+        <button class="primary-btn w-50" @click="tipModal=false">OK</button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -115,7 +132,8 @@ export default {
       configPoolModal: false,
       stakeAsset: '',
       creating: false,
-      updating: false
+      updating: false,
+      tipModal: true
     }
   },
   computed: {
@@ -160,9 +178,9 @@ export default {
     // create new pool
     async create (pool) {
       let form = {
-        type: this.poolType, 
-        ratios: pool.map(p => parseFloat(p.ratio)), 
-        name: pool[pool.length - 1].name, 
+        type: this.poolType,
+        ratios: pool.map(p => parseFloat(p.ratio)),
+        name: pool[pool.length - 1].name,
         asset: this.stakeAsset
       }
       try {

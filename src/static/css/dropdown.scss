@@ -128,4 +128,7 @@
 }
 .top-header-dropdown .dropdown-item {
   color: var(--text-grey-7);
+  &:hover {
+    background: var(--block-bg);
+  }
 }
