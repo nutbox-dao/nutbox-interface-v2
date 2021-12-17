@@ -87,23 +87,6 @@
                          @update='update'
                          @close="configPoolModal=false"/>
     </b-modal>
-    <b-modal
-      v-model="tipModal"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop>
-      <div class="p-4">
-        这是提示内容
-        这是提示内容
-        这是提示内容
-        这是提示内容
-      </div>
-      <div class="text-center">
-        <button class="primary-btn w-50" @click="tipModal=false">OK</button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -133,7 +116,6 @@ export default {
       stakeAsset: '',
       creating: false,
       updating: false,
-      tipModal: true
     }
   },
   computed: {

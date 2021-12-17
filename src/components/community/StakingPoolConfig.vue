@@ -14,7 +14,7 @@
                       label="Pool Name">
           <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
         </b-form-group>
-        <div class="mb-2">Profit Sharing Ratio</div>
+        <div class="mb-2">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
         <div class="pool-chart-box w-100 d-flex">
           <div class="pool-data-box">
             <b-form-group :label="activePools[inputIndex].name"

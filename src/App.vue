@@ -4,7 +4,7 @@
       <div class="page-side">
         <div class="text-center">
           <div @click="goHome()" class="hover">
-            <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" @click="goHome()" alt="">
+            <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" alt="">
           </div>
           <router-link to="/community">
             <i class="app-icon mt-4"></i>
@@ -148,7 +148,7 @@ export default {
       this.$router.push('/sub-community/home/' + communityId.substring(0, 10))
     },
     goHome() {
-      this.$router.replace('/')
+      this.$router.push('/')
     },
     connect () {
       if (this.metamaskConnected) {

@@ -242,7 +242,7 @@ export default {
       showChargeTip: false,
       showWithdrawTip: false,
       showDevAddressTip: false,
-      showDevRatioTip: true,
+      showDevRatioTip: false,
       chargeValue: null,
       withdrawValue: null,
       inputDevAddress: '',
@@ -410,7 +410,6 @@ export default {
     } catch (e) {
     }
     this.cToken = await getCToken(communityInfo.id)
-    console.log('ctoken', communityInfo.id, this.cToken);
     this.isMintable = this.cToken.isMintable
     if (!this.isMintable) {
         // updating balances of admin and community
