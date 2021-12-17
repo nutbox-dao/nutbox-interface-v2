@@ -64,7 +64,6 @@ export default {
     // },
   },
   mounted () {
-    console.log(23, this.cardInfo)
   },
   methods: {
     gotoCommunity () {

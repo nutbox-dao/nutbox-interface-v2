@@ -75,7 +75,6 @@ export default {
       this.loading = true
       try{
         const token = await getERC20Info(this.provideAddress);
-        console.log(23, token);
         this.searchResult = token
       }catch(err){
         this.searchResult = null

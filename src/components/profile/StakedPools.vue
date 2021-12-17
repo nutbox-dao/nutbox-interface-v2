@@ -126,7 +126,6 @@ export default {
     ...mapState('web3', ['userGraphInfo']),
     joinedPool() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools) return [];
-      console.log(23, this.userGraphInfo.inPools);
       return this.userGraphInfo.inPools
     }
   }
