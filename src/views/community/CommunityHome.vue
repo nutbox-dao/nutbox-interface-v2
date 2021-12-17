@@ -25,13 +25,13 @@
       <div class="view-top-header view-top-header-sticky">
         <div class="row">
           <div class="col-lg-6">
-            <div class="nav-box nav-box-bg">
+            <!-- <div class="nav-box nav-box-bg">
               <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
                       @click="activeTab = index">{{item}}</span>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="col-lg-6 mt-lg-0 mt-3">
             <div class="row">
@@ -48,6 +48,9 @@
                     </div>
                   </template>
                   <b-dropdown-item @click="selectType='TVL'">TVL</b-dropdown-item>
+                  <b-dropdown-item @click="selectType='MEMBER'">MEMBER</b-dropdown-item>
+                  <b-dropdown-item @click="selectType='TTT'">TTT</b-dropdown-item>
+                  <b-dropdown-item @click="selectType='POOL'">POOL</b-dropdown-item>
                 </b-dropdown>
               </div>
               <div class="col-sm-5 mt-sm-0 mt-3">
@@ -67,15 +70,15 @@
 <!--        <p class="font16 text-center mt-4">{{ $t("tip.loading") }}</p>-->
       </div>
       <template v-else>
-<!--        <div class="empty-bg" v-if="!filterCommunities || filterCommunities.length === 0">-->
-<!--          <img src="~@/static/images/empty-data.png" alt="" />-->
-<!--          <p>{{ $t("tip.noCommunities") }}</p>-->
-<!--        </div>-->
-<!--        <div class="row">-->
-<!--          <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of filterCommunities" :key="index">-->
-<!--            <CommunityCard :card-info="cItem"/>-->
-<!--          </div>-->
-<!--        </div>-->
+       <div class="empty-bg" v-if="!showingCommunity || showingCommunity.length === 0">
+         <img src="~@/static/images/empty-data.png" alt="" />
+         <p>{{ $t("tip.noCommunities") }}</p>
+       </div>
+       <div class="row">
+         <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of showingCommunity" :key="index">
+           <CommunityCard :card-info="cItem"/>
+         </div>
+       </div>
       </template>
     </div>
   </div>
@@ -93,14 +96,50 @@ export default {
   components: { CommunityCard, ConnectMetaMask, ToggleSwitch },
   computed: {
     ...mapState(['metamaskConnected']),
+    ...mapState('community', ['loadingAllCommunityInfo', 'allCommunityInfo']),
+    showingCommunity() {
+      let communities = this.allCommunityInfo
+      if (!communities || Object.keys(communities).length === 0) return [];
+      communities = Object.values(communities)
+      if(this.isOfficial) {
+        console.log(communities);
+        communities = communities.filter(c => parseInt(c.isVip) == 1) 
+      }else {
+        communities = communities.filter(c => parseInt(c.isVip) == 0) 
+      }
+      if (this.searchText && this.searchText.length > 0) {
+        communities.filter(c => c.name.toLowerCase().indexOf(this.searchText.toLowerCase()) !== -1)
+      }
+      switch (this.selectType) {
+        case "TVL":
+          break;
+        case "MEMBER":
+          break;
+        case "POOL": 
+        break;
+      }
+      return communities
+    },
+  },
+  watch: {
+    loadingAllCommunityInfo(newValue, oldValue) {
+      if (!newValue) {
+        this.loading = false
+      }
+    }
+  },
+  mounted () {
+    if (!this.loadingAllCommunityInfo){
+      this.loading = false
+    }
   },
   data () {
     return {
-      loading: true,
       activeTab: 0,
+      loading: true,
       tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: '',
-      isOfficial: false,
+      isOfficial: true,
       selectType: 'TVL'
     }
   }
