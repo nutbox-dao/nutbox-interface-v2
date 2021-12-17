@@ -333,3 +333,38 @@ input::-webkit-input-placeholder {
 .hover {
   cursor: pointer;
 }
+.c-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: 4rem;
+  min-height: 4rem;
+  z-index: 99;
+  &-bg {
+    background: rgba(0, 0, 0, .5);
+  }
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url("~@/static/images/loading.svg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    animation: spinner 1.2s linear infinite;
+  }
+}
+@keyframes spinner {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
