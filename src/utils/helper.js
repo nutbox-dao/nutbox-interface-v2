@@ -306,3 +306,29 @@ export function blockTimeWithoutUTC(start, end) {
   const diff = (end - start) * BLOCK_SECOND;
   return getDateString(null, null, diff);
 }
+
+
+export function rollingFunction(func, params, interval, callback) {
+  var flag = true;
+
+  var rolling = {
+    start: async function start() {
+      while (flag) {
+        try {
+          const res = await func(params);
+          if (flag) {
+            if (callback) {
+              callback(res);
+            }
+            await sleep(interval)
+          }
+        }catch(e) {}
+      }
+    },
+    stop: function stop() {
+      flag = false
+    }
+  }
+
+  return rolling
+}

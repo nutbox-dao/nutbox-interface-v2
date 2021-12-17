@@ -87,7 +87,6 @@ export default {
     }
     try {
       this.loading = true;
-      this.clearData()
       getSpecifyCommunityInfo(this.communityId).then(community => {
         getCToken(community.id, true).then(ctoken => {
           this.saveCtoken(ctoken)
@@ -110,6 +109,10 @@ export default {
       this.loading = false
     }
   },
+  beforeDestroy() {
+    this.clearData()
+    this.clear();
+  },
   methods: {
     ...mapMutations('currentCommunity', [
       'clearData',
@@ -118,7 +121,8 @@ export default {
       'saveFeeRatio',
       'saveOperationCount',
       'saveOperationHistory',
-      'saveAllUsers'])
+      'saveAllUsers']),
+      ...mapMutations('pool', ['clear'])
   },
 }
 </script>

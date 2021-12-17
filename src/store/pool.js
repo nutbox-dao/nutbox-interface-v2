@@ -41,7 +41,7 @@ export default {
             state.approvements = null;
             state.userReward = null;
             state.poolAprs = null;
-            loadingApprovements = false;
+            state.loadingApprovements = false;
         }
     }
 }

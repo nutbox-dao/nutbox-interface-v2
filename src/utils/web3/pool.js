@@ -37,6 +37,8 @@ import {
   BLOCK_SECOND,
   PRICES_SYMBOL
 } from "@/constant"
+import { rollingFunction } from '@/utils/helper'
+import { getUsers } from './account'
 
 /**
  * Get all pools that user have upload to backend
@@ -105,7 +107,7 @@ export const approvePool = async (pool) => {
       
       try{
         const tx = await contract.approve(pool.id, new BN(10).pow(new BN(60)).toString())
-        await waitForTx(tx.hash)
+        await waitForTx(tx.hash);
         resolve(tx.hash)
       }catch(e){
         if (e.code === 4001){
@@ -375,23 +377,32 @@ export const withdrawReward = async (communityId, poolId) => {
  * @param {*} pools 
  * @returns 
  */
-export const updatePoolsByPolling = async (pools) => {
+export const updatePoolsByPolling = (pools) => {
   pools = pools.filter(p => p.status === 'OPENED')  
-  const stakingWatcher = await monitorUserStakings(pools).catch();
-  const rewardWatcher = await monitorPendingRewards(pools).catch();
-  const approvementsWatcher = await monitorApprovements(pools).catch();
+  const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
+    store.commit('pool/saveUserStaked', res)
+  })
+  const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
+    store.commit('pool/saveUserReward', res)
+  })
+  const approvmentRolling = rollingFunction(getApprovements, pools, 3, res => {
+    store.commit('pool/saveApprovements', res)
+  })
+  stakingRolling.start();
+  rewardRolling.start();
+  approvmentRolling.start();
 
-  return [stakingWatcher, rewardWatcher, approvementsWatcher]
+  return [stakingRolling, rewardRolling, approvmentRolling]
 }
 
 /** 
- * monitor users staking and pool's total staked
+ * Get users staking and pool's total staked
  */
-export const monitorUserStakings = async (pools) => {
+export const getUserStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       const account = await getAccounts();
-      const watcher = createWatcher(pools.map(p => {
+      const result = await aggregate(pools.map(p => {
         return {
           target: p.id,
           call: [
@@ -403,32 +414,23 @@ export const monitorUserStakings = async (pools) => {
           ]
         }
       }), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        console.log('Updates user staking', updates);
-        let userStakings = store.state.pool.userStaked || {}
-        updates.map(u => {
-          userStakings[u.type] = u.value
-        })
-        store.commit('pool/saveUserStaked', {...userStakings})
-      });
-      watcher.start()
-      resolve(watcher)
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('monitorUserStaking fail', e);
+      console.log('Get UserStaking fail', e);
       reject(e)
     }
   })
 }
 
 /**
- * monitor users pending rewards
+ * Get users pending rewards
  * @returns 
  */
-export const monitorPendingRewards = async (pools) => {
+export const getPendingRewards = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       const account = await getAccounts();
-      const watcher = createWatcher(pools.map(p => ({
+      const result = await aggregate(pools.map(p => ({
           target: p.community.id,
           call: [
             'getPoolPendingRewards(address,address)(uint256)',
@@ -439,28 +441,19 @@ export const monitorPendingRewards = async (pools) => {
             [p.id]
           ]
         })), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        console.log('Updates pending rewards', updates);
-        let pendingRewards = store.state.pool.pendingRewards || {}
-        updates.map(u => {
-          pendingRewards[u.type] = u.value
-        })
-        store.commit('pool/saveUserReward', {...pendingRewards})
-      });
-      watcher.start()
-      resolve(watcher)
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('monitorPendingreward fail', e);
+      console.log('Get Pendingreward fail', e);
       reject(e)
     }
   })
 }
 
 /**
- * Monitor users token approvement
+ * Get users token approvement
  * @returns 
  */
-export const monitorApprovements = async (pools) => {
+export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
@@ -477,20 +470,10 @@ export const monitorApprovements = async (pools) => {
           [pool.id, val => val.toString() / 1e18 > 1e10]
         ]
       }))
-      const watcher = createWatcher(calls, Multi_Config)
-      watcher.batch().subscribe(updates => {
-        console.log('Updates approve', updates);
-        store.commit('pool/saveLoadingApprovements', false)
-        let approvements = store.state.pool.approvements || {};
-        updates.map(u => {
-          approvements[u.type] = u.value
-        })
-        store.commit('pool/saveApprovements', {...approvements})
-      });
-      watcher.start()
-      resolve(watcher)
+      const result = await aggregate(calls, Multi_Config)
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('Monitor approvment fail', e);
+      console.log('Get approvment fail', e);
       reject(e)
     }
   })

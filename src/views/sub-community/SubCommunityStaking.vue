@@ -42,7 +42,7 @@ import { CHAIN_NAME } from '@/config'
 import CommunityStakingCard from '@/components/community/CommunityStakingCard'
 import  { mapState, mapGetters } from 'vuex'
 import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
-import { sleep } from '@/utils/helper'
+import { sleep, rollingFunction } from '@/utils/helper'
 import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 
 export default {
@@ -80,29 +80,29 @@ export default {
       return this.allPools.filter(p => p.status === 'CLOSED')
     }
   },
+  methods: {
+    async test() {
+        await sleep(3);
+        return 5;
+    }
+  },
   async mounted() {
     while(true) {
-      if (this.allPools) {
+      if (this.communityInfo && this.allPools) {
         break;
       }
       await sleep(0.3)
     }
-    // monitor pools info 
-    console.log(111);
-    const [stake, reward, approve] = await updatePoolsByPolling(this.allPools)
-    console.log(22);
-    const interval = setInterval(() => {
-      console.log(62,3);
-      getPoolsFromGraph(this.allPools.map(p => p.id))
-    }, 6000)
+    const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 4)
+    updatePoolsFromGraph.start();
+
+    const [stake, reward, approve] = updatePoolsByPolling(this.allPools)
 
     this.$once('hook:beforeDestroy', () => {
         stake.stop();
-        console.log(1, 'close');
         reward.stop();
         approve.stop();
-        window.clearInterval(interval)
-        console.log(2, 'closed');
+        updatePoolsFromGraph.stop();
     })
   }
 }
