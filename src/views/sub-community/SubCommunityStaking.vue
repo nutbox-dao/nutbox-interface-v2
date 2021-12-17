@@ -15,7 +15,7 @@
           <button class="primary-btn w-auto" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
         </div>
       </div>
-      <div class="c-loading c-loading-absolute" v-if="loadingCommunityInfo"></div>
+      <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>
       <template v-else>
         <div v-if="stakingCards.length > 0"></div>
         <div class="empty-bg" v-else>
