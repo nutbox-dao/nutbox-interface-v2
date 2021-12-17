@@ -120,7 +120,9 @@ export default {
     }
   },
   mounted () {
-    getWalnutData()
+    getWalnutData().then((res) => {
+      this.loading = false
+    })
     getAllCommunities()
   }
 }

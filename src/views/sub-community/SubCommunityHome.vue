@@ -1,6 +1,7 @@
 <template>
   <div class="sub-home-page h-100 d-flex">
     <div class="scroll-content page-view">
+      <!-- base info -->
       <div class="p-card">
         <img class="poster" :src="baseInfo && baseInfo.poster" alt="">
         <div class="second-card-home border-0">
@@ -17,6 +18,7 @@
           </div>
         </div>
       </div>
+      <!-- c token -->
       <div class="c-card">
         <div class="content1">
           <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
@@ -48,22 +50,25 @@
             </div>
           </div>
         </div>
-        <div class="c-loading c-loading-absolute c-loading-bg"></div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="!cToken"></div>
       </div>
+      <!-- distribution -->
       <div class="c-card">
         <div class="content2 mb-5">
           <div class="title mb-3">Distribution Stratage</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
         </div>
-        <div class="c-loading c-loading-absolute c-loading-bg"></div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>
       </div>
+      <!-- pools -->
       <div class="c-card">
         <div class="content3 mb-5">
           <div class="title mb-3">Pools</div>
           <PoolRatio :pools-data="poolsData"/>
         </div>
-        <div class="c-loading c-loading-absolute c-loading-bg"></div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="loadingPool"></div>
       </div>
+      <!-- Dao fund -->
       <div class="c-card">
         <div class="content3 mb-5">
           <div class="title mb-3">DAO Fund</div>
@@ -120,11 +125,11 @@
         </div>
       </div>
     </div>
-
+  <!-- history -->
     <div class="activity-banner">
       <div class="a-banner-card">
         <div class="mt-2 mb-4">Activities</div>
-        <div class="c-loading c-loading-absolute c-loading-bg"></div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="!operationHistory || (operationHistory.length === 0)"></div>
         <transition-group name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
                         v-for="operation of operationHistory" :key="operation.tx + operation.type"
@@ -155,6 +160,8 @@ export default {
   data () {
     return {
       communityBalanceValue: 0,
+      loadingPool: true,
+      laodingHistory: false
     }
   },
   computed: {
@@ -162,6 +169,7 @@ export default {
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
+      this.loadingPool = false
       return this.allPools.filter(pool => pool.status === 'OPENED').map(pool => ({
         name: pool.name,
         ratio: parseFloat(pool.ratio) / 100
@@ -215,7 +223,6 @@ export default {
     while (!this.communityId) {
       await sleep(0.2)
     }
-
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res.address)
