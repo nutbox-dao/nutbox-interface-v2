@@ -24,7 +24,8 @@
         </div>
       </div>
     </div>
-    <div class="c-card mt-3">
+    <div class="c-loading my-5"></div>
+    <div class="c-card mt-3" v-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index" v-show="getCommunityInfoById(pool.community.id)">
         <div class="c-header-grid py-3 px-4">
           <div class="d-flex align-items-center" style="grid-area: avatar">

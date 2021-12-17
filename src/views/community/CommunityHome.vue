@@ -62,9 +62,9 @@
           </div>
         </div>
       </div>
-      <div class="loading-bg" v-if="loading">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t("tip.loading") }}</p>
+      <div class="position-relative my-5" v-if="loading">
+        <div class="c-loading"></div>
+<!--        <p class="font16 text-center mt-4">{{ $t("tip.loading") }}</p>-->
       </div>
       <template v-else>
 <!--        <div class="empty-bg" v-if="!filterCommunities || filterCommunities.length === 0">-->
@@ -96,7 +96,7 @@ export default {
   },
   data () {
     return {
-      loading: false,
+      loading: true,
       activeTab: 0,
       tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: '',

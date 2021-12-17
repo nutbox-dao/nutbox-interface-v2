@@ -41,7 +41,7 @@
                 <img src="~@/static/images/home-s3-img1.svg" alt="">
                 <div class="value font46 font-bold">{{ walnutInfo.totalCommunities }}</div>
                 <div class="label text-grey-7">Community</div>
-                <div v-if="loading" class="c-loading"></div>
+                <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
             <div class="col-md-4 mb-md-0 mb-3">
@@ -49,7 +49,7 @@
                 <img src="~@/static/images/home-s3-img2.svg" alt="">
                 <div class="value font46 font-bold">{{ walnutInfo.totalUsers }}</div>
                 <div class="label text-grey-7">Member</div>
-                <div v-if="loading" class="c-loading"></div>
+                <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
             <div class="col-md-4">
@@ -57,7 +57,7 @@
                 <img src="~@/static/images/home-s3-img3.svg" alt="">
                 <div class="value font46 font-bold">{{ tokensTvl }}</div>
                 <div class="label text-grey-7">TVL</div>
-                <div v-if="loading" class="c-loading"></div>
+                <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
           </div>

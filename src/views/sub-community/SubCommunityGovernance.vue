@@ -1,19 +1,15 @@
 <template>
-  <div class="page-view-content nps h-100">
-    <div class="scroll-content">
-      <div class="loading-bg" v-if="loading">
-        <img src="~@/static/images/loading.gif" alt="" />
-        <p class="font16">{{ $t("tip.loading") }}</p>
-      </div>
-      <template v-else>
-        <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
-          <div style="text-align: left">
-            <Markdown :body="form ? form.remark : ''" />
-          </div>
+  <div class="page-view-content nps h-100 position-relative">
+    <div class="c-loading c-loading-absolute c-loading-bg" v-if="loading"></div>
+    <div class="scroll-content" v-else>
+      <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
+        <div style="text-align: left">
+          <Markdown :body="form ? form.remark : ''" />
         </div>
-        <div class="view-top-header view-top-header-sticky d-flex justify-content-between align-items-center">
-          <div class="nav-box nav-box-bg">
-            <div class="nav">
+      </div>
+      <div class="view-top-header view-top-header-sticky d-flex justify-content-between align-items-center">
+        <div class="nav-box nav-box-bg">
+          <div class="nav">
                 <span
                   v-for="(item, index) of tabOptions"
                   :key="index"
@@ -21,30 +17,29 @@
                   @click="activeTab = index"
                 >{{ $t('nps.' + item) }}</span
                 >
-            </div>
-          </div>
-          <div class="c-btn-group">
-            <button class="primary-btn d-flex align-items-center"
-                    @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
-              <i class="add-icon"></i>
-              <span>{{ $t('nps.createProposal') }}</span>
-            </button>
           </div>
         </div>
+        <div class="c-btn-group">
+          <button class="primary-btn d-flex align-items-center"
+                  @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
+            <i class="add-icon"></i>
+            <span>{{ $t('nps.createProposal') }}</span>
+          </button>
+        </div>
+      </div>
 
-        <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t("nps.noProposals") }}</p>
-        </div>
-        <div class="mb-5" v-else>
-          <ProposalItem
-            v-for="(proposalItem, index) in proposalitems"
-            :key="proposalItem.id"
-            :proposalItem="proposalItem"
-            :index="index"
-          ></ProposalItem>
-        </div>
-      </template>
+      <div class="empty-bg" v-if="!proposalitems || proposalitems.length === 0">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>{{ $t("nps.noProposals") }}</p>
+      </div>
+      <div class="mb-5" v-else>
+        <ProposalItem
+          v-for="(proposalItem, index) in proposalitems"
+          :key="proposalItem.id"
+          :proposalItem="proposalItem"
+          :index="index"
+        ></ProposalItem>
+      </div>
     </div>
   </div>
 </template>
