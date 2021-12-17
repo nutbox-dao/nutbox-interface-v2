@@ -6,7 +6,7 @@
         <div class="d-flex align-items-end logo-box">
           <img class="logo" :src="cardInfo.icon" alt="">
           <img class="vip" style="margin-left: -1rem"
-               src="~@/static/images/vip.svg" v-show="cardInfo.is_vip" alt="">
+               src="~@/static/images/vip.svg" v-show="parseInt(cardInfo.isVip) === 1" alt="">
         </div>
         <div class="d-flex justify-content-between align-items-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
