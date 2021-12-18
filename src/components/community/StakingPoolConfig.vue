@@ -14,7 +14,9 @@
                       label="Pool Name">
           <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
         </b-form-group>
+        <!-- token logo -->
         <b-form-group
+          v-if="needIcon"
           class="mb-4 logo-form"
           label-class="overflow-hidden text-grey-7"
           label-cols-md="3" content-cols-md="9"
@@ -55,6 +57,9 @@
               </div>
             </template>
           </b-form-file>
+          <div class="font12 text-grey-5 mt-2">
+              {{ $t("tip.stakeTokenLogoTip", { token: token ? token.symbol : '' }) }}
+            </div>
         </b-form-group>
 
         <div class="mb-2">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
@@ -124,6 +129,7 @@ import { mapState } from 'vuex'
 import { sleep, uploadImage } from '@/utils/helper'
 import UploadLoading from '@/components/common/UploadLoading'
 import { VueCropper } from 'vue-cropper'
+import { updateTokenIcon } from '@/utils/web3/asset'
 
 export default {
   name: 'StakingPoolConfig',
@@ -140,6 +146,13 @@ export default {
     type: {
       type: String,
       default: "config" // create
+    },
+    needIcon: {
+      type: Boolean,
+      default: false
+    },
+    token: {
+      type: Object
     }
   },
   computed: {
@@ -177,6 +190,29 @@ export default {
       this.cropperModal = false
       this.logo = null
       this.logoUploadLoading = false
+    },
+    clipCircleImg (imgSrc) {
+      return new Promise(resolve => {
+        const canvas = document.getElementById('cropper-canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = imgSrc
+        img.onload = () => {
+          const cw = canvas.width = img.width
+          const ch = canvas.height = img.height
+          ctx.beginPath()
+          ctx.arc(cw / 2, ch / 2, ch / 2, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.clip()
+          ctx.drawImage(img, 0, 0)
+        }
+        const timer = setInterval(function () {
+          if (img.complete) {
+            clearInterval(timer)
+            resolve(canvas)
+          }
+        }, 50)
+      })
     },
     completeCropAndUpload() {
       this.$refs.cropper.getCropData(async (data) => {
@@ -225,6 +261,18 @@ export default {
             variant: 'info'
           })
           return;
+        }
+        if (this.needIcon) {
+          // update load icon
+          if (!this.propsIcon){
+            this.$bvToast.toast('Please input token icon', {
+              title: this.$t('tip.tips'),
+              variant: 'info'
+            });
+            return;
+          }else {
+            updateTokenIcon({address: this.token.address, icon: this.propsIcon})
+          }
         }
         this.$emit('create', this.activePools)
       }else {

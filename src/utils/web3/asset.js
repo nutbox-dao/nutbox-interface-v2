@@ -204,45 +204,15 @@ export const deployERC20 = async ({
   })
 }
 
+/**
+ * Update token icon {address, icon}
+ * @param {*} token 
+ * @returns 
+ */
 export const updateTokenIcon = async (token) => {
   return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
     try {
-      stakingFactoryId = await getMyCommunityContract()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-
-    let nonce = await getNonce()
-    const userId = await getAccounts();
-    nonce = nonce ? nonce + 1 : 1
-
-    token['id'] = stakingFactoryId;
-    const originMessage = JSON.stringify(token)
-    let signature = ''
-    try {
-      signature = await signMessage(originMessage + nonce)
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-        return;
-      }
-    }
-    const params = {
-      userId,
-      infoStr: originMessage,
-      nonce,
-      signature
-    }
-    try {
-      const res = await uti(params)
-      // update nonce in storage
-      store.commit('web3/saveNonce', nonce)
+      const res = await uti(token)
       resolve(res)
     } catch (e) {
       reject(e)

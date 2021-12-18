@@ -67,6 +67,7 @@ export default {
   computed: {
     ...mapState('web3', ['allTokens']),
     recommendToken() {
+      if (!this.allTokens || this.allTokens.length === 0) return [];
       return this.allTokens.filter(t => t.isRecommend)
     }
   },

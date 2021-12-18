@@ -196,7 +196,8 @@ module.exports = {
     deployTokenTip: 'Attention: this is the pre-distribution amount mint to your own account, not total supply. Please be carefull.',
     attention: "Attention!",
     markdownTip: "You can use markdown format.",
-    stopPoolAttention: 'Once you close the pool, it cannot be opened again. Please use this function with caution!'
+    stopPoolAttention: 'Once you close the pool, it cannot be opened again. Please use this function with caution!',
+    stakeTokenLogoTip: "This logo is set to the stake token {token} which you selected."
   },
   nps: {
     nps: "Governance",

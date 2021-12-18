@@ -65,6 +65,8 @@
       </div>
       <StakingPoolConfig v-if="createPoolStep===3"
                          type="create"
+                         :needIcon="needIcon"
+                         :token="selectToken"
                          @back="createPoolStep=2"
                          @close="poolTypeModal=false"
                          :enable-op="!creating"
@@ -99,7 +101,6 @@ import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
-import { contractAddress } from '@/utils/web3/contract'
 
 export default {
   name: 'CommunitySetting',
@@ -111,10 +112,12 @@ export default {
       poolTypeModal: false,
       createPoolStep: 1,
       poolType: '',
-      configPoolModal: true,
+      configPoolModal: false,
       stakeAsset: '',
       creating: false,
       updating: false,
+      needIcon: false,
+      selectToken: {}
     }
   },
   computed: {
@@ -143,11 +146,13 @@ export default {
     },
     selectPoolToken (tokenData) {
       if (this.poolType === 'bsc') {
+        this.stakeAsset = tokenData.address
         if (tokenData.icon) {
-          this.stakeAsset = tokenData.address
+          this.needIcon =false
         }else {
           // need to upload token icon
-
+          this.needIcon = true;
+          this.selectToken = tokenData;
         }
       }else if (this.poolType === 'steem') {
         this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
