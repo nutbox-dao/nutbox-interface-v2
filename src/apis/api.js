@@ -8,6 +8,9 @@ export const getDataCounts = async () => {
   get(BACKEND_API_URL + '/getdatacounts')
 }
 
+export const getPricesOnCEX = async () =>
+  get("https://api.binance.com/api/v3/ticker/price");
+
 // ============================================ backend v2 ============================================
 
 export const getMyCommunityInfo = async (communityId) =>
@@ -21,15 +24,6 @@ export const updateCommunity = async (params) =>
 
 export const getAllTokens = async () => get(BACKEND_API_URL + "/token/get");
 
-export const getMyCommunityProposalConfigInfo = async (communityId) =>
-  get(BACKEND_API_URL + "/communityProposalConfig/get", { id: communityId });
-
-export const insertCommunityProposalConfig = async (params) =>
-  post(BACKEND_API_URL + "/communityProposalConfig/insert", params);
-
-export const updateCommunityProposalConfig = async (params) =>
-  put(BACKEND_API_URL + "/communityProposalConfig/update", params);
-
 export const insertProposal = async (params) =>
   post(BACKEND_API_URL + "/proposal/insert", params);
 
@@ -38,12 +32,6 @@ export const updateProposal = async (params) =>
   
 export const getAllCommunities = async (communityId = null) =>
   get(BACKEND_API_URL + "/community/get", { id: communityId });
-
-export const getAllProposal = async (communityId) =>
-  get(BACKEND_API_URL + "/proposal/get", { communityId: communityId });
-
-export const getProposalInfo = async (id) =>
-  get(BACKEND_API_URL + "/proposal/get", { id: id });
 
 export const insertVote = async (params) =>
   post(BACKEND_API_URL + "/vote/insert", params);
@@ -73,17 +61,27 @@ export const getAllUsers = async () => get(BACKEND_API_URL + "/user/users");
 
 export const getSomeUsers = async (ids) => post(BACKEND_API_URL + "/user/getsomeusers", {ids})
 
-// ============================================ strategies ============================================
+// ============================================ nps ============================================
 
 export const getScores = async (params) =>
   post(BACKEND_API_URL + "/scores/get", { params });
 
-export const getAllPools = async (communityId = null) =>
-  get(BACKEND_API_URL + "/pool/getAll", { id: communityId });
+export const getMyCommunityProposalConfigInfo = async (communityId) =>
+  get(BACKEND_API_URL + "/communityProposalConfig/get", { id: communityId });
 
-export const getPricesOnCEX = async () =>
-  get("https://api.binance.com/api/v3/ticker/price");
+export const insertCommunityProposalConfig = async (params) =>
+  post(BACKEND_API_URL + "/communityProposalConfig/insert", params);
 
+export const updateCommunityProposalConfig = async (params) =>
+  put(BACKEND_API_URL + "/communityProposalConfig/update", params);
+
+export const getAllProposal = async (communityId) =>
+get(BACKEND_API_URL + "/proposal/get", { communityId: communityId });
+
+export const getProposalInfo = async (id) =>
+get(BACKEND_API_URL + "/proposal/get", { id: id });
+
+// ============================================ game ============================================
 export const getGame = async (gameId) =>
   get(BACKEND_API_URL + "/game/get", { id: gameId });
 

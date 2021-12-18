@@ -13,7 +13,7 @@
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.staking") }}</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/governance">
+              <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
                 <span>{{ $t("router.governance") }}</span>
               </b-nav-item>
@@ -24,9 +24,12 @@
             </b-nav>
           </div>
           <div class="link-items">
-            <img src="~@/static/images/h-github.svg" alt="">
-            <img src="~@/static/images/h-twitter.svg" alt="">
-            <img src="~@/static/images/h-telegram.svg" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.facebook" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
           </div>
         </div>
       </div>
@@ -57,9 +60,12 @@
                     <span>{{ $t("router.member") }}</span>
                   </b-nav-item>
                   <div class="link-items">
-                    <img src="~@/static/images/h-github.svg" alt="">
-                    <img src="~@/static/images/h-twitter.svg" alt="">
-                    <img src="~@/static/images/h-telegram.svg" alt="">
+                    <img v-if="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+                    <img v-if="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+                    <img v-if="communityInfo && communityInfo.facebook" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
+                    <img v-if="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+                    <img v-if="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+                    <img v-if="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
                   </div>
                 </div>
               </div>
@@ -73,7 +79,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
 import { handleApiErrCode } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
@@ -84,6 +90,18 @@ export default {
     ...mapState(
       'currentCommunity', ['communityId']
     ),
+    ...mapGetters('community', ['getCommunityInfoById']),
+    communityInfo() {
+      if(this.communityId) {
+        const info = this.getCommunityInfoById(this.communityId)
+        console.log(2436, info);
+        if (info){
+          return info
+        }
+      }
+      return {}
+    },
+
   },
   data () {
     return {
@@ -132,7 +150,10 @@ export default {
       'saveOperationCount',
       'saveOperationHistory',
       'saveAllUsers']),
-      ...mapMutations('pool', ['clear'])
+      ...mapMutations('pool', ['clear']),
+      openTab(url) {
+        window.open(url, '_blank')
+      }
   },
 }
 </script>
