@@ -8,12 +8,17 @@
           placement="top"
         >
           {{ description }}
-          {{ operation.user }}
         </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
       <img class="rounded-circle hover"
+            :id="operation.tx + operation.type + operation.user"
            style="width: 2rem; height: 2rem"
            :src="userAvatar" alt="">
+      <b-popover :target="operation.tx + operation.type + operation.user"
+      triggers="hover focus"
+      placement="top">
+        {{ operation.user }}
+      </b-popover>
       <span :id="operation.tx + operation.type + operation.timestamp" class="hover">{{ time }}</span>
       <b-popover :target="operation.tx + operation.type + operation.timestamp"
         triggers="hover focus"

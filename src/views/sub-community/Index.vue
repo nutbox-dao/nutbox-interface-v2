@@ -83,7 +83,7 @@ export default {
   computed: {
     ...mapState(
       'currentCommunity', ['communityId']
-    )
+    ),
   },
   data () {
     return {

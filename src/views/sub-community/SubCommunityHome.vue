@@ -238,11 +238,11 @@ export default {
       while (this.loadingCommunityInfo) {
         await sleep(0.1)
       }
-      // const interval = setInterval(() => {
-      //   getUpdateCommunityOPHistory(this.communityId)
-      // }, 3000)
+      const interval = setInterval(() => {
+        getUpdateCommunityOPHistory(this.communityId)
+      }, 3000)
       this.$once('hook:beforeDestroy', () => {
-        // window.clearInterval(interval)
+        window.clearInterval(interval)
       })
     }).catch(e => {
       console.log('[Sub community home]: get ctoken fail', e);

@@ -13,7 +13,7 @@
           <!-- joined community -->
           <div class="pt-3 communities-bar">
             <div class="community-logo-box"
-                 :class="'active'"
+                 :class="(inSubCommunityView && (community.id === communityId.toLowerCase())) ? 'active' : ''"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id">
               <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)"
                    v-show="getCommunityInfoById(community.id)"
@@ -120,6 +120,12 @@ export default {
       }else {
         return 2;
       }
+    },
+    inSubCommunityView() {
+      if (this.$route.path.indexOf('sub-community') !== -1){
+        return true;
+      }
+      return false
     }
   },
   data() {

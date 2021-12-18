@@ -555,11 +555,17 @@ export const getSpecifyDistributionEras = async (communityId) => {
   })
 }
 
+/**
+ * watch current community's users balances
+ * Must clear time interval to close this watcher
+ * @param {*} callback 
+ * @returns 
+ */
 export const watchMemberBalance = (callback) => {
   return setInterval(async () => {
     try{
       const users = store.state.currentCommunity.communityInfo.users;
-      const ctoken = await getCToken(store.state.currentCommunity.communityId)
+      const ctoken = store.state.currentCommunity.cToken;
       if (!users || users.length === 0 || !ctoken) {
         callback({});
         return
