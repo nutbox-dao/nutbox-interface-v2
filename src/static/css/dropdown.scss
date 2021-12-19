@@ -88,7 +88,8 @@
 .setting-dropdown .dropdown-menu {
   border: transparent;
   border-radius: .8rem;
-  position: absolute!important;
+  //position: absolute!important;
+  position: fixed;
   @include coin-shadow();
   background-color: transparent;
 }
@@ -105,9 +106,12 @@
   &.active {
     background-color: transparent;
   }
-  .dropdown-item-icon {
-    @include icon(1.2rem, 1.2rem);
-  }
+}
+.side-menu-dropdown .dropdown-toggle {
+  padding: 0!important;
+}
+.side-menu-dropdown .dropdown-menu {
+  background: transparent;
 }
 .top-header-dropdown .dropdown-toggle {
   @extend .c-dropdown-btn;

@@ -42,11 +42,55 @@
           <router-link to="/profile" v-show="metamaskConnected">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
-                 src="~@/static/images/home-s2-icon1.svg" alt="">
+                 src="~@/static/images/avatar-default.svg" alt="">
           </router-link>
-          <div class="hover">
-            <i class="menu-icon" style="opacity: .7"></i>
-          </div>
+          <b-dropdown variant="text" dropup
+                      class="side-menu-dropdown"
+                      menu-class="text-white"
+                      toggle-class="p-0">
+            <template #button-content>
+              <i class="menu-icon hover"></i>
+            </template>
+            <div class="dropdown-menu-card" v-show="!langActive">
+              <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
+                <i class="dropdown-item-icon github-icon"></i>
+                <span>Github</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://nutbox-io.gitbook.io/nutbox/" target="_blank">
+                <i class="dropdown-item-icon docs-icon"></i>
+                <span>{{ $t("commen.docs") }}</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://discord.com/invite/zPkMuGY" target="_blank">
+                <i class="dropdown-item-icon discard-icon"></i>
+                <span>Discord</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://t.me/nutbox_defi" target="_blank">
+                <i class="dropdown-item-icon telegram-icon"></i>
+                <span>Telegram</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://twitter.com/NutboxDao" target="_blank">
+                <i class="dropdown-item-icon twitter-icon"></i>
+                <span>Twitter</span>
+              </b-dropdown-item>
+              <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
+                <i class="dropdown-item-icon docs-icon"></i>
+                <span>{{ $t("commen.auditReport") }}</span>
+              </b-dropdown-item>
+              <div class="dropdown-item" @click="langActive=true">
+                <i class=" language-icon"></i>
+                <span>{{$t('commen.language')}}</span>
+              </div>
+            </div>
+            <div class="dropdown-menu-card" v-show="langActive">
+              <div class="dropdown-item">
+                <i class="back-icon" @click="langActive=false"></i>
+              </div>
+              <b-dropdown-item @click="setLanguage(lang)"
+                               v-for="lang of langOptions" :key="lang">
+                <span>{{ $t(`commen.${lang}`) }}</span>
+              </b-dropdown-item>
+            </div>
+          </b-dropdown>
         </div>
       </div>
       <!-- right part -->
@@ -131,6 +175,8 @@ export default {
   data() {
     return {
       screenWidth: document.body.clientWidth,
+      langActive: false,
+      langOptions: ['en', 'kr', 'es', 'my']
     }
   },
   mixins: [showToastMixin],
@@ -138,6 +184,7 @@ export default {
     ...mapActions('steem', ['setVestsToSteem']),
     ...mapActions('hive', ['setVestsToHive']),
     setLanguage (lang) {
+      this.langActive = false
       localStorage.setItem(LOCALE_KEY, lang)
       this.$store.commit('saveLang', lang)
       this.$i18n.locale = lang
@@ -313,5 +360,41 @@ body {
 .community-logo {
   width: 2rem;
   height: 2rem;
+}
+.dropdown-menu-card {
+  @include card(1.2rem 0, #2C2D2E);
+  border: 1px solid #747576;
+  min-height: 19rem;
+  i {
+    @include icon(1.6rem, 1.6rem);
+    margin-right: .4rem;
+  }
+  span {
+    color: white;
+    font-size: .8rem;
+    font-weight: bold;
+    //user-select: none;
+  }
+}
+.github-icon {
+  background-image: url("~@/static/images/h-github.svg");
+}
+.docs-icon {
+  background-image: url("~@/static/images/h-docs.svg");
+}
+.discard-icon {
+  background-image: url("~@/static/images/h-discord.svg");
+}
+.twitter-icon {
+  background-image: url("~@/static/images/h-twitter.svg");
+}
+.telegram-icon {
+  background-image: url("~@/static/images/h-telegram.svg");
+}
+.medium-icon {
+  background-image: url("~@/static/images/h-mdeium.svg");
+}
+.back-icon {
+  background-image: url("~@/static/images/back.svg");
 }
 </style>

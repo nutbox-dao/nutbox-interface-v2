@@ -8,9 +8,9 @@
             <img v-if="user.avatar" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
             <img v-else class="user-avatar hover rounded-circle"
-                 src="~@/static/images/home-s2-icon1.svg" alt="">
+                 src="~@/static/images/avatar-default.svg" alt="">
             <div class="d-flex align-items-center mt-2">
-              <b-input class="bg-transparent text-white name-input text-center"
+              <b-input class="text-white name-input text-center"
                        :class="isEditName?'edit':''"
                        :disabled="!isEditName"
                        placeholder="Input name"
@@ -61,6 +61,15 @@
       no-close-on-backdrop>
       <AssetDetailModal @close="assetModalVisible=false"/>
     </b-modal>
+    <b-modal
+      v-model="avatarModalVisible"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <AvatarOptionsModal @close="avatarModalVisible=false"/>
+    </b-modal>
   </div>
 </template>
 
@@ -72,10 +81,11 @@ import CommunityCard from '@/components/community/CommunityCard'
 import { getUserBaseInfo, updateUserInfo } from '@/utils/web3/account'
 import { mapState, mapGetters } from 'vuex'
 import AssetDetailModal from '@/components/profile/AssetDetailModal'
+import AvatarOptionsModal from '@/components/profile/AvatarOptionsModal';
 
 export default {
   name: 'Profile',
-  components: { PoolRatio, StakedPools, CommunityCard, AssetDetailModal },
+  components: { PoolRatio, StakedPools, CommunityCard, AssetDetailModal, AvatarOptionsModal },
   data () {
     return {
       user:{},
@@ -86,7 +96,8 @@ export default {
         { name: 'PNUT', ratio: 20 },
         { name: 'PNUT', ratio: 20 }
       ],
-      assetModalVisible: false
+      assetModalVisible: false,
+      avatarModalVisible: true
     }
   },
   computed: {
@@ -149,9 +160,10 @@ export default {
   height: 6rem;
 }
 .name-input {
-  width: 6rem;
+  width: 8rem;
   border-color: transparent;
-  border-radius: 0;
+  border-radius: .8rem;
+  background-color: var(--nav-tab-bg);
   &.edit {
     border-bottom: 1px solid var(--dividers);
   }

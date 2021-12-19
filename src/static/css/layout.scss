@@ -37,6 +37,12 @@
   .menu-icon {
     @include icon(2rem, 2rem);
     background-image: url("~@/static/images/menu-icon.svg");
+    &:hover {
+      background-image: url("~@/static/images/menu-icon-active.svg");
+    }
+    &.active {
+      background-image: url("~@/static/images/menu-icon-active.svg");
+    }
   }
   .setting-icon {
     @include icon(2rem, 2rem);

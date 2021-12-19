@@ -4,14 +4,15 @@
       <div class="text-right">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
-      <div class="mt-2 text-center">Your Asset Detail</div>
+      <div class="text-center">Your Asset Detail</div>
+      <div class="h-line mt-4"></div>
       <div class="d-flex justify-content-between align-items-center my-4">
         <span>Total Asset Value</span>
         <span>$850</span>
       </div>
       <div class="asset-list flex-fill overflow-auto">
         <b-table :fields="fields" :items="listData"
-                 thead-tr-class="asset-tr"
+                 thead-tr-class="asset-tr text-grey-7"
                  tbody-tr-class="asset-tr"
                  details-td-class="p-0"
                  class="text-white border-0 font12" borderless>

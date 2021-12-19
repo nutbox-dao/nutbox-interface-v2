@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 16</title>
+    <defs>
+        <path d="M50,0 C77.6142375,-5.07265313e-15 100,22.3857625 100,50 C100,77.6142375 77.6142375,100 50,100 C22.3857625,100 3.38176876e-15,77.6142375 0,50 C-3.38176876e-15,22.3857625 22.3857625,5.07265313e-15 50,0 Z" id="path-1"></path>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nutbox-设置头像前" transform="translate(-120.000000, -130.000000)">
+            <g id="编组-16" transform="translate(120.000000, 130.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="蒙版" fill="#2C2D2E" xlink:href="#path-1"></use>
+                <rect id="矩形" fill="#747576" mask="url(#mask-2)" x="41" y="32" width="18" height="18" rx="8"></rect>
+                <path d="M59.959517,67.9823836 L40.040483,67.9823836 C35.3161506,67.9823836 31.5,68.5402578 31.5,63.3687857 C31.5,58.1973136 43.5539062,54 48.2777131,54 L51.5819602,54 C56.282642,54 68.5,58.1989045 68.5,63.3698463 C68.5,68.5407881 64.6838494,67.9823836 59.959517,67.9823836 L59.959517,67.9823836 Z" id="路径" fill="#CDCECF" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

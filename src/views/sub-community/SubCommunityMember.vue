@@ -59,10 +59,12 @@
             <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Creator</button>
           </div>
           <div class="text-center mt-3 pb-3">
-            <img v-if="getAvatar(user && user.address)" class="user-avatar rounded-circle" style="height:4.8rem;width:4.8rem"
-                 :src="getAvatar(user && user.address)" alt="">
-            <img v-else class="user-avatar rounded-circle"
-                 src="~@/static/images/home-s2-icon1.svg" alt="">
+            <div class="avatar-bg">
+              <img v-if="getAvatar(user && user.address)" class="user-avatar rounded-circle" style="height:4.8rem;width:4.8rem"
+                   :src="getAvatar(user && user.address)" alt="">
+              <img v-else class="user-avatar rounded-circle"
+                   src="~@/static/images/avatar-default.svg" alt="">
+            </div>
             <div class="my-1 font20 font-bold">{{ getName(user ? user.address : null) }}</div>
             <div class="mb-3 font12 text-grey-7 d-flex align-items-center justify-content-center">
               <span>{{ user ? (user.address.substring(0, 6) + '...' + user.address.substring(user.address.length - 6, user.address.length)) : '--' }}</span>
@@ -236,6 +238,15 @@ export default {
   .block {
     height: 100%;
     overflow: hidden;
+  }
+  .avatar-bg {
+    background-image: url("~@/static/images/member-avatar-bg.svg");
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    img {
+      margin: 8px auto;
+    }
   }
   .member-card, .user-card {
     @include card();
