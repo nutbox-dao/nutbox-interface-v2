@@ -5,9 +5,9 @@
         <div class="row">
           <!-- header -->
           <div class="col-md-5 text-left d-flex flex-column justify-content-center">
-            <img v-if="user.avatar" class="user-avatar hover rounded-circle"
+            <img v-if="user.avatar" @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
-            <img v-else class="user-avatar hover rounded-circle"
+            <img v-else @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  src="~@/static/images/avatar-default.svg" alt="">
             <div class="d-flex align-items-center mt-2">
               <b-input class="text-white name-input text-center"
@@ -61,6 +61,7 @@
       no-close-on-backdrop>
       <AssetDetailModal @close="assetModalVisible=false"/>
     </b-modal>
+    <!-- avatat modal -->
     <b-modal
       v-model="avatarModalVisible"
       modal-class="custom-modal"
@@ -97,7 +98,7 @@ export default {
         { name: 'PNUT', ratio: 20 }
       ],
       assetModalVisible: false,
-      avatarModalVisible: true
+      avatarModalVisible: false
     }
   },
   computed: {

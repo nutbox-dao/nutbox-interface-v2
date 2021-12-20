@@ -3,11 +3,11 @@
     <div class="text-right">
       <i class="modal-close-icon" @click="$emit('close')"></i>
     </div>
-    <div class="text-center">Please select a Avatar</div>
+    <div class="text-center">Please select an avatar</div>
     <div class="h-line mt-4"></div>
     <div class="avatar-box">
-      <div class="avatar-item" :class="selectedIndex===index?'active':''"
-           @click="selectedIndex = index"
+      <div class="avatar-item hover" :class="selectedIndex == index ? 'active' : ''"
+           @click="select(index)"
            v-for="(avatar, index) of avatarOptions" :key="index">
         <img :src="avatar" alt="">
       </div>
@@ -16,21 +16,40 @@
 </template>
 
 <script>
+import { updateUserInfo } from '@/utils/web3/account'
+import { mapGetters, mapState } from 'vuex';
+
 export default {
   name: 'AvatarOptionsModal',
   data () {
     return {
       selectedIndex: -1,
       avatarOptions: [
-        require('../../static/images/avatar-1.png'),
-        require('../../static/images/avatar-2.png'),
-        require('../../static/images/avatar-3.png'),
-        require('../../static/images/avatar-4.png'),
-        require('../../static/images/avatar-5.png'),
-        require('../../static/images/avatar-6.png')
+        require('../../static/images/avatars/1.png'),
+        require('../../static/images/avatars/2.png'),
+        require('../../static/images/avatars/3.png'),
+        require('../../static/images/avatars/4.png'),
+        require('../../static/images/avatars/5.png'),
+        require('../../static/images/avatars/6.png')
       ]
     }
-  }
+  },
+  computed: {
+    ...mapGetters('user', ['getUserByAddress']),
+    ...mapState('web3', ['account'])
+  },
+  methods: {
+    async select(index) {
+      console.log(index);
+      this.selectedIndex = index;
+      const user = this.getUserByAddress(this.account)
+      index++;
+      const avatar = 'https://cdn.wherein.mobi/walnut/avatar/default/'+ index +'.png'
+      user.avatar = avatar
+      await updateUserInfo(user);
+      this.$emit('close');
+    }
+  },
 }
 </script>
 

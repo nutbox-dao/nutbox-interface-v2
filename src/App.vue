@@ -72,14 +72,14 @@
                 <i class="dropdown-item-icon twitter-icon"></i>
                 <span>Twitter</span>
               </b-dropdown-item>
-              <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
+              <!-- <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.auditReport") }}</span>
-              </b-dropdown-item>
-              <div class="dropdown-item" @click="langActive=true">
+              </b-dropdown-item> -->
+              <!-- <div class="dropdown-item" @click="langActive=true">
                 <i class=" language-icon"></i>
                 <span>{{$t('commen.language')}}</span>
-              </div>
+              </div> -->
             </div>
             <div class="dropdown-menu-card" v-show="langActive">
               <div class="dropdown-item">

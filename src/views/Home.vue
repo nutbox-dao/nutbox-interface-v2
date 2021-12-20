@@ -74,7 +74,7 @@
             </div>
           </div>
         </section>
-        <section class="my-4 font-bold font20 text-center">
+        <section @click="gotoOfficial" class="my-4 font-bold font20 text-center hover">
           About Nutbox
         </section>
       </div>
@@ -117,6 +117,11 @@ export default {
       }
       this.loadingAllCommunity = false
       return rcs;
+    }
+  },
+  methods: {
+    gotoOfficial() {
+      window.open('https://nutbox.io', '_blank')
     }
   },
   mounted () {
