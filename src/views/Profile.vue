@@ -146,7 +146,6 @@ export default {
       console.log('get my user info fail:', err)
     })
     await getMyJoinedCommunity();
-
   },
 }
 </script>

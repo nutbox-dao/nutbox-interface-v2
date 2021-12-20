@@ -25,81 +25,83 @@
       </div>
     </div>
     <div class="c-card mt-3" v-if="joinedPool.length>0">
-      <div v-for="(pool, index) of joinedPool" :key="index" v-show="getCommunityInfoById(pool.community.id)">
-        <div class="c-header-grid py-3 px-4">
-          <div class="d-flex align-items-center" style="grid-area: avatar">
-            <div class="logo-group mr-3">
-              <img class="logo1" src="https://cdn.wherein.mobi/nutbox/v2/1635409783017" alt="">
-              <img class="logo2" src="https://cdn.wherein.mobi/nutbox/v2/1633769085901" alt="">
+      <div v-for="(pool, index) of joinedPool" :key="index">
+        <template v-if="getCommunityInfoById(pool.community.id)">
+          <div class="c-header-grid py-3 px-4">
+            <div class="d-flex align-items-center" style="grid-area: avatar">
+              <div class="logo-group mr-3">
+                <img class="logo1" :src="getCommunityInfoById(pool.community.id).icon" alt="">
+                <img class="logo2" :src="tokenIcons[pool.asset]" alt="">
+              </div>
+              <div class="h-100 d-flex flex-column justify-content-between">
+                <div class="font-bold">{{ getCommunityInfoById(pool.community.id).name }}</div>
+                <div class="font14 ">{{ pool.name }}</div>
+              </div>
             </div>
-            <div class="h-100 d-flex flex-column justify-content-between">
-              <div class="font-bold">Pool Name</div>
-              <div class="font14 ">Stake Nut Earn Moon</div>
+            <div class="value-box d-flex" style="grid-area: value">
+              <div class="item h-100 d-flex justify-content-between text-center">
+                <div class="font14 ">Moons Earned</div>
+                <div class="font-bold">123.0000</div>
+              </div>
+              <div class="item h-100 d-flex justify-content-between text-center">
+                <div class="font14 ">APR</div>
+                <div class="font-bold">90.12%</div>
+              </div>
+              <div class="item h-100 d-flex justify-content-between text-center">
+                <div class="font14 ">Total Staking</div>
+                <div class="font-bold">12323420</div>
+              </div>
+              <div class="item h-100 d-flex justify-content-between text-center">
+                <div class="font14 ">TVL</div>
+                <div class="font-bold">$23413</div>
+              </div>
+            </div>
+            <div class="d-flex px-3 justify-content-between align-items-center action-box" style="grid-area: action">
+              <span class="text-primary-0" :class="poolStatus">{{poolStatus}}</span>
+              <div v-b-toggle="'accordion'+index" class="toggle-btn text-primary-0 font14">
+                <span class="when-open">Hide</span>
+                <span class="when-closed">Detail</span>
+              </div>
             </div>
           </div>
-          <div class="value-box d-flex" style="grid-area: value">
-            <div class="item h-100 d-flex justify-content-between text-center">
-              <div class="font14 ">Moons Earned</div>
-              <div class="font-bold">123.0000</div>
-            </div>
-            <div class="item h-100 d-flex justify-content-between text-center">
-              <div class="font14 ">APR</div>
-              <div class="font-bold">90.12%</div>
-            </div>
-            <div class="item h-100 d-flex justify-content-between text-center">
-              <div class="font14 ">Total Staking</div>
-              <div class="font-bold">12323420</div>
-            </div>
-            <div class="item h-100 d-flex justify-content-between text-center">
-              <div class="font14 ">TVL</div>
-              <div class="font-bold">$23413</div>
-            </div>
-          </div>
-          <div class="d-flex px-3 justify-content-between align-items-center action-box" style="grid-area: action">
-            <span class="text-primary-0" :class="poolStatus">{{poolStatus}}</span>
-            <div v-b-toggle="'accordion'+index" class="toggle-btn text-primary-0 font14">
-              <span class="when-open">Hide</span>
-              <span class="when-closed">Detail</span>
-            </div>
-          </div>
-        </div>
-        <b-collapse :id="'accordion'+index" visible>
-          <div class="collapse-content-grid font16 py-3 px-4">
-            <div class="link-box text-primary-0" style="grid-area: link">
-              <div class="link-icon">PNUT Community</div>
-              <div class="link-icon">
-                <span>Nut Contract</span>
-                <i class="copy-icon ml-2"></i>
+          <b-collapse :id="'accordion'+index" visible>
+            <div class="collapse-content-grid font16 py-3 px-4">
+              <div class="link-box text-primary-0" style="grid-area: link">
+                <div class="link-icon">PNUT Community</div>
+                <div class="link-icon">
+                  <span>Nut Contract</span>
+                  <i class="copy-icon ml-2"></i>
+                </div>
+                <div class="link-icon">
+                  <span>Nut Contract</span>
+                  <i class="copy-icon ml-2"></i>
+                </div>
               </div>
-              <div class="link-icon">
-                <span>Nut Contract</span>
-                <i class="copy-icon ml-2"></i>
+              <div class="content-box d-flex align-items-center justify-content-between p-2"
+                  style="grid-area: card1">
+                <div>
+                  <div class="font-bold">Moons Earned</div>
+                  <div class="font12">123.0000</div>
+                </div>
+                <button class="primary-btn w-auto px-2 mx-0">Harvest</button>
+              </div>
+              <div class="content-box d-flex align-items-center justify-content-between p-2"
+                  style="grid-area: card2">
+                <div>
+                  <div class="font-bold">Moons Earned</div>
+                  <div class="font12">123.0000</div>
+                </div>
+                <div class="content-btn-group d-flex">
+                  <button class="symbol-btn w-auto px-2 mx-0">-</button>
+                  <button class="symbol-btn w-auto px-2 mr-0 ml-2">+</button>
+                </div>
+              </div>
+              <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
+                <span class="type-box text-primary-0 px-2">BSC</span>
               </div>
             </div>
-            <div class="content-box d-flex align-items-center justify-content-between p-2"
-                 style="grid-area: card1">
-              <div>
-                <div class="font-bold">Moons Earned</div>
-                <div class="font12">123.0000</div>
-              </div>
-              <button class="primary-btn w-auto px-2 mx-0">Harvest</button>
-            </div>
-            <div class="content-box d-flex align-items-center justify-content-between p-2"
-                 style="grid-area: card2">
-              <div>
-                <div class="font-bold">Moons Earned</div>
-                <div class="font12">123.0000</div>
-              </div>
-              <div class="content-btn-group d-flex">
-                <button class="symbol-btn w-auto px-2 mx-0">-</button>
-                <button class="symbol-btn w-auto px-2 mr-0 ml-2">+</button>
-              </div>
-            </div>
-            <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
-              <span class="type-box text-primary-0 px-2">BSC</span>
-            </div>
-          </div>
-        </b-collapse>
+          </b-collapse>
+        </template>
       </div>
     </div>
     <div class="c-loading my-5" v-else></div>
@@ -123,7 +125,7 @@ export default {
   computed: {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapState('community', ['allCommunityInfo']),
-    ...mapState('web3', ['userGraphInfo']),
+    ...mapState('web3', ['userGraphInfo', 'tokenIcons']),
     joinedPool() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools) return [];
       console.log(45, this.userGraphInfo.inPools);
