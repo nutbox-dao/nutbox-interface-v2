@@ -9,6 +9,11 @@
   .modal-close-icon {
     @include icon(1.4rem, 1.4rem);
     background-image: url("~@/static/images/close.svg");
+    &-right {
+      position: absolute;
+      right: 1.2rem;
+      top: 1.2rem;
+    }
   }
   .modal-back-icon {
     @include icon(1.4rem, 1.4rem);

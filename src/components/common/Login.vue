@@ -1,38 +1,37 @@
 <template>
-  <transition name="fade">
-    <div class="mask" @click.self="hideMask">
-      <div class="login">
-        <!-- keychain login -->
-        <p>{{ this.$t("operation.login") }}</p>
-        <div class="mt-5">
-          <div class="account-box">
-            <span class="keychain" :style="keychainLogo" @click="getKeychain" />
-            <b-input
-              class="mr-sm-2 mb-sm-0 input"
-              :placeholder="
+  <div class="login">
+    <!-- keychain login -->
+    <div class="text-center">
+      {{ this.$t("operation.login") }}
+      <i class="modal-close-icon modal-close-icon-right" @click="$emit('hideMask')"></i>
+    </div>
+    <div class="mt-4">
+      <div class="account-box c-input-group">
+        <span class="keychain" :style="keychainLogo" @click="getKeychain" />
+        <b-input
+          class="mr-sm-2 mb-sm-0 input"
+          :placeholder="
                 type === 'STEEM'
                   ? $t('commen.steemAccoutPlaceHolder')
                   : $t('commen.hiveAccountPlaceHolder')
               "
-              v-model="keychainAccount"
-            ></b-input>
-          </div>
-          <button
-            class="login-btn primary-btn"
-            @click="loginByKeychain"
-            :disabled="isLoging"
-          >
-            <b-spinner
-              small
-              type="grow"
-              v-show="isLoging"
-            ></b-spinner>
-            {{ $t('commen.loginByKeychain') }}
-          </button>
-        </div>
+          v-model="keychainAccount"
+        ></b-input>
       </div>
+      <button
+        class="login-btn primary-btn"
+        @click="loginByKeychain"
+        :disabled="isLoging"
+      >
+        <b-spinner
+          small
+          type="grow"
+          v-show="isLoging"
+        ></b-spinner>
+        {{ $t('commen.loginByKeychain') }}
+      </button>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -150,19 +149,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.login {
-  margin-top: -15%;
-  width: 492px;
-  height: 262px;
-  background: white;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
-  border-radius: 28px;
-  padding: 24px;
-  p {
-    font-size: 20px;
-  }
-}
+<style lang="scss" scoped>
+@import "src/static/css/form";
 .account-box {
   display: flex;
   .keychain {

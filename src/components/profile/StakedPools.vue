@@ -67,14 +67,16 @@
           <b-collapse :id="'accordion'+index" visible>
             <div class="collapse-content-grid font16 py-3 px-4">
               <div class="link-box text-primary-0" style="grid-area: link">
-                <div class="link-icon">PNUT Community</div>
-                <div class="link-icon">
+                <div class="">PNUT Community</div>
+                <div class="d-flex align-items-center">
                   <span>Nut Contract</span>
-                  <i class="copy-icon ml-2"></i>
+                  <i class="copy-icon mx-2"></i>
+                  <i class="link-icon"></i>
                 </div>
-                <div class="link-icon">
+                <div class="d-flex align-items-center">
                   <span>Nut Contract</span>
-                  <i class="copy-icon ml-2"></i>
+                  <i class="copy-icon mx-2"></i>
+                  <i class="link-icon"></i>
                 </div>
               </div>
               <div class="content-box d-flex align-items-center justify-content-between p-2"
@@ -171,20 +173,22 @@ export default {
     }
   }
 }
+.link-icon {
+  @include icon(.8rem, .8rem);
+  background-image: url("~@/static/images/link-primary-icon.svg");
+}
+.copy-icon {
+  @include icon(1rem, 1rem);
+  background-image: url("~@/static/images/copy-primary-icon.svg");
+}
 .collapse-content-grid {
   background: var(--block-bg);
   display: grid;
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: 'link card1 card2 type';
   .link-icon {
-    padding-right: 1.4rem;
-    background-repeat: no-repeat;
-    background-size: .8rem .8rem;
+    @include icon(1rem, 1rem);
     background-image: url("~@/static/images/link-primary-icon.svg");
-    background-position: right center;
-    width: fit-content;
-    display: flex;
-    align-items: center;
   }
   .copy-icon {
     @include icon(1rem, 1rem);
