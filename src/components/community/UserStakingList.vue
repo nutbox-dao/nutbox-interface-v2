@@ -40,14 +40,19 @@
         <b-collapse :id="'accordion'+pool.id" visible>
         <div class="collapse-content-grid font16 py-3 px-4">
             <div class="link-box text-primary-0" style="grid-area: link">
-            <div class="link-icon hover">{{ getCommunityInfoById(pool.community.id).name }}</div>
-            <div class="link-icon hover">
-                <span>{{ cToken ? cToken.symbol : '' }} Contract</span>
-                <i class="copy-icon ml-2"></i>
+            <div class="d-flex align-items-center">
+                {{ getCommunityInfoById(pool.community.id).name }}
+                <i class="link-icon"></i>
             </div>
-            <div v-if="stakeToken.symbol" class="link-icon hover">
+            <div class="d-flex align-items-center">
+                <span>{{ cToken ? cToken.symbol : '' }} Contract</span>
+                <i class="copy-icon mx-2"></i>
+                <i class="link-icon"></i>
+            </div>
+            <div v-if="stakeToken.symbol" class="d-flex align-items-center">
                 <span>{{ stakeToken ? stakeToken.symbol : '' }} Contract</span>
-                <i class="copy-icon ml-2"></i>
+                <i class="copy-icon mx-2"></i>
+                <i class="link-icon"></i>
             </div>
             </div>
             <div class="content-box d-flex align-items-center justify-content-between p-2"
@@ -61,17 +66,18 @@
                 Harvest
             </button>
             </div>
-            <div class="content-box d-flex align-items-center justify-content-between p-2"
+            <div v-if="isApproved" class="content-box d-flex align-items-center justify-content-between p-2"
                 style="grid-area: card2">
-            <div>
-                <div class="font-bold">{{ type === homeName ? (stakeToken.symbol + ' Staked') : type === 'STEEM' ? 'SP Delegated' : 'HP Delegated' }}</div>
-                <div class="font12">{{ staked | amountForm }}</div>
+                <div>
+                    <div class="font-bold">{{ type === homeName ? (stakeToken.symbol + ' Staked') : type === 'STEEM' ? 'SP Delegated' : 'HP Delegated' }}</div>
+                    <div class="font12">{{ staked | amountForm }}</div>
+                </div>
+                <div class="content-btn-group d-flex">
+                    <button class="symbol-btn w-auto px-2 mx-0">-</button>
+                    <button class="symbol-btn w-auto px-2 mr-0 ml-2" :disabled="pool.status==='CLOSED'">+</button>
+                </div>
             </div>
-            <div class="content-btn-group d-flex">
-                <button class="symbol-btn w-auto px-2 mx-0">-</button>
-                <button class="symbol-btn w-auto px-2 mr-0 ml-2" :disabled="pool.status==='CLOSED'">+</button>
-            </div>
-            </div>
+            <button v-else class="primary-btn mx-3">Approve</button>
             <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
             <!-- <span class="type-box text-primary-0 px-2">BSC</span> -->
             </div>
@@ -111,6 +117,9 @@ export default {
         },
         community() {
 
+        },
+        isApproved(){
+            return false
         },
         cToken() {
             const token = this.allTokens.filter(t => t.address.toLowerCase() == this.pool.community.cToken)[0]
@@ -250,10 +259,12 @@ export default {
     width: fit-content;
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
   .copy-icon {
     @include icon(1rem, 1rem);
     background-image: url("~@/static/images/copy-primary-icon.svg");
+    cursor: pointer;
   }
   .content-box {
     border: 1px solid var(--input-border);

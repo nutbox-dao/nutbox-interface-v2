@@ -50,17 +50,29 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <div class="p-4">
-        Your Steem account haven't binding with current BSC account, please change Steem account in your wallet first.
-        <br>
-        Your binding Steem account is: 3r2fsd9283y23r8u2083r0293r0293ru0ru
+      <div class="custom-form text-center">
+        <i class="modal-close-icon modal-close-icon-right" @click="tipModal=false"></i>
+        <div class="mt-2 mb-4">Please change Steem Account</div>
+        <div>Your Steem account haven't binding with current BSC account, please change Steem account in your wallet first.</div>
+        <div class="mt-3 mb-1">Your binding Steem account is:</div>
+        <div class="c-input-group">
+          <input class="text-center" type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
+        </div>
       </div>
-      <div class="text-center">
-        <button class="primary-btn w-50" @click="tipModal=false">OK</button>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button class="primary-btn primary-btn-outline mx-3" @click="tipModal=false">Cancel</button>
+        <button class="primary-btn mx-3" @click="tipModal=false">OK</button>
       </div>
     </b-modal>
-
-    <Login :type='type' v-if="showLogin" @hideMask="showLogin = false" />
+    <b-modal
+      v-model="showLogin"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <Login type='STEEM' @hideMask="showLogin=false"/>
+    </b-modal>
   </div>
 </template>
 
@@ -166,4 +178,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+@import "src/static/css/form";
 </style>

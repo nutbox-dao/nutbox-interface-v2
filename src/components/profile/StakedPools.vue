@@ -47,7 +47,8 @@ export default {
       activeTab: 0,
       tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive', 'Inactive'],
       searchText: '',
-      poolStatus: 'active'
+      poolStatus: 'active',
+      isApprove: false
     }
   },
   components: {
@@ -135,20 +136,22 @@ export default {
     }
   }
 }
+.link-icon {
+  @include icon(.8rem, .8rem);
+  background-image: url("~@/static/images/link-primary-icon.svg");
+}
+.copy-icon {
+  @include icon(1rem, 1rem);
+  background-image: url("~@/static/images/copy-primary-icon.svg");
+}
 .collapse-content-grid {
   background: var(--block-bg);
   display: grid;
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: 'link card1 card2 type';
   .link-icon {
-    padding-right: 1.4rem;
-    background-repeat: no-repeat;
-    background-size: .8rem .8rem;
+    @include icon(1rem, 1rem);
     background-image: url("~@/static/images/link-primary-icon.svg");
-    background-position: right center;
-    width: fit-content;
-    display: flex;
-    align-items: center;
   }
   .copy-icon {
     @include icon(1rem, 1rem);
