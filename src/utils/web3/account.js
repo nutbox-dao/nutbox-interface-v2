@@ -1,7 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce, getDistributionEras } from './community'
-import { monitorPools } from './pool'
 import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
 import { updateUserInfo as uui, getSomeUsers, getAllUsers } from '@/apis/api'
@@ -54,7 +53,6 @@ export const accountChanged = async (refresh) => {
             }
         }).catch(console.error)
         monitorCtokenBalance(true)
-        monitorPools()
     })
 }
 

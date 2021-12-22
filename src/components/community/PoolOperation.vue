@@ -44,24 +44,44 @@
       />
     </b-modal>
     <b-modal
-      v-model="tipModal"
+      v-model="showWrongSteem"
       modal-class="custom-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop>
       <div class="custom-form text-center">
-        <i class="modal-close-icon modal-close-icon-right" @click="tipModal=false"></i>
+        <i class="modal-close-icon modal-close-icon-right" @click="showWrongSteem=false"></i>
         <div class="mt-2 mb-4">Please change Steem Account</div>
         <div>Your Steem account haven't binding with current BSC account, please change Steem account in your wallet first.</div>
         <div class="mt-3 mb-1">Your binding Steem account is:</div>
         <div class="c-input-group">
-          <input class="text-center" type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
+          <input class="text-center" disabled type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
         </div>
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn primary-btn-outline mx-3" @click="tipModal=false">Cancel</button>
-        <button class="primary-btn mx-3" @click="tipModal=false">OK</button>
+        <button class="primary-btn primary-btn-outline mx-3" @click="showWrongSteem=false">Cancel</button>
+        <button class="primary-btn mx-3" @click="showWrongSteem=false">OK</button>
+      </div>
+    </b-modal>
+     <b-modal
+      v-model="showWrongAccount"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <div class="custom-form text-center">
+        <i class="modal-close-icon modal-close-icon-right" @click="showWrongAccount=false"></i>
+        <div class="mt-2 mb-4">Please change BSC Account</div>
+        <div>Your BSC account haven't binding with current STEEM account, please change BSC account in your wallet first.</div>
+        <div class="mt-3 mb-1">Your binding BSC account is:</div>
+        <div class="c-input-group">
+          <input class="text-center" disabled type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button class="primary-btn mx-3" @click="showWrongAccount=false">OK</button>
       </div>
     </b-modal>
     <b-modal
@@ -103,7 +123,8 @@ export default {
         updateStaking: false,
         operate: 'add',
         showLogin: false,
-        tipModal: false
+        showWrongSteem: true,
+        showWrongAccount: false
       }
   },
   computed: {

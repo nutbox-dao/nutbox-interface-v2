@@ -32,7 +32,7 @@
         </div>
         <div class="item h-100 d-flex justify-content-between text-center">
           <div class="font14">TVL</div>
-          <div class="font-bold">$23413</div>
+          <div class="font-bold">{{ tvl | formatPrice }}</div>
         </div>
       </div>
       <div
@@ -91,30 +91,62 @@
           class="content-box d-flex align-items-center justify-content-between p-2"
           style="grid-area: card2"
         >
-          <template v-if="isApproved">
-            <div>
-              <div class="font-bold">
-                {{
-                  type === homeName
-                    ? stakeToken.symbol + " Staked"
-                    : type === "STEEM"
-                    ? "SP Delegated"
-                    : "HP Delegated"
-                }}
+          <ConnectMetaMask
+            :disable="pool.status === 'CLOSED'"
+            v-if="!metamaskConnected"
+          />
+          <template v-else>
+            <template v-if="approved && !needLogin">
+              <div>
+                <div class="font-bold">
+                  {{
+                    type === homeName
+                      ? stakeToken.symbol + " Staked"
+                      : type === "STEEM"
+                      ? "SP Delegated"
+                      : "HP Delegated"
+                  }}
+                </div>
+                <div class="font12">{{ staked | amountForm }}</div>
               </div>
-              <div class="font12">{{ staked | amountForm }}</div>
-            </div>
-            <div class="content-btn-group d-flex">
-              <button class="symbol-btn w-auto px-2 mx-0">-</button>
-              <button
-                class="symbol-btn w-auto px-2 mr-0 ml-2"
-                :disabled="pool.status === 'CLOSED'"
-              >
-                +
-              </button>
-            </div>
+              <div class="content-btn-group d-flex">
+                <button class="symbol-btn w-auto px-2 mx-0" @click="decrease">-</button>
+                <button
+                  class="symbol-btn w-auto px-2 mr-0 ml-2"
+                  @click="increase"
+                  :disabled="pool.status === 'CLOSED'"
+                >
+                  +
+                </button>
+              </div>
+            </template>
+            <template v-else>
+                <button
+                class="primary-btn"
+                v-if="needLogin"
+                @click="showLogin = true"
+                >
+                {{
+                    type === "STEEM"
+                    ? $t("wallet.connectSteem")
+                    : $t("wallet.connectHive")
+                }}
+                </button>
+                <button
+                v-else
+                class="primary-btn"
+                @click="approve"
+                :disabled="approved || isApproving || pool.status === 'CLOSED'"
+                >
+                <b-spinner
+                    small
+                    type="grow"
+                    v-show="isApproving || loadingApprovements"
+                ></b-spinner>
+                {{ $t("operation.approve") }}
+                </button>
+            </template>
           </template>
-          <button v-else class="primary-btn mx-3">Approve</button>
         </div>
         <div
           style="grid-area: type"
@@ -131,8 +163,9 @@
 import { mapGetters, mapState } from "vuex";
 import { approvePool, withdrawReward, getPoolType } from "@/utils/web3/pool";
 import { CHAIN_NAME } from "@/config";
-import { handleApiErrCode } from "@/utils/helper";
-import showToastMixin from '@/mixins/copyToast'
+import { handleApiErrCode, formatBalance } from "@/utils/helper";
+import showToastMixin from "@/mixins/copyToast";
+import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 
 export default {
   name: "",
@@ -141,16 +174,25 @@ export default {
       type: Object,
     },
   },
+  components: {
+    ConnectMetaMask,
+  },
   data() {
     return {
       homeName: CHAIN_NAME,
       isWithdrawing: false,
+      isApproving: false,
+      operate: '',
+      updateStaking: false,
     };
   },
   mixins: [showToastMixin],
   computed: {
     ...mapGetters("community", ["getCommunityInfoById"]),
+    ...mapState(["prices", "metamaskConnected"]),
     ...mapState("web3", ["tokenIcons", "allTokens"]),
+    ...mapState("steem", ["steemAccount", "vestsToSteem"]),
+    ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -164,9 +206,19 @@ export default {
     type() {
       return getPoolType(this.pool.poolFactory, this.pool.chainId);
     },
-    community() {},
-    isApproved() {
+    needLogin() {
+      if (this.type === "STEEM") {
+        return !this.steemAccount;
+      } else if (this.type === "HIVE") {
+        return !this.hiveAccount;
+      }
       return false;
+    },
+    community() {},
+    approved() {
+      if (this.type !== CHAIN_NAME) return true;
+      if (!this.approvements) return false;
+      return this.approvements[this.pool.id];
     },
     cToken() {
       const token = this.allTokens.filter(
@@ -175,7 +227,6 @@ export default {
       return token;
     },
     stakeToken() {
-      console.log(this.type, this.allTokens);
       if (this.type !== CHAIN_NAME || !this.allTokens) return {};
       const token = this.allTokens.filter(
         (t) => t.address.toLowerCase() == this.pool.asset
@@ -198,13 +249,7 @@ export default {
       if (!this.userReward) return 0;
       const pendingBn = this.userReward[this.pool.id];
       if (!pendingBn) return 0;
-      if (this.type === CHAIN_NAME) {
-        return pendingBn.toString() / 1e18;
-      } else if (this.type === "STEEM") {
-        return (pendingBn.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "HIVE") {
-        return (pendingBn.toString() / 1e6) * this.vestsToHive;
-      }
+      return pendingBn.toString() / 1e18;
     },
     totalDeposited() {
       if (!this.totalStaked) return 0;
@@ -217,6 +262,11 @@ export default {
       } else if (this.type === "HIVE") {
         return (total.toString() / 1e6) * this.vestsToHive;
       }
+      return 0;
+    },
+    apr() {},
+    tvl() {
+      console.log(424, this.prices);
       return 0;
     },
   },
@@ -243,10 +293,35 @@ export default {
       );
     },
     gotoCommunity() {
-        console.log(2);
+      console.log(2);
     },
     gotoContract(address) {
-        window.open('https://goerli.etherscan.io/address/' + address, '_blank')
+      window.open("https://goerli.etherscan.io/address/" + address, "_blank");
+    },
+    increase() {
+      this.operate = "add";
+      this.updateStaking = true;
+    },
+    decrease() {
+      this.operate = "minus";
+      this.updateStaking = true;
+    },
+    // Approve contract
+    async approve() {
+      try {
+        this.isApproving = true;
+        const hash = await approvePool(this.card);
+        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isApproving = false;
+      }
     },
     async withdraw() {
       try {

@@ -127,6 +127,7 @@ import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
+import {ethers} from 'ethers'
 
 export default {
   components: { ManageCommunityMenu },
@@ -211,25 +212,15 @@ export default {
         return
       }
       setupNetwork()
+    },
+    geta(address){
+      console.log(ethers.utils.getAddress(address));
     }
   },
   mounted () {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {
-    // bsc related
-    try {
-      updateAllCommunitiesFromBackend();
-      updateAllTokensFromBackend();
-      updateAllUsersByPolling();
-      await getAccounts(true)
-      getMyJoinedCommunity();
-      getMyCommunityInfo().catch(e => {
-        console.log('No created token by current user');
-      });
-    } catch (e) {
-      console.log('Get accounts fail', e)
-    }
     try {
       setupNetwork()
       chainChanged(() => {
@@ -241,6 +232,19 @@ export default {
       subBlockNum()
     } catch (e) {
       console.log(533, e)
+    }
+        // bsc related
+    try {
+      updateAllCommunitiesFromBackend();
+      updateAllTokensFromBackend();
+      updateAllUsersByPolling();
+      await getAccounts(true)
+      getMyJoinedCommunity();
+      getMyCommunityInfo().catch(e => {
+        console.log('No created token by current user');
+      });
+    } catch (e) {
+      console.log('Get accounts fail', e)
     }
 
     // get steem vests ratio

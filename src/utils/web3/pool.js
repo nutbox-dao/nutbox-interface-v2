@@ -372,6 +372,27 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
+// get user's bind account
+export const getBindSteemAccount = async (pool) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('SPStaking', pool.id)
+      const account = await getAccounts();
+      const bindAccount = parseInt(pool.chainId) === 1 ? store.state.steem.steemAccount : store.state.hive.hiveAccount;
+      const bindAccountBytes = ethers.utils.formatBytes32String(bindAccount);
+      const accountInfo = await contract.getUserDepositInfo(account);
+      const _bindAccount = ethers.utils.parseBytes32String(accountInfo.bindAccount);
+      const _account = await contract.accountBindMap(bindAccountBytes);
+      resolve({
+        account: [account, _bindAccount],
+        bindAccont: [bindAccount, _account]
+      })
+    }catch(e) {
+      reject(e);
+    } 
+  })
+}
+
 /**
  * update pools info
  * @param {*} pools 
@@ -387,6 +408,7 @@ export const updatePoolsByPolling = (pools) => {
   const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
     store.commit('pool/saveUserReward', res)
   })
+  store.commit('pool/saveLoadingApprovements', true)
   const approvmentRolling = rollingFunction(getApprovements, pools, 3, res => {
     store.commit('pool/saveApprovements', res)
   })
@@ -485,7 +507,6 @@ export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
-      store.commit('pool/saveLoadingApprovements', true)
       const account = await getAccounts();
       let calls = pools.map(pool => ({
         target: pool.asset,
@@ -503,6 +524,8 @@ export const getApprovements = async (pools) => {
     } catch (e) {
       console.log('Get approvment fail', e);
       reject(e)
+    } finally{
+      store.commit('pool/saveLoadingApprovements', false)
     }
   })
 }
@@ -622,19 +645,4 @@ export const monitorUserBalances = async () => {
     setTimeout(update, 10000)
   }
   update()
-}
-
-/**
- * Monitor pools data
- */
-export const monitorPools = async () => {
-  getAllPools().then(() => {
-    Promise.all([
-      monitorUserStakings(),
-      monitorPendingRewards(),
-      monitorApprovements(),
-      monitorPoolInfos(),
-      monitorUserBalances()
-    ]).catch(console.error)
-  })
 }
