@@ -94,7 +94,6 @@ export default {
     communityInfo() {
       if(this.communityId) {
         const info = this.getCommunityInfoById(this.communityId)
-        console.log(2436, info);
         if (info){
           return info
         }
@@ -109,33 +108,33 @@ export default {
     }
   },
   mounted () {
-    // if (!this.communityId) {
-    //   this.$router.replace('/');
-    //   return;
-    // }
-    // try {
-    //   this.loading = true;
-    //   getSpecifyCommunityInfo(this.communityId).then(community => {
-    //     getCToken(community.id, true).then(ctoken => {
-    //       this.saveCtoken(ctoken)
-    //     }).catch(e => {
-    //       console.log('get ctoken fail');
-    //     })
-    //     this.saveFeeRatio(community.feeRatio)
-    //     this.saveOperationCount(community.operationCount)
-    //     this.saveAllPools(community.pools)
-    //     this.saveOperationHistory(community.operationHistory)
-    //     this.saveAllUsers(community.users)
-    //     this.loading = false
-    //   }).catch(e => {
-    //     console.log(42643, e)
-    //   })
-    // }catch (e){
-    //   handleApiErrCode(e, (tip, params) => {
-    //     this.$bvToast.toast(tip, params)
-    //   })
-    //   this.loading = false
-    // }
+    if (!this.communityId) {
+      this.$router.replace('/');
+      return;
+    }
+    try {
+      this.loading = true;
+      getSpecifyCommunityInfo(this.communityId).then(community => {
+        getCToken(community.id, true).then(ctoken => {
+          this.saveCtoken(ctoken)
+        }).catch(e => {
+          console.log('get ctoken fail');
+        })
+        this.saveFeeRatio(community.feeRatio)
+        this.saveOperationCount(community.operationCount)
+        this.saveAllPools(community.pools)
+        this.saveOperationHistory(community.operationHistory)
+        this.saveAllUsers(community.users)
+        this.loading = false
+      }).catch(e => {
+        console.log(42643, e)
+      })
+    }catch (e){
+      handleApiErrCode(e, (tip, params) => {
+        this.$bvToast.toast(tip, params)
+      })
+      this.loading = false
+    }
   },
   beforeDestroy() {
     this.clearData()

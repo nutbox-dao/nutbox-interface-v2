@@ -21,6 +21,7 @@ export async function getMyJoinedCommunity() {
                 inPools {
                     id
                     name
+                    status
                     poolFactory
                     community{
                         id

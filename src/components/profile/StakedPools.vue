@@ -10,7 +10,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="row">
           <div class="col-md-6"></div>
           <div class="col-md-6">
@@ -22,86 +22,11 @@
             </b-input-group>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="c-card mt-3" v-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
-        <template v-if="getCommunityInfoById(pool.community.id)">
-          <div class="c-header-grid py-3 px-4">
-            <div class="d-flex align-items-center" style="grid-area: avatar">
-              <div class="logo-group mr-3">
-                <img class="logo1" :src="getCommunityInfoById(pool.community.id).icon" alt="">
-                <img class="logo2" :src="tokenIcons[pool.asset]" alt="">
-              </div>
-              <div class="h-100 d-flex flex-column justify-content-between">
-                <div class="font-bold">{{ getCommunityInfoById(pool.community.id).name }}</div>
-                <div class="font14 ">{{ pool.name }}</div>
-              </div>
-            </div>
-            <div class="value-box d-flex" style="grid-area: value">
-              <div class="item h-100 d-flex justify-content-between text-center">
-                <div class="font14 ">Moons Earned</div>
-                <div class="font-bold">123.0000</div>
-              </div>
-              <div class="item h-100 d-flex justify-content-between text-center">
-                <div class="font14 ">APR</div>
-                <div class="font-bold">90.12%</div>
-              </div>
-              <div class="item h-100 d-flex justify-content-between text-center">
-                <div class="font14 ">Total Staking</div>
-                <div class="font-bold">12323420</div>
-              </div>
-              <div class="item h-100 d-flex justify-content-between text-center">
-                <div class="font14 ">TVL</div>
-                <div class="font-bold">$23413</div>
-              </div>
-            </div>
-            <div class="d-flex px-3 justify-content-between align-items-center action-box" style="grid-area: action">
-              <span class="text-primary-0" :class="poolStatus">{{poolStatus}}</span>
-              <div v-b-toggle="'accordion'+index" class="toggle-btn text-primary-0 font14">
-                <span class="when-open">Hide</span>
-                <span class="when-closed">Detail</span>
-              </div>
-            </div>
-          </div>
-          <b-collapse :id="'accordion'+index" visible>
-            <div class="collapse-content-grid font16 py-3 px-4">
-              <div class="link-box text-primary-0" style="grid-area: link">
-                <div class="link-icon">PNUT Community</div>
-                <div class="link-icon">
-                  <span>Nut Contract</span>
-                  <i class="copy-icon ml-2"></i>
-                </div>
-                <div class="link-icon">
-                  <span>Nut Contract</span>
-                  <i class="copy-icon ml-2"></i>
-                </div>
-              </div>
-              <div class="content-box d-flex align-items-center justify-content-between p-2"
-                  style="grid-area: card1">
-                <div>
-                  <div class="font-bold">Moons Earned</div>
-                  <div class="font12">123.0000</div>
-                </div>
-                <button class="primary-btn w-auto px-2 mx-0">Harvest</button>
-              </div>
-              <div class="content-box d-flex align-items-center justify-content-between p-2"
-                  style="grid-area: card2">
-                <div>
-                  <div class="font-bold">Moons Earned</div>
-                  <div class="font12">123.0000</div>
-                </div>
-                <div class="content-btn-group d-flex">
-                  <button class="symbol-btn w-auto px-2 mx-0">-</button>
-                  <button class="symbol-btn w-auto px-2 mr-0 ml-2">+</button>
-                </div>
-              </div>
-              <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
-                <span class="type-box text-primary-0 px-2">BSC</span>
-              </div>
-            </div>
-          </b-collapse>
-        </template>
+        <UserStakingList v-if="getCommunityInfoById(pool.community.id)" :pool="pool" />
       </div>
     </div>
     <div class="c-loading my-5" v-else></div>
@@ -111,6 +36,9 @@
 <script>
 import { CHAIN_NAME } from '@/config'
 import { mapGetters, mapState } from 'vuex'
+import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
+import UserStakingList from '@/components/community/UserStakingList'
+import { sleep } from '@/utils/helper'
 
 export default {
   name: 'StakedPools',
@@ -122,16 +50,52 @@ export default {
       poolStatus: 'active'
     }
   },
+  components: {
+    UserStakingList,
+  },
   computed: {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapState('community', ['allCommunityInfo']),
     ...mapState('web3', ['userGraphInfo', 'tokenIcons']),
     joinedPool() {
-      if (!this.userGraphInfo || !this.userGraphInfo.inPools) return [];
-      console.log(45, this.userGraphInfo.inPools);
-      return this.userGraphInfo.inPools
+      switch(this.activeTab) {
+        case 4:
+          return this.inActivedPools;
+        case 0:
+          return this.activedPools;
+        case 1:
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
+        case 2:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
+        case 3:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive')) && parseInt(p.chainId) == 2)
+      }
+    },
+    activedPools() {
+      if (!this.userGraphInfo || !this.userGraphInfo.inPools || this.userGraphInfo.inPools.length === 0) return [];
+      return this.userGraphInfo.inPools.filter(p => p.status === 'OPENED')
+    },
+    inActivedPools() {
+      if (!this.userGraphInfo || !this.userGraphInfo.inPools || this.userGraphInfo.inPools.length === 0) return [];
+      return this.userGraphInfo.inPools.filter(p => p.status === 'CLOSED')
     }
-  }
+  },
+  async mounted () {
+    while(true) {
+      if (this.userGraphInfo && this.userGraphInfo.inPools) {
+        break;
+      }
+      await sleep(0.3)
+    }
+    // update pools data
+    const [stake, total, reward, approve] = updatePoolsByPolling(this.userGraphInfo.inPools)
+    this.$once('hook:beforeDestroy', () => {
+        stake.stop();
+        total.stop();
+        reward.stop();
+        approve.stop();
+    });
+  },
 }
 </script>
 

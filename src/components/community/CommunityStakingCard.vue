@@ -70,6 +70,8 @@ export default {
     ...mapState('currentCommunity', ['allPools']),
     ...mapState('web3', ['allTokens']),
     ...mapState('pool', ['totalStaked', 'userStaked', 'approvements', 'userReward', 'loadingApprovements']),
+    ...mapState('steem', ['vestsToSteem']),
+    ...mapState('hive', ['vestsToHive']),
     type() {
       return getPoolType(this.card.poolFactory, this.card.chainId)
     },
@@ -88,17 +90,16 @@ export default {
       return parseFloat(pendingBn.toString() / 1e18).toFixed(3)
     },
     totalDeposited () {
-      return this.card.totalAmount.toString() / 1e18
-      if (!this.userStaked) return 0;
-      const userStakingBn =
-        this.userStaked[this.card.id]
-      if (!userStakingBn) return 0
+      if (!this.totalStaked) return 0;
+      const total =
+        this.totalStaked[this.card.id]
+      if (!total) return 0
       if (this.type === CHAIN_NAME) {
-        return userStakingBn.toString() / 1e18
+        return total.toString() / 1e18
       } else if (this.type === 'STEEM') {
-        return 0
+        return total.toString() / 1e6 * this.vestsToSteem
       } else if (this.type === 'HIVE') {
-        return 0
+        return total.toString() /1e6 * this.vestsToHive
       }
       return 0
     },
@@ -151,9 +152,6 @@ export default {
       } finally {
         this.isWithdrawing = false
       }
-    },
-    openNewTab (id) {
-      window.open(`${window.location.origin}/#/specify?id=${id}`, '_blank')
     }
   }
 }

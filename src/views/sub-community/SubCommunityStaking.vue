@@ -89,10 +89,11 @@ export default {
     const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 4)
     updatePoolsFromGraph.start();
 
-    const [stake, reward, approve] = updatePoolsByPolling(this.allPools)
+    const [stake, total, reward, approve] = updatePoolsByPolling(this.allPools)
 
     this.$once('hook:beforeDestroy', () => {
         stake.stop();
+        total.stop();
         reward.stop();
         approve.stop();
         updatePoolsFromGraph.stop();

@@ -25,6 +25,8 @@ export async function getPools(poolIds) {
                 stakersCount
                 community{
                     id
+                    feeRatio
+                    cToken
                 }
             }
         }

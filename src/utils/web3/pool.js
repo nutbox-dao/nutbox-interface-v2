@@ -381,6 +381,9 @@ export const updatePoolsByPolling = (pools) => {
   const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
     store.commit('pool/saveUserStaked', res)
   })
+  const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 3, res => {
+    store.commit('pool/saveTotalStaked', res)
+  })
   const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
     store.commit('pool/saveUserReward', res)
   })
@@ -388,14 +391,15 @@ export const updatePoolsByPolling = (pools) => {
     store.commit('pool/saveApprovements', res)
   })
   stakingRolling.start();
+  totalStakingRolling.start();
   rewardRolling.start();
   approvmentRolling.start();
 
-  return [stakingRolling, rewardRolling, approvmentRolling]
+  return [stakingRolling, totalStakingRolling, rewardRolling, approvmentRolling]
 }
 
 /** 
- * Get users staking and pool's total staked
+ * Get users staking
  */
 export const getUserStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
@@ -407,6 +411,31 @@ export const getUserStakings = async (pools) => {
           call: [
             'getUserStakedAmount(address)(uint256)',
             account
+          ],
+          returns: [
+            [p.id]
+          ]
+        }
+      }), Multi_Config)
+      resolve(result.results.transformed)
+    } catch (e) {
+      console.log('Get UserStaking fail', e);
+      reject(e)
+    }
+  })
+}
+
+/** 
+ * Get pool total staked
+ */
+ export const getPoolTotalStakings = async (pools) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result = await aggregate(pools.map(p => {
+        return {
+          target: p.id,
+          call: [
+            'getTotalStakedAmount()(uint256)'
           ],
           returns: [
             [p.id]
