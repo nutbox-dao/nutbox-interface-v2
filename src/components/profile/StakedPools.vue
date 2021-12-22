@@ -136,26 +136,20 @@ export default {
     }
   }
 }
-.link-icon {
-  @include icon(.8rem, .8rem);
-  background-image: url("~@/static/images/link-primary-icon.svg");
-}
-.copy-icon {
-  @include icon(1rem, 1rem);
-  background-image: url("~@/static/images/copy-primary-icon.svg");
-}
 .collapse-content-grid {
   background: var(--block-bg);
   display: grid;
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: 'link card1 card2 type';
   .link-icon {
-    @include icon(1rem, 1rem);
+    @include icon(.8rem, .8rem);
     background-image: url("~@/static/images/link-primary-icon.svg");
+    cursor: pointer;
   }
   .copy-icon {
     @include icon(1rem, 1rem);
     background-image: url("~@/static/images/copy-primary-icon.svg");
+    cursor: pointer;
   }
   .content-box {
     border: 1px solid var(--input-border);
