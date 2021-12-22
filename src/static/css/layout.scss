@@ -173,9 +173,9 @@
     .m-view-top-header {
       display: none;
     }
-    .view-top-header {
-      padding: 1rem 15px 1rem;
-      top: -1.5rem;
+    .view-top-header-sticky {
+      padding: 0 15px 1rem;
+      top: 0;
     }
   }
   .b-sidebar-outer {

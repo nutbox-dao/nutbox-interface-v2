@@ -1,7 +1,7 @@
 <template>
-  <div class="sub-staking-page">
+  <div class="sub-staking-page h-100">
     <div class="scroll-content position-relative">
-      <div class="view-top-header-sticky">
+      <div class="view-top-header view-top-header-sticky">
         <div class="row">
           <div class="col-md-6">
             <div class="nav-box nav-box-bg mb-3 mb-md-0">
