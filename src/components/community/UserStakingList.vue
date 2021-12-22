@@ -66,18 +66,19 @@
                 Harvest
             </button>
             </div>
-            <div v-if="isApproved" class="content-box d-flex align-items-center justify-content-between p-2"
-                style="grid-area: card2">
+            <div class="content-box d-flex align-items-center justify-content-between p-2" style="grid-area: card2">
+              <template v-if="isApproved">
                 <div>
-                    <div class="font-bold">{{ type === homeName ? (stakeToken.symbol + ' Staked') : type === 'STEEM' ? 'SP Delegated' : 'HP Delegated' }}</div>
-                    <div class="font12">{{ staked | amountForm }}</div>
+                  <div class="font-bold">{{ type === homeName ? (stakeToken.symbol + ' Staked') : type === 'STEEM' ? 'SP Delegated' : 'HP Delegated' }}</div>
+                  <div class="font12">{{ staked | amountForm }}</div>
                 </div>
                 <div class="content-btn-group d-flex">
-                    <button class="symbol-btn w-auto px-2 mx-0">-</button>
-                    <button class="symbol-btn w-auto px-2 mr-0 ml-2" :disabled="pool.status==='CLOSED'">+</button>
+                  <button class="symbol-btn w-auto px-2 mx-0">-</button>
+                  <button class="symbol-btn w-auto px-2 mr-0 ml-2" :disabled="pool.status==='CLOSED'">+</button>
                 </div>
+              </template>
+              <button v-else class="primary-btn mx-3">Approve</button>
             </div>
-            <button v-else class="primary-btn mx-3">Approve</button>
             <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
             <!-- <span class="type-box text-primary-0 px-2">BSC</span> -->
             </div>
@@ -251,14 +252,8 @@ export default {
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: 'link card1 card2 type';
   .link-icon {
-    padding-right: 1.4rem;
-    background-repeat: no-repeat;
-    background-size: .8rem .8rem;
+    @include icon(.8rem, .8rem);
     background-image: url("~@/static/images/link-primary-icon.svg");
-    background-position: right center;
-    width: fit-content;
-    display: flex;
-    align-items: center;
     cursor: pointer;
   }
   .copy-icon {
