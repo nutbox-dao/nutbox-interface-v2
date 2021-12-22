@@ -71,7 +71,7 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <Login type='STEEM' @hideMask="showLogin=false"/>
+      <Login :type='type' @hideMask="showLogin=false"/>
     </b-modal>
   </div>
 </template>
