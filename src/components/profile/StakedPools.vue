@@ -89,14 +89,18 @@
               </div>
               <div class="content-box d-flex align-items-center justify-content-between p-2"
                   style="grid-area: card2">
-                <div>
-                  <div class="font-bold">Moons Earned</div>
-                  <div class="font12">123.0000</div>
-                </div>
-                <div class="content-btn-group d-flex">
-                  <button class="symbol-btn w-auto px-2 mx-0">-</button>
-                  <button class="symbol-btn w-auto px-2 mr-0 ml-2">+</button>
-                </div>
+                <template v-if="isApprove">
+                  <div>
+                    <div class="font-bold">Moons Earned</div>
+                    <div class="font12">123.0000</div>
+                  </div>
+                  <div class="content-btn-group d-flex">
+                    <button class="symbol-btn w-auto px-2 mx-0">-</button>
+                    <button class="symbol-btn w-auto px-2 mr-0 ml-2">+</button>
+                  </div>
+                </template>
+                <button v-else class="primary-btn mx-3">Approve</button>
+
               </div>
               <div style="grid-area: type" class="d-flex justify-content-center align-items-center">
                 <span class="type-box text-primary-0 px-2">BSC</span>
@@ -121,7 +125,8 @@ export default {
       activeTab: 0,
       tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive', 'Inactive'],
       searchText: '',
-      poolStatus: 'active'
+      poolStatus: 'active',
+      isApprove: false
     }
   },
   computed: {
