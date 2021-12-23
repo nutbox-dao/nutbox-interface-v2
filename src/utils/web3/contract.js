@@ -42,6 +42,7 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "SPStakingFactory": "SPStakingFactory.json",
   "ERC20StakingFactory": "ERC20StakingFactory.json",
   "ERC20Staking": "ERC20Staking.json",
+  "SPStaking":"SPStaking.json",
   "ERC20": "ERC20.json"
 }
 

@@ -7,6 +7,7 @@ module.exports = {
     crowdstaking: "Staking",
     optional: "(Optional)",
     connectMetamask: 'Connect Metamask',
+    delegateFee: 'Delegate fee',
 
     apy: "APR",
     balance: "Balance",

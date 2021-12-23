@@ -1,6 +1,9 @@
 <template>
   <div>
-    <ConnectMetaMask :disable="card.status === 'CLOSED'" v-if="!metamaskConnected" />
+    <ConnectMetaMask
+      :disable="card.status === 'CLOSED'"
+      v-if="!metamaskConnected"
+    />
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center mb-4"
@@ -10,15 +13,38 @@
           {{ staked | amountForm }}
         </span>
         <div class="d-flex">
-          <button class="symbol-btn hover mr-2" @click="decrease">-</button>
-          <button class="symbol-btn hover " :disabled="card.status === 'CLOSED'" @click="increase">+</button>
+          <button
+            class="symbol-btn hover mr-2"
+            @click="decrease"
+            :disabled="isCheckingAccount"
+          >
+            <b-spinner type="grow" small v-show="isCheckingAccount"></b-spinner>
+            -
+          </button>
+          <button
+            class="symbol-btn hover"
+            :disabled="card.status === 'CLOSED' || isCheckingAccount"
+            @click="increase"
+          >
+            <b-spinner type="grow" small v-show="isCheckingAccount"></b-spinner
+            >+
+          </button>
         </div>
       </div>
       <template v-else>
         <button class="primary-btn" v-if="needLogin" @click="showLogin = true">
-            {{ type === 'STEEM' ? $t('wallet.connectSteem') : $t('wallet.connectHive') }}
+          {{
+            type === "STEEM"
+              ? $t("wallet.connectSteem")
+              : $t("wallet.connectHive")
+          }}
         </button>
-        <button v-else class="primary-btn" @click="approve" :disabled="approved || isApproving || card.status === 'CLOSED'">
+        <button
+          v-else
+          class="primary-btn"
+          @click="approve"
+          :disabled="approved || isApproving || card.status === 'CLOSED'"
+        >
           <b-spinner
             small
             type="grow"
@@ -58,7 +84,7 @@
         @hideStakeMask="showSpStake = false"
       />
     </b-modal>
-    
+
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
@@ -66,40 +92,73 @@
       centered
       hide-header
       hide-footer
-      no-close-on-backdrop>
+      no-close-on-backdrop
+    >
       <div class="custom-form text-center">
-        <i class="modal-close-icon modal-close-icon-right" @click="showWrongSteem=false"></i>
+        <i
+          class="modal-close-icon modal-close-icon-right"
+          @click="showWrongSteem = false"
+        ></i>
         <div class="mt-2 mb-4">Please change Steem Account</div>
-        <div>Your Steem account haven't binding with current BSC account, please change Steem account in your wallet first.</div>
+        <div>
+          Your Steem account haven't binding with current BSC account, please
+          change Steem account in your wallet first.
+        </div>
         <div class="mt-3 mb-1">Your binding Steem account is:</div>
         <div class="c-input-group">
-          <input class="text-center" disabled type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            value="3r2fsd9283y23r8u2083r0293r0293ru0ru"
+          />
         </div>
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn primary-btn-outline mx-3" @click="showWrongSteem=false">Cancel</button>
-        <button class="primary-btn mx-3" @click="showWrongSteem=false">OK</button>
+        <button
+          class="primary-btn primary-btn-outline mx-3"
+          @click="showWrongSteem = false"
+        >
+          Cancel
+        </button>
+        <button class="primary-btn mx-3" @click="showWrongSteem = false">
+          OK
+        </button>
       </div>
     </b-modal>
     <!-- wrong main chain account -->
-     <b-modal
+    <b-modal
       v-model="showWrongAccount"
       modal-class="custom-modal"
       centered
       hide-header
       hide-footer
-      no-close-on-backdrop>
+      no-close-on-backdrop
+    >
       <div class="custom-form text-center">
-        <i class="modal-close-icon modal-close-icon-right" @click="showWrongAccount=false"></i>
+        <i
+          class="modal-close-icon modal-close-icon-right"
+          @click="showWrongAccount = false"
+        ></i>
         <div class="mt-2 mb-4">Please change BSC Account</div>
-        <div>Your BSC account haven't binding with current STEEM account, please change BSC account in your wallet first.</div>
+        <div>
+          Your BSC account haven't binding with current STEEM account, please
+          change BSC account in your wallet first.
+        </div>
         <div class="mt-3 mb-1">Your binding BSC account is:</div>
         <div class="c-input-group">
-          <input class="text-center" disabled type="text" value="3r2fsd9283y23r8u2083r0293r0293ru0ru">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            value="3r2fsd9283y23r8u2083r0293r0293ru0ru"
+          />
         </div>
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn mx-3" @click="showWrongAccount=false">OK</button>
+        <button class="primary-btn mx-3" @click="showWrongAccount = false">
+          OK
+        </button>
       </div>
     </b-modal>
     <!-- Login -->
@@ -109,8 +168,9 @@
       centered
       hide-header
       hide-footer
-      no-close-on-backdrop>
-      <Login :type='type' @hideMask="showLogin=false"/>
+      no-close-on-backdrop
+    >
+      <Login :type="type" @hideMask="showLogin = false" />
     </b-modal>
   </div>
 </template>
@@ -118,12 +178,16 @@
 <script>
 import { mapState } from "vuex";
 import { CHAIN_NAME } from "@/config";
-import { getPoolType, approvePool } from '@/utils/web3/pool'
-import Login from '@/components/common/Login'
-import ConnectMetaMask from '@/components/common/ConnectMetaMask'
-import { handleApiErrCode } from '@/utils/helper'
-import StakingHomeChainAssetModal from '@/components/common/StakingHomeChainAssetModal'
-import SPStakingModal from '@/components/common/SPStakingModal'
+import {
+  getPoolType,
+  approvePool,
+  getBindSteemAccount,
+} from "@/utils/web3/pool";
+import Login from "@/components/common/Login";
+import ConnectMetaMask from "@/components/common/ConnectMetaMask";
+import { handleApiErrCode } from "@/utils/helper";
+import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
+import SPStakingModal from "@/components/common/SPStakingModal";
 
 export default {
   name: "PoolOperation",
@@ -133,22 +197,25 @@ export default {
     },
   },
   components: {
-      Login,
-      ConnectMetaMask,
-      StakingHomeChainAssetModal,
-      SPStakingModal
+    Login,
+    ConnectMetaMask,
+    StakingHomeChainAssetModal,
+    SPStakingModal,
   },
   data() {
-      return {
-        isApproving: false,
-        updateStaking: false,
-        operate: 'add',
-        showLogin: false,
-        showWrongSteem: false,
-        showWrongAccount: false,
-        showSpStake: false,
-        showHpStake: false
-      }
+    return {
+      isApproving: false,
+      updateStaking: false,
+      operate: "add",
+      showLogin: false,
+      showWrongSteem: false,
+      showWrongAccount: false,
+      showSpStake: false,
+      showHpStake: false,
+      isCheckingAccount: false,
+      bindSteem: '',
+      bindAddress:''
+    };
   },
   computed: {
     ...mapState(["metamaskConnected"]),
@@ -165,12 +232,12 @@ export default {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
     needLogin() {
-        if (this.type === 'STEEM') {
-            return !this.steemAccount
-        }else if(this.type === 'HIVE') {
-            return !this.hiveAccount
-        }
-        return false
+      if (this.type === "STEEM") {
+        return !this.steemAccount;
+      } else if (this.type === "HIVE") {
+        return !this.hiveAccount;
+      }
+      return false;
     },
     approved() {
       if (this.type !== CHAIN_NAME || !this.approvements) return true;
@@ -183,32 +250,70 @@ export default {
       if (this.type === CHAIN_NAME) {
         return userStakingBn.toString() / 1e18;
       } else if (this.type === "STEEM") {
-        return userStakingBn.toString() / 1e6 * this.vestsToSteem;
+        return (userStakingBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "HIVE") {
-        return userStakingBn.toString() / 1e6 * this.vestsToHive;
+        return (userStakingBn.toString() / 1e6) * this.vestsToHive;
       }
       return 0;
     },
   },
   methods: {
-    increase() {
+    async increase() {
       this.operate = "add";
-      if(this.type === CHAIN_NAME) {
+      if (this.type === CHAIN_NAME) {
         this.updateStaking = true;
-      }else if(this.type === 'STEEM') { // check account first
-        this.showSpStake = true;
-      }else if(this.type === 'HIVE') {
-        this.showHpStake = true;
+      } else if (this.type === "STEEM") {
+        // check account first
+        if(await this.checkAccount()){
+          this.showSpStake = true;
+        }
+      } else if (this.type === "HIVE") {
+        if(await this.checkAccount()){
+          this.showHpStake = true;
+        }
       }
     },
-    decrease() {
+    async decrease() {
       this.operate = "minus";
-      if(this.type === CHAIN_NAME) {
+      if (this.type === CHAIN_NAME) {
         this.updateStaking = true;
-      }else if(this.type === 'STEEM') { // check account first
-        this.showSpStake = true;
-      }else if(this.type === 'HIVE') {
-        this.showHpStake = true;
+      } else if (this.type === "STEEM") {
+        // check account first
+        if(await this.checkAccount()){
+          this.showSpStake = true;
+        }
+      } else if (this.type === "HIVE") {
+        if(await this.checkAccount()){
+          this.showHpStake = true;
+        }
+      }
+    },
+    async checkAccount() {
+      this.isCheckingAccount = true;
+      try {
+        const bindInfo = await getBindSteemAccount(this.card);
+        const steemAcc = parseInt(this.card.chainId) === 1 ? this.steemAccount : this.hiveAccount
+        if(bindInfo.account[1] === steemAcc) return true;
+        if(bindInfo.account[1] === '') {
+          if(bindInfo.bindAccount[1] === "0x0000000000000000000000000000000000000000") return true;
+          if(bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()) {
+            this.bindAddress = bindInfo.bindAccount[1];
+            this.showWrongAccount = true;
+            return;
+          }
+        }
+        if(bindInfo.account[1] !== steemAcc) {
+          this.bindSteem = bindInfo.account[1]
+          this.showWrongSteem = true;
+          return;
+        }
+        return true
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.isCheckingAccount = false;
       }
     },
     // Approve contract

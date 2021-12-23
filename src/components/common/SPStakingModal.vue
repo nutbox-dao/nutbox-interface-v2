@@ -37,6 +37,7 @@
       <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("operation.confirm") }}</button>
     </div>
+    <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} STEEM</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
 </template>
@@ -93,6 +94,7 @@ export default {
       this.$emit("hideStakeMask");
     },
     fillMax(){
+      if(this.loading) return;
         this.stakingValue =
         this.operate === "add" ? this.formBalance : this.formStaked;
     },
@@ -132,11 +134,10 @@ export default {
         this.loading = false
         return false
       }
-      console.log('delegated:', haveDelegated);
       if (this.operate === 'add') {
-        sp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue)
+        sp = parseFloat(haveDelegated) + parseFloat(this.stakingValue)
       } else {
-        sp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue)
+        sp = parseFloat(haveDelegated) - parseFloat(this.stakingValue)
         sp = sp < 0 ? 0 : sp
       }
       this.delegateSp(sp);

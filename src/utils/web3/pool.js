@@ -380,12 +380,11 @@ export const getBindSteemAccount = async (pool) => {
       const account = await getAccounts();
       const bindAccount = parseInt(pool.chainId) === 1 ? store.state.steem.steemAccount : store.state.hive.hiveAccount;
       const bindAccountBytes = ethers.utils.formatBytes32String(bindAccount);
-      const accountInfo = await contract.getUserDepositInfo(account);
+      const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccountBytes)])
       const _bindAccount = ethers.utils.parseBytes32String(accountInfo.bindAccount);
-      const _account = await contract.accountBindMap(bindAccountBytes);
       resolve({
         account: [account, _bindAccount],
-        bindAccont: [bindAccount, _account]
+        bindAccount: [bindAccount, _account]
       })
     }catch(e) {
       reject(e);
