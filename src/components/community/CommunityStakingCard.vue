@@ -33,15 +33,20 @@
         </div>
         <div class="project-info-container">
           <span class="name"> APR </span>
-          <div class="info">{{ card.apy ? card.apy.toFixed(2) + '%' : '--' }}</div>
+          <div class="info">{{ apr }}</div>
         </div>
         <div class="project-info-container">
           <span class="name"> Stakers </span>
           <div class="info d-flex align-items-center">
-            <img class="info-icon" src="~@/static/images/tokens/dot.png">
-            <img class="info-icon" src="~@/static/images/tokens/dot.png">
-            <img class="info-icon" src="~@/static/images/tokens/dot.png">
-            <span class="ml-1">201</span>
+            <div :id="user.id + card.id" v-for="user of stakers" :key="user.id">
+              <img class="info-icon" :src="user.avatar">
+              <b-popover :target="user.id + card.id" triggers="hover focus" placement="top">
+                {{ user.name ? user.name : user.id }}
+              </b-popover>
+            </div>
+           
+
+            <span class="ml-1">{{ card.stakersCount }}</span>
           </div>
         </div>
       </div>
@@ -59,6 +64,7 @@ import showToastMixin from '@/mixins/copyToast'
 import { CHAIN_NAME } from '@/config'
 import PoolOperation from '@/components/community/PoolOperation'
 import { BLOCK_SECOND } from '@/constant'
+import { getUserBaseInfo } from '@/utils/web3/account'
 
 export default {
   name: 'CommunityStakingCard',
@@ -123,7 +129,7 @@ export default {
       return price ? price : 0
     },
     apr() {
-      if(!this.prices) return 0;
+      if(!this.prices || !this.cToken) return '--';
       const cTokenPrice = this.cToken.price
       const stakePrice = this.stakePrice;
       if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return '--';
@@ -141,7 +147,8 @@ export default {
   data () {
     return {
       isWithdrawing: false,
-      homeName: CHAIN_NAME
+      homeName: CHAIN_NAME,
+      stakers: []
     }
   },
   mixins: [showToastMixin],
@@ -181,7 +188,13 @@ export default {
         this.isWithdrawing = false
       }
     }
-  }
+  },
+  async mounted () {
+    console.log(555, this.card.stakers);
+    const len = Math.min(7, this.card.stakers.length)
+    const ids = this.card.stakers.slice(0, len).map(a => a.id)
+    this.stakers = await Promise.all(ids.map(id => getUserBaseInfo(id)))
+  },
 }
 </script>
 

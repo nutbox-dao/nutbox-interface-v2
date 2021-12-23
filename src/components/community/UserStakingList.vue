@@ -412,7 +412,7 @@ export default {
       return price ? price : 0
     },
     apr() {
-      if(!this.prices) return 0;
+      if(!this.prices) return '--';
       const cTokenPrice = this.cToken.price
       const stakePrice = this.stakePrice;
       if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return '--';
