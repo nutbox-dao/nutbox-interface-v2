@@ -62,7 +62,7 @@ export const getAllProposal = async communityId => {
   return new Promise(async (resolve, reject) => {
     try {
       const proposals = await gap(communityId);
-      store.commit('web3/saveProposals', proposals)
+      store.commit('currentCommunity/saveProposals', proposals)
       resolve(proposals);
     } catch (e) {
       console.log("Get all proposal fail", e);

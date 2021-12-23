@@ -2,12 +2,12 @@
   <div class="page-view-content nps h-100 position-relative">
     <div class="c-loading c-loading-absolute c-loading-bg" v-if="loading"></div>
     <div class="scroll-content" v-else>
-      <div class="tip-box" :style="(form && form.poster) ? {backgroundImage: `url(${form.poster})`} : ''">
+      <div class="tip-box" :style="poster ? {backgroundImage: `url(${poster})`} : ''">
         <div style="text-align: left">
-          <Markdown :body="form ? form.remark : ''" />
+          <Markdown :body="remark" />
         </div>
       </div>
-      <div class="view-top-header view-top-header-sticky d-flex justify-content-between align-items-center">
+      <div class="view-top-header view-top-header-sticky d-flex justify-content-between align-items-center my-3">
         <div class="nav-box nav-box-bg">
           <div class="nav">
                 <span
@@ -21,7 +21,7 @@
         </div>
         <div class="c-btn-group">
           <button class="primary-btn d-flex align-items-center"
-                  @click="$router.push(`${url}/nps/proposal-create?id=${id}`)">
+                  @click="$router.push(`/nps/proposal-create?id=${id}`)">
             <i class="add-icon"></i>
             <span>{{ $t('nps.createProposal') }}</span>
           </button>
@@ -48,8 +48,7 @@
 import ProposalItem from '@/components/community/ProposalItem.vue'
 import { handleApiErrCode } from '@/utils/helper'
 import { getAllProposal } from '@/utils/web3/proposal'
-import { MAIN_COMMUNITY_ID } from '@/config'
-import { getMyCommunityProposalConfigInfo } from '@/utils/web3/communityProposalConfig'
+import { getMyCommunityInfo } from '@/utils/web3/community'
 import Markdown from '@/components/common/Markdown'
 import { mapState } from 'vuex'
 
@@ -61,8 +60,7 @@ export default {
   },
   computed: {
     ...mapState({
-      form: state => state.web3.communityProposalConfig,
-      proposals: state => state.web3.proposals,
+      proposals: state => state.currentCommunity.proposals,
       account: state => state.web3.account
     }),
     // status: 0 unstart,1 voting, 2 end
@@ -90,29 +88,22 @@ export default {
   },
   data () {
     return {
-      url: '',
       tabOptions: ['all', 'rolling', 'pass', 'unpass', 'mine'],
       activeTab: 0,
-      loading: false
+      loading: false,
+      remark: '',
+      poster: ''
     }
   },
   async mounted () {
     this.loading = true
-    this.url =
-      this.$router.currentRoute.params.key || this.$route.query.id
-        ? '/specify'
-        : ''
-
-    this.id = this.$router.currentRoute.params.key
-      ? this.$router.currentRoute.params.key
-      : this.$route.query.id
-        ? this.$route.query.id
-        : MAIN_COMMUNITY_ID
+    const communityInfo = await getMyCommunityInfo()
+    this.remark = communityInfo.remark
+    this.poster = communityInfo.npsPoster
 
     this.communityId = this.id
     try {
       getAllProposal(this.communityId)
-      getMyCommunityProposalConfigInfo(this.communityId).then(console.log)
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params)

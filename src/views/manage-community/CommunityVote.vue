@@ -185,7 +185,6 @@ import {
 } from '@/config'
 import Markdown from '@/components/common/Markdown'
 import { nanoid } from 'nanoid'
-import { mapState } from 'vuex'
 import UploadLoading from '@/components/common/UploadLoading'
 import { VueCropper } from 'vue-cropper'
 
@@ -221,9 +220,6 @@ export default {
         passthreshold: 0,
       }
     }
-  },
-  computed: {
-    ...mapState('web3', ['communityProposalConfig'])
   },
   methods: {
     onCancel () {

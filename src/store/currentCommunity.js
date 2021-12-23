@@ -14,7 +14,10 @@ export default {
       allUsers: null,
       feeRatio: 0,
       operationCount: 0,
-      specifyDistributionEras: []
+      specifyDistributionEras: [],
+
+      // proposal
+      proposals: null,
     },
     mutations: {
       saveCommunityId (state, communityId) {
@@ -47,6 +50,10 @@ export default {
       },
       saveAllUsers(state, allUsers) {
         state.allUsers = allUsers
+      },
+
+      saveProposals: (state, proposals) => {
+        state.proposals = proposals;
       },
       
       clearData (state) {

@@ -53,9 +53,6 @@ export default {
     loadingCommunity: true,
     loadingCtokenBalances: true,
 
-    // proposal
-    proposals: null,
-    communityProposalConfig: null,
     //games
     games: null,
 
@@ -194,12 +191,6 @@ export default {
     },
     saveCtokenBalances: (state, ctokenBalances) => {
       state.ctokenBalances = ctokenBalances;
-    },
-    saveProposals: (state, proposals) => {
-      state.proposals = proposals;
-    },
-    saveCommunityProposalConfig: (state, communityProposalConfig) => {
-      state.communityProposalConfig = communityProposalConfig;
     },
     saveGames: (state, games) => {
       state.games = games;
