@@ -176,6 +176,23 @@ export const getOperationFee = async (type) => {
 }
 
 /**
+ * Get community token reward per block
+ * @param {*} communityId 
+ * @returns 
+ */
+export const getCommunityRewardPerBlock = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('LinearCalculator')
+      const amount = await contract.getCurrentRewardPerBlock(communityId)
+      resolve(amount.toString() / 1e18)
+    }catch(e) {
+
+    }
+  })
+}
+
+/**
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
  */

@@ -26,6 +26,7 @@ export async function getMyJoinedCommunity() {
                     community{
                         id
                         cToken
+                        feeRatio
                     }
                     ratio
                     asset

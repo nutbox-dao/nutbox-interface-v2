@@ -53,6 +53,7 @@ import StakingCardHeader from '@/components/common/StakingCardHeader'
 import showToastMixin from '@/mixins/copyToast'
 import { CHAIN_NAME } from '@/config'
 import PoolOperation from '@/components/community/PoolOperation'
+import { BLOCK_SECOND } from '@/constant'
 
 export default {
   name: 'CommunityStakingCard',
@@ -69,6 +70,7 @@ export default {
   computed: {
     ...mapState('currentCommunity', ['allPools']),
     ...mapState('web3', ['allTokens']),
+    ...mapState(['prices']),
     ...mapState('pool', ['totalStaked', 'userStaked', 'approvements', 'userReward', 'loadingApprovements']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
@@ -103,12 +105,33 @@ export default {
       }
       return 0
     },
-    tvl () {
-      return 0
+    stakePrice(){
+      if(!this.prices) return 0
+      let price
+      if (this.type === CHAIN_NAME) {
+        price = this.stakeToken.price
+      } else if (this.type === "STEEM") {
+        price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
+      } else if (this.type === "HIVE") {
+        price = this.prices['HIVEUSDT']
+      }
+      return price ? price : 0
     },
-    erc20Price () {
-      return 0
-    }
+    apr() {
+      if(!this.prices) return 0;
+      const cTokenPrice = this.cToken.price
+      const stakePrice = this.stakePrice;
+      if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return '--';
+      const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
+      const fundRatio = this.pool.community.feeRatio
+      const poolRatio = this.pool.ratio
+      const reward = this.rewardPerBlock * blocksPerYear * (10000 - fundRatio) * poolRatio * stakePrice;
+      const stake = this.tvl;
+      return parseFloat(reward / 1e6 / stake).toFixed(2) + '%';
+    },
+    tvl() {
+      return this.totalDeposited * this.stakePrice
+    },
   },
   data () {
     return {

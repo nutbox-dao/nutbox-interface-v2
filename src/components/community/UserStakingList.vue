@@ -24,7 +24,7 @@
         </div>
         <div class="item h-100 d-flex justify-content-between text-center">
           <div class="font14">APR</div>
-          <div class="font-bold">90.12%</div>
+          <div class="font-bold">{{ apr }}</div>
         </div>
         <div class="item h-100 d-flex justify-content-between text-center">
           <div class="font14">Total Staking</div>
@@ -280,11 +280,12 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import { approvePool, withdrawReward, getPoolType, getBindSteemAccount } from "@/utils/web3/pool";
+import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 import { CHAIN_NAME } from "@/config";
 import { handleApiErrCode, formatBalance } from "@/utils/helper";
 import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
-
+import { BLOCK_SECOND } from '@/constant'
 import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
@@ -308,7 +309,7 @@ export default {
       isApproving: false,
       operate: '',
       updateStaking: false,
-      
+      rewardPerBlock: 0,
       showLogin: false,
       showWrongSteem: false,
       showWrongAccount: false,
@@ -398,10 +399,32 @@ export default {
       }
       return 0;
     },
-    apr() {},
+    stakePrice(){
+      if(!this.prices) return 0
+      let price
+      if (this.type === CHAIN_NAME) {
+        price = this.stakeToken.price
+      } else if (this.type === "STEEM") {
+        price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
+      } else if (this.type === "HIVE") {
+        price = this.prices['HIVEUSDT']
+      }
+      return price ? price : 0
+    },
+    apr() {
+      if(!this.prices) return 0;
+      const cTokenPrice = this.cToken.price
+      const stakePrice = this.stakePrice;
+      if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return '--';
+      const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
+      const fundRatio = this.pool.community.feeRatio
+      const poolRatio = this.pool.ratio
+      const reward = this.rewardPerBlock * blocksPerYear * (10000 - fundRatio) * poolRatio * stakePrice;
+      const stake = this.tvl;
+      return parseFloat(reward / 1e6 / stake).toFixed(2) + '%';
+    },
     tvl() {
-      console.log(424, this.prices);
-      return 0;
+      return this.totalDeposited * this.stakePrice
     },
   },
   methods: {
@@ -461,13 +484,35 @@ export default {
         this.isCheckingAccount = false;
       }
     },
-    increase() {
+    async increase() {
       this.operate = "add";
-      this.updateStaking = true;
+      if (this.type === CHAIN_NAME) {
+        this.updateStaking = true;
+      } else if (this.type === "STEEM") {
+        // check account first
+        if(await this.checkAccount()){
+          this.showSpStake = true;
+        }
+      } else if (this.type === "HIVE") {
+        if(await this.checkAccount()){
+          this.showHpStake = true;
+        }
+      }
     },
-    decrease() {
+    async decrease() {
       this.operate = "minus";
-      this.updateStaking = true;
+      if (this.type === CHAIN_NAME) {
+        this.updateStaking = true;
+      } else if (this.type === "STEEM") {
+        // check account first
+        if(await this.checkAccount()){
+          this.showSpStake = true;
+        }
+      } else if (this.type === "HIVE") {
+        if(await this.checkAccount()){
+          this.showHpStake = true;
+        }
+      }
     },
     // Approve contract
     async approve() {
@@ -502,6 +547,14 @@ export default {
         this.isWithdrawing = false;
       }
     },
+  },
+  mounted () {
+    getCommunityRewardPerBlock(this.pool.community.id).then(res => {
+      console.log('reward perblock', res);
+      this.rewardPerBlock = res
+    }).catch(e => {
+      console.log('Get community reward fail', e);
+    });
   },
 };
 </script>
