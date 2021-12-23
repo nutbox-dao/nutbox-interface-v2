@@ -28,7 +28,7 @@
         </button>
       </template>
     </template>
-
+    <!-- main chain stake -->
     <b-modal
       v-model="updateStaking"
       modal-class="custom-modal"
@@ -43,6 +43,23 @@
         @hideStakeMask="updateStaking = false"
       />
     </b-modal>
+    <!-- sp stake  -->
+    <b-modal
+      v-model="showSpStake"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <SPStakingModal
+        :operate="operate"
+        :pool="card"
+        @hideStakeMask="showSpStake = false"
+      />
+    </b-modal>
+    
+    <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
       modal-class="custom-modal"
@@ -64,6 +81,7 @@
         <button class="primary-btn mx-3" @click="showWrongSteem=false">OK</button>
       </div>
     </b-modal>
+    <!-- wrong main chain account -->
      <b-modal
       v-model="showWrongAccount"
       modal-class="custom-modal"
@@ -84,6 +102,7 @@
         <button class="primary-btn mx-3" @click="showWrongAccount=false">OK</button>
       </div>
     </b-modal>
+    <!-- Login -->
     <b-modal
       v-model="showLogin"
       modal-class="custom-modal"
@@ -104,6 +123,7 @@ import Login from '@/components/common/Login'
 import ConnectMetaMask from '@/components/common/ConnectMetaMask'
 import { handleApiErrCode } from '@/utils/helper'
 import StakingHomeChainAssetModal from '@/components/common/StakingHomeChainAssetModal'
+import SPStakingModal from '@/components/common/SPStakingModal'
 
 export default {
   name: "PoolOperation",
@@ -115,7 +135,8 @@ export default {
   components: {
       Login,
       ConnectMetaMask,
-      StakingHomeChainAssetModal
+      StakingHomeChainAssetModal,
+      SPStakingModal
   },
   data() {
       return {
@@ -123,8 +144,10 @@ export default {
         updateStaking: false,
         operate: 'add',
         showLogin: false,
-        showWrongSteem: true,
-        showWrongAccount: false
+        showWrongSteem: false,
+        showWrongAccount: false,
+        showSpStake: false,
+        showHpStake: false
       }
   },
   computed: {
@@ -170,11 +193,23 @@ export default {
   methods: {
     increase() {
       this.operate = "add";
-      this.updateStaking = true;
+      if(this.type === CHAIN_NAME) {
+        this.updateStaking = true;
+      }else if(this.type === 'STEEM') { // check account first
+        this.showSpStake = true;
+      }else if(this.type === 'HIVE') {
+        this.showHpStake = true;
+      }
     },
     decrease() {
       this.operate = "minus";
-      this.updateStaking = true;
+      if(this.type === CHAIN_NAME) {
+        this.updateStaking = true;
+      }else if(this.type === 'STEEM') { // check account first
+        this.showSpStake = true;
+      }else if(this.type === 'HIVE') {
+        this.showHpStake = true;
+      }
     },
     // Approve contract
     async approve() {

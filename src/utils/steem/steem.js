@@ -3,13 +3,11 @@ import { errCode, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, BSC_CHAIN_ID } from '../..
 import store from '@/store'
 import axios from "axios"
 
-function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
+function requestBroadcastWithFee (account, pid, address, fee, symbol, operation, needsActive = true) {
   const steemGas = STEEM_GAS_ACCOUNT
   let memo = [
     "delegate_vesting_shares",
     {
-      "homeChainId": BSC_CHAIN_ID, // ethruem chain id
-      "stakingFeast": stakingFeast,
       "pid": pid,
       "delegator_address": address,
     }
@@ -54,10 +52,9 @@ export async function transferSteem (from, to, amount, memo) {
 //     }
 //   ])
 // }
-
-export async function steemDelegation (delegator, delegatee, amount, stakingFeast, pid, address) {
+export async function steemDelegation (delegator, delegatee, amount, pid, address) {
   const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, stakingFeast, pid, address, fee, 'STEEM', [
+  return await requestBroadcastWithFee(delegator, pid, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {
       delegator,
