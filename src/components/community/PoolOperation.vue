@@ -101,7 +101,7 @@
         ></i>
         <div class="mt-2 mb-4">Please change Steem Account</div>
         <div>
-          Your Steem account haven't binding with current BSC account, please
+          Your Steem account haven't binding with current {{ chainName }} address, please
           change Steem account in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding Steem account is:</div>
@@ -110,7 +110,7 @@
             class="text-center"
             disabled
             type="text"
-            value="3r2fsd9283y23r8u2083r0293r0293ru0ru"
+            :value="bindSteem"
           />
         </div>
       </div>
@@ -121,7 +121,7 @@
         >
           Cancel
         </button>
-        <button class="primary-btn mx-3" @click="showWrongSteem = false">
+        <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
           OK
         </button>
       </div>
@@ -140,18 +140,18 @@
           class="modal-close-icon modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
-        <div class="mt-2 mb-4">Please change BSC Account</div>
+        <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
         <div>
-          Your BSC account haven't binding with current STEEM account, please
-          change BSC account in your wallet first.
+          Your {{ chainName }} address haven't binding with current STEEM account, please
+          change {{ chainName }} address in your wallet first.
         </div>
-        <div class="mt-3 mb-1">Your binding BSC account is:</div>
+        <div class="mt-3 mb-1">Your binding address is:</div>
         <div class="c-input-group">
           <input
             class="text-center"
             disabled
             type="text"
-            value="3r2fsd9283y23r8u2083r0293r0293ru0ru"
+            :value="bindAddress"
           />
         </div>
       </div>
@@ -214,7 +214,8 @@ export default {
       showHpStake: false,
       isCheckingAccount: false,
       bindSteem: '',
-      bindAddress:''
+      bindAddress:'',
+      chainName: CHAIN_NAME
     };
   },
   computed: {

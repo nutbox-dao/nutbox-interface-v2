@@ -213,9 +213,6 @@ export default {
       }
       setupNetwork()
     },
-    geta(address){
-      console.log(ethers.utils.getAddress(address));
-    }
   },
   mounted () {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')

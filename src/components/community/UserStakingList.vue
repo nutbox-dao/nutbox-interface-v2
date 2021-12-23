@@ -100,7 +100,7 @@
               <div>
                 <div class="font-bold">
                   {{
-                    type === homeName
+                    type === chainName
                       ? stakeToken.symbol + " Staked"
                       : type === "STEEM"
                       ? "SP Delegated"
@@ -148,24 +148,146 @@
             </template>
           </template>
         </div>
-        <div
+        <!-- <div
           style="grid-area: type"
           class="d-flex justify-content-center align-items-center"
         >
-          <!-- <span class="type-box text-primary-0 px-2">BSC</span> -->
-        </div>
+          <span class="type-box text-primary-0 px-2">BSC</span>
+        </div> -->
       </div>
     </b-collapse>
+    <!-- main chain stake -->
+    <b-modal
+      v-model="updateStaking"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <StakingHomeChainAssetModal
+        :operate="operate"
+        :card="pool"
+        @hideStakeMask="updateStaking = false"
+      />
+    </b-modal>
+      <!-- sp stake  -->
+    <b-modal
+      v-model="showSpStake"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <SPStakingModal
+        :operate="operate"
+        :pool="pool"
+        @hideStakeMask="showSpStake = false"
+      />
+    </b-modal>
+
+    <!-- wrong steem account -->
+    <b-modal
+      v-model="showWrongSteem"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form text-center">
+        <i
+          class="modal-close-icon modal-close-icon-right"
+          @click="showWrongSteem = false"
+        ></i>
+        <div class="mt-2 mb-4">Please change Steem Account</div>
+        <div>
+          Your Steem account haven't binding with current {{ chainName }} address, please
+          change Steem account in your wallet first.
+        </div>
+        <div class="mt-3 mb-1">Your binding Steem account is:</div>
+        <div class="c-input-group">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            :value="bindSteem"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button
+          class="primary-btn primary-btn-outline mx-3"
+          @click="showWrongSteem = false"
+        >
+          Cancel
+        </button>
+        <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
+          OK
+        </button>
+      </div>
+    </b-modal>
+    <!-- wrong main chain account -->
+    <b-modal
+      v-model="showWrongAccount"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form text-center">
+        <i
+          class="modal-close-icon modal-close-icon-right"
+          @click="showWrongAccount = false"
+        ></i>
+        <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
+        <div>
+          Your {{ chainName }} address haven't binding with current STEEM account, please
+          change {{ chainName }} address in your wallet first.
+        </div>
+        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="c-input-group">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            :value="bindAddress"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button class="primary-btn mx-3" @click="showWrongAccount = false">
+          OK
+        </button>
+      </div>
+    </b-modal>
+    <!-- Login -->
+    <b-modal
+      v-model="showLogin"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <Login :type="type" @hideMask="showLogin = false" />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { approvePool, withdrawReward, getPoolType } from "@/utils/web3/pool";
+import { approvePool, withdrawReward, getPoolType, getBindSteemAccount } from "@/utils/web3/pool";
 import { CHAIN_NAME } from "@/config";
 import { handleApiErrCode, formatBalance } from "@/utils/helper";
 import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
+
+import Login from "@/components/common/Login";
+import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
+import SPStakingModal from "@/components/common/SPStakingModal";
 
 export default {
   name: "",
@@ -176,14 +298,26 @@ export default {
   },
   components: {
     ConnectMetaMask,
+    Login,
+    StakingHomeChainAssetModal,
+    SPStakingModal
   },
   data() {
     return {
-      homeName: CHAIN_NAME,
       isWithdrawing: false,
       isApproving: false,
       operate: '',
       updateStaking: false,
+      
+      showLogin: false,
+      showWrongSteem: false,
+      showWrongAccount: false,
+      showSpStake: false,
+      showHpStake: false,
+      isCheckingAccount: false,
+      bindSteem: '',
+      bindAddress:'',
+      chainName: CHAIN_NAME
     };
   },
   mixins: [showToastMixin],
@@ -293,10 +427,39 @@ export default {
       );
     },
     gotoCommunity() {
-      console.log(2);
+      this.$store.commit('currentCommunity/saveCommunityId', this.pool.community)
+      this.$router.push('/sub-community/home/' + this.cardInfo.id.substring(0, 10))
     },
     gotoContract(address) {
       window.open("https://goerli.etherscan.io/address/" + address, "_blank");
+    },
+    async checkAccount() {
+      this.isCheckingAccount = true;
+      try {
+        const bindInfo = await getBindSteemAccount(this.pool);
+        const steemAcc = parseInt(this.pool.chainId) === 1 ? this.steemAccount : this.hiveAccount
+        if(bindInfo.account[1] === steemAcc) return true;
+        if(bindInfo.account[1] === '') {
+          if(bindInfo.bindAccount[1] === "0x0000000000000000000000000000000000000000") return true;
+          if(bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()) {
+            this.bindAddress = bindInfo.bindAccount[1];
+            this.showWrongAccount = true;
+            return;
+          }
+        }
+        if(bindInfo.account[1] !== steemAcc) {
+          this.bindSteem = bindInfo.account[1]
+          this.showWrongSteem = true;
+          return;
+        }
+        return true
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.isCheckingAccount = false;
+      }
     },
     increase() {
       this.operate = "add";
@@ -310,7 +473,7 @@ export default {
     async approve() {
       try {
         this.isApproving = true;
-        const hash = await approvePool(this.card);
+        const hash = await approvePool(this.pool);
         this.$bvToast.toast(this.$t("tip.approveSuccess"), {
           title: this.$t("tip.success"),
           variant: "success",

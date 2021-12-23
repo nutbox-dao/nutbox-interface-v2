@@ -12,7 +12,7 @@
     </div>
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
-        <div class="label">
+        <div class="label text-right">
           <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
         </div>
         <div class="c-input-group input-border d-flex">
