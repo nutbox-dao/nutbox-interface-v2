@@ -81,7 +81,7 @@
                 <span>{{$t('commen.language')}}</span>
               </div> -->
             </div>
-            <div class="dropdown-menu-card" v-show="langActive">
+            <!-- <div class="dropdown-menu-card" v-show="langActive">
               <div class="dropdown-item">
                 <i class="back-icon" @click="langActive=false"></i>
               </div>
@@ -89,7 +89,7 @@
                                v-for="lang of langOptions" :key="lang">
                 <span>{{ $t(`commen.${lang}`) }}</span>
               </b-dropdown-item>
-            </div>
+            </div> -->
           </b-dropdown>
         </div>
       </div>
