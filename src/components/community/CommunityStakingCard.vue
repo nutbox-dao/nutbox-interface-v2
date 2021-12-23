@@ -37,7 +37,12 @@
         </div>
         <div class="project-info-container">
           <span class="name"> Stakers </span>
-          <div class="info">{{ card.stakersCount }}</div>
+          <div class="info d-flex align-items-center">
+            <img class="info-icon" src="~@/static/images/tokens/dot.png">
+            <img class="info-icon" src="~@/static/images/tokens/dot.png">
+            <img class="info-icon" src="~@/static/images/tokens/dot.png">
+            <span class="ml-1">201</span>
+          </div>
         </div>
       </div>
     </div>
@@ -159,7 +164,7 @@ export default {
         address: formatUserAddress(address)
       }), { title: this.$t('tip.clipboard') })
     },
-    
+
     async withdraw () {
       try {
         this.isWithdrawing = true
