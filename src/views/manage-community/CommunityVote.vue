@@ -94,11 +94,11 @@
                   <template v-if="form.poster">
                     <img class="cover-preview" :src="form.poster" alt="" />
                     <div class="edit-mask">
-                    <span
-                    >{{ $t("community.edit") }}<br />{{
-                        $t("community.communityPoster")
-                      }}</span
-                    >
+                      <span
+                      >{{ $t("operation.edit") }}<br />{{
+                          $t("community.communityPoster")
+                        }}</span
+                      >
                     </div>
                   </template>
                   <template v-else>
@@ -166,7 +166,7 @@
         ></vueCropper>
       </div>
       <div class="crop-btn-group">
-        <button class="primary-btn" @click="onCancel">{{ $t('commen.cancel') }}</button>
+        <button class="primary-btn" @click="onCancel">{{ $t('operation.cancel') }}</button>
         <button class="primary-btn" @click="completeCropAndUpload">{{ $t('commen.complete') }}</button>
       </div>
     </b-modal>
@@ -175,15 +175,12 @@
 
 <script>
 import {
-  completeCommunityProposalConfigInfo,
-  getMyCommunityProposalConfigInfo
+  completeCommunityProposalConfigInfo
 } from '@/utils/web3/communityProposalConfig'
 import { handleApiErrCode, uploadImage } from '@/utils/helper'
 import { getCToken } from '@/utils/web3/asset'
 import { getMyCommunityInfo } from '@/utils/web3/community'
 import {
-  BSC_CHAIN_ID,
-  BSC_CHAIN_NAME,
   BSC_STRATEGIES_NAME
 } from '@/config'
 import Markdown from '@/components/common/Markdown'
@@ -205,12 +202,6 @@ export default {
       communityId: null,
       activeTab: 0,
       coverImg: null,
-      modalNetworksOpen: false,
-      modalStrategyOpen: false,
-      modelEditStrategyOpen: false,
-      currentStrategyControlId: '',
-      currentStrategyKey: '',
-      currentStrategyParams: '',
       strategyControlItems: [],
       strategies: null,
       uploading: false,
@@ -222,19 +213,12 @@ export default {
       coverUploadLoading: false,
       form: {
         communityId: '',
-        network: '',
-        networkName: '',
+        remark: '',
         symbol: '',
         poster: '',
-        skin: '',
-        admins: '',
-        members: '',
         strategies: '',
         threshold: 0,
         passthreshold: 0,
-        validation: 'basic',
-        onlyMembers: 0,
-        userId: ''
       }
     }
   },
@@ -282,8 +266,6 @@ export default {
         const resCode = await completeCommunityProposalConfigInfo(
           this.form
         )
-
-        // go to community dashboard
         this.$bvToast.toast(
           this.$t('tip.completeCommunityProposalConfigSuccess'),
           {
@@ -291,6 +273,9 @@ export default {
             variant: 'success'
           }
         )
+        setTimeout(() => {
+          getMyCommunityInfo()
+        }, 3000);
       } catch (e) {
         const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params)
@@ -311,50 +296,41 @@ export default {
         this.cropImgSize = [1200, 280]
       }
     },
-    gotoCreate () {
-      this.$router.push('/community/create-economy')
-    },
-    goToHome () {
-      this.$router.push('/')
-    }
   },
   async mounted () {
     try {
       const communityInfo = await getMyCommunityInfo()
+      console.log(3465, communityInfo);
 
       this.form.id = communityInfo.id
       this.form.communityId = communityInfo.id
+      this.form.threshold = communityInfo.threshold;
+      this.form.passthreshold = communityInfo.passthreshold
+      this.form.remark = communityInfo.remark
+      this.form.poster = communityInfo.npsPoster
 
-      const token = await getCToken(communityInfo.id)
+      if (this.form.strategies) { 
+        this.strategyControlItems = JSON.parse(this.form.strategies) 
+      }else {
+        const token = await getCToken(communityInfo.id)
+        const strategyParamsObj = {}
+        strategyParamsObj.address = token.address
+        strategyParamsObj.symbol = token.symbol
+        strategyParamsObj.decimals = token.token_decimal
+        this.form.symbol = token.symbol
 
-      const strategyParamsObj = {}
-      strategyParamsObj.address = token.address
-      strategyParamsObj.symbol = token.symbol
-      strategyParamsObj.decimals = token.token_decimal
-      this.form.symbol = token.symbol
-
-      const currentItem = {
-        strategyControlId: nanoid(),
-        strategyKey: BSC_STRATEGIES_NAME,
-        strategyParams: JSON.stringify(strategyParamsObj, null, 4),
-        strategies: {
-          name: BSC_STRATEGIES_NAME,
-          params: strategyParamsObj
+        const currentItem = {
+          strategyControlId: nanoid(),
+          strategyKey: BSC_STRATEGIES_NAME,
+          strategyParams: JSON.stringify(strategyParamsObj, null, 4),
+          strategies: {
+            name: BSC_STRATEGIES_NAME,
+            params: strategyParamsObj
+          }
         }
+
+        this.strategyControlItems.push(currentItem)
       }
-
-      this.strategyControlItems.push(currentItem)
-      this.form.network = BSC_CHAIN_ID
-      this.form.networkName = BSC_CHAIN_NAME
-      this.form = this.communityProposalConfig ?? this.form
-      getMyCommunityProposalConfigInfo(communityInfo.id).then(res => {
-        if (res) {
-          this.form = res
-          this.strategyControlItems = JSON.parse(this.form.strategies)
-        }
-      })
-
-      if (this.form.strategies) { this.strategyControlItems = JSON.parse(this.form.strategies) }
     } catch (e) {
       handleApiErrCode(e, (info, params) => {
         this.$bvToast.toast(info, params)
@@ -369,5 +345,24 @@ export default {
 .c-card {
   //@include card(2rem 1.2rem, var(--card-bg-primary), none, auto);
   flex: 1;
+}
+.cover-preview {
+  width: 100%;
+}
+.edit-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  span {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    text-align: center;
+  }
 }
 </style>
