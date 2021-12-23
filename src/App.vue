@@ -28,14 +28,6 @@
           <router-link v-show="!loadingMyCommunityInfo && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
           </router-link>
-          <!-- <b-dropdown v-else variant="text" class="setting-dropdown mt-4" toggle-class="p-0">
-            <template #button-content>
-              <i class="setting-icon"></i>
-            </template>
-            <template #default>
-              <ManageCommunityMenu/>
-            </template>
-          </b-dropdown> -->
           <div class="hover" @click="gotoCreateCommunity()" v-show="metamaskConnected">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
           </div>
@@ -126,11 +118,9 @@ import { updateAllTokensFromBackend } from '@/utils/web3/asset'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
-import ManageCommunityMenu from '@/components/community/ManageCommunityMenu'
 import {ethers} from 'ethers'
 
 export default {
-  components: { ManageCommunityMenu },
   computed: {
     ...mapState(['lang', 'prices', 'metamaskConnected']),
     ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo', 'loadingCommunity', 'account']),
