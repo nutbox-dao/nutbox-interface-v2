@@ -75,7 +75,7 @@
           <div class="title mb-3">DAO Fund</div>
           <div class="custom-form form-row-align-center">
             <!-- community balance -->
-            <b-form-group v-if="showBalance" label-cols-md="2" content-cols-md="7"
+            <b-form-group v-if="showBalance" label-cols-md="3" content-cols-md="8"
                           class="align-items-center"
                           label-align="left"
                           :label="$t('community.communityBalance')">
@@ -92,7 +92,7 @@
               </div>
             </b-form-group>
             <!-- community dev address -->
-            <b-form-group label-cols-md="2" content-cols-md="7"
+            <b-form-group label-cols-md="3" content-cols-md="8"
                           label-align="left"
                           :label="$t('community.fundAddress')">
               <div class="d-flex v-middle">
@@ -107,7 +107,7 @@
               </div>
             </b-form-group>
             <!-- community dev ratio -->
-            <b-form-group label-cols-md="2" content-cols-md="7"
+            <b-form-group label-cols-md="3" content-cols-md="8"
                           label-align="left"
                           :label="$t('community.fundRatio')">
               <div class="d-flex v-middle">
