@@ -26,15 +26,15 @@
                 <div class="col-sm-6 d-flex flex-column justify-content-between">
                   <div class="mb-3">
                     <div>Total Asset Value</div>
-                    <div class="font28 mt-2">$850</div>
+                    <div class="font28 mt-2">${{ totalValue }}</div>
                   </div>
                   <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
-                  <PoolRatio class="asset-chart" :pools-data="assetValue" :show-legend-info="false"/>
+                  <PoolRatio class="asset-chart" :pools-data="chartToken" :show-legend-info="false"/>
                 </div>
               </div>
-              <div class="c-loading c-loading-bg c-loading-absolute"></div>
+              <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingBalance"></div>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <AssetDetailModal @close="assetModalVisible=false"/>
+      <AssetDetailModal :tokens="balances" :totalValue="totalValue" @close="assetModalVisible=false"/>
     </b-modal>
     <!-- avatat modal -->
     <b-modal
@@ -83,6 +83,8 @@ import { getUserBaseInfo, updateUserInfo } from '@/utils/web3/account'
 import { mapState, mapGetters } from 'vuex'
 import AssetDetailModal from '@/components/profile/AssetDetailModal'
 import AvatarOptionsModal from '@/components/profile/AvatarOptionsModal';
+import { getCtokenBalance } from '@/utils/web3/asset'
+import { rollingFunction } from '@/utils/helper'
 
 export default {
   name: 'Profile',
@@ -92,17 +94,15 @@ export default {
       user:{},
       userName: 'AAA',
       isEditName: false,
-      assetValue: [
-        { name: 'PNUT', ratio: 20 },
-        { name: 'PNUT', ratio: 20 },
-        { name: 'PNUT', ratio: 20 }
-      ],
       assetModalVisible: false,
-      avatarModalVisible: false
+      avatarModalVisible: false,
+      loadingBalance: true,
+      balances: [],
+      chartToken: []
     }
   },
   computed: {
-    ...mapState('web3', ['account', 'userGraphInfo']),
+    ...mapState('web3', ['account', 'userGraphInfo', 'allTokens']),
     ...mapState('community', ['allCommunityInfo']),
     joinedCommunity() {
       if (!this.userGraphInfo || !this.userGraphInfo.inCommunities) return [];
@@ -118,6 +118,18 @@ export default {
         }
       }
       return communities
+    },
+    totalValue() {
+      if (!this.balances) return 0;
+      let value = 0;
+      for (let i = 0; i < this.balances.length; i++){
+        const t = this.balances[i]
+        if (t.balance == 0 || t.price == 0 || !t.price){
+          continue;
+        }
+        value += t.balance * t.price
+      }
+      return value
     }
   },
   methods: {
@@ -145,7 +157,44 @@ export default {
     }).catch(err => {
       console.log('get my user info fail:', err)
     })
-    await getMyJoinedCommunity();
+    getMyJoinedCommunity();
+    const interval = rollingFunction(getCtokenBalance, null, 3, res => {
+      if(!this.allTokens) return;
+      let ctokens = []
+      Object.keys(res).forEach(address => {
+        const token = this.allTokens.filter(t => t.address === address)
+        if (token && token.length > 0){
+          ctokens.push({
+            ...token[0],
+            balance: res[address]
+          })
+        }
+      })
+      this.balances = ctokens.sort((a, b) => b.balance - a.balance)
+      let tem = this.balances.filter(t => t.balance > 0)
+      const sum = tem.reduce((a, b) => a + b.balance, 0) / 100
+      tem = tem.map(t => ({
+        name: t.symbol,
+        ratio: t.balance / sum
+      }))
+      if (tem.length === this.chartToken.length){
+        for(let i = 0; i < tem.length; i++) {
+          const t1 = tem[i]
+          const t2 = this.chartToken[i]
+          if (t1.name != t2.name || t1.ratio != t2.ratio){
+            this.chartToken = tem
+            break;
+          }
+        }
+      }else{
+        this.chartToken = tem
+      }
+      this.loadingBalance = false
+    })
+    interval.start();
+    this.$once('hook:beforeDestroy', () => {
+      interval.stop();
+    })
   },
 }
 </script>

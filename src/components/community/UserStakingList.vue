@@ -27,7 +27,7 @@
           <div class="font-bold">{{ apr }}</div>
         </div>
         <div class="item h-100 d-flex justify-content-between text-center">
-          <div class="font14">Total Staking</div>
+          <div class="font14">Total {{ type === chainName ? 'Staking' : 'Delegated' }}</div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
         <div class="item h-100 d-flex justify-content-between text-center">

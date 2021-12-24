@@ -284,50 +284,24 @@ const getPrices = async () => {
  * monitor all ctoken balance of user
  * used in wallet
  */
-export const monitorCtokenBalance = async (update = false) => {
+export const getCtokenBalance = async () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let ctokenBalances = store.state.web3.ctokenBalances
-      if (ctokenBalances.length > 0 && !update){
-        resolve();
-        return;
-      }
       const allCommunities = await getAllCommunities()
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['ctoken']
-      store.commit('web3/saveLoadingCtokenBalances', true)
-      watcher && watcher.stop()
       const account = await getAccounts();
-      watcher = createWatcher(allCommunities.map(c => ({
+      const result = await aggregate(Object.values(allCommunities).map(c => ({
         target: c.ctoken,
         call:[
           'balanceOf(address)(uint256)',
           account
         ],
         returns:[
-          [c.ctoken]
+          [c.ctoken, val => val.toString() / 1e18]
         ]
       })), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        updates.map(u => {
-          const t = allCommunities.filter(c => c.ctoken === u.type)[0]
-          ctokenBalances[u.type] = {
-            logo: t.tokenIcon,
-            balance: u.value,
-            name: t.tokenName,
-            symbol: t.tokenSymbol,
-            decimal: t.tokenDecimal
-          }
-        })
-        // console.log('Updates ctoken balances', ctokenBalances);
-        store.commit('web3/saveLoadingCtokenBalances', false)
-        store.commit('web3/saveCtokenBalances', {...ctokenBalances})
-      })
-      watcher.start()
-      watchers['ctoken'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(result.results.transformed)
     }catch (e) {
+      console.log('get ctoken balance fail', e);
       reject(e);
     }
   })
