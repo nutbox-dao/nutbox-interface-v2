@@ -222,6 +222,7 @@ export default {
     ...mapState(["metamaskConnected"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
+    ...mapState('web3', ['account']),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",

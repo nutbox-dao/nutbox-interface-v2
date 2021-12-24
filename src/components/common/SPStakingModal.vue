@@ -31,11 +31,11 @@
       </div>
     </div>
     <div class="d-flex" style="margin: 0 -1rem">
-      <button class="primary-btn outline-btn mx-3" @click="hide" :disabled='loading'>{{
-            $t("operation.cancel")
-          }}</button>
       <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("operation.confirm") }}</button>
+      <button class="primary-btn primary-btn-outline mx-3" @click="hide" :disabled='loading'>{{
+            $t("operation.cancel")
+          }}</button>
     </div>
     <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} STEEM</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
@@ -164,7 +164,14 @@ export default {
           }
           this.getVests();
           this.getSteem();
-          this.$emit("hideDelegateMask");
+          this.$bvToast.toast('Delegate success! The data will be update after 1 or 2 mins later, please wait', {
+            title:this.$t('tip.success'),
+            variant: 'success',
+            autoHideDelay: 7000,
+          })
+          setTimeout(() => {
+            this.$emit("hideStakeMask");
+          }, 4000)
         }
       }catch(e){
         console.log('Delegate sp fail5', e);

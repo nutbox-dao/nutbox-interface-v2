@@ -8,7 +8,7 @@
             :src="getCommunityInfoById(pool.community.id).icon"
             alt=""
           />
-          <img class="logo2" :src="tokenIcons[pool.asset]" alt="" />
+          <img class="logo2" :src="stakeIcon" alt="" />
         </div>
         <div class="h-100 d-flex flex-column justify-content-between">
           <div class="font-bold">
@@ -285,7 +285,7 @@ import { CHAIN_NAME } from "@/config";
 import { handleApiErrCode, formatBalance } from "@/utils/helper";
 import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
-import { BLOCK_SECOND } from '@/constant'
+import { BLOCK_SECOND, ASSET_LOGO_URL } from '@/constant'
 import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
@@ -349,7 +349,15 @@ export default {
       }
       return false;
     },
-    community() {},
+    stakeIcon() {
+      if (this.type === CHAIN_NAME) {
+        return this.stakeToken.icon
+      } else if (this.type === "STEEM") {
+        return ASSET_LOGO_URL['steem']
+      } else if (this.type === "HIVE") {
+        return ASSET_LOGO_URL['hive']
+      }
+    },
     approved() {
       if (this.type !== CHAIN_NAME) return true;
       if (!this.approvements) return false;
