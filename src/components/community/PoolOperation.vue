@@ -159,6 +159,9 @@
         <button class="primary-btn mx-3" @click="showWrongAccount = false">
           OK
         </button>
+        <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
+          Change steem
+        </button>
       </div>
     </b-modal>
     <!-- Login -->

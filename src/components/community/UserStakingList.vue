@@ -261,6 +261,9 @@
         <button class="primary-btn mx-3" @click="showWrongAccount = false">
           OK
         </button>
+        <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
+          Change steem
+        </button>
       </div>
     </b-modal>
     <!-- Login -->
@@ -558,7 +561,6 @@ export default {
   },
   mounted () {
     getCommunityRewardPerBlock(this.pool.community.id).then(res => {
-      console.log('reward perblock', res);
       this.rewardPerBlock = res
     }).catch(e => {
       console.log('Get community reward fail', e);
