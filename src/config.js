@@ -96,8 +96,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
+// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+// export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
+
+// bsc test
+export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
+export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
 
 // bsc net
 // export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
