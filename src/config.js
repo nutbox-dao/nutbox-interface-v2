@@ -8,7 +8,7 @@ export const LOCALE_KEY = "localeLanguage";
 // export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
 export const BACKEND_API_URL = "http://localhost:3000";
 
-export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
+export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app" + "/qiNiu/upload";
 
 /**
  * ERROR CODE DEFINE

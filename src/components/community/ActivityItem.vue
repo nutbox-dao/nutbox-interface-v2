@@ -20,7 +20,7 @@
       <b-popover :target="operation.tx + operation.type + operation.user"
       triggers="hover focus"
       placement="top">
-        {{ operation.user }}
+        {{ username }}
       </b-popover>
       <span :id="operation.tx + operation.type + operation.timestamp" class="hover">{{ time }}</span>
       <b-popover :target="operation.tx + operation.type + operation.timestamp"
@@ -55,6 +55,7 @@ export default {
     return {
       time: '',
       description: '',
+      username: '',
       userAvatar: ''
     }
   },
@@ -92,6 +93,7 @@ export default {
       accName = user.name;
       this.userAvatar = user.avatar
     }
+    this.username = accName
     let symbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
