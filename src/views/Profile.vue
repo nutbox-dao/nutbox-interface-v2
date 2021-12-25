@@ -159,7 +159,6 @@ export default {
     })
     getMyJoinedCommunity();
     const interval = rollingFunction(getCtokenBalance, null, 3, res => {
-      console.log(243, res, this.allTokens);
       if(!this.allTokens) return;
       let ctokens = []
       Object.keys(res).forEach(address => {

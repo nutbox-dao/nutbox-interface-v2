@@ -144,7 +144,6 @@ export default {
         const steemPrice = this.prices['STEEMETH'] * this.prices['ETHUSDT']
         const hivePrice = this.prices['HIVEUSDT']
         let t = 0;
-        console.log(2333, res);
         res.map(p => {
           if(parseInt(p.chainId) === 1) {
             const amount = p.totalAmount.toString() / 1e6 * this.vestsToSteem

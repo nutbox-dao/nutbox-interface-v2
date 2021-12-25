@@ -188,11 +188,6 @@ export default {
       return !this.cToken.isMintable
     }
   },
-  watch: {
-    operationHistory(newValue, oldValue) {
-        console.log(234, newValue);
-    }
-  },
   methods: {
     formatUserAddress (address, long = true) {
       if (!address) return 'Loading Account'
