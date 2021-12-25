@@ -320,9 +320,11 @@ export function rollingFunction(func, params, interval, callback) {
             if (callback) {
               callback(res);
             }
-            await sleep(interval)
           }
-        }catch(e) {}
+        }catch(e) {
+          console.log('Rolling fail', e);
+        }
+        await sleep(interval)
       }
     },
     stop: function stop() {
