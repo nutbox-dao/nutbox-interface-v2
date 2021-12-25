@@ -16,9 +16,15 @@
                  :class="(inSubCommunityView && (community.id === communityId.toLowerCase())) ? 'active' : ''"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id">
               <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)"
+                  :id="community.id + 'icon'"
                    v-show="getCommunityInfoById(community.id)"
                    :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
                   alt="">
+                <b-popover :target="community.id + 'icon'" 
+                  triggers="hover focus"
+                  placement="top">
+                  {{ getCommunityInfoById(community.id) && getCommunityInfoById(community.id).name }}
+                </b-popover>
             </div>
           </div>
         </div>

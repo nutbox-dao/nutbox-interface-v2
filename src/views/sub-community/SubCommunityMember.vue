@@ -43,10 +43,10 @@
             </template>
             <template #cell(avatar)="row">
               <img v-if="getAvatar(row.item.address)"
-                   style="width:2rem;height: 2rem"
-                   class="user-avatar rounded-circle"
+                   class="avatar rounded-circle"
                    :src="getAvatar(row.item.address)" alt="">
-              <empty-img v-else width="2rem" height="2rem" class="rounded-circle"></empty-img>
+              <img v-else class="avatar rounded-circle"
+              src="~@/static/images/avatar-default.svg" alt="">
             </template>
           </b-table>
         </div>
@@ -185,7 +185,7 @@ export default {
       if (!address) return '--'
       address = ethers.utils.getAddress(address)
       const u = this.users[address]
-      if (u) {
+      if (u && u.name) {
         return u.name;
       }
       return address.substring(0,6) + '...'
@@ -226,6 +226,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.avatar{
+  width: 2rem;
+  height: 2rem;
+}
 .sub-member-page {
   flex: 1;
   height: 100%;

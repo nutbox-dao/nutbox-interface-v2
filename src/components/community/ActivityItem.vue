@@ -10,10 +10,13 @@
           {{ description }}
         </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
-      <img class="rounded-circle hover"
+      <img class="rounded-circle hover avatar"
+            v-if="userAvatar && userAvatar.length > 0"
             :id="operation.tx + operation.type + operation.user"
-           style="width: 2rem; height: 2rem"
            :src="userAvatar" alt="">
+      <img v-else class="user-avatar rounded-circle avatar"
+            :id="operation.tx + operation.type + operation.user"
+              src="~@/static/images/avatar-default.svg" alt="">
       <b-popover :target="operation.tx + operation.type + operation.user"
       triggers="hover focus"
       placement="top">
@@ -159,5 +162,9 @@ export default {
   .content {
     @include text-multi-line(2);
   }
+}
+.avatar{
+  width: 2rem;
+  height: 2rem;
 }
 </style>
