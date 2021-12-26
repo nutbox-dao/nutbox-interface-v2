@@ -110,6 +110,7 @@ export default {
               },
               padding: 6,
               formatter: (value, ctx) => {
+                if (this.showDataLabel) return value.name
                 return Number(value.ratio).toFixed(2) + '%'
               }
             }
@@ -135,6 +136,14 @@ export default {
     showLegendInfo: {
       type: Boolean,
       default: true
+    },
+    showDataLabel: {
+      type: Boolean,
+      default: false
+    },
+    animation: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -150,6 +159,7 @@ export default {
     }
   },
   mounted () {
+    if (!this.animation) this.chartData.options.animation = false
     const ctx = document.getElementById('pie')
     this.chartData.data.datasets = [{
       data: this.poolsData,

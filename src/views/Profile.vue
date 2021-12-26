@@ -31,7 +31,11 @@
                   <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
-                  <PoolRatio class="asset-chart" :pools-data="chartToken" :show-legend-info="false"/>
+                  <PoolRatio class="asset-chart"
+                             :pools-data="chartToken"
+                             :animation="false"
+                             :show-data-label="true"
+                             :show-legend-info="false"/>
                 </div>
               </div>
               <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingBalance"></div>

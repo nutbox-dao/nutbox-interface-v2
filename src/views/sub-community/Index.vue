@@ -209,6 +209,7 @@ export default {
   }
   .link-items {
     display: flex;
+    flex-flow: wrap;
     justify-content: center;
     img {
       margin: 0.5rem;
