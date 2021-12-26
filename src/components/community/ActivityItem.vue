@@ -102,7 +102,6 @@ export default {
         const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
         symbol = token.symbol;
       }catch(e){
-        console.log(654, e);
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
