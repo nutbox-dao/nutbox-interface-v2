@@ -2,7 +2,7 @@
   <div class="c-progress" :class="(progressData && progressData.length>0) ? 'mt-5' : 'mt-3'">
     <span class="progress-num-min" v-b-tooltip.hover :title="min">{{formatNum(min)}}</span>
     <span class="progress-num-max" v-b-tooltip.hover :title="max">{{formatNum(max)}}</span>
-    <span v-if="blockNum"
+    <span v-if="blockNum && blockPosition > 0 && blockPosition < 1"
           class="current-block" v-show="(progressData && progressData.length > 0) && blockNum>progressData[0].startHeight"
           :style="{left: `${(blockPosition)*100}%`}">{{blockNum}}</span>
     <div class="c-progress-container" :style="{background: trackColor}">
@@ -53,7 +53,8 @@ export default {
       if (!this.progressData || this.progressData.length === 0) {
         return
       }
-      const block = this.blockNum
+      let block = this.blockNum
+      block = 15328970
       let index = 0
       for (let i = 0; i < this.progressData.length; i++) {
         const p = this.progressData[i]
@@ -64,7 +65,9 @@ export default {
       }
       const totalField = this.progressData.length
       let position = index / parseFloat(totalField)
+      console.log(1, position, block, this.progressData[index]);
       position = position + parseFloat(block - this.progressData[index].startHeight) / parseFloat(this.progressData[index].stopHeight - this.progressData[index].startHeight) / totalField
+      console.log(2, position);
       return position
     }
   },

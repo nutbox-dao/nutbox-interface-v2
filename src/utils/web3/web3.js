@@ -3,7 +3,8 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE
+  RPC_NODE,
+  CHAIN_NAME
 } from '@/config'
 import store from '@/store'
 
@@ -31,6 +32,7 @@ export const setupNetwork = async () => {
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
+    console.log(4256, error);
     try{
       await eth.request({
         method: 'wallet_addEthereumChain',
@@ -41,6 +43,7 @@ export const setupNetwork = async () => {
         }],
       })
     }catch(error){
+      console.log(43256, error);
       store.commit('web3/saveChainId', chainId)
       store.commit('web3/saveAccount', null)
       store.commit('saveMetamaskConnected', false)

@@ -146,7 +146,7 @@ import { mapGetters, mapState } from 'vuex'
 import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getCToken } from '@/utils/web3/asset'
-import { sleep, formatBalance } from '@/utils/helper'
+import { sleep, formatBalance, rollingFunction } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
@@ -233,11 +233,10 @@ export default {
       while (this.loadingCommunityInfo) {
         await sleep(0.1)
       }
-      const interval = setInterval(() => {
-        getUpdateCommunityOPHistory(this.communityId)
-      }, 3000)
+      const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
+      interval.start();
       this.$once('hook:beforeDestroy', () => {
-        window.clearInterval(interval)
+        interval.stop();
       })
     }).catch(e => {
       console.log('[Sub community home]: get ctoken fail', e);
