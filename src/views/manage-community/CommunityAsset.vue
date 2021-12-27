@@ -45,7 +45,7 @@
           <!-- community balance -->
           <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8" :label="$t('community.communityBalance')">
             <div class="d-flex">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input
                   :disabled="true"
                   v-model="communityBalance"
@@ -67,7 +67,7 @@
             :label="$t('community.fundAddress')"
           >
             <div class="d-flex">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input
                   :disabled="true"
                   :placeholder="stakingFactoryId"
@@ -80,7 +80,7 @@
           <!-- community dev ratio -->
           <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.fundRatio')">
             <div class="d-flex">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input
                   :disabled="true"
                   type="number"
@@ -116,7 +116,7 @@
             <span>{{ $t("operation.charge") }} </span>&nbsp;
             <span class="text-right">{{ $t("wallet.balance") }}:{{ adminBalance | amountForm }}</span>
           </div>
-          <div class="c-input-group">
+          <div class="c-input-group c-input-group-bg">
             <input type="number" v-model="chargeValue" placeholder="0"/>
           </div>
         </div>
@@ -151,7 +151,7 @@
             <span>{{ $t("operation.withdraw") }} </span>&nbsp;
             <span class="text-right">{{ $t("wallet.balance") }}:{{ communityBalance | amountForm }}</span>
           </div>
-          <div class="c-input-group">
+          <div class="c-input-group c-input-group-bg">
             <input type="number" v-model="withdrawValue" placeholder="0"/>
           </div>
         </div>
@@ -187,7 +187,7 @@
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
-            <div class="c-input-group">
+            <div class="c-input-group c-input-group-bg">
               <input
                 :step="0.01"
                 :max="100"

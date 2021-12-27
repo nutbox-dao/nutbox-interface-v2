@@ -9,7 +9,7 @@
       <div class="row mt-3 mb-5">
         <div class="col-md-4">
           <div class="token-card">
-            <div class="mt-2 mb-4 text-center">Community asset info</div>
+            <div class="mt-3 mb-4 text-center">🎉 Community asset info 🎉</div>
 
             <div class="d-flex justify-content-between align-items-center font14" v-if="premining > 0">
               <span class="font-bold">Premining</span>
@@ -50,7 +50,7 @@
             <Progress :progress-data="distributions || []"/>
           </div>
         </div>
-        <div class="col-md-7 offset-md-1">
+        <div class="col-md-8">
           <div class="community-info-card text-left">
             <!-- community name -->
             <div class="custom-form">
@@ -643,6 +643,7 @@ export default {
 .community-info-card {
   min-height: 30rem;
   position: relative;
+  @include card();
 }
 .token-card {
   @include card(.8rem, var(--card-bg-primary), hidden, unset);

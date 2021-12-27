@@ -69,8 +69,9 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: rgba(white, .9);
+    color: var(--text-grey-7);
     font-size: .7rem;
+    font-weight: bold;
     &-checked {
       border-color: var(--primary-custom);
       background-color: var(--primary-custom);

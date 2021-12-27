@@ -68,7 +68,7 @@
             <b-form-group :label="activePools[inputIndex].name"
                           label-cols="4" content-cols="8"
                           v-for="(ratio, inputIndex) of ratios" :key="inputIndex">
-              <div class="c-input-group d-flex">
+              <div class="c-input-group c-input-group-bg d-flex">
                 <b-form-input :data-label="activePools[inputIndex].name"
                               v-model="ratios[inputIndex]"
                               @input="inputChange" step="0.01" type="number"></b-form-input>

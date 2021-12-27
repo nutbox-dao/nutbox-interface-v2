@@ -6,7 +6,7 @@
       <i class="modal-close-icon modal-close-icon-right" @click="$emit('hideMask')"></i>
     </div>
     <div class="mt-4">
-      <div class="account-box c-input-group">
+      <div class="account-box c-input-group c-input-group-bg">
         <span class="keychain" :style="keychainLogo" @click="getKeychain" />
         <b-input
           class="mr-sm-2 mb-sm-0 input"

@@ -1,13 +1,13 @@
 <template>
   <div class="scroll-content">
     <div class="container">
-      <div class=" col-md-9 mx-auto">
-        <div class="custom-form text-left">
+      <div class="c-card">
+        <div class="custom-form text-left col-md-9">
           <b-form-group label-cols-md="0" content-cols-md="12" label=""
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon twitter">Twitter</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.twitter" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -16,7 +16,7 @@
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon discord">Discord</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.discord" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -25,7 +25,7 @@
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon telegram">Telegram</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.telegram" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -34,7 +34,7 @@
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon facebook">Facebook</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.facebook" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -43,7 +43,7 @@
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon github">Github</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.github" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -52,7 +52,7 @@
                         label-class="d-flex align-items-center font16 font-bold">
             <div class="d-flex align-items-center">
               <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
               </div>
             </div>
@@ -186,7 +186,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .c-card {
-  @include card(2rem 1.2rem, var(--card-bg-primary), hidden, fit-content);
+  @include card();
 }
 .link-info-icon {
   padding-left: 2rem;

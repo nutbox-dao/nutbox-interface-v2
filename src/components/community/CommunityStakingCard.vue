@@ -1,7 +1,7 @@
 <template>
   <div class="multi-card">
     <StakingCardHeader :card="card"/>
-    <div class="c-card border-0" style="margin-top: -.5rem; background-color: var(--block-bg)">
+    <div class="c-card border-0" style="margin-top: -0.6rem">
       <div>
         <span style="color: #717376" class="font-bold mr-2">{{ cToken ? cToken.symbol : '' }}</span>
         <span style="color: #bdbfc2">EARNED</span>
@@ -45,7 +45,7 @@
                 {{ user.name ? user.name : user.id }}
               </b-popover>
             </div>
-           
+
 
             <span class="ml-1">{{ card.stakersCount }}</span>
           </div>

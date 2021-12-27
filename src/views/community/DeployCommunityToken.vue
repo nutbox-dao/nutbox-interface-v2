@@ -23,7 +23,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="font14 mb-1">Token Name</div>
-                  <div class="c-input-group">
+                  <div class="c-input-group c-input-group-bg">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text"
                                :placeholder="$t('asset.tokenName')"
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-sm-6 mt-2 mt-sm-0">
                   <div class="font14 mb-1">Token Symbol</div>
-                  <div class="c-input-group">
+                  <div class="c-input-group c-input-group-bg">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text" @keyup="upcaseSymbol()"
                                :placeholder="$t('asset.tokenSymbol')" v-model="form.symbol"></b-input>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-12 mt-2">
                   <div class="font14 mb-1">Premine amount</div>
-                  <div class="c-input-group">
+                  <div class="c-input-group c-input-group-bg">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
                                :placeholder="$t('asset.distributionAmount')" v-model="form.supply"></b-input>
@@ -59,7 +59,7 @@
         <div v-show="cardStep===1" class="form-card">
           <div class="custom-form">
             <i class="close-icon" @click="cardStep=0"></i>
-            <div class="c-input-group">
+            <div class="c-input-group c-input-group-bg">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
                          :placeholder="$t('asset.tokenAddress')"
@@ -102,13 +102,13 @@
               <div class="row font16 mt-3 mb-1">
                 <div class="col-sm-8">Total distribution by current policy</div>
                 <div class="col-sm-4">
-                  <div class="b-box">{{ totalSupply }}</div>
+                  <div class="b-box font20 text-right">{{ totalSupply }}</div>
                 </div>
               </div>
               <div class="row font16">
                 <div class="col-sm-8">Current Block height</div>
                 <div class="col-md-4">
-                  <div class="b-box">{{ blockNum }}</div>
+                  <div class="b-box font20 text-right">{{ blockNum }}</div>
                 </div>
               </div>
               <div class="py-4">
@@ -122,7 +122,7 @@
                   content-cols-md="9"
                   :label="$t('community.startBlock')"
                 >
-                  <div class="d-flex c-input-group">
+                  <div class="d-flex c-input-group c-input-group-bg">
                     <b-form-input
                       class=""
                       type="number"
@@ -143,7 +143,7 @@
                   :disabled="deploying"
                   :label="$t('community.stopBlock')"
                 >
-                  <div class="d-flex c-input-group">
+                  <div class="d-flex c-input-group c-input-group-bg">
                     <b-form-input
                       type="number"
                       v-model="distributionForm.end"
@@ -160,7 +160,7 @@
                   content-cols-md="9"
                   :label="$t('community.mintAmount')"
                 >
-                  <div class="c-input-group">
+                  <div class="c-input-group c-input-group-bg">
                     <b-form-input
                       type="number"
                       v-model="distributionForm.reward"
@@ -483,12 +483,11 @@ export default {
   left: 1.5rem;
 }
 .b-box {
-  border: 1px solid var(--input-border);
   min-width: fit-content;
   padding: .2rem;
   border-radius: .4rem;
   text-align: center;
-  background-color: rgba(white, .1);
+  font-weight: bolder;
 }
 .next-btn {
   position: absolute;

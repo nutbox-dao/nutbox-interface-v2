@@ -1,8 +1,8 @@
 <template>
   <div class="scroll-content d-flex flex-column">
     <div class="container">
-      <div class="c-card col-md-9 mx-auto">
-        <div class="custom-form text-left">
+      <div class="c-card">
+        <div class="custom-form col-md-9 text-left">
           <b-form-group
             label-cols-md="2"
             content-cols-md="10"
@@ -11,7 +11,7 @@
             label-class="d-flex font16 font-bold "
           >
             <div class="d-flex">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-textarea
                   id="remark"
                   :placeholder="$t('placeHolder.remarkInput')"
@@ -31,7 +31,7 @@
             label-class="d-flex font16 font-bold "
           >
             <div class="d-flex">
-              <div class="c-input-group p-3" style="min-height: 2.4rem">
+              <div class="c-input-group c-input-group-bg p-3" style="min-height: 2.4rem">
                 <Markdown :body="form.remark" />
               </div>
             </div>
@@ -45,7 +45,7 @@
             label-class="d-flex align-items-center font16 font-bold "
           >
             <div class="d-flex">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input
                   id="proposalThreshold"
                   :placeholder="$t('nps.proposalThresholdInput')"
@@ -64,7 +64,7 @@
             label-class="d-flex align-items-center font16 font-bold"
           >
             <div class="d-flex align-items-center">
-              <div class="c-input-group">
+              <div class="c-input-group c-input-group-bg">
                 <b-form-input
                   id="proposalPassThreshold"
                   :placeholder="$t('nps.proposalPassThresholdInput')"
@@ -125,7 +125,7 @@
                 </div>
               </template>
             </b-form-file>
-            <div class="font12 text-grey-light mt-1">
+            <div class="font12 text-grey-7 mt-1">
               {{ $t("tip.picTip", { size: "1200*280" }) }}
             </div>
           </b-form-group>
@@ -305,8 +305,8 @@ export default {
       this.form.remark = communityInfo.remark
       this.form.poster = communityInfo.npsPoster
 
-      if (this.form.strategies) { 
-        this.strategyControlItems = JSON.parse(this.form.strategies) 
+      if (this.form.strategies) {
+        this.strategyControlItems = JSON.parse(this.form.strategies)
       }else {
         const token = await getCToken(communityInfo.id)
         const strategyParamsObj = {}
@@ -339,7 +339,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .c-card {
-  //@include card(2rem 1.2rem, var(--card-bg-primary), none, auto);
+  @include card(2rem 1.2rem, var(--card-bg-primary), none, auto);
   flex: 1;
 }
 .cover-preview {

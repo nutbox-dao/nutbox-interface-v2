@@ -269,7 +269,7 @@ export default {
   --card-bg-primary: #141414;
   --nav-tab-bg: #2C2D2E;
   --nav-tab-bg-active: #141414;
-  --input-border: #4e5054;
+  --input-border: #2C2D2E;
   --input-bg: #1b1e23;
   --block-bg: #1C1D1E;
   --text-grey-7: #747576;

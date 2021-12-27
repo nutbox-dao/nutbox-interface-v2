@@ -5,7 +5,7 @@
       <div class="mt-2 mb-4 text-center">Create {{delegateType}} delegate pool</div>
       <div class="custom-form col-lg-8 mx-auto mt-5">
         <div class="mb-2">Your {{delegateType}} delegatee account</div>
-        <div class="c-input-group">
+        <div class="c-input-group c-input-group-bg">
           <b-input-group class="d-flex flex-between-center">
             <b-input :placeholder="$t('placeHolder.inputDelegatee')" class="flex-full" v-model="delegatee"></b-input>
           </b-input-group>

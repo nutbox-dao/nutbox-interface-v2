@@ -5,7 +5,7 @@
         <i class="modal-back-icon" @click="$emit('back')"></i>
         <div class="mt-2 mb-4 text-center">Create staking pool on BSC</div>
         <div class="custom-form col-lg-8 mx-auto">
-          <div class="c-input-group">
+          <div class="c-input-group c-input-group">
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full"
                        :placeholder="$t('asset.tokenAddress')"

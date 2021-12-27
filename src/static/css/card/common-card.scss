@@ -3,7 +3,7 @@
   @include c-col-flex-between-center;
 }
 .c-card {
-  @include card;
+  @include card();
   @include c-col-flex-between-center;
   .h-line {
     @include line(2rem, .2rem, .2rem);

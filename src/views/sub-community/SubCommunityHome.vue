@@ -80,7 +80,7 @@
                           label-align="left"
                           :label="$t('community.communityBalance')">
               <div class="d-flex v-middle">
-                <div class="c-input-group">
+                <div class="c-input-group c-input-group-bg">
                   <b-form-input
                     :disabled="true"
                     v-model='communityBalanceValue'
@@ -96,7 +96,7 @@
                           label-align="left"
                           :label="$t('community.fundAddress')">
               <div class="d-flex v-middle">
-                <div class="c-input-group">
+                <div class="c-input-group c-input-group-bg">
                   <b-form-input
                     :disabled="true"
                     :placeholder="communityId"
@@ -111,7 +111,7 @@
                           label-align="left"
                           :label="$t('community.fundRatio')">
               <div class="d-flex v-middle">
-                <div class="c-input-group">
+                <div class="c-input-group c-input-group-bg">
                   <b-form-input
                     :disabled="true"
                     type="number"

@@ -207,7 +207,7 @@
           change Steem account in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding Steem account is:</div>
-        <div class="c-input-group">
+        <div class="c-input-group c-input-group-bg">
           <input
             class="text-center"
             disabled
@@ -248,7 +248,7 @@
           change {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
-        <div class="c-input-group">
+        <div class="c-input-group c-input-group-bg">
           <input
             class="text-center"
             disabled

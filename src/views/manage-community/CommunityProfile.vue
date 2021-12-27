@@ -1,163 +1,159 @@
 <template>
   <div class="scroll-content">
     <div class="container">
-      <div class="row mt-3 mb-5">
-        <div class="col-md-10 offset-md-1">
-          <div class="community-info-card text-left">
-            <!-- community name -->
-            <div class="custom-form">
-              <b-form-group
-                class="mb-4"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.communityName')"
-              >
-                <b-form-input
-                  v-model="form.name"
-                  :placeholder="$t('placeHolder.inputName')"
-                ></b-form-input>
-              </b-form-group>
-              <!-- community link -->
-              <b-form-group
-                class="mb-4"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.communityLink')"
-              >
-                <b-form-input
-                  v-model="form.website"
-                  :placeholder="$t('placeHolder.inputLink')"
-                ></b-form-input>
-                <span class="font12 text-grey-5">{{ $t('commen.optional') }}</span>
-              </b-form-group>
-              <!-- community description -->
-              <b-form-group
-                class="mb-4"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.communityDesc')"
-              >
-                <b-form-textarea
-                  v-model="form.description"
-                  :placeholder="$t('placeHolder.inputDesc')"
-                  rows="5"
-                ></b-form-textarea>
-              </b-form-group>
-              <b-form-group
-                class="mb-4 logo-form"
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                :label="$t('community.communityLogo')"
-              >
-                <b-form-file
-                  v-model="logo"
-                  @input="updateLogo"
-                  accept="image/png,image/jpeg, image/jpg"
-                  ref="logo-file-input"
-                >
-                  <template #placeholder>
-                    <div class="input-file-logo">
-                      <template v-if="form.icon">
-                        <img class="cover-preview" :src="form.icon" alt="" />
-                        <div class="edit-mask">
-                          <span>{{ $t("operation.edit") }}<br />LOGO</span>
-                        </div>
-                      </template>
-                      <template v-else>
-                        <img
-                          class="add-icon"
-                          src="~@/static/images/add-white-icon.svg"
-                          alt=""
-                        />
-                        <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                      </template>
+      <div class="community-info-card text-left">
+        <!-- community name -->
+        <div class="custom-form col-md-9">
+          <b-form-group
+            class="mb-4"
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            :label="$t('community.communityName')"
+          >
+            <b-form-input
+              v-model="form.name"
+              :placeholder="$t('placeHolder.inputName')"
+            ></b-form-input>
+          </b-form-group>
+          <!-- community link -->
+          <b-form-group
+            class="mb-4"
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            :label="$t('community.communityLink')"
+          >
+            <b-form-input
+              v-model="form.website"
+              :placeholder="$t('placeHolder.inputLink')"
+            ></b-form-input>
+            <span class="font12 text-grey-5">{{ $t('commen.optional') }}</span>
+          </b-form-group>
+          <!-- community description -->
+          <b-form-group
+            class="mb-4"
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            :label="$t('community.communityDesc')"
+          >
+            <b-form-textarea
+              v-model="form.description"
+              :placeholder="$t('placeHolder.inputDesc')"
+              rows="5"
+            ></b-form-textarea>
+          </b-form-group>
+          <b-form-group
+            class="mb-4 logo-form"
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            :label="$t('community.communityLogo')"
+          >
+            <b-form-file
+              v-model="logo"
+              @input="updateLogo"
+              accept="image/png,image/jpeg, image/jpg"
+              ref="logo-file-input"
+            >
+              <template #placeholder>
+                <div class="input-file-logo">
+                  <template v-if="form.icon">
+                    <img class="cover-preview" :src="form.icon" alt="" />
+                    <div class="edit-mask">
+                      <span>{{ $t("operation.edit") }}<br />LOGO</span>
                     </div>
                   </template>
-                  <template #file-name>
-                    <div class="input-file-logo">
-                      <img
-                        class="logo-preview"
-                        v-if="logoPreviewSrc"
-                        :src="logoPreviewSrc"
-                        alt=""
-                      />
-                      <UploadLoading v-if="logoUploadLoading" />
-                    </div>
+                  <template v-else>
+                    <img
+                      class="add-icon"
+                      src="~@/static/images/add-white-icon.svg"
+                      alt=""
+                    />
+                    <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
                   </template>
-                </b-form-file>
-              </b-form-group>
+                </div>
+              </template>
+              <template #file-name>
+                <div class="input-file-logo">
+                  <img
+                    class="logo-preview"
+                    v-if="logoPreviewSrc"
+                    :src="logoPreviewSrc"
+                    alt=""
+                  />
+                  <UploadLoading v-if="logoUploadLoading" />
+                </div>
+              </template>
+            </b-form-file>
+          </b-form-group>
 
-              <!-- community poster -->
-              <b-form-group
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                class="cover-form mb-4"
-                :label="$t('community.communityPoster')"
-              >
-                <b-form-file
-                  v-model="coverImg"
-                  @input="updateCover"
-                  accept="image/png,image/jpeg,image/jpg"
-                  ref="logo-file-input"
-                >
-                  <template #placeholder>
-                    <div class="input-file-cover">
-                      <template v-if="form.poster">
-                        <img class="cover-preview" :src="form.poster" alt="" />
-                        <div class="edit-mask">
+          <!-- community poster -->
+          <b-form-group
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            class="cover-form mb-4"
+            :label="$t('community.communityPoster')"
+          >
+            <b-form-file
+              v-model="coverImg"
+              @input="updateCover"
+              accept="image/png,image/jpeg,image/jpg"
+              ref="logo-file-input"
+            >
+              <template #placeholder>
+                <div class="input-file-cover">
+                  <template v-if="form.poster">
+                    <img class="cover-preview" :src="form.poster" alt="" />
+                    <div class="edit-mask">
                         <span
                         >{{ $t("operation.edit") }}<br />{{
                             $t("community.communityPoster")
                           }}</span
                         >
-                        </div>
-                      </template>
-                      <template v-else>
-                        <img
-                          class="add-icon"
-                          src="~@/static/images/add-white-icon.svg"
-                          alt=""
-                        />
-                        <div class="add-text">
-                          {{ $t("operation.uploadPoster") }}
-                        </div>
-                      </template>
                     </div>
                   </template>
-                  <template #file-name>
-                    <div class="input-file-cover">
-                      <img
-                        class="cover-preview"
-                        v-if="coverPreviewSrc"
-                        :src="coverPreviewSrc"
-                        alt=""
-                      />
-                      <UploadLoading v-if="coverUploadLoading" />
+                  <template v-else>
+                    <img
+                      class="add-icon"
+                      src="~@/static/images/add-white-icon.svg"
+                      alt=""
+                    />
+                    <div class="add-text">
+                      {{ $t("operation.uploadPoster") }}
                     </div>
                   </template>
-                </b-form-file>
-                <div class="font12 text-grey-5 mt-2">
-                  {{ $t("tip.picTip", { size: "1200*280" }) }}
                 </div>
-              </b-form-group>
-              <b-form-group
-                label-class="overflow-hidden"
-                label-cols-md="3"
-                content-cols-md="9"
-                class="text-center"
-                label=""
-              >
-                <button class="primary-btn w-50" @click="showTips">
-                  {{ $t("operation.commit") }}
-                </button>
-              </b-form-group>
+              </template>
+              <template #file-name>
+                <div class="input-file-cover">
+                  <img
+                    class="cover-preview"
+                    v-if="coverPreviewSrc"
+                    :src="coverPreviewSrc"
+                    alt=""
+                  />
+                  <UploadLoading v-if="coverUploadLoading" />
+                </div>
+              </template>
+            </b-form-file>
+            <div class="font12 text-grey-5 mt-2">
+              {{ $t("tip.picTip", { size: "1200*280" }) }}
             </div>
-          </div>
+          </b-form-group>
+          <b-form-group
+            label-class="overflow-hidden"
+            label-cols-md="3"
+            content-cols-md="9"
+            class="text-center"
+            label=""
+          >
+            <button class="primary-btn w-50" @click="showTips">
+              {{ $t("operation.commit") }}
+            </button>
+          </b-form-group>
         </div>
       </div>
     </div>
@@ -497,6 +493,7 @@ export default {
 .community-info-card {
   min-height: 30rem;
   position: relative;
+  @include card();
 }
 .token-card {
   @include card(.8rem, var(--card-bg-primary), hidden, unset);

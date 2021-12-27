@@ -4,6 +4,7 @@
   border-radius: .8rem;
   font-size: .8rem;
   padding: .8rem;
+  color: white;
 }
 .custom-form input {
   height: 2.4rem;
@@ -15,12 +16,12 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-.custom-form::-webkit-input-placeholder {
-  color: #BDBFC2;
+.custom-form input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  color: var(--text-grey-7);
 }
 
-.custom-form::-moz-placeholder {
-  color: #BDBFC2;
+.custom-form input::-moz-placeholder, textarea::-webkit-input-placeholder {
+  color: var(--text-grey-7);
 }
 .custom-form .input-border {
   border: 1px solid var(--input-border);
@@ -57,7 +58,7 @@ input[type="number"] {
   position: absolute;
   top: 62%;
   font-size: .6rem;
-  color: #BDBFC2;
+  color: var(--text-grey-7);
 }
 .upload-loading {
   position: absolute;
@@ -65,10 +66,14 @@ input[type="number"] {
 }
 .c-input-group {
   @include c-flex-between-center;
-  background: var(--input-bg);
   border-radius: .8rem;
   flex: 1;
-  border: 1px solid var(--input-border);
+  &-border {
+    border: 1px solid var(--input-border);
+  }
+  &-bg {
+    background: var(--input-bg);
+  }
   .c-append {
     padding: 0 .8rem;
     white-space: nowrap;
@@ -76,7 +81,7 @@ input[type="number"] {
     align-items: center;
   }
   input {
-    background: var(--input-bg);
+    background: transparent;
     color: white;
     flex: 1;
   }

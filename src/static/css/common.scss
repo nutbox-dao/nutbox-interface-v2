@@ -268,7 +268,7 @@ input::-webkit-input-placeholder {
   width: 100%!important;
   height: 100%!important;
   background-color: var(--input-bg)!important;
-  border: 1px solid var(--input-border)!important;
+  border: transparent!important;
   padding: 0!important;
   box-sizing: content-box;
 }
