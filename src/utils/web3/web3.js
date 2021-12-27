@@ -122,6 +122,23 @@ export const isUnlocked = async () => {
 }
 
 /**
+ * Monitor metamask lock state
+ * @param {*} refresh 
+ */
+export const lockStatusChanged = async (refresh) => {
+  while(true) {
+    await sleep(3)
+    if (await isUnlocked()){
+
+    }else{
+      store.commit('web3/saveAccount', null)
+      refresh()
+      break;
+    }
+  }
+}
+
+/**
  * Add asset to metamask
  */
 export const addAssetToWallet = async (address, symbol, decimals, image) => {
