@@ -16,7 +16,7 @@
            :src="userAvatar" alt="">
       <img v-else class="user-avatar rounded-circle avatar"
             :id="operation.tx + operation.type + operation.user"
-              src="~@/static/images/avatar-default.svg" alt="">
+              src="~@/static/images/avatars/default.png" alt="">
       <b-popover :target="operation.tx + operation.type + operation.user"
       triggers="hover focus"
       placement="top">
@@ -90,7 +90,7 @@ export default {
     let accName = this.operation.user.substring(0, 4) + '...' + this.operation.user.substring(this.operation.user.length - 4, this.operation.user.length)
     const user = this.getUserByAddress(this.operation.user);
     if (user) {
-      accName = user.name;
+      accName = user.name ?? accName;
       this.userAvatar = user.avatar
     }
     this.username = accName

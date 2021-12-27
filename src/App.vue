@@ -40,7 +40,7 @@
           <router-link to="/profile" v-show="metamaskConnected">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
-                 src="~@/static/images/avatar-default.svg" alt="">
+                 src="~@/static/images/avatars/default.png" alt="">
           </router-link>
           <b-dropdown variant="text" dropup
                       class="side-menu-dropdown"

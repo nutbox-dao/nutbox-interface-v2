@@ -159,7 +159,7 @@ export default {
       }else {
         this.$router.push('/community/deploy-token')
       }
-    }
+    },
   },
 }
 </script>
