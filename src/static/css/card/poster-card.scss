@@ -49,14 +49,14 @@
     background-size: 1.2rem 1.2rem;
     background-repeat: no-repeat;
     text-align: left;
-    color: #242629;
+    color: white;
     width: fit-content;
     margin-bottom: .8rem;
     &.official-link-icon{
-      background-image: url("~@/static/images/official-link.png");
+      background-image: url("~@/static/images/official-link.svg");
     }
     &.link-icon {
-      background-image: url("~@/static/images/auctionPlanLink.png");
+      background-image: url("~@/static/images/official-link1.svg");
     }
   }
 }
