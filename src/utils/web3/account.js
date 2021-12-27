@@ -19,13 +19,13 @@ export const getAccounts = async (update=false) => {
         store.commit('web3/saveAccount', null);
         return
     }
-    if (store.state.web3.account && !update) {
-        return store.state.web3.account;
-    }
-    const chainId = store.state.chainId;
-    if (chainId && (parseInt(chainId) !== parseInt(BSC_CHAIN_ID))) {
+    const chainId = store.state.web3.chainId;
+    if (!chainId || (parseInt(chainId) !== parseInt(BSC_CHAIN_ID))) {
         store.commit('web3/saveAccount', null)
         return;
+    }
+    if (store.state.web3.account && !update) {
+        return store.state.web3.account;
     }
     const accounts = await metamask.request({ method: 'eth_requestAccounts' })
     let account = accounts[0]

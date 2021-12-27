@@ -29,9 +29,11 @@ export const getMyCommunityContract = async (update = false) => {
       return;
     }
     store.commit("web3/saveLoadingCommunity", true);
-    
-
     const account = await getAccounts();
+    if (!account){
+      reject(errCode.NO_STAKING_FACTORY);
+      return;
+    }
     let stakingFactoryId = null;
     let contract;
     try{

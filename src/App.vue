@@ -31,13 +31,13 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link v-show="!loadingMyCommunityInfo && settingStep === 3 && metamaskConnected" to="/manage-community">
+          <router-link v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
           </router-link>
-          <div class="hover" @click="gotoCreateCommunity()" v-show="metamaskConnected">
+          <div class="hover" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
           </div>
-          <router-link to="/profile" v-show="metamaskConnected">
+          <router-link to="/profile" v-show="metamaskConnected && account">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
                  src="~@/static/images/avatars/default.png" alt="">
@@ -116,7 +116,7 @@
 <script>
 import { LOCALE_KEY } from '@/config'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { setupNetwork, chainChanged, lockStatusChanged } from '@/utils/web3/web3'
+import { setupNetwork, chainChanged, lockStatusChanged, checkNetwork } from '@/utils/web3/web3'
 import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getMyCommunityInfo, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
@@ -124,7 +124,7 @@ import { updateAllTokensFromBackend } from '@/utils/web3/asset'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
-import {ethers} from 'ethers'
+import { ethers } from 'ethers'
 
 export default {
   computed: {
@@ -216,7 +216,8 @@ export default {
   },
   async created () {
     try {
-      setupNetwork()
+      // setupNetwork()
+      await checkNetwork()
       chainChanged(() => {
         this.$router.go(0);
       })

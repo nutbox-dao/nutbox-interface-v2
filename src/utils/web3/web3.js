@@ -32,7 +32,6 @@ export const setupNetwork = async () => {
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
-    console.log(4256, error);
     try{
       await eth.request({
         method: 'wallet_addEthereumChain',
@@ -42,13 +41,37 @@ export const setupNetwork = async () => {
           rpcUrls:[RPC_NODE]
         }],
       })
+      store.commit('saveMetamaskConnected', true)
+      store.commit('web3/saveChainId', chainId)
+      return true
     }catch(error){
       console.log(43256, error);
-      store.commit('web3/saveChainId', chainId)
+      store.commit('web3/saveChainId', 0)
       store.commit('web3/saveAccount', null)
       store.commit('saveMetamaskConnected', false)
       return false
     }
+  }
+}
+
+export const checkNetwork = async () => {
+  const eth = await getEthWeb()
+  const chainId = parseInt(BSC_CHAIN_ID)
+  if (!eth) {
+    store.commit('web3/saveAccount', null)
+    store.commit('saveMetamaskConnected', false)
+  }
+  while(!eth.networkVersion) {
+    await sleep(0.3)
+  }
+  if (parseInt(eth.networkVersion) == chainId) {
+    store.commit('web3/saveChainId', chainId)
+    store.commit('saveMetamaskConnected', true)
+    console.log(44, store.state.web3.chainId);
+  }else {
+    store.commit('web3/saveChainId', parseInt(eth.networkVersion))
+    store.commit('web3/saveAccount', null)
+    store.commit('saveMetamaskConnected', false)
   }
 }
 
@@ -129,6 +152,7 @@ export const lockStatusChanged = async (refresh) => {
     await sleep(3)
     if (await isUnlocked()){
     }else{
+      store.commit('saveMetamaskConnected', false)
       if(!store.state.web3.account) continue;
       store.commit('web3/saveAccount', null)
       refresh()

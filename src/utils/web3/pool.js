@@ -399,17 +399,17 @@ export const getBindSteemAccount = async (pool) => {
  */
 export const updatePoolsByPolling = (pools) => {
   const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
-    store.commit('pool/saveUserStaked', res)
+    store.commit('pool/saveUserStaked', res || {})
   })
   const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 3, res => {
-    store.commit('pool/saveTotalStaked', res)
+    store.commit('pool/saveTotalStaked', res || {})
   })
   const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
-    store.commit('pool/saveUserReward', res)
+    store.commit('pool/saveUserReward', res || {})
   })
   store.commit('pool/saveLoadingApprovements', true)
   const approvmentRolling = rollingFunction(getApprovements, pools, 3, res => {
-    store.commit('pool/saveApprovements', res)
+    store.commit('pool/saveApprovements', res || {})
   })
   stakingRolling.start();
   totalStakingRolling.start();
@@ -426,6 +426,10 @@ export const getUserStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       const account = await getAccounts();
+      if (!account) {
+        resolve();
+        return;
+      }
       const result = await aggregate(pools.map(p => {
         return {
           target: p.id,
@@ -479,6 +483,10 @@ export const getPendingRewards = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
       const account = await getAccounts();
+      if (!account) {
+        resolve()
+        return
+      }
       const result = await aggregate(pools.map(p => ({
           target: p.community.id,
           call: [
@@ -507,6 +515,10 @@ export const getApprovements = async (pools) => {
     try {
       pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
       const account = await getAccounts();
+      if (!account) {
+        resolve();
+        return
+      }
       let calls = pools.map(pool => ({
         target: pool.asset,
         call: [
@@ -541,6 +553,10 @@ export const monitorUserBalances = async () => {
       let watcher = watchers['userBalances']
       watcher && watcher.stop()
       const account = await getAccounts();
+      if (!account) {
+        resolve()
+        return;
+      }
       watcher = createWatcher(allTokens.map(token => ({
         target: token.address,
         call:[
