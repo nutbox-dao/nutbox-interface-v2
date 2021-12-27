@@ -280,7 +280,6 @@ module.exports = {
       "Steem and Tron address mismatch，Please confirm whether the wallet account is switched",
     delegateerror: "Delegation Error！",
     tryrefreshpage: "Error，please refresh page and try again！",
-    steemloginerr: "Steem login failed!",
     needkeychainandtronlink: "Need to install Steem Keychain and TronLink！",
     needkeychain: "Please install Steem Keychain",
     needtronlink: "Please install TronLink",

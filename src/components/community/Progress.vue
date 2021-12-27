@@ -54,7 +54,6 @@ export default {
         return
       }
       let block = this.blockNum
-      block = 15328970
       let index = 0
       for (let i = 0; i < this.progressData.length; i++) {
         const p = this.progressData[i]
@@ -65,9 +64,7 @@ export default {
       }
       const totalField = this.progressData.length
       let position = index / parseFloat(totalField)
-      console.log(1, position, block, this.progressData[index]);
       position = position + parseFloat(block - this.progressData[index].startHeight) / parseFloat(this.progressData[index].stopHeight - this.progressData[index].startHeight) / totalField
-      console.log(2, position);
       return position
     }
   },
@@ -148,6 +145,7 @@ export default {
   top: 1.2rem;
   font-size: .6rem;
   line-height: .6rem;
+  transform: translateX(-50%);
   &::before {
     display: block;
     content: '';

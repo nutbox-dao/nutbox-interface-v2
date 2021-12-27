@@ -116,6 +116,7 @@ export default {
             }
             that.$emit('hideMask')
           } else {
+            console.log('steem login fail', res);
             if (res.error === 'user_cancel') {
               that.tipTitle = that.$t('error.error')
               that.tipMessage = that.$t('error.unlockKeychain')
