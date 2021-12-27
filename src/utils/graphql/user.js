@@ -91,12 +91,12 @@ export async function getMyJoinedCommunity() {
     return {}
 }
 
-// fetch first 100 history of user
-export async function getNewUserStakingHistory(account) {
+// fetch first 500 history of user in specify community
+export async function getNewUserStakingHistory(account, community) {
     const query = gql`
-        query getHistory($id: String!) {
+        query getHistory($id: String!, $community: String!) {
             user(id: $id) {
-                operationHistory(orderBy: timestamp, orderDirection: desc, first: 500) {
+                operationHistory(where:{community: $community},orderBy: timestamp, orderDirection: desc, first: 500) {
                     type 
                     user
                     community{
@@ -117,7 +117,7 @@ export async function getNewUserStakingHistory(account) {
         }
     `
     try{
-        const user = await client.request(query, {id: account.toLowerCase()});
+        const user = await client.request(query, {id: account.toLowerCase(), community: community.toLowerCase()});
         if (user && user.user && user.user.operationHistory) {
             return user.user.operationHistory
         }

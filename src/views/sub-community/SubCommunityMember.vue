@@ -81,7 +81,7 @@
               </div>
             </div>
           </div>
-          <div class="mt-2">{{ user ? user.operationCount : '' }} Activities</div>
+          <div class="mt-2">{{ activitiesList ? activitiesList.length : '' }} Activities</div>
           <div class="flex-fill overflow-auto">
             <div class="c-loading" v-if="activitiesLoading"></div>
             <transition-group v-show="!activitiesLoading" name="list-complete">
@@ -194,7 +194,7 @@ export default {
       try{
         if (!this.user) return [];
         this.activitiesLoading = true
-        const res = await getNewUserStakingHistory(this.user.id)
+        const res = await getNewUserStakingHistory(this.user.id, this.communityId)
         return res
       } catch (e){
 
