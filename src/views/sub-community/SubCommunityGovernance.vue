@@ -21,7 +21,7 @@
         </div>
         <div class="c-btn-group">
           <button class="primary-btn d-flex align-items-center"
-                  @click="$router.push(`/nps/proposal-create?id=${id}`)">
+                  @click="$router.push(`/sub-community/governance/create?id=${id}`)">
             <i class="add-icon"></i>
             <span>{{ $t('nps.createProposal') }}</span>
           </button>
@@ -103,6 +103,9 @@ export default {
       tabOptions: ['all', 'rolling', 'pass', 'unpass', 'mine'],
       activeTab: 0,
       loading: false,
+      testData: {
+        id: 1
+      }
     }
   },
   async mounted () {
@@ -131,62 +134,6 @@ export default {
     background-size: cover;
     background-position: center;
     background-blend-mode: color;
-  }
-  .nps-card {
-    height: 108px;
-    background: white;
-    padding: 18px;
-    margin-bottom: 20px;
-    box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
-    border-radius: 28px;
-    border: 1px solid rgba(227, 229, 232, 0.5);
-  }
-  .proposal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 72px;
-    p,
-    a {
-      margin: 0 10px;
-      color: var(--primary-text);
-      font-size: 16px;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      max-height: 60px;
-      font-weight: 600;
-      line-height: 20px;
-    }
-    a:hover {
-      color: var(--link);
-    }
-
-    .pass {
-      background: rgba(80, 191, 0, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(80, 191, 0, 0.3);
-      color: var(--success);
-    }
-    .pending {
-      background: rgba(255, 219, 38, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 219, 38, 0.3);
-      color: var(--warning);
-    }
-    .unpass {
-      background: rgba(255, 91, 77, 0.051);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 91, 77, 0.3);
-      color: var(--error);
-    }
-    .rolling {
-      background: #408fff0d;
-      border-radius: 8px;
-      border: 1px solid #408fff4d;
-      color: var(--link);
-    }
   }
 }
 @media (max-width: 560px) {

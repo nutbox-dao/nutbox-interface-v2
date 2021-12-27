@@ -11,6 +11,8 @@ import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
+import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
+import SubGovernanceDetail from '@/views/sub-community/SubGovernanceDetail'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
@@ -71,6 +73,14 @@ const routes = [
       {
         path: 'governance',
         component: SubCommunityGovernance
+      },
+      {
+        path: 'governance/create',
+        component: SubGovernanceCreate
+      },
+      {
+        path: 'governance/detail',
+        component: SubGovernanceDetail
       }
     ]
   },

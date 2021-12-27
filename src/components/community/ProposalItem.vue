@@ -1,41 +1,23 @@
 <template>
-  <div class="nps">
-    <div class="nps-card">
-      <div class="proposal">
-        <div class="p-content d-flex w-100">
-          <p
-            style="
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            border: 1px solid var(--primary-custom);
-            font-size: 14px;
-            line-height: 32px;
-          "
-          >
-            {{ index + 1 }}
-          </p>
-
-          <span
-            @click="
-            $router.push(`${url}/nps/proposal?proposalId=${proposalItem.id}`)
-          "
-            style="
-            flex: 1;
-            text-align: left;
-            font-weight: 500;
-            border-radius: 8px;
-          "
-          >
-          {{ proposalItem.title }}
-        </span>
-        </div>
-        <div class="d-flex align-items-center justify-content-end w-100">
-          <div class="w-20">
-            {{ $t("nps.proposalEnd") + ":" + endTime }}
+  <div class="nps-card">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="p-content d-flex align-items-center">
+          <span class="number-circle">{{index + 1}}</span>
+          <div class="content-info mx-3" @click="$router.push(`${url}/nps/proposal?proposalId=${proposalItem.id}`)">
+            {{ proposalItem.title }}
           </div>
-          <div class="flag"
-             :class="
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex justify-content-end">
+          <div class="item mx-3 d-flex flex-column justify-content-between">
+            <div style="color: #50BF00; white-space: nowrap">Agree: 123123</div>
+            <div style="color: #FF5B4D; white-space: nowrap">Disagree: 123123</div>
+          </div>
+          <div class="d-flex flex-column align-items-end">
+            <div class="px-1"
+                 :class="
              proposalItem.status == 0
               ? 'proposal-pending'
               : proposalItem.status == 1
@@ -43,117 +25,113 @@
               : proposalItem.proposalResult === 1
               ? 'proposal-pass'
               : 'proposal-unpass'">
-          {{
-            proposalItem.status == 0
-              ? $t("nps.propsalVoteStatusWaitStart")
-              : proposalItem.status == 1
-              ? $t("nps.propsalVoteStatusDoing")
-              : proposalItem.proposalResult === 1
-              ? $t("nps.pass")
-              : $t("nps.unpass")
-          }}
-        </div>
+              {{
+                proposalItem.status == 0
+                  ? $t("nps.propsalVoteStatusWaitStart")
+                  : proposalItem.status == 1
+                    ? $t("nps.propsalVoteStatusDoing")
+                    : proposalItem.proposalResult === 1
+                      ? $t("nps.pass")
+                      : $t("nps.unpass")
+              }}
+            </div>
+            <div class="w-auto mt-1 text-grey-7" style="white-space: nowrap">
+              {{ $t("nps.proposalEnd") + ":" + endTime }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import { formatDate } from "@/utils/commen/util";
+import { formatDate } from '@/utils/commen/util'
 export default {
-  name: "ProposalItem",
-  data() {
-    return { url: "", voteTotalScore: 0 };
+  name: 'ProposalItem',
+  data () {
+    return { url: '', voteTotalScore: 0 }
   },
-  props: ["proposalItem", "index"],
+  props: ['proposalItem', 'index'],
   computed: {
-    endTime() {
-      var newDate = formatDate(this.proposalItem.end);
-      return newDate;
+    endTime () {
+      var newDate = formatDate(this.proposalItem.end)
+      return newDate
     },
 
-    voteAgreeTotalScoreRate() {
+    voteAgreeTotalScoreRate () {
       return this.voteTotalScore == 0
         ? 0
-        : (this.proposalItem.voteAgreeTotalScore * 100) / this.voteTotalScore;
+        : (this.proposalItem.voteAgreeTotalScore * 100) / this.voteTotalScore
     },
-    voteDisagreeTotalScoreRate() {
+    voteDisagreeTotalScoreRate () {
       return this.voteTotalScore == 0
         ? 0
         : (this.proposalItem.voteDisagreeTotalScore * 100) /
-            this.voteTotalScore;
-    },
+            this.voteTotalScore
+    }
   },
-  mounted() {
+  mounted () {
     this.url =
       this.$router.currentRoute.params.key || this.$route.query.id
-        ? "/specify"
-        : "";
+        ? '/specify'
+        : ''
     this.voteTotalScore =
       this.proposalItem.voteAgreeTotalScore +
-      this.proposalItem.voteDisagreeTotalScore;
-  },
-};
+      this.proposalItem.voteDisagreeTotalScore
+  }
+}
 </script>
 
 <style  lang="scss" scoped>
-/* .proposal-item {
-  padding: 20px;
-  background-color: white;
-  border-radius: 30px;
-  font: bold;
-  font-size: 18px;
+.nps-card {
+  @include card(1.2rem, var(--card-bg-primary), hidden, fit-conent);
+  margin-bottom: 1rem;
+  .number-circle {
+    border: 1px solid var(--primary-custom);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+    min-width: 3rem;
+    min-height: 3rem;
+    max-width: 3rem;
+    max-height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .content-info {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.pass {
+  background: rgba(80, 191, 0, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(80, 191, 0, 0.3);
+  color: var(--success);
+}
+.pending {
+  background: rgba(255, 219, 38, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 219, 38, 0.3);
+  color: var(--warning);
+}
+.unpass {
+  background: rgba(255, 91, 77, 0.051);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 91, 77, 0.3);
+  color: var(--error);
+}
+.rolling {
+  background: #408fff0d;
+  border-radius: 8px;
+  border: 1px solid #408fff4d;
+  color: var(--link);
 }
 
-div button {
-  float: right;
-}
-span {
-  margin-right: 10px;
-}
- */
-.nps {
-  .nps-card {
-    @include card();
-    margin-bottom: 1rem;
-    position: relative;
-  }
-  .proposal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 72px;
-    .p-content {
-      align-items:center;
-    }
-    p,
-    a {
-      margin: 0 10px;
-      color: var(--primary-text);
-      font-size: 16px;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      max-height: 60px;
-      font-weight: 600;
-      line-height: 20px;
-    }
-    a:hover {
-      color: var(--link);
-    }
-    .flag {
-      padding: .4rem .6rem;
-      font-size: .7rem;
-      line-height: .8rem;
-      margin-left: 1rem;
-    }
-  }
-}
-.w-25 {
-  width: 20% !important;
-}
 @media (max-width: 960px) {
   .nps {
     .nps-card {
