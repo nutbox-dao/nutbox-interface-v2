@@ -46,7 +46,7 @@
                    class="avatar rounded-circle"
                    :src="getAvatar(row.item.address)" alt="">
               <img v-else class="avatar rounded-circle"
-              src="~@/static/images/avatar-default.svg" alt="">
+              src="~@/static/images/avatars/default.png" alt="">
             </template>
           </b-table>
         </div>
@@ -62,8 +62,8 @@
             <div class="avatar-bg">
               <img v-if="getAvatar(user && user.address)" class="user-avatar rounded-circle" style="height:4.8rem;width:4.8rem"
                    :src="getAvatar(user && user.address)" alt="">
-              <img v-else class="user-avatar rounded-circle"
-                   src="~@/static/images/avatar-default.svg" alt="">
+              <img v-else class="user-avatar rounded-circle" style="height:4.8rem;width:4.8rem"
+                   src="~@/static/images/avatars/default.png" alt="">
             </div>
             <div class="my-1 font20 font-bold">{{ getName(user ? user.address : null) }}</div>
             <div class="mb-3 font12 text-grey-7 d-flex align-items-center justify-content-center">

@@ -8,7 +8,7 @@
             <img v-if="user.avatar" @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
             <img v-else @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
-                 src="~@/static/images/avatar-default.svg" alt="">
+                 src="~@/static/images/avatars/default.png" alt="">
             <div class="d-flex align-items-center mt-2">
               <b-input class="text-white name-input text-center"
                        :class="isEditName?'edit':''"

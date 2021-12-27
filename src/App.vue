@@ -40,7 +40,7 @@
           <router-link to="/profile" v-show="metamaskConnected">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
-                 src="~@/static/images/avatar-default.svg" alt="">
+                 src="~@/static/images/avatars/default.png" alt="">
           </router-link>
           <b-dropdown variant="text" dropup
                       class="side-menu-dropdown"
@@ -116,7 +116,7 @@
 <script>
 import { LOCALE_KEY } from '@/config'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { setupNetwork, chainChanged } from '@/utils/web3/web3'
+import { setupNetwork, chainChanged, lockStatusChanged } from '@/utils/web3/web3'
 import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getMyCommunityInfo, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
@@ -135,7 +135,7 @@ export default {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapGetters('user', ['getUserByAddress']),
     address () {
-      if (this.account) {
+      if (ethers.utils.isAddress(this.account)) {
         return formatUserAddress(this.account, false)
       }
     },
@@ -146,6 +146,7 @@ export default {
       return null
     },
     avatar() {
+      if (!ethers.utils.isAddress(this.account)) return ''
       const user = this.getUserByAddress(this.account)
       if (user) {
         return user.avatar
@@ -222,20 +223,25 @@ export default {
       accountChanged(() => {
         this.$router.go(0);
       })
+      lockStatusChanged(() => {
+        this.$router.go(0);
+      })
       subBlockNum()
     } catch (e) {
-      console.log(533, e)
+      console.log('Initial network fail', e)
     }
         // bsc related
     try {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();
       updateAllUsersByPolling();
-      await getAccounts(true)
-      getMyJoinedCommunity();
-      getMyCommunityInfo().catch(e => {
-        console.log('No created token by current user');
-      });
+      const account = await getAccounts(true)
+      if (account) {
+        getMyJoinedCommunity();
+        getMyCommunityInfo().catch(e => {
+          console.log('No created token by current user');
+        });
+      }
     } catch (e) {
       console.log('Get accounts fail', e)
     }

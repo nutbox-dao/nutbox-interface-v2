@@ -295,7 +295,7 @@ export default {
     this.activePools = this.communityData.pools.filter(p => p.status === 'OPENED').map(p => ({...p, ratio: p.ratio / 100}));
     this.newName = ''
     if (this.type === 'create'){
-      this.activePools.push({name: this.newName, ratio: 100})
+      this.activePools.push({name: this.newName, ratio: 0})
     }
     this.ratios = this.activePools.map(p => p.ratio)
   },

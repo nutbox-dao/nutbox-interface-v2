@@ -7,11 +7,11 @@
 <script>
 export default {
   name: 'ToggleSwitch',
-  data () {
+  data() {
     return {
-      value: true
+      value: false
     }
-  }
+  },
 
 }
 </script>

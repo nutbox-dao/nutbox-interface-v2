@@ -40,7 +40,7 @@
           <div class="info d-flex align-items-center">
             <div :id="user.id + card.id" v-for="user of stakers" :key="user.id">
               <img class="info-icon" v-if="user.avatar && user.avatar.length > 0" :src="user.avatar">
-              <img v-else class="info-icon" src="~@/static/images/avatar-default.svg" alt="">
+              <img v-else class="info-icon" src="~@/static/images/avatars/default.png" alt="">
               <b-popover :target="user.id + card.id" triggers="hover focus" placement="top">
                 {{ user.name ? user.name : user.id }}
               </b-popover>
