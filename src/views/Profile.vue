@@ -31,7 +31,11 @@
                   <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
-                  <PoolRatio class="asset-chart" :pools-data="chartToken" :show-legend-info="false"/>
+                  <PoolRatio class="asset-chart"
+                             :pools-data="chartToken"
+                             :animation="false"
+                             :show-data-label="true"
+                             :show-legend-info="false"/>
                 </div>
               </div>
               <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingBalance"></div>
@@ -162,7 +166,7 @@ export default {
       if(!this.allTokens) return;
       let ctokens = []
       Object.keys(res).forEach(address => {
-        const token = this.allTokens.filter(t => t.address === address)
+        const token = this.allTokens.filter(t => t.address.toLowerCase() === address.toLowerCase())
         if (token && token.length > 0){
           ctokens.push({
             ...token[0],

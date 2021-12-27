@@ -55,7 +55,7 @@
             <div class="col-md-4">
               <div class="s2-card2">
                 <img src="~@/static/images/home-s3-img3.svg" alt="">
-                <div class="value font46 font-bold">{{ tokensTvl }}</div>
+                <div class="value font46 font-bold">{{ tvl | formatPrice }}</div>
                 <div class="label text-grey-7">TVL</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
@@ -87,6 +87,9 @@ import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
 import CommunityCard from '@/components/community/CommunityCard'
 import { getAllCommunities } from '@/utils/web3/community'
+import { getAllPools } from '@/utils/graphql/pool'
+import { rollingFunction, sleep } from '@/utils/helper';
+import { ethers } from 'ethers'
 
 export default {
   name: 'Home',
@@ -94,15 +97,16 @@ export default {
   data () {
     return {
       loadingAllCommunity: true,
-      loading: true
+      loading: true,
+      tvl: 0
     }
   },
   computed: {
-    ...mapState('web3', ['walnutInfo']),
+    ...mapState(['prices']),
+    ...mapState('web3', ['walnutInfo', 'allTokens']),
     ...mapState('community', ['allCommunityInfo']),
-    tokensTvl () {
-      return 0
-    },
+    ...mapState('steem', ['vestsToSteem']),
+    ...mapState('hive', ['vestsToHive']),
     recommendCommunity () {
       if (!this.allCommunityInfo) {
         this.loadingAllCommunity = false
@@ -124,11 +128,43 @@ export default {
       window.open('https://nutbox.io', '_blank')
     }
   },
-  mounted () {
+  async mounted () {
     getWalnutData().then((res) => {
       this.loading = false
     })
     getAllCommunities()
+    while(true) {
+      if(this.allTokens && this.prices) {
+        break;
+      }
+      await sleep(0.3)
+    }
+    const rolling = rollingFunction(getAllPools, null, 8, res => {
+      if (res && this.allTokens && this.prices) {
+        const steemPrice = this.prices['STEEMETH'] * this.prices['ETHUSDT']
+        const hivePrice = this.prices['HIVEUSDT']
+        let t = 0;
+        res.map(p => {
+          if(parseInt(p.chainId) === 1) {
+            const amount = p.totalAmount.toString() / 1e6 * this.vestsToSteem
+            t += amount * steemPrice
+          }else if(parseInt(p.chainId) === 2) {
+            const amount = p.totalAmount.toString() / 1e6 * this.vestsToHive
+            t += amount * hivePrice
+          }else {
+            const price = this.prices[ethers.utils.getAddress(p.asset)]
+            if (price && price > 0){
+              t += p.totalAmount.toString() / 1e18 * price;
+            }
+          }
+        })
+        this.tvl = t;
+      }
+    })
+    rolling.start();
+    this.$once('hook:beforeDestroy', () => {
+      rolling.stop();
+    })
   }
 }
 </script>

@@ -24,12 +24,12 @@
             </b-nav>
           </div>
           <div class="link-items">
-            <img class="hover" v-if="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.facebook" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.github && communityInfo.github != 'undefined'" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.document && communityInfo.document != 'undefined'" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.facebook && communityInfo.facebook != 'undefined'" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.discord && communityInfo.discord != 'undefined'" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.telegram && communityInfo.telegram != 'undefined'" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+            <img class="hover" v-if="communityInfo && communityInfo.twitter && communityInfo.twitter != 'undefined'" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
           </div>
         </div>
       </div>
@@ -209,6 +209,7 @@ export default {
   }
   .link-items {
     display: flex;
+    flex-flow: wrap;
     justify-content: center;
     img {
       margin: 0.5rem;

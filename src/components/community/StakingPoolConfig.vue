@@ -83,7 +83,7 @@
              <b-spinner small type="grow" v-show="!enableOp" />
             OK
           </button>
-          <button class="primary-btn mx-2" :disabled="!enableOp" @click="$emit('close')">
+          <button class="primary-btn primary-btn-outline mx-2" :disabled="!enableOp" @click="$emit('close')">
             <b-spinner small type="grow" v-show="!enableOp" />
             Cancel
           </button>

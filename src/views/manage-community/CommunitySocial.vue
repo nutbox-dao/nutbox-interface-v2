@@ -112,7 +112,6 @@ export default {
     return {
       showSignatureTip: false,
       uploading: false,
-      communityInfo: {},
       newBlogTag: '',
       blogTag: '',
       inputBlogTag: '',
@@ -138,6 +137,7 @@ export default {
   computed: {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
     ...mapState("steem", ['steemAccount']),
+    ...mapState('community', ['communityInfo']),
   },
   watch: {
     steemAccount(newValue, oldValue) {
@@ -151,11 +151,11 @@ export default {
       try{
         this.uploading = true
         const res = await udpateSocialInfo(this.socialForm)
-        this.$bvToast.toast(this.$t('community.updateSocialSuccess'), {
+        this.$bvToast.toast(this.$t('tip.updateSocialSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
-        this.communityInfo = await getMyCommunityInfo(true)
+        await getMyCommunityInfo(true)
         this.fixNullOfSocial()
         this.showSignatureTip = false
       }catch(e){
@@ -177,7 +177,7 @@ export default {
     }
   },
   async mounted () {
-    getMyCommunityInfo().then(res => this.communityInfo = res).catch();
+    getMyCommunityInfo().then().catch();
     this.fixNullOfSocial()
   },
 }

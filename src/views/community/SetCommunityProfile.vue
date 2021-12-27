@@ -267,13 +267,13 @@
         <div class="my-5">
           {{ $t("tip.editTip") }}
         </div>
-        <div class="flex-between-center" style="gap: 2rem">
-          <button class="primary-btn" @click="onConfirm" :disabled="uploading">
+        <div class="d-flex" style="margin: 0 -1rem">
+          <button class="primary-btn mx-3" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
             Sign and uplaod
           </button>
           <button
-            class="primary-btn primary-btn-outline"
+            class="primary-btn primary-btn-outline mx-3"
             @click="showSignatureTip = false"
             :disabled="uploading"
           >

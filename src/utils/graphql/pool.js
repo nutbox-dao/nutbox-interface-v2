@@ -42,3 +42,30 @@ export async function getPools(poolIds) {
         console.log('Get community from graph fail:', e);
     }
 }
+
+/**
+ * Get a specify community info 
+ * @param {*} community 
+ * @returns 
+ */
+ export async function getAllPools() {
+    const query = gql`
+    {
+        pools (where: {status: OPENED}) {
+            id
+            asset
+            chainId
+            totalAmount
+        }
+    }
+    `
+    try{
+        const data = await client.request(query)
+        if (data && data.pools) {
+            const pools = data.pools
+            return pools
+        }
+    }catch(e) {
+        console.log('Get community from graph fail:', e);
+    }
+}

@@ -10,14 +10,17 @@
           {{ description }}
         </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
-      <img class="rounded-circle hover"
+      <img class="rounded-circle hover avatar"
+            v-if="userAvatar && userAvatar.length > 0"
             :id="operation.tx + operation.type + operation.user"
-           style="width: 2rem; height: 2rem"
            :src="userAvatar" alt="">
+      <img v-else class="user-avatar rounded-circle avatar"
+            :id="operation.tx + operation.type + operation.user"
+              src="~@/static/images/avatar-default.svg" alt="">
       <b-popover :target="operation.tx + operation.type + operation.user"
       triggers="hover focus"
       placement="top">
-        {{ operation.user }}
+        {{ username }}
       </b-popover>
       <span :id="operation.tx + operation.type + operation.timestamp" class="hover">{{ time }}</span>
       <b-popover :target="operation.tx + operation.type + operation.timestamp"
@@ -52,6 +55,7 @@ export default {
     return {
       time: '',
       description: '',
+      username: '',
       userAvatar: ''
     }
   },
@@ -89,6 +93,7 @@ export default {
       accName = user.name;
       this.userAvatar = user.avatar
     }
+    this.username = accName
     let symbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
@@ -97,7 +102,6 @@ export default {
         const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
         symbol = token.symbol;
       }catch(e){
-        console.log(654, e);
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
@@ -108,10 +112,11 @@ export default {
         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
+          const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
@@ -159,5 +164,9 @@ export default {
   .content {
     @include text-multi-line(2);
   }
+}
+.avatar{
+  width: 2rem;
+  height: 2rem;
 }
 </style>

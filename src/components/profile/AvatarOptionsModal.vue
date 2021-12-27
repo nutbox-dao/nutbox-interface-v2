@@ -42,7 +42,12 @@ export default {
     async select(index) {
       console.log(index);
       this.selectedIndex = index;
-      const user = this.getUserByAddress(this.account)
+      let user = this.getUserByAddress(this.account)
+      if (!user){
+        user = {
+          address: this.account,
+        }
+      }
       index++;
       const avatar = 'https://cdn.wherein.mobi/walnut/avatar/default/'+ index +'.png'
       user.avatar = avatar

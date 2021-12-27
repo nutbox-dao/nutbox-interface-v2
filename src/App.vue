@@ -16,9 +16,15 @@
                  :class="(inSubCommunityView && (community.id === communityId.toLowerCase())) ? 'active' : ''"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id">
               <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)"
+                  :id="community.id + 'icon'"
                    v-show="getCommunityInfoById(community.id)"
                    :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
                   alt="">
+                <b-popover :target="community.id + 'icon'"
+                  triggers="hover focus"
+                  placement="top">
+                  {{ getCommunityInfoById(community.id) && getCommunityInfoById(community.id).name }}
+                </b-popover>
             </div>
           </div>
         </div>
@@ -355,7 +361,6 @@ body {
 .dropdown-menu-card {
   @include card(1.2rem 0, #2C2D2E);
   border: 1px solid #747576;
-  min-height: 19rem;
   i {
     @include icon(1.6rem, 1.6rem);
     margin-right: .4rem;
