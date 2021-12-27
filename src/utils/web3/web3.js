@@ -43,9 +43,6 @@ export const setupNetwork = async () => {
     }catch(error){
       store.commit('web3/saveChainId', chainId)
       store.commit('web3/saveAccount', null)
-      store.commit('web3/saveStakingFactoryId', null)
-      store.commit('web3/saveMyPools', null)
-      store.commit('web3/saveAllAssetsOfUser', null)
       store.commit('saveMetamaskConnected', false)
       return false
     }
@@ -88,7 +85,6 @@ export const connectMetamask = async () => {
  * User changed chain
  */
 export const chainChanged = async (refresh) => {
-  
   const metamask = await getEthWeb()
   metamask.on('chainChanged', async(chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
@@ -129,8 +125,8 @@ export const lockStatusChanged = async (refresh) => {
   while(true) {
     await sleep(3)
     if (await isUnlocked()){
-
     }else{
+      if(!store.state.web3.account) continue;
       store.commit('web3/saveAccount', null)
       refresh()
       break;

@@ -13,6 +13,12 @@ import { signMessage } from './utils'
  * @returns all accounts
  */
 export const getAccounts = async (update=false) => {
+    const metamask = await getEthWeb()
+    const unlock = await metamask._metamask.isUnlocked()
+    if (!unlock) {
+        store.commit('web3/saveAccount', null);
+        return
+    }
     if (store.state.web3.account && !update) {
         return store.state.web3.account;
     }
@@ -21,12 +27,12 @@ export const getAccounts = async (update=false) => {
         store.commit('web3/saveAccount', null)
         return;
     }
-    const metamask = await getEthWeb()
     const accounts = await metamask.request({ method: 'eth_requestAccounts' })
     let account = accounts[0]
     account = ethers.utils.getAddress(account)
     store.commit('web3/saveAccount', account)
     store.commit('web3/saveAllAccounts', accounts)
+    console.log(accounts[0]);
     return accounts[0]
 }
 
