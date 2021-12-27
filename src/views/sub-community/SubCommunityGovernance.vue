@@ -48,9 +48,8 @@
 import ProposalItem from '@/components/community/ProposalItem.vue'
 import { handleApiErrCode } from '@/utils/helper'
 import { getAllProposal } from '@/utils/web3/proposal'
-import { getMyCommunityInfo } from '@/utils/web3/community'
 import Markdown from '@/components/common/Markdown'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'Community',
@@ -63,6 +62,8 @@ export default {
       proposals: state => state.currentCommunity.proposals,
       account: state => state.web3.account
     }),
+    ...mapState('currentCommunity', ['communityId']),
+    ...mapGetters('community', ['getCommunityInfoById']),
     // status: 0 unstart,1 voting, 2 end
     // proposalresult: 0 unstart, 1 pass, 2 unpass.
     proposalitems () {
@@ -84,6 +85,17 @@ export default {
           (t) => t.userId == this.account
         )
       }
+    },
+    communityInfo() {
+      return this.getCommunityInfoById(this.communityId)
+    },
+    remark() {
+      if (!this.communityInfo) return;
+      return this.communityInfo.remark
+    },
+    poster() {
+      if (!this.communityInfo) return;
+      return this.communityInfo.npsPoster
     }
   },
   data () {
@@ -91,17 +103,10 @@ export default {
       tabOptions: ['all', 'rolling', 'pass', 'unpass', 'mine'],
       activeTab: 0,
       loading: false,
-      remark: '',
-      poster: ''
     }
   },
   async mounted () {
     this.loading = true
-    const communityInfo = await getMyCommunityInfo()
-    this.remark = communityInfo.remark
-    this.poster = communityInfo.npsPoster
-
-    this.communityId = this.id
     try {
       getAllProposal(this.communityId)
     } catch (e) {

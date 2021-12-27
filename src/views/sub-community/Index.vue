@@ -72,7 +72,7 @@
             </template>
           </b-dropdown>
         </div>
-        <router-view></router-view>
+        <router-view :key="communityId"></router-view>
       </div>
     </div>
   </div>

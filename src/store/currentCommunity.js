@@ -57,8 +57,8 @@ export default {
       },
       
       clearData (state) {
-        state.communityId = null;
-        Cookie.set('currentCommunityId', null, '30d')
+        // state.communityId = null;
+        // Cookie.set('currentCommunityId', null, '30d')
         state.communityInfo = null;
         state.operationHistory = null;
         state.feeRatio = 0;

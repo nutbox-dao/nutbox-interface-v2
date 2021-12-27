@@ -2,13 +2,13 @@
   <div class="activity-card">
     <div class="title">{{ operation.type }}</div>
     <div class="content hover" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
-    <b-popover
+    <!-- <b-popover
           :target="operation.tx + operation.type"
           triggers="hover focus"
           placement="top"
         >
           {{ description }}
-        </b-popover>
+        </b-popover> -->
     <div class="d-flex justify-content-between align-items-center mt-2">
       <img class="rounded-circle hover avatar"
             v-if="userAvatar && userAvatar.length > 0"
