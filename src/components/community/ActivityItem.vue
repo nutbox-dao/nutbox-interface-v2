@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { parseTimestamp } from '@/utils/helper'
+import { parseTimestamp, sleep } from '@/utils/helper'
 import { ethers } from 'ethers'
 import { mapState, mapGetters } from 'vuex'
 import { contractAddress } from '@/utils/web3/contract'
@@ -79,7 +79,7 @@ export default {
       }
     },
   },
-  mounted () {
+  async mounted () {
     // timestamp
     this.time = parseTimestamp(this.operation.timestamp)
     const interval = setInterval(() => {
@@ -96,6 +96,7 @@ export default {
     }
     this.username = accName
     let symbol;
+    let ctokenSymbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
       try{
@@ -106,7 +107,6 @@ export default {
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
-    const ctokenSymbol = this.cToken.symbol;
     const amount = (this.operation.amount?.toString() / 1e18).toFixed(2)
     // distribution
     switch (this.operation.type) {
@@ -135,9 +135,17 @@ export default {
         }
         break;
       case "HARVEST":
-       this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
+        while(!this.cToken) {
+          await sleep(0.2)
+        }
+        ctokenSymbol = this.cToken.symbol;
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
+        while(!this.cToken) {
+          await sleep(0.2)
+        }
+        ctokenSymbol = this.cToken.symbol;
         this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
         break;
       case "ADMINCREATE":
