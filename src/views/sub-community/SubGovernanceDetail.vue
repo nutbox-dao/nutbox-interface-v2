@@ -120,7 +120,7 @@
             }}
           </div>
           <div>
-            {{ $t("nps.propsalVoteRight") }}:{{ totalScore | amountForm
+            {{ $t("nps.propsalVoteRight") }}:{{ balacne | amountForm
             }}{{ symbol }}
           </div>
         </b-card>
@@ -146,10 +146,12 @@ import { getProposal } from "@/utils/web3/proposal";
 import { completeVote, getAllVote } from "@/utils/web3/vote";
 import { formatDate as fd } from "@/utils/commen/util";
 import Markdown from "@/components/common/Markdown";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import { getERC20Balance } from '@/utils/web3/asset'
 import {
   getScores,
 } from "@/utils/web3/communityProposalConfig";
+
 export default {
   name: "Proposal",
   components: {
@@ -161,6 +163,7 @@ export default {
       modelVoteOpen: false,
       totalScore: 0,
       type: "",
+      balacne: 0,
       proposal: {
         id: "",
         ipfs: "",
@@ -201,6 +204,7 @@ export default {
   computed: {
     ...mapState('web3', ['account']),
     ...mapState('currentCommunity', ['communityId', 'cToken']),
+    ...mapGetters('community', ['getCommunityInfoById']),
     voteAgreeTotalScoreRate() {
       return this.voteTotalScore == 0
         ? 0
@@ -229,14 +233,19 @@ export default {
     onVote(type) {
       this.type = type;
       this.modelVoteOpen = true;
+      getERC20Balance(this.cToken.address).then(res => {
+        this.balacne = res.toString() / 1e18
+      })
     },
     async ConfirmVote() {
       try {
         this.voteing = true;
+        const b = await getERC20Balance(this.cToken.address)
+        const score = b.toString() / 1e18;
         this.vote.communityId = this.communityId;
         this.vote.proposalId = this.proposal.id;
         this.vote.voteType = this.type == "agree" ? 1 : 0;
-        this.vote.voteScore = this.totalScore;
+        this.vote.voteScore = score;
         const result = await completeVote(this.vote);
         this.isVoted = true;
         if (result.code == 0) {
@@ -257,6 +266,7 @@ export default {
     },
     async loadAllVote() {
       this.voteItems = await getAllVote(this.proposal.id);
+      console.log(235, this.voteItems);
 
       if (this.voteItems) {
         var list = this.voteItems.filter((t) => t.userId == this.currentUserId);
@@ -333,7 +343,7 @@ export default {
             created: item.created,
             userId: item.userId,
             voteScore: item.voteScore,
-            agree: item.voteType === 1
+            voteType: item.voteType
           })),
           {header},
           'Proposal-result-of-' + this.proposal.title + '.csv'
@@ -349,14 +359,12 @@ export default {
   },
   async mounted() {
     this.id = this.$route.params.id
-      console.log(444, this.id);
 
     try {
       this.loading = true;
       this.currentUserId = this.account
 
       var proposalList = await getProposal(this.id);
-      console.log(555, proposalList);
 
       this.proposal = proposalList[0];
 
