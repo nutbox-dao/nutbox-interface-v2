@@ -1,19 +1,22 @@
 <template>
   <div class="nps-card">
     <div class="row">
-      <div class="col-md-6">
-        <div class="p-content d-flex align-items-center">
+      <div class="col-md-8">
+        <div class="p-content d-flex align-items-center hover">
           <span class="number-circle">{{index + 1}}</span>
-          <div class="content-info mx-3" @click="$router.push(`${url}/nps/proposal?proposalId=${proposalItem.id}`)">
+          <div class="content-info mx-3" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
+            {{ getName }}
+          </div>
+          <div class="content-info mx-3" style="overflow: hidden" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
             {{ proposalItem.title }}
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="d-flex justify-content-end">
-          <div class="item mx-3 d-flex flex-column justify-content-between">
-            <div style="color: #50BF00; white-space: nowrap">Agree: 123123</div>
-            <div style="color: #FF5B4D; white-space: nowrap">Disagree: 123123</div>
+          <div class="item mx-3 font18 d-flex flex-column justify-content-between">
+            <div style="color: #50BF00; white-space: nowrap">Agree: {{proposalItem.voteAgreeTotalScore || 0}}</div>
+            <div style="color: #FF5B4D; white-space: nowrap">Disagree: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
           </div>
           <div class="d-flex flex-column align-items-end">
             <div class="px-1"
@@ -35,7 +38,7 @@
                       : $t("nps.unpass")
               }}
             </div>
-            <div class="w-auto mt-1 text-grey-7" style="white-space: nowrap">
+            <div class="w-auto mt-1 text-grey-7 font16" style="white-space: nowrap">
               {{ $t("nps.proposalEnd") + ":" + endTime }}
             </div>
           </div>
@@ -48,13 +51,17 @@
 
 <script>
 import { formatDate } from '@/utils/commen/util'
+import { ethers } from 'ethers'
+import { mapState } from 'vuex'
+
 export default {
   name: 'ProposalItem',
   data () {
-    return { url: '', voteTotalScore: 0 }
+    return { voteTotalScore: 0 }
   },
   props: ['proposalItem', 'index'],
   computed: {
+    ...mapState('user', ['users']),
     endTime () {
       var newDate = formatDate(this.proposalItem.end)
       return newDate
@@ -70,13 +77,20 @@ export default {
         ? 0
         : (this.proposalItem.voteDisagreeTotalScore * 100) /
             this.voteTotalScore
-    }
+    },
+    getName() {
+      let address = this.proposalItem.userId;
+      if (!address) return '--'
+      address = ethers.utils.getAddress(address)
+      const u = this.users[address]
+      if (u && u.name) {
+        return u.name;
+      }
+      return address.substring(0,6) + '...'
+    },
   },
   mounted () {
-    this.url =
-      this.$router.currentRoute.params.key || this.$route.query.id
-        ? '/specify'
-        : ''
+    console.log(444, this.proposalItem);
     this.voteTotalScore =
       this.proposalItem.voteAgreeTotalScore +
       this.proposalItem.voteDisagreeTotalScore

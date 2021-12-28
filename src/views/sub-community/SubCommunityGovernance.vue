@@ -21,7 +21,7 @@
         </div>
         <div class="c-btn-group">
           <button class="primary-btn d-flex align-items-center"
-                  @click="$router.push(`/sub-community/governance/create?id=${id}`)">
+                  @click="$router.push(`/sub-community/governance/create`)">
             <i class="add-icon"></i>
             <span>{{ $t('nps.createProposal') }}</span>
           </button>

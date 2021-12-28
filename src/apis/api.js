@@ -66,9 +66,6 @@ export const getSomeUsers = async (ids) => post(BACKEND_API_URL + "/user/getsome
 export const getScores = async (params) =>
   post(BACKEND_API_URL + "/scores/get", { params });
 
-export const getMyCommunityProposalConfigInfo = async (communityId) =>
-  get(BACKEND_API_URL + "/communityProposalConfig/get", { id: communityId });
-
 export const insertCommunityProposalConfig = async (params) =>
   post(BACKEND_API_URL + "/communityProposalConfig/insert", params);
 

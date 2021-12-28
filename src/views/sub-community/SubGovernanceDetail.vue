@@ -121,7 +121,7 @@
           </div>
           <div>
             {{ $t("nps.propsalVoteRight") }}:{{ totalScore | amountForm
-            }}{{ form.symbol }}
+            }}{{ symbol }}
           </div>
         </b-card>
         <button
@@ -149,8 +149,6 @@ import Markdown from "@/components/common/Markdown";
 import { mapState } from "vuex";
 import {
   getScores,
-  getScore,
-  getMyCommunityProposalConfigInfo,
 } from "@/utils/web3/communityProposalConfig";
 export default {
   name: "Proposal",
@@ -180,20 +178,6 @@ export default {
         end_block: 0,
         passthreshold: 0,
       },
-      form: {
-        communityId: "",
-        network: "",
-        networkName: "",
-        symbol: "",
-        skin: "",
-        admins: "",
-        members: "",
-        strategies: "",
-        threshold: 0,
-        validation: "basic",
-        onlyMembers: 0,
-        userId: "",
-      },
       vote: {
         id: "",
         ipfs: "",
@@ -216,6 +200,7 @@ export default {
   },
   computed: {
     ...mapState('web3', ['account']),
+    ...mapState('currentCommunity', ['communityId', 'cToken']),
     voteAgreeTotalScoreRate() {
       return this.voteTotalScore == 0
         ? 0
@@ -226,6 +211,10 @@ export default {
         ? 0
         : (this.voteDisagreeTotalScore * 100) / this.voteTotalScore;
     },
+    symbol() {
+      if(!this.cToken) return ''
+      return this.cToken.symbol;
+    }
   },
   methods: {
     cutString(srcValue, length) {
@@ -244,7 +233,7 @@ export default {
     async ConfirmVote() {
       try {
         this.voteing = true;
-        this.vote.communityId = this.form.communityId;
+        this.vote.communityId = this.communityId;
         this.vote.proposalId = this.proposal.id;
         this.vote.voteType = this.type == "agree" ? 1 : 0;
         this.vote.voteScore = this.totalScore;
@@ -359,25 +348,19 @@ export default {
     }
   },
   async mounted() {
-    this.id = this.$router.currentRoute.params.key
-      ? this.$router.currentRoute.params.key
-      : this.$route.query.proposalId;
+    this.id = this.$route.params.id
+      console.log(444, this.id);
 
     try {
       this.loading = true;
       this.currentUserId = this.account
 
       var proposalList = await getProposal(this.id);
+      console.log(555, proposalList);
 
       this.proposal = proposalList[0];
 
-      const communityProposalConfigInfo =
-        await getMyCommunityProposalConfigInfo(this.proposal.communityId);
-
       await this.loadAllVote();
-      this.form = communityProposalConfigInfo;
-
-      this.strategyControlItems = JSON.parse(this.form.strategies);
       this.loading = false;
     } catch (e) {
       handleApiErrCode(e, (info, params) => {

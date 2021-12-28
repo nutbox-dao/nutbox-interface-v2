@@ -79,7 +79,7 @@ const routes = [
         component: SubGovernanceCreate
       },
       {
-        path: 'governance/detail',
+        path: 'governance/detail/:id',
         component: SubGovernanceDetail
       }
     ]

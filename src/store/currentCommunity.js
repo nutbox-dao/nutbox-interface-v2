@@ -67,6 +67,7 @@ export default {
         state.allUsers = null;
         state.operationCount = 0;
         state.specifyDistributionEras = [];
+        state.proposals = null;
       }
     }
   }

@@ -108,7 +108,7 @@
             :disabled="commiting"
           >
             <b-spinner small type="grow" v-show="commiting" />
-            {{ $t("community.commit") }}
+            {{ $t("operation.commit") }}
           </button>
         </b-form-group>
       </div>
@@ -118,14 +118,9 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { handleApiErrCode, blockTimeWithoutUTC } from '@/utils/helper'
+import { handleApiErrCode, blockTimeWithoutUTC, sleep } from '@/utils/helper'
 import Markdown from '@/components/common/Markdown'
-import { MAIN_COMMUNITY_ID } from '@/config'
-import {
-  getScore,
-  getMyCommunityProposalConfigInfo
-} from '@/utils/web3/communityProposalConfig'
-
+import { getERC20Balance } from '@/utils/web3/asset'
 import { completeProposal } from '@/utils/web3/proposal'
 
 export default {
@@ -137,7 +132,6 @@ export default {
     return {
       url: '',
       commiting: false,
-      communityId: null,
       activeTab: 0,
       proposal: {
         title: '',
@@ -148,8 +142,8 @@ export default {
         start: '',
         end: '',
         body: '',
-        first_block: 0,
-        end_block: 0
+        first_block: '',
+        end_block:''
       },
       noCommunity: false,
       isValid: false,
@@ -173,12 +167,9 @@ export default {
     ...mapState({
       blockNum: (state) => state.web3.blockNum
     }),
-    ...mapGetters('web3', ['communityById']),
-    communityInfo () {
-      const com = this.communityById(this.communityId)
-      console.log('communityInfo', com)
-      return com
-    },
+    ...mapState('currentCommunity', ['communityId', 'cToken']),
+    ...mapState('web3', ['account']),
+    ...mapGetters('community', ['getCommunityInfoById']),
     startTime () {
       return blockTimeWithoutUTC(this.blockNum, this.proposal.first_block)
     },
@@ -186,49 +177,32 @@ export default {
       return blockTimeWithoutUTC(this.blockNum, this.proposal.end_block)
     }
   },
-  watch: {
-    'form.network': {
-      handler (newValue, oldValue) {
-        const validationName = 'basic'
-
-        const strategies = []
-        if (this.form.strategies) {
-          const formStrategies = JSON.parse(this.form.strategies).forEach(
-            (element) => {
-              strategies.push(element.strategies)
-            }
-          )
-        }
-        var params = {
-          space: '',
-          strategies,
-          network: this.form.network
-        }
-
-        getScore(params).then((res) => {
-          const totalScore = res
-          this.isValid = totalScore >= this.form.threshold
-          this.proposal.network = this.form.network
-          this.proposal.strategies = JSON.stringify(strategies)
-          this.proposal.communityId = this.form.communityId
-        })
-      },
-      immediate: true,
-      deep: true
-    }
-  },
   methods: {
     async submitProposal () {
       try {
+        if(!this.proposal.title || this.proposal.title.length === 0 || !this.proposal.body || this.proposal.body.length === 0) {
+          this.$bvToast.toast(this.$t('nps.completeContent'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
         this.commiting = true
+        const b = await getERC20Balance(this.cToken.address);
+        if (b.toString() / 1e18 < this.form.threshold) {
+          this.$bvToast.toast(this.$t('nps.insuffientBalance'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          this.commiting = false
+          return;
+        }
         this.proposal.communityId = this.form.communityId
         this.proposal.strategies = this.form.strategies
         this.proposal.network = this.form.network
         this.proposal.threshold = this.form.threshold
         this.proposal.passthreshold = this.form.passthreshold
-
         this.proposal.start = this.startTime
-
         this.proposal.end = this.endTime
         const result = await completeProposal(this.proposal)
 
@@ -237,6 +211,7 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
+          await sleep(3)
           /* this.$router.replace("/nps/proposal-space/" + this.form.communityId); */
           this.$router.back()
         }
@@ -250,28 +225,20 @@ export default {
     }
   },
   async mounted () {
-    this.url =
-      this.$router.currentRoute.params.key || this.$route.query.id
-        ? '/specify'
-        : ''
-    this.form.id = this.$router.currentRoute.params.key
-      ? this.$router.currentRoute.params.key
-      : this.$route.query.id
-        ? this.$route.query.id
-        : MAIN_COMMUNITY_ID
-
-    this.form.communityId = this.form.id
-    try {
-      const communityProposalConfigInfo =
-        await getMyCommunityProposalConfigInfo(this.form.communityId)
-
-      this.form = communityProposalConfigInfo
-
-      this.strategyControlItems = JSON.parse(this.form.strategies)
-    } catch (e) {
-      handleApiErrCode(e, (info, params) => {
-        this.$bvToast.toast(info, params)
-      })
+    if (!this.account) return;
+    console.log(this.account);
+    while(!this.cToken.address){
+      await sleep(0.3)
+    }
+    const community = await this.getCommunityInfoById(this.communityId)
+    this.form = {
+      communityId: this.communityId,
+      symbol: this.cToken.symbol,
+      threshold: community.threshold,
+      validation: 'basic',
+      userId: this.account,
+      strategies: community.strategies,
+      passthreshold: community.passthreshold
     }
   }
 }

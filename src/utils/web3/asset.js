@@ -327,6 +327,7 @@ export const getERC20Balance = async (erc20) => {
     try{
       const erc20Contract = await getContract('ERC20', erc20);
       const account = await getAccounts();
+      if (!account) return 0
       const balanceBI = await erc20Contract.balanceOf(account);
       resolve(balanceBI);
     }catch(e) {
