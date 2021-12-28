@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { parseTimestamp } from '@/utils/helper'
+import { parseTimestamp, sleep } from '@/utils/helper'
 import { ethers } from 'ethers'
 import { mapState, mapGetters } from 'vuex'
 import { contractAddress } from '@/utils/web3/contract'
@@ -64,6 +64,7 @@ export default {
     ...mapState('user', ['users']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
+    ...mapState('currentCommunity', ['cToken']),
     ...mapGetters('user', ['getUserByAddress']),
   },
   methods: {
@@ -78,7 +79,7 @@ export default {
       }
     },
   },
-  mounted () {
+  async mounted () {
     // timestamp
     this.time = parseTimestamp(this.operation.timestamp)
     const interval = setInterval(() => {
@@ -95,6 +96,7 @@ export default {
     }
     this.username = accName
     let symbol;
+    let ctokenSymbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
       try{
@@ -133,10 +135,18 @@ export default {
         }
         break;
       case "HARVEST":
-       this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from pool: ${this.operation.pool.name}`
+        while(!this.cToken) {
+          await sleep(0.2)
+        }
+        ctokenSymbol = this.cToken.symbol;
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
-        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${symbol}`
+        while(!this.cToken) {
+          await sleep(0.2)
+        }
+        ctokenSymbol = this.cToken.symbol;
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
         break;
       case "ADMINCREATE":
         this.description = (this.showName ? 'Admin creat' : 'Create') + ` this community`
