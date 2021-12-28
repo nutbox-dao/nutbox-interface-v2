@@ -31,17 +31,29 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
+          <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
+            <b-popover target="tipmanagecommunity" triggers="hover focus"
+                  placement="top">
+              Manage your community
+            </b-popover>
           </router-link>
-          <div class="hover" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
+          <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
+            <b-popover target="tipcreatecommunity" triggers="hover focus"
+                  placement="top">
+              Create new community
+            </b-popover>
           </div>
-          <router-link to="/profile" v-show="metamaskConnected && account">
+          <router-link id="tipprofile" to="/profile" v-show="metamaskConnected && account">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
                  src="~@/static/images/avatars/default.png" alt="">
           </router-link>
+          <b-popover target="tipprofile" triggers="hover focus"
+                  placement="top">
+              Profile
+            </b-popover>
           <b-dropdown variant="text" dropup
                       class="side-menu-dropdown"
                       menu-class="text-white"
