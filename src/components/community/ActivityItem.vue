@@ -64,6 +64,7 @@ export default {
     ...mapState('user', ['users']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
+    ...mapState('currentCommunity', ['cToken']),
     ...mapGetters('user', ['getUserByAddress']),
   },
   methods: {
@@ -105,6 +106,7 @@ export default {
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
+    const ctokenSymbol = this.cToken.symbol;
     const amount = (this.operation.amount?.toString() / 1e18).toFixed(2)
     // distribution
     switch (this.operation.type) {
@@ -133,10 +135,10 @@ export default {
         }
         break;
       case "HARVEST":
-       this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${symbol} from pool: ${this.operation.pool.name}`
+       this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
-        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${symbol}`
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
         break;
       case "ADMINCREATE":
         this.description = (this.showName ? 'Admin creat' : 'Create') + ` this community`
