@@ -31,7 +31,7 @@ export default {
 }
 .type-box {
   border: 1px solid var(--input-border);
-  background-color: var(--input-bg);
+  background-color: var(--nav-tab-bg-active);
   flex: 1;
   margin: 0 .5rem;
   border-radius: .8rem;

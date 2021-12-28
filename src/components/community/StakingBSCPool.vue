@@ -5,7 +5,7 @@
         <i class="modal-back-icon" @click="$emit('back')"></i>
         <div class="mt-2 mb-4 text-center">Create staking pool on BSC</div>
         <div class="custom-form col-lg-8 mx-auto">
-          <div class="c-input-group c-input-group">
+          <div class="c-input-group c-input-group-bg">
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full"
                        :placeholder="$t('asset.tokenAddress')"
@@ -91,5 +91,14 @@ export default {
 @import "src/static/css/form";
 .bsc-pool-modal-content {
   height: 60vh;
+}
+.divide-line {
+  width: 50%;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(to right, var(--card-broder), var(--card-broder)),
+    linear-gradient(to right, var(--card-broder), var(--card-broder));;
+  background-size: 30% 2px, 30% 2px;
+  background-position: left center, right center;
 }
 </style>

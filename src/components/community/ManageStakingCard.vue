@@ -55,7 +55,7 @@
           {{ `Please input pool name: "${pool.name}" to close this pool.` }}
         </div>
 
-        <div class="c-input-group c-input-group my-3">
+        <div class="c-input-group c-input-group-bg my-3">
           <b-input class="flex-1"
                    :placeholder="$t('placeHolder.confirmInfo', {info: pool.name})"
                    v-model="confirmInfo"></b-input>

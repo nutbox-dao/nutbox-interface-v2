@@ -74,6 +74,9 @@ input[type="number"] {
   &-bg {
     background: var(--input-bg);
   }
+  &-bg-dark {
+    background: #141414;
+  }
   .c-append {
     padding: 0 .8rem;
     white-space: nowrap;

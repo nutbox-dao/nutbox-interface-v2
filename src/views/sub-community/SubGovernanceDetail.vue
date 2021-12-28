@@ -1,11 +1,12 @@
 <template>
   <div class="scroll-content">
-    <div class="container">
+    <div class="container mb-5">
         <div class="row text-left">
-          <div class="custom-form col-md-8 mb-5">
-            <div class="font32 font-bold my-2">{{ proposal.title }}</div>
-            <div class="flag"
-                :class="
+          <div class="col-md-7 mb-4 mb-md-0">
+            <div class="custom-form form-card">
+              <div class="font32 font-bold my-2">{{ proposal.title }}</div>
+              <div class="flag"
+                   :class="
                 proposal.status == 0
                   ? 'proposal-pending'
                   : proposal.status == 1
@@ -13,48 +14,49 @@
                   : proposal.proposalResult === 1
                   ? 'proposal-pass'
                   : 'proposal-unpass'">
-              {{
-                proposal.status == 0
-                  ? $t("nps.propsalVoteStatusWaitStart")
-                  : proposal.status == 1
-                  ? $t("nps.propsalVoteStatusDoing")
-                  : proposal.proposalResult === 1
-                  ? $t("nps.pass")
-                  : $t("nps.unpass")
-              }}
-            </div>
-            <Markdown :body="proposal.body" />
-            <div class="row mt-4" v-show="!isVoted && proposal.status == 1">
-              <div class="col-6 text-right">
-                <button class="primary-btn w-50"
-                        @click="onVote('agree')"
-                        :disabled="isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
+                {{
+                  proposal.status == 0
+                    ? $t("nps.propsalVoteStatusWaitStart")
+                    : proposal.status == 1
+                      ? $t("nps.propsalVoteStatusDoing")
+                      : proposal.proposalResult === 1
+                        ? $t("nps.pass")
+                        : $t("nps.unpass")
+                }}
               </div>
-              <div class="col-6">
-                <button class="primary-btn w-50"
-                        @click="onVote('disagree')"
-                        :disabled="isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
+              <Markdown :body="proposal.body" />
+              <div class="row mt-4" v-show="!isVoted && proposal.status == 1">
+                <div class="col-6 text-right">
+                  <button class="primary-btn w-50"
+                          @click="onVote('agree')"
+                          :disabled="isVoted">{{ $t("nps.proposalAgreeBtn") }}</button>
+                </div>
+                <div class="col-6">
+                  <button class="primary-btn w-50"
+                          @click="onVote('disagree')"
+                          :disabled="isVoted">{{ $t("nps.proposalDisagreeBtn") }}</button>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-5">
             <div class="c-card mb-4">
               <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
               <div class="c-card-content">
-                <div class="flex-between-center">
-                  <span class="text-grey-light">{{ $t("nps.proposalFirst_Block") }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-grey-7 font12">{{ $t("nps.proposalFirst_Block") }}</span>
                   <span>{{ proposal.first_block }}</span>
                 </div>
-                <div class="flex-between-center">
-                  <span class="text-grey-light">{{ $t("nps.proposalEnd_Block") }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-grey-7 font12">{{ $t("nps.proposalEnd_Block") }}</span>
                   <span>{{ proposal.end_block }}</span>
                 </div>
-                <div class="flex-between-center">
-                  <span class="text-grey-light">{{ $t("nps.proposalStart") }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-grey-7 font12">{{ $t("nps.proposalStart") }}</span>
                   <span>{{ formatDate(proposal.start) }}</span>
                 </div>
-                <div class="flex-between-center">
-                  <span class="text-grey-light">{{ $t("nps.proposalEnd") }}</span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="text-grey-7 font12">{{ $t("nps.proposalEnd") }}</span>
                   <span>{{ formatDate(proposal.end) }}</span>
                 </div>
               </div>
@@ -102,30 +104,30 @@
     <b-modal
       id="modal-vote"
       v-model="modelVoteOpen"
-      modal-class="custom-modal"
-      size="lg"
-      :title="$t('nps.propsalSureVote')"
+      modal-class="custom-modal text-center"
       centered
+      hide-header
       hide-footer
-    >
-      <div class="tip-modal">
-        <b-card class="mb-3">
-          <div>
-            {{
-              $t("nps.propsalVoteRemind", [
-                type == "agree"
-                  ? $t("nps.proposalAgreeBtn")
-                  : $t("nps.proposalDisagreeBtn"),
-              ])
-            }}
-          </div>
-          <div>
-            {{ $t("nps.propsalVoteRight") }}:{{ balacne | amountForm
-            }}{{ symbol }}
-          </div>
-        </b-card>
+      no-close-on-backdrop>
+      <div class="custom-form">
+        <i class="modal-close-icon modal-close-icon-right" @click="modelVoteOpen=false"></i>
+        <div class="font32 font-bold mb-4">{{$t('nps.propsalSureVote')}}</div>
+        <div class="mb-2">
+          {{
+            $t("nps.propsalVoteRemind", [
+              type == "agree"
+                ? $t("nps.proposalAgreeBtn")
+                : $t("nps.proposalDisagreeBtn"),
+            ])
+          }}
+        </div>
+        <div>
+          {{ $t("nps.propsalVoteRight") }}:
+          <span class="font28 mx-2">{{ balacne | amountForm}}</span>
+          {{ symbol }}
+        </div>
         <button
-          class="primary-btn"
+          class="primary-btn mt-4"
           @click="ConfirmVote"
           :disabled="isVoted || voteing || loading"
         >
@@ -379,10 +381,13 @@ export default {
 };
 </script>
 <style  lang="scss" scoped>
+@import "src/static/css/form";
+.form-card {
+  @include card();
+}
 .c-card {
   @include card(0, var(--card-primary-bg), none, fit-conent);
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.02);
-  margin-bottom: .6rem;
   .c-card-header {
     padding: 1.2rem 1.2rem 2.8rem;
     background-image: linear-gradient(to bottom, #141414, #1D1E1F);
@@ -404,5 +409,8 @@ export default {
   line-height: .7rem;
   width: fit-content;
   margin-bottom: .5rem;
+}
+.progress {
+  background-color: var(--block-bg);
 }
 </style>

@@ -2,7 +2,7 @@
   .modal-content {
     border: 0.5px solid #FFA34C;
     border-radius: 20px;
-    background-color: var(--input-bg);
+    background-color: var(--block-bg);
     color: var(--primary-text);
     //box-shadow: 0 2px 12px 2px rgba(white, 0.1);
   }
@@ -26,5 +26,5 @@
   }
 }
 .cropper-modal .modal-content {
-  background-color: var(--input-bg);
+  background-color: var(--block-bg);
 }

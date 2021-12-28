@@ -1,8 +1,8 @@
 <template>
-  <div class="nps-card">
+  <div class="c-card">
     <div class="row">
-      <div class="col-md-8">
-        <div class="p-content d-flex align-items-center hover">
+      <div class="col-md-6">
+        <div class="p-content  d-flex align-items-center hover">
           <span class="number-circle">{{index + 1}}</span>
           <div class="content-info mx-3" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
             {{ getName }}
@@ -12,14 +12,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="d-flex justify-content-end">
-          <div class="item mx-3 font18 d-flex flex-column justify-content-between">
+      <div class="col-md-6 mt-3 mt-md-0">
+        <div class=" d-flex justify-content-between other-info">
+          <div class="font18 d-flex justify-content-between info-start">
             <div style="color: #50BF00; white-space: nowrap">Agree: {{proposalItem.voteAgreeTotalScore || 0}}</div>
             <div style="color: #FF5B4D; white-space: nowrap">Disagree: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
           </div>
-          <div class="d-flex flex-column align-items-end">
-            <div class="px-1"
+          <div class="d-flex align-items-end info-end">
+            <div class="t-flag px-1"
                  :class="
              proposalItem.status == 0
               ? 'proposal-pending'
@@ -99,18 +99,19 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-.nps-card {
+.c-card {
+  position: relative;
   @include card(1.2rem, var(--card-bg-primary), hidden, fit-conent);
   margin-bottom: 1rem;
   .number-circle {
-    border: 1px solid var(--primary-custom);
-    width: 3rem;
-    height: 3rem;
-    border-radius: 3rem;
-    min-width: 3rem;
-    min-height: 3rem;
-    max-width: 3rem;
-    max-height: 3rem;
+    border: 2px solid var(--primary-custom);
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,6 +120,9 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .info-start, .info-end {
+    flex-direction: column;
   }
 }
 .pass {
@@ -145,29 +149,26 @@ export default {
   border: 1px solid #408fff4d;
   color: var(--link);
 }
-
-@media (max-width: 960px) {
-  .nps {
-    .nps-card {
-      padding-top: 3rem;
-    }
-    .proposal {
+@media (max-width: 560px) {
+  .c-card {
+    padding-top: 2.2rem;
+    .other-info {
       flex-direction: column;
-      .flag {
-        position: absolute;
-        top: .8rem;
-        right: .8rem;
-        margin: 0;
-        font-size: .6rem;
-        line-height: .8rem;
-      }
     }
-  }
-}
-@media (max-width: 760px) {
-  .nps .proposal .p-content {
-    align-items: flex-start;
-    margin-bottom: 1rem;
+    .info-start, .info-end {
+      flex-direction: row;
+    }
+    .info-start {
+      justify-content: space-between;
+    }
+    .info-end {
+      margin-top: .5rem;
+      justify-content: flex-end;
+    }
+    .t-flag {
+      position: absolute;
+      top: -5.2rem;
+    }
   }
 }
 </style>

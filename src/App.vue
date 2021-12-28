@@ -289,7 +289,7 @@ export default {
   --nav-tab-bg: #2C2D2E;
   --nav-tab-bg-active: #141414;
   --input-border: #2C2D2E;
-  --input-bg: #1b1e23;
+  --input-bg: #2C2D2E;
   --block-bg: #1C1D1E;
   --text-grey-7: #747576;
 }
