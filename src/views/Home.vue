@@ -65,7 +65,7 @@
         <section class="section3 mt-4">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="more" @click="$router.replace('/community/index')">More >></div>
+            <div class="more" @click="$router.push('/community/index')">More >></div>
           </div>
           <div class="row mt-3">
             <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of recommendCommunity" :key="index">
