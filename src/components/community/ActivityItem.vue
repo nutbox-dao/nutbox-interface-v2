@@ -124,10 +124,11 @@ export default {
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
+          const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${amount * this.vestsToSteem} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${amount * this.vestsToHive} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
