@@ -114,6 +114,7 @@ export default {
     }
     try {
       this.loading = true;
+      this.clearData();
       getSpecifyCommunityInfo(this.communityId).then(community => {
         getCToken(community.id, true).then(ctoken => {
           this.saveCtoken(ctoken)
