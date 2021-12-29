@@ -483,7 +483,8 @@ export default {
         this.$t("tip.copyAddress", {
           address: this.formatUserAddress(address),
         }),
-        { title: this.$t("tip.clipboard") }
+        { title: this.$t("tip.clipboard") },
+        address
       );
     },
     gotoCommunity() {

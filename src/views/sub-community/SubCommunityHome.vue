@@ -101,6 +101,7 @@
                   <b-form-input
                     :disabled="true"
                     :placeholder="communityId"
+                    v-model="communityId"
                   >
                   </b-form-input>
                   <span></span>
@@ -117,6 +118,7 @@
                     :disabled="true"
                     type="number"
                     :placeholder="(feeRatio / 100).toFixed(2).toString()"
+                    :value="(feeRatio / 100).toFixed(2).toString()"
                   >
                   </b-form-input>
                   <span class="c-append">%</span>

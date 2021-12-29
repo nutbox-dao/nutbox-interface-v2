@@ -56,7 +56,7 @@
         <div class="user-card d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center">
             <span></span>
-            <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Creator</button>
+            <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Administor</button>
           </div>
           <div class="text-center mt-3 pb-3">
             <div class="avatar-bg">

@@ -1,7 +1,7 @@
 export default {
   methods: {
-    onCopy (message, options = {}) {
-      navigator.clipboard.writeText(this.$store.state.web3.account).then(() => {
+    onCopy (message, options = {}, content) {
+      navigator.clipboard.writeText(content || this.$store.state.web3.account).then(() => {
         this.$bvToast.toast(message, {
           ...{
             title: 'Nutbox',
