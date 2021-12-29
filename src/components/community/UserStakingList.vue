@@ -110,15 +110,21 @@
                 <div class="font12">{{ staked | amountForm }}</div>
               </div>
               <div class="content-btn-group d-flex">
-                <button class="symbol-btn w-auto px-2 mx-0" :disable="isCheckingAccount" @click="decrease">
-                  -
+                <button
+                  class="symbol-btn symbol-btn-outline hover mr-2"
+                  @click="decrease"
+                  :disabled="isCheckingAccount"
+                >
+                  <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
+                  <i v-else class="sub-icon sub-icon-primary"></i>
                 </button>
                 <button
-                  class="symbol-btn w-auto px-2 mr-0 ml-2"
-                  @click="increase"
+                  class="symbol-btn symbol-btn-outline hover"
                   :disabled="pool.status === 'CLOSED' || isCheckingAccount"
+                  @click="increase"
                 >
-                  +
+                  <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
+                  <i v-else class="add-icon add-icon-primary"></i>
                 </button>
               </div>
             </template>
@@ -642,20 +648,6 @@ export default {
     .primary-btn {
       height: 2rem;
       border-radius: 0.4rem;
-    }
-    .symbol-btn {
-      height: 2rem;
-      max-height: 2rem;
-      width: 2rem;
-      min-width: 2rem;
-      color: white;
-      border-radius: 0.4rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: var(--primary-custom);
-      border: none;
-      font-size: 1.4rem;
     }
   }
   .type-box {
