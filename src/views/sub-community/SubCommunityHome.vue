@@ -8,10 +8,11 @@
           <img class="large-logo" :src="baseInfo && baseInfo.icon" alt=""/>
           <div class="project-info text-left">
             <div class="d-flex align-items-center">
-              <a class="font20 font-bold title icon-title official-link-icon m-0"
+              <a class="font20 font-bold text-white m-0"
                  :href="baseInfo && baseInfo.website"
                  target="_blank">{{ baseInfo && baseInfo.name }}</a>
-              <i class="v-line" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
+              <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website"></i>
+              <i class="v-line mx-2" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
             </div>
             <div class="desc font14 mt-2"
                  v-html="(baseInfo && baseInfo.description)"></div>
@@ -282,7 +283,6 @@ export default {
 
   .v-line {
     display: inline-block;
-    margin: 0 1rem;
     @include line(1px, 1rem, 0, var(--text-74))
   }
 }

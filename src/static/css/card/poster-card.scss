@@ -40,24 +40,13 @@
       text-align: justify;
     }
   }
-  .official-link-title {
-
+  .official-link-icon{
+    @include icon();
+    background-image: url("~@/static/images/official-link.svg");
   }
-  .icon-title {
-    padding-right: 1.8rem;
-    background-position: right center;
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-    text-align: left;
-    color: white;
-    width: fit-content;
-    margin-bottom: .8rem;
-    &.official-link-icon{
-      background-image: url("~@/static/images/official-link.svg");
-    }
-    &.link-icon {
-      background-image: url("~@/static/images/official-link1.svg");
-    }
+  .link-icon {
+    @include icon();
+    background-image: url("~@/static/images/official-link1.svg");
   }
 }
 @media (max-width: 500px) {
