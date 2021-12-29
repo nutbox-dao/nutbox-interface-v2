@@ -12,7 +12,7 @@
               <div class="font32">{{ cToken.symbol }}</div>
               <div class="flex-start-center">
                 <span>{{ cToken.name }}</span>
-                <i class="copy-icon ml-2" @click="copyAddress"></i>
+                <i class="copy-icon copy-icon-gray ml-2" @click="copyAddress"></i>
               </div>
               <div class="font24">${{ cToken.price | amountForm }}</div>
             </div>
@@ -443,11 +443,6 @@ export default {
   height: 5rem;
   border-radius: 5rem;
   margin-right: .9rem;
-}
-.copy-icon {
-  @include icon(.6rem, .6rem);
-  background-image: url("~@/static/images/copy.svg");
-  cursor: pointer
 }
 .token-info-card {
   @include card(1.2rem 3rem, rgba(255, 219, 38, 0.05));
