@@ -6,18 +6,22 @@
     <div class="text-center">Please select an avatar</div>
     <div class="h-line mt-4"></div>
     <div class="avatar-box">
-      <div class="avatar-item hover" :class="selectedIndex == index ? 'active' : ''"
+      <div class="avatar-item hover" :class="selectedIndex === index ? 'active' : ''"
            @click="select(index)"
            v-for="(avatar, index) of avatarOptions" :key="index">
+        <svg v-if="selectedIndex===index" class="svg-circle" height="100%" width="100%">
+          <circle class="circle" cx="50%" cy="50%" r="48%" stroke="#F8B62A" stroke-width="2" fill-opacity="0" />
+        </svg>
         <img :src="avatar" alt="">
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 import { updateUserInfo } from '@/utils/web3/account'
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'AvatarOptionsModal',
@@ -68,14 +72,10 @@ export default {
   width: 5rem;
   height: 5rem;
   margin: 1rem;
+  position: relative;
   img {
     width: 100%;
     height: 100%;
-  }
-  &.active {
-    border: 1px solid var(--primary-custom);
-    border-radius: 50%;
-    position: relative;
   }
   &.active::after {
     content: '';
@@ -85,6 +85,30 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+    opacity: 0;
+    animation: show 0.4s ease-in 1s forwards;
+  }
+}
+.svg-circle {
+  position: absolute;
+}
+.circle {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: stroke 5s ease-out forwards;
+}
+
+@keyframes stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>

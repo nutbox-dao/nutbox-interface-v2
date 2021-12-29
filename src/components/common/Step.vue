@@ -69,7 +69,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: var(--text-grey-7);
+    color: var(--text-74);
     font-size: .7rem;
     font-weight: bold;
     &-checked {

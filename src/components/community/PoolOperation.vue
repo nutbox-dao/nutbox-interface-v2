@@ -7,31 +7,31 @@
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center mb-4"
-        v-if="approved && !needLogin"
+
       >
         <span class="value flex-fill">
           {{ staked | amountForm }}
         </span>
         <div class="d-flex">
           <button
-            class="symbol-btn hover mr-2"
+            class="symbol-btn symbol-btn-outline hover mr-2"
             @click="decrease"
             :disabled="isCheckingAccount"
           >
-            <b-spinner type="grow" small v-show="isCheckingAccount"></b-spinner>
-            -
+            <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
+            <i v-else class="sub-icon sub-icon-primary"></i>
           </button>
           <button
-            class="symbol-btn hover"
+            class="symbol-btn symbol-btn-outline hover"
             :disabled="card.status === 'CLOSED' || isCheckingAccount"
             @click="increase"
           >
-            <b-spinner type="grow" small v-show="isCheckingAccount"></b-spinner
-            >+
+            <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
+            <i v-else class="add-icon add-icon-primary"></i>
           </button>
         </div>
       </div>
-      <template v-else>
+      <template >
         <button class="primary-btn" v-if="needLogin" @click="showLogin = true">
           {{
             type === "STEEM"

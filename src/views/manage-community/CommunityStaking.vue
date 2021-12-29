@@ -1,49 +1,47 @@
 <template>
   <div class="scroll-content">
-    <div class="container">
-      <div class="view-top-header view-top-header-sticky">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="nav-box nav-box-bg mb-3 mb-md-0">
-              <div class="nav">
+    <div class="view-top-header view-top-header-sticky">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="nav-box nav-box-bg mb-3 mb-md-0">
+            <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
                       @click="activeTab = index">{{item}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="c-btn-group" >
-              <button class="primary-btn primary-btn-outline w-auto mr-2"
-                      style="height: 2rem"
-                      v-show="activePool.length > 1"
-                      @click="configPoolModal=true">
-                {{ $t('pool.updatePoolRatios') }}</button>
-              <button class="primary-btn w-auto mx-0 d-flex align-items-center"
-                      style="height: 2rem"
-                      @click="poolTypeModal=true, createPoolStep=1">
-                <i class="add-icon"></i>
-                <span>{{ $t('pool.addPool') }}</span>
-              </button>
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="stakingPools && stakingPools.length===0"
-          class="empty-card mb-5 d-flex flex-column justify-content-center">
-        <div class="empty-bg">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t('pool.noPools') }}</p>
-        </div>
-      </div>
-      <template v-else>
-        <div class="row">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">
-            <ManageStakingCard :pool="pool"/>
+        <div class="col-md-6">
+          <div class="c-btn-group" >
+            <button class="primary-btn primary-btn-outline w-auto mr-2"
+                    style="height: 2rem"
+                    v-show="activePool.length > 1"
+                    @click="configPoolModal=true">
+              {{ $t('pool.updatePoolRatios') }}</button>
+            <button class="primary-btn w-auto mx-0 d-flex align-items-center"
+                    style="height: 2rem"
+                    @click="poolTypeModal=true, createPoolStep=1">
+              <i class="add-icon"></i>
+              <span>{{ $t('pool.addPool') }}</span>
+            </button>
           </div>
         </div>
-      </template>
+      </div>
     </div>
+    <div v-if="stakingPools && stakingPools.length===0"
+         class="empty-card mb-5 d-flex flex-column justify-content-center">
+      <div class="empty-bg">
+        <img src="~@/static/images/empty-data.png" alt="" />
+        <p>{{ $t('pool.noPools') }}</p>
+      </div>
+    </div>
+    <template v-else>
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">
+          <ManageStakingCard :pool="pool"/>
+        </div>
+      </div>
+    </template>
     <b-modal
       v-model="poolTypeModal"
       modal-class="custom-modal"

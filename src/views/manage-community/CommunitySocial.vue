@@ -1,70 +1,68 @@
 <template>
   <div class="scroll-content">
-    <div class="container">
-      <div class="c-card">
-        <div class="custom-form text-left col-md-9">
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon twitter">Twitter</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.twitter" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+    <div class="c-card">
+      <div class="custom-form text-left col-md-9">
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon twitter">Twitter</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.twitter" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon discord">Discord</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.discord" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon discord">Discord</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.discord" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon telegram">Telegram</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.telegram" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon telegram">Telegram</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.telegram" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon facebook">Facebook</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.facebook" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon facebook">Facebook</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.facebook" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon github">Github</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.github" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon github">Github</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.github" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label=""
-                        label-class="d-flex align-items-center font16 font-bold">
-            <div class="d-flex align-items-center">
-              <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon document">{{ $t('commen.docs') }}</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
-          </b-form-group>
-          <b-form-group label-cols-md="0" content-cols-md="12" label="">
-            <div class="text-center mt-4">
-              <button class="primary-btn col-md-6" @click="showSignatureTip = true">
-                {{ $t("operation.update") }}
-              </button>
-            </div>
-          </b-form-group>
-        </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label="">
+          <div class="text-center mt-4">
+            <button class="primary-btn col-md-6" @click="showSignatureTip = true">
+              {{ $t("operation.update") }}
+            </button>
+          </div>
+        </b-form-group>
       </div>
     </div>
     <b-modal
@@ -76,12 +74,11 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <!-- <img class="close-btn" src="~@/static/images/close.svg"
-             alt="" @click="showSignatureTip=false"/> -->
+        <i class="modal-close-icon modal-close-icon-right" @click="showSignatureTip=false"></i>
         <div class="my-5">
           {{ $t("tip.editTip") }}
         </div>
-        <div class="flex-between-center" style="gap: 2rem">
+        <div class="d-flex justify-content-between" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
             {{ $t("operation.sign") }}
@@ -110,7 +107,7 @@ export default {
   name: 'SocialSetting',
   data () {
     return {
-      showSignatureTip: false,
+      showSignatureTip: true,
       uploading: false,
       newBlogTag: '',
       blogTag: '',
@@ -186,7 +183,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .c-card {
-  @include card();
+  @include card(2rem 1.2rem, var(--card-bg-primary), hidden, fit-content);
 }
 .link-info-icon {
   padding-left: 2rem;

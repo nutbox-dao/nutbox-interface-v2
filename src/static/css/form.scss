@@ -17,11 +17,11 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 .custom-form input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  color: var(--text-grey-7);
+  color: var(--text-74);
 }
 
 .custom-form input::-moz-placeholder, textarea::-webkit-input-placeholder {
-  color: var(--text-grey-7);
+  color: var(--text-74);
 }
 .custom-form .input-border {
   border: 1px solid var(--input-border);
@@ -58,7 +58,7 @@ input[type="number"] {
   position: absolute;
   top: 62%;
   font-size: .6rem;
-  color: var(--text-grey-7);
+  color: var(--text-74);
 }
 .upload-loading {
   position: absolute;

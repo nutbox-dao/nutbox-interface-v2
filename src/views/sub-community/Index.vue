@@ -198,7 +198,7 @@ export default {
       opacity: .8;
     }
     span {
-      color: var(--text-grey-7);
+      color: var(--text-74);
     }
     .active span {
       color: var(--primary-custom);

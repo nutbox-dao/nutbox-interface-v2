@@ -64,7 +64,7 @@ export default {
   .nav-item a{
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--text-grey-7);
+    color: var(--text-74);
     &.active {
       color: var(--primary-custom);
       font-weight: bold;

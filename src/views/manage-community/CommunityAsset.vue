@@ -1,100 +1,98 @@
 <template>
   <div class="scroll-content">
-    <div class="container">
-      <!-- token info -->
-      <div class="c-card">
-        <div class="row">
-          <div class="col-md-6 d-flex flex-column justify-content-between">
-            <div class="font20 font-bold">{{ $t('community.communityAsset') }}</div>
-            <div class="d-flex align-items-center">
-              <img v-if="cToken.icon" class="token-icon" :src="cToken.icon" alt="">
-              <empty-img v-else class="rounded-circle mx-0"></empty-img>
-              <div class="info d-flex flex-column align-items-start ml-2">
-                <div class="font32">{{ cToken.symbol }}</div>
-                <div class="flex-start-center">
-                  <span>{{ cToken.name }}</span>
-                  <i class="copy-icon ml-2" @click="copyAddress"></i>
-                </div>
-                <div class="font24">${{ cToken.price | amountForm }}</div>
+    <!-- token info -->
+    <div class="c-card">
+      <div class="row">
+        <div class="col-md-6 d-flex flex-column justify-content-between">
+          <div class="font20 font-bold">{{ $t('community.communityAsset') }}</div>
+          <div class="d-flex align-items-center">
+            <img v-if="cToken.icon" class="token-icon" :src="cToken.icon" alt="">
+            <empty-img v-else class="rounded-circle mx-0"></empty-img>
+            <div class="info d-flex flex-column align-items-start ml-2">
+              <div class="font32">{{ cToken.symbol }}</div>
+              <div class="flex-start-center">
+                <span>{{ cToken.name }}</span>
+                <i class="copy-icon ml-2" @click="copyAddress"></i>
               </div>
+              <div class="font24">${{ cToken.price | amountForm }}</div>
             </div>
           </div>
-          <div class="col-md-6 c-mt-1">
-            <div class="token-info-card">
-              <div class="row-info">
-                <span>{{ $t('asset.totalSupply') }}：</span>
-                <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
-              </div>
-              <div class="row-info">
-                <span>{{ $t('asset.cap') }}：</span>
-                <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
-              </div>
+        </div>
+        <div class="col-md-6 c-mt-1">
+          <div class="token-info-card">
+            <div class="row-info">
+              <span>{{ $t('asset.totalSupply') }}：</span>
+              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
+            </div>
+            <div class="row-info">
+              <span>{{ $t('asset.cap') }}：</span>
+              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
             </div>
           </div>
         </div>
       </div>
-      <!-- strategy -->
-      <div class="c-card mt-3">
-        <div class="font20 font-bold">Token Release Strategy</div>
-        <Progress :progress-data="distributions"></Progress>
-      </div>
-      <!-- fund info -->
-      <div class="c-card mt-3">
-        <div class="font20 font-bold">Dao Fund Info</div>
-        <div class="custom-form mt-5">
-          <!-- community balance -->
-          <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8" :label="$t('community.communityBalance')">
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input
-                  :disabled="true"
-                  v-model="communityBalance"
-                  placeholder="0.000"
-                >
-                </b-form-input>
-                <span class="c-append">{{ cToken.symbol }}</span>
-              </div>
-              <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
-                {{$t("operation.charge") }}
-              </button>
-              <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
-                {{$t("operation.withdraw") }}
-              </button>
+    </div>
+    <!-- strategy -->
+    <div class="c-card mt-3">
+      <div class="font20 font-bold">Token Release Strategy</div>
+      <Progress :progress-data="distributions"></Progress>
+    </div>
+    <!-- fund info -->
+    <div class="c-card mt-3 mb-5">
+      <div class="font20 font-bold">Dao Fund Info</div>
+      <div class="custom-form mt-5">
+        <!-- community balance -->
+        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8" :label="$t('community.communityBalance')">
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                :disabled="true"
+                v-model="communityBalance"
+                placeholder="0.000"
+              >
+              </b-form-input>
+              <span class="c-append">{{ cToken.symbol }}</span>
             </div>
-          </b-form-group>
-          <!-- community dev address -->
-          <b-form-group label-cols-md="2" content-cols-md="8"
-            :label="$t('community.fundAddress')"
-          >
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input
-                  :disabled="true"
-                  :placeholder="stakingFactoryId"
-                >
-                </b-form-input>
-                <span></span>
-              </div>
+            <button class="primary-btn ml-2" style="width: 5rem" @click="showChargeTip = true">
+              {{$t("operation.charge") }}
+            </button>
+            <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
+              {{$t("operation.withdraw") }}
+            </button>
+          </div>
+        </b-form-group>
+        <!-- community dev address -->
+        <b-form-group label-cols-md="2" content-cols-md="8"
+                      :label="$t('community.fundAddress')"
+        >
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                :disabled="true"
+                :placeholder="stakingFactoryId"
+              >
+              </b-form-input>
+              <span></span>
             </div>
-          </b-form-group>
-          <!-- community dev ratio -->
-          <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.fundRatio')">
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input
-                  :disabled="true"
-                  type="number"
-                  :placeholder="((communityData ? communityData.feeRatio : 0) / 100).toFixed(2).toString()"
-                >
-                </b-form-input>
-                <span class="c-append">%</span>
-              </div>
-              <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
-                {{ this.$t("operation.update") }}
-              </button>
+          </div>
+        </b-form-group>
+        <!-- community dev ratio -->
+        <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.fundRatio')">
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                :disabled="true"
+                type="number"
+                :placeholder="((communityData ? communityData.feeRatio : 0) / 100).toFixed(2).toString()"
+              >
+              </b-form-input>
+              <span class="c-append">%</span>
             </div>
-          </b-form-group>
-        </div>
+            <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
+              {{ this.$t("operation.update") }}
+            </button>
+          </div>
+        </b-form-group>
       </div>
     </div>
     <!-- charge balance tip -->
