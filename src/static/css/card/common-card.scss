@@ -142,54 +142,6 @@
   }
 }
 
-.symbol-btn {
-  height: 2.4rem;
-  max-height: 2.4rem;
-  width: 2.4rem;
-  min-width: 2.4rem;
-  border-radius: .8rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.4rem;
-  &-bg {
-    color: white;
-    background-color: var(--primary-custom);
-    border: none;
-  }
-  &-outline {
-    color: var(--primary-custom);
-    background-color: transparent;
-    border: 1px solid var(--primary-custom);
-    &:disabled {
-      color: var(--text-74);
-      border-color: var(--text-74);
-    }
-  }
-  .sub-icon {
-    @include icon();
-    &-gray {
-      background-image: url("~@/static/images/sub-icon-gray.svg");
-    }
-    &-primary {
-      background-image: url("~@/static/images/sub-icon-primary.svg");
-    }
-  }
-  .add-icon {
-    @include icon();
-    &-gray {
-      background-image: url("~@/static/images/add-icon-gary.svg");
-    }
-    &-primary {
-      background-image: url("~@/static/images/add-icon-primary.svg");
-    }
-  }
-  .loading-icon-gray {
-    @include icon();
-    background-image: url("~@/static/images/loading-gray.svg");
-    animation: spinner-relative 1.2s linear infinite;
-  }
-}
 .info-icon {
   width: 1.4rem;
   height: 1.4rem;

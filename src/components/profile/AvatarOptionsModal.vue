@@ -9,9 +9,7 @@
       <div class="avatar-item hover" :class="selectedIndex === index ? 'active' : ''"
            @click="select(index)"
            v-for="(avatar, index) of avatarOptions" :key="index">
-        <svg v-if="selectedIndex===index" class="svg-circle" height="100%" width="100%">
-          <circle class="circle" cx="50%" cy="50%" r="48%" stroke="#F8B62A" stroke-width="2" fill-opacity="0" />
-        </svg>
+        <div v-if="selectedIndex===index" class="circle-box"></div>
         <img :src="avatar" alt="">
       </div>
     </div>
@@ -73,9 +71,13 @@ export default {
   height: 5rem;
   margin: 1rem;
   position: relative;
+  padding: 2px;
   img {
     width: 100%;
     height: 100%;
+    z-index: 2;
+    position: relative;
+    border-radius: 50%;
   }
   &.active::after {
     content: '';
@@ -85,30 +87,18 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    opacity: 0;
-    animation: show 0.4s ease-in 1s forwards;
   }
 }
-.svg-circle {
+.circle-box {
   position: absolute;
-}
-.circle {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: stroke 5s ease-out forwards;
-}
-
-@keyframes stroke {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--primary-custom);
+  border-radius: 50%;
+  clip-path: polygon(50% 0, 50% 50%, 100% 25%, 100% 100%, 0 100%, 0 0);
+  z-index: 0;
+  animation: spinner-relative 1.2s linear infinite;
 }
 </style>
