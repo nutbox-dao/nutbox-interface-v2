@@ -110,11 +110,13 @@
                 <div class="font12">{{ staked | amountForm }}</div>
               </div>
               <div class="content-btn-group d-flex">
-                <button class="symbol-btn w-auto px-2 mx-0" @click="decrease">-</button>
+                <button class="symbol-btn w-auto px-2 mx-0" :disable="isCheckingAccount" @click="decrease">
+                  -
+                </button>
                 <button
                   class="symbol-btn w-auto px-2 mr-0 ml-2"
                   @click="increase"
-                  :disabled="pool.status === 'CLOSED'"
+                  :disabled="pool.status === 'CLOSED' || isCheckingAccount"
                 >
                   +
                 </button>
