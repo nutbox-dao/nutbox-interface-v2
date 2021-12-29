@@ -38,7 +38,7 @@ import { parseTimestamp, sleep } from '@/utils/helper'
 import { ethers } from 'ethers'
 import { mapState, mapGetters } from 'vuex'
 import { contractAddress } from '@/utils/web3/contract'
-import { VUE_APP_TX_BROWER } from '@/config'
+import { BLOCK_CHAIN_BROWER } from '@/config'
 
 export default {
   name: 'ActivityItem',
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     gotoTransaction() {
-      window.open(VUE_APP_TX_BROWER + this.operation.tx, '_blank')
+      window.open(BLOCK_CHAIN_BROWER + 'tx/' + this.operation.tx, '_blank')
     },
     getDateString(timestamp) {
       try {
