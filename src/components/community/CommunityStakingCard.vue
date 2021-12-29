@@ -179,7 +179,7 @@ export default {
     copy (address) {
       this.onCopy(this.$t('tip.copyAddress', {
         address: formatUserAddress(address)
-      }), { title: this.$t('tip.clipboard') })
+      }), { title: this.$t('tip.clipboard') }, address)
     },
     gotoToken(address) {
       window.open(BLOCK_CHAIN_BROWER + 'token/' + address, '_blank')

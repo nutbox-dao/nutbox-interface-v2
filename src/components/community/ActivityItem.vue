@@ -139,7 +139,7 @@ export default {
           await sleep(0.2)
         }
         ctokenSymbol = this.cToken.symbol;
-        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${ethers.utils.formatEther(this.operation.amount)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
         while(!this.cToken) {
