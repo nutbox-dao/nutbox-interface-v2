@@ -34,14 +34,14 @@
           <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
             <b-popover target="tipmanagecommunity" triggers="hover focus"
-                  placement="top">
+                  placement="right">
               Manage your community
             </b-popover>
           </router-link>
           <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
-            <b-popover target="tipcreatecommunity" triggers="hover focus"
-                  placement="top">
+            <b-popover target="tipcreatecommunity" triggers="hover"
+                  placement="right">
               Create new community
             </b-popover>
           </div>
@@ -50,10 +50,6 @@
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
                  src="~@/static/images/avatars/default.png" alt="">
           </router-link>
-          <b-popover target="tipprofile" triggers="hover focus"
-                  placement="top">
-              Profile
-            </b-popover>
           <b-dropdown variant="text" dropup
                       class="side-menu-dropdown"
                       menu-class="text-white"
