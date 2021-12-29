@@ -187,6 +187,22 @@
       />
     </b-modal>
 
+      <!-- hp stake  -->
+    <b-modal
+      v-model="showHpStake"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <HPStakingModal
+        :operate="operate"
+        :pool="pool"
+        @hideStakeMask="showHpStake = false"
+      />
+    </b-modal>
+
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
@@ -292,6 +308,7 @@ import { BLOCK_SECOND, ASSET_LOGO_URL } from '@/constant'
 import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
+import HPStakingModal from "@/components/common/HPStakingModal";
 
 export default {
   name: "",
@@ -304,7 +321,8 @@ export default {
     ConnectMetaMask,
     Login,
     StakingHomeChainAssetModal,
-    SPStakingModal
+    SPStakingModal,
+    HPStakingModal
   },
   data() {
     return {

@@ -84,6 +84,21 @@
         @hideStakeMask="showSpStake = false"
       />
     </b-modal>
+        <!-- hp stake  -->
+    <b-modal
+      v-model="showHpStake"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <HPStakingModal
+        :operate="operate"
+        :pool="card"
+        @hideStakeMask="showHpStake = false"
+      />
+    </b-modal>
 
     <!-- wrong steem account -->
     <b-modal
@@ -142,7 +157,7 @@
         ></i>
         <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
         <div>
-          Your {{ chainName }} address haven't binding with current STEEM account, please
+          Your {{ chainName }} address haven't binding with current {{ type }} account, please
           change {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -160,7 +175,7 @@
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change steem
+          Change {{type}}
         </button>
       </div>
     </b-modal>
@@ -191,6 +206,7 @@ import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { handleApiErrCode } from "@/utils/helper";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
+import HPStakingModal from "@/components/common/HPStakingModal";
 
 export default {
   name: "PoolOperation",
@@ -204,6 +220,7 @@ export default {
     ConnectMetaMask,
     StakingHomeChainAssetModal,
     SPStakingModal,
+    HPStakingModal
   },
   data() {
     return {
