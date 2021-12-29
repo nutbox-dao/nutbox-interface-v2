@@ -100,8 +100,10 @@ export async function getNewCommunityOPHistory(community) {
     `
     try{
         const userOperationHistories = await client.request(query, {id: community.toLowerCase()})
-        if (userOperationHistories && userOperationHistories.userOperationHistories) {
-            store.commit('currentCommunity/saveOperationHistory', userOperationHistories.userOperationHistories)
+        if (userOperationHistories && userOperationHistories.userOperationHistories.length > 0) {
+            if (userOperationHistories.userOperationHistories[0].community.id === store.state.currentCommunity.communityId.toLowerCase()){
+                store.commit('currentCommunity/saveOperationHistory', userOperationHistories.userOperationHistories)
+            }
         }
         return;
     }catch(err) {
@@ -140,7 +142,10 @@ export async function getUpdateCommunityOPHistory(community) {
     try{
         let newOps = await client.request(query, { id: community.toLowerCase(), timestamp: parseInt(lastTime) });
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('currentCommunity/saveOperationHistory', newOps.userOperationHistories.concat(existHistory));
+            if (newOps.userOperationHistories[0].community.id === store.state.currentCommunity.communityId.toLowerCase())
+            {
+                store.commit('currentCommunity/saveOperationHistory', newOps.userOperationHistories.concat(existHistory));
+            }
         }else {
             // console.log('no update');
         }
@@ -180,7 +185,9 @@ export async function getMoreCommunityOPHistory(community) {
     try{
         let newOps = await client.request(query, {id: community.toLowerCase(), timestamp: parseInt(lastTime)});
         if (newOps && newOps.userOperationHistories && newOps.userOperationHistories.length > 0){
-            store.commit('currentCommunity/saveOperationHistory', oldHistory.concat(newOps.userOperationHistories));
+            if (newOps.userOperationHistories[0].community.id === store.state.currentCommunity.communityId.toLowerCase()){
+                store.commit('currentCommunity/saveOperationHistory', oldHistory.concat(newOps.userOperationHistories));
+            }
         }else {
             console.log('no update');
         }
