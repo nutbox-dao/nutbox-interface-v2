@@ -187,6 +187,22 @@
       />
     </b-modal>
 
+      <!-- hp stake  -->
+    <b-modal
+      v-model="showHpStake"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <HPStakingModal
+        :operate="operate"
+        :pool="pool"
+        @hideStakeMask="showHpStake = false"
+      />
+    </b-modal>
+
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
@@ -201,12 +217,12 @@
           class="modal-close-icon modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
-        <div class="mt-2 mb-4">Please change Steem Account</div>
+        <div class="mt-2 mb-4">Please change {{type}} Account</div>
         <div>
-          Your Steem account haven't binding with current {{ chainName }} address, please
-          change Steem account in your wallet first.
+          Your {{type}} account haven't binding with current {{ chainName }} address, please
+          change {{type}} account in your wallet first.
         </div>
-        <div class="mt-3 mb-1">Your binding Steem account is:</div>
+        <div class="mt-3 mb-1">Your binding {{type}} account is:</div>
         <div class="c-input-group c-input-group-bg">
           <input
             class="text-center"
@@ -244,7 +260,7 @@
         ></i>
         <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
         <div>
-          Your {{ chainName }} address haven't binding with current STEEM account, please
+          Your {{ chainName }} address haven't binding with current {{type}} account, please
           change {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -262,7 +278,7 @@
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change steem
+          Change {{type}}
         </button>
       </div>
     </b-modal>
@@ -292,6 +308,7 @@ import { BLOCK_SECOND, ASSET_LOGO_URL } from '@/constant'
 import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
+import HPStakingModal from "@/components/common/HPStakingModal";
 
 export default {
   name: "",
@@ -304,7 +321,8 @@ export default {
     ConnectMetaMask,
     Login,
     StakingHomeChainAssetModal,
-    SPStakingModal
+    SPStakingModal,
+    HPStakingModal
   },
   data() {
     return {

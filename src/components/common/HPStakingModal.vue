@@ -10,7 +10,7 @@
           : $t("stake.increaseDelegation")
       }}
     </div>
-    <p style="color: red;" class="font16">You're using steem account: {{ steemAccount }} to delegate</p>
+    <p style="color: red;" class="font16">You're using hive account: {{ hiveAccount }} to delegate</p>
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
         <div class="label text-right">
@@ -37,7 +37,7 @@
             $t("operation.cancel")
           }}</button>
     </div>
-    <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} STEEM</div>
+    <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} HIVE</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
 </template>
@@ -47,35 +47,35 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import { handleApiErrCode } from '../../utils/helper';
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { getAllCommunities } from '@/utils/web3/community'
-import { STEEM_STAKE_FEE } from '@/config'
-import { getDelegateFromSteem, steemDelegation } from '@/utils/steem/steem'
+import { HIVE_STAKE_FEE } from '@/config'
+import { getDelegateFromHive, hiveDelegation } from '@/utils/hive/hive'
 import { ethers } from 'ethers'
 
 export default {
-  name:'SPStakingModal',
+  name:'HPStakingModal',
   data () {
     return {
       stakingValue: '',
       loading: false,
-      fee: STEEM_STAKE_FEE
+      fee: HIVE_STAKE_FEE
     }
   },
   computed: {
     ...mapState('pool', ['userStaked']),
     ...mapState('currentCommunity', ['communityId']),
-    ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance']),
+    ...mapState('hive', ['hiveAccount', 'hiveBalance', 'vestsToHive', 'vestsBalance']),
     ...mapState('web3', ['userStakings', 'account', 'userGraphInfo']),
-    ...mapGetters('steem', ['spBalance']),
+    ...mapGetters('hive', ['hpBalance']),
     staked(){
       if (!this.userStaked) return 0;
       return this.userStaked[this.pool.id] ?? 0
     },
     formBalance(){
-      return this.spBalance;
+      return this.hpBalance;
     },
     formStaked(){
       const staked = this.staked;
-      return (staked.toString() / 1e6) * this.vestsToSteem;
+      return (staked.toString() / 1e6) * this.vestsToHive;
     }
   },
   props: {
@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('steem', ['getSteem', 'getVests']),
+    ...mapActions('hive', ['getHive', 'getVests']),
     hide() {
       if (this.loading) return;
       this.$emit("hideStakeMask");
@@ -111,7 +111,7 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.steemBalance >= this.fee){
+      if (this.hiveBalance >= this.fee){
         return true;
       }
       this.$bvToast.toast(this.$t('error.delegateeroor'), {
@@ -123,9 +123,9 @@ export default {
     async confirm(){
       if (!this.checkInputValue()) return;
       if (!this.checkDelegateFee()) return;
-      let sp = 0;
+      let hp = 0;
       this.loading = true;
-      const haveDelegated = await getDelegateFromSteem(this.steemAccount, ethers.utils.parseBytes32String(this.pool.asset))
+      const haveDelegated = await getDelegateFromHive(this.hiveAccount, ethers.utils.parseBytes32String(this.pool.asset))
       if (haveDelegated < 0) {
         this.$bvToast.toast(this.$t('error.delegateerror'), {
           title:this.$t('error.pleaseRetry'),
@@ -135,22 +135,22 @@ export default {
         return false
       }
       if (this.operate === 'add') {
-        sp = parseFloat(haveDelegated) + parseFloat(this.stakingValue)
+        hp = parseFloat(haveDelegated) + parseFloat(this.stakingValue)
       } else {
-        sp = parseFloat(haveDelegated) - parseFloat(this.stakingValue)
-        sp = sp < 0 ? 0 : sp
+        hp = parseFloat(haveDelegated) - parseFloat(this.stakingValue)
+        hp = hp < 0 ? 0 : hp
       }
-      this.delegateSp(sp);
+      this.delegateHp(hp);
     },
-    async delegateSp(sp) {
+    async delegateHp(hp) {
       try{
-        sp = parseFloat(sp)
-        if ((sp !== 0 && !this.checkInputValue()) || !this.checkDelegateFee()){
+        hp = parseFloat(hp)
+        if ((hp !== 0 && !this.checkInputValue()) || !this.checkDelegateFee()){
           return;
         }
-        const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
-        const res = await steemDelegation(
-          this.steemAccount,
+        const amount = parseFloat(hp / this.vestsToHive).toFixed(6);
+        const res = await hiveDelegation(
+          this.hiveAccount,
           ethers.utils.parseBytes32String(this.pool.asset),
           amount,
           this.pool.id,
@@ -163,7 +163,7 @@ export default {
             getMyJoinedCommunity()
           }
           this.getVests();
-          this.getSteem();
+          this.getHive();
           this.$bvToast.toast('Delegate success! The data will be update after 1 or 2 mins later, please wait', {
             title:this.$t('tip.success'),
             variant: 'success',
@@ -174,7 +174,7 @@ export default {
           }, 4000)
         }
       }catch(e){
-        console.log('Delegate sp fail5', e);
+        console.log('Delegate hp fail5', e);
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
         })
@@ -185,7 +185,7 @@ export default {
   },
   mounted () {
     // get user's balance
-    this.getSteem()
+    this.getHive().then(console.log)
     this.getVests()
   },
 }

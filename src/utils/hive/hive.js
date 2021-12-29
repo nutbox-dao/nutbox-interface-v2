@@ -5,13 +5,11 @@ import axios from 'axios'
 
 const RPC_NODE = 'https://api.hive.blog'
 
-async function requestBroadcastWithFee (account, stakingFeast, pid, address, fee, symbol, operation, needsActive = true) {
+async function requestBroadcastWithFee (account, pid, address, fee, symbol, operation, needsActive = true) {
   const hiveGas = HIVE_GAS_ACCOUNT
   let memo = [
     "delegate_vesting_shares",
     {
-      "homeChainId": BSC_CHAIN_ID, // ethruem chain id
-      "stakingFeast": stakingFeast,
       "pid": pid,
       "delegator_address": address,
     }
@@ -43,23 +41,23 @@ export async function transferHive (from, to, amount, memo) {
   return await broadcastOps([transOp])
 }
 
-export async function hiveWrap (from, to, amount, memo, currency, address, fee) {
-  fee = parseFloat(fee).toFixed(3)
-  amount = parseFloat(amount).toFixed(3)
-  return await requestBroadcastWithFee(from, address, fee, currency, [
-    'transfer',
-    {
-      from,
-      to,
-      amount: amount + ' ' + currency,
-      memo
-    }
-  ])
-}
+// export async function hiveWrap (from, to, amount, memo, currency, address, fee) {
+//   fee = parseFloat(fee).toFixed(3)
+//   amount = parseFloat(amount).toFixed(3)
+//   return await requestBroadcastWithFee(from, address, fee, currency, [
+//     'transfer',
+//     {
+//       from,
+//       to,
+//       amount: amount + ' ' + currency,
+//       memo
+//     }
+//   ])
+// }
 
-export async function hiveDelegation (delegator, delegatee, amount, takingFeast, pid, address) {
+export async function hiveDelegation (delegator, delegatee, amount, pid, address) {
   const fee = parseFloat(HIVE_STAKE_FEE || 1).toFixed(3)
-  return await requestBroadcastWithFee(delegator, takingFeast, pid, address, fee, 'HIVE', [
+  return await requestBroadcastWithFee(delegator, pid, address, fee, 'HIVE', [
     'delegate_vesting_shares',
     {
       delegator,
@@ -170,14 +168,6 @@ export const getDelegateFromHive = async (account, targetAccount) => {
       resolve(-1)
     }
   })
-}
-
-export const getKeychain = async () => {
-  if (window.hive_keychain) {
-    return window.hive_keychain
-  }
-  await sleep(2)
-  return window.hive_keychain
 }
 
 async function broadcastOps(ops) {
