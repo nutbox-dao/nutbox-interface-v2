@@ -333,19 +333,17 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
-    padding: 1px;
   }
   .active {
-    border: 1px solid var(--primary-custom);
-    border-radius: 2.8rem;
-    width: 2.6rem;
-    height: 2.6rem;
-    padding: 1px;
+    border: 2px solid var(--primary-custom);
+    border-radius: 48px;
+    width: 48px;
+    height: 48px;
     box-sizing: border-box;
   }
   .community-logo-box img {
-    max-width: 2.4rem;
-    max-height: 2.4rem;
+    max-width: 40px;
+    max-height: 40px;
     width: 100%;
     height: 100%;
   }

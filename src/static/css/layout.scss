@@ -9,10 +9,11 @@
   height: 100%;
   background: var(--card-bg-primary);
   //border-right: 1px solid var(--dividers);
-  padding: .5rem;
+  padding: .5rem 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   min-height: fit-content;
   .app-icon {
     @include icon(2rem, 2rem);
