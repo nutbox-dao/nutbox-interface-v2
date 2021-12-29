@@ -6,8 +6,8 @@
         <span class="font-bold text-grey-47 mr-2">{{ cToken ? cToken.symbol : '' }}</span>
         <div class="d-flex align-items-center">
           <span class="text-grey-7">EARNED</span>
-          <i class="copy-icon copy-icon-gray mx-1"></i>
-          <i class="link-icon link-icon-gray"></i>
+          <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken ? cToken.address : '')"></i>
+          <i class="link-icon link-icon-gray" @click="gotoToken(cToken ? cToken.address : '')"></i>
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center">
@@ -22,8 +22,10 @@
         <span class="text-grey-47 font-bold mr-2">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
         <div class="d-flex align-items-center">
           <span class="text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
-          <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken.address)"></i>
-          <i class="link-icon link-icon-gray"></i>
+          <template v-if="type === homeName">
+          <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
+          <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
+          </template>
         </div>
       </div>
 
@@ -69,7 +71,7 @@ import { approvePool, withdrawReward, getPoolType } from '@/utils/web3/pool'
 import { formatUserAddress, handleApiErrCode } from '@/utils/helper'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
 import showToastMixin from '@/mixins/copyToast'
-import { CHAIN_NAME } from '@/config'
+import { CHAIN_NAME, BLOCK_CHAIN_BROWER } from '@/config'
 import PoolOperation from '@/components/community/PoolOperation'
 import { BLOCK_SECOND } from '@/constant'
 import { getUserBaseInfo } from '@/utils/web3/account'
@@ -179,7 +181,9 @@ export default {
         address: formatUserAddress(address)
       }), { title: this.$t('tip.clipboard') })
     },
-
+    gotoToken(address) {
+      window.open(BLOCK_CHAIN_BROWER + 'token/' + address, '_blank')
+    },
     async withdraw () {
       try {
         this.isWithdrawing = true
