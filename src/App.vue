@@ -15,7 +15,7 @@
             <div class="community-logo-box"
                  :class="(inSubCommunityView && (community.id === communityId.toLowerCase())) ? 'active' : ''"
                  v-for="community of userGraphInfo.inCommunities" :key="community.id">
-              <img class="rounded-circle w-100 mb-3 hover" @click="gotoCommunity(community.id)"
+              <img class="rounded-circle w-100 hover" @click="gotoCommunity(community.id)"
                   :id="community.id + 'icon'"
                    v-show="getCommunityInfoById(community.id)"
                    :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"

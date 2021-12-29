@@ -114,12 +114,12 @@
           class="modal-close-icon modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
-        <div class="mt-2 mb-4">Please change Steem Account</div>
+        <div class="mt-2 mb-4">Please change {{type}} Account</div>
         <div>
-          Your Steem account haven't binding with current {{ chainName }} address, please
-          change Steem account in your wallet first.
+          Your {{type}} account haven't binding with current {{ chainName }} address, please
+          change {{type}} account in your wallet first.
         </div>
-        <div class="mt-3 mb-1">Your binding Steem account is:</div>
+        <div class="mt-3 mb-1">Your binding {{type}} account is:</div>
         <div class="c-input-group c-input-group">
           <input
             class="text-center"
