@@ -283,7 +283,7 @@ export default {
   .v-line {
     display: inline-block;
     margin: 0 1rem;
-    @include line(1px, 1rem, 0, var(--text-grey-7))
+    @include line(1px, 1rem, 0, var(--text-74))
   }
 }
 

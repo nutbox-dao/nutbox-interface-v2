@@ -2,9 +2,13 @@
   <div class="multi-card">
     <StakingCardHeader :card="card"/>
     <div class="c-card border-0" style="margin-top: -0.6rem">
-      <div>
-        <span style="color: #717376" class="font-bold mr-2">{{ cToken ? cToken.symbol : '' }}</span>
-        <span style="color: #bdbfc2">EARNED</span>
+      <div class="d-flex align-items-end">
+        <span class="font-bold text-grey-47 mr-2">{{ cToken ? cToken.symbol : '' }}</span>
+        <div class="d-flex align-items-center">
+          <span class="text-grey-7">EARNED</span>
+          <i class="copy-icon copy-icon-gray mx-1"></i>
+          <i class="link-icon link-icon-gray"></i>
+        </div>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <span class="value flex-fill"> {{ pendingReward | amountForm }} </span>
@@ -14,15 +18,18 @@
           {{ $t("operation.harvest") }}
         </button>
       </div>
-      <div class="mt-3 mb-1">
-        <span style="color: #717376" class="font-bold">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
-        <span style="color: #bdbfc2"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
-        <i class="copy-icon" @click="copy(cToken.address)"></i>
+      <div class="mt-3 mb-1 d-flex align-items-end">
+        <span class="text-grey-47 font-bold mr-2">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
+        <div class="d-flex align-items-center">
+          <span class="text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
+          <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken.address)"></i>
+          <i class="link-icon link-icon-gray"></i>
+        </div>
       </div>
 
       <PoolOperation :card='card'/>
 
-      <div class="detail-info-box">
+      <div class="detail-info-box text-grey-7">
         <div class="project-info-container">
           <span class="name"> {{ $t('community.totalDeposit') }} </span>
           <div class="info">{{ totalDeposited | amountForm }}</div>

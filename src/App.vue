@@ -271,7 +271,7 @@ export default {
   --primary-text: white;
   --primary-btn-text-color: #242629;
   --secondary-text: #717376;
-  --disable: #bdbfc2;
+  --disable: #CDCECF;
   --dividers: #242526;
   --background: #1D1E1F;
   --error: #ff5040;
@@ -287,12 +287,15 @@ export default {
   --input-border: #2C2D2E;
   --input-bg: #2C2D2E;
   --block-bg: #1C1D1E;
-  --text-grey-7: #747576;
+  --text-47: #474849;
+  --text-74: #747576;
+  --text-bd: #BDBFC2;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
 @import "static/css/responsive";
 @import "static/css/font";
+@import "static/css/icon";
 @import "static/css/common.scss";
 @import "static/css/layout";
 @import "static/css/modal";

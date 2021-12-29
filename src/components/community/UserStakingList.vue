@@ -55,16 +55,16 @@
           <div class="d-flex align-items-center">
             {{ getCommunityInfoById(pool.community.id).name }}
             <i class="mx-2"></i>
-            <i class="link-icon" @click="gotoCommunity"></i>
+            <i class="link-icon " @click="gotoCommunity"></i>
           </div>
           <div class="d-flex align-items-center">
             <span>{{ cToken ? cToken.symbol : "" }} Contract</span>
-            <i class="copy-icon mx-2" @click="copy(cToken.address)"></i>
+            <i class="copy-icon copy-icon-primary mx-2" @click="copy(cToken.address)"></i>
             <i class="link-icon" @click="gotoContract(cToken.address)"></i>
           </div>
           <div v-if="stakeToken.symbol" class="d-flex align-items-center">
             <span>{{ stakeToken ? stakeToken.symbol : "" }} Contract</span>
-            <i class="copy-icon mx-2" @click="copy(stakeToken.address)"></i>
+            <i class="copy-icon copy-icon-primary mx-2" @click="copy(stakeToken.address)"></i>
             <i class="link-icon" @click="gotoContract(stakeToken.address)"></i>
           </div>
         </div>
@@ -631,11 +631,6 @@ export default {
   .link-icon {
     @include icon(0.8rem, 0.8rem);
     background-image: url("~@/static/images/link-primary-icon.svg");
-    cursor: pointer;
-  }
-  .copy-icon {
-    @include icon(1rem, 1rem);
-    background-image: url("~@/static/images/copy-primary-icon.svg");
     cursor: pointer;
   }
   .content-box {

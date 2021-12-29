@@ -56,6 +56,7 @@
   margin-right: .4rem;
   img {
     border: 1px solid white;
+    background-color: var(--card-bg-primary);
   }
   .icon1 {
     @include card-icon;
@@ -107,8 +108,6 @@
   .name {
     flex: 1;
     text-align: left;
-    color: rgba(189, 191, 194, 1);
-    font-weight: bold;
     white-space: nowrap;
     margin-right: .4rem;
   }
@@ -144,23 +143,58 @@
 }
 
 .symbol-btn {
-  height: 2rem;
-  max-height: 2rem;
-  width: 2rem;
-  min-width: 2rem;
-  color: white;
-  border-radius: .4rem;
+  height: 2.4rem;
+  max-height: 2.4rem;
+  width: 2.4rem;
+  min-width: 2.4rem;
+  border-radius: .8rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--primary-custom);
-  border: none;
   font-size: 1.4rem;
+  &-bg {
+    color: white;
+    background-color: var(--primary-custom);
+    border: none;
+  }
+  &-outline {
+    color: var(--primary-custom);
+    background-color: transparent;
+    border: 1px solid var(--primary-custom);
+    &:disabled {
+      color: var(--text-74);
+      border-color: var(--text-74);
+    }
+  }
+  .sub-icon {
+    @include icon();
+    &-gray {
+      background-image: url("~@/static/images/sub-icon-gray.svg");
+    }
+    &-primary {
+      background-image: url("~@/static/images/sub-icon-primary.svg");
+    }
+  }
+  .add-icon {
+    @include icon();
+    &-gray {
+      background-image: url("~@/static/images/add-icon-gary.svg");
+    }
+    &-primary {
+      background-image: url("~@/static/images/add-icon-primary.svg");
+    }
+  }
+  .loading-icon-gray {
+    @include icon();
+    background-image: url("~@/static/images/loading-gray.svg");
+    animation: spinner-relative 1.2s linear infinite;
+  }
 }
 .info-icon {
   width: 1.4rem;
   height: 1.4rem;
   margin-left: -.2rem;
   border-radius: 1.2rem;
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--text-74);
+  background-color: var(--card-bg-primary);
 }

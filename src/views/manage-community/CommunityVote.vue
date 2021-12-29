@@ -1,147 +1,144 @@
 <template>
-  <div class="scroll-content d-flex flex-column">
-    <div class="container">
-      <div class="c-card">
-        <div class="custom-form col-md-9 text-left">
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="10"
-            :label="$t('nps.remark')"
-            label-for="remarkInput"
-            label-class="d-flex font16 font-bold "
-          >
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-textarea
-                  id="remark"
-                  :placeholder="$t('placeHolder.remarkInput')"
-                  v-model="form.remark"
-                  rows="10"
-                  max="2046"
-                ></b-form-textarea>
-              </div>
+  <div class="scroll-content">
+    <div class="c-card mb-5">
+      <div class="custom-form col-md-9 text-left">
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="10"
+          :label="$t('nps.remark')"
+          label-for="remarkInput"
+          label-class="d-flex font16 font-bold "
+        >
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-textarea
+                id="remark"
+                :placeholder="$t('placeHolder.remarkInput')"
+                v-model="form.remark"
+                rows="10"
+                max="2046"
+              ></b-form-textarea>
             </div>
+          </div>
           <div class="mt-3">{{ $t('tip.markdownTip') }}</div>
-          </b-form-group>
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="10"
-            :label="$t('nps.proposalBodyPreview')"
-            label-for="remarkInput"
-            label-class="d-flex font16 font-bold "
-          >
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg p-3" style="min-height: 2.4rem">
-                <Markdown :body="form.remark" />
-              </div>
+        </b-form-group>
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="10"
+          :label="$t('nps.proposalBodyPreview')"
+          label-for="remarkInput"
+          label-class="d-flex font16 font-bold "
+        >
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg p-3" style="min-height: 2.4rem">
+              <Markdown :body="form.remark" />
             </div>
-          </b-form-group>
+          </div>
+        </b-form-group>
 
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="5"
-            :label="$t('nps.proposalThreshold')"
-            label-for="proposalThresholdInput"
-            label-class="d-flex align-items-center font16 font-bold "
-          >
-            <div class="d-flex">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input
-                  id="proposalThreshold"
-                  :placeholder="$t('nps.proposalThresholdInput')"
-                  v-model="form.threshold"
-                  type="number"
-                ></b-form-input>
-                <span class="c-append">{{ form.symbol }}</span>
-              </div>
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="5"
+          :label="$t('nps.proposalThreshold')"
+          label-for="proposalThresholdInput"
+          label-class="d-flex align-items-center font16 font-bold "
+        >
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                id="proposalThreshold"
+                :placeholder="$t('nps.proposalThresholdInput')"
+                v-model="form.threshold"
+                type="number"
+              ></b-form-input>
+              <span class="c-append">{{ form.symbol }}</span>
             </div>
-          </b-form-group>
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="5"
-            :label="$t('nps.proposalPassThreshold')"
-            label-for="proposalPassThresholdInput"
-            label-class="d-flex align-items-center font16 font-bold"
-          >
-            <div class="d-flex align-items-center">
-              <div class="c-input-group c-input-group-bg">
-                <b-form-input
-                  id="proposalPassThreshold"
-                  :placeholder="$t('nps.proposalPassThresholdInput')"
-                  v-model="form.passthreshold"
-                  type="number"
-                ></b-form-input>
-                <span class="c-append">{{ form.symbol }}</span>
-              </div>
+          </div>
+        </b-form-group>
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="5"
+          :label="$t('nps.proposalPassThreshold')"
+          label-for="proposalPassThresholdInput"
+          label-class="d-flex align-items-center font16 font-bold"
+        >
+          <div class="d-flex align-items-center">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                id="proposalPassThreshold"
+                :placeholder="$t('nps.proposalPassThresholdInput')"
+                v-model="form.passthreshold"
+                type="number"
+              ></b-form-input>
+              <span class="c-append">{{ form.symbol }}</span>
             </div>
-          </b-form-group>
+          </div>
+        </b-form-group>
 
-          <!-- npm poster -->
-          <b-form-group
-            label-cols-md="2"
-            content-cols-md="10"
-            class="cover-form"
-            :label="$t('community.communityPoster')"
+        <!-- npm poster -->
+        <b-form-group
+          label-cols-md="2"
+          content-cols-md="10"
+          class="cover-form"
+          :label="$t('community.communityPoster')"
+        >
+          <b-form-file
+            v-model="coverImg"
+            @input="updateCover"
+            accept="image/png,image/jpeg,image/jpg"
+            ref="logo-file-input"
           >
-            <b-form-file
-              v-model="coverImg"
-              @input="updateCover"
-              accept="image/png,image/jpeg,image/jpg"
-              ref="logo-file-input"
-            >
-              <template #placeholder>
-                <div class="input-file-cover">
-                  <template v-if="form.poster">
-                    <img class="cover-preview" :src="form.poster" alt="" />
-                    <div class="edit-mask">
+            <template #placeholder>
+              <div class="input-file-cover">
+                <template v-if="form.poster">
+                  <img class="cover-preview" :src="form.poster" alt="" />
+                  <div class="edit-mask">
                       <span
                       >{{ $t("operation.edit") }}<br />{{
                           $t("community.communityPoster")
                         }}</span
                       >
-                    </div>
-                  </template>
-                  <template v-else>
-                    <img
-                      class="add-icon"
-                      src="~@/static/images/add-white-icon.svg"
-                      alt=""
-                    />
-                    <div class="add-text">
-                      {{ $t("operation.uploadPoster") }}
-                    </div>
-                  </template>
-                </div>
-              </template>
-              <template #file-name>
-                <div class="input-file-cover">
+                  </div>
+                </template>
+                <template v-else>
                   <img
-                    class="cover-preview"
-                    v-if="coverPreviewSrc"
-                    :src="coverPreviewSrc"
+                    class="add-icon"
+                    src="~@/static/images/add-white-icon.svg"
                     alt=""
                   />
-                  <UploadLoading v-if="coverUploadLoading" />
-                </div>
-              </template>
-            </b-form-file>
-            <div class="font12 text-grey-7 mt-1">
-              {{ $t("tip.picTip", { size: "1200*280" }) }}
-            </div>
-          </b-form-group>
+                  <div class="add-text">
+                    {{ $t("operation.uploadPoster") }}
+                  </div>
+                </template>
+              </div>
+            </template>
+            <template #file-name>
+              <div class="input-file-cover">
+                <img
+                  class="cover-preview"
+                  v-if="coverPreviewSrc"
+                  :src="coverPreviewSrc"
+                  alt=""
+                />
+                <UploadLoading v-if="coverUploadLoading" />
+              </div>
+            </template>
+          </b-form-file>
+          <div class="font12 text-grey-7 mt-1">
+            {{ $t("tip.picTip", { size: "1200*280" }) }}
+          </div>
+        </b-form-group>
 
-          <b-form-group label-cols-md="2" content-cols-md="10" label="">
-            <div class="text-center mt-4">
-              <button class="primary-btn col-md-6" @click="submitForm" :disabled="updateing">
-                <b-spinner small type="grow" v-show="updateing" />
-                {{ $t("operation.update") }}
-              </button>
-            </div>
-          </b-form-group>
-        </div>
+        <b-form-group label-cols-md="2" content-cols-md="10" label="">
+          <div class="text-center mt-4">
+            <button class="primary-btn col-md-6" @click="submitForm" :disabled="updateing">
+              <b-spinner small type="grow" v-show="updateing" />
+              {{ $t("operation.update") }}
+            </button>
+          </div>
+        </b-form-group>
       </div>
     </div>
-
     <!-- crop pic tip -->
     <b-modal
       v-model="cropperModal"
@@ -339,7 +336,7 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .c-card {
-  @include card(2rem 1.2rem, var(--card-bg-primary), none, auto);
+  @include card(2rem 1.2rem, var(--card-bg-primary), hidden, fit-content);
   flex: 1;
 }
 .cover-preview {

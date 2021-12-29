@@ -1,0 +1,20 @@
+.copy-icon {
+  @include icon(1rem, 1rem);
+  cursor: pointer;
+  &-gray {
+    background-image: url("~@/static/images/copy.svg");
+  }
+  &-primary {
+    background-image: url("~@/static/images/copy-primary-icon.svg");
+  }
+}
+.link-icon {
+  @include icon(1rem, 1rem);
+  cursor: pointer;
+  &-gray {
+    background-image: url("~@/static/images/link-gray.svg");
+  }
+  &-primary {
+    background-image: url("~@/static/images/link-primary-icon.svg");
+  }
+}
