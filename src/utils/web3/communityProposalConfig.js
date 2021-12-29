@@ -84,13 +84,11 @@ export const getScore = async (params) => {
 export const getScores = async (params) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (params.network) {
-        const res = await gScores(params);
+      const res = await gScores(params);
 
-        const totalScore = res.result.scores;
+      const totalScore = res.result.scores;
 
-        resolve(totalScore);
-      }
+      resolve(totalScore);
     } catch (e) {
       console.log("Get all score  failed", e);
       reject(e);

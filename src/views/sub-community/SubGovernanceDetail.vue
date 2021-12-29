@@ -62,7 +62,28 @@
               </div>
             </div>
             <div class="c-card">
-              <div class="c-card-header font20">{{ $t("nps.proposalVoteResult") }}</div>
+              <div class="c-card-header d-flex justify-content-between font20">{{ $t("nps.proposalVoteResult") }}
+                <div class="flag"
+                v-show="proposal.proposalResult !== 0"
+                   :class="
+                proposal.status == 0
+                  ? 'proposal-pending'
+                  : proposal.status == 1
+                  ? 'proposal-rolling'
+                  : proposal.proposalResult === 1
+                  ? 'proposal-pass'
+                  : 'proposal-unpass'">
+                {{
+                  proposal.status == 0
+                    ? $t("nps.propsalVoteStatusWaitStart")
+                    : proposal.status == 1
+                      ? $t("nps.propsalVoteStatusDoing")
+                      : proposal.proposalResult === 1
+                        ? $t("nps.pass")
+                        : $t("nps.unpass")
+                }}
+              </div>
+              </div>
               <div class="c-card-content">
                 <div class="progress-box">
                   <div class="flex-between-center">
@@ -84,7 +105,7 @@
                               variant="danger"
                               class="w-100 my-1"></b-progress>
                 </div>
-                <div class="progress-box">
+                <!-- <div class="progress-box">
                   <div class="flex-between-center">
                     <span>{{ $t("nps.proposalVoteResult") }}</span>
                     <span>{{ voteAgreeTotalScore - voteDisagreeTotalScore | amountForm }}</span>
@@ -93,7 +114,7 @@
                               height=".5rem"
                               variant="info"
                               class="w-100 my-1"></b-progress>
-                </div>
+                </div> -->
                 <button @click="download" :disabled="loading" class="primary-btn rounded-pill w-75">{{ $t('nps.downloadReport') }}</button>
               </div>
             </div>
@@ -129,7 +150,7 @@
         <button
           class="primary-btn mt-4"
           @click="ConfirmVote"
-          :disabled="isVoted || voteing || loading"
+          :disabled="isVoted || voteing || loading || balacne === 0"
         >
           <b-spinner small type="grow" v-show="voteing" />
           {{  type == "agree"
@@ -268,11 +289,8 @@ export default {
     },
     async loadAllVote() {
       this.voteItems = await getAllVote(this.proposal.id);
-      console.log(235, this.voteItems);
-
       if (this.voteItems) {
         var list = this.voteItems.filter((t) => t.userId == this.currentUserId);
-
         var addresses = [];
         this.voteItems.forEach((value, index) => {
           /*  if (value.voteType == 1) {

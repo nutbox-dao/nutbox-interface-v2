@@ -90,7 +90,6 @@ export default {
     },
   },
   mounted () {
-    console.log(444, this.proposalItem);
     this.voteTotalScore =
       this.proposalItem.voteAgreeTotalScore +
       this.proposalItem.voteDisagreeTotalScore
