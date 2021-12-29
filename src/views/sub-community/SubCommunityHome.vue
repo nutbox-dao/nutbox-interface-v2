@@ -8,9 +8,11 @@
           <img class="large-logo" :src="baseInfo && baseInfo.icon" alt=""/>
           <div class="project-info text-left">
             <div class="d-flex align-items-center">
-              <a class="font20 font-bold text-white m-0"
+              <a v-if="baseInfo && baseInfo.website"
+                 class="font20 font-bold text-white m-0"
                  :href="baseInfo && baseInfo.website"
                  target="_blank">{{ baseInfo && baseInfo.name }}</a>
+              <div v-else>{{ baseInfo && baseInfo.name }}</div>
               <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website"></i>
               <i class="v-line mx-2" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
             </div>
