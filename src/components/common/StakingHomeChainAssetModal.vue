@@ -1,9 +1,7 @@
 <template>
-  <div class="">
-    <div class="text-right">
-      <img class="modal-close-icon" src="~@/static/images/close.svg" alt="" @click="hide"/>
-    </div>
-    <div class="text-center font20 font-bold" >
+  <div class="position-relative">
+    <i class="modal-close-icon-right" @click="hide"></i>
+    <div class="modal-title font20 font-bold" >
       {{
         operate === "add"
           ? $t("stake.stake")
@@ -12,7 +10,7 @@
     </div>
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
-        <div class="label text-right">
+        <div class="label text-right font20">
           <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
         </div>
         <div class="c-input-group input-border d-flex">
@@ -31,7 +29,7 @@
     <div class="d-flex" style="margin: 0 -1rem">
       <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
             >{{ $t("operation.confirm") }}</button>
-      <button class="primary-btn primary-btn-outline mx-3" @click="hide" :disabled='loading'>{{
+      <button class="dark-btn mx-3" @click="hide" :disabled='loading'>{{
             $t("operation.cancel")
           }}</button>
     </div>

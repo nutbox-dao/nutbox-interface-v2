@@ -1,15 +1,15 @@
 <template>
-  <div class="login">
+  <div class="login position-relative">
+    <i class="modal-close-icon-right" @click="$emit('hideMask')"></i>
     <!-- keychain login -->
-    <div class="text-center">
+    <div class="modal-title">
       {{ this.$t("operation.login") }}
-      <i class="modal-close-icon-right" @click="$emit('hideMask')"></i>
     </div>
     <div class="mt-4">
-      <div class="account-box c-input-group c-input-group-bg">
+      <div class="account-box c-input-group c-input-group-bg-dark c-input-group-border">
         <span class="keychain" :style="keychainLogo" @click="getKeychain" />
         <b-input
-          class="mr-sm-2 mb-sm-0 input"
+          class="mb-sm-0 input"
           :placeholder="
                 type === 'STEEM'
                   ? $t('commen.steemAccoutPlaceHolder')

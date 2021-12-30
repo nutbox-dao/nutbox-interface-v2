@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="col-md-6 text-right">
-            <button class="primary-btn w-auto mr-0" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
+            <button class="primary-btn w-auto px-2 mr-0" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
           </div>
         </div>
       </div>

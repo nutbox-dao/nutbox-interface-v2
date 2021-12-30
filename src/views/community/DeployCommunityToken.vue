@@ -460,8 +460,9 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .form-card {
-  @include card(2rem 10% 2rem, var(--card-bg-primary), auto, 600px);
+  @include card(2rem 10% 2rem, var(--card-bg-primary), auto);
   position: relative;
+  min-height: 600px;
 }
 .divide-line {
   width: 50%;

@@ -375,10 +375,15 @@ body {
     width: 1.6rem;
     padding: .2rem;
     margin-right: .3rem;
+    position: relative;
     &::after {
       content: '';
+      position: absolute;
       @include icon;
       background-image: url("~@/static/images/wallet.svg");
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 }

@@ -658,7 +658,7 @@ export default {
   @include card();
 }
 .token-card {
-  @include card(.8rem, var(--card-bg-primary), hidden, unset);
+  @include card(.8rem, var(--card-bg-primary), hidden, fit-content);
 }
 @import "src/static/css/form";
 .cover-preview {

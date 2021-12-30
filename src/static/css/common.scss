@@ -439,6 +439,15 @@ input::-webkit-input-placeholder {
     animation: spinner-relative 1.2s linear infinite;
   }
 }
+.sub-community-page .symbol-btn {
+  &-bg {
+    background-color: var(--sub-primary);
+  }
+  &-outline {
+    color:  var(--sub-primary);
+    border-color: var(--sub-primary);
+  }
+}
 .row {
   margin-left: -8px;
   margin-right: -8px;
