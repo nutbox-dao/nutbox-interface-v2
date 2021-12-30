@@ -74,6 +74,7 @@ import { CHAIN_NAME, BLOCK_CHAIN_BROWER } from '@/config'
 import PoolOperation from '@/components/community/PoolOperation'
 import { BLOCK_SECOND } from '@/constant'
 import { getUserBaseInfo } from '@/utils/web3/account'
+import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 
 export default {
   name: 'CommunityStakingCard',
@@ -135,7 +136,7 @@ export default {
       } else if (this.type === "HIVE") {
         price = this.prices['HIVEUSDT']
       }
-      return price ? price : 0
+      return price ? parseFloat(price) : 0
     },
     apr() {
       if(!this.prices || !this.cToken || !this.tvl) return '--';
@@ -143,8 +144,8 @@ export default {
       const stakePrice = this.stakePrice;
       if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return '--';
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
-      const fundRatio = this.pool.community.feeRatio
-      const poolRatio = this.pool.ratio
+      const fundRatio = this.card.community.feeRatio
+      const poolRatio = this.card.ratio
       const reward = this.rewardPerBlock * blocksPerYear * (10000 - fundRatio) * poolRatio * stakePrice;
       const stake = this.tvl;
       return parseFloat(reward / 1e6 / stake).toFixed(2) + '%';
@@ -157,7 +158,8 @@ export default {
     return {
       isWithdrawing: false,
       homeName: CHAIN_NAME,
-      stakers: []
+      stakers: [],
+      rewardPerBlock: 0
     }
   },
   mixins: [showToastMixin],
@@ -205,6 +207,11 @@ export default {
     const len = Math.min(7, this.card.stakers.length)
     const ids = this.card.stakers.slice(0, len).map(a => a.id)
     this.stakers = await Promise.all(ids.map(id => getUserBaseInfo(id)))
+    getCommunityRewardPerBlock(this.card.community.id).then(res => {
+      this.rewardPerBlock = res
+    }).catch(e => {
+      console.log('Get community reward fail', e);
+    });
   },
 }
 </script>

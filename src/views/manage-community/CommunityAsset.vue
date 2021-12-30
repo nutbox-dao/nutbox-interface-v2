@@ -48,8 +48,7 @@
             <div class="c-input-group c-input-group-bg">
               <b-form-input
                 :disabled="true"
-                v-model="communityBalance"
-                placeholder="0.000"
+                :placeholder="communityBalance.toString()"
               >
               </b-form-input>
               <span class="c-append">{{ cToken.symbol }}</span>
@@ -71,7 +70,7 @@
             <div class="c-input-group c-input-group-bg">
               <b-form-input
                 :disabled="true"
-                :placeholder="stakingFactoryId"
+                :placeholder="account"
               >
               </b-form-input>
               <span></span>
@@ -261,7 +260,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['stakingFactoryId']),
+    ...mapState('web3', ['account']),
     ...mapState('community', ['communityData', 'distributions']),
     cTokenAddress () {
       return this.cToken.address
@@ -424,7 +423,7 @@ export default {
           })
           // update dao fund balance
           getCommunityBalance(communityInfo.id, this.cToken.address).then(res => {
-            this.communityBalance = res.toString() / 1e18
+            this.communityBalance = (res.toString() / 1e18).toFixed(2)
           }).catch()
         }, 1000)
         this.$once('hook:beforeDestroy', () => {

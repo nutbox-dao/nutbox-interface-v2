@@ -104,8 +104,8 @@
                 <div class="c-input-group c-input-group-bg">
                   <b-form-input
                     :disabled="true"
-                    :placeholder="communityId"
-                    v-model="communityId"
+                    :placeholder="fund"
+                    v-model="fund"
                   >
                   </b-form-input>
                   <span></span>
@@ -155,7 +155,7 @@ import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getCToken } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction } from '@/utils/helper'
-import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
+import { getSpecifyDistributionEras, getCommunityBalance, getCommunityOwner } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 
@@ -170,7 +170,8 @@ export default {
     return {
       communityBalanceValue: 0,
       loadingPool: true,
-      laodingHistory: false
+      laodingHistory: false,
+      fund:''
     }
   },
   computed: {
@@ -232,6 +233,9 @@ export default {
     while (!this.communityId) {
       await sleep(0.2)
     }
+    getCommunityOwner(this.communityId).then((res) => {
+      this.fund = res
+    })
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res.address)
