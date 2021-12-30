@@ -175,13 +175,13 @@ export default {
   width: 1.6rem;
 }
 .sub-page-side {
-  width: 12rem;
+  width: 170px;
   height: 100%;
-  padding: 0 .8rem .8rem;
+  margin-right: 16px;
 }
 .slider-content {
+  height: calc(100% - 16px);
   width: 100%;
-  height: 100%;
   background-color: var(--card-bg-primary);
   padding: 1rem 0;
   border-radius: .8rem;
@@ -192,16 +192,19 @@ export default {
     .nav-link {
       display: flex;
       align-items: center;
+      padding: 12px 20px;
     }
     i {
       margin-right: .5rem;
       opacity: .8;
     }
     span {
+      font-size: 16px;
+      line-height: 16px;
       color: var(--text-74);
     }
     .active span {
-      color: var(--primary-custom);
+      color: var(--sub-primary);
       font-weight: bold;
     }
     .active i {
@@ -219,7 +222,7 @@ export default {
 }
 @media (min-width: 1200px) {
   .sub-page-side {
-    width: 16rem;
+    width: 170px;
   }
 }
 @media (min-width: 992px) {
@@ -244,7 +247,7 @@ export default {
   }
 }
 .menu-icon {
-  @include icon(1.2rem, 1.2rem);
+  @include icon(24px, 24px);
 }
 .home-icon {
   background-image: url("~@/static/images/menu-home.svg");

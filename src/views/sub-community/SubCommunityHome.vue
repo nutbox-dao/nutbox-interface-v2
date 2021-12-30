@@ -1,13 +1,13 @@
 <template>
-  <div class="sub-home-page h-100 d-flex">
+  <div class="sub-home-page">
     <div class="scroll-content page-view">
       <!-- base info -->
       <div class="p-card">
         <img class="poster" :src="baseInfo && baseInfo.poster" alt="">
         <div class="second-card-home border-0">
           <img class="large-logo" :src="baseInfo && baseInfo.icon" alt=""/>
-          <div class="project-info text-left">
-            <div class="d-flex align-items-center">
+          <div class="text-left">
+            <div class="d-flex align-items-center font20 line-height24 font-bold">
               <a v-if="baseInfo && baseInfo.website"
                  class="font20 font-bold text-white m-0"
                  :href="baseInfo && baseInfo.website"
@@ -16,7 +16,7 @@
               <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website"></i>
               <i class="v-line mx-2" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
             </div>
-            <div class="desc font14 mt-2"
+            <div class="desc font14 line-height18 mt-2"
                  v-html="(baseInfo && baseInfo.description)"></div>
           </div>
         </div>
@@ -66,20 +66,21 @@
       </div>
       <!-- pools -->
       <div class="c-card">
-        <div class="content3 mb-5">
+        <div class="content3">
           <div class="title mb-3">Pools</div>
-          <PoolRatio :pools-data="poolsData"/>
+          <PoolRatio :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="loadingPool"></div>
       </div>
       <!-- Dao fund -->
       <div class="c-card">
-        <div class="content3 mb-5">
+        <div class="content3">
           <div class="title mb-3">DAO Fund</div>
           <div class="custom-form form-row-align-center">
             <!-- community balance -->
             <b-form-group v-if="showBalance" label-cols-md="3" content-cols-md="8"
                           class="align-items-center"
+                          label-class="font14"
                           label-align="left"
                           :label="$t('community.communityBalance')">
               <div class="d-flex v-middle">
@@ -96,6 +97,7 @@
             </b-form-group>
             <!-- community dev address -->
             <b-form-group label-cols-md="3" content-cols-md="8"
+                          label-class="font14"
                           label-align="left"
                           :label="$t('community.fundAddress')">
               <div class="d-flex v-middle">
@@ -113,6 +115,7 @@
             <!-- community dev ratio -->
             <b-form-group label-cols-md="3" content-cols-md="8"
                           label-align="left"
+                          label-class="font14"
                           :label="$t('community.fundRatio')">
               <div class="d-flex v-middle">
                 <div class="c-input-group c-input-group-bg">
@@ -134,7 +137,7 @@
   <!-- history -->
     <div class="activity-banner">
       <div class="a-banner-card">
-        <div class="mt-2 mb-4">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
+        <div class="mt-2 mb-4 font-bold font20 font24">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-if="!operationHistory || (operationHistory.length === 0)"></div>
         <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
@@ -266,6 +269,7 @@ export default {
   .activity-banner {
     width: 25%;
     min-width: 16rem;
+    max-width: 300px;
     padding: 0 .8rem .8rem;
   }
   .a-banner-card {
@@ -292,15 +296,9 @@ export default {
 }
 
 .c-card {
-  @include card(2rem, var(--card-bg-primary), hidden, fit-content);
+  @include card(.8rem 1rem, var(--card-bg-primary), hidden, fit-content);
   margin-top: 1rem;
   margin-bottom: .8rem;
-
-  .title {
-    @include single-color-bg(.2rem 1.6rem, left center);
-    padding-left: 1rem;
-    text-align: left;
-  }
 
   .token-logo {
     height: 2.4rem;
@@ -309,6 +307,11 @@ export default {
     min-height: 2.4rem;
     @include coin-shadow();
     border-radius: 3rem;
+  }
+  .title {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: bold;
   }
 
   .token-address {
@@ -349,9 +352,6 @@ export default {
   }
 }
 @media (min-width: 992px) and (max-width: 1600px) {
-  .ratio-container {
-    flex-direction: column;
-  }
   .base-value-info {
     flex-direction: column;
   }
@@ -364,15 +364,24 @@ export default {
     margin-top: 0!important;
   }
 }
+@media (min-width: 992px) {
+  .sub-home-page {
+    height: 100%;
+    display: flex;
+  }
+}
 @media (max-width: 991px) {
   .sub-home-page {
-    flex-direction: column;
-    overflow: scroll;
+    height: 100%;
+    overflow: auto;
     .page-view {
       padding: 0 .8rem;
+      height: fit-content;
+      flex: 1;
     }
     .activity-banner {
       width: 100%;
+      max-width: 100%;
       height: fit-content;
     }
   }

@@ -3,7 +3,7 @@
     <!-- keychain login -->
     <div class="text-center">
       {{ this.$t("operation.login") }}
-      <i class="modal-close-icon modal-close-icon-right" @click="$emit('hideMask')"></i>
+      <i class="modal-close-icon-right" @click="$emit('hideMask')"></i>
     </div>
     <div class="mt-4">
       <div class="account-box c-input-group c-input-group-bg">

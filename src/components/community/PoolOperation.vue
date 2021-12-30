@@ -111,7 +111,7 @@
     >
       <div class="custom-form text-center">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
         <div class="mt-2 mb-4">Please change {{type}} Account</div>
@@ -152,7 +152,7 @@
     >
       <div class="custom-form text-center">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
         <div class="mt-2 mb-4">Please change {{ chainName }} address</div>

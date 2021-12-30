@@ -4,7 +4,7 @@
       <div class="text-right">
         <i class="modal-close-icon" @click="$emit('close')"></i>
       </div>
-      <div class="mt-2 text-center">Choose a pool type</div>
+      <div class="modal-title">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100">
         <div class="type-box" @click="$emit('onType', 'bsc')">BSC <br> Staking</div>
         <div class="type-box" @click="$emit('onType', 'steem')">Steem <br> Staking</div>
@@ -27,7 +27,7 @@ export default {
 
 <style scoped lang="scss">
 .pool-type-modal-content {
-  min-height: 60vh;
+  min-height: 50vh;
 }
 .type-box {
   border: 1px solid var(--input-border);
@@ -40,6 +40,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40vh;
+  height: 30vh;
 }
 </style>

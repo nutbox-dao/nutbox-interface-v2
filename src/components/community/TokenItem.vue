@@ -3,8 +3,8 @@
     <img v-if="logo" class="logo" :src="logo" alt="">
     <empty-img v-else width="2.4rem" height="2.4rem" border-radius="50%"></empty-img>
     <div class="flex-fill ml-4">
-      <div class="mb-2 font16">{{tokenName}} -- {{tokenSymbol}}</div>
-      <div class="text-grey-7 font14">{{tokenAddress}}</div>
+      <div class="mb-2 font14 line-height14">{{tokenName}} -- {{tokenSymbol}}</div>
+      <div class="text-grey-7 font12 line-height12 mt-1">{{tokenAddress}}</div>
     </div>
   </div>
 </template>
@@ -34,9 +34,12 @@ export default {
 </script>
 
 <style scoped>
+.token-item {
+  height: 48px;
+}
 .logo {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 2.4rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px
 }
 </style>

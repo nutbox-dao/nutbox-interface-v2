@@ -58,10 +58,10 @@
   display: flex;
   flex-direction: column;
   .page-header {
-    height: 3.8rem;
-    min-height: 3.8rem;
+    height: 5rem;
+    min-height: 5rem;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0 40px;
   }
   .page-content {
     position: relative;
@@ -99,12 +99,6 @@
       display: flex;
       gap: .4rem;
       justify-content: flex-end;
-      .add-icon {
-        @include icon;
-        min-width: 1rem;
-        margin-right: .2rem;
-        background-image: url("~@/static/images/add-white-icon.svg");
-      }
     }
   }
   .no-view-top-header {
@@ -116,21 +110,6 @@
     align-items: center;
     background-color: var(--background);
     box-sizing: border-box;
-    &-line {
-      background-color: #f6f7f9;
-      height: 2.4rem;
-      overflow-x: auto;
-      .nav .active {
-        color: var(--primary-text);
-        @include single-color-bg(3rem .2rem, center bottom);
-        font-weight: bold;
-      }
-      a, span {
-        height: 2.4rem;
-        line-height: 2.4rem;
-        min-width: fit-content;
-      }
-    }
     &-bg {
       height: 2rem;
       background-color: var(--nav-tab-bg);
@@ -144,7 +123,6 @@
       }
       a, span {
         height: 1.8rem;
-        line-height: 1.8rem;
         color: var(--text-74);
       }
     }
@@ -155,17 +133,24 @@
       overflow-y: hidden;
       overflow-x: scroll;
       a, span {
-        font-size: .8rem;
+        min-width: 90px;
         cursor: pointer;
-        flex: 1;
         padding: 0 .5rem;
         text-align: center;
+        font-size: 14px;
+        line-height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       a:hover, span:hover {
         text-decoration: none;
         font-weight: bold;
       }
     }
+  }
+  .sub-community-page .nav-box .nav .active {
+    color: var(--sub-primary);
   }
 }
 //pc
@@ -186,6 +171,9 @@
 //h5
 @media (max-width: 991px) {
   .page-container {
+    .page-header {
+      padding: 0 15px;
+    }
     .page-back-text-icon {
       margin-top: 0;
       margin-bottom: 0;

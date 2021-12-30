@@ -74,7 +74,7 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <i class="modal-close-icon modal-close-icon-right" @click="showSignatureTip=false"></i>
+        <i class="modal-close-icon-right" @click="showSignatureTip=false"></i>
         <div class="my-5">
           {{ $t("tip.editTip") }}
         </div>

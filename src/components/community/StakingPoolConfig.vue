@@ -9,7 +9,7 @@
       <div class="col-lg-10 mx-auto custom-form overflow-hidden flex-fill d-flex flex-column">
         <b-form-group class="mb-4"
                       v-if="type === 'create' && activePools && activePools.length > 0"
-                      label-class="overflow-hidden text-grey-7"
+                      label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
                       label-cols-md="3" content-cols-md="9"
                       label="Pool Name">
           <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
@@ -18,57 +18,60 @@
         <b-form-group
           v-if="needIcon"
           class="mb-4 logo-form"
-          label-class="overflow-hidden text-grey-7"
+          label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
           label-cols-md="3" content-cols-md="9"
           :label="$t('community.communityLogo')">
-          <b-form-file
-            v-model="logo"
-            @input="updateLogo"
-            accept="image/png,image/jpeg, image/jpg"
-            ref="logo-file-input"
-          >
-            <template #placeholder>
-              <div class="input-file-logo">
-                <template v-if="propsIcon">
-                  <img class="cover-preview" :src="propsIcon" alt="" />
-                  <div class="edit-mask">
-                    <span>{{ $t("operation.edit") }}<br />LOGO</span>
-                  </div>
-                </template>
-                <template v-else>
+          <div class="d-flex align-items-center">
+            <b-form-file
+              v-model="logo"
+              @input="updateLogo"
+              accept="image/png,image/jpeg, image/jpg"
+              ref="logo-file-input"
+            >
+              <template #placeholder>
+                <div class="input-file-logo">
+                  <template v-if="propsIcon">
+                    <img class="cover-preview" :src="propsIcon" alt="" />
+                    <div class="edit-mask">
+                      <span>{{ $t("operation.edit") }}<br />LOGO</span>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <img
+                      class="add-icon"
+                      src="~@/static/images/add-icon-gary.svg"
+                      alt=""
+                    />
+                  </template>
+                </div>
+              </template>
+              <template #file-name>
+                <div class="input-file-logo">
                   <img
-                    class="add-icon"
-                    src="~@/static/images/add-white-icon.svg"
+                    class="logo-preview"
+                    v-if="logoPreviewSrc"
+                    :src="logoPreviewSrc"
                     alt=""
                   />
-                  <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                </template>
-              </div>
-            </template>
-            <template #file-name>
-              <div class="input-file-logo">
-                <img
-                  class="logo-preview"
-                  v-if="logoPreviewSrc"
-                  :src="logoPreviewSrc"
-                  alt=""
-                />
-                <UploadLoading v-if="logoUploadLoading" />
-              </div>
-            </template>
-          </b-form-file>
-          <div class="font12 text-grey-5 mt-2">
+                  <UploadLoading v-if="logoUploadLoading" />
+                </div>
+              </template>
+            </b-form-file>
+            <div class="font12 text-grey-7 ml-3">
               {{ $t("tip.stakeTokenLogoTip", { token: token ? token.symbol : '' }) }}
             </div>
+          </div>
         </b-form-group>
 
-        <div class="mb-2">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
+        <div class="mb-2 font14 line-height14">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
         <div class="pool-chart-box w-100 d-flex">
           <div class="pool-data-box">
             <b-form-group :label="activePools[inputIndex].name"
-                          label-cols="4" content-cols="8"
+                          label-cols="4"
+                          label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
+                          content-cols="8"
                           v-for="(ratio, inputIndex) of ratios" :key="inputIndex">
-              <div class="c-input-group c-input-group-bg d-flex">
+              <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex">
                 <b-form-input :data-label="activePools[inputIndex].name"
                               v-model="ratios[inputIndex]"
                               @input="inputChange" step="0.01" type="number"></b-form-input>
@@ -79,13 +82,13 @@
           <PoolRatio class="flex-fill" style="margin-top: -2rem" :pools-data="activePools" :show-legend-info="false"/>
         </div>
         <div class="d-flex mt-3">
-          <button class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
-             <b-spinner small type="grow" v-show="!enableOp" />
-            OK
-          </button>
-          <button class="primary-btn primary-btn-outline mx-2" :disabled="!enableOp" @click="$emit('close')">
+          <button class="dark-btn mx-2" :disabled="!enableOp" @click="$emit('close')">
             <b-spinner small type="grow" v-show="!enableOp" />
             Cancel
+          </button>
+          <button class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
+            <b-spinner small type="grow" v-show="!enableOp" />
+            OK
           </button>
         </div>
       </div>

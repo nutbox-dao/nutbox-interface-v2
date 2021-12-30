@@ -3,15 +3,15 @@
     <StakingCardHeader :card="card"/>
     <div class="c-card border-0" style="margin-top: -0.6rem">
       <div class="d-flex align-items-end">
-        <span class="font-bold text-grey-47 mr-2">{{ cToken ? cToken.symbol : '' }}</span>
+        <span class="font-bold text-grey-47 mr-2 font12">{{ cToken ? cToken.symbol : '' }}</span>
         <div class="d-flex align-items-center">
-          <span class="text-grey-7">EARNED</span>
+          <span class="font14 text-grey-7">EARNED</span>
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken ? cToken.address : '')"></i>
           <i class="link-icon link-icon-gray" @click="gotoToken(cToken ? cToken.address : '')"></i>
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center">
-        <span class="value flex-fill"> {{ pendingReward | amountForm }} </span>
+        <span class="value flex-fill font-bold font24 line-height24"> {{ pendingReward | amountForm }} </span>
         <button class="primary-btn m-0 w-auto d-flex align-items-center"
                 :disabled="isWithdrawing" @click="withdraw">
           <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
@@ -19,9 +19,9 @@
         </button>
       </div>
       <div class="mt-3 mb-1 d-flex align-items-end">
-        <span class="text-grey-47 font-bold mr-2">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
+        <span class="text-grey-47 font-bold mr-2 font12">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
         <div class="d-flex align-items-center">
-          <span class="text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
+          <span class="font14 text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
           <template v-if="type === homeName">
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
           <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
@@ -31,7 +31,7 @@
 
       <PoolOperation :card='card'/>
 
-      <div class="detail-info-box text-grey-7">
+      <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
           <span class="name"> {{ $t('community.totalDeposit') }} </span>
           <div class="info">{{ totalDeposited | amountForm }}</div>
@@ -47,15 +47,14 @@
         <div class="project-info-container">
           <span class="name"> Stakers </span>
           <div class="info d-flex align-items-center">
-            <div :id="user.id + card.id" v-for="user of stakers" :key="user.id">
+            <div :id="user.id + card.id" v-for="(user, index) of stakers" :key="user.id"
+                 :style="{zIndex: stakers.length-index}">
               <img class="info-icon" v-if="user.avatar && user.avatar.length > 0" :src="user.avatar">
               <img v-else class="info-icon" src="~@/static/images/avatars/default.png" alt="">
               <b-popover :target="user.id + card.id" triggers="hover focus" placement="top">
                 {{ user.name ? user.name : user.id }}
               </b-popover>
             </div>
-
-
             <span class="ml-1">{{ card.stakersCount }}</span>
           </div>
         </div>
@@ -202,6 +201,7 @@ export default {
     }
   },
   async mounted () {
+    console.log(this.card)
     const len = Math.min(7, this.card.stakers.length)
     const ids = this.card.stakers.slice(0, len).map(a => a.id)
     this.stakers = await Promise.all(ids.map(id => getUserBaseInfo(id)))

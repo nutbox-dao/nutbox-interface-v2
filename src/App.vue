@@ -18,9 +18,9 @@
               <img class="rounded-circle w-100 hover" @click="gotoCommunity(community.id)"
                   :id="community.id + 'icon'"
                    v-show="getCommunityInfoById(community.id)"
-                   :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon"
+                   :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon || './default.png'"
                   alt="">
-                <b-popover :target="community.id + 'icon'"
+              <b-popover :target="community.id + 'icon'"
                   triggers="hover focus"
                   placement="top">
                   {{ getCommunityInfoById(community.id) && getCommunityInfoById(community.id).name }}
@@ -107,7 +107,7 @@
                  :src="currentCommunityInfo && currentCommunityInfo.icon" alt="">
             <span>{{ currentCommunityInfo && currentCommunityInfo.name }}</span>
           </div>
-          <div v-else class="page-title font-bold font20">{{$route.name}}</div>
+          <div v-else class="page-title font-bold font28 line-height32">{{$route.name}}</div>
           <div class="address-box" @click="connect">
             <i class="wallet-icon"></i>
             <div class="font12">{{ address || $t("commen.connectMetamask") }}</div>
@@ -265,11 +265,11 @@ export default {
 <style lang="scss">
 :root {
   --yellow-background: #f5ecd8;
-  --primary-custom: #f8b62a;
+  --primary-custom: #FD9800;
   --primary-custom-rgb: 255, 219, 27;
   --primary-hover: #ffeb75;
   --primary-text: white;
-  --primary-btn-text-color: #242629;
+  --primary-btn-text-color: #ffffff;
   --secondary-text: #717376;
   --disable: #CDCECF;
   --dividers: #242526;
@@ -287,9 +287,12 @@ export default {
   --input-border: #2C2D2E;
   --input-bg: #2C2D2E;
   --block-bg: #1C1D1E;
+  --modal-bg: #1D1E1F;
   --text-47: #474849;
   --text-74: #747576;
   --text-bd: #BDBFC2;
+  --text-9f: #9FA0A0;
+  --sub-primary: #FFDB1B;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
@@ -321,9 +324,18 @@ body {
   bottom: 0;
   background-color: var(--background);
 }
-@media (min-width: 1600px) {
+@media (max-width: 1440px) {
   .container {
-    max-width: 75%;
+    max-width: 100% !important;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1440px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 .communities-bar {

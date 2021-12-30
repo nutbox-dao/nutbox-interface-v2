@@ -4,7 +4,7 @@
     <div class="second-card border-0 d-flex flex-column justify-content-between">
       <div>
         <div class="d-flex align-items-end logo-box">
-          <img class="logo" :src="cardInfo.icon" alt="">
+          <img class="logo" :src="cardInfo.icon || './default.png'" alt="">
           <img class="vip" style="margin-left: -1rem"
                src="~@/static/images/vip.svg" v-show="parseInt(cardInfo.isVip) === 1" alt="">
         </div>

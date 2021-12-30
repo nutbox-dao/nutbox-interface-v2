@@ -1,12 +1,12 @@
 <template>
-  <div class="token-tip-modal">
-    <div class="">You have choose <span class="text-primary-0 font20">{{ symbol }}</span> as community token.</div>
-    <div class="my-3">
+  <div class="token-tip-modal text-center">
+    <div class="font20 line-height24">You have choose <span class="text-primary-0 font20">{{ symbol }}</span> as community token.</div>
+    <div class="font20 line-height24">
       Before distribution, you need deposit enough
       <span class="text-primary-0 font20">{{ symbol }}</span>
       to the community
     </div>
-    <div>You can do it now, or later in the community management page.</div>
+    <div class="font20 line-height24">You can do it now, or later in the community management page.</div>
     <div class="custom-form mt-4">
       <b-form-group
         class="mb-4"
@@ -16,7 +16,9 @@
         label="Amount"
       >
         <div class="d-flex">
-          <b-form-input class="input-border" v-model="value"></b-form-input>
+          <div class="c-input-group c-input-group-border c-input-group-bg-dark">
+            <b-form-input v-model="value"></b-form-input>
+          </div>
           <button class="primary-btn w-auto px-3 ml-3" :disabled="depositing" @click="deposit">
             <b-spinner
               small
@@ -84,7 +86,6 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .token-tip-modal {
-  font-weight: 200;
-  padding: 3rem;
+  font-weight: 500;
 }
 </style>

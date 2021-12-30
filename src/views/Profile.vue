@@ -9,7 +9,7 @@
                  :src="user.avatar" alt="">
             <img v-else @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  src="~@/static/images/avatars/default.png" alt="">
-            <div class="d-flex align-items-center mt-2">
+            <div class="d-flex align-items-center mt-3">
               <b-input class="text-white name-input text-center"
                        :class="isEditName?'edit':''"
                        :disabled="!isEditName"
@@ -22,13 +22,13 @@
           <!-- token list -->
           <div class="col-md-7">
             <div class="asset-card">
-              <div class="row">
+              <div class="row h-100">
                 <div class="col-sm-6 d-flex flex-column justify-content-between">
                   <div class="mb-3">
                     <div>Total Asset Value</div>
                     <div class="font28 mt-2">${{ totalValue }}</div>
                   </div>
-                  <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
+                  <button class="primary-btn mb-2 w-50 ml-0" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
                   <PoolRatio class="asset-chart"
@@ -43,7 +43,7 @@
           </div>
         </div>
         <!-- community -->
-        <div class="font-bold mt-5 mb-3">Joined Communities</div>
+        <div class="font-bold mt-5 mb-3 font20 line-height32">Joined Communities</div>
         <div class="row" v-if="joinedCommunity">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>
@@ -51,7 +51,7 @@
         </div>
         <div class="c-loading" v-else></div>
         <!-- pools -->
-        <div class="font-bold mt-5 mb-3">Staked Pools</div>
+        <div class="font-bold mt-4 mb-3 font20 line-height32">Staked Pools</div>
           <StakedPools class="mb-3"/>
         </div>
     </div>
@@ -232,7 +232,7 @@ export default {
     position: absolute;
     width: 100%;
     max-width: 14rem;
-    top: -3rem;
+    top: -2rem;
     right: 1.2rem;
   }
 }

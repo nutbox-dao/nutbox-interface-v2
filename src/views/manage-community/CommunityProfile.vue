@@ -5,7 +5,7 @@
       <div class="custom-form col-md-9">
         <b-form-group
           class="mb-4"
-          label-class="overflow-hidden"
+          label-class="overflow-hidden font14 line-height14 font-bold"
           label-cols-md="3"
           content-cols-md="9"
           :label="$t('community.communityName')"
@@ -18,7 +18,7 @@
         <!-- community link -->
         <b-form-group
           class="mb-4"
-          label-class="overflow-hidden"
+          label-class="overflow-hidden font14 line-height14 font-bold"
           label-cols-md="3"
           content-cols-md="9"
           :label="$t('community.communityLink')"
@@ -32,7 +32,7 @@
         <!-- community description -->
         <b-form-group
           class="mb-4"
-          label-class="overflow-hidden"
+          label-class="overflow-hidden font14 line-height14 font-bold"
           label-cols-md="3"
           content-cols-md="9"
           :label="$t('community.communityDesc')"
@@ -45,52 +45,56 @@
         </b-form-group>
         <b-form-group
           class="mb-4 logo-form"
-          label-class="overflow-hidden"
+          label-class="overflow-hidden font14 line-height14 font-bold"
           label-cols-md="3"
           content-cols-md="9"
           :label="$t('community.communityLogo')"
         >
-          <b-form-file
-            v-model="logo"
-            @input="updateLogo"
-            accept="image/png,image/jpeg, image/jpg"
-            ref="logo-file-input"
-          >
-            <template #placeholder>
-              <div class="input-file-logo">
-                <template v-if="form.icon">
-                  <img class="cover-preview" :src="form.icon" alt="" />
-                  <div class="edit-mask">
-                    <span>{{ $t("operation.edit") }}<br />LOGO</span>
-                  </div>
-                </template>
-                <template v-else>
+          <div class="d-flex align-items-center">
+            <b-form-file
+              v-model="logo"
+              @input="updateLogo"
+              accept="image/png,image/jpeg, image/jpg"
+              ref="logo-file-input"
+            >
+              <template #placeholder>
+                <div class="input-file-logo">
+                  <template v-if="form.icon">
+                    <img class="cover-preview" :src="form.icon" alt="" />
+                    <div class="edit-mask">
+                      <span class="text-primary-0">{{ $t("operation.edit") }}<br />LOGO</span>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <img
+                      class="add-icon"
+                      src="~@/static/images/add-icon-gary.svg"
+                      alt=""
+                    />
+                  </template>
+                </div>
+              </template>
+              <template #file-name>
+                <div class="input-file-logo">
                   <img
-                    class="add-icon"
-                    src="~@/static/images/add-white-icon.svg"
+                    class="logo-preview"
+                    v-if="logoPreviewSrc"
+                    :src="logoPreviewSrc"
                     alt=""
                   />
-                  <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                </template>
-              </div>
-            </template>
-            <template #file-name>
-              <div class="input-file-logo">
-                <img
-                  class="logo-preview"
-                  v-if="logoPreviewSrc"
-                  :src="logoPreviewSrc"
-                  alt=""
-                />
-                <UploadLoading v-if="logoUploadLoading" />
-              </div>
-            </template>
-          </b-form-file>
+                  <UploadLoading v-if="logoUploadLoading" />
+                </div>
+              </template>
+            </b-form-file>
+            <div class="font12 text-grey-7 ml-3">
+              {{ $t("tip.picTip", { size: "200*200" }) }}
+            </div>
+          </div>
         </b-form-group>
 
         <!-- community poster -->
         <b-form-group
-          label-class="overflow-hidden"
+          label-class="overflow-hidden font14 line-height14 font-bold"
           label-cols-md="3"
           content-cols-md="9"
           class="cover-form mb-4"
@@ -107,7 +111,7 @@
                 <template v-if="form.poster">
                   <img class="cover-preview" :src="form.poster" alt="" />
                   <div class="edit-mask">
-                        <span
+                        <span class="text-primary-0"
                         >{{ $t("operation.edit") }}<br />{{
                             $t("community.communityPoster")
                           }}</span
@@ -117,12 +121,9 @@
                 <template v-else>
                   <img
                     class="add-icon"
-                    src="~@/static/images/add-white-icon.svg"
+                    src="~@/static/images/add-icon-gary.svg"
                     alt=""
                   />
-                  <div class="add-text">
-                    {{ $t("operation.uploadPoster") }}
-                  </div>
                 </template>
               </div>
             </template>
@@ -138,7 +139,7 @@
               </div>
             </template>
           </b-form-file>
-          <div class="font12 text-grey-5 mt-2">
+          <div class="font12 text-grey-7 mt-2">
             {{ $t("tip.picTip", { size: "1200*280" }) }}
           </div>
         </b-form-group>
@@ -166,7 +167,7 @@
       no-close-on-backdrop
     >
       <div class="tip-modal">
-        <i class="modal-close-icon modal-close-icon-right" @click="showSignatureTip=false"></i>
+        <i class="modal-close-icon-right" @click="showSignatureTip=false"></i>
         <div class="my-5">{{ $t("tip.editTip") }}</div>
         <div class="d-flex justify-content-between" style="gap: 2rem">
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">

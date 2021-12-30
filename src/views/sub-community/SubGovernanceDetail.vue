@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-5 font14">
             <div class="c-card mb-4">
               <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
               <div class="c-card-content">
@@ -131,7 +131,7 @@
       hide-footer
       no-close-on-backdrop>
       <div class="custom-form">
-        <i class="modal-close-icon modal-close-icon-right" @click="modelVoteOpen=false"></i>
+        <i class="modal-close-icon-right" @click="modelVoteOpen=false"></i>
         <div class="font32 font-bold mb-4">{{$t('nps.propsalSureVote')}}</div>
         <div class="mb-2">
           {{

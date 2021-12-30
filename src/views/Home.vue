@@ -9,10 +9,12 @@
                 <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt="">
                 <div class="mt-3">
                   <div class="s1-title s-title">Link Community to Web3.0</div>
-                  <div class="row font-bold">
-                    <div class="col-sm-4">Staking-based Bootstrap</div>
-                    <div class="col-sm-4">DAO Goverance</div>
-                    <div class="col-sm-4">Community Service</div>
+                  <div class="font-bold banner1-sub-title">
+                    <span>Staking-based Bootstrap</span>
+                    <span class="text-dot mx-2">·</span>
+                    <span>DAO Goverance</span>
+                    <span class="text-dot mx-2">·</span>
+                    <span>Community Service</span>
                   </div>
                 </div>
                 <button @click="$router.replace('/community/index')"
@@ -35,7 +37,7 @@
               </div>
             </div>
           </div>
-          <div class="row mt-3">
+          <div class="row" style="margin-top: 1.6rem">
             <div class="col-md-4 mb-md-0 mb-3">
               <div class="s2-card2">
                 <img src="~@/static/images/home-s3-img1.svg" alt="">
@@ -62,10 +64,13 @@
             </div>
           </div>
         </section>
-        <section class="section3 mt-4">
+        <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="more" @click="$router.push('/community/index')">More >></div>
+            <div class="d-flex align-items-center text-grey-9f" @click="$router.push('/community/index')">
+              <span>More</span>
+              <i class="more-text-icon"></i>
+            </div>
           </div>
           <div class="row mt-3">
             <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of recommendCommunity" :key="index">
@@ -250,12 +255,19 @@ $home-primary-color: #F8B62A;
     .value {
       line-height: 2.8rem;
     }
+    border: transparent;
+    box-shadow: 0 1px 2px 0 rgba(white, 0.2) inset;
   }
 }
 .section3 {
   flex: 1;
+  margin-top: 3.2rem;
   .more {
     cursor: pointer;
+  }
+  .more-text-icon {
+    @include icon(1.2rem, 1.2rem);
+    background-image: url("~@/static/images/right-arrow.svg");
   }
 }
 .s-title {
@@ -284,6 +296,15 @@ $home-primary-color: #F8B62A;
     .s2-card {
       background-position: right bottom, 0 0, right bottom;
     }
+  }
+}
+@media (max-width: 960px) {
+  .banner1-sub-title {
+    display: flex;
+    flex-direction: column;
+  }
+  .text-dot {
+    display: none;
   }
 }
 </style>

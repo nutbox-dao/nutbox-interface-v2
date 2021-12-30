@@ -16,29 +16,24 @@
     left: 1rem;
   }
   .logo {
-    @include card-icon;
+    @include card-icon(56px, 56px);
     border: 2px solid white;
   }
   .large-logo {
     @include card-icon(3.6rem, 3.6rem);
     position: absolute;
-    border: 1px solid white;
-    left: 1.2rem;
+    border: 4px solid white;
+    left: 20px;
     top: -1.8rem;
     background-color: white;
+    box-sizing: border-box;
   }
   .second-card {
     @include card(3rem 1rem 1.2rem, var(--card-bg-primary), none);
     margin-top: -.8rem;
   }
   .second-card-home {
-    @include card(3rem 1rem 1.2rem, var(--card-bg-primary), none);
-  }
-  .project-info {
-    margin-left: 4.2rem;
-    .desc {
-      text-align: justify;
-    }
+    @include card(2rem 1rem 1.2rem, var(--card-bg-primary), none);
   }
   .official-link-icon{
     @include icon();

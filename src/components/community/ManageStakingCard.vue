@@ -1,34 +1,35 @@
 <template>
-  <div class="c-card">
+  <div class="multi-card">
     <div class="status-container text-right">
       <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
       <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
     </div>
-    <div class="card-top mt-4">
+    <div class="card-link-top-box">
       <div class="card-title-box d-flex align-items-center">
         <div class="card-single-icon">
-         <img class="icon1" :src="icon" alt="">
+          <img class="icon1" :src="icon || './default.png'" alt="">
         </div>
         <div class="title-text font20 font-bold ml-2">
           <span>{{ pool.name || '--' }}</span>
         </div>
       </div>
-      <div class="h-line mt-4 mb-3"></div>
+    </div>
+    <div class="c-card text-grey-7 font14 font-bold">
       <div class="project-info-container">
         <span class="name">{{ $t('pool.userCount') }}</span>
-       <div class="info">{{ pool.stakersCount || 0 }}</div>
+        <div class="info">{{ pool.stakersCount || 0 }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.totalDeposit') }}</span>
-       <div class="info">{{ totalDeposited | amountForm }}</div>
+        <div class="info">{{ totalDeposited | amountForm }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.tvl') }}</span>
-       <div class="info">{{ tvl | formatPrice }}</div>
+        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.ratio') }}</span>
-       <div class="info">{{pool.ratio / 100}}%</div>
+        <div class="info">{{pool.ratio / 100}}%</div>
       </div>
 
       <button class="primary-btn my-3" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
@@ -36,7 +37,6 @@
         {{ $t('pool.closePool')}}
       </button>
     </div>
-
     <!-- showAttention tip -->
     <b-modal
       v-model="showAttention"
@@ -48,26 +48,26 @@
     >
       <div class="custom-form">
         <h3 style="color: red;text-align:center">{{ $t("tip.attention") }}</h3>
-        <div class="my-3">
+        <div class="my-3 font20 line-height24 text-center">
           {{ $t("tip.stopPoolAttention") }}
         </div>
-        <div class="mb-4">
+        <div class="mb-4 font20 line-height24 text-center">
           {{ `Please input pool name: "${pool.name}" to close this pool.` }}
         </div>
 
-        <div class="c-input-group c-input-group-bg my-3">
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border my-3">
           <b-input class="flex-1"
                    :placeholder="$t('placeHolder.confirmInfo', {info: pool.name})"
                    v-model="confirmInfo"></b-input>
         </div>
 
         <div class="d-flex justify-content-between" style="gap: 2rem">
-          <button class="primary-btn" @click="receiveAttention" :disabled="updating">
+          <button class="dark-btn" @click="receiveAttention" :disabled="updating">
             <b-spinner small type="grow" v-show="updating" />
             {{ $t("pool.closePool") }}
           </button>
           <button
-            class="primary-btn primary-btn-outline"
+            class="primary-btn"
             @click="showAttention = false"
             :disabled="updating"
           >
@@ -206,24 +206,9 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/card/common-card";
 @import "src/static/css/form";
-.apy-input {
-  width: 50%;
-  border: none;
-  background: #F6F7F9;
-  border-radius: .8rem;
-  text-align: center;
-  font-size: .8rem;
-  height: 2.4rem;
-  &::-webkit-input-placeholder {
-    color: #BDBFC2;
-  }
-.close-icon {
+.status-container {
   position: absolute;
-  right: -1.4rem;
-  top: -1.4rem;
-  @include icon(1.4rem, 1.4rem);
-  background-image: url("~@/static/images/circle-close.png");
-}
-
+  top: 8px;
+  right: 8px;
 }
 </style>

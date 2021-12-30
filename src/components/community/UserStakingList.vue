@@ -3,12 +3,12 @@
     <div class="c-header-grid py-3 px-4">
       <div class="d-flex align-items-center" style="grid-area: avatar">
         <div class="logo-group mr-3">
-          <img
+          <img v-if="getCommunityInfoById(pool.community.id).icon"
             class="logo1"
-            :src="getCommunityInfoById(pool.community.id).icon"
+            :src="getCommunityInfoById(pool.community.id).icon || './default.png'"
             alt=""
           />
-          <img class="logo2" :src="stakeIcon" alt="" />
+          <img class="logo2" :src="stakeIcon || './default.png'" alt="" />
         </div>
         <div class="h-100 d-flex flex-column justify-content-between">
           <div class="font-bold">
@@ -42,7 +42,7 @@
         <span class="text-primary-0">{{ type }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
-          class="toggle-btn text-primary-0 font14"
+          class="toggle-btn font14" style="color: #408fff"
         >
           <span class="when-open">Hide</span>
           <span class="when-closed">Detail</span>
@@ -55,17 +55,17 @@
           <div class="d-flex align-items-center">
             {{ getCommunityInfoById(pool.community.id).name }}
             <i class="mx-2"></i>
-            <i class="link-icon " @click="gotoCommunity"></i>
+            <i class="link-icon link-icon-gray" @click="gotoCommunity"></i>
           </div>
           <div class="d-flex align-items-center">
             <span>{{ cToken ? cToken.symbol : "" }} Contract</span>
-            <i class="copy-icon copy-icon-primary mx-2" @click="copy(cToken.address)"></i>
-            <i class="link-icon" @click="gotoContract(cToken.address)"></i>
+            <i class="copy-icon copy-icon-gray mx-2" @click="copy(cToken.address)"></i>
+            <i class="link-icon link-icon-gray" @click="gotoContract(cToken.address)"></i>
           </div>
           <div v-if="stakeToken.symbol" class="d-flex align-items-center">
             <span>{{ stakeToken ? stakeToken.symbol : "" }} Contract</span>
-            <i class="copy-icon copy-icon-primary mx-2" @click="copy(stakeToken.address)"></i>
-            <i class="link-icon" @click="gotoContract(stakeToken.address)"></i>
+            <i class="copy-icon copy-icon-gray mx-2" @click="copy(stakeToken.address)"></i>
+            <i class="link-icon link-icon-gray" @click="gotoContract(stakeToken.address)"></i>
           </div>
         </div>
         <div
@@ -73,10 +73,10 @@
           style="grid-area: card1"
         >
           <div>
-            <div class="font-bold">
+            <div class="font-bold text-grey-7">
               {{ cToken ? cToken.symbol : "" }} Earned
             </div>
-            <div class="font12">{{ pendingReward | amountForm }}</div>
+            <div class="font12 text-grey-7">{{ pendingReward | amountForm }}</div>
           </div>
           <button
             class="primary-btn w-auto px-2 mx-0"
@@ -98,7 +98,7 @@
           <template v-else>
             <template v-if="approved && !needLogin">
               <div>
-                <div class="font-bold">
+                <div class="font-bold text-grey-7">
                   {{
                     type === chainName
                       ? stakeToken.symbol + " Staked"
@@ -107,7 +107,7 @@
                       : "HP Delegated"
                   }}
                 </div>
-                <div class="font12">{{ staked | amountForm }}</div>
+                <div class="font12 text-grey-7">{{ staked | amountForm }}</div>
               </div>
               <div class="content-btn-group d-flex">
                 <button
@@ -222,7 +222,7 @@
     >
       <div class="custom-form text-center">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
         <div class="mt-2 mb-4">Please change {{type}} Account</div>
@@ -263,7 +263,7 @@
     >
       <div class="custom-form text-center">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
         <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
@@ -624,7 +624,7 @@ export default {
     span:after {
       content: "";
       @include icon();
-      background-image: url("~@/static/images/arrow-primary-icon.svg");
+      background-image: url("~@/static/images/arrow-blue-icon.svg");
       margin: 0 0.2rem;
     }
     .when-open:after {
@@ -637,11 +637,6 @@ export default {
   display: grid;
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: "link card1 card2 type";
-  .link-icon {
-    @include icon(0.8rem, 0.8rem);
-    background-image: url("~@/static/images/link-primary-icon.svg");
-    cursor: pointer;
-  }
   .content-box {
     border: 1px solid var(--input-border);
     border-radius: 0.8rem;

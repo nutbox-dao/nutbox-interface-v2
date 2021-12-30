@@ -1,7 +1,7 @@
 <template>
   <div class="activity-card">
-    <div class="title">{{ operation.type }}</div>
-    <div class="content hover" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
+    <div class="title font14 font-bold">{{ operation.type }}</div>
+    <div class="content hover font14 line-height18 font-bold" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
     <!-- <b-popover
           :target="operation.tx + operation.type"
           triggers="hover focus"
@@ -22,7 +22,7 @@
       placement="top">
         {{ username }}
       </b-popover>
-      <span :id="operation.tx + operation.type + operation.timestamp" class="hover">{{ time }}</span>
+      <span :id="operation.tx + operation.type + operation.timestamp" class="hover text-grey-7 font14 line-height14">{{ time }}</span>
       <b-popover :target="operation.tx + operation.type + operation.timestamp"
         triggers="hover focus"
         placement="top"
@@ -170,14 +170,13 @@ export default {
 
 <style scoped lang="scss">
 .activity-card {
-  @include card(.5rem, var(--block-bg), unset, fit-conent);
-  font-size: .7rem;
+  @include card(16px 8px, var(--block-bg), unset, fit-conent);
   .content {
     @include text-multi-line(2);
   }
 }
 .avatar{
-  width: 2rem;
-  height: 2rem;
+  width: 28px;
+  height: 28px;
 }
 </style>

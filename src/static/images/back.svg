@@ -1,1 +1,14 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1638960131979" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3701" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64"><defs><style type="text/css"></style></defs><path d="M396.928 780.373333a42.496 42.496 0 0 0 0-60.16L231.381333 554.666667h647.253334c23.466667 0 42.666667-19.2 42.666666-42.666667s-19.2-42.666667-42.666666-42.666667H230.954667l165.546666-165.546666a42.496 42.496 0 1 0-60.16-60.16l-238.506666 238.506666a42.496 42.496 0 0 0 0 60.16l238.933333 238.08c16.213333 16.64 43.52 16.64 60.16 0z" p-id="3702" fill="#ffffff"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>111</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Create-community-step1-register" transform="translate(-487.000000, -256.000000)">
+            <g id="编组-9备份-3" transform="translate(460.000000, 236.000000)">
+                <g id="icon/arrow/l" transform="translate(27.000000, 20.000000)">
+                    <rect id="Rectangle-55" fill="#D8D8D8" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M9.30247857,12 L16.7206625,19.7902442 C17.0931125,20.1813745 17.0931125,20.815522 16.7206625,21.2066523 C16.3482125,21.5977826 15.7443518,21.5977826 15.3719018,21.2066523 L7.27933749,12.708204 C6.9068875,12.3170737 6.9068875,11.6829263 7.27933749,11.291796 L15.3719018,2.79334771 C15.7443518,2.40221743 16.3482125,2.40221743 16.7206625,2.79334771 C17.0931125,3.18447799 17.0931125,3.81862547 16.7206625,4.20975576 L9.30247857,12 L9.30247857,12 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
