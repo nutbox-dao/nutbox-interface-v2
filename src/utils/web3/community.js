@@ -707,6 +707,23 @@ export const getCommunityBalance = async (communityId, ctokenAddress) => {
 };
 
 /**
+ * Get community's owner
+ * @param {*} communityId 
+ * @returns 
+ */
+export const getCommunityOwner = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('Community', communityId);
+      const owner = await contract.owner();
+      resolve(owner)
+    }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+/**
  * Monitor community dev address and dev ratio
  * @param {*} communityInfo
  * @returns
