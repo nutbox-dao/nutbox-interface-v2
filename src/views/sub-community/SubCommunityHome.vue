@@ -152,9 +152,10 @@ import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getCToken } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction } from '@/utils/helper'
-import { getSpecifyDistributionEras, getCommunityBalance, getCommunityOwner } from '@/utils/web3/community'
+import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
+import { ethers } from 'ethers'
 
 export default {
   name: 'Home',
@@ -227,12 +228,10 @@ export default {
     }
   },
   async mounted () {
-    while (!this.communityId) {
+    while (!this.communityInfo) {
       await sleep(0.2)
     }
-    getCommunityOwner(this.communityId).then((res) => {
-      this.fund = res
-    })
+    this.fund = ethers.utils.getAddress(this.communityInfo.owner.id);
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res.address)
