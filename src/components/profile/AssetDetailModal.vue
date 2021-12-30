@@ -8,7 +8,7 @@
       <div class="h-line mt-4"></div>
       <div class="d-flex justify-content-between align-items-center my-4">
         <span>Total Asset Value</span>
-        <span>${{totalValue}}</span>
+        <span>{{totalValue | formatPrice}}</span>
       </div>
       <div class="asset-list flex-fill overflow-auto">
         <b-table :fields="fields" :items="tokens"

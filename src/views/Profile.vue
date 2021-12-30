@@ -26,7 +26,7 @@
                 <div class="col-sm-6 d-flex flex-column justify-content-between">
                   <div class="mb-3">
                     <div>Total Asset Value</div>
-                    <div class="font28 mt-2">${{ totalValue }}</div>
+                    <div class="font28 mt-2">{{ totalValue | formatPrice }}</div>
                   </div>
                   <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
                 </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="activity-card">
-    <div class="title">{{ operation.type }}</div>
+    <div class="title">{{ opType }}</div>
     <div class="content hover" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
     <!-- <b-popover
           :target="operation.tx + operation.type"
@@ -56,7 +56,8 @@ export default {
       time: '',
       description: '',
       username: '',
-      userAvatar: ''
+      userAvatar: '',
+      opType: '',
     }
   },
   computed: {
@@ -111,6 +112,7 @@ export default {
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":
+        this.opType = "Deposit"
         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
@@ -123,6 +125,7 @@ export default {
         }
         break;
       case "WITHDRAW":
+        this.opType = "Withdraw"
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
@@ -135,6 +138,7 @@ export default {
         }
         break;
       case "HARVEST":
+        this.opType = "Harvest"
         while(!this.cToken) {
           await sleep(0.2)
         }
@@ -142,6 +146,7 @@ export default {
         this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
+        this.opType = "Harvest all"
         while(!this.cToken) {
           await sleep(0.2)
         }
@@ -149,18 +154,23 @@ export default {
         this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
         break;
       case "ADMINCREATE":
+        this.opType = "Create Community"
         this.description = (this.showName ? 'Admin creat' : 'Create') + ` this community`
         break;
       case "ADMINSETFEE":
-        this.description = (this.showName ? 'Admin change' : 'Change') + ` change DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
+        this.opType = "Set DAO fund ratio"
+        this.description = (this.showName ? 'Admin change' : 'Change') + ` DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
         break;
       case "ADMINADDPOOL":
+        this.opType = "Create new pool"
         this.description = (this.showName ? 'Admin creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
         break;
       case "ADMINCLOSEPOOL":
+        this.opType = "Close pool"
         this.description = (this.showName ? 'Admin close' : 'Close') + ` a pool: ${this.operation.pool.name}`
         break;
       case "ADMINSETRATIO":
+        this.opType = "Reset pool ratios"
         this.description = (this.showName ? 'Admin reset' : 'Reset') + ` the pool ratios.`
         break;
     }
