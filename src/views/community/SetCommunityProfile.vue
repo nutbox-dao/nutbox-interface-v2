@@ -53,10 +53,10 @@
         <div class="col-md-8">
           <div class="community-info-card text-left">
             <!-- community name -->
-            <div class="custom-form">
+            <div class="custom-form font14">
               <b-form-group
                 class="mb-4"
-                label-class="overflow-hidden"
+                label-class="overflow-hidden font-bold"
                 label-cols-md="3"
                 content-cols-md="9"
                 :label="$t('community.communityName')"
@@ -69,7 +69,7 @@
               <!-- community link -->
               <b-form-group
                 class="mb-4"
-                label-class="overflow-hidden"
+                label-class="overflow-hidden font-bold"
                 label-cols-md="3"
                 content-cols-md="9"
                 :label="$t('community.communityLink')"
@@ -78,12 +78,12 @@
                   v-model="form.website"
                   :placeholder="$t('placeHolder.inputLink')"
                 ></b-form-input>
-                <span class="font12 text-grey-5">{{ $t('commen.optional') }}</span>
+                <span class="font12 text-grey-7">{{ $t('commen.optional') }}</span>
               </b-form-group>
               <!-- community description -->
               <b-form-group
                 class="mb-4"
-                label-class="overflow-hidden"
+                label-class="overflow-hidden font-bold"
                 label-cols-md="3"
                 content-cols-md="9"
                 :label="$t('community.communityDesc')"
@@ -97,93 +97,106 @@
               <!-- logo -->
               <b-form-group
                 class="mb-4 logo-form"
-                label-class="overflow-hidden"
+                label-class="overflow-hidden font-bold"
                 label-cols-md="3"
                 content-cols-md="9"
                 :label="$t('community.communityLogo')"
               >
-                <b-form-file
-                  v-model="logo"
-                  @input="updateLogo"
-                  accept="image/png,image/jpeg, image/jpg"
-                  ref="logo-file-input"
-                >
-                  <template #placeholder>
-                    <div class="input-file-logo">
-                      <template v-if="form.icon">
-                        <img class="cover-preview" :src="form.icon" alt="" />
-                        <div class="edit-mask">
-                          <span>{{ $t("operation.edit") }}<br />LOGO</span>
-                        </div>
-                      </template>
-                      <template v-else>
+                <div class="d-flex align-items-center">
+                  <b-form-file
+                    v-model="logo"
+                    @input="updateLogo"
+                    accept="image/png,image/jpeg, image/jpg"
+                    ref="logo-file-input"
+                  >
+                    <template #placeholder>
+                      <div class="input-file-logo">
+                        <template v-if="form.icon">
+                          <img class="cover-preview" :src="form.icon" alt="" />
+                          <div class="edit-mask">
+                            <span>{{ $t("operation.edit") }}<br />LOGO</span>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <img
+                            class="add-icon"
+                            src="~@/static/images/add-icon-gary.svg"
+                            alt=""
+                          />
+                        </template>
+                      </div>
+                    </template>
+                    <template #file-name>
+                      <div class="input-file-logo">
                         <img
-                          class="add-icon"
-                          src="~@/static/images/add-white-icon.svg"
+                          class="logo-preview"
+                          v-if="logoPreviewSrc"
+                          :src="logoPreviewSrc"
                           alt=""
                         />
-                        <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                      </template>
-                    </div>
-                  </template>
-                  <template #file-name>
-                    <div class="input-file-logo">
-                      <img
-                        class="logo-preview"
-                        v-if="logoPreviewSrc"
-                        :src="logoPreviewSrc"
-                        alt=""
-                      />
-                      <UploadLoading v-if="logoUploadLoading" />
-                    </div>
-                  </template>
-                </b-form-file>
-                <!-- token logo -->
-                <span>
-                  {{$t('community.cTokenLogo')}}
-                  </span>
-                <b-form-file
-                  :disabled="!editToken"
-                  v-model="tokenLogo"
-                  @input="updateTokenLogo"
-                  accept="image/png,image/jpeg, image/jpg"
-                  ref="logo-file-input"
-                >
-                  <template #placeholder>
-                    <div class="input-file-logo">
-                      <template v-if="!!form.tokenLogo">
-                        <img class="cover-preview" :src="form.tokenLogo" alt="" />
-                        <div class="edit-mask" v-show="editToken">
-                          <span>{{ $t("operation.edit") }}<br />LOGO</span>
-                        </div>
-                      </template>
-                      <template v-else>
+                        <UploadLoading v-if="logoUploadLoading" />
+                      </div>
+                    </template>
+                  </b-form-file>
+                  <div class="font12 text-grey-5 ml-3 text-grey-7">
+                    {{ $t("tip.picTip", { size: "200*200" }) }}
+                  </div>
+                </div>
+              </b-form-group>
+              <!-- token logo -->
+              <b-form-group
+                label-class="overflow-hidden font-bold"
+                label-cols-md="3"
+                content-cols-md="9"
+                class="logo-form mb-4"
+                :label="$t('community.cTokenLogo')"
+              >
+                <div class="d-flex align-items-center">
+                  <b-form-file
+                    :disabled="!editToken"
+                    v-model="tokenLogo"
+                    @input="updateTokenLogo"
+                    accept="image/png,image/jpeg, image/jpg"
+                    ref="logo-file-input"
+                  >
+                    <template #placeholder>
+                      <div class="input-file-logo">
+                        <template v-if="!!form.tokenLogo">
+                          <img class="cover-preview" :src="form.tokenLogo" alt="" />
+                          <div class="edit-mask" v-show="editToken">
+                            <span>{{ $t("operation.edit") }}<br />LOGO</span>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <img
+                            class="add-icon"
+                            src="~@/static/images/add-icon-gary.svg"
+                            alt=""
+                          />
+                        </template>
+                      </div>
+                    </template>
+                    <template #file-name>
+                      <div class="input-file-logo">
                         <img
-                          class="add-icon"
-                          src="~@/static/images/add-white-icon.svg"
+                          class="logo-preview"
+                          v-if="tokenLogoPreviewSrc"
+                          :src="tokenLogoPreviewSrc"
                           alt=""
                         />
-                        <div class="add-text">{{ $t("operation.uploadLogo") }}</div>
-                      </template>
-                    </div>
-                  </template>
-                  <template #file-name>
-                    <div class="input-file-logo">
-                      <img
-                        class="logo-preview"
-                        v-if="tokenLogoPreviewSrc"
-                        :src="tokenLogoPreviewSrc"
-                        alt=""
-                      />
-                      <UploadLoading v-if="tokenLogoUploadLoading" />
-                    </div>
-                  </template>
-                </b-form-file>
+                        <UploadLoading v-if="tokenLogoUploadLoading" />
+                      </div>
+                    </template>
+                  </b-form-file>
+                  <div class="font12 text-grey-5 ml-3 text-grey-7">
+                    {{ $t("tip.picTip", { size: "1200*280" }) }}
+                  </div>
+                </div>
               </b-form-group>
 
               <!-- community poster -->
               <b-form-group
-                label-class="overflow-hidden"
+                label-class="overflow-hidden font-bold"
                 label-cols-md="3"
                 content-cols-md="9"
                 class="cover-form mb-4"
@@ -210,7 +223,7 @@
                       <template v-else>
                         <img
                           class="add-icon"
-                          src="~@/static/images/add-white-icon.svg"
+                          src="~@/static/images/add-icon-gary.svg"
                           alt=""
                         />
                         <div class="add-text">
@@ -231,7 +244,7 @@
                     </div>
                   </template>
                 </b-form-file>
-                <div class="font12 text-grey-5 mt-2">
+                <div class="font12 text-grey-5 mt-2 text-grey-7">
                   {{ $t("tip.picTip", { size: "1200*280" }) }}
                 </div>
               </b-form-group>
@@ -261,24 +274,24 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="pt-2">
         <!-- <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/> -->
-        <div class="my-5">
+        <div class="font20 line-height28 mb-4">
           {{ $t("tip.editTip") }}
         </div>
         <div class="d-flex" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="onConfirm" :disabled="uploading">
-            <b-spinner small type="grow" v-show="uploading" />
-            Sign and uplaod
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showSignatureTip = false"
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
             {{ $t("operation.cancel") }}
+          </button>
+          <button class="primary-btn mx-3" @click="onConfirm" :disabled="uploading">
+            <b-spinner small type="grow" v-show="uploading" />
+            Sign and uplaod
           </button>
         </div>
       </div>
@@ -315,7 +328,6 @@
     <b-modal
       v-model="chooseTokenTipModal"
       modal-class="custom-modal"
-      size="lg"
       hide-backdrop
       centered
       hide-header
@@ -404,22 +416,22 @@ export default {
     }
   },
   async mounted () {
-    try{
-      await getMyCommunityInfo()
-    }catch(e) {
-      if(e == errCode.NO_STAKING_FACTORY){
-        this.$router.replace('deploy-token')
-        return;
-      }
-    }
+    // try{
+    //   await getMyCommunityInfo()
+    // }catch(e) {
+    //   if(e == errCode.NO_STAKING_FACTORY){
+    //     this.$router.replace('deploy-token')
+    //     return;
+    //   }
+    // }
 
-    if (this.communityInfo && this.communityInfo.cToken){
-      // this.tokenLogo = this.communityInfo.cToken.icon
-      this.form.tokenLogo = this.communityInfo.cToken.icon
-      if (this.form.tokenLogo) this.editToken = false
-      this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
-      getDistributionEras();
-    }
+    // if (this.communityInfo && this.communityInfo.cToken){
+    //   // this.tokenLogo = this.communityInfo.cToken.icon
+    //   this.form.tokenLogo = this.communityInfo.cToken.icon
+    //   if (this.form.tokenLogo) this.editToken = false
+    //   this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
+    //   getDistributionEras();
+    // }
   },
   methods: {
     onCancel () {
@@ -646,7 +658,7 @@ export default {
   @include card();
 }
 .token-card {
-  @include card(.8rem, var(--card-bg-primary), hidden, unset);
+  @include card(.8rem, var(--card-bg-primary), hidden, fit-content);
 }
 @import "src/static/css/form";
 .cover-preview {

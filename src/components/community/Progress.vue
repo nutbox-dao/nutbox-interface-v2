@@ -1,9 +1,9 @@
 <template>
   <div class="c-progress" :class="(progressData && progressData.length>0) ? 'mt-5' : 'mt-3'">
-    <span class="progress-num-min" v-b-tooltip.hover :title="min">{{formatNum(min)}}</span>
-    <span class="progress-num-max" v-b-tooltip.hover :title="max">{{formatNum(max)}}</span>
+    <span class="progress-num-min text-grey-7" v-b-tooltip.hover :title="min">{{formatNum(min)}}</span>
+    <span class="progress-num-max text-grey-7" v-b-tooltip.hover :title="max">{{formatNum(max)}}</span>
     <span v-if="blockNum && blockPosition > 0 && blockPosition < 1"
-          class="current-block" v-show="(progressData && progressData.length > 0) && blockNum>progressData[0].startHeight"
+          class="current-block text-grey-7" v-show="(progressData && progressData.length > 0) && blockNum>progressData[0].startHeight"
           :style="{left: `${(blockPosition)*100}%`}">{{blockNum}}</span>
     <div class="c-progress-container" :style="{background: trackColor}">
       <div class="c-progress-bar" v-for="(data, index) of (progressData ? progressData : [])" :key="index"
@@ -124,7 +124,7 @@ export default {
   background: var(--block-bg);
   font-size: .6rem;
   line-height: .8rem;
-  border-radius: .3rem;
+  border-radius: 1rem;
   box-shadow: 0 4px 12px 4px rgba(0, 0, 0, 0.05);
   padding: .4rem .8rem;
   min-width: 2rem;
@@ -142,7 +142,7 @@ export default {
 }
 .current-block {
   position: absolute;
-  top: 1.2rem;
+  top: 2.2rem;
   font-size: .6rem;
   line-height: .6rem;
   transform: translateX(-50%);
@@ -164,12 +164,12 @@ export default {
 }
 .progress-num-min {
   position: absolute;
-  top: 1.3rem;
+  top: 1.8rem;
   left: 0;
 }
 .progress-num-max {
   position: absolute;
-  top: 1.3rem;
+  top: 1.8rem;
   right: 0;
 }
 .progress-num {

@@ -4,7 +4,7 @@
       <div class="banner-card mb-3 mb-md-0">
         <div class="row">
           <div class="col-md-7 d-flex flex-column justify-content-center">
-            <div class="text-left font50 font-bold py-lg-4">
+            <div class="text-left font20 line-height28 font-bold py-lg-4">
               It's easy to bring DeFi,social media and Governance to the community
             </div>
           </div>
@@ -12,9 +12,9 @@
             <div class="v-line mx-auto"></div>
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
-            <div class="mx-3 my-md-0 my-3 font-bold">OR</div>
-            <ConnectMetaMask v-if="!metamaskConnected"/>
-            <button v-else class="primary-btn d-flex justify-content-center align-items-center"
+            <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">OR</div>
+            <ConnectMetaMask class="w-100" v-if="!metamaskConnected"/>
+            <button v-else class="primary-btn d-flex justify-content-center align-items-center w-100"
                     @click="manageCommunity">
               <i class="add-icon mr-2"></i>
               <span>{{ settingStep === 3 ? 'Manage Community' : 'Create Community' }}</span>
@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="view-top-header view-top-header-sticky">
+      <div class="view-top-header view-top-header-sticky mt-5">
         <div class="row">
           <div class="col-lg-6">
             <!-- <div class="nav-box nav-box-bg">
@@ -74,7 +74,7 @@
          <p>{{ $t("tip.noCommunities") }}</p>
        </div>
        <div class="row">
-         <div class="col-xl-4 col-md-6 mb-4" v-for="(cItem, index) of showingCommunity" :key="index">
+         <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of showingCommunity" :key="index">
            <CommunityCard :card-info="cItem"/>
          </div>
        </div>
@@ -102,9 +102,9 @@ export default {
       if (!communities || Object.keys(communities).length === 0) return [];
       communities = Object.values(communities)
       if(this.isOfficial) {
-        communities = communities.filter(c => parseInt(c.isVip) == 1) 
+        communities = communities.filter(c => parseInt(c.isVip) == 1)
       }
-      
+
       if (this.searchText && this.searchText.length > 0) {
         communities = communities.filter(c => c.name.toLowerCase().indexOf(this.searchText.toLowerCase()) !== -1)
       }
@@ -113,7 +113,7 @@ export default {
           break;
         case "USER":
           break;
-        case "POOL": 
+        case "POOL":
         break;
       }
       return communities

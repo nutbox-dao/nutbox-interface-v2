@@ -4,12 +4,12 @@
       <div class="container">
         <div class="row">
           <!-- header -->
-          <div class="col-md-5 text-left d-flex flex-column justify-content-center">
+          <div class="col-md-5 mb-3 mb-md-0 text-left d-flex flex-column justify-content-center">
             <img v-if="user.avatar" @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
             <img v-else @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  src="~@/static/images/avatars/default.png" alt="">
-            <div class="d-flex align-items-center mt-2">
+            <div class="d-flex align-items-center mt-3">
               <b-input class="text-white name-input text-center"
                        :class="isEditName?'edit':''"
                        :disabled="!isEditName"
@@ -22,13 +22,13 @@
           <!-- token list -->
           <div class="col-md-7">
             <div class="asset-card">
-              <div class="row">
-                <div class="col-sm-6 d-flex flex-column justify-content-between">
-                  <div class="mb-3">
-                    <div>Total Asset Value</div>
-                    <div class="font28 mt-2">{{ totalValue | formatPrice }}</div>
+              <div class="row h-100">
+                <div class="col-sm-6 d-flex user-asset justify-content-between">
+                  <div class="mb-3 font20 line-height28 font-bold">
+                    <div class="">Total Asset Value</div>
+                    <div class="mt-2">{{ totalValue | formatPrice }}</div>
                   </div>
-                  <button class="primary-btn mb-2" @click="assetModalVisible=true">Detail</button>
+                  <button class="primary-btn mb-2 px-4 mx-0" @click="assetModalVisible=true">Detail</button>
                 </div>
                 <div class="col-sm-6 position-relative">
                   <PoolRatio class="asset-chart"
@@ -43,7 +43,7 @@
           </div>
         </div>
         <!-- community -->
-        <div class="font-bold mt-5 mb-3">Joined Communities</div>
+        <div class="font-bold mt-5 mb-3 font20 line-height32">Joined Communities</div>
         <div class="row" v-if="joinedCommunity">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>
@@ -51,7 +51,7 @@
         </div>
         <div class="c-loading" v-else></div>
         <!-- pools -->
-        <div class="font-bold mt-5 mb-3">Staked Pools</div>
+        <div class="font-bold mt-4 mb-3 font20 line-height32">Staked Pools</div>
           <StakedPools class="mb-3"/>
         </div>
     </div>
@@ -232,8 +232,14 @@ export default {
     position: absolute;
     width: 100%;
     max-width: 14rem;
-    top: -3rem;
+    top: -2rem;
     right: 1.2rem;
+  }
+  .user-asset {
+    flex-direction: column;
+    .primary-btn {
+      width: fit-content;
+    }
   }
 }
 @media (max-width: 576px) {
@@ -246,11 +252,16 @@ export default {
       right: 0;
       width: 16rem;
     }
+    .user-asset {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
 @media (min-width: 577px) and (max-width: 991px) {
   .asset-card {
-    height: 10rem;
+    height: 11rem;
   }
 }
 </style>

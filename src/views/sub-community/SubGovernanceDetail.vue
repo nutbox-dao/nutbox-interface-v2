@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-5 font14">
             <div class="c-card mb-4">
               <div class="c-card-header font20">{{ $t("nps.proposalInfo") }}</div>
               <div class="c-card-content">
@@ -125,15 +125,15 @@
     <b-modal
       id="modal-vote"
       v-model="modelVoteOpen"
-      modal-class="custom-modal text-center"
+      modal-class="custom-modal text-center sub-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <div class="custom-form">
-        <i class="modal-close-icon modal-close-icon-right" @click="modelVoteOpen=false"></i>
-        <div class="font32 font-bold mb-4">{{$t('nps.propsalSureVote')}}</div>
-        <div class="mb-2">
+      <div class="custom-form position-relative">
+        <i class="modal-close-icon-right" @click="modelVoteOpen=false"></i>
+        <div class="modal-title">{{$t('nps.propsalSureVote')}}</div>
+        <div class="mt-2 font20 line-height28">
           {{
             $t("nps.propsalVoteRemind", [
               type == "agree"
@@ -142,9 +142,9 @@
             ])
           }}
         </div>
-        <div>
+        <div class="font20 line-height28">
           {{ $t("nps.propsalVoteRight") }}:
-          <span class="font28 mx-2">{{ balacne | amountForm}}</span>
+          <span class="font24 line-height28 mx-2">{{ balacne | amountForm}}</span>
           {{ symbol }}
         </div>
         <button

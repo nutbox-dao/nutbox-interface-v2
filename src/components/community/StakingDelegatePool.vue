@@ -1,11 +1,11 @@
 <template>
   <div class="delegate-pool-modal position-relative">
+    <i class="modal-back-icon" @click="$emit('back')"></i>
     <div class="delegate-pool-modal-content d-flex flex-column">
-      <i class="modal-back-icon" @click="$emit('back')"></i>
-      <div class="mt-2 mb-4 text-center">Create {{delegateType}} delegate pool</div>
+      <div class="mt-4 mb-4 modal-title">Create {{delegateType}} delegate pool</div>
       <div class="custom-form col-lg-8 mx-auto mt-5">
-        <div class="mb-2">Your {{delegateType}} delegatee account</div>
-        <div class="c-input-group c-input-group-bg">
+        <div class="mb-2 font14">Your {{delegateType}} delegatee account</div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <b-input-group class="d-flex flex-between-center">
             <b-input :placeholder="$t('placeHolder.inputDelegatee')" class="flex-full" v-model="delegatee"></b-input>
           </b-input-group>

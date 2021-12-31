@@ -2,13 +2,28 @@
   <div class="container h-100">
     <div class="manage-index-page">
       <div class="m-menu">
-        <div class="m-menu-card">
+        <div class="m-menu-card font16 line-height16">
           <b-nav vertical class="overflow-hidden">
-            <b-nav-item to="/manage-community/profile">{{ $t('router.information') }}</b-nav-item>
-            <b-nav-item to="/manage-community/asset">{{ $t('router.asset') }}</b-nav-item>
-            <b-nav-item to="/manage-community/staking">{{ $t('router.pool') }}</b-nav-item>
-            <b-nav-item to="/manage-community/social">{{ $t('router.social') }}</b-nav-item>
-            <b-nav-item to="/manage-community/vote">{{ $t('router.governance') }}</b-nav-item>
+            <b-nav-item to="/manage-community/profile">
+              <i class="menu-icon home-icon" />
+              <span>{{ $t('router.information') }}</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/asset">
+              <i class="menu-icon asset-icon" />
+              <span>{{ $t('router.asset') }}</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/staking">
+              <i class="menu-icon stake-icon" />
+              <span>{{ $t('router.pool') }}</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/social">
+              <i class="menu-icon social-icon" />
+              <span>{{ $t('router.social') }}</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/vote">
+              <i class="menu-icon governance-icon" />
+              <span>{{ $t('router.governance') }}</span>
+            </b-nav-item>
       <!--      <b-nav-item to="/manage-community/game">{{ $t('game.game') }}</b-nav-item>-->
           </b-nav>
         </div>
@@ -43,8 +58,9 @@ export default {
   height: 100%;
   display: flex;
   .m-menu {
-    height: fit-content;
-    margin: 0 .8rem .8rem;
+    width: 170px;
+    height: calc(100% - 16px);
+    margin-right: 16px;
   }
   .m-page {
     flex: 1;
@@ -56,8 +72,8 @@ export default {
   }
 }
 .m-menu-card {
-  @include card(1.2rem 0);
-  width: 10rem;
+  @include card(12px 0);
+  width: 100%;
   .nav-item {
     width: 100%;
   }
@@ -65,10 +81,50 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--text-74);
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    user-select: none;
     &.active {
       color: var(--primary-custom);
       font-weight: bold;
     }
+  }
+}
+.menu-icon {
+  @include icon(24px, 24px);
+  margin-right: .4rem;
+}
+.home-icon {
+  background-image: url("~@/static/images/m-menu-home.svg");
+}
+.asset-icon {
+  background-image: url("~@/static/images/m-menu-asset.svg");
+}
+.stake-icon {
+  background-image: url("~@/static/images/m-menu-stake.svg");
+}
+.governance-icon {
+  background-image: url("~@/static/images/m-menu-governance.svg");
+}
+.social-icon {
+  background-image: url("~@/static/images/m-menu-social.svg");
+}
+.active {
+  .home-icon {
+    background-image: url("~@/static/images/m-menu-home-active.svg");
+  }
+  .asset-icon {
+    background-image: url("~@/static/images/m-menu-asset-active.svg");
+  }
+  .stake-icon {
+    background-image: url("~@/static/images/m-menu-stake-active.svg");
+  }
+  .governance-icon {
+    background-image: url("~@/static/images/m-menu-governance-active.svg");
+  }
+  .social-icon {
+    background-image: url("~@/static/images/m-menu-social-active.svg");
   }
 }
 </style>

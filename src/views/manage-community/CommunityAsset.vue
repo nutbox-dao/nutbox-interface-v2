@@ -2,31 +2,30 @@
   <div class="scroll-content">
     <!-- token info -->
     <div class="c-card">
+      <div class="font20 font24 font-bold mb-3">{{ $t('community.communityAsset') }}</div>
       <div class="row">
-        <div class="col-md-6 d-flex flex-column justify-content-between">
-          <div class="font20 font-bold">{{ $t('community.communityAsset') }}</div>
-          <div class="d-flex align-items-center">
-            <img v-if="cToken.icon" class="token-icon" :src="cToken.icon" alt="">
-            <empty-img v-else class="rounded-circle mx-0"></empty-img>
+        <div class="col-md-6 d-flex justify-content-between">
+          <img class="token-icon" :src="cToken.icon || './default.png'" alt="">
+          <div class="d-flex flex-1 justify-content-between align-items-center">
             <div class="info d-flex flex-column align-items-start ml-2">
-              <div class="font32">{{ cToken.symbol }}</div>
-              <div class="flex-start-center">
-                <span>{{ cToken.name }}</span>
+              <div class="font20 line-height24">{{ cToken.symbol }}</div>
+              <div class="d-flex align-items-center mt-2">
+                <span class="font12 line-height12 text-grey-7">{{ cToken.name }}</span>
                 <i class="copy-icon copy-icon-gray ml-2" @click="copyAddress"></i>
               </div>
-              <div class="font24">${{ cToken.price | amountForm }}</div>
             </div>
+            <div class="font24 line-height24 font-bold mr-md-5">${{ cToken.price | amountForm }}</div>
           </div>
         </div>
         <div class="col-md-6 c-mt-1">
           <div class="token-info-card">
             <div class="row-info">
-              <span>{{ $t('asset.totalSupply') }}：</span>
-              <span>{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
+              <span class="font14 line-height14 text-grey-7 mb-2">{{ $t('asset.totalSupply') }}</span>
+              <span class="font20 line-height20 font-bold">{{ (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))  | amountForm }} {{ cToken.symbol }}</span>
             </div>
             <div class="row-info">
-              <span>{{ $t('asset.cap') }}：</span>
-              <span>${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
+              <span class="font14 line-height14 text-grey-7 mb-2">{{ $t('asset.cap') }}</span>
+              <span class="font20 line-height20 font-bold">${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
             </div>
           </div>
         </div>
@@ -42,7 +41,9 @@
       <div class="font20 font-bold">Dao Fund Info</div>
       <div class="custom-form mt-5">
         <!-- community balance -->
-        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8" :label="$t('community.communityBalance')">
+        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8"
+                      label-class="font14 font-bold line-height14 d-flex align-items-center"
+                      :label="$t('community.communityBalance')">
           <div class="d-flex">
             <div class="c-input-group c-input-group-bg">
               <b-form-input
@@ -62,6 +63,7 @@
         </b-form-group>
         <!-- community dev address -->
         <b-form-group label-cols-md="2" content-cols-md="8"
+                      label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.fundAddress')"
         >
           <div class="d-flex">
@@ -76,7 +78,9 @@
           </div>
         </b-form-group>
         <!-- community dev ratio -->
-        <b-form-group label-cols-md="2" content-cols-md="8" :label="$t('community.fundRatio')">
+        <b-form-group label-cols-md="2" content-cols-md="8"
+                      label-class="font14 font-bold line-height14 d-flex align-items-center"
+                      :label="$t('community.fundRatio')">
           <div class="d-flex">
             <div class="c-input-group c-input-group-bg">
               <b-form-input
@@ -104,8 +108,8 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("operation.charge") }}
         </div>
         <div class="mb-4">
@@ -118,13 +122,13 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="dark-btn mx-3" @click="showChargeTip = false" :disabled="charging">
+            <b-spinner small type="grow" v-show="charging" />
+            {{ $t("operation.cancel") }}
+          </button>
           <button class="primary-btn mx-3" @click="charge" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("operation.confirm") }}
-          </button>
-          <button class="primary-btn primary-btn-outline mx-3" @click="showChargeTip = false" :disabled="charging">
-            <b-spinner small type="grow" v-show="charging" />
-            {{ $t("operation.cancel") }}
           </button>
         </div>
       </div>
@@ -139,8 +143,8 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("operation.withdraw") }}
         </div>
         <div class="mb-4">
@@ -153,17 +157,17 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="withdraw" :disabled="withdrawing">
-            <b-spinner small type="grow" v-show="withdrawing" />
-            {{ $t("operation.withdraw") }}
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showWithdrawTip = false"
             :disabled="withdrawing"
           >
             <b-spinner small type="grow" v-show="withdrawing" />
             {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="withdraw" :disabled="withdrawing">
+            <b-spinner small type="grow" v-show="withdrawing" />
+            {{ $t("operation.withdraw") }}
           </button>
         </div>
       </div>
@@ -178,13 +182,13 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("community.fundRatio") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
-            <div class="c-input-group c-input-group-bg">
+            <div class="c-input-group c-input-group-bg-dark c-input-group-border">
               <input
                 :step="0.01"
                 :max="100"
@@ -197,17 +201,17 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
-            <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t("operation.confirm") }}
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showDevRatioTip = false"
             :disabled="updatingDevRatio"
           >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
+            <b-spinner small type="grow" v-show="updatingDevRatio" />
+            {{ $t("operation.confirm") }}
           </button>
         </div>
       </div>
@@ -434,23 +438,25 @@ export default {
 @import "src/static/css/form";
 
 .c-card {
-  @include card(1.2rem, var(--card-bg-primary), hidden, fit-content);
+  @include card(.9rem 1rem, var(--card-bg-primary), hidden, fit-content);
   box-sizing: border-box;
 }
 .token-icon {
-  width: 5rem;
-  height: 5rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 5rem;
   margin-right: .9rem;
 }
 .token-info-card {
-  @include card(1.2rem 3rem, rgba(255, 219, 38, 0.05));
-  border: 1px solid var(--primary-custom);
+  height: 100%;
   display: flex;
-  flex-direction: column;
   gap: .7rem;
   .row-info {
-    @include c-flex-between-center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }
 @media (max-width: 767px) {

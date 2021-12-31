@@ -1,7 +1,7 @@
 <template>
   <div class="card-link-top-box">
-    <div class="status-container text-right">
-      <span :class="card.status == 'OPENED' ? 'Active' : 'Completed'">{{
+    <div class="status-container">
+      <span class="font14 font-bold" :class="card.status == 'OPENED' ? 'Active' : 'Completed'">{{
         $t('pool.' + card.status.toLowerCase())
       }}</span>
     </div>
@@ -11,7 +11,7 @@
         <img class="icon2" :src="icon" alt="" />
       </div>
       <div class="card-link-title-text font20 font-bold">
-        <div class="link-title">
+        <div class="link-title font20 line-height24">
           <span :id="communityId + card.id + 'com'">{{
               communityInfo.name
             }}</span>
@@ -24,7 +24,7 @@
           </b-popover>
           <i class="link-icon"></i>
         </div>
-        <div class="link-title">
+        <div class="link-title font16 line-height20">
           <span :id="card.id">{{
               card.name
             }}</span>
@@ -37,7 +37,7 @@
           </b-popover>
         </div>
       </div>
-      <span class="primary-border font12 text-primary-0 px-2" style="border-radius: .4rem">{{ poolType }}</span>
+      <span class="chain-type mt-2">{{ poolType }}</span>
     </div>
   </div>
 </template>
@@ -92,4 +92,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+.status-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.chain-type {
+  border-radius: 24px;
+  color: var(--sub-primary);
+  border: 1px solid var(--sub-primary);
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+}
 </style>

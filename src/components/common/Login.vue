@@ -1,15 +1,15 @@
 <template>
-  <div class="login">
+  <div class="login position-relative custom-form">
+    <i class="modal-close-icon-right" @click="$emit('hideMask')"></i>
     <!-- keychain login -->
-    <div class="text-center">
+    <div class="modal-title">
       {{ this.$t("operation.login") }}
-      <i class="modal-close-icon modal-close-icon-right" @click="$emit('hideMask')"></i>
     </div>
     <div class="mt-4">
-      <div class="account-box c-input-group c-input-group-bg">
+      <div class="account-box c-input-group c-input-group-bg-dark c-input-group-border">
         <span class="keychain" :style="keychainLogo" @click="getKeychain" />
         <b-input
-          class="mr-sm-2 mb-sm-0 input"
+          class="mb-sm-0"
           :placeholder="
                 type === 'STEEM'
                   ? $t('commen.steemAccoutPlaceHolder')
@@ -168,18 +168,6 @@ export default {
   .keychain:hover {
     background-color: var(--dividers);
     cursor: pointer;
-  }
-  input {
-    height: 48px;
-    flex: 1;
-    background: var(--background);
-    border: none;
-  }
-  .input {
-    border-radius: 0 16px 16px 0;
-  }
-  .input-active {
-    border-radius: 16px;
   }
 }
 .login-btn {

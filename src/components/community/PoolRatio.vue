@@ -1,11 +1,9 @@
 <template>
   <div class="d-flex ratio-container">
-    <div class="flex-fill overflow-hidden">
-      <div class="mx-auto" style="width: 100%; max-width: 20rem">
-        <canvas id="pie"></canvas>
-      </div>
+    <div :style="{width:'100%', maxWidth: '20rem', ...chartStyle}">
+      <canvas id="pie"></canvas>
     </div>
-    <div v-if="showLegendInfo" class="legend-box flex-fill px-3">
+    <div v-if="showLegendInfo" class="legend-box flex-fill">
       <div
         class="legend-info"
         v-for="(item, index) of chartData.data.datasets[0].data"
@@ -15,9 +13,9 @@
                 class="circle"
                 :style="{ 'border-color': getColor(index)}"
               ></span>
-        <span class="name">{{ item.name || "--" }}</span>
+        <span class="name font14">{{ item.name || "--" }}</span>
         <!-- <span class="status">{{ index%2 === 0 ? 'remo' : ' active' }}</span> -->
-        <span class="value">{{ parseFloat(item.ratio) }}%</span>
+        <span class="value font14">{{ parseFloat(item.ratio) }}%</span>
       </div>
     </div>
   </div>
@@ -104,7 +102,7 @@ export default {
               clip: false,
               anchor: 'end',
               align: 'end',
-              offset: 10,
+              offset: 5,
               font: {
                 weight: 'bold'
               },
@@ -144,6 +142,12 @@ export default {
     animation: {
       type: Boolean,
       default: true
+    },
+    chartStyle: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   watch: {
@@ -171,12 +175,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.ratio-container {
+  flex-direction: row-reverse;
+}
 .legend-box {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin: 2rem 0;
 }
 
@@ -197,12 +204,24 @@ export default {
     border: 0.2rem solid;
   }
   .name {
-    flex: 1;
+    width: 40%;
     text-align: left;
   }
   .value {
     min-width: 4rem;
     text-align: right;
+  }
+}
+@media (max-width: 560px) {
+  .ratio-container {
+    flex-direction: column!important;
+    align-items: center;
+  }
+  .legend-box {
+    width: 100%;
+  }
+  .legend-info .name {
+    flex: 1;
   }
 }
 </style>

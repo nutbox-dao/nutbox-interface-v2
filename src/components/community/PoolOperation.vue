@@ -1,12 +1,12 @@
 <template>
   <div>
-    <ConnectMetaMask
+    <ConnectMetaMask class="w-100"
       :disable="card.status === 'CLOSED'"
       v-if="!metamaskConnected"
     />
     <template v-else>
       <div
-        class="d-flex justify-content-between align-items-center mb-4"
+        class="d-flex justify-content-between align-items-center "
         v-if="approved && !needLogin"
       >
         <span class="value flex-fill">
@@ -57,7 +57,7 @@
     <!-- main chain stake -->
     <b-modal
       v-model="updateStaking"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -72,7 +72,7 @@
     <!-- sp stake  -->
     <b-modal
       v-model="showSpStake"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -87,7 +87,7 @@
         <!-- hp stake  -->
     <b-modal
       v-model="showHpStake"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -103,24 +103,24 @@
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form text-center">
+      <div class="custom-form position-relative">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
-        <div class="mt-2 mb-4">Please change {{type}} Account</div>
-        <div>
+        <div class="modal-title">Please change {{type}} Account</div>
+        <div class="text-center font20 line-height24 mt-3">
           Your {{type}} account haven't binding with current {{ chainName }} address, please
           change {{type}} account in your wallet first.
         </div>
-        <div class="mt-3 mb-1">Your binding {{type}} account is:</div>
-        <div class="c-input-group c-input-group">
+        <div class="mt-3 mb-1 text-center font20 line-height24">Your binding {{type}} account is:</div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
             disabled
@@ -131,7 +131,7 @@
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
         <button
-          class="primary-btn primary-btn-outline mx-3"
+          class="dark-btn primary-btn-outline mx-3"
           @click="showWrongSteem = false"
         >
           Cancel
@@ -144,24 +144,24 @@
     <!-- wrong main chain account -->
     <b-modal
       v-model="showWrongAccount"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form text-center">
+      <div class="custom-form text-center position-relative">
         <i
-          class="modal-close-icon modal-close-icon-right"
+          class="modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
-        <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
-        <div>
+        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="font20 line-height24 mt-3">
           Your {{ chainName }} address haven't binding with current {{ type }} account, please
           change {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
-        <div class="c-input-group c-input-group">
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
             disabled
@@ -171,7 +171,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn mx-3" @click="showWrongAccount = false">
+        <button class="primary-btn primary-btn-outline mx-3" @click="showWrongAccount = false">
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
@@ -182,7 +182,7 @@
     <!-- Login -->
     <b-modal
       v-model="showLogin"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer

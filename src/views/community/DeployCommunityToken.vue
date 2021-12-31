@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-content">
     <div class="container">
-      <div class="col-md-10 mx-auto">
+      <div class="col-md-10 mx-auto mt-0 mt-sm-2 mt-md-4">
         <div class="view-top-header">
           <Step :current-step="1" :step-label="['Deploy community asset', 'Complete info']"></Step>
         </div>
@@ -9,21 +9,21 @@
       <div class="col-md-7 mx-auto position-relative mb-5">
         <div v-show="cardStep===0" class="form-card">
           <div class="text-left">
-            <div class="font-bold font20">Chose an asset</div>
-            <div class="font16 my-3">If you want to use an exist token</div>
+            <div class="font-bold line-height24 font20">Chose an asset</div>
+            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">If you want to use an exist token</div>
             <div class="custom-form">
               <button class="primary-btn" @click="cardStep=1">Choose Token</button>
             </div>
           </div>
-          <div class="my-5 mx-auto divide-line font-bold text-center">OR</div>
+          <div class="my-4 mx-auto divide-line font14 line-height14 text-center">OR</div>
           <div class="form text-left">
-            <div class="font-bold font20">Register an asset</div>
-            <div class="font16 my-3">If you want to create a new token</div>
+            <div class="font-bold line-height24 font20">Register an asset</div>
+            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">If you want to create a new token</div>
             <div class="custom-form">
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="font14 mb-1">Token Name</div>
-                  <div class="c-input-group c-input-group-bg">
+                  <div class="font14 mb-1 font-bold">Token Name</div>
+                  <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text"
                                :placeholder="$t('asset.tokenName')"
@@ -32,25 +32,27 @@
                   </div>
                 </div>
                 <div class="col-sm-6 mt-2 mt-sm-0">
-                  <div class="font14 mb-1">Token Symbol</div>
-                  <div class="c-input-group c-input-group-bg">
+                  <div class="font14 mb-1 font-bold">Token Symbol</div>
+                  <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text" @keyup="upcaseSymbol()"
                                :placeholder="$t('asset.tokenSymbol')" v-model="form.symbol"></b-input>
                     </b-input-group>
                   </div>
                 </div>
-                <div class="col-12 mt-2">
-                  <div class="font14 mb-1">Premine amount</div>
-                  <div class="c-input-group c-input-group-bg">
+                <div class="col-12 mt-3">
+                  <div class="font14 mb-1 font-bold">Premine amount</div>
+                  <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
                                :placeholder="$t('asset.distributionAmount')" v-model="form.supply"></b-input>
                     </b-input-group>
                   </div>
                 </div>
+                <div class="col-12 font12 text-grey-7 my-3">*You can premine some tokens to bootup your community,
+                  the rest tokens will be minted from the contract block by block.</div>
                 <div class="col-12">
-                  <button class="primary-btn mt-5" @click="registerToken()">Register Token</button>
+                  <button class="primary-btn" @click="registerToken()">Register Token</button>
                 </div>
               </div>
             </div>
@@ -59,7 +61,7 @@
         <div v-show="cardStep===1" class="form-card">
           <div class="custom-form">
             <i class="close-icon" @click="cardStep=0"></i>
-            <div class="c-input-group c-input-group-bg">
+            <div class="c-input-group c-input-group-border">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
                          :placeholder="$t('asset.tokenAddress')"
@@ -69,11 +71,11 @@
                 <i class="search-icon" @click="checkTokenAddress"></i>
               </div>
             </div>
-            <div v-if="loading" class="text-center">
-              <b-spinner label="Spinning"></b-spinner>
+            <div v-if="loading"  class="text-center">
+              <div class="c-loading"></div>
             </div>
             <template v-else>
-              <div v-if="searchResult==='error'" class="text-center mt-2">地址输入错误</div>
+              <div v-if="searchResult==='error'" class="text-center mt-2 font14 text-grey-7">地址输入错误</div>
               <div @click="choseToken()" v-if="provideName && provideSymbol">
                 <TokenItem class="my-3"
                            :logo="provideLogo"
@@ -82,31 +84,34 @@
                            :token-address="provideAddress"/>
               </div>
             </template>
-            <div class="mt-4 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
-            <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-            <div style="cursor: pointer" v-for="token of OfficialAssets ? OfficialAssets : []" :key="token.address"
-                 @click="choseToken(token)">
-              <TokenItem class="my-3"
-                         :logo="token.icon"
-                         :token-name="token.name"
-                         :token-symbol="token.symbol"
-                         :token-address="token.address"/>
+            <div class="my-3 mx-auto divide-line font14 line-height14 text-center">OR</div>
+            <div class="font14 line-height14 text-center text-grey-7 mb-3">Choose a token as cToken</div>
+            <div v-if="OfficialAssets.length>0" class="token-list-card">
+              <div class="list-item" v-for="token of OfficialAssets" :key="token.address"
+                   @click="choseToken(token)">
+                <TokenItem :logo="token.icon"
+                           :token-name="token.name"
+                           :token-symbol="token.symbol"
+                           :token-address="token.address"/>
+              </div>
             </div>
           </div>
         </div>
         <div v-show="cardStep===2" class="form-card">
           <div class="custom-form">
             <i class="back-icon" @click="goBackTo0()"></i>
-            <div class="text-left">
-              <div class="font-bold font20">Setting your asset distribution</div>
-              <div class="row font16 mt-3 mb-1">
-                <div class="col-sm-8">Total distribution by current policy</div>
+            <div class="text-left mt-4">
+              <div class="font-bold font24 line-height24 mb-3">Setting your asset distribution</div>
+              <div class="row mb-1 font-bold">
+                <div class="col-sm-8 font14 line-height14 d-flex align-items-center">
+                  Total distribution by current policy
+                </div>
                 <div class="col-sm-4">
-                  <div class="b-box font20 text-right">{{ totalSupply }}</div>
+                  <div class="b-box font20 line-height24 text-right">{{ totalSupply }}</div>
                 </div>
               </div>
-              <div class="row font16">
-                <div class="col-sm-8">Current Block height</div>
+              <div class="row font-bold">
+                <div class="col-sm-8 font14 line-height14 d-flex align-items-center">Current Block height</div>
                 <div class="col-md-4">
                   <div class="b-box font20 text-right">{{ blockNum }}</div>
                 </div>
@@ -114,10 +119,10 @@
               <div class="py-4">
                 <Progress :progress-data="progressData" @delete="deleteData" :is-edit='true'/>
               </div>
-              <div class="custom-form">
+              <div class="custom-form font14">
                 <b-form-group
                   class="mb-4"
-                  label-class="overflow-hidden text-grey-7"
+                  label-class="overflow-hidden text-grey-7 d-flex align-items-center"
                   label-cols-md="3"
                   content-cols-md="9"
                   :label="$t('community.startBlock')"
@@ -137,7 +142,7 @@
                 </b-form-group>
                 <b-form-group
                   class="mb-4"
-                  label-class="overflow-hidden text-grey-7"
+                  label-class="overflow-hidden text-grey-7 d-flex align-items-center"
                   label-cols-md="3"
                   content-cols-md="9"
                   :disabled="deploying"
@@ -155,7 +160,7 @@
                 </b-form-group>
                 <b-form-group
                   class="mb-4"
-                  label-class="overflow-hidden text-grey-7"
+                  label-class="overflow-hidden text-grey-7 d-flex align-items-center"
                   label-cols-md="3"
                   content-cols-md="9"
                   :label="$t('community.mintAmount')"
@@ -455,9 +460,9 @@ export default {
 <style scoped lang="scss">
 @import "src/static/css/form";
 .form-card {
-  @include card(4rem 10% 2rem);
-  height: 40rem;
+  @include card(2rem 10% 2rem, var(--card-bg-primary), auto);
   position: relative;
+  min-height: 600px;
 }
 .divide-line {
   width: 50%;
@@ -465,22 +470,22 @@ export default {
   background-image:
     linear-gradient(to right, var(--card-broder), var(--card-broder)),
     linear-gradient(to right, var(--card-broder), var(--card-broder));;
-  background-size: 30% 2px, 30% 2px;
+  background-size: 30% 1px, 30% 1px;
   background-position: left center, right center;
 }
 .close-icon {
-  @include icon(1.4rem, 1.4rem);
+  @include icon(24px, 24px);
   background-image: url("~@/static/images/close.svg");
   position: absolute;
-  top: 1.2rem;
-  right: 1.5rem;
+  top: 20px;
+  right: 20px;
 }
 .back-icon {
-  @include icon(1.4rem, 1.4rem);
+  @include icon(24px, 24px);
   background-image: url("~@/static/images/back.svg");
   position: absolute;
-  top: 1.2rem;
-  left: 1.5rem;
+  top: 20px;
+  left: 20px;
 }
 .b-box {
   min-width: fit-content;
@@ -498,6 +503,18 @@ export default {
   .next-icon {
     @include icon(1.2rem, 1.2rem);
     background-image: url("~@/static/images/next.svg");
+  }
+}
+.token-list-card {
+  @include card(1.2rem 0, var(--input-bg), auto, fit-content);
+  max-height: 400px;
+  border: 1px solid var(--text-74);
+  .list-item {
+    cursor: pointer;
+    padding: .2rem 1.2rem;
+  }
+  .list-item:hover {
+    background-color: #272828;
   }
 }
 </style>

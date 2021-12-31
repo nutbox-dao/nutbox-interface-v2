@@ -7,29 +7,34 @@
           <b-table :fields="fields" :items="allUsers"
                     v-else
                    ref="selectableTable"
-                   thead-tr-class="asset-tr text-grey-7"
-                   tbody-tr-class="asset-tr tr-light"
+                   thead-tr-class="asset-tr text-grey-7 px-3"
+                   tbody-tr-class="asset-tr tr-light font-bold font14"
                    details-td-class="p-0"
                    selectable
                    select-mode="single"
                    no-select-on-click
                    @row-clicked="onSelectUser"
                    class="text-white border-0 font14" borderless>
-            <template #table-colgroup="scope">
-              <col v-for="field in scope.fields" :key="field.key"
-                   :style="{ width: field.key === 'avatar' ? '2rem' : '' }">
-            </template>
+<!--            <template #table-colgroup="scope">-->
+<!--              <col v-for="field in scope.fields" :key="field.key" colspan="2"-->
+<!--                   :style="{ width: field.key === 'avatar' ? '40px' : '' }">-->
+<!--            </template>-->
             <template #cell(address)="row">
-              <span :id="row.item.address">
-                {{ getName(row.item.address) }}
-              </span>
-              <b-popover
-                :target="row.item.address"
-                triggers="hover focus"
-                placement="top"
-              >
-                {{ row.item.address }}
-              </b-popover>
+              <div class="d-flex align-items-center">
+                <img v-if="getAvatar(row.item.address)"
+                     class="avatar rounded-circle"
+                     :src="getAvatar(row.item.address)" alt="">
+                <img v-else class="avatar rounded-circle"
+                     src="~@/static/images/avatars/default.png" alt="">
+                <span class="ml-2" :id="row.item.address">{{ getName(row.item.address) }}</span>
+                <b-popover
+                  :target="row.item.address"
+                  triggers="hover focus"
+                  placement="top"
+                >
+                  {{ row.item.address }}
+                </b-popover>
+              </div>
             </template>
             <template #cell(createdAt)="row">
               <span>
@@ -40,13 +45,6 @@
               <span>
                 {{ getBalance(row.item.address) | amountForm(2) }}
               </span>
-            </template>
-            <template #cell(avatar)="row">
-              <img v-if="getAvatar(row.item.address)"
-                   class="avatar rounded-circle"
-                   :src="getAvatar(row.item.address)" alt="">
-              <img v-else class="avatar rounded-circle"
-              src="~@/static/images/avatars/default.png" alt="">
             </template>
           </b-table>
         </div>
@@ -72,16 +70,16 @@
             </div>
             <div class="s-card d-flex text-center font12">
               <div class="flex-1 overflow-hidden">
-                <div class="font14 text-grey-7">Join Date</div>
-                <div class="font24 font-bold mt-2">{{ user ? getDateString(user.createdAt).substring(0, 10) : '--' }}</div>
+                <div class="font14 line-height14 text-grey-7">Join Date</div>
+                <div class="font24 line-height24 font-bold mt-4">{{ user ? getDateString(user.createdAt).substring(0, 10) : '--' }}</div>
               </div>
               <div class="flex-1">
-                <div class="font14 text-grey-7">{{ cToken && cToken.symbol }}</div>
-                <div class="font24 font-bold mt-2">{{ (user ? getBalance(user.address) : 0) | amountForm(2) }}</div>
+                <div class="font14 line-height14 text-grey-7">{{ cToken && cToken.symbol || '&nbsp' }}</div>
+                <div class="font24 line-height24 font-bold mt-4">{{ (user ? getBalance(user.address) : 0) | amountForm(2) }}</div>
               </div>
             </div>
           </div>
-          <div class="mt-2">{{ activitiesList ? activitiesList.length : '' }} Activities</div>
+          <div class="mt-2 font14 line-height14 text-grey-7">{{ activitiesList ? activitiesList.length : '' }} Activities</div>
           <div class="flex-fill overflow-auto">
             <div class="c-loading" v-if="activitiesLoading"></div>
             <transition-group v-show="!activitiesLoading" name="list-complete">
@@ -114,7 +112,7 @@ export default {
     return {
       balanceWatcher: {},
       fields: [
-        { key: 'avatar', label: '' },
+        // { key: 'avatar', label: 'Nickname' },
         { key: 'address', label: 'Nickname' },
         { key: 'createdAt', label: 'Joined At', class: 'text-center' },
         { key: 'value', label: 'Balance', class: 'text-right' }
@@ -227,8 +225,8 @@ export default {
 
 <style scoped lang="scss">
 .avatar{
-  width: 2rem;
-  height: 2rem;
+  width: 40px;
+  height: 40px;
 }
 .sub-member-page {
   flex: 1;
@@ -252,7 +250,12 @@ export default {
       margin: 8px auto;
     }
   }
-  .member-card, .user-card {
+  .member-card {
+    @include card(1.2rem 0);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .user-card {
     @include card();
     overflow-x: hidden;
     overflow-y: auto;

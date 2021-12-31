@@ -1,23 +1,21 @@
 <template>
-  <div class="">
-    <div class="text-right">
-      <img class="modal-close-icon" src="~@/static/images/close.svg" alt="" @click="hide"/>
-    </div>
-    <div class="text-center font20 font-bold" >
+  <div class="position-relative">
+    <i class="modal-close-icon-right" @click="hide"></i>
+    <div class="modal-title font20 font-bold" >
       {{
         operate === "add"
           ? $t("stake.creaseDelegation")
           : $t("stake.increaseDelegation")
       }}
     </div>
-    <p style="color: red;" class="font16">You're using hive account: {{ hiveAccount }} to delegate</p>
-    <div class="custom-form my-3">
-      <div class="input-group-box mb-4">
+    <div style="color: red;" class="font-bold font20 line-height28 text-center mt-2">You're using hive account: {{ hiveAccount }} to delegate</div>
+    <div class="custom-form">
+      <div class="input-group-box mb-3">
         <div class="label text-right">
           <span></span>
-          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
+          <span class="text-right font20">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
         </div>
-        <div class="c-input-group input-border d-flex">
+        <div class="c-input-group c-input-group-border c-input-group-bg-dark d-flex">
           <input style="flex: 1"
                  type="number"
                  v-model="stakingValue"
@@ -31,13 +29,13 @@
       </div>
     </div>
     <div class="d-flex" style="margin: 0 -1rem">
-      <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
-            >{{ $t("operation.confirm") }}</button>
-      <button class="primary-btn primary-btn-outline mx-3" @click="hide" :disabled='loading'>{{
+      <button class="dark-btn  mx-3" @click="hide" :disabled='loading'>{{
             $t("operation.cancel")
           }}</button>
+      <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
+      >{{ $t("operation.confirm") }}</button>
     </div>
-    <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} HIVE</div>
+    <div class="text-center text-grey-light font14 mt-2">{{ $t("commen.delegateFee") }}： {{ fee }} HIVE</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
 </template>

@@ -1,17 +1,14 @@
 <template>
-  <div>
-      <button
-      class="connect primary-btn"
-      style="width:100%"
-      @click="connect"
-      :disabled="isConnecting"
-    >
+  <button
+    class="connect primary-btn"
+    @click="connect"
+    :disabled="isConnecting"
+  >
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
-      {{
-        $t('commen.connectMetamask')
-      }}
-    </button>
-  </div>
+    {{
+      $t('commen.connectMetamask')
+    }}
+  </button>
 </template>
 
 <script>

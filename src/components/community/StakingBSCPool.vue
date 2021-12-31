@@ -1,11 +1,11 @@
 <template>
   <div class="bsc-pool-modal position-relative">
+    <i class="modal-back-icon" @click="$emit('back')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
-        <i class="modal-back-icon" @click="$emit('back')"></i>
-        <div class="mt-2 mb-4 text-center">Create staking pool on BSC</div>
+        <div class="my-4 modal-title">Create staking pool on BSC</div>
         <div class="custom-form col-lg-8 mx-auto">
-          <div class="c-input-group c-input-group-bg">
+          <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full"
                        :placeholder="$t('asset.tokenAddress')"
@@ -17,12 +17,12 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-8 mx-auto flex-fill overflow-auto">
+      <div class="col-lg-8 mx-auto flex-fill">
         <div v-if="loading" class="text-center">
           <b-spinner label="Spinning"></b-spinner>
         </div>
         <template v-else>
-          <div v-if="!searchResult" class="text-center">No search token</div>
+          <div v-if="!searchResult" class="text-center font14 text-grey-7">No search token</div>
           <div class="hover" v-else
                @click="$emit('confirm', searchResult)">
             <TokenItem class="my-3"
@@ -32,14 +32,15 @@
                        :token-address="searchResult.address"/>
           </div>
         </template>
-        <div class="mt-5 mb-2 mx-auto divide-line font-bold text-center text-grey-5">OR</div>
-        <div class="mb-4 text-center text-grey-5">Choose a token as cToken</div>
-        <div style="cursor: pointer" v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token)">
-          <TokenItem class="my-3"
-                     :logo="token.icon"
-                     :token-name="token.name"
-                     :token-symbol="token.symbol"
-                     :token-address="token.address"/>
+        <div class="my-3 mx-auto divide-line font14 line-height14 text-center">OR</div>
+        <div class="font14 line-height14 text-center text-grey-7 mb-3">Choose a token as cToken</div>
+        <div class="token-list-card">
+          <div class="list-item"  v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token)">
+            <TokenItem :logo="token.icon"
+                       :token-name="token.name"
+                       :token-symbol="token.symbol"
+                       :token-address="token.address"/>
+          </div>
         </div>
       </div>
     </div>
@@ -100,5 +101,17 @@ export default {
     linear-gradient(to right, var(--card-broder), var(--card-broder));;
   background-size: 30% 2px, 30% 2px;
   background-position: left center, right center;
+}
+.token-list-card {
+  @include card(20px 0, var(--input-bg), auto, fit-content);
+  max-height: 330px;
+  border: 1px solid var(--text-74);
+  .list-item {
+    cursor: pointer;
+    padding: .2rem 1.2rem;
+  }
+  .list-item:hover {
+    background-color: #272828;
+  }
 }
 </style>

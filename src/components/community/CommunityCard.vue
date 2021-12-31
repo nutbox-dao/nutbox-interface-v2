@@ -4,14 +4,14 @@
     <div class="second-card border-0 d-flex flex-column justify-content-between">
       <div>
         <div class="d-flex align-items-end logo-box">
-          <img class="logo" :src="cardInfo.icon" alt="">
+          <img class="logo" :src="cardInfo.icon || './default.png'" alt="">
           <img class="vip" style="margin-left: -1rem"
                src="~@/static/images/vip.svg" v-show="parseInt(cardInfo.isVip) === 1" alt="">
         </div>
         <div class="d-flex justify-content-between align-items-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
         </div>
-        <div class="desc text-left text-grey-7">
+        <div class="desc text-left text-grey-7 font14 line-height18">
           {{ cardInfo.description }}
         </div>
       </div>
@@ -90,9 +90,8 @@ export default {
 .desc {
   margin-bottom: 1rem;
   @include text-multi-line(3);
-  font-size: .7rem;
-  line-height: 1.2rem;
-  height: 3.6rem;
+  height: 54px;
+  font-weight: 500;
 }
 .primary-btn {
   margin-top: 1rem;

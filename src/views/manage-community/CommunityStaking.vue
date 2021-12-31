@@ -13,15 +13,15 @@
         </div>
         <div class="col-md-6">
           <div class="c-btn-group" >
-            <button class="primary-btn primary-btn-outline w-auto mr-2"
+            <button class="primary-btn primary-btn-outline w-auto mr-2 px-3"
                     style="height: 2rem"
                     v-show="activePool.length > 1"
                     @click="configPoolModal=true">
               {{ $t('pool.updatePoolRatios') }}</button>
-            <button class="primary-btn w-auto mx-0 d-flex align-items-center"
+            <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
                     @click="poolTypeModal=true, createPoolStep=1">
-              <i class="add-icon"></i>
+              <i class="add-icon add-icon-white mr-2"></i>
               <span>{{ $t('pool.addPool') }}</span>
             </button>
           </div>
@@ -121,6 +121,7 @@ export default {
   computed: {
     ...mapState('community', ['communityData']),
     pools() {
+      console.log(this.communityData);
       return this.communityData ? this.communityData.pools : []
     },
     activePool() {

@@ -1,9 +1,7 @@
 <template>
-  <div class="avatar-modal">
-    <div class="text-right">
-      <i class="modal-close-icon" @click="$emit('close')"></i>
-    </div>
-    <div class="text-center">Please select an avatar</div>
+  <div class="avatar-modal position-relative">
+    <i class="modal-close-icon-right" @click="$emit('close')"></i>
+    <div class="modal-title">Please select an avatar</div>
     <div class="h-line mt-4"></div>
     <div class="avatar-box">
       <div class="avatar-item hover" :class="selectedIndex === index ? 'active' : ''"

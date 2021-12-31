@@ -1,11 +1,9 @@
 <template>
   <div class="asset-detail-modal position-relative">
+    <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="asset-detail-modal-content d-flex flex-column overflow-hidden">
-      <div class="text-right">
-        <i class="modal-close-icon" @click="$emit('close')"></i>
-      </div>
-      <div class="text-center">Your Asset Detail</div>
-      <div class="h-line mt-4"></div>
+      <div class="text-center modal-title">Your Asset Detail</div>
+      <div class="h-line mt-2"></div>
       <div class="d-flex justify-content-between align-items-center my-4">
         <span>Total Asset Value</span>
         <span>{{totalValue | formatPrice}}</span>
@@ -33,7 +31,7 @@
           <template #cell(icon)="row">
             <img v-if="row.item.icon"
                  style="width:1.6rem;height: 1.6rem"
-                 :src="row.item.icon" alt="">
+                 :src="row.item.icon || './default.png'" alt="">
             <empty-img v-else width="1.6rem" height="1.6rem" class="rounded-circle"></empty-img>
           </template>
         </b-table>
