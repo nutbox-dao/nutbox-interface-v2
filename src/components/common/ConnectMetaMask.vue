@@ -1,6 +1,6 @@
 <template>
   <button
-    class="connect primary-btn w-auto"
+    class="connect primary-btn"
     @click="connect"
     :disabled="isConnecting"
   >
