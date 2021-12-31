@@ -22,16 +22,18 @@ export const setupNetwork = async () => {
   const eth = await getEthWeb()
   const chainId = parseInt(BSC_CHAIN_ID)
   try {
-    await eth.request({
+    const res = await eth.request({
       method: 'wallet_switchEthereumChain',
       params: [{
         chainId: `0x${chainId.toString(16)}`
       }],
     })
+    console.log(4536, res);
     store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
+    if (error.code === 4001) return;
     try{
       await eth.request({
         method: 'wallet_addEthereumChain',
