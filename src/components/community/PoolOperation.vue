@@ -57,7 +57,7 @@
     <!-- main chain stake -->
     <b-modal
       v-model="updateStaking"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -72,7 +72,7 @@
     <!-- sp stake  -->
     <b-modal
       v-model="showSpStake"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -87,7 +87,7 @@
         <!-- hp stake  -->
     <b-modal
       v-model="showHpStake"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -103,7 +103,7 @@
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -144,7 +144,7 @@
     <!-- wrong main chain account -->
     <b-modal
       v-model="showWrongAccount"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
@@ -182,7 +182,7 @@
     <!-- Login -->
     <b-modal
       v-model="showLogin"
-      modal-class="custom-modal"
+      modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer

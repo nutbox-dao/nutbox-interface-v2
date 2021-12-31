@@ -36,10 +36,10 @@
         </div>
       </div>
       <div
-        class="d-flex justify-content-end align-items-center action-box"
+        class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font14 line-height24 font-bold">{{ type }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -79,7 +79,7 @@
             <div class="font12 text-grey-7">{{ pendingReward | amountForm }}</div>
           </div>
           <button
-            class="primary-btn w-auto px-2 mx-0"
+            class="primary-btn primary-btn-40 w-auto px-2 mx-0"
             @click="withdraw"
             :disabled="isWithdrawing"
           >
@@ -130,7 +130,7 @@
             </template>
             <template v-else>
                 <button
-                class="primary-btn w-auto"
+                class="primary-btn primary-btn-40 w-100"
                 v-if="needLogin"
                 @click="showLogin = true"
                 >
@@ -610,7 +610,7 @@ export default {
   padding-top: 1rem;
   padding-bottom: 1rem;
   display: grid;
-  grid-template-columns: 25% 50% 25%;
+  grid-template-columns: 25% 60% 15%;
   grid-template-areas: "avatar value action";
   .value-box .item {
     flex-direction: column;
@@ -639,6 +639,14 @@ export default {
       transform: rotate(180deg);
     }
   }
+  .action-box {
+    justify-content: space-between;
+  }
+  .action-box .type {
+    border: 1px solid var(--primary-custom);
+    border-radius: 1rem;
+    padding: 2px 4px;
+  }
 }
 .collapse-content-grid {
   background: var(--input-bg);
@@ -650,21 +658,13 @@ export default {
     border: 1px solid var(--text-47);
     border-radius: 0.8rem;
     margin: 0 0.2rem;
-    .primary-btn {
-      height: 2rem;
-      border-radius: 0.4rem;
-    }
-  }
-  .type-box {
-    border: 1px solid var(--primary-custom);
-    border-radius: 0.4rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .c-header-grid {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 70% 30%;
     grid-template-rows: repeat(2, auto);
     grid-template-areas:
       "avatar action"
@@ -685,7 +685,7 @@ export default {
       "card1 card2";
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 557px) {
   .c-header-grid {
     display: grid;
     grid-template-columns: 100%;

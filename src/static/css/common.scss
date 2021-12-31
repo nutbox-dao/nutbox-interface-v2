@@ -96,7 +96,7 @@ ponsived {
   border: 1px solid var(--text-74);
   color: white;
 }
-.sub-community-page .primary-btn {
+.sub-community-page .primary-btn, .sub-modal .primary-btn {
   background: var(--sub-primary);
   color: var(--card-bg-primary);
 }

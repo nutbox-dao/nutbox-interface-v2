@@ -1,8 +1,8 @@
 <template>
   <div class="staked-pools">
     <div class="row">
-      <div class="col-md-6">
-        <div class="nav-box nav-box-bg mb-3 mb-md-0">
+      <div class="col-md-12">
+        <div class="nav-box nav-box-bg mb-3 mb-md-0 w-auto">
           <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
