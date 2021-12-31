@@ -6,7 +6,7 @@
     />
     <template v-else>
       <div
-        class="d-flex justify-content-between align-items-center mb-4"
+        class="d-flex justify-content-between align-items-center "
         v-if="approved && !needLogin"
       >
         <span class="value flex-fill">
