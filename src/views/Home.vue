@@ -184,14 +184,14 @@ $home-primary-color: #F8B62A;
   left: 0;
   right: 0;
   bottom: 0;
+  background-image: url("~@/static/images/home-bg1.svg"), url("~@/static/images/home-bg2.png");
+  background-repeat: no-repeat;
+  background-position: 70% -2rem, 45% 35%;
+  background-size: 45%, 50%;
   .container {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-image: url("~@/static/images/home-bg1.svg"), url("~@/static/images/home-bg2.png");
-    background-repeat: no-repeat;
-    background-position: 70% -2rem, 45% 35%;
-    background-size: 45%, 50%;
   }
 }
 .section1 {

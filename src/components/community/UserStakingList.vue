@@ -39,7 +39,7 @@
         class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type+' Testnet' }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -644,8 +644,9 @@ export default {
   }
   .action-box .type {
     border: 1px solid var(--primary-custom);
-    border-radius: 1rem;
+    border-radius: 6px;
     padding: 2px 4px;
+    white-space: nowrap;
   }
 }
 .collapse-content-grid {
@@ -660,7 +661,11 @@ export default {
     margin: 0 0.2rem;
   }
 }
-
+@media (max-width: 1200px) {
+  .c-header-grid {
+    grid-template-columns: 25% 55% 20%;
+  }
+}
 @media (max-width: 868px) {
   .c-header-grid {
     display: grid;
@@ -691,9 +696,9 @@ export default {
     grid-template-columns: 100%;
     grid-template-rows: repeat(3, auto);
     grid-template-areas:
-      "action"
       "avatar"
-      "value";
+      "value"
+      "action";
     .value-box {
       flex-direction: column;
       .item {
@@ -706,7 +711,7 @@ export default {
       flex-direction: row;
     }
     .action-box {
-      margin-top: 0;
+      margin-top: 10px;
     }
   }
   .collapse-content-grid {
