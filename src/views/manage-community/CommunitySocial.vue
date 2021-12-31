@@ -107,7 +107,7 @@ export default {
   name: 'SocialSetting',
   data () {
     return {
-      showSignatureTip: true,
+      showSignatureTip: false,
       uploading: false,
       newBlogTag: '',
       blogTag: '',
