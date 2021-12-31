@@ -24,12 +24,18 @@
         </div>
       </div> -->
     </div>
-    <div class="c-card mt-3" v-if="joinedPool.length>0">
-      <div v-for="(pool, index) of joinedPool" :key="index">
-        <UserStakingList v-if="getCommunityInfoById(pool.community.id)" :pool="pool" />
+<!--    <div class="c-card mt-3" v-if="joinedPool.length>0">-->
+<!--      <div v-for="(pool, index) of joinedPool" :key="index">-->
+<!--        <UserStakingList v-if="getCommunityInfoById(pool.community.id)" :pool="pool" />-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="c-loading my-5" v-else></div>-->
+
+    <div class="c-card">
+      <div v-for="i of 10" :key="i">
+        <UserStakingList :pool="testData"></UserStakingList>
       </div>
     </div>
-    <div class="c-loading my-5" v-else></div>
   </div>
 </template>
 
@@ -48,7 +54,20 @@ export default {
       tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
-      isApprove: false
+      isApprove: false,
+      testData: {
+        asset: "0x6e7574626f780000000000000000000000000000000000000000000000000000",
+        chainId: 1,
+        community: {id: "0x92a3a1148caceec2c588e67228e95209a3c03b7e"},
+        id: "0xe70ef856b121667032773405803b4ac6b789a042",
+        name: "Delegate to nutbox",
+        poolFactory: "0x4042163cf1e94b5a0ae5296de55a076110d03e55",
+        ratio: 1000,
+        stakers: ["0x3d67a8926f097a1304eaf9dc985fd00533fa56c5", "0xe27890a9f122c6df6f27a6fb92970334777016dd"],
+        stakersCount: 2,
+        status: "OPENED",
+        totalAmount: "16566148834"
+      }
     }
   },
   components: {

@@ -91,7 +91,7 @@
           class="content-box d-flex align-items-center justify-content-between p-2"
           style="grid-area: card2"
         >
-          <ConnectMetaMask class="primary-btn-40 w-100"
+          <ConnectMetaMask class="primary-btn-40 w-auto"
             :disable="pool.status === 'CLOSED'"
             v-if="!metamaskConnected"
           />
@@ -610,7 +610,7 @@ export default {
   padding-top: 1rem;
   padding-bottom: 1rem;
   display: grid;
-  grid-template-columns: 25% 50% 25%;
+  grid-template-columns: 25% 65% 10%;
   grid-template-areas: "avatar value action";
   .value-box .item {
     flex-direction: column;
