@@ -121,6 +121,7 @@ export default {
   computed: {
     ...mapState('community', ['communityData']),
     pools() {
+      console.log(this.communityData);
       return this.communityData ? this.communityData.pools : []
     },
     activePool() {
