@@ -39,7 +39,7 @@
         class="d-flex justify-content-end align-items-center action-box"
         style="grid-area: action"
       >
-<!--        <span class="text-primary-0 font14 line-height24 font-bold">{{ type }}</span>-->
+       <span class="text-primary-0 font14 line-height24 font-bold">{{ type }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -160,7 +160,7 @@
           style="grid-area: type"
           class="d-flex justify-content-end align-items-center"
         >
-          <span class="text-primary-0 px-1 font14 line-height24 font-bold">{{ type }}</span>
+          <!-- <span class="text-primary-0 px-1 font14 line-height24 font-bold">{{ type }}</span> -->
         </div>
       </div>
     </b-collapse>
