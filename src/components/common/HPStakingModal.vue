@@ -29,11 +29,11 @@
       </div>
     </div>
     <div class="d-flex" style="margin: 0 -1rem">
-      <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
-            >{{ $t("operation.confirm") }}</button>
       <button class="dark-btn  mx-3" @click="hide" :disabled='loading'>{{
             $t("operation.cancel")
           }}</button>
+      <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
+      >{{ $t("operation.confirm") }}</button>
     </div>
     <div class="text-center text-grey-light font14 mt-2">{{ $t("commen.delegateFee") }}： {{ fee }} HIVE</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->

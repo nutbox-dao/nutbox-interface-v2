@@ -125,7 +125,7 @@
     <b-modal
       id="modal-vote"
       v-model="modelVoteOpen"
-      modal-class="custom-modal text-center"
+      modal-class="custom-modal text-center sub-modal"
       centered
       hide-header
       hide-footer
@@ -144,7 +144,7 @@
         </div>
         <div class="font20 line-height28">
           {{ $t("nps.propsalVoteRight") }}:
-          <span class="font28 mx-2">{{ balacne | amountForm}}</span>
+          <span class="font24 line-height28 mx-2">{{ balacne | amountForm}}</span>
           {{ symbol }}
         </div>
         <button

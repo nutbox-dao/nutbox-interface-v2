@@ -108,6 +108,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: fit-content;
+    max-width: fit-content;
     background-color: var(--background);
     box-sizing: border-box;
     &-bg {
@@ -127,7 +129,7 @@
       }
     }
     .nav {
-      flex: 1;
+      width: fit-content;
       display: flex;
       flex-wrap: nowrap;
       overflow-y: hidden;
