@@ -9,7 +9,7 @@
                 <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt="">
                 <div class="mt-3">
                   <div class="s1-title s-title">Link Community to Web3.0</div>
-                  <div class="font-bold banner1-sub-title">
+                  <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
                     <span>Staking-based Bootstrap</span>
                     <span class="text-dot mx-2">·</span>
                     <span>DAO Goverance</span>
@@ -27,12 +27,12 @@
         <section class="section2 mt-4">
           <div class="row">
             <div class="col-md-6 mb-md-0 mb-3">
-              <div class="s2-card font24 font-bold">
+              <div class="s2-card font20 line-height28 font-bold">
                 <div class="text-left">It's easy to bring DeFi,social media and Governance to the community</div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="s2-card font24 font-bold">
+              <div class="s2-card font20 line-height28 font-bold">
                 <div class="text-left">It's easy to bring DeFi,social media and Governance to the community</div>
               </div>
             </div>
@@ -41,24 +41,24 @@
             <div class="col-md-4 mb-md-0 mb-3">
               <div class="s2-card2">
                 <img src="~@/static/images/home-s3-img1.svg" alt="">
-                <div class="value font46 font-bold">{{ walnutInfo.totalCommunities }}</div>
-                <div class="label text-grey-7">Community</div>
+                <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalCommunities }}</div>
+                <div class="label font20 line-height20 text-grey-7">Community</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
             <div class="col-md-4 mb-md-0 mb-3">
               <div class="s2-card2">
                 <img src="~@/static/images/home-s3-img2.svg" alt="">
-                <div class="value font46 font-bold">{{ walnutInfo.totalUsers }}</div>
-                <div class="label text-grey-7">Member</div>
+                <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalUsers }}</div>
+                <div class="label font20 line-height20 text-grey-7">Member</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="s2-card2">
                 <img src="~@/static/images/home-s3-img3.svg" alt="">
-                <div class="value font46 font-bold">{{ tvl | formatPrice }}</div>
-                <div class="label text-grey-7">TVL</div>
+                <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ tvl | formatPrice }}</div>
+                <div class="label font20 line-height20 text-grey-7">TVL</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
@@ -67,7 +67,7 @@
         <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="d-flex align-items-center text-grey-9f" @click="$router.push('/community/index')">
+            <div class="d-flex align-items-center text-grey-9f font14 line-height18" @click="$router.push('/community/index')">
               <span>More</span>
               <i class="more-text-icon"></i>
             </div>
@@ -213,8 +213,8 @@ $home-primary-color: #F8B62A;
     object-position: left;
   }
   .s1-title {
-    font-size: 1.8rem;
-    line-height: 2rem;
+    font-size: 36px;
+    line-height: 40px;
     font-weight: bolder;
     width: fit-content;
   }
@@ -266,7 +266,7 @@ $home-primary-color: #F8B62A;
     cursor: pointer;
   }
   .more-text-icon {
-    @include icon(1.2rem, 1.2rem);
+    @include icon(1rem, 1rem);
     background-image: url("~@/static/images/right-arrow.svg");
   }
 }

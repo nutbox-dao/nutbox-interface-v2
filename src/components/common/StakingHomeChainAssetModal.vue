@@ -13,7 +13,7 @@
         <div class="label text-right font20">
           <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
         </div>
-        <div class="c-input-group input-border d-flex">
+        <div class="c-input-group c-input-group-border c-input-group-bg-dark d-flex">
           <input style="flex: 1"
                  type="number"
                  v-model="stakingValue"

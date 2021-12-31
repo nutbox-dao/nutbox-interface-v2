@@ -1,11 +1,9 @@
 <template>
-  <div class="pool-config-modal">
+  <div class="pool-config-modal position-relative">
+    <i v-if="enableBack" class="modal-back-icon" @click="$emit('back')"></i>
+    <i v-else :disable="!enableOp" class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="pool-config-modal-content overflow-hidden d-flex flex-column">
-      <i v-if="enableBack" class="modal-back-icon" @click="$emit('back')"></i>
-      <div v-else class="text-right" :disable="!enableOp">
-        <i class="modal-close-icon" @click="$emit('close')"></i>
-      </div>
-      <div class="mt-2 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
+      <div class="mt-4 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
       <div class="col-lg-10 mx-auto custom-form overflow-hidden flex-fill d-flex flex-column">
         <b-form-group class="mb-4"
                       v-if="type === 'create' && activePools && activePools.length > 0"

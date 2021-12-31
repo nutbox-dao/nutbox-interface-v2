@@ -8,14 +8,14 @@
           : $t("stake.increaseDelegation")
       }}
     </div>
-    <p style="color: red;" class="font16">You're using steem account: {{ steemAccount }} to delegate</p>
-    <div class="custom-form my-3">
-      <div class="input-group-box mb-4">
+    <div style="color: red;" class="font20 line-height28 font-bold text-center mt-2">You're using steem account: {{ steemAccount }} to delegate</div>
+    <div class="custom-form">
+      <div class="input-group-box mb-3">
         <div class="label text-right">
           <span></span>
           <span class="text-right font20">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
         </div>
-        <div class="c-input-group input-border d-flex">
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex">
           <input style="flex: 1"
                  type="number"
                  v-model="stakingValue"
@@ -35,7 +35,7 @@
             $t("operation.cancel")
           }}</button>
     </div>
-    <div class="text-center text-grey-light font14 mt-4">{{ $t("commen.delegateFee") }}： {{ fee }} STEEM</div>
+    <div class="text-center text-grey-light font14 mt-2">{{ $t("commen.delegateFee") }}： {{ fee }} STEEM</div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
 </template>

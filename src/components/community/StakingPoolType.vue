@@ -1,10 +1,8 @@
 <template>
   <div class="pool-type-modal position-relative">
+    <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="pool-type-modal-content d-flex flex-column">
-      <div class="text-right">
-        <i class="modal-close-icon" @click="$emit('close')"></i>
-      </div>
-      <div class="modal-title">Choose a pool type</div>
+      <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100">
         <div class="type-box" @click="$emit('onType', 'bsc')">BSC <br> Staking</div>
         <div class="type-box" @click="$emit('onType', 'steem')">Steem <br> Staking</div>
@@ -30,7 +28,7 @@ export default {
   min-height: 50vh;
 }
 .type-box {
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--text-74);
   background-color: var(--nav-tab-bg-active);
   flex: 1;
   margin: 0 .5rem;

@@ -87,7 +87,7 @@ ponsived {
     color: var(--primary-custom);
   }
   &-40 {
-    height: 40px;
+    height: 2rem;
   }
 }
 .dark-btn {
@@ -400,7 +400,15 @@ input::-webkit-input-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.4rem;
+  &-40 {
+    height: 2rem;
+    max-height: 2rem;
+    width: 2rem;
+    max-width: 2rem;
+    box-sizing: border-box;
+    min-width: 2rem;
+    border-radius: .6rem;
+  }
   &-bg {
     color: white;
     background-color: var(--primary-custom);
@@ -423,6 +431,9 @@ input::-webkit-input-placeholder {
     &-primary {
       background-image: url("~@/static/images/sub-icon-primary.svg");
     }
+    &-white {
+      background-image: url("~@/static/images/sub-icon-white.svg");
+    }
   }
   .add-icon {
     @include icon();
@@ -431,6 +442,9 @@ input::-webkit-input-placeholder {
     }
     &-primary {
       background-image: url("~@/static/images/add-icon-primary.svg");
+    }
+    &-white {
+      background-image: url("~@/static/images/add-icon-white.svg");
     }
   }
   .loading-icon-gray {

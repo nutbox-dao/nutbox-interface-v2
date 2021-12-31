@@ -166,21 +166,21 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="position-relative">
         <i class="modal-close-icon-right" @click="showSignatureTip=false"></i>
-        <div class="my-5">{{ $t("tip.editTip") }}</div>
+        <div class="pt-5 text-center font20 line-height28 mb-3">{{ $t("tip.editTip") }}</div>
         <div class="d-flex justify-content-between" style="gap: 2rem">
-          <button class="primary-btn" @click="onConfirm" :disabled="uploading">
-            <b-spinner small type="grow" v-show="uploading" />
-            Sign and uplaod
-          </button>
           <button
-            class="primary-btn primary-btn-outline"
+            class="dark-btn"
             @click="showSignatureTip = false"
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
             {{ $t("operation.cancel") }}
+          </button>
+          <button class="primary-btn" @click="onConfirm" :disabled="uploading">
+            <b-spinner small type="grow" v-show="uploading" />
+            Sign and uplaod
           </button>
         </div>
       </div>

@@ -108,8 +108,8 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("operation.charge") }}
         </div>
         <div class="mb-4">
@@ -122,13 +122,13 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="dark-btn mx-3" @click="showChargeTip = false" :disabled="charging">
+            <b-spinner small type="grow" v-show="charging" />
+            {{ $t("operation.cancel") }}
+          </button>
           <button class="primary-btn mx-3" @click="charge" :disabled="charging">
             <b-spinner small type="grow" v-show="charging" />
             {{ $t("operation.confirm") }}
-          </button>
-          <button class="primary-btn primary-btn-outline mx-3" @click="showChargeTip = false" :disabled="charging">
-            <b-spinner small type="grow" v-show="charging" />
-            {{ $t("operation.cancel") }}
           </button>
         </div>
       </div>
@@ -143,8 +143,8 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("operation.withdraw") }}
         </div>
         <div class="mb-4">
@@ -157,17 +157,17 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="withdraw" :disabled="withdrawing">
-            <b-spinner small type="grow" v-show="withdrawing" />
-            {{ $t("operation.withdraw") }}
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showWithdrawTip = false"
             :disabled="withdrawing"
           >
             <b-spinner small type="grow" v-show="withdrawing" />
             {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="withdraw" :disabled="withdrawing">
+            <b-spinner small type="grow" v-show="withdrawing" />
+            {{ $t("operation.withdraw") }}
           </button>
         </div>
       </div>
@@ -182,13 +182,13 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form">
-        <div class="font20 font-bold text-center mb-4">
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
           {{ $t("community.fundRatio") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
-            <div class="c-input-group c-input-group-bg">
+            <div class="c-input-group c-input-group-bg-dark c-input-group-border">
               <input
                 :step="0.01"
                 :max="100"
@@ -201,17 +201,17 @@
           </div>
         </div>
         <div class="d-flex align-items-center" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
-            <b-spinner small type="grow" v-show="updatingDevRatio" />
-            {{ $t("operation.confirm") }}
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showDevRatioTip = false"
             :disabled="updatingDevRatio"
           >
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
+            <b-spinner small type="grow" v-show="updatingDevRatio" />
+            {{ $t("operation.confirm") }}
           </button>
         </div>
       </div>

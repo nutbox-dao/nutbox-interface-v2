@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="c-header-grid py-3 px-4">
+    <div class="c-header-grid px-4">
       <div class="d-flex align-items-center" style="grid-area: avatar">
         <div class="logo-group mr-3">
           <img v-if="getCommunityInfoById(pool.community.id).icon"
@@ -10,36 +10,36 @@
           />
           <img class="logo2" :src="stakeIcon || './default.png'" alt="" />
         </div>
-        <div class="h-100 d-flex flex-column justify-content-between">
-          <div class="font-bold">
+        <div class="h-100 d-flex flex-column justify-content-center">
+          <div class="font-bold font20 line-height20">
             {{ getCommunityInfoById(pool.community.id).name }}
           </div>
-          <div class="font14">{{ pool.name }}</div>
+          <div class="font16 line-height16 mt-1">{{ pool.name }}</div>
         </div>
       </div>
       <div class="value-box d-flex" style="grid-area: value">
-        <div class="item h-100 d-flex justify-content-between text-center">
-          <div class="font14">{{ cToken ? cToken.symbol : "" }} Earned</div>
+        <div class="item h-100 d-flex text-center font14 line-height14">
+          <div class="mb-2">{{ cToken ? cToken.symbol : "" }} Earned</div>
           <div class="font-bold">{{ pendingReward | amountForm }}</div>
         </div>
-        <div class="item h-100 d-flex justify-content-between text-center">
-          <div class="font14">APR</div>
+        <div class="item h-100 d-flex text-center font14 line-height14">
+          <div class="mb-2">APR</div>
           <div class="font-bold">{{ apr }}</div>
         </div>
-        <div class="item h-100 d-flex justify-content-between text-center">
-          <div class="font14">Total {{ type === chainName ? 'Staking' : 'Delegated' }}</div>
+        <div class="item h-100 d-flex text-center font14 line-height14">
+          <div class="mb-2">Total {{ type === chainName ? 'Staking' : 'Delegated' }}</div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
-        <div class="item h-100 d-flex justify-content-between text-center">
-          <div class="font14">TVL</div>
+        <div class="item h-100 d-flex text-center font14 line-height14">
+          <div class="mb-2">TVL</div>
           <div class="font-bold">{{ tvl | formatPrice }}</div>
         </div>
       </div>
       <div
-        class="d-flex px-3 justify-content-between align-items-center action-box"
+        class="d-flex justify-content-end align-items-center action-box"
         style="grid-area: action"
       >
-        <span class="text-primary-0">{{ type }}</span>
+<!--        <span class="text-primary-0 font14 line-height24 font-bold">{{ type }}</span>-->
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -51,7 +51,7 @@
     </div>
     <b-collapse :id="'accordion' + pool.id" visible>
       <div class="collapse-content-grid font16 py-3 px-4">
-        <div class="link-box text-primary-0" style="grid-area: link">
+        <div class="link-box d-flex flex-column justify-content-center text-primary-0" style="grid-area: link">
           <div class="d-flex align-items-center">
             {{ getCommunityInfoById(pool.community.id).name }}
             <i class="mx-2"></i>
@@ -91,7 +91,7 @@
           class="content-box d-flex align-items-center justify-content-between p-2"
           style="grid-area: card2"
         >
-          <ConnectMetaMask
+          <ConnectMetaMask class="primary-btn-40 w-100"
             :disable="pool.status === 'CLOSED'"
             v-if="!metamaskConnected"
           />
@@ -111,26 +111,26 @@
               </div>
               <div class="content-btn-group d-flex">
                 <button
-                  class="symbol-btn symbol-btn-outline hover mr-2"
+                  class="symbol-btn symbol-btn-40 symbol-btn-bg hover mr-2"
                   @click="decrease"
                   :disabled="isCheckingAccount"
                 >
                   <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
-                  <i v-else class="sub-icon sub-icon-primary"></i>
+                  <i v-else class="sub-icon sub-icon-white"></i>
                 </button>
                 <button
-                  class="symbol-btn symbol-btn-outline hover"
+                  class="symbol-btn symbol-btn-40 symbol-btn-bg hover"
                   :disabled="pool.status === 'CLOSED' || isCheckingAccount"
                   @click="increase"
                 >
                   <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
-                  <i v-else class="add-icon add-icon-primary"></i>
+                  <i v-else class="add-icon add-icon-white"></i>
                 </button>
               </div>
             </template>
             <template v-else>
                 <button
-                class="primary-btn"
+                class="primary-btn w-auto"
                 v-if="needLogin"
                 @click="showLogin = true"
                 >
@@ -156,12 +156,12 @@
             </template>
           </template>
         </div>
-        <!-- <div
+        <div
           style="grid-area: type"
-          class="d-flex justify-content-center align-items-center"
+          class="d-flex justify-content-end align-items-center"
         >
-          <span class="type-box text-primary-0 px-2">BSC</span>
-        </div> -->
+          <span class="text-primary-0 px-1 font14 line-height24 font-bold">{{ type }}</span>
+        </div>
       </div>
     </b-collapse>
     <!-- main chain stake -->
@@ -220,36 +220,37 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form text-center">
-        <i
-          class="modal-close-icon-right"
-          @click="showWrongSteem = false"
-        ></i>
-        <div class="mt-2 mb-4">Please change {{type}} Account</div>
-        <div>
-          Your {{type}} account haven't binding with current {{ chainName }} address, please
-          change {{type}} account in your wallet first.
+      <div class="position-relative">
+        <i class="modal-close-icon-right" @click="showWrongSteem = false"></i>
+        <div class="custom-form text-center pt-3 font20 line-height28">
+          <div class="pt-4">Please change <span class="text-primary-0 font-bold">{{type}}</span> Account</div>
+          <div>
+            Your <span class="text-primary-0 font-bold">{{type}}</span>
+            account haven't binding with current <span class="text-primary-0 font-bold">{{type}}</span>
+            address, please
+            change <span class="text-primary-0 font-bold">{{type}}</span> account in your wallet first.
+          </div>
+          <div class="mt-2 mb-1">Your binding {{type}} account is:</div>
+          <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+            <input
+              class="text-center"
+              disabled
+              type="text"
+              :value="bindSteem"
+            />
+          </div>
         </div>
-        <div class="mt-3 mb-1">Your binding {{type}} account is:</div>
-        <div class="c-input-group c-input-group-bg">
-          <input
-            class="text-center"
-            disabled
-            type="text"
-            :value="bindSteem"
-          />
+        <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+          <button
+            class="dark-btn primary-btn-outline mx-3"
+            @click="showWrongSteem = false"
+          >
+            Cancel
+          </button>
+          <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
+            OK
+          </button>
         </div>
-      </div>
-      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button
-          class="primary-btn primary-btn-outline mx-3"
-          @click="showWrongSteem = false"
-        >
-          Cancel
-        </button>
-        <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
-          OK
-        </button>
       </div>
     </b-modal>
     <!-- wrong main chain account -->
@@ -261,18 +262,22 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="custom-form text-center">
+      <div class="custom-form position-relative pt-2 text-center font20 line-height28">
         <i
           class="modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
-        <div class="mt-2 mb-4">Please change {{ chainName }} address</div>
+        <div class="mt-4">Please change <span class="text-primary-0 font-bold">{{ chainName }} </span>address</div>
         <div>
-          Your {{ chainName }} address haven't binding with current {{type}} account, please
-          change {{ chainName }} address in your wallet first.
+          Your <span class="text-primary-0 font-bold">{{ chainName }} </span>
+          address haven't binding with current
+          <span class="text-primary-0 font-bold">{{ type }} </span>
+          account, please
+          change <span class="text-primary-0 font-bold">{{ chainName }} </span>
+          address in your wallet first.
         </div>
-        <div class="mt-3 mb-1">Your binding address is:</div>
-        <div class="c-input-group c-input-group-bg">
+        <div class="mt-2 mb-1">Your binding address is:</div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
             disabled
@@ -282,7 +287,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn mx-3" @click="showWrongAccount = false">
+        <button class="primary-btn primary-btn-outline mx-3" @click="showWrongAccount = false">
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
@@ -602,12 +607,15 @@ export default {
   @include card(0);
 }
 .c-header-grid {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-areas: "avatar value action";
   .value-box .item {
     flex-direction: column;
     flex: 1;
+    justify-content: center;
   }
   .collapsed > .when-open,
   .not-collapsed > .when-closed {
@@ -633,12 +641,13 @@ export default {
   }
 }
 .collapse-content-grid {
-  background: var(--block-bg);
+  background: var(--input-bg);
   display: grid;
   grid-template-columns: 34% 28% 28% 10%;
   grid-template-areas: "link card1 card2 type";
   .content-box {
-    border: 1px solid var(--input-border);
+    min-height: 72px;
+    border: 1px solid var(--text-47);
     border-radius: 0.8rem;
     margin: 0 0.2rem;
     .primary-btn {
@@ -661,7 +670,7 @@ export default {
       "avatar action"
       "value value";
     .value-box {
-      margin-top: 0.5rem;
+      margin-top: 1rem;
     }
     .action-box {
       margin-top: 0.5rem;
@@ -682,17 +691,22 @@ export default {
     grid-template-columns: 100%;
     grid-template-rows: repeat(3, auto);
     grid-template-areas:
-      "avatar"
       "action"
+      "avatar"
       "value";
     .value-box {
       flex-direction: column;
       .item {
         flex-direction: row;
+        flex: 1;
+        justify-content: space-between;
       }
     }
     .toggle-btn span {
       flex-direction: row;
+    }
+    .action-box {
+      margin-top: 0;
     }
   }
   .collapse-content-grid {
@@ -713,12 +727,16 @@ export default {
   align-items: flex-end;
   width: 3.8rem;
   margin-right: 0.4rem;
+  img {
+    border: 2px solid white;
+    background-color: var(--card-bg-primary);
+  }
   .logo1 {
-    @include card-icon;
+    @include card-icon(56px, 56px);
   }
   .logo2 {
     margin-left: -0.8rem;
-    @include card-icon(1.8rem, 1.8rem);
+    @include card-icon(32px, 32px);
   }
 }
 </style>

@@ -130,10 +130,10 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <div class="custom-form">
+      <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="modelVoteOpen=false"></i>
-        <div class="font32 font-bold mb-4">{{$t('nps.propsalSureVote')}}</div>
-        <div class="mb-2">
+        <div class="modal-title">{{$t('nps.propsalSureVote')}}</div>
+        <div class="mt-2 font20 line-height28">
           {{
             $t("nps.propsalVoteRemind", [
               type == "agree"
@@ -142,7 +142,7 @@
             ])
           }}
         </div>
-        <div>
+        <div class="font20 line-height28">
           {{ $t("nps.propsalVoteRight") }}:
           <span class="font28 mx-2">{{ balacne | amountForm}}</span>
           {{ symbol }}

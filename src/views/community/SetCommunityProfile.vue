@@ -274,24 +274,24 @@
       hide-footer
       no-close-on-backdrop
     >
-      <div class="tip-modal">
+      <div class="pt-2">
         <!-- <img class="close-btn" src="~@/static/images/close.svg"
              alt="" @click="showSignatureTip=false"/> -->
-        <div class="font20 line-height24 mb-4">
+        <div class="font20 line-height28 mb-4">
           {{ $t("tip.editTip") }}
         </div>
         <div class="d-flex" style="margin: 0 -1rem">
-          <button class="primary-btn mx-3" @click="onConfirm" :disabled="uploading">
-            <b-spinner small type="grow" v-show="uploading" />
-            Sign and uplaod
-          </button>
           <button
-            class="primary-btn primary-btn-outline mx-3"
+            class="dark-btn mx-3"
             @click="showSignatureTip = false"
             :disabled="uploading"
           >
             <b-spinner small type="grow" v-show="uploading" />
             {{ $t("operation.cancel") }}
+          </button>
+          <button class="primary-btn mx-3" @click="onConfirm" :disabled="uploading">
+            <b-spinner small type="grow" v-show="uploading" />
+            Sign and uplaod
           </button>
         </div>
       </div>

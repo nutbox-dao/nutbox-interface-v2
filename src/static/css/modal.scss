@@ -38,8 +38,22 @@
     }
   }
   .modal-back-icon {
-    @include icon(1.4rem, 1.4rem);
-    background-image: url("~@/static/images/back.svg");
+    width: 48px;
+    height: 48px;
+    background: var(--input-bg);
+    border-radius: 16px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    &::after {
+      content: '';
+      @include icon(16px, 16px);
+      background-image: url("~@/static/images/back.svg");
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
   .h-line {
     width: 100%;

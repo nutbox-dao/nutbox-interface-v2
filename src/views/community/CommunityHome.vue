@@ -4,7 +4,7 @@
       <div class="banner-card mb-3 mb-md-0">
         <div class="row">
           <div class="col-md-7 d-flex flex-column justify-content-center">
-            <div class="text-left font50 font-bold py-lg-4">
+            <div class="text-left font20 line-height28 font-bold py-lg-4">
               It's easy to bring DeFi,social media and Governance to the community
             </div>
           </div>
@@ -12,7 +12,7 @@
             <div class="v-line mx-auto"></div>
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
-            <div class="mx-3 my-md-0 my-3 font-bold">OR</div>
+            <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">OR</div>
             <ConnectMetaMask class="w-100" v-if="!metamaskConnected"/>
             <button v-else class="primary-btn d-flex justify-content-center align-items-center w-100"
                     @click="manageCommunity">

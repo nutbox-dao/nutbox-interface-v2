@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
           <div class="font20 font-bold">{{ cardInfo.name }}</div>
         </div>
-        <div class="desc text-left text-grey-7">
+        <div class="desc text-left text-grey-7 font14 line-height18">
           {{ cardInfo.description }}
         </div>
       </div>
@@ -90,9 +90,8 @@ export default {
 .desc {
   margin-bottom: 1rem;
   @include text-multi-line(3);
-  font-size: .7rem;
-  line-height: 1.2rem;
-  height: 3.6rem;
+  height: 54px;
+  font-weight: 500;
 }
 .primary-btn {
   margin-top: 1rem;
