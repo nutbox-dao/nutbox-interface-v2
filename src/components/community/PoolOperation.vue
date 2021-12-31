@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ConnectMetaMask
+    <ConnectMetaMask class="w-100"
       :disable="card.status === 'CLOSED'"
       v-if="!metamaskConnected"
     />
