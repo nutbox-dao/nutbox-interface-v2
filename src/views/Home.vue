@@ -10,11 +10,11 @@
                 <div class="mt-3">
                   <div class="s1-title s-title">Link Community to Web3.0</div>
                   <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
-                    <span>Staking-based Bootstrap</span>
+                    <span>Bootstrap</span>
                     <span class="text-dot mx-2">·</span>
-                    <span>DAO Goverance</span>
+                    <span>Goverance</span>
                     <span class="text-dot mx-2">·</span>
-                    <span>Community Service</span>
+                    <span>Extensions</span>
                   </div>
                 </div>
                 <button @click="$router.replace('/community/index')"
@@ -28,12 +28,12 @@
           <div class="row">
             <div class="col-md-6 mb-md-0 mb-3">
               <div class="s2-card font20 line-height28 font-bold">
-                <div class="text-left">It's easy to bring DeFi,social media and Governance to the community</div>
+                <div class="text-left">Create a DAO in minutes, and everyone can build it without coding.</div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="s2-card font20 line-height28 font-bold">
-                <div class="text-left">It's easy to bring DeFi,social media and Governance to the community</div>
+                <div class="text-left">It's easy to bring DeFi, social media and Governance to the community.</div>
               </div>
             </div>
           </div>
