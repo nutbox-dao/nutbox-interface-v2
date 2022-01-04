@@ -28,7 +28,6 @@ export const setupNetwork = async () => {
         chainId: `0x${chainId.toString(16)}`
       }],
     })
-    console.log(4536, res);
     store.commit('saveMetamaskConnected', true)
     store.commit('web3/saveChainId', chainId)
     return true
@@ -69,7 +68,6 @@ export const checkNetwork = async () => {
   if (parseInt(eth.networkVersion) == chainId) {
     store.commit('web3/saveChainId', chainId)
     store.commit('saveMetamaskConnected', true)
-    console.log(44, store.state.web3.chainId);
   }else {
     store.commit('web3/saveChainId', parseInt(eth.networkVersion))
     store.commit('web3/saveAccount', null)

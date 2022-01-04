@@ -59,7 +59,7 @@
                 <img src="~@/static/images/home-s3-img3.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ tvl | formatPrice }}</div>
                 <div class="label font20 line-height20 text-grey-7">TVL</div>
-                <div v-if="loading" class="c-loading c-loading-absolute"></div>
+                <div v-if="loadingTvl" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
           </div>
@@ -103,7 +103,8 @@ export default {
     return {
       loadingAllCommunity: true,
       loading: true,
-      tvl: 0
+      tvl: 0,
+      loadingTvl:true
     }
   },
   computed: {
@@ -163,6 +164,7 @@ export default {
             }
           }
         })
+        this.loadingTvl = false
         this.tvl = t;
       }
     })
@@ -182,14 +184,14 @@ $home-primary-color: #F8B62A;
   left: 0;
   right: 0;
   bottom: 0;
+  background-image: url("~@/static/images/home-bg1.svg"), url("~@/static/images/home-bg2.png");
+  background-repeat: no-repeat;
+  background-position: 70% -2rem, 45% 35%;
+  background-size: 45%, 50%;
   .container {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-image: url("~@/static/images/home-bg1.svg"), url("~@/static/images/home-bg2.png");
-    background-repeat: no-repeat;
-    background-position: 70% -2rem, 45% 35%;
-    background-size: 45%, 50%;
   }
 }
 .section1 {
