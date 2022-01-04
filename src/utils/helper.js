@@ -64,8 +64,29 @@ export const formatBalance = function (value, digit = 4) {
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
 };
 
-export const formatPrice = function (value) {
+/**
+ * 
+ * @param {*} value 
+ * @param {*} abb is abbreviations 
+ * @returns 
+ */
+export const formatPrice = function (value, abb=false) {
   if (!value) return "--";
+  let unit = ''
+  if (abb) {
+    value = Number(value)
+    if (value < 1000) {}
+    else if (value < 1e6) {
+      value = value / 1000
+      unit ='K'
+    }else if (value < 1e9){
+      value = value / 1e6
+      unit = 'M'
+    }else if(value < 1e12) {
+      value = value / 1e9
+      unit = 'B'
+    }
+  }
   const str = Number(value).toFixed(3).toString();
   let integer = str;
   let fraction = "";
@@ -73,7 +94,7 @@ export const formatPrice = function (value) {
     integer = str.split(".")[0];
     fraction = "." + str.split(".")[1];
   }
-  return "$" + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
+  return "$" + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction + unit;
 };
 
 export const formatUserAddress = (address, long = true) => {
