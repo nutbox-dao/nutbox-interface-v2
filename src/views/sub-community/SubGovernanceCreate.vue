@@ -227,7 +227,7 @@ export default {
   async mounted () {
     if (!this.account) return;
     console.log(this.account);
-    while(!this.cToken.address){
+    while(!this.cToken || !this.cToken.address){
       await sleep(0.3)
     }
     const community = await this.getCommunityInfoById(this.communityId)
