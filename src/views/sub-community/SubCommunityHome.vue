@@ -148,6 +148,7 @@
         <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
                         v-for="operation of operationHistory" :key="operation.tx + operation.type"
+                        v-show="!isAdmin || (isAdmin && operation.type.indexOf('ADMIN') !== -1)"
                         :operation="operation"/>
         </transition-group>
       </div>
