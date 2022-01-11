@@ -2,15 +2,15 @@
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>icon/normal/Blog</title>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-新-1218" transform="translate(-420.000000, -72.000000)">
-            <g id="社区一级导航备份" transform="translate(400.000000, 0.000000)">
+        <g id="icon-新-1218" transform="translate(-240.000000, -72.000000)">
+            <g id="社区一级导航备份-2" transform="translate(220.000000, 0.000000)">
                 <g id="编组-2备份" transform="translate(0.000000, 60.000000)">
                     <g id="menuicon_home" transform="translate(20.000000, 12.000000)">
                         <g id="social" transform="translate(2.000000, 2.000000)">
                             <rect id="矩形" fill="#747576" transform="translate(15.000000, 7.000000) rotate(-15.000000) translate(-15.000000, -7.000000) " x="14" y="4" width="2" height="6" rx="1"></rect>
-                            <circle id="椭圆形" fill="#CDCECF" cx="13" cy="4" r="4"></circle>
-                            <circle id="椭圆形备份-3" fill="#CDCECF" cx="16.5" cy="14.5" r="3.5"></circle>
-                            <circle id="椭圆形备份-4" fill="#CDCECF" cx="5" cy="15" r="5"></circle>
+                            <circle id="椭圆形" fill="#FFDB1B" cx="13" cy="4" r="4"></circle>
+                            <circle id="椭圆形备份-3" fill="#FFDB1B" cx="16.5" cy="14.5" r="3.5"></circle>
+                            <circle id="椭圆形备份-4" fill="#FFDB1B" cx="5" cy="15" r="5"></circle>
                             <rect id="矩形备份-8" fill="#747576" transform="translate(9.250000, 9.299038) rotate(35.000000) translate(-9.250000, -9.299038) " x="8.25" y="4.79903811" width="2" height="9" rx="1"></rect>
                         </g>
                     </g>
