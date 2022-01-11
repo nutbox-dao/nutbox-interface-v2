@@ -637,6 +637,7 @@ export default {
         await sleep(1)
         this.$router.replace('/manage-community/profile')
       } catch (e) {
+        console.log(235,e);
         const handleRes = handleApiErrCode(e, (info, params) => {
           this.$bvToast.toast(info, params)
         })

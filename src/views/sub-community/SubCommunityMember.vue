@@ -79,7 +79,9 @@
               </div>
             </div>
           </div>
-          <div class="mt-2 font14 line-height14 text-grey-7">{{ activitiesList ? activitiesList.length : '' }} Activities</div>
+          <div class="mt-2 font14 line-height14 text-grey-7 d-flex justify-content-between align-items-center">
+              <span>{{ activitiesList ? activitiesList.length : '' }} Activities</span>
+          </div>
           <div class="flex-fill overflow-auto">
             <div class="c-loading" v-if="activitiesLoading"></div>
             <transition-group v-show="!activitiesLoading" name="list-complete">

@@ -137,7 +137,13 @@
   <!-- history -->
     <div class="activity-banner">
       <div class="a-banner-card">
-        <div class="mt-2 mb-4 font-bold font20 font24">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
+        <div class="mt-2 mb-4 font-bold font14 justify-content-between d-flex align-items-center">
+          <span>{{ communityInfo ? communityInfo.operationCount : '' }} Activities</span>
+          <div class="d-flex align-items-center">
+            <span class="mr-2 font14">Admin only</span>
+            <ToggleSwitch v-model="isAdmin"/>
+          </div>
+        </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-if="!operationHistory || (operationHistory.length === 0)"></div>
         <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
@@ -159,20 +165,23 @@ import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/co
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import { ethers } from 'ethers'
+import ToggleSwitch from '@/components/common/ToggleSwitch'
 
 export default {
   name: 'Home',
   components: {
     Progress,
     PoolRatio,
-    ActivityItem
+    ActivityItem,
+    ToggleSwitch
   },
   data () {
     return {
       communityBalanceValue: 0,
       loadingPool: true,
       laodingHistory: false,
-      fund:''
+      fund:'',
+      isAdmin: false
     }
   },
   computed: {
