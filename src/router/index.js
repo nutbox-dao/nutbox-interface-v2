@@ -40,17 +40,17 @@ const routes = [
     children: [
       {
         path: 'index',
-        name: 'community',
+        name: 'communityHome',
         component: CommunityHome
       },
       {
         path: 'deploy-token',
-        name: 'createCommunity',
+        name: 'DeployCommunityToken',
         component: DeployCommunityToken
       },
       {
         path: 'set-profile',
-        name: 'createCommunity',
+        name: 'SetCommunityProfile',
         component: SetCommunityProfile
       }
     ]
@@ -95,27 +95,27 @@ const routes = [
     children: [
       {
         path: 'profile',
-        name: 'manageCommunity',
+        name: 'CommunityProfile',
         component: CommunityProfile
       },
       {
         path: 'asset',
-        name: 'manageCommunity',
+        name: 'CommunityAsset',
         component: CommunityAsset
       },
       {
         path: 'staking',
-        name: 'manageCommunity',
+        name: 'CommunityStaking',
         component: CommunityStaking
       },
       {
         path: 'social',
-        name: 'manageCommunity',
+        name: 'CommunitySocial',
         component: CommunitySocial
       },
       {
         path: 'vote',
-        name: 'manageCommunity',
+        name: 'CommunityVote',
         component: CommunityVote
       }
     ]

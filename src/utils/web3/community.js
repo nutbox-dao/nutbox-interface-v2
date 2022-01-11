@@ -70,7 +70,9 @@ export const getMyCommunityContract = async (update = false) => {
 export const getMyCommunityInfo = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null;
-    store.commit('community/saveLoadingMyCommunityInfo', true)
+    if(!store.state.community.communityInfo){
+      store.commit('community/saveLoadingMyCommunityInfo', true)
+    }
     try {
       stakingFactoryId = await getMyCommunityContract(update);
       if (!stakingFactoryId) {

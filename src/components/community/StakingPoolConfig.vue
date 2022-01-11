@@ -243,7 +243,7 @@ export default {
       })
     }, 1000),
     nameChange: debounce(function () {
-      this.activePools[this.activePools.length - 1].name = this.newName
+      this.activePools[this.activePools.length - 1].name = this.newName.trim()
     }, 1500),
     // create new pool
     create() {
@@ -256,7 +256,7 @@ export default {
           })
           return;
         }
-        if (this.type === 'create' && (!this.newName || this.newName.length === 0)) {
+        if (this.type === 'create' && (!this.newName || this.newName.trim().length === 0)) {
           this.$bvToast.toast('Please input pool name', {
             title: this.$t('tip.tips'),
             variant: 'info'

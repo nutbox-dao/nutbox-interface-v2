@@ -60,13 +60,31 @@
                     <span>{{ $t("router.member") }}</span>
                   </b-nav-item>
                   <div class="link-items">
-                    <img v-if="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
-                    <img v-if="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
-                    <img v-if="communityInfo && communityInfo.facebook" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
-                    <img v-if="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
-                    <img v-if="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
-                    <img v-if="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
+                    <img id="com-github" v-show="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+                    <img id="c-document" v-show="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+                    <img id="c-facebook" v-show="communityInfo && communityInfo.facebook" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.facebook)" alt="">
+                    <img id="c-discord" v-show="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+                    <img id="c-telegram" v-show="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+                    <img id="c-twitter" v-show="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
                   </div>
+                    <b-popover target="com-github" triggers="hover focus" placement="top">
+                      Github
+                    </b-popover>
+                    <b-popover target="c-document" triggers="hover" placement="top">
+                      Document
+                    </b-popover>
+                    <b-popover target="c-facebook" triggers="hover" placement="top">
+                      Facebook
+                    </b-popover>
+                    <b-popover target="c-discord" triggers="hover" placement="top">
+                      Discord
+                    </b-popover>
+                    <b-popover target="c-telegram" triggers="hover" placement="top">
+                      Telegram
+                    </b-popover>
+                    <b-popover target="c-twitter" triggers="hover" placement="top">
+                      Twitter
+                    </b-popover>
                 </div>
               </div>
             </template>

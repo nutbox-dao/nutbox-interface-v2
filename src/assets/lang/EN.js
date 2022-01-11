@@ -199,7 +199,8 @@ module.exports = {
     markdownTip: "You can use markdown format.",
     stopPoolAttention: 'Once you close the pool, it cannot be opened again. Please use this function with caution!',
     stakeTokenLogoTip: "This logo is set to the stake token {token} which you selected.",
-    updateSocialSuccess: 'Update successful!'
+    updateSocialSuccess: 'Update successful!',
+    startHeightOut: 'The first start block must bigger than current block.'
   },
   nps: {
     nps: "Governance",

@@ -434,6 +434,14 @@ export default {
         })
         return
       }
+      console.log(this.progressData[0].startHeight, this.blockNum);
+      if (this.progressData[0].startHeight <= this.blockNum + 2) {
+        this.$bvToast.toast(this.$t('tip.startHeightOut'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
       try {
         this.deploying = true
         const communityInfo = await createCommunity(this.cToken, this.progressData)
