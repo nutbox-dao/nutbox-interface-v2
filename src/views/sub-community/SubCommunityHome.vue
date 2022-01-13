@@ -352,7 +352,18 @@ export default {
     transform: translateY(-50%);
   }
 }
-
+@media (min-width: 992px) and (max-width: 1050px){
+  .ratio-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  ::v-deep .ratio-container .legend-box {
+    width: 70%;
+    .name {
+      flex: 1;
+    }
+  }
+}
 @media (max-width: 767px) {
   .c-card {
     .token-base-info {
@@ -362,6 +373,13 @@ export default {
   }
   .ratio-container {
     flex-direction: column;
+    align-items: center;
+  }
+  ::v-deep .ratio-container .legend-box {
+    width: 70%;
+    .name {
+      flex: 1;
+    }
   }
 }
 @media (min-width: 992px) and (max-width: 1600px) {

@@ -24,12 +24,24 @@
             </b-nav>
           </div>
           <div class="link-items">
-            <img class="hover" v-if="communityInfo && communityInfo.github && communityInfo.github != 'undefined' && communityInfo.github != 'null'" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.document && communityInfo.document != 'undefined' && communityInfo.document != 'null'" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.facebook && communityInfo.facebook != 'undefined' && communityInfo.facebook != 'null'" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.discord && communityInfo.discord != 'undefined' && communityInfo.discord != 'null'" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.telegram && communityInfo.telegram != 'undefined' && communityInfo.telegram != 'null'" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
-            <img class="hover" v-if="communityInfo && communityInfo.twitter && communityInfo.twitter != 'undefined' && communityInfo.twitter != 'null'" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Github'"
+                 v-if="communityInfo && communityInfo.github && communityInfo.github != 'undefined' && communityInfo.github != 'null'"
+                 src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Document'"
+                 v-if="communityInfo && communityInfo.document && communityInfo.document != 'undefined' && communityInfo.document != 'null'"
+                 src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Facebook'"
+                 v-if="communityInfo && communityInfo.facebook && communityInfo.facebook != 'undefined' && communityInfo.facebook != 'null'"
+                 src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Discord'"
+                 v-if="communityInfo && communityInfo.discord && communityInfo.discord != 'undefined' && communityInfo.discord != 'null'"
+                 src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Telegram'"
+                 v-if="communityInfo && communityInfo.telegram && communityInfo.telegram != 'undefined' && communityInfo.telegram != 'null'"
+                 src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+            <img class="hover" v-b-popover.hover.top="'Twitter'"
+                 v-if="communityInfo && communityInfo.twitter && communityInfo.twitter != 'undefined' && communityInfo.twitter != 'null'"
+                 src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
           </div>
         </div>
       </div>
@@ -271,7 +283,7 @@ export default {
   background-image: url("~@/static/images/menu-home.svg");
 }
 .blog-icon {
-  background-image: url("~@/static/images/menu-blog.svg");
+  background-image: url("~@/static/images/menu-social.svg");
 }
 .stake-icon {
   background-image: url("~@/static/images/menu-stake.svg");
@@ -290,13 +302,13 @@ export default {
     background-image: url("~@/static/images/menu-home-active.svg");
   }
   .blog-icon {
-    background-image: url("~@/static/images/menu-blog.svg");
+    background-image: url("~@/static/images/menu-social-active.svg");
   }
   .stake-icon {
     background-image: url("~@/static/images/menu-stake-active.svg");
   }
   .dapp-icon {
-    background-image: url("~@/static/images/menu-dapp.svg");
+    background-image: url("~@/static/images/menu-dapp-active.svg");
   }
   .governance-icon {
     background-image: url("~@/static/images/menu-governance-active.svg");
