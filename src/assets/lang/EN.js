@@ -267,6 +267,8 @@ module.exports = {
     },
     remark: "Intro",
     downloadReport: "Download Report",
+    completeContent: "Please fill all the blanks.",
+    endLtStart: 'End block number must greater than start block'
   },
   error: {
     error: "Error",

@@ -102,10 +102,7 @@ export default {
     return {
       tabOptions: ['all', 'rolling', 'pass', 'unpass', 'mine'],
       activeTab: 0,
-      loading: false,
-      testData: {
-        id: 1
-      }
+      loading: false
     }
   },
   async mounted () {

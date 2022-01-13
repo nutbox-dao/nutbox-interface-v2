@@ -105,7 +105,7 @@
           <button
             class="primary-btn"
             @click="submitProposal"
-            :disabled="commiting"
+            :disabled="commiting || isLoading"
           >
             <b-spinner small type="grow" v-show="commiting" />
             {{ $t("operation.commit") }}
@@ -147,6 +147,7 @@ export default {
       },
       noCommunity: false,
       isValid: false,
+      isLoading: true,
       form: {
         communityId: '',
         network: '',
@@ -180,17 +181,26 @@ export default {
   methods: {
     async submitProposal () {
       try {
-        if(!this.proposal.title || this.proposal.title.length === 0 || !this.proposal.body || this.proposal.body.length === 0) {
+        if(!this.proposal.title || this.proposal.title.length === 0 || !this.proposal.body || this.proposal.body.length === 0 || !this.proposal.first_block || !this.proposal.end_block) {
           this.$bvToast.toast(this.$t('nps.completeContent'), {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
           return;
         }
+        if (this.proposal.end_block <= this.proposal.start_block) {
+          this.$bvToast.toast(this.$t('nps.endLtStart'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+        }
         this.commiting = true
         const b = await getERC20Balance(this.cToken.address);
         if (b.toString() / 1e18 < this.form.threshold) {
-          this.$bvToast.toast(this.$t('nps.insuffientBalance'), {
+          this.$bvToast.toast(this.$t("nps.validationWarning.basic.minScore", [
+            this.form.threshold,
+            this.form.symbol,
+          ]), {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
@@ -216,6 +226,7 @@ export default {
           this.$router.back()
         }
       } catch (e) {
+        console.log('Post proposal fail:', e);
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
         })
@@ -240,6 +251,7 @@ export default {
       strategies: community.strategies,
       passthreshold: community.passthreshold
     }
+    this.isLoading = false
   }
 }
 </script>
