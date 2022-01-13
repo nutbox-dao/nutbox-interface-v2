@@ -1,7 +1,7 @@
 <template>
   <div class="sub-member-page">
     <div class="row">
-      <div class="block col-md-7 col-sm-7 pr-sm-0">
+      <div class="block col-md-7  pr-sm-0">
         <div class="member-card position-relative">
           <div class="c-loading c-loading-bg c-loading-absolute" v-if="allUsers && allUsers.length == 0"></div>
           <b-table :fields="fields" :items="allUsers"
@@ -50,7 +50,7 @@
         </div>
       </div>
       <!-- right part -->
-      <div class="block col-md-5 col-sm-5">
+      <div class="block col-md-5 ">
         <div class="user-card d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center">
             <span></span>
@@ -270,7 +270,12 @@ export default {
   background-image: url("~@/static/images/copy.svg");
   cursor: pointer
 }
-@media (max-width: 577px) {
+@media (min-width: 768px) and (max-width: 1140px) {
+  .sub-member-page .s-card {
+    flex-direction: column;
+  }
+}
+@media (max-width: 767px) {
   .sub-member-page {
     overflow: auto;
     .row, .block {
@@ -283,6 +288,17 @@ export default {
     .user-card {
       height: fit-content;
     }
+  }
+}
+@media (max-width: 500px) {
+  .sub-member-page{
+    overflow-x: hidden;
+  }
+  .sub-member-page .member-card {
+    overflow-x: scroll;
+  }
+  .sub-member-page .s-card {
+    flex-direction: column;
   }
 }
 </style>
