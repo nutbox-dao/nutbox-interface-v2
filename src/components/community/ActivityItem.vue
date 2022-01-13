@@ -1,7 +1,10 @@
 <template>
   <div class="activity-card">
     <div class="title font14 font-bold">{{ opType }}</div>
-    <div class="content hover font14 line-height18 font-bold" :id="operation.tx + operation.type" @click="gotoTransaction()">{{ description }}</div>
+    <div class="content hover font14 line-height18 font-bold" :id="operation.tx + operation.type" @click="gotoTransaction()">
+      <span v-show="showName" :class="isAdmin ? 'admin' : ''">{{ username }}</span>
+      {{ description }}
+    </div>
     <!-- <b-popover
           :target="operation.tx + operation.type"
           triggers="hover focus"
@@ -56,6 +59,7 @@ export default {
       time: '',
       description: '',
       username: '',
+      isAdmin: false,
       userAvatar: '',
       opType: '',
     }
@@ -113,65 +117,79 @@ export default {
     switch (this.operation.type) {
       case "DEPOSIT":
         this.opType = "Deposit"
+        this.isAdmin =false;
         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? ' add' : 'Add') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = (this.showName ? accName + ' add' : 'Add') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? ' add' : 'Add') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
       case "WITHDRAW":
         this.opType = "Withdraw"
+        this.isAdmin =false;
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
           this.description = (this.showName ? accName + ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? ' minus' : 'Minus') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
           }else {
-            this.description = (this.showName ? accName + ' minus' : 'Minus') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
+            this.description = (this.showName ? ' minus' : 'Minus') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
           }
         }
         break;
       case "HARVEST":
         this.opType = "Harvest"
+        this.isAdmin =false;
         while(!this.cToken) {
           await sleep(0.2)
         }
         ctokenSymbol = this.cToken.symbol;
-        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
         this.opType = "Harvest all"
+        this.isAdmin =false;
         while(!this.cToken) {
           await sleep(0.2)
         }
         ctokenSymbol = this.cToken.symbol;
-        this.description = (this.showName ? accName + ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
+        this.description = (this.showName ? ' harvest' : 'Harvest') + ` harvest all ${ctokenSymbol}`
         break;
       case "ADMINCREATE":
+        this.isAdmin = true;
+        this.username = 'Admin'
         this.opType = "Create Community"
-        this.description = (this.showName ? 'Admin creat' : 'Create') + ` this community`
+        this.description = (this.showName ? ' creat' : 'Create') + ` this community`
         break;
       case "ADMINSETFEE":
+        this.isAdmin = true
+        this.username = 'Admin'
         this.opType = "Set DAO fund ratio"
-        this.description = (this.showName ? 'Admin change' : 'Change') + ` DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
+        this.description = (this.showName ? ' change' : 'Change') + ` DAO fund ratio to ${(this.operation.amount.toString() / 100).toFixed(2)}%`
         break;
       case "ADMINADDPOOL":
+        this.isAdmin = true;
+        this.username = 'Admin'
         this.opType = "Create new pool"
-        this.description = (this.showName ? 'Admin creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? ' creat' : 'Create') + ` a new pool: ${this.operation.pool.name}`
         break;
       case "ADMINCLOSEPOOL":
+        this.isAdmin = true;
+        this.username = 'Admin'
         this.opType = "Close pool"
-        this.description = (this.showName ? 'Admin close' : 'Close') + ` a pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? ' close' : 'Close') + ` a pool: ${this.operation.pool.name}`
         break;
       case "ADMINSETRATIO":
+        this.isAdmin = true;
+        this.username = 'Admin'
         this.opType = "Reset pool ratios"
-        this.description = (this.showName ? 'Admin reset' : 'Reset') + ` the pool ratios.`
+        this.description = (this.showName ? ' reset' : 'Reset') + ` the pool ratios.`
         break;
     }
   },
@@ -183,6 +201,12 @@ export default {
   @include card(16px 8px, var(--block-bg), unset, fit-conent);
   .content {
     @include text-multi-line(2);
+    span {
+      color: var(--sub-primary);
+    }
+    .admin {
+      color: var(--warning)
+    }
   }
 }
 .avatar{

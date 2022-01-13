@@ -43,7 +43,7 @@
             </template>
             <template #cell(value)="row">
               <span>
-                {{ getBalance(row.item.address) | amountForm(2) }}
+                {{ row.item.balance | amountForm(2) }}
               </span>
             </template>
           </b-table>
@@ -75,7 +75,7 @@
               </div>
               <div class="flex-1">
                 <div class="font14 line-height14 text-grey-7">{{ cToken && cToken.symbol || '&nbsp' }}</div>
-                <div class="font24 line-height24 font-bold mt-4">{{ (user ? getBalance(user.address) : 0) | amountForm(2) }}</div>
+                <div class="font24 line-height24 font-bold mt-4">{{ (user ? user.balance : 0) | amountForm(2) }}</div>
               </div>
             </div>
           </div>
@@ -122,8 +122,7 @@ export default {
       user: null,
       activitiesList: [],
       activitiesLoading: true,
-      selectIndex: 0,
-      balances: {}
+      selectIndex: 0
     }
   },
   computed: {
@@ -138,7 +137,11 @@ export default {
       await sleep(0.3)
     }
     const interval = watchMemberBalance((res) => {
-      this.balances = res
+      const allUsers = this.allUsers.map(u => ({
+        ...u,
+        balance: res[u.address].toString() / 1e18
+      }))
+      this.$store.commit('currentCommunity/saveAllUsers', allUsers)
     })
     this.user = this.allUsers[0]
     this.getUserActive().then(res => {
@@ -167,10 +170,6 @@ export default {
       }catch(e) {
         return '--'
       }
-    },
-    getBalance(address) {
-      if (!address || !this.balances || Object.keys(this.balances).length === 0) return '0';
-      return this.balances[address.toLowerCase()].toString() / 1e18
     },
     getAvatar(address) {
       if (!address) return null
