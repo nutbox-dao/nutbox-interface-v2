@@ -266,7 +266,7 @@ module.exports = {
         "You need to pass the proposal validation in order to submit a proposal.",
     },
     remark: "Intro",
-    downloadReport: "Download Report.",
+    downloadReport: "Download Report",
   },
   error: {
     error: "Error",

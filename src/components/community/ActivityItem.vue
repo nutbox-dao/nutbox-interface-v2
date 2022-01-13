@@ -202,7 +202,7 @@ export default {
   .content {
     @include text-multi-line(2);
     span {
-      color: var(--sub-primary);
+      color: var(--primary-hover);
     }
     .admin {
       color: var(--warning)

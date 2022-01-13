@@ -107,7 +107,7 @@
                  :src="currentCommunityInfo && currentCommunityInfo.icon" alt="">
             <span>{{ currentCommunityInfo && currentCommunityInfo.name }}</span>
           </div>
-          <div v-else class="page-title font-bold font28 line-height32">{{$route.name}}</div>
+          <div v-else class="page-title font-bold font28 line-height32">{{ pageTitle }}</div>
           <div class="address-box" @click="connect">
             <i class="wallet-icon"></i>
             <div class="font12">{{ address || $t("commen.connectMetamask") }}</div>
@@ -146,6 +146,13 @@ export default {
       if (ethers.utils.isAddress(this.account)) {
         return formatUserAddress(this.account, false)
       }
+    },
+    pageTitle() {
+      const url = this.$route.path
+      if (url === '/') return 'Home'
+      else if(url.indexOf('/community') !== -1) return 'Community'
+      else if(url.indexOf('/manage-community')) return 'Community Dashboard'
+      else if(url.indexOf('/profile')) return 'Profile'
     },
     currentCommunityInfo() {
       if (this.communityId){

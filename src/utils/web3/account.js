@@ -123,7 +123,7 @@ export const getUserBaseInfo = async (user) => {
                     store.commit('user/saveUsers', originInfo)
                     return;
                 }
-                resolve(null)
+                resolve({id: user})
             }
         }catch(e){
             console.log('Get user info fail:', e);
