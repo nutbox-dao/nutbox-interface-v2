@@ -203,7 +203,6 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.card)
     const len = Math.min(7, this.card.stakers.length)
     const ids = this.card.stakers.slice(0, len).map(a => a.id)
     this.stakers = await Promise.all(ids.map(id => getUserBaseInfo(id)))
