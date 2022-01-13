@@ -2,8 +2,8 @@
   <div class="multi-card">
     <StakingCardHeader :card="card"/>
     <div class="c-card border-0" style="margin-top: -0.6rem">
-      <div class="d-flex align-items-end">
-        <span class="font-bold text-grey-47 mr-2 font12">{{ cToken ? cToken.symbol : '' }}</span>
+      <div class="d-flex align-items-center">
+        <span class="font-bold text-grey-47 mr-2 font14">{{ cToken ? cToken.symbol : 'Pnut' }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">EARNED</span>
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken ? cToken.address : '')"></i>
@@ -18,8 +18,8 @@
           {{ $t("operation.harvest") }}
         </button>
       </div>
-      <div class="mt-3 mb-1 d-flex align-items-end">
-        <span class="text-grey-47 font-bold mr-2 font12">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
+      <div class="mt-3 mb-1 d-flex align-items-center">
+        <span class="text-grey-47 font-bold mr-2 font14">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
           <template v-if="type === homeName">
