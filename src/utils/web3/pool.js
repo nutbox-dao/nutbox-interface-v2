@@ -13,15 +13,13 @@ import {
   Multi_Config
 } from '@/config'
 import {
-  waitForTx,
-  getGasPrice
+  waitForTx
 } from './ethers'
 import {
   aggregate,
   createWatcher
 } from '@makerdao/multicall'
 import {
-  getRegitryAssets,
   getAllTokenFromBackend,
   getERC20Info
 } from './asset'
