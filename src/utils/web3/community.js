@@ -586,25 +586,24 @@ export const watchMemberBalance = (callback) => {
   return setInterval(async () => {
     try{
       const users = store.state.currentCommunity.communityInfo.users;
-      const ctoken = store.state.currentCommunity.cToken;
+      const ctoken = store.state.currentCommunity.communityInfo.cToken;
       if (!users || users.length === 0 || !ctoken) {
         callback({});
         return
       }
       let res = await aggregate(users.map(u => ({
-        target: ctoken.address,
+        target: ctoken,
         call: [
           'balanceOf(address)(uint256)',
           u.address
         ],
         returns: [
-          [u.address]
+          [u.address, val => val.toString() / 1e18]
         ]
       })), Multi_Config)
       callback(res.results.transformed)
     }catch(err) {
       console.log('Watch members balance fail:', err);
-      reject(err);
     }
   }, 3000)
 }

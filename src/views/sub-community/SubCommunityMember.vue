@@ -119,7 +119,6 @@ export default {
         { key: 'createdAt', label: 'Joined At', class: 'text-center' },
         { key: 'value', label: 'Balance', class: 'text-right' }
       ],
-      user: null,
       activitiesList: [],
       activitiesLoading: true,
       selectIndex: 0
@@ -128,6 +127,11 @@ export default {
   computed: {
     ...mapState('currentCommunity', ['communityInfo', 'allUsers', 'communityId', 'cToken']),
     ...mapState('user', ['users']),
+    user() {
+      if (this.allUsers && this.allUsers.length > 0) {
+        return this.allUsers[this.selectIndex]
+      }
+    }
   },
   async mounted () {
     if (!this.communityId) {
@@ -137,13 +141,13 @@ export default {
       await sleep(0.3)
     }
     const interval = watchMemberBalance((res) => {
+      if (!res) return;
       const allUsers = this.allUsers.map(u => ({
         ...u,
-        balance: res[u.address].toString() / 1e18
+        balance: res[u.address.toLowerCase()] ? res[u.address.toLowerCase()] : 0
       }))
       this.$store.commit('currentCommunity/saveAllUsers', allUsers)
     })
-    this.user = this.allUsers[0]
     this.getUserActive().then(res => {
       this.activitiesList = res
     })
@@ -156,8 +160,6 @@ export default {
   methods: {
     onSelectUser (data, index) {
       if (this.activitiesLoading || this.selectIndex === index) return
-      this.user = data
-      console.log(this.user.id);
       this.selectIndex = index
       this.$refs.selectableTable.selectRow(index)
       this.getUserActive().then(res => {
@@ -173,6 +175,7 @@ export default {
     },
     getAvatar(address) {
       if (!address) return null
+      if (!this.users) return null
       address = ethers.utils.getAddress(address);
       const u = this.users[address]
       if (u) {
@@ -182,6 +185,7 @@ export default {
     },
     getName(address) {
       if (!address) return '--'
+      if (!this.users) return '--'
       address = ethers.utils.getAddress(address)
       const u = this.users[address]
       if (u && u.name) {

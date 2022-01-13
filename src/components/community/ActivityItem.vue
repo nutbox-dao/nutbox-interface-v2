@@ -107,6 +107,9 @@ export default {
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0){
       try{
+        while(!this.allTokens) {
+          await sleep(0.3)
+        }
         const tokenAddress = ethers.utils.getAddress(this.operation.asset)
         const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
         symbol = token.symbol;
