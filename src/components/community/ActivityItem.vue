@@ -5,13 +5,14 @@
       <span v-show="showName" :class="isAdmin ? 'admin' : ''">{{ username }}</span>
       {{ description }}
     </div>
-    <!-- <b-popover
+    <b-popover
           :target="operation.tx + operation.type"
+          :delay="{show: 800}"
           triggers="hover focus"
           placement="top"
         >
-          {{ description }}
-        </b-popover> -->
+          {{ showName ? username + description : description }}
+        </b-popover>
     <div class="d-flex justify-content-between align-items-center mt-2">
       <img class="rounded-circle hover avatar"
             v-if="userAvatar && userAvatar.length > 0"
@@ -29,6 +30,7 @@
       <b-popover :target="operation.tx + operation.type + operation.timestamp"
         triggers="hover focus"
         placement="top"
+        :delay="{show: 500}"
       >
         {{ getDateString(operation.timestamp) }}
       </b-popover>
