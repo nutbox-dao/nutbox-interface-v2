@@ -25,7 +25,7 @@
             </div>
             <div class="row-info">
               <span class="font14 line-height14 text-grey-7 mb-2">{{ $t('asset.cap') }}</span>
-              <span class="font20 line-height20 font-bold">${{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | amountForm}}</span>
+              <span class="font20 line-height20 font-bold">{{ (cToken.price *  (cToken && cToken.totalSupply && cToken.totalSupply.toString() / (10 ** cToken.decimal))) | formatPrice}}</span>
             </div>
           </div>
         </div>
