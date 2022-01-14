@@ -416,22 +416,22 @@ export default {
     }
   },
   async mounted () {
-    // try{
-    //   await getMyCommunityInfo()
-    // }catch(e) {
-    //   if(e == errCode.NO_STAKING_FACTORY){
-    //     this.$router.replace('deploy-token')
-    //     return;
-    //   }
-    // }
+    try{
+      await getMyCommunityInfo()
+    }catch(e) {
+      if(e == errCode.NO_STAKING_FACTORY){
+        this.$router.replace('deploy-token')
+        return;
+      }
+    }
 
-    // if (this.communityInfo && this.communityInfo.cToken){
-    //   // this.tokenLogo = this.communityInfo.cToken.icon
-    //   this.form.tokenLogo = this.communityInfo.cToken.icon
-    //   if (this.form.tokenLogo) this.editToken = false
-    //   this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
-    //   getDistributionEras();
-    // }
+    if (this.communityInfo && this.communityInfo.cToken){
+      // this.tokenLogo = this.communityInfo.cToken.icon
+      this.form.tokenLogo = this.communityInfo.cToken.icon
+      if (this.form.tokenLogo) this.editToken = false
+      this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
+      getDistributionEras();
+    }
   },
   methods: {
     onCancel () {

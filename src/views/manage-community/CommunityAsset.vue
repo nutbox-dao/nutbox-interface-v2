@@ -63,6 +63,7 @@
         </b-form-group>
         <!-- community dev address -->
         <b-form-group label-cols-md="2" content-cols-md="8"
+                      v-if="isMintable"
                       label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.fundAddress')"
         >
@@ -79,6 +80,7 @@
         </b-form-group>
         <!-- community dev ratio -->
         <b-form-group label-cols-md="2" content-cols-md="8"
+                      v-if="isMintable"
                       label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.fundRatio')">
           <div class="d-flex">

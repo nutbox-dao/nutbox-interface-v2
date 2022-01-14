@@ -73,6 +73,13 @@ export const formatBalance = function (value, digit = 4) {
 export const formatPrice = function (value, abb=false) {
   if (!value) return "--";
   let unit = ''
+  if(Number(value) > 1e6) {
+    abb = true
+  }
+  let digit = 3
+  if(Number(value) < 1) {
+    digit = 4
+  }
   if (abb) {
     value = Number(value)
     if (value < 1000) {}
@@ -87,7 +94,7 @@ export const formatPrice = function (value, abb=false) {
       unit = 'B'
     }
   }
-  const str = Number(value).toFixed(3).toString();
+  const str = Number(value).toFixed(digit).toString();
   let integer = str;
   let fraction = "";
   if (str.includes(".")) {

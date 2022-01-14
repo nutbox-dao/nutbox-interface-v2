@@ -124,7 +124,7 @@ export default {
         this.opType = "Deposit"
         this.isAdmin =false;
         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = (this.showName ? accName + ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
+          this.description = (this.showName ? ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){
@@ -138,7 +138,7 @@ export default {
         this.opType = "Withdraw"
         this.isAdmin =false;
          if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = (this.showName ? accName + ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
+          this.description = (this.showName ? ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
           const sp = (this.operation.amount?.toString() / 1e6)
           if (parseInt(this.operation.chainId) === 1){

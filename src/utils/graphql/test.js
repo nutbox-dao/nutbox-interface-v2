@@ -27,7 +27,7 @@ export function test() {
             }
         }
     `
-    const graphQLClient = new GraphQLClient('https://api.thegraph.com/subgraphs/name/terryyyyyy/walnutingoerli');
+    const graphQLClient = new GraphQLClient('https://api.thegraph.com/subgraphs/name/terryyyyyy/walnutinchapel');
 
     graphQLClient.request(query).then((res) => console.log(123, res)).catch(err => console.log('err', err))
 }

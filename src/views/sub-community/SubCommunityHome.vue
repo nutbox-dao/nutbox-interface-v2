@@ -75,10 +75,10 @@
       <!-- Dao fund -->
       <div class="c-card">
         <div class="content3">
-          <div class="title mb-3">DAO Fund</div>
+          <div class="title mb-3">Community Asset</div>
           <div class="custom-form form-row-align-center">
             <!-- community balance -->
-            <b-form-group v-if="showBalance" label-cols-md="3" content-cols-md="8"
+            <b-form-group v-if="isMintable" label-cols-md="3" content-cols-md="8"
                           class="align-items-center"
                           label-class="font14"
                           label-align="left"
@@ -98,6 +98,7 @@
             <!-- community dev address -->
             <b-form-group label-cols-md="3" content-cols-md="8"
                           label-class="font14"
+                          v-if="!isMintable"
                           label-align="left"
                           :label="$t('community.fundAddress')">
               <div class="d-flex v-middle">
@@ -114,6 +115,7 @@
             </b-form-group>
             <!-- community dev ratio -->
             <b-form-group label-cols-md="3" content-cols-md="8"
+                          v-if="!isMintable"
                           label-align="left"
                           label-class="font14"
                           :label="$t('community.fundRatio')">
@@ -201,7 +203,7 @@ export default {
         return this.getCommunityInfoById(this.communityId)
       }
     },
-    showBalance () {
+    isMintable () {
       if (!this.cToken) {
         return false;
       }
