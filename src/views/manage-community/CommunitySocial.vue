@@ -58,7 +58,7 @@
         </b-form-group>
         <b-form-group label-cols-md="0" content-cols-md="12" label="">
           <div class="text-center mt-4">
-            <button class="primary-btn col-md-6" @click="showSignatureTip = true">
+            <button class="primary-btn col-md-6" @click="checkInput() && (showSignatureTip = true)">
               {{ $t("operation.update") }}
             </button>
           </div>
@@ -110,13 +110,6 @@ export default {
       showSignatureTip: false,
       uploading: false,
       newBlogTag: '',
-      blogTag: '',
-      inputBlogTag: '',
-      blogMainPassword: '',
-      showBlogTip: false,
-      creatingBlog: false,
-      showSteemLogin: false,
-      publishingBlog: false,
       state: '',
       socialForm: {
         twitter: '',
@@ -144,6 +137,44 @@ export default {
     }
   },
   methods: {
+    checkInput() {
+        if (this.socialForm.github && this.socialForm.github.indexOf('https://github.com/') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Github'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.socialForm.discord && this.socialForm.discord.indexOf('https://discord.com/') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Discord'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.socialForm.telegram && this.socialForm.telegram.indexOf('https://t.me/') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Telegram'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.socialForm.twitter && this.socialForm.twitter.indexOf('https://twitter.com/') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Twitter'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.socialForm.document && this.socialForm.document.indexOf('https://') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'document'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        return true
+    },
     async onConfirm() {
       try{
         this.uploading = true
