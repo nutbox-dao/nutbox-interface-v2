@@ -72,7 +72,6 @@ export default {
     },
     activedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      console.log(45,this.allPools);
       return this.allPools.filter(p => p.status === 'OPENED')
     },
     inActivedPools() {
