@@ -253,7 +253,7 @@ export default {
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
       // start watch history
-      while (this.operationHistory.length === 0) {
+      while (!this.operationHistory || this.operationHistory.length === 0) {
         await sleep(0.3)
       }
       const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
