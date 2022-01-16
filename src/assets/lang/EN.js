@@ -371,6 +371,9 @@ module.exports = {
     fundRatio: "Fund ratio",
     totalDeposit: 'Total amount',
     currentBlock: 'Current block',
+    noJoinedCommunity: 'No joined communities',
+    noJoinedPool: "No joined pools",
+    exploreCommunity: 'Explore Communities',
 
     noCommunity: "You have no community yet",
 

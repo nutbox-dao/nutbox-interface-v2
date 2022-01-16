@@ -44,12 +44,17 @@
         </div>
         <!-- community -->
         <div class="font-bold mt-5 mb-3 font20 line-height32">Joined Communities</div>
-        <div class="row" v-if="joinedCommunity">
+        <div class="row" v-if="joinedCommunity && joinedCommunity.length > 0">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>
           </div>
         </div>
-        <div class="c-loading" v-else></div>
+        <div class="empty-bg" v-else>
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p> {{ $t('community.noJoinedCommunity') }} </p>
+          <button class="primary-btn" @click="window.history.push('/community')">{{ $t('community.exploreCommunity') }}</button>
+        </div>
+        <div class="c-loading" v-show="loadingCommunity"></div>
         <!-- pools -->
         <div class="font-bold mt-4 mb-3 font20 line-height32">Staked Pools</div>
           <StakedPools class="mb-3"/>
@@ -101,6 +106,7 @@ export default {
       assetModalVisible: false,
       avatarModalVisible: false,
       loadingBalance: true,
+      loadingCommunity: true,
       balances: [],
       chartToken: []
     }
@@ -161,7 +167,7 @@ export default {
     }).catch(err => {
       console.log('get my user info fail:', err)
     })
-    getMyJoinedCommunity();
+    getMyJoinedCommunity().then(res => this.loadingCommunity = false);
     const interval = rollingFunction(getCtokenBalance, null, 3, res => {
       if(!this.allTokens) return;
       let ctokens = []

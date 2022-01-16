@@ -41,6 +41,8 @@ export async function getMyJoinedCommunity() {
         const userInfo = await client.request(query, {id: account.toLowerCase()});
         if (userInfo && userInfo.user) {
             store.commit('web3/saveUserGraphInfo', userInfo.user)
+        }else {
+            store.commit('user/saveLoadingUserGraph', false)
         }
         return;
     }catch(err) {

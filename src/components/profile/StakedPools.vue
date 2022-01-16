@@ -24,12 +24,16 @@
         </div>
       </div> -->
     </div>
-    <div class="c-card mt-3" v-if="joinedPool.length>0">
+    <div class="c-loading my-5" v-if="loadingUserGraph"></div>
+    <div class="c-card mt-3" v-else-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
         <UserStakingList v-if="getCommunityInfoById(pool.community.id)" :pool="pool" />
       </div>
     </div>
-    <div class="c-loading my-5" v-else></div>
+    <div class="empty-bg" v-else>
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p> {{ $t('community.noJoinedPool') }} </p>
+        </div>
   </div>
 </template>
 
@@ -58,6 +62,7 @@ export default {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapState('community', ['allCommunityInfo']),
     ...mapState('web3', ['userGraphInfo', 'tokenIcons']),
+    ...mapState('user', ['loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
         case 4:
@@ -83,19 +88,21 @@ export default {
   },
   async mounted () {
     while(true) {
-      if (this.userGraphInfo && this.userGraphInfo.inPools) {
+      if (this.userGraphInfo && this.userGraphInfo.inPools || !this.loadingUserGraph) {
         break;
       }
       await sleep(0.3)
     }
     // update pools data
-    const [stake, total, reward, approve] = updatePoolsByPolling(this.userGraphInfo.inPools)
-    this.$once('hook:beforeDestroy', () => {
-        stake.stop();
-        total.stop();
-        reward.stop();
-        approve.stop();
-    });
+    if (this.userGraphInfo && this.userGraphInfo.inPools){
+      const [stake, total, reward, approve] = updatePoolsByPolling(this.userGraphInfo.inPools)
+      this.$once('hook:beforeDestroy', () => {
+          stake.stop();
+          total.stop();
+          reward.stop();
+          approve.stop();
+      });
+    }
   },
 }
 </script>

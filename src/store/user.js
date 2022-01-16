@@ -5,13 +5,14 @@ export default {
     state: {
         users: null,
         // loading all users from backend
-        loadingUsers: false
+        loadingUsers: false,
+        loadingUserGraph: true,
     },
     getters: {
         getUserByAddress: state => (address) => {
             address = ethers.utils.getAddress(address)
             return state.users ? state.users[address] : null;
-        },
+        }
     },
     mutations: {
         saveUsers(state, users) {
@@ -19,6 +20,9 @@ export default {
         },
         saveLoadingUsers(state, loadingUsers) {
             state.loadingUsers = loadingUsers
+        },
+        saveLoadingUserGraph(state, loadingUserGraph) {
+            state.loadingUserGraph = loadingUserGraph
         }
     }
 }
