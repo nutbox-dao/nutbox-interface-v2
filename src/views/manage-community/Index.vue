@@ -42,13 +42,13 @@ import { getMyCommunityContract } from '@/utils/web3/community'
 export default {
   name: 'Index',
   async mounted () {
-    // try{
-    //   const res = await getMyCommunityContract()
-    //   getMyCommunityData();
-    // }catch(e) {
-    //   // no registered
-    //   this.$router.replace('/')
-    // }
+    try{
+      const res = await getMyCommunityContract()
+      getMyCommunityData();
+    }catch(e) {
+      // no registered
+      this.$router.replace('/')
+    }
   },
 }
 </script>
