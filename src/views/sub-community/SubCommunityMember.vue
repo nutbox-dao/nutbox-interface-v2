@@ -26,6 +26,7 @@
                      :src="getAvatar(row.item.address)" alt="">
                 <img v-else class="avatar rounded-circle"
                      src="~@/static/images/avatars/default.png" alt="">
+                <img src="~@/static/images/avatars/admin-icon.png" v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id)" alt="">
                 <span class="ml-2" :id="row.item.address">{{ getName(row.item.address) }}</span>
                 <b-popover
                   :target="row.item.address"
