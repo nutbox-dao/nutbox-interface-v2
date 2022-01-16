@@ -93,7 +93,8 @@
               </b-form-input>
               <span class="c-append">%</span>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" @click="showDevRatioTip = true">
+            <button class="primary-btn ml-2" style="width: 5rem" :disabled="!communityData" @click="showDevRatioTip = true">
+              <b-spinner small type="grow" v-show="!communityData" />
               {{ this.$t("operation.update") }}
             </button>
           </div>
@@ -387,6 +388,7 @@ export default {
         this.updatingDevRatio = true
         const r = parseInt(parseFloat(this.inputDevRatio) * 100)
         await setDevRatio(r)
+        console.log(23,this.communityData);
         this.communityData.feeRatio = r;
         this.$store.commit('community/saveCommunityData', this.communityData)
         this.$bvToast.toast(this.$t(), {

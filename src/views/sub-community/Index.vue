@@ -32,7 +32,7 @@
                  src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
             <img class="hover" v-b-popover.hover.top="'Facebook'"
                  v-if="communityInfo && communityInfo.facebook && communityInfo.facebook != 'undefined' && communityInfo.facebook != 'null'"
-                 src="~@/static/images/h-github.svg" @click="openTab(communityInfo.facebook)" alt="">
+                 src="~@/static/images/h-facebook.svg" @click="openTab(communityInfo.facebook)" alt="">
             <img class="hover" v-b-popover.hover.top="'Discord'"
                  v-if="communityInfo && communityInfo.discord && communityInfo.discord != 'undefined' && communityInfo.discord != 'null'"
                  src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
@@ -72,12 +72,12 @@
                     <span>{{ $t("router.member") }}</span>
                   </b-nav-item>
                   <div class="link-items">
-                    <img id="com-github" v-show="communityInfo && communityInfo.github" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
-                    <img id="c-document" v-show="communityInfo && communityInfo.document" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
-                    <img id="c-facebook" v-show="communityInfo && communityInfo.facebook" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.facebook)" alt="">
-                    <img id="c-discord" v-show="communityInfo && communityInfo.discord" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
-                    <img id="c-telegram" v-show="communityInfo && communityInfo.telegram" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
-                    <img id="c-twitter" v-show="communityInfo && communityInfo.twitter" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
+                    <img id="com-github" v-show="communityInfo && communityInfo.github && communityInfo.github != 'undefined' && communityInfo.github != 'null'" src="~@/static/images/h-github.svg" @click="openTab(communityInfo.github)" alt="">
+                    <img id="c-document" v-show="communityInfo && communityInfo.document && communityInfo.document != 'undefined' && communityInfo.document != 'null'" src="~@/static/images/h-docs.svg" @click="openTab(communityInfo.document)" alt="">
+                    <img id="c-facebook" v-show="communityInfo && communityInfo.facebook && communityInfo.facebook != 'undefined' && communityInfo.facebook != 'null'" src="~@/static/images/h-facebook.svg" @click="openTab(communityInfo.facebook)" alt="">
+                    <img id="c-discord" v-show="communityInfo && communityInfo.discord && communityInfo.discord != 'undefined' && communityInfo.discord != 'null'" src="~@/static/images/h-discord.svg" @click="openTab(communityInfo.discord)" alt="">
+                    <img id="c-telegram" v-show="communityInfo && communityInfo.telegram && communityInfo.telegram != 'undefined' && communityInfo.telegram != 'null'" src="~@/static/images/h-telegram.svg" @click="openTab(communityInfo.telegram)" alt="">
+                    <img id="c-twitter" v-show="communityInfo && communityInfo.twitter && communityInfo.twitter != 'undefined' && communityInfo.twitters != 'null'" src="~@/static/images/h-twitter.svg" @click="openTab(communityInfo.twitter)" alt="">
                   </div>
                     <b-popover target="com-github" triggers="hover focus" placement="top">
                       Github

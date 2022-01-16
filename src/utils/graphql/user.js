@@ -61,6 +61,9 @@ export async function getMyJoinedCommunity() {
                 community(id: $id) {
                     id
                     feeRatio
+                    owner{
+                        id
+                    }
                     pools(orderBy: poolIndex) {
                         id
                         status

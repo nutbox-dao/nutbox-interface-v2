@@ -180,7 +180,7 @@
           </button>
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            Sign and uplaod
+            Sign and upload
           </button>
         </div>
       </div>
