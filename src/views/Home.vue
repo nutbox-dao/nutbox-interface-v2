@@ -27,19 +27,19 @@
         <section class="section2 mt-4">
           <div class="row">
             <div class="col-md-6 mb-md-0 mb-3">
-              <div class="s2-card font20 line-height28 font-bold">
+              <div class="s2-card s2-card-1 font20 line-height28 font-bold">
                 <div class="text-left">Create a DAO in minutes, and everyone can build it without coding.</div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="s2-card font20 line-height28 font-bold">
+              <div class="s2-card s2-card-2 font20 line-height28 font-bold">
                 <div class="text-left">It's easy to bring DeFi, social media and Governance to the community.</div>
               </div>
             </div>
           </div>
           <div class="row" style="margin-top: 1.6rem">
             <div class="col-md-4 mb-md-0 mb-3">
-              <div class="s2-card2">
+              <div class="s2-card2 s2-card2-1">
                 <img src="~@/static/images/home-s3-img1.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalCommunities }}</div>
                 <div class="label font20 line-height20 text-grey-7">Community</div>
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="col-md-4 mb-md-0 mb-3">
-              <div class="s2-card2">
+              <div class="s2-card2 s2-card2-2">
                 <img src="~@/static/images/home-s3-img2.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalUsers }}</div>
                 <div class="label font20 line-height20 text-grey-7">Member</div>
@@ -55,7 +55,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="s2-card2">
+              <div class="s2-card2 s2-card2-3">
                 <img src="~@/static/images/home-s3-img3.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ tvl | formatPrice(true) }}</div>
                 <div class="label font20 line-height20 text-grey-7">TVL</div>
@@ -236,29 +236,51 @@ $home-primary-color: #F8B62A;
     width: fit-content;
     font-size: 1rem;
     font-weight: bolder;
+    white-space: nowrap;
   }
 }
 .section2 {
   .s2-card {
     @include card(2.5rem);
-    background-image:
-      linear-gradient(-120deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%),
-      url("~@/static/images/home-s2-img1.png"),
-      url("~@/static/images/home-s2-img2.png");
-    background-size: 100%, 5rem, 5rem;
-    background-repeat: no-repeat;
-    background-position: right bottom, 0 0, right 135%;
     background-origin: padding-box;
     border: none;
+    padding-right: 10rem;
+    background-size: 100%, 5rem, 7.5rem auto;
+    background-repeat: no-repeat;
+    background-position: right bottom, 0 0, 95% bottom;
+    &-1 {
+      background-image:
+        linear-gradient(-120deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%),
+        url("~@/static/images/home-s2-img1.png"),
+        url("~@/static/images/home-s2-img2.png");
+    }
+    &-2 {
+      background-image:
+        linear-gradient(-120deg,rgba(205, 80, 203, 0.3), rgba(78, 40, 222, 0) 20%),
+        url("~@/static/images/home-s2-img1.png"),
+        url("~@/static/images/home-s2-img3.png");
+    }
   }
   .s2-card2 {
     position: relative;
     @include card(1rem);
+    border: transparent;
+    box-shadow: 0 1px 2px 0 rgba(white, 0.2) inset;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    &-1 {
+      background-image: url("~@/static/images/home-s2-img4.svg");
+    }
+    &-2 {
+      background-image: url("~@/static/images/home-s2-img5.svg");
+    }
+    &-3 {
+      background-image: url("~@/static/images/home-s2-img6.svg");
+    }
     .value {
       line-height: 2.8rem;
     }
-    border: transparent;
-    box-shadow: 0 1px 2px 0 rgba(white, 0.2) inset;
   }
 }
 .section3 {
@@ -286,6 +308,24 @@ $home-primary-color: #F8B62A;
     }
   }
 }
+@media (max-width: 1120px) {
+  .section2 .s2-card {
+    padding-right: 7.5rem;
+  }
+}
+@media (max-width: 960px) {
+  .section2 .s2-card {
+    padding-right: 2rem;
+    background-size: 100%, 5rem, 5.5rem auto;
+  }
+  .banner1-sub-title {
+    display: flex;
+    flex-direction: column;
+  }
+  .text-dot {
+    display: none;
+  }
+}
 @media (max-width: 767px) {
   .section1 {
     .home-img1 {
@@ -294,19 +334,15 @@ $home-primary-color: #F8B62A;
   }
 }
 @media (max-width: 500px) {
+  .section1 .s1-btn {
+    padding: 0 10px;
+  }
   .section2 {
     .s2-card {
+      padding: 1rem 3rem 1rem 1rem;
+      font-size: 18px;
       background-position: right bottom, 0 0, right bottom;
     }
-  }
-}
-@media (max-width: 960px) {
-  .banner1-sub-title {
-    display: flex;
-    flex-direction: column;
-  }
-  .text-dot {
-    display: none;
   }
 }
 </style>

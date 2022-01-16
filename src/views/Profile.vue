@@ -52,7 +52,11 @@
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
           <p> {{ $t('community.noJoinedCommunity') }} </p>
-          <button class="primary-btn" @click="window.history.push('/community')">{{ $t('community.exploreCommunity') }}</button>
+          <router-link to="/community">
+            <button class="primary-btn w-auto px-4">
+              {{ $t('community.exploreCommunity') }}
+            </button>
+          </router-link>
         </div>
         <div class="c-loading" v-show="loadingCommunity"></div>
         <!-- pools -->

@@ -143,10 +143,10 @@
   <!-- history -->
     <div class="activity-banner">
       <div class="a-banner-card">
-        <div class="mt-2 mb-4 font-bold font14 justify-content-between d-flex align-items-center">
-          <span>{{ communityInfo ? communityInfo.operationCount : '' }} Activities</span>
+        <div class="mt-2 mb-4 font-bold font14 justify-content-between d-flex  flex-column">
+          <div class="font24 line-height24 mb-4">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
           <div class="d-flex align-items-center">
-            <span class="mr-2 font14">Admin only</span>
+            <span class="mr-2 font14 text-grey-7">Admin only</span>
             <ToggleSwitch v-model="isAdmin"/>
           </div>
         </div>

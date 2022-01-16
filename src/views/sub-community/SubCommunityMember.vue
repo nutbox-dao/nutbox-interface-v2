@@ -21,12 +21,15 @@
 <!--            </template>-->
             <template #cell(address)="row">
               <div class="d-flex align-items-center">
-                <img v-if="getAvatar(row.item.address)"
-                     class="avatar rounded-circle"
-                     :src="getAvatar(row.item.address)" alt="">
-                <img v-else class="avatar rounded-circle"
-                     src="~@/static/images/avatars/default.png" alt="">
-                <img src="~@/static/images/avatars/admin-icon.png" v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id)" alt="">
+                <div style="position: relative">
+                  <img v-if="getAvatar(row.item.address)"
+                       class="avatar rounded-circle"
+                       :src="getAvatar(row.item.address)" alt="">
+                  <img v-else class="avatar rounded-circle"
+                       src="~@/static/images/avatars/default.png" alt="">
+                  <img src="~@/static/images/avatars/admin-icon.png" class="admin-tag"
+                       v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id)" alt="">
+                </div>
                 <span class="ml-2" :id="row.item.address">{{ getName(row.item.address) }}</span>
                 <b-popover
                   :target="row.item.address"
@@ -233,6 +236,13 @@ export default {
 .avatar{
   width: 40px;
   height: 40px;
+}
+.admin-tag {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .sub-member-page {
   flex: 1;
