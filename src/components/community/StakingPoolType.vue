@@ -4,18 +4,18 @@
     <div class="pool-type-modal-content d-flex flex-column">
       <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
-        <div class="type-box type-box-bsc" @click="$emit('onType', 'bsc')">
-          <button class="bsc-btn">
+        <div class="type-box type-box-bsc">
+          <button class="bsc-btn" @click="$emit('onType', 'bsc')">
             BSC <br> Staking
           </button>
         </div>
-        <div class="type-box type-box-steem" @click="$emit('onType', 'steem')">
-          <button class="steem-btn">
+        <div class="type-box type-box-steem">
+          <button class="steem-btn" @click="$emit('onType', 'steem')">
             Steem <br> Staking
           </button>
         </div>
-        <div class="type-box type-box-hive" @click="$emit('onType', 'hive')">
-          <button class="hive-btn">
+        <div class="type-box type-box-hive">
+          <button class="hive-btn" @click="$emit('onType', 'hive')">
             Hive <br> Staking
           </button>
         </div>
