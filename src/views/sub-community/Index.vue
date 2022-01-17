@@ -5,7 +5,7 @@
         <div class="slider-content">
           <div class="menu-items">
             <b-nav vertical align="center" class="top">
-              <b-nav-item :to="'/sub-community/home/' + (communityId ? communityId.substring(0,10) : '')">
+              <b-nav-item to="/sub-community/home/">
                 <i class="menu-icon home-icon" />
                 <span>Home</span>
               </b-nav-item>
@@ -138,10 +138,11 @@ export default {
     }
   },
   mounted () {
-    if (!this.communityId) {
+    if (!this.$route.query.id) {
       this.$router.replace('/');
       return;
     }
+    this.$store.commit('currentCommunity/saveCommunityId', this.$route.query.id);
     try {
       this.loading = true;
       this.clearData();

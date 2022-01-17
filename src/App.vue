@@ -211,7 +211,7 @@ export default {
     },
     gotoCommunity(communityId) {
       this.$store.commit('currentCommunity/saveCommunityId', communityId);
-      this.$router.push('/sub-community/home/' + communityId.substring(0, 10))
+      this.$router.push('/sub-community/home/?id=' + communityId)
     },
     goHome() {
       this.$router.push('/')

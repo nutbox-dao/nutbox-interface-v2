@@ -52,7 +52,7 @@
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
           <p> {{ $t('community.noJoinedCommunity') }} </p>
-          <router-link to="/community">
+          <router-link to="/community" style="text-decoration: none;">
             <button class="primary-btn w-auto px-4">
               {{ $t('community.exploreCommunity') }}
             </button>

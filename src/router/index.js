@@ -62,7 +62,7 @@ const routes = [
     redirect: '/sub-community/home',
     children: [
       {
-        path: 'home/:id',
+        path: 'home',
         component: SubCommunityHome
       },
       {
@@ -127,23 +127,23 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.query.id) {
-//     next()
-//   } else if (to.matched[0].path === '/specify' && from.query.id) {
-//     next({
-//       path: to.path,
-//       query: {
-//         ...to.query,
-//         id: from.query.id
-//       }
-//     })
-//   } else if (to.matched[0].path === '/specify' && !from.query.id) {
-//     next({
-//       path: '/'
-//     })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.query.id) {
+    next()
+  } else if (to.matched[0].path === '/sub-community' && from.query.id) {
+    next({
+      path: to.path,
+      query: {
+        ...to.query,
+        id: from.query.id
+      }
+    })
+  } else if (to.matched[0].path === '/sub-community' && !from.query.id) {
+    next({
+      path: '/'
+    })
+  } else {
+    next()
+  }
+})
 export default router

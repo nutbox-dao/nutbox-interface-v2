@@ -494,7 +494,7 @@ export default {
     },
     gotoCommunity() {
       this.$store.commit('currentCommunity/saveCommunityId', this.pool.community.id)
-      this.$router.push('/sub-community/home/' + this.pool.community.id.substring(0, 10))
+      this.$router.push('/sub-community/home/?id=' + this.pool.community.id)
     },
     gotoContract(address) {
       window.open("https://goerli.etherscan.io/address/" + address, "_blank");
