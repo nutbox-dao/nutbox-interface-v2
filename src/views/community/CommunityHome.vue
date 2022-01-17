@@ -14,7 +14,7 @@
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
             <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">OR</div>
             <ConnectMetaMask class="w-100" v-if="!metamaskConnected"/>
-            <button v-else class="primary-btn d-flex justify-content-center align-items-center w-100"
+            <button v-else :disabled="loadingMyCommunityInfo" class="primary-btn d-flex justify-content-center align-items-center w-100"
                     @click="manageCommunity">
               <i class="add-icon mr-2"></i>
               <span>{{ settingStep === 3 ? 'Manage Community' : 'Create Community' }}</span>
@@ -96,7 +96,7 @@ export default {
   computed: {
     ...mapState(['metamaskConnected']),
     ...mapState('web3', ['stakingFactoryId']),
-    ...mapState('community', ['loadingAllCommunityInfo', 'allCommunityInfo', 'communityInfo']),
+    ...mapState('community', ['loadingAllCommunityInfo', 'loadingMyCommunityInfo', 'allCommunityInfo', 'communityInfo']),
     showingCommunity() {
       let communities = this.allCommunityInfo
       if (!communities || Object.keys(communities).length === 0) return [];
