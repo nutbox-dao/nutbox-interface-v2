@@ -31,7 +31,7 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
+          <router-link id="tipmanagecommunity"  to="/manage-community">
             <i class="setting-icon mt-4"></i>
             <b-popover target="tipmanagecommunity" triggers="hover"
                   :delay="{show: 800}"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 6</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="菜单icon替换方案一" transform="translate(-294.000000, -770.000000)">
+            <g id="左二级导航" transform="translate(266.000000, 0.000000)">
+                <g id="编组-6" transform="translate(28.000000, 770.000000)">
+                    <rect id="Rectangle-3" fill="#FD9800" opacity="0.100000001" x="0" y="0" width="24" height="24" rx="6"></rect>
+                    <path d="M13,3.57735027 L18.7942286,6.92264973 C19.4130308,7.27991532 19.7942286,7.94016936 19.7942286,8.65470054 L19.7942286,15.3452995 C19.7942286,16.0598306 19.4130308,16.7200847 18.7942286,17.0773503 L13,20.4226497 C12.3811978,20.7799153 11.6188022,20.7799153 11,20.4226497 L5.20577137,17.0773503 C4.58696921,16.7200847 4.20577137,16.0598306 4.20577137,15.3452995 L4.20577137,8.65470054 C4.20577137,7.94016936 4.58696921,7.27991532 5.20577137,6.92264973 L11,3.57735027 C11.6188022,3.22008468 12.3811978,3.22008468 13,3.57735027 Z" id="多边形" stroke="#FD9800" stroke-width="2" stroke-linejoin="round"></path>
+                    <circle id="椭圆形" stroke="#FD9800" stroke-width="2" cx="12" cy="12" r="3"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

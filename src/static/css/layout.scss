@@ -45,10 +45,13 @@
       background-image: url("~@/static/images/menu-icon-active.svg");
     }
   }
-  .setting-icon {
+  #tipmanagecommunity .setting-icon {
     @include icon(2rem, 2rem);
-    background-image: url("~@/static/images/setting-icon.svg");
-    opacity: .7;
+    background-image: url("~@/static/images/setting-icon-grey.svg");
+  }
+  #tipmanagecommunity.active .setting-icon {
+    @include icon(2rem, 2rem);
+    background-image: url("~@/static/images/setting-icon-active.svg");
   }
 }
 .page-container {
