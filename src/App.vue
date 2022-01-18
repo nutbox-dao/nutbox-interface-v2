@@ -31,7 +31,7 @@
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link id="tipmanagecommunity"  to="/manage-community">
+          <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
             <b-popover target="tipmanagecommunity" triggers="hover"
                   :delay="{show: 800}"
@@ -129,7 +129,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { setupNetwork, chainChanged, lockStatusChanged, checkNetwork } from '@/utils/web3/web3'
 import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
-import { getMyCommunityInfo, updateAllCommunitiesFromBackend } from '@/utils/web3/community'
+import { getMyCommunityInfo, updateAllCommunitiesFromBackend, getOperationFee } from '@/utils/web3/community'
 import { updateAllTokensFromBackend } from '@/utils/web3/asset'
 import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
@@ -253,6 +253,7 @@ export default {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();
       updateAllUsersByPolling();
+      getOperationFee()
       const account = await getAccounts(true)
       if (account) {
         getMyJoinedCommunity();

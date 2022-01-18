@@ -26,6 +26,7 @@ export default {
     readonlyProvider: null,
     allPools: null,
     tokenDeploying: false,
+    fees: {},
     // user deposit data
     depositDatas: {},
     // multicall get data
@@ -52,6 +53,7 @@ export default {
     loadingDevInfo: true,
     loadingCommunity: true,
     loadingCtokenBalances: true,
+    loadingFees: true,
 
     //games
     games: null,
@@ -128,6 +130,9 @@ export default {
     saveTokenDeploying: (state, tokenDeploying) => {
       state.tokenDeploying = tokenDeploying;
     },
+    saveFees: (state, fees) => {
+      state.fees = fees
+    },
 
     savePendingRewards: (state, pendingRewards) => {
       state.pendingRewards = pendingRewards;
@@ -176,6 +181,9 @@ export default {
     },
     saveLoadingDevInfo: (state, loadingDevInfo) => {
       state.loadingDevInfo = loadingDevInfo;
+    },
+    saveLoadingFees: (state, loadingFees) => {
+      state.loadingFees = loadingFees
     },
     saveDevAddress: (state, devAddress) => {
       state.devAddress = devAddress;

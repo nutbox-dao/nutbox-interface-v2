@@ -10,7 +10,7 @@ import {
   updateSocial,
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config } from "@/config";
+import { errCode, Multi_Config, FEE_TYPES, NutAddress } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
@@ -162,18 +162,29 @@ export const updateAllCommunitiesFromBackend = async () => {
 };
 
 /**
- * get operation fee amount by op type
- * CREATING_COMMUNITY
- * CREATING_POOL
- * STAKING
+ * get operation fee amount
  */
-export const getOperationFee = async (type) => {
+export const getOperationFee = async () => {
   return new Promise(async (resolve, reject) => {
     try{
-      const committe = await getContract('Committe');
-      const feeAmount = await committe.getFee(type)
-      resolve(feeAmount);
+      store.commit('web3/saveLoadingFees', true)
+      const calls = FEE_TYPES.map(type => ({
+        target: contractAddress['Committee'],
+        call: [
+          'getFee(string)(uint256)',
+          type
+        ],
+        returns: [
+          [type, val => val.toString() / 1e18]
+        ]
+      }))
+      const res = await aggregate(calls, Multi_Config);
+      store.commit('web3/saveFees', res.results.transformed)
+      store.commit('web3/saveLoadingFees', false)
+      resolve(res.results.transformed);
     }catch(e){
+      console.log('Get operation fees fail', e);
+      store.commit('web3/saveLoadingFees', false)
       reject(errCode.BLOCK_CHAIN_ERR);
     }
   })
@@ -719,6 +730,25 @@ export const getCommunityOwner = async (communityId) => {
       const owner = await contract.owner();
       resolve(owner)
     }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+/**
+ * 
+ * @param {*} token 
+ * @param {*} target 
+ */
+export const getApprovement = async (token, target) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('ERC20', token)
+      const account = await getAccounts()
+      const res = await contract.allowance(account, target)
+      resolve(res.toString() / 1e18 > 1e12)
+    }catch(e) {
+      console.log('get approvement fail', e);
       reject(e)
     }
   })
