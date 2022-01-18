@@ -33,7 +33,8 @@
           <div class="divider-line mx-auto my-2"></div>
           <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
             <i class="setting-icon mt-4"></i>
-            <b-popover target="tipmanagecommunity" triggers="hover focus"
+            <b-popover target="tipmanagecommunity" triggers="hover"
+                  :delay="{show: 800}"
                   placement="right">
               Manage your community
             </b-popover>
@@ -41,6 +42,7 @@
           <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
             <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
             <b-popover target="tipcreatecommunity" triggers="hover"
+                  :delay="{show: 800}"
                   placement="right">
               Create new community
             </b-popover>
