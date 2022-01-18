@@ -44,7 +44,7 @@ export const getMyCommunityContract = async (update = false) => {
     }
     try {
       stakingFactoryId = await contract.ownerCommunity(account);
-      if (!stakingFactoryId || stakingFactoryId === '0x0000000000000000000000000000000000000000') {
+      if (!stakingFactoryId || stakingFactoryId === ethers.constants.AddressZero) {
         store.commit("web3/saveStakingFactoryId", null);
         store.commit("web3/saveLoadingCommunity", false);
         reject(errCode.NO_STAKING_FACTORY);
@@ -748,7 +748,22 @@ export const getApprovement = async (token, target) => {
       const res = await contract.allowance(account, target)
       resolve(res.toString() / 1e18 > 1e12)
     }catch(e) {
-      console.log('get approvement fail', e);
+      // console.log('get approvement fail', e);
+      reject(e)
+    }
+  })
+}
+
+export const approveUseERC20 = async (token, target) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('ERC20', token, false)
+      const account = await getAccounts() 
+      const tx = await contract.approve(target, ethers.constants.MaxUint256)
+      await waitForTx(tx.hash)
+      resolve()
+    }catch(e) {
+      console.log('Approve fail', e);
       reject(e)
     }
   })

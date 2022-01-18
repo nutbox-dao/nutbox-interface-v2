@@ -157,7 +157,7 @@ export default {
       if (this.settingStep === 3) {
         this.$router.push('/manage-community')
       }else {
-        this.$router.push('/community/deploy-token')
+        this.$router.push('/create/deploy-token')
       }
     },
   },

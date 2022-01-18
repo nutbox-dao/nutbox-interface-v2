@@ -155,6 +155,7 @@ export default {
       else if(url.indexOf('/community') !== -1) return 'Community'
       else if(url.indexOf('/manage-community') !== -1) return 'Community Dashboard'
       else if(url.indexOf('/profile') !== -1) return 'Profile'
+      else if(url.indexOf('/create') !== -1) return 'Create Community'
     },
     currentCommunityInfo() {
       if (this.communityId){
@@ -206,9 +207,9 @@ export default {
     },
     gotoCreateCommunity()  {
       if (this.settingStep === 1) {
-        this.$router.push('/community/deploy-token')
+        this.$router.push('/create/deploy-token')
       }else if (this.settingStep === 2) {
-        this.$router.push('/community/set-profile')
+        this.$router.push('/create/set-profile')
       }
     },
     gotoCommunity(communityId) {

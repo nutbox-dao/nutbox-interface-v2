@@ -42,7 +42,15 @@ const routes = [
         path: 'index',
         name: 'communityHome',
         component: CommunityHome
-      },
+      }
+    ]
+  },
+  {
+    path: '/create',
+    name: 'create',
+    component: CommunityIndex,
+    redirect: '/community/deploy-token',
+    children: [
       {
         path: 'deploy-token',
         name: 'DeployCommunityToken',

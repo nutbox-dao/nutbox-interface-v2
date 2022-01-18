@@ -182,7 +182,15 @@
             </div>
           </div>
         </div>
-        <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2" @click="confirmDeploy()">
+        <button class="next-btn primary-btn w-auto" :disabled="loadingApprovement || isApproving" v-show="cardStep === 2 && (loadingApprovement || !approvementCommunityFactory)" @click="approveCommunityFactory()">
+          <b-spinner
+              small
+              type="grow"
+              v-show="loadingApprovement || isApproving"
+            ></b-spinner>
+          Approve
+        </button>
+        <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2 && approvementCommunityFactory" @click="confirmDeploy()">
           <b-spinner
               small
               type="grow"
@@ -198,14 +206,16 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { createCommunity, getMyCommunityContract } from '@/utils/web3/community'
+import { createCommunity, getMyCommunityContract, getApprovement, approveUseERC20 } from '@/utils/web3/community'
 import { handleApiErrCode, blockTime } from '@/utils/helper'
 import { MaxBlockNum } from '@/constant'
+import { NutAddress } from '@/config'
 import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
 import { getAddress } from '@/utils/web3/ethers'
 import { getERC20Info } from '@/utils/web3/asset'
+import { contractAddress } from '@/utils/web3/contract'
 import { sleep } from '@/utils/helper'
 import { ethers } from "ethers";
 
@@ -226,6 +236,9 @@ export default {
       provideAddress: null,
       progressData: [],
       cToken: {},
+      loadingApprovement: true,
+      approvementCommunityFactory: false,
+      isApproving: false,
       form: {
         address: null,
         name: null,
@@ -250,7 +263,7 @@ export default {
     ...mapState({
       blockNum: state => state.web3.blockNum
     }),
-    ...mapState('web3', ['stakingFactoryId', 'allTokens']),
+    ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
     OfficialAssets() {
       if (!this.allTokens) return []
       return this.allTokens.filter(c => c.isRecommend)
@@ -274,6 +287,9 @@ export default {
     }
   },
   async mounted () {
+     getApprovement(NutAddress, contractAddress['CommunityFactory']).then(res => this.approvementCommunityFactory = res).catch().finally(res => {
+        this.loadingApprovement = false
+      })
     try{
       const id = await getMyCommunityContract()
       if (id) {
@@ -380,6 +396,21 @@ export default {
     },
     max () {
       this.distributionForm.end = this.maxBlock
+    },
+    async approveCommunityFactory () {
+      try{
+        this.isApproving = true
+        await approveUseERC20(NutAddress, contractAddress['CommunityFactory'])
+        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.approvementCommunityFactory = true
+      }catch(e) { 
+
+      }finally{
+        this.isApproving = false
+      }
     },
     confirmAdd () {
       if (parseInt(this.distributionForm.start) <= this.blockNum) {
