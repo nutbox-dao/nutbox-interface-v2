@@ -77,6 +77,13 @@ export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
 
 export const MAIN_COMMUNITY_ID = process.env.VUE_APP_MAIN_COMMUNITY_ID;
+
+export const NATIVE_CURRENCY = {
+  name: 'BNB',
+  symbol: 'BNB',
+  decimals: 18
+}
+
 /**
  * chainId on blockchain to chain name
  */

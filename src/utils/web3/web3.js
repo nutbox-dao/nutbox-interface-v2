@@ -4,7 +4,9 @@ import {
 import {
   BSC_CHAIN_ID,
   RPC_NODE,
-  CHAIN_NAME
+  CHAIN_NAME,
+  NATIVE_CURRENCY,
+  BLOCK_CHAIN_BROWER
 } from '@/config'
 import store from '@/store'
 
@@ -39,7 +41,9 @@ export const setupNetwork = async () => {
         params: [{
           chainId: `0x${chainId.toString(16)}`,
           chainName: CHAIN_NAME,
-          rpcUrls:[RPC_NODE]
+          rpcUrls:[RPC_NODE],
+          nativeCurrency: NATIVE_CURRENCY,
+          blockExplorerUrls: [BLOCK_CHAIN_BROWER]
         }],
       })
       store.commit('saveMetamaskConnected', true)

@@ -151,8 +151,8 @@ export default {
       const url = this.$route.path
       if (url === '/') return 'Home'
       else if(url.indexOf('/community') !== -1) return 'Community'
-      else if(url.indexOf('/manage-community')) return 'Community Dashboard'
-      else if(url.indexOf('/profile')) return 'Profile'
+      else if(url.indexOf('/manage-community') !== -1) return 'Community Dashboard'
+      else if(url.indexOf('/profile') !== -1) return 'Profile'
     },
     currentCommunityInfo() {
       if (this.communityId){
