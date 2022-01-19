@@ -70,7 +70,7 @@ export default {
     },
     icon() {
       switch (this.card.poolFactory.toLowerCase()){
-        case getPoolFactory('bsc').toLowerCase():
+        case getPoolFactory('erc20staking').toLowerCase():
           return this.tokenIcons[this.card.asset]
         case getPoolFactory('steem').toLowerCase():
           const chainId = this.card.chainId

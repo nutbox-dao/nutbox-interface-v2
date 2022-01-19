@@ -7,6 +7,7 @@ export default {
         // loading all users from backend
         loadingUsers: false,
         loadingUserGraph: true,
+        userGraphInfo: {}
     },
     getters: {
         getUserByAddress: state => (address) => {
@@ -23,6 +24,9 @@ export default {
         },
         saveLoadingUserGraph(state, loadingUserGraph) {
             state.loadingUserGraph = loadingUserGraph
-        }
+        },
+        saveUserGraphInfo: (state, userGraphInfo) => {
+          state.userGraphInfo = userGraphInfo;
+        },
     }
 }

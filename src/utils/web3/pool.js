@@ -66,7 +66,7 @@ export const getAllPools = async (update = false) => {
 
 export const getPoolFactoryAddress = (type) => {
   switch (type){
-    case 'main':
+    case 'erc20staking':
       return contractAddress['ERC20StakingFactory'].toLowerCase()
     case 'steem':
       return contractAddress['SPStakingFactory'].toLowerCase()
@@ -154,14 +154,14 @@ export const addPool = async (form) => {
     let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
-      factory = await getContract(form.type === 'bsc' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
+      factory = await getContract(form.type === 'erc20staking' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
     } catch (e) {
       reject(e);
       return
     }
 
     try {
-      if (form.type === 'bsc') {
+      if (form.type === 'erc20staking') {
         factory.on('ERC20StakingCreated', (pool, community, name, token) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
@@ -200,7 +200,7 @@ export const addPool = async (form) => {
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
     } catch (e) {
       console.log('Create pool fail', e);
-      if (form.type === 'bsc') {
+      if (form.type === 'erc20staking') {
         factory.removeAllListeners('ERC20StakingCreated')
       }else{
         factory.removeAllListeners('SPStakingCreated')
@@ -511,7 +511,7 @@ export const getPendingRewards = async (pools) => {
 export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
+      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
       const account = await getAccounts();
       if (!account) {
         resolve();

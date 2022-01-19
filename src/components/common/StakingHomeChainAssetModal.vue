@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     ...mapState('pool', ['userStaked']),
-    ...mapState('web3', ['userGraphInfo']),
+    ...mapState('user', ['userGraphInfo']),
     ...mapState('currentCommunity', ['communityId']),
     staked(){
       if (!this.userStaked) return 0;

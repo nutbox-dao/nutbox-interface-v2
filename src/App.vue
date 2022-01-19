@@ -139,9 +139,10 @@ import { ethers } from 'ethers'
 export default {
   computed: {
     ...mapState(['lang', 'prices', 'metamaskConnected']),
-    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'userGraphInfo', 'loadingCommunity', 'account']),
+    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'loadingCommunity', 'account']),
     ...mapState('community', ['loadingMyCommunityInfo', 'communityInfo']),
     ...mapState('currentCommunity', ['communityId']),
+    ...mapState('user', ['userGraphInfo']),
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapGetters('user', ['getUserByAddress']),
     address () {

@@ -62,7 +62,8 @@ export default {
     ...mapState('pool', ['userStaked']),
     ...mapState('currentCommunity', ['communityId']),
     ...mapState('steem', ['steemAccount', 'steemBalance', 'vestsToSteem', 'vestsBalance']),
-    ...mapState('web3', ['userStakings', 'account', 'userGraphInfo']),
+    ...mapState('web3', ['userStakings', 'account']),
+    ...mapState('user', ['userGraphInfo']),
     ...mapGetters('steem', ['spBalance']),
     staked(){
       if (!this.userStaked) return 0;
