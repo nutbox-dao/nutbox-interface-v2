@@ -61,9 +61,27 @@
             </button>
           </div>
         </b-form-group>
+        <!-- retained Reveue -->
+        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8"
+                      label-class="font14 font-bold line-height14 d-flex align-items-center"
+                      :label="$t('community.retainedRevenue')">
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input
+                :disabled="true"
+                :placeholder="communityData ? (communityData.retainedRevenue.toString() / 1e18).toString() : '0'"
+              >
+              </b-form-input>
+              <span class="c-append">{{ cToken.symbol }}</span>
+            </div>
+            <button class="primary-btn ml-2" style="width: 5rem" :disabled="withdrawingRevenue || !communityData" @click="withdrawRevenue">
+              <b-spinner small type="grow" v-show="!communityData || withdrawingRevenue" />
+              {{$t("operation.withdraw") }}
+            </button>
+          </div>
+        </b-form-group>
         <!-- community dev address -->
         <b-form-group label-cols-md="2" content-cols-md="8"
-                      v-if="isMintable"
                       label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.fundAddress')"
         >
@@ -71,16 +89,19 @@
             <div class="c-input-group c-input-group-bg">
               <b-form-input
                 :disabled="true"
-                :placeholder="account"
+                :placeholder="communityData && communityData.daoFund"
               >
               </b-form-input>
               <span></span>
             </div>
+            <button class="primary-btn ml-2" style="width: 5rem" :disabled="!communityData" @click="showDevAddressTip = true">
+              <b-spinner small type="grow" v-show="!communityData" />
+              {{ this.$t("operation.update") }}
+            </button>
           </div>
         </b-form-group>
         <!-- community dev ratio -->
         <b-form-group label-cols-md="2" content-cols-md="8"
-                      v-if="isMintable"
                       label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.fundRatio')">
           <div class="d-flex">
@@ -219,6 +240,47 @@
         </div>
       </div>
     </b-modal>
+     <!-- dev address tip -->
+    <b-modal
+      v-model="showDevAddressTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
+          {{ $t("community.fundRatio") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+              <input
+                type="text"
+                v-model="inputDevAddress"
+                :placeholder="$t('placeHolder.inputDevAddress')"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button
+            class="dark-btn mx-3"
+            @click="showDevAddressTip = false"
+            :disabled="updatingDevAddress"
+          >
+            <b-spinner small type="grow" v-show="updatingDevAddress" />
+            {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="updateDevAddress" :disabled="updatingDevAddress">
+            <b-spinner small type="grow" v-show="updatingDevAddress" />
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -230,13 +292,17 @@ import {
   chargeCommunityBalance,
   withdrawCommunityBalance,
   setDevRatio,
+  setDevAddress,
   getMyCommunityInfo,
   getDistributionEras,
-  getCommunityBalance } from '@/utils/web3/community'
+  getCommunityBalance,
+  withdrawRevenue,
+   } from '@/utils/web3/community'
 import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { errCode } from '@/config'
+import { ethers } from 'ethers'
 
 export default {
   name: 'CommunityAsset',
@@ -252,9 +318,10 @@ export default {
       inputDevAddress: '',
       inputDevRatio: '',
       charging: false,
+      withdrawingRevenue: false,
       withdrawing: false,
       approving: false,
-      updatingAddress: false,
+      updatingDevAddress: false,
       updatingDevRatio: false,
       cToken: {},
       isMintable: true,
@@ -335,6 +402,7 @@ export default {
           variant: 'success'
         })
         this.chargeValue = ''
+        this.communityBalance = this.communityBalance + chargeValue
         setTimeout(() => {
           this.showChargeTip = false
         }, 2000)
@@ -372,6 +440,7 @@ export default {
           variant: 'success'
         })
         this.withdrawValue = ''
+        this.communityBalance = this.communityBalance - withdrawValue
         setTimeout(() => {
           this.showWithdrawTip = false
         }, 2000)
@@ -383,15 +452,35 @@ export default {
         this.withdrawing = false
       }
     },
+    async withdrawRevenue() {
+      try{
+        this.withdrawingRevenue = true;
+        await withdrawRevenue();
+        let retained = (this.communityData.retainedReveue.toString() / 1e18)
+        this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
+        retained = this.communityBalance > retained ? 0 : (retained - this.communityBalance)
+        this.communityData.retainedReveue = ethers.utils.parseUnits(retained.toString(), 18)
+        this.$store.commit('community/saveCommunityData', this.communityData)
+        this.$bvToast.toast(this.$t('tip.success'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.withdrawingRevenue = false;
+      }
+    },
     async updateDevRatio () {
       try {
         this.updatingDevRatio = true
         const r = parseInt(parseFloat(this.inputDevRatio) * 100)
         await setDevRatio(r)
-        console.log(23,this.communityData);
         this.communityData.feeRatio = r;
         this.$store.commit('community/saveCommunityData', this.communityData)
-        this.$bvToast.toast(this.$t(), {
+        this.$bvToast.toast(this.$t('tip.success'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
@@ -404,6 +493,32 @@ export default {
         })
       } finally {
         this.updatingDevRatio = false
+      }
+    },
+    async updateDevAddress() {
+      try{
+        this.updatingDevAddress = true
+        if(!ethers.utils.isAddress(this.inputDevAddress)){
+          this.$bvToast.toast('Please input right address', {
+            title: this.$t('tip.tips'),
+            variant:'info'
+          })
+          return;
+        }
+        await setDevAddress(this.inputDevAddress)
+        this.communityData.daoFund = this.inputDevAddress
+        this.$store.commit('community/saveCommunityData', this.communityData)
+        this.$bvToast.toast(this.$t('tip.success'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        setTimeout(() => {
+          this.showDevAddressTip = false
+        }, 1000)
+      }catch(e) {
+
+      }finally{
+        this.updatingDevAddress = false
       }
     }
   },

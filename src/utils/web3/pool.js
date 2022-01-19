@@ -20,8 +20,7 @@ import {
   createWatcher
 } from '@makerdao/multicall'
 import {
-  getAllTokenFromBackend,
-  getERC20Info
+  getAllTokenFromBackend
 } from './asset'
 import {
   getMyCommunityContract,

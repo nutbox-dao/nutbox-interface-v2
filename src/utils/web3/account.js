@@ -20,7 +20,13 @@ export const getAccounts = async (update=false) => {
         return
     }
     const chainId = store.state.web3.chainId;
-    if (!chainId || (parseInt(chainId) !== parseInt(BSC_CHAIN_ID))) {
+    while(true) {
+        if (parseInt(chainId) > 0){
+             break;
+        }
+        await sleep(0.3)
+    }
+    if (parseInt(chainId !== parseInt(BSC_CHAIN_ID))) {
         store.commit('web3/saveAccount', null)
         return;
     }

@@ -46,7 +46,6 @@
 import { mapGetters, mapState } from 'vuex'
 import { getPoolType } from '@/utils/web3/pool'
 import { getPoolFactory } from '@/utils/web3/contract'
-import { getERC20Info } from '@/utils/web3/asset'
 import { ASSET_LOGO_URL } from '@/constant'
 
 export default {

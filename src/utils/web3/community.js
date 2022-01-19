@@ -28,10 +28,11 @@ export const getMyCommunityContract = async (update = false) => {
       resolve(id);
       return;
     }
-    store.commit('user/saveLoadingUserGraph', false)
+    // store.commit('user/saveLoadingUserGraph', false)
     store.commit("web3/saveLoadingCommunity", true);
     const account = await getAccounts();
     if (!account){
+      console.log('no account');
       reject(errCode.NO_STAKING_FACTORY);
       return;
     }
@@ -44,12 +45,15 @@ export const getMyCommunityContract = async (update = false) => {
     }
     let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
     if (!joinedCommunity || joinedCommunity.length === 0) {
+      store.commit("web3/saveStakingFactoryId", null);
+      store.commit("web3/saveLoadingCommunity", false);
       reject(errCode.NO_STAKING_FACTORY)
       return;
     }
     let stakingFactoryId = null;
     for (let i = 0; i < joinedCommunity.length; i++){
       if (joinedCommunity[i].owner.id === account.toLowerCase()){
+        stakingFactoryId = joinedCommunity[i].id;
         store.commit("web3/saveLoadingCommunity", false);
         store.commit("web3/saveStakingFactoryId", stakingFactoryId);
         resolve(stakingFactoryId);
@@ -351,6 +355,70 @@ export const completeCommunityInfo = async (form, type) => {
     }
   });
 };
+
+/**
+ * update new dao fund address
+ * @param {*} daofund 
+ * @returns 
+ */
+export const setDevAddress = async (daofund) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null;
+    let contract = null;
+    try {
+      stakingFactoryId = await getMyCommunityContract();
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY);
+        return;
+      }
+      contract = await getContract("Community", stakingFactoryId, false);
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminSetDev(daofund);
+      await waitForTx(tx.hash);
+      resolve(tx.hash);
+    } catch (e) {
+      console.log("Set dao fund Failed", e);
+      reject(errCode.BLOCK_CHAIN_ERR);
+      return;
+    }
+  })
+}
+
+/**
+ * withdraw retained revenue
+ * @param {*} daofund 
+ * @returns 
+ */
+ export const withdrawRevenue = async () => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null;
+    let contract = null;
+    try {
+      stakingFactoryId = await getMyCommunityContract();
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY);
+        return;
+      }
+      contract = await getContract("Community", stakingFactoryId, false);
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminWithdrawRevenue();
+      await waitForTx(tx.hash);
+      resolve(tx.hash);
+    } catch (e) {
+      console.log("Set dao fund Failed", e);
+      reject(errCode.BLOCK_CHAIN_ERR);
+      return;
+    }
+  })
+}
 
 /**
  * Charge community's balance

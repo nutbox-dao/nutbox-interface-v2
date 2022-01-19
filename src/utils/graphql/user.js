@@ -41,9 +41,7 @@ export async function getMyJoinedCommunity() {
         }
     `
     try{
-        console.log(56);
         const userInfo = await client.request(query, {id: account.toLowerCase()});
-        console.log(4364, userInfo);
         if (userInfo && userInfo.user) {
             store.commit('user/saveUserGraphInfo', userInfo.user)
         }
@@ -67,9 +65,12 @@ export async function getMyJoinedCommunity() {
                 community(id: $id) {
                     id
                     feeRatio
+                    daoFund
+                    retainedReveue
                     owner{
                         id
                     }
+                    cToken
                     pools(orderBy: poolIndex) {
                         id
                         status
