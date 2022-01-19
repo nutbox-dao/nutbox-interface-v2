@@ -67,13 +67,13 @@
         <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
-            <div class="d-flex align-items-center text-grey-9f font14 line-height18" @click="$router.push('/community/index')">
+            <div class="d-flex align-items-center text-grey-9f font14 line-height18 hover" @click="$router.push('/community/index')">
               <span>More</span>
               <i class="more-text-icon"></i>
             </div>
           </div>
-          <div class="row mt-3">
-            <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of recommendCommunity" :key="index">
+          <div class="cards-box cards-box-col4 mt-3" :class="'col4-items-'+recommendCommunity.length">
+            <div class="card-item" v-for="(cItem, index) of recommendCommunity" :key="index">
               <CommunityCard btn-class="gradient-outline-btn"
                              :card-info="cItem"/>
             </div>
@@ -292,6 +292,10 @@ $home-primary-color: #F8B62A;
   .more-text-icon {
     @include icon(1rem, 1rem);
     background-image: url("~@/static/images/right-arrow.svg");
+  }
+  .card-item {
+    width: 308px;
+    height: 336px;
   }
 }
 .s-title {

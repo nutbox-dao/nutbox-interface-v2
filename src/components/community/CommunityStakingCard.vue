@@ -1,7 +1,7 @@
 <template>
   <div class="multi-card">
     <StakingCardHeader :card="card"/>
-    <div class="c-card border-0" style="margin-top: -0.6rem">
+    <div class="c-card border-0">
       <div class="d-flex align-items-center">
         <span class="font-bold text-grey-47 mr-2 font14">{{ cToken ? cToken.symbol : 'Pnut' }}</span>
         <div class="d-flex align-items-center">
@@ -18,7 +18,7 @@
           {{ $t("operation.harvest") }}
         </button>
       </div>
-      <div class="mt-3 mb-1 d-flex align-items-center">
+      <div class="mt-1 mb-1 d-flex align-items-center">
         <span class="text-grey-47 font-bold mr-2 font14">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
@@ -217,4 +217,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "src/static/css/card/common-card";
+.c-card {
+  padding: 22px 20px;
+  margin-top: -24px;
+  height: 330px;
+  min-height: 330px;
+}
 </style>

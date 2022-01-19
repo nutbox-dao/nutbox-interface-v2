@@ -2,9 +2,10 @@
   @include card(0);
   @include c-col-flex-between-center;
   position: relative;
+  border: none;
   .poster{
-    @include card-poster-bg(5.2rem);
-    min-height: 5.2rem;
+    @include card-poster-bg(107px);
+    min-height: 107px;
     background-color: white;
   }
   .large-poster{
@@ -24,13 +25,13 @@
     position: absolute;
     border: 4px solid white;
     left: 20px;
-    top: -1.8rem;
+    top: -15px;
     background-color: white;
     box-sizing: border-box;
   }
   .second-card {
     @include card(3rem 1rem 1.2rem, var(--card-bg-primary), none);
-    margin-top: -.8rem;
+    margin-top: -12px;
   }
   .second-card-home {
     @include card(2rem 1rem 1.2rem, var(--card-bg-primary), none);

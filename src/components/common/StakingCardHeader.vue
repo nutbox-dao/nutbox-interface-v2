@@ -96,15 +96,20 @@ export default {
   position: absolute;
   top: 8px;
   right: 8px;
+  box-sizing: border-box;
+  span {
+    box-sizing: border-box;
+  }
 }
 .chain-type {
   border-radius: 24px;
   color: var(--sub-primary);
   border: 1px solid var(--sub-primary);
   font-size: 14px;
-  line-height: 24px;
+  line-height: 22px;
   padding: 0 14px;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 }
 </style>

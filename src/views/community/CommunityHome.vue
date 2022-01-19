@@ -73,11 +73,11 @@
          <img src="~@/static/images/empty-data.png" alt="" />
          <p>{{ $t("tip.noCommunities") }}</p>
        </div>
-       <div class="row">
-         <div class="col-xl-3 col-md-4 col-sm-6 mb-4" v-for="(cItem, index) of showingCommunity" :key="index">
-           <CommunityCard :card-info="cItem"/>
-         </div>
-       </div>
+        <div class="cards-box">
+          <div class="card-item" v-for="(cItem, index) of showingCommunity" :key="index">
+            <CommunityCard :card-info="cItem"/>
+          </div>
+        </div>
       </template>
     </div>
   </div>
@@ -178,6 +178,10 @@ export default {
 .add-icon {
   @include icon();
   background-image: url("~@/static/images/add-white-icon.svg");
+}
+.card-item {
+  width: 308px;
+  height: 336px;
 }
 @media (max-width: 767px) {
   .banner-card .v-line {

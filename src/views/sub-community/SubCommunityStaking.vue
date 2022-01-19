@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-staking-page h-100">
+  <div class="sub-staking-page h-100 position-relative">
     <div class="scroll-content position-relative">
       <div class="view-top-header view-top-header-sticky">
         <div class="row">
@@ -24,9 +24,9 @@
           <img src="~@/static/images/empty-data.png" alt="" />
           <p> {{ $t('tip.noProject') }} </p>
         </div>
-        <div class="cards-container no-view-top-header">
-          <div class="row">
-            <div class="col-xl-4 col-md-6 mb-4" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
+        <div class="cards-container">
+          <div class="cards-box cards-box-col3" :class="'col3-items-'+stakingCards.length">
+            <div class="card-item" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
               <CommunityStakingCard :card="cardInfo"/>
             </div>
           </div>
@@ -102,6 +102,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.sub-staking-page {
+  overflow: auto;
+}
+.card-item {
+  width: 354px;
+  height: 434px;
+}
 </style>

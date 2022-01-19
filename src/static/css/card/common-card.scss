@@ -43,10 +43,13 @@
   align-items: center;
 }
 .card-link-top-box {
-  border-top-left-radius: .8rem;
-  border-top-right-radius: .8rem;
+  height: 128px;
+  box-sizing: border-box;
+  border-radius: 16px 16px 0 0;
   background-image: linear-gradient(to bottom, #141414, #1D1E1F);
-  padding: 24px 8px 44px 20px;
+  padding-top: 24px;
+  padding-left: 20px;
+  padding-right: 8px;
   overflow: hidden;
 }
 .card-link-icons {
@@ -95,17 +98,20 @@
 .project-info-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.6rem;
+  margin-top: 12px;
   margin-bottom: 0;
+  font-size: 14px;
   .name {
     flex: 1;
     text-align: left;
     white-space: nowrap;
     margin-right: .4rem;
+    line-height: 14px;
   }
   .info {
     text-align: right;
     font-weight: 500;
+    line-height: 14px;
   }
 }
 
@@ -117,7 +123,7 @@
     padding: 0 14px;
     border-radius: 2rem;
     font-size: 14px;
-    line-height: 24px;
+    height: 24px;
   }
   .Active {
     color: rgba(80, 191, 0, 1);

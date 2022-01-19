@@ -335,19 +335,10 @@ body {
   bottom: 0;
   background-color: var(--background);
 }
-@media (max-width: 1440px) {
-  .container {
-    max-width: 100% !important;
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-}
-@media (min-width: 1441px) {
-  .container {
-    max-width: 1440px;
-    padding-left: 40px;
-    padding-right: 40px;
-  }
+.container {
+  max-width: 1360px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 .communities-bar {
   .community-logo-box {
