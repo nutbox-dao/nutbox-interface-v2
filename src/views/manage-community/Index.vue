@@ -44,7 +44,7 @@ export default {
   async mounted () {
     try{
       const res = await getMyCommunityContract()
-      getMyCommunityData();
+      getMyCommunityData().then(res => console.log(3098));
     }catch(e) {
       // no registered
       this.$router.replace('/')

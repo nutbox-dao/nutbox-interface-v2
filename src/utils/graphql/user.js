@@ -66,7 +66,7 @@ export async function getMyJoinedCommunity() {
                     id
                     feeRatio
                     daoFund
-                    retainedReveue
+                    retainedRevenue
                     owner{
                         id
                     }

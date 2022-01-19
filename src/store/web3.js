@@ -50,7 +50,7 @@ export default {
     loadingCommunityBalance: true,
     loadingApprovementCtoken: true,
     loadingDevInfo: true,
-    loadingCommunity: true,
+    loadingCommunity: false,
     loadingCtokenBalances: true,
     loadingFees: true,
 

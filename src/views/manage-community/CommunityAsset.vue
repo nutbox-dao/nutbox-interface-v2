@@ -516,7 +516,9 @@ export default {
           this.showDevAddressTip = false
         }, 1000)
       }catch(e) {
-
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
       }finally{
         this.updatingDevAddress = false
       }

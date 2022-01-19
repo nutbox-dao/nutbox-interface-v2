@@ -28,6 +28,14 @@ export const getMyCommunityContract = async (update = false) => {
       resolve(id);
       return;
     }
+    while(store.state.web3.loadingCommunity) {
+      await sleep(0.3)
+      if (!store.state.web3.loadingCommunity){
+        await sleep(0.2)
+        resolve(store.state.web3.stakingFactoryId)
+        return;
+      }
+    }
     // store.commit('user/saveLoadingUserGraph', false)
     store.commit("web3/saveLoadingCommunity", true);
     const account = await getAccounts();
@@ -43,6 +51,7 @@ export const getMyCommunityContract = async (update = false) => {
       }
       await sleep(0.2)
     }
+
     let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
     if (!joinedCommunity || joinedCommunity.length === 0) {
       store.commit("web3/saveStakingFactoryId", null);

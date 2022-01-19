@@ -15,6 +15,8 @@ export async function getSpecifyCommunityInfo(community) {
                 createdAt
                 feeRatio
                 cToken
+                daoFund
+                retainedRevenue
                 owner{
                     id
                 }

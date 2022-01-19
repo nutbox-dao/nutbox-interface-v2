@@ -351,7 +351,8 @@ module.exports = {
     remarkInput: "Please input introduce",
     confirmInfo: 'Please input "{info}" to confirm.',
     inputPoolName: 'Please input pool name.',
-    inputDelegatee: 'Please input delegatee account'
+    inputDelegatee: 'Please input delegatee account',
+    inputDevAddress: 'Please input new DAO fund address'
   },
   community: {
     community: "Community",
