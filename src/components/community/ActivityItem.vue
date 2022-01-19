@@ -196,6 +196,18 @@ export default {
         this.opType = "Reset pool ratios"
         this.description = (this.showName ? ' reset' : 'Reset') + ` the pool ratios.`
         break;
+      case "ADMINSETDAOFUND":
+        this.isAdmin = true;
+        this.username = 'admin'
+        this.opType = 'Reset DAO fund'
+        this.description = (this.showName ? ' reset' : 'Reset') + ' DAO fund address.'
+        return;
+      case "ADMINWITHDRAWNREVENUE":
+        this.isAdmin = true;
+        this.username = 'admin'
+        this.opType = 'Withdraw revenue'
+        this.description = (this.showName ? ' withdraw' : 'Withdraw') + ' revenue to DAO fund address.'
+        return;
     }
   },
 }

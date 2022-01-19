@@ -25,15 +25,14 @@
               type="grow"
               v-show="depositing"
             ></b-spinner>
-            Deposit
+            Recharge
           </button>
         </div>
       </b-form-group>
       <div class="col-md-6 offset-md-3">
-        <button class="primary-btn" :disabled="depositing" @click="$emit('close')">OK</button>
+        <button class="primary-btn" :disabled="depositing" @click="$emit('close')">Recharge Later</button>
       </div>
     </div>
-
   </div>
 </template>
 

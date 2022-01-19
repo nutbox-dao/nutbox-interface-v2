@@ -628,7 +628,7 @@ export default {
           title: this.$t('tip.tips'),
           variant: 'success'
         })
-        await sleep(2)
+        await sleep(3)
         await Promise.all([
           getAllCommunities(true),
           getMyJoinedCommunity(),

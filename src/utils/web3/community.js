@@ -75,7 +75,7 @@ export const getMyCommunityInfo = async (update = false) => {
       store.commit('community/saveLoadingMyCommunityInfo', true)
     }
     try {
-      stakingFactoryId = await getMyCommunityContract(update);
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         store.commit('community/saveLoadingMyCommunityInfo', false)
