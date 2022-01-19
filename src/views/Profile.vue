@@ -116,7 +116,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['account', 'userGraphInfo', 'allTokens']),
+    ...mapState('web3', ['account', 'allTokens']),
+    ...mapState('user', ['userGraphInfo']),
     ...mapState('community', ['allCommunityInfo']),
     joinedCommunity() {
       if (!this.userGraphInfo || !this.userGraphInfo.inCommunities) return [];

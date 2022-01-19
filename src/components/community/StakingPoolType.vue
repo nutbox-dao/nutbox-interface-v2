@@ -5,7 +5,7 @@
       <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
         <div class="type-box type-box-bsc">
-          <button class="bsc-btn" @click="$emit('onType', 'bsc')">
+          <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
             BSC <br> Staking
           </button>
         </div>

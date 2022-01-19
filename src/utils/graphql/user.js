@@ -12,6 +12,9 @@ export async function getMyJoinedCommunity() {
                 createdAt
                 inCommunities {
                     id
+                    owner{
+                        id
+                    }
                     feeRatio
                     cToken
                     usersCount
@@ -38,9 +41,11 @@ export async function getMyJoinedCommunity() {
         }
     `
     try{
+        console.log(56);
         const userInfo = await client.request(query, {id: account.toLowerCase()});
+        console.log(4364, userInfo);
         if (userInfo && userInfo.user) {
-            store.commit('web3/saveUserGraphInfo', userInfo.user)
+            store.commit('user/saveUserGraphInfo', userInfo.user)
         }
         store.commit('user/saveLoadingUserGraph', false)
         return;

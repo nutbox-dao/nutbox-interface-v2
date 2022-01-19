@@ -8,7 +8,6 @@ export default {
     ethers: null,
     walnutInfo: {},
     account: Cookie.get("bsc-account"),
-    userGraphInfo: {},
     allAccounts: [],
     abis: {},
     chainId: -1,
@@ -73,9 +72,6 @@ export default {
     },
     saveAllAccounts: (state, allAccounts) => {
       state.allAccounts = allAccounts;
-    },
-    saveUserGraphInfo: (state, userGraphInfo) => {
-      state.userGraphInfo = userGraphInfo;
     },
     saveAbi: (state, { name, abi }) => {
       state[name] = abi;

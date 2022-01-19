@@ -189,7 +189,7 @@ export default {
 
   async mounted () {
     switch (this.pool.poolFactory.toLowerCase()){
-      case getPoolFactory('bsc').toLowerCase():
+      case getPoolFactory('erc20staking').toLowerCase():
         this.stakedERC20 = await getERC20Info(this.pool.asset)
         this.icon = this.stakedERC20.icon
         this.vert = (10 ** this.stakedERC20.decimal)

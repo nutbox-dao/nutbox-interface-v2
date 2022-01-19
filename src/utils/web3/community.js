@@ -28,37 +28,38 @@ export const getMyCommunityContract = async (update = false) => {
       resolve(id);
       return;
     }
+    store.commit('user/saveLoadingUserGraph', false)
     store.commit("web3/saveLoadingCommunity", true);
     const account = await getAccounts();
     if (!account){
       reject(errCode.NO_STAKING_FACTORY);
       return;
     }
-    let stakingFactoryId = null;
-    let contract;
-    try{
-      contract = await getContract('CommunityFactory');
-    }catch (e){
-      reject(e);
+    while(true) {
+      if (!store.state.user.loadingUserGraph) {
+        await sleep(0.1)
+        break;
+      }
+      await sleep(0.2)
+    }
+    let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
+    if (!joinedCommunity || joinedCommunity.length === 0) {
+      reject(errCode.NO_STAKING_FACTORY)
       return;
     }
-    try {
-      stakingFactoryId = await contract.ownerCommunity(account);
-      if (!stakingFactoryId || stakingFactoryId === ethers.constants.AddressZero) {
-        store.commit("web3/saveStakingFactoryId", null);
+    let stakingFactoryId = null;
+    for (let i = 0; i < joinedCommunity.length; i++){
+      if (joinedCommunity[i].owner.id === account.toLowerCase()){
         store.commit("web3/saveLoadingCommunity", false);
-        reject(errCode.NO_STAKING_FACTORY);
+        store.commit("web3/saveStakingFactoryId", stakingFactoryId);
+        resolve(stakingFactoryId);
         return;
       }
-    } catch (e) {
-      console.log("Get staking feast record fail", e);
-      reject(errCode.BLOCK_CHAIN_ERR);
-      return;
     }
-    console.log("community", stakingFactoryId);
+    store.commit("web3/saveStakingFactoryId", null);
     store.commit("web3/saveLoadingCommunity", false);
-    store.commit("web3/saveStakingFactoryId", stakingFactoryId);
-    resolve(stakingFactoryId);
+    reject(errCode.NO_STAKING_FACTORY);
+    return;
   });
 };
 
@@ -74,7 +75,7 @@ export const getMyCommunityInfo = async (update = false) => {
       store.commit('community/saveLoadingMyCommunityInfo', true)
     }
     try {
-      stakingFactoryId = await getMyCommunityContract(update);
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         store.commit('community/saveLoadingMyCommunityInfo', false)
@@ -272,13 +273,14 @@ export const createCommunity = async (cToken, distribution) => {
           // Created a new community
           store.commit('community/saveCommunityInfo', communityInfo)
           store.commit("community/saveDistributions", distribution);
+          store.commit("web3/saveStakingFactoryId", community);
           resolve(communityInfo);
         }
       })
       // call contract 
       const preMine = (cToken && cToken.supply) ? cToken.supply.toString() : "0"
       const res = await contract.createCommunity(
-        isMintable ? "0x0000000000000000000000000000000000000000" : cToken.address,
+        isMintable ? ethers.constants.AddressZero : cToken.address,
         {
           name: cToken.name,
           symbol: cToken.symbol,

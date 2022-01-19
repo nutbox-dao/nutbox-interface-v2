@@ -54,7 +54,7 @@
                             @close="poolTypeModal=false"
                             @onType="selectPoolType"/>
       <div v-show="createPoolStep===2">
-        <StakingBSCPool v-if="poolType==='bsc'"
+        <StakingBSCPool v-if="poolType==='erc20staking'"
                         @confirm="selectPoolToken"
                         @back="createPoolStep=1"/>
         <StakingDelegatePool v-else :delegate-type="poolType"
@@ -144,7 +144,7 @@ export default {
       this.createPoolStep = 2
     },
     selectPoolToken (tokenData) {
-      if (this.poolType === 'bsc') {
+      if (this.poolType === 'erc20staking') {
         this.stakeAsset = tokenData.address
         if (tokenData.icon) {
           this.needIcon =false

@@ -63,7 +63,7 @@ export default {
         case 0:
           return this.activedPools;
         case 1:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('main'))
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
         case 2:
           return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
         case 3:
