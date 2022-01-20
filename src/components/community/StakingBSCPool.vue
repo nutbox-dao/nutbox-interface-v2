@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-8 mx-auto flex-fill">
+      <div class="col-lg-8 mx-auto flex-fill overflow-auto">
         <div v-if="loading" class="text-center">
           <b-spinner label="Spinning"></b-spinner>
         </div>
@@ -34,7 +34,7 @@
         </template>
         <div class="my-3 mx-auto divide-line font14 line-height14 text-center">OR</div>
         <div class="font14 line-height14 text-center text-grey-7 mb-3">Choose a token as cToken</div>
-        <div class="token-list-card">
+        <div class="token-list-card mb-2">
           <div class="list-item"  v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token)">
             <TokenItem :logo="token.icon"
                        :token-name="token.name"
