@@ -85,15 +85,8 @@ export const NATIVE_CURRENCY = {
 }
 
 export const FEE_TYPES = [
-  'CREATING_COMMUNITY',
-  'CREATING_POOL',
-  'CLOSING_POOL',
-  'ADMIN_SET_FEE_RATIO',
-  'SET_POOL_RATIO',
-  'WITHDRAW_REWARDS',
-  'ERC20_STAKING',
-  'ERC20_WITHDRAW',
-  'SP_HIVE_UPDATE'
+  'COMMUNITY',
+  'USER'
 ]
 /**
  * chainId on blockchain to chain name

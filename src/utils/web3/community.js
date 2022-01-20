@@ -422,7 +422,7 @@ export const setDevAddress = async (daofund) => {
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
-      console.log("Set dao fund Failed", e);
+      console.log("Withdraw revenue Failed", e);
       reject(errCode.BLOCK_CHAIN_ERR);
       return;
     }

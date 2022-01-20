@@ -74,7 +74,7 @@
               </b-form-input>
               <span class="c-append">{{ cToken.symbol }}</span>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" :disabled="withdrawingRevenue || !communityData" @click="withdrawRevenue">
+            <button class="primary-btn ml-2" style="width: 5rem" :disabled="withdrawingRevenue || !communityData || (communityData.retainedRevenue.toString() / 1e18) === 0" @click="withdrawRevenue">
               <b-spinner small type="grow" v-show="!communityData || withdrawingRevenue" />
               {{$t("operation.withdraw") }}
             </button>
@@ -233,10 +233,17 @@
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t('operation.cancel') }}
           </button>
-          <button class="primary-btn mx-3" @click="updateDevRatio" :disabled="updatingDevRatio">
+          <button class="primary-btn mx-3" v-if="approving || !approvement" @click="approve" :disabled="approving">
+            <b-spinner small type="grow" v-show="approving" />
+            {{ $t("operation.approve") }}
+          </button>
+          <button class="primary-btn mx-3" v-else @click="updateDevRatio" :disabled="updatingDevRatio">
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t("operation.confirm") }}
           </button>
+        </div>
+        <div v-if="takeFee" class="font14 my-1" style="text-align:center">
+          {{ `Operation fee: ${fee} NUT` }}
         </div>
       </div>
     </b-modal>
@@ -274,10 +281,17 @@
             <b-spinner small type="grow" v-show="updatingDevAddress" />
             {{ $t('operation.cancel') }}
           </button>
-          <button class="primary-btn mx-3" @click="updateDevAddress" :disabled="updatingDevAddress">
+          <button class="primary-btn mx-3" v-if="approving || !approvement" @click="approve" :disabled="approving">
+            <b-spinner small type="grow" v-show="approving" />
+            {{ $t("operation.approve") }}
+          </button>
+          <button v-else class="primary-btn mx-3" @click="updateDevAddress" :disabled="updatingDevAddress">
             <b-spinner small type="grow" v-show="updatingDevAddress" />
             {{ $t("operation.confirm") }}
           </button>
+        </div>
+        <div v-if="takeFee" class="font14 my-1" style="text-align:center">
+          {{ `Operation fee: ${fee} NUT` }}
         </div>
       </div>
     </b-modal>
@@ -286,7 +300,6 @@
 
 <script>
 import Progress from '@/components/community/Progress'
-import BN from 'bn.js'
 import {
   approveCommunityBalance,
   chargeCommunityBalance,
@@ -297,11 +310,13 @@ import {
   getDistributionEras,
   getCommunityBalance,
   withdrawRevenue,
+  getApprovement,
+  approveUseERC20
    } from '@/utils/web3/community'
+import { NutAddress } from '@/config'
 import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapState } from 'vuex'
-import { errCode } from '@/config'
 import { ethers } from 'ethers'
 
 export default {
@@ -320,7 +335,9 @@ export default {
       charging: false,
       withdrawingRevenue: false,
       withdrawing: false,
-      approving: false,
+      approving: true,
+      approveMent: false,
+
       updatingDevAddress: false,
       updatingDevRatio: false,
       cToken: {},
@@ -330,7 +347,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['account']),
+    ...mapState('web3', ['account', 'fees']),
     ...mapState('community', ['communityData', 'distributions']),
     cTokenAddress () {
       return this.cToken.address
@@ -340,17 +357,30 @@ export default {
         return 0
       }
       return this.userBalances[this.cTokenAddress].toString() / (10 ** this.cToken.decimal)
+    }, 
+    fee() {
+      if (this.fees){
+        return this.fees['COMMUNITY'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['COMMUNITY'] > 0
+      }
+      return false
     }
   },
   methods: {
     async approve () {
       try {
         this.approving = true
-        const hash = await approveCommunityBalance(this.cTokenAddress)
+        const hash = await approveUseERC20(NutAddress, this.communityData.id)
         this.$bvToast.toast(this.$t('tip.approveSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
         })
+        this.approvement = true
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -551,6 +581,11 @@ export default {
           window.clearInterval(interval)
         })
     }
+    getApprovement(NutAddress, communityInfo.id).then(res => {
+      this.approvement = res
+    }).finally(() => {
+      this.approving = false
+    })
   }
 }
 </script>
