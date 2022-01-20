@@ -99,10 +99,27 @@
                 </div>
               </div>
             </b-form-group>
+            <!-- community retained revenue -->
+            <b-form-group v-if="isMintable" label-cols-md="3" content-cols-md="8"
+                          class="align-items-center"
+                          label-class="font14"
+                          label-align="left"
+                          :label="$t('community.retainedRevenue')">
+              <div class="d-flex v-middle">
+                <div class="c-input-group c-input-group-bg">
+                  <b-form-input
+                    :disabled="true"
+                    v-model="retainedRevenue"
+                    placeholder="0.00"
+                  >
+                  </b-form-input>
+                  <span class="c-append">{{ cToken ? cToken.symbol : '' }}</span>
+                </div>
+              </div>
+            </b-form-group>
             <!-- community dev address -->
             <b-form-group label-cols-md="3" content-cols-md="8"
                           label-class="font14"
-                          v-if="!isMintable"
                           label-align="left"
                           :label="$t('community.fundAddress')">
               <div class="d-flex v-middle">
@@ -119,7 +136,6 @@
             </b-form-group>
             <!-- community dev ratio -->
             <b-form-group label-cols-md="3" content-cols-md="8"
-                          v-if="!isMintable"
                           label-align="left"
                           label-class="font14"
                           :label="$t('community.fundRatio')">
@@ -185,6 +201,7 @@ export default {
   data () {
     return {
       communityBalanceValue: 0,
+      retainedRevenue: 0,
       loadingPool: true,
       laodingHistory: false,
       fund:'',
@@ -250,7 +267,8 @@ export default {
     while (!this.communityInfo) {
       await sleep(0.2)
     }
-    this.fund = ethers.utils.getAddress(this.communityInfo.owner.id);
+    this.fund = this.communityInfo.daoFund
+    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / 1e18;
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res.address)
