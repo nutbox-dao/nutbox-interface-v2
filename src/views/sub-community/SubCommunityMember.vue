@@ -58,7 +58,7 @@
         <div class="user-card d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center">
             <span></span>
-            <button class="primary-btn w-auto text-black mx-0" style="height: 1.8rem;" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Administor</button>
+            <div class="user-type-tag text-black" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Administor</div>
           </div>
           <div class="text-center mt-3 pb-3">
             <div class="avatar-bg">
@@ -265,6 +265,18 @@ export default {
     img {
       margin: 8px auto;
     }
+  }
+  .user-type-tag {
+    background: var(--sub-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    height: 1.8rem;
+    padding: 0 0.8rem;
+    border-radius: 0.6rem;
+    font-size: .8rem;
+    line-height: 24px;
   }
   .member-card {
     @include card(1.2rem 0);
