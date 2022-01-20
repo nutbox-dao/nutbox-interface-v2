@@ -100,7 +100,7 @@
               </div>
             </b-form-group>
             <!-- community retained revenue -->
-            <b-form-group v-if="isMintable" label-cols-md="3" content-cols-md="8"
+            <b-form-group label-cols-md="3" content-cols-md="8"
                           class="align-items-center"
                           label-class="font14"
                           label-align="left"

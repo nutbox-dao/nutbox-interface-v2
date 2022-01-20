@@ -466,7 +466,7 @@ export const getUserStakings = async (pools) => {
       }), Multi_Config)
       resolve(result.results.transformed)
     } catch (e) {
-      console.log('Get UserStaking fail', e);
+      console.log('Get pool total fail', e);
       reject(e)
     }
   })

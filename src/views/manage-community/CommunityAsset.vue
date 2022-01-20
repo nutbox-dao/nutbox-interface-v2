@@ -62,7 +62,7 @@
           </div>
         </b-form-group>
         <!-- retained Reveue -->
-        <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8"
+        <b-form-group label-cols-md="2" content-cols-md="8"
                       label-class="font14 font-bold line-height14 d-flex align-items-center"
                       :label="$t('community.retainedRevenue')">
           <div class="d-flex">
@@ -483,12 +483,17 @@ export default {
       try{
         this.withdrawingRevenue = true;
         await withdrawRevenue();
-        let retained = (this.communityData.retainedRevenue.toString() / 1e18)
-        const temBalacne = this.communityBalance
-        this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
-        retained = this.communityBalance > retained ? 0 : (retained - temBalacne)
-        this.communityData.retainedRevenue = ethers.utils.parseUnits(retained.toString(), 18)
-        this.$store.commit('community/saveCommunityData', this.communityData)
+        if(this.isMintable) {
+          this.communityData.retainedRevenue = ethers.constants.Zero
+          this.$store.commit('community/saveCommunityData', this.communityData)
+        }else{
+          let retained = (this.communityData.retainedRevenue.toString() / 1e18)
+          const temBalacne = this.communityBalance
+          this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
+          retained = this.communityBalance > retained ? 0 : (retained - temBalacne)
+          this.communityData.retainedRevenue = ethers.utils.parseUnits(retained.toString(), 18)
+          this.$store.commit('community/saveCommunityData', this.communityData)
+        }
         this.$bvToast.toast(this.$t('tip.success'), {
           title: this.$t('tip.success'),
           variant: 'success'
