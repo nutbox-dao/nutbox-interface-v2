@@ -84,10 +84,17 @@
             <b-spinner small type="grow" v-show="!enableOp" />
             Cancel
           </button>
-          <button class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
+          <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
+            <b-spinner small type="grow" v-show="approving" />
+            {{ $t("operation.approve") }}
+          </button>
+          <button v-else class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
             <b-spinner small type="grow" v-show="!enableOp" />
             OK
           </button>
+        </div>
+        <div v-if="takeFee" class="font14 my-1" style="text-align:center">
+          {{ `Operation fee: ${fee} NUT` }}
         </div>
       </div>
     </div>
@@ -131,6 +138,10 @@ import { sleep, uploadImage } from '@/utils/helper'
 import UploadLoading from '@/components/common/UploadLoading'
 import { VueCropper } from 'vue-cropper'
 import { updateTokenIcon } from '@/utils/web3/asset'
+import {
+  approveUseERC20
+   } from '@/utils/web3/community'
+import { NutAddress } from '@/config'
 
 export default {
   name: 'StakingPoolConfig',
@@ -157,7 +168,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('community', ['communityData'])
+    ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
+    ...mapState('web3', ['fees']),
+    fee() {
+      if (this.fees){
+        return this.fees['COMMUNITY'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['COMMUNITY'] > 0
+      }
+      return false
+    }
   },
   data () {
     return {
@@ -171,10 +195,28 @@ export default {
       cropperModal: false,
       cropperImgSrc: '',
       cropFixedNumber: [1, 1],
-      cropImgSize: [200, 200]
+      cropImgSize: [200, 200],
+      approving: false
     }
   },
   methods: {
+    async approve () {
+      try {
+        this.approving = true
+        const hash = await approveUseERC20(NutAddress, this.communityData.id)
+        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.$store.commit('community/saveApprovedCommunity', true)
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.approving = false
+      }
+    },
     async updateLogo (file) {
       if (!this.logo) return
       this.logoUploadLoading = true

@@ -62,7 +62,11 @@
         </div>
 
         <div class="d-flex justify-content-between" style="gap: 2rem">
-          <button class="dark-btn" @click="receiveAttention" :disabled="updating">
+          <button class="dark-btn" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
+            <b-spinner small type="grow" v-show="approving" />
+            {{ $t("operation.approve") }}
+          </button>
+          <button v-else class="dark-btn" @click="receiveAttention" :disabled="updating">
             <b-spinner small type="grow" v-show="updating" />
             {{ $t("pool.closePool") }}
           </button>
@@ -75,6 +79,9 @@
             {{ $t("operation.cancel") }}
           </button>
         </div>
+        <div v-if="takeFee" class="font14 my-1" style="text-align:center">
+          {{ `Operation fee: ${fee} NUT` }}
+        </div>
       </div>
     </b-modal>
 
@@ -85,15 +92,17 @@
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import { closePool } from '@/utils/web3/pool'
-import { getAssetMetadata, getERC20Info } from '@/utils/web3/asset'
+import { getERC20Info } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
+import { approveUseERC20 } from '@/utils/web3/community'
+import { NutAddress } from '@/config'
 
 export default {
   name: 'ManageStakingCard',
   computed: {
-    ...mapState('web3', ['stakingFactoryId', 'allTokens']),
-    ...mapState('community', ['communityData']),
+    ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
+    ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
       hiveVests: state => state.hive.vestsToHive,
@@ -105,6 +114,18 @@ export default {
     tvl () {
       return 0
     },
+    fee() {
+      if (this.fees){
+        return this.fees['COMMUNITY'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['COMMUNITY'] > 0
+      }
+      return false
+    }
   },
   data () {
     return {
@@ -113,6 +134,7 @@ export default {
       contract: null,
       stakedERC20: {},
       showAttention: false,
+      approving: false,
       icon: null,
       vert: 1e18,
       confirmInfo: ''
@@ -124,6 +146,23 @@ export default {
     }
   },
   methods: {
+    async approve () {
+      try {
+        this.approving = true
+        const hash = await approveUseERC20(NutAddress, this.communityData.id)
+        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.$store.commit('community/saveApprovedCommunity', true)
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.approving = false
+      }
+    },
     receiveAttention () {
       if (this.confirmInfo !== this.pool.name) {
         this.$bvToast.toast(this.$t('error.wrongConfirmInfo'), {

@@ -233,7 +233,7 @@
             <b-spinner small type="grow" v-show="updatingDevRatio" />
             {{ $t('operation.cancel') }}
           </button>
-          <button class="primary-btn mx-3" v-if="approving || !approvement" @click="approve" :disabled="approving">
+          <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
             <b-spinner small type="grow" v-show="approving" />
             {{ $t("operation.approve") }}
           </button>
@@ -281,7 +281,7 @@
             <b-spinner small type="grow" v-show="updatingDevAddress" />
             {{ $t('operation.cancel') }}
           </button>
-          <button class="primary-btn mx-3" v-if="approving || !approvement" @click="approve" :disabled="approving">
+          <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
             <b-spinner small type="grow" v-show="approving" />
             {{ $t("operation.approve") }}
           </button>
@@ -301,7 +301,6 @@
 <script>
 import Progress from '@/components/community/Progress'
 import {
-  approveCommunityBalance,
   chargeCommunityBalance,
   withdrawCommunityBalance,
   setDevRatio,
@@ -310,7 +309,6 @@ import {
   getDistributionEras,
   getCommunityBalance,
   withdrawRevenue,
-  getApprovement,
   approveUseERC20
    } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
@@ -335,8 +333,7 @@ export default {
       charging: false,
       withdrawingRevenue: false,
       withdrawing: false,
-      approving: true,
-      approveMent: false,
+      approving: false,
 
       updatingDevAddress: false,
       updatingDevRatio: false,
@@ -348,7 +345,7 @@ export default {
   },
   computed: {
     ...mapState('web3', ['account', 'fees']),
-    ...mapState('community', ['communityData', 'distributions']),
+    ...mapState('community', ['communityData', 'distributions', 'loadingApproveCommunity', 'approvedCommunity']),
     cTokenAddress () {
       return this.cToken.address
     },
@@ -380,7 +377,7 @@ export default {
           title: this.$t('tip.success'),
           variant: 'success'
         })
-        this.approvement = true
+        this.$store.commit('community/saveApprovedCommunity', true)
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -581,11 +578,6 @@ export default {
           window.clearInterval(interval)
         })
     }
-    getApprovement(NutAddress, communityInfo.id).then(res => {
-      this.approvement = res
-    }).finally(() => {
-      this.approving = false
-    })
   }
 }
 </script>

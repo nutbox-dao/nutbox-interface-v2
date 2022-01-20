@@ -37,7 +37,8 @@
 
 <script>
 import { getMyCommunityData } from '@/utils/graphql/user'
-import { getMyCommunityContract } from '@/utils/web3/community'
+import { getMyCommunityContract, getApprovement } from '@/utils/web3/community'
+import { NutAddress } from '@/config'
 
 export default {
   name: 'Index',
@@ -45,6 +46,13 @@ export default {
     try{
       const res = await getMyCommunityContract()
       getMyCommunityData();
+      this.$store.commit('community/saveLoadingApproveCommunity', true)
+
+      getApprovement(NutAddress, res).then(res => {
+        this.$store.commit('community/saveApprovedCommunity', res)
+      }).finally(() => {
+        this.$store.commit('community/saveLoadingApproveCommunity', false)
+      })
     }catch(e) {
       // no registered
       this.$router.replace('/')

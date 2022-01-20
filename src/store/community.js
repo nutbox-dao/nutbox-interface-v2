@@ -12,6 +12,9 @@ export default {
     // loading flag
     loadingMyCommunityInfo: false,
     loadingAllCommunityInfo: false,
+    loadingApproveCommunity: false,
+
+    approvedCommunity: false,
     // all i joined community from graph
     joinedCommunityData: null,
 
@@ -47,6 +50,12 @@ export default {
     },
     saveJoinedCommunityData (state, joinedCommunityData) {
       state.joinedCommunityData = joinedCommunityData
+    },
+    saveLoadingApproveCommunity (state, loadingApproveCommunity) {
+      state.loadingApproveCommunity = loadingApproveCommunity
+    },
+    saveApprovedCommunity (state, approvedCommunity) {
+      state.approvedCommunity = approvedCommunity
     }
   },
   getters: {
