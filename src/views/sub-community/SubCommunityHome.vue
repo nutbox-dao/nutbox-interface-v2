@@ -13,7 +13,7 @@
                  :href="baseInfo && baseInfo.website"
                  target="_blank">{{ baseInfo && baseInfo.name }}</a>
               <div v-else>{{ baseInfo && baseInfo.name }}</div>
-              <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website"></i>
+              <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website && baseInfo.website.indexOf('https://') !== -1"></i>
               <i class="v-line mx-2" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
             </div>
             <div class="desc font14 line-height18 mt-2"

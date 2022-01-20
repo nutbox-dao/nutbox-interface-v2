@@ -37,7 +37,7 @@
           </b-popover>
         </div>
       </div>
-      <span class="chain-type mt-2">{{ poolType.toUpperCase() }}</span>
+      <span class="chain-type mt-2">{{ poolType }}</span>
     </div>
   </div>
 </template>
@@ -79,8 +79,8 @@ export default {
     },
     poolType() {
       const type = getPoolType(this.card.poolFactory, this.card.chainId)
-      if (type === 'erc20staking') return CHAIN_NAME
-      return type
+      if (type === 'erc20staking') return 'ERC20'
+      return type.toUpperCase()
     },
   },
   methods: {

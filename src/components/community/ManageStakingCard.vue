@@ -91,7 +91,7 @@
 <script>
 import { mapState } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
-import { closePool } from '@/utils/web3/pool'
+import { closePool, getPoolType } from '@/utils/web3/pool'
 import { getERC20Info } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
@@ -111,8 +111,26 @@ export default {
     totalDeposited () {
       return this.pool.totalAmount ? this.pool.totalAmount.toString() / this.vert : 0
     },
+    type() {
+      return getPoolType(this.pool.poolFactory, this.pool.chainId)
+    },
+    stakeToken() {
+      if (this.type !== 'erc20staking' || !this.allTokens) return {}
+      const token = this.allTokens.filter(t => t.address.toLowerCase() == this.pool.asset.toLowerCase())[0]
+      return token
+    },
     tvl () {
-      return 0
+      if(!this.prices || !this.stakeToken) return 0
+      let price
+      if (this.type === 'erc20staking') {
+        price = this.stakeToken.price
+      } else if (this.type === "steem") {
+        price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
+      } else if (this.type === "hive") {
+        price = this.prices['HIVEUSDT']
+      }
+      price = price ? parseFloat(price) : 0
+      return this.totalDeposited * price
     },
     fee() {
       if (this.fees){
