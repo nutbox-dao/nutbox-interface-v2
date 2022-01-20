@@ -234,7 +234,7 @@
             {{ $t('operation.cancel') }}
           </button>
           <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
-            <b-spinner small type="grow" v-show="approving" />
+            <b-spinner small type="grow" v-show="approving || loadingApproveCommunity" />
             {{ $t("operation.approve") }}
           </button>
           <button class="primary-btn mx-3" v-else @click="updateDevRatio" :disabled="updatingDevRatio">
@@ -282,7 +282,7 @@
             {{ $t('operation.cancel') }}
           </button>
           <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
-            <b-spinner small type="grow" v-show="approving" />
+            <b-spinner small type="grow" v-show="approving || loadingApproveCommunity" />
             {{ $t("operation.approve") }}
           </button>
           <button v-else class="primary-btn mx-3" @click="updateDevAddress" :disabled="updatingDevAddress">
@@ -483,10 +483,11 @@ export default {
       try{
         this.withdrawingRevenue = true;
         await withdrawRevenue();
-        let retained = (this.communityData.retainedReveue.toString() / 1e18)
+        let retained = (this.communityData.retainedRevenue.toString() / 1e18)
+        const temBalacne = this.communityBalance
         this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
-        retained = this.communityBalance > retained ? 0 : (retained - this.communityBalance)
-        this.communityData.retainedReveue = ethers.utils.parseUnits(retained.toString(), 18)
+        retained = this.communityBalance > retained ? 0 : (retained - temBalacne)
+        this.communityData.retainedRevenue = ethers.utils.parseUnits(retained.toString(), 18)
         this.$store.commit('community/saveCommunityData', this.communityData)
         this.$bvToast.toast(this.$t('tip.success'), {
           title: this.$t('tip.success'),

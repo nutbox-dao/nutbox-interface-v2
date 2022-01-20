@@ -27,7 +27,7 @@
           <div class="font-bold">{{ apr }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
-          <div class="mb-2">Total {{ type === chainName ? 'Staked' : 'Delegated' }}</div>
+          <div class="mb-2">Total {{ type === 'erc20staking' ? 'Staked' : 'Delegated' }}</div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
@@ -39,7 +39,7 @@
         class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type.toUpperCase() }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -100,9 +100,9 @@
               <div>
                 <div class="font-bold text-grey-7">
                   {{
-                    type === chainName
+                    type === 'erc20staking'
                       ? stakeToken.symbol + " Staked"
-                      : type === "STEEM"
+                      : type === "steem"
                       ? "SP Delegated"
                       : "HP Delegated"
                   }}
@@ -135,7 +135,7 @@
                 @click="showLogin = true"
                 >
                 {{
-                    type === "STEEM"
+                    type === "steem"
                     ? $t("wallet.connectSteem")
                     : $t("wallet.connectHive")
                 }}
@@ -223,14 +223,14 @@
       <div class="position-relative">
         <i class="modal-close-icon-right" @click="showWrongSteem = false"></i>
         <div class="custom-form text-center pt-3 font20 line-height28">
-          <div class="pt-4">Please change <span class="text-primary-0 font-bold">{{type}}</span> Account</div>
+          <div class="pt-4">Please change <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span> Account</div>
           <div>
-            Your <span class="text-primary-0 font-bold">{{type}}</span>
-            account haven't binding with current <span class="text-primary-0 font-bold">{{type}}</span>
+            Your <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span>
+            account haven't binding with current <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span>
             address, please
-            change <span class="text-primary-0 font-bold">{{type}}</span> account in your wallet first.
+            change <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span> account in your wallet first.
           </div>
-          <div class="mt-2 mb-1">Your binding {{type}} account is:</div>
+          <div class="mt-2 mb-1">Your binding {{type.toUpperCase()}} account is:</div>
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <input
               class="text-center"
@@ -271,7 +271,7 @@
         <div>
           Your <span class="text-primary-0 font-bold">{{ chainName }} </span>
           address haven't binding with current
-          <span class="text-primary-0 font-bold">{{ type }} </span>
+          <span class="text-primary-0 font-bold">{{ type.toUpperCase() }} </span>
           account, please
           change <span class="text-primary-0 font-bold">{{ chainName }} </span>
           address in your wallet first.
@@ -291,7 +291,7 @@
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change {{type}}
+          Change {{type.toUpperCase()}}
         </button>
       </div>
     </b-modal>
@@ -304,7 +304,7 @@
       hide-footer
       no-close-on-backdrop
     >
-      <Login :type="type" @hideMask="showLogin = false" />
+      <Login :type="type.toUpperCase()" @hideMask="showLogin = false" />
     </b-modal>
   </div>
 </template>
@@ -327,7 +327,7 @@ export default {
   name: "",
   props: {
     pool: {
-      type: Object,
+      type: Object
     },
   },
   components: {
@@ -376,24 +376,24 @@ export default {
       return getPoolType(this.pool.poolFactory, this.pool.chainId);
     },
     needLogin() {
-      if (this.type === "STEEM") {
+      if (this.type === "steem") {
         return !this.steemAccount;
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return !this.hiveAccount;
       }
       return false;
     },
     stakeIcon() {
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         return this.stakeToken.icon
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         return ASSET_LOGO_URL['steem']
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return ASSET_LOGO_URL['hive']
       }
     },
     approved() {
-      if (this.type !== CHAIN_NAME) return true;
+      if (this.type !== 'erc20staking') return true;
       if (!this.approvements) return false;
       return this.approvements[this.pool.id];
     },
@@ -404,7 +404,7 @@ export default {
       return token;
     },
     stakeToken() {
-      if (this.type !== CHAIN_NAME || !this.allTokens) return {};
+      if (this.type !== 'erc20staking' || !this.allTokens) return {};
       const token = this.allTokens.filter(
         (t) => t.address.toLowerCase() == this.pool.asset
       )[0];
@@ -414,11 +414,11 @@ export default {
       if (!this.userStaked) return 0;
       const stakedBn = this.userStaked[this.pool.id];
       if (!stakedBn) return 0;
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         return stakedBn.toString() / 1e18;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         return (stakedBn.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
       }
     },
@@ -432,11 +432,11 @@ export default {
       if (!this.totalStaked) return 0;
       const total = this.totalStaked[this.pool.id];
       if (!total) return 0;
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         return total.toString() / 1e18;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         return (total.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
       }
       return 0;
@@ -444,11 +444,11 @@ export default {
     stakePrice(){
       if(!this.prices) return 0
       let price
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         price = this.stakeToken.price
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         price = this.prices['HIVEUSDT']
       }
       return price ? price : 0
@@ -529,14 +529,14 @@ export default {
     },
     async increase() {
       this.operate = "add";
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         this.updateStaking = true;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         // check account first
         if(await this.checkAccount()){
           this.showSpStake = true;
         }
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         if(await this.checkAccount()){
           this.showHpStake = true;
         }
@@ -544,14 +544,14 @@ export default {
     },
     async decrease() {
       this.operate = "minus";
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         this.updateStaking = true;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         // check account first
         if(await this.checkAccount()){
           this.showSpStake = true;
         }
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         if(await this.checkAccount()){
           this.showHpStake = true;
         }

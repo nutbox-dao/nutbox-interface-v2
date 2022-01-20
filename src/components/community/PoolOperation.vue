@@ -7,12 +7,13 @@
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center "
-        v-if="approved && !needLogin"
+        v-if="approved && approvedCommunity || (!needLogin && type !== 'erc20staking')"
       >
         <span class="value flex-fill">
           {{ staked | amountForm }}
         </span>
         <div class="d-flex">
+          <!-- decrease -->
           <button
             class="symbol-btn symbol-btn-outline hover mr-2"
             @click="decrease"
@@ -21,6 +22,7 @@
             <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
             <i v-else class="sub-icon sub-icon-primary"></i>
           </button>
+          <!-- increase -->
           <button
             class="symbol-btn symbol-btn-outline hover"
             :disabled="card.status === 'CLOSED' || isCheckingAccount"
@@ -32,26 +34,44 @@
         </div>
       </div>
       <template v-else>
+        <!-- steem hive login -->
         <button class="primary-btn" v-if="needLogin" @click="showLogin = true">
           {{
-            type === "STEEM"
+            type === "steem"
               ? $t("wallet.connectSteem")
               : $t("wallet.connectHive")
           }}
         </button>
-        <button
-          v-else
-          class="primary-btn"
-          @click="approve"
-          :disabled="approved || isApproving || card.status === 'CLOSED'"
-        >
-          <b-spinner
-            small
-            type="grow"
-            v-show="isApproving || loadingApprovements"
-          ></b-spinner>
-          {{ $t("operation.approve") }}
-        </button>
+        <template v-else>
+          <!-- approve community -->
+          <button
+            v-if="takeFee && (loadingApproveCommunity || !approvedCommunity)"
+            class="primary-btn"
+            @click="approveCommunity"
+            :disabled="approved || loadingApproveCommunity || isApprovingCommunity || card.status === 'CLOSED'"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="isApprovingCommunity || loadingApproveCommunity"
+            ></b-spinner>
+            {{ $t("operation.approve") + ' Community' }}
+          </button>
+          <!-- approve pool -->
+          <button
+            v-else
+            class="primary-btn"
+            @click="approve"
+            :disabled="approved || isApproving || card.status === 'CLOSED'"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="isApproving || loadingApprovements"
+            ></b-spinner>
+            {{ $t("operation.approve") + ' Pool' }}
+          </button>
+        </template>
       </template>
     </template>
     <!-- main chain stake -->
@@ -114,12 +134,12 @@
           class="modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
-        <div class="modal-title">Please change {{type}} Account</div>
+        <div class="modal-title">Please change {{type.toUpperCase()}} Account</div>
         <div class="text-center font20 line-height24 mt-3">
-          Your {{type}} account haven't binding with current {{ chainName }} address, please
-          change {{type}} account in your wallet first.
+          Your {{type.toUpperCase()}} account haven't binding with current {{ chainName }} address, please
+          change {{type.toUpperCase()}} account in your wallet first.
         </div>
-        <div class="mt-3 mb-1 text-center font20 line-height24">Your binding {{type}} account is:</div>
+        <div class="mt-3 mb-1 text-center font20 line-height24">Your binding {{type.toUpperCase()}} account is:</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -157,7 +177,7 @@
         ></i>
         <div class="modal-title">Please change {{ chainName }} address</div>
         <div class="font20 line-height24 mt-3">
-          Your {{ chainName }} address haven't binding with current {{ type }} account, please
+          Your {{ chainName }} address haven't binding with current {{ type.toUpperCase() }} account, please
           change {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -175,7 +195,7 @@
           OK
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change {{type}}
+          Change {{type.toUpperCase()}}
         </button>
       </div>
     </b-modal>
@@ -188,14 +208,14 @@
       hide-footer
       no-close-on-backdrop
     >
-      <Login :type="type" @hideMask="showLogin = false" />
+      <Login :type="type.toUpperCase()" @hideMask="showLogin = false" />
     </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import { CHAIN_NAME } from "@/config";
+import { CHAIN_NAME, NutAddress } from "@/config";
 import {
   getPoolType,
   approvePool,
@@ -207,6 +227,7 @@ import { handleApiErrCode } from "@/utils/helper";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
 import HPStakingModal from "@/components/common/HPStakingModal";
+import { approveUseERC20 } from '@/utils/web3/community'
 
 export default {
   name: "PoolOperation",
@@ -225,6 +246,7 @@ export default {
   data() {
     return {
       isApproving: false,
+      isApprovingCommunity: false,
       updateStaking: false,
       operate: "add",
       showLogin: false,
@@ -242,7 +264,8 @@ export default {
     ...mapState(["metamaskConnected"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
-    ...mapState('web3', ['account']),
+    ...mapState('web3', ['account', 'fees']),
+    ...mapState('community', ['loadingApproveCommunity', 'approvedCommunity']),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -250,30 +273,42 @@ export default {
       "userReward",
       "loadingApprovements",
     ]),
+    fee() {
+      if (this.fees){
+        return this.fees['USER'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['USER'] > 0
+      }
+      return false
+    },
     type() {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
     needLogin() {
-      if (this.type === "STEEM") {
+      if (this.type === "steem") {
         return !this.steemAccount;
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return !this.hiveAccount;
       }
       return false;
     },
     approved() {
-      if (this.type !== CHAIN_NAME || !this.approvements) return true;
+      if (this.type !== 'erc20staking' || !this.approvements) return true;
       return this.approvements[this.card.id];
     },
     staked() {
       if (!this.userStaked) return 0;
       const userStakingBn = this.userStaked[this.card.id];
       if (!userStakingBn) return 0;
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         return userStakingBn.toString() / 1e18;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         return (userStakingBn.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         return (userStakingBn.toString() / 1e6) * this.vestsToHive;
       }
       return 0;
@@ -282,14 +317,14 @@ export default {
   methods: {
     async increase() {
       this.operate = "add";
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         this.updateStaking = true;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         // check account first
         if(await this.checkAccount()){
           this.showSpStake = true;
         }
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         if(await this.checkAccount()){
           this.showHpStake = true;
         }
@@ -297,14 +332,14 @@ export default {
     },
     async decrease() {
       this.operate = "minus";
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         this.updateStaking = true;
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         // check account first
         if(await this.checkAccount()){
           this.showSpStake = true;
         }
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         if(await this.checkAccount()){
           this.showHpStake = true;
         }
@@ -338,7 +373,7 @@ export default {
         this.isCheckingAccount = false;
       }
     },
-    // Approve contract
+    // Approve pool
     async approve() {
       try {
         this.isApproving = true;
@@ -353,6 +388,24 @@ export default {
         });
       } finally {
         this.isApproving = false;
+      }
+    },
+    // approve community
+    async approveCommunity () {
+      try {
+        this.isApprovingCommunity = true
+        const hash = await approveUseERC20(NutAddress, this.card.community.id)
+        this.$bvToast.toast(this.$t('tip.approveSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.$store.commit('community/saveApprovedCommunity', true)
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.isApprovingCommunity = false
       }
     },
   },

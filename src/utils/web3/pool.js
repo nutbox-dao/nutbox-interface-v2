@@ -78,12 +78,12 @@ export const getPoolType = (factory, chainId) => {
   factory = ethers.utils.getAddress(factory)
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
-      return CHAIN_NAME
+      return 'erc20staking'
     case contractAddress['SPStakingFactory']:
       if (parseInt(chainId) === 1) {
-        return 'STEEM'
+        return 'steem'
       }else if (parseInt(chainId) === 2) {
-        return 'HIVE'
+        return 'hive'
       }
   }
 }

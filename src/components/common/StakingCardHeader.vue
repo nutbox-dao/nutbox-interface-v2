@@ -37,7 +37,7 @@
           </b-popover>
         </div>
       </div>
-      <span class="chain-type mt-2">{{ poolType }}</span>
+      <span class="chain-type mt-2">{{ poolType.toUpperCase() }}</span>
     </div>
   </div>
 </template>
@@ -47,6 +47,7 @@ import { mapGetters, mapState } from 'vuex'
 import { getPoolType } from '@/utils/web3/pool'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
+import { CHAIN_NAME } from '@/config'
 
 export default {
   name: "StakingCardHeader",
@@ -77,7 +78,9 @@ export default {
       }
     },
     poolType() {
-      return getPoolType(this.card.poolFactory, this.card.chainId)
+      const type = getPoolType(this.card.poolFactory, this.card.chainId)
+      if (type === 'erc20staking') return CHAIN_NAME
+      return type
     },
   },
   methods: {

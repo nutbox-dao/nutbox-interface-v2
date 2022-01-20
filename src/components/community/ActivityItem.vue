@@ -105,7 +105,7 @@ export default {
     let symbol;
     let ctokenSymbol;
     let delegatee;
-    if (this.operation.asset && this.operation.asset.length > 0){
+    if (this.operation.asset && this.operation.asset.length > 0 && this.operation.type !== 'ADMINSETDAOFUND' && this.operation.type !== 'ADMINWITHDRAWNREVENUE' ){
       try{
         while(!this.allTokens) {
           await sleep(0.3)
@@ -114,6 +114,7 @@ export default {
         const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
         symbol = token.symbol;
       }catch(e){
+        console.log(this.operation.asset);
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
@@ -200,13 +201,13 @@ export default {
         this.isAdmin = true;
         this.username = 'admin'
         this.opType = 'Reset DAO fund'
-        this.description = (this.showName ? ' reset' : 'Reset') + ' DAO fund address.'
+        this.description = (this.showName ? ' reset' : 'Reset') + ` DAO fund address:${ethers.utils.getAddress(this.operation.asset)}.`
         return;
       case "ADMINWITHDRAWNREVENUE":
         this.isAdmin = true;
         this.username = 'admin'
         this.opType = 'Withdraw revenue'
-        this.description = (this.showName ? ' withdraw' : 'Withdraw') + ' revenue to DAO fund address.'
+        this.description = (this.showName ? ' withdraw' : 'Withdraw') + ` revenue to:${ethers.utils.getAddress(this.operation.asset)}.`
         return;
     }
   },

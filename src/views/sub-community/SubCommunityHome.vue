@@ -187,7 +187,6 @@ import { sleep, formatBalance, rollingFunction } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
-import { ethers } from 'ethers'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
 
 export default {

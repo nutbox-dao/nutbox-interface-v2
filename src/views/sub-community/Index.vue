@@ -111,8 +111,10 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
+import { getApprovement } from '@/utils/web3/community'
 import { handleApiErrCode } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
+import { NutAddress } from '@/config'
 
 export default {
   name: 'Index',
@@ -146,6 +148,13 @@ export default {
     try {
       this.loading = true;
       this.clearData();
+      this.$store.commit('community/saveLoadingApproveCommunity', true)
+        this.$store.commit('community/saveApprovedCommunity', false)
+      getApprovement(NutAddress, this.communityId).then(res => {
+        this.$store.commit('community/saveApprovedCommunity', res)
+      }).finally(() => {
+        this.$store.commit('community/saveLoadingApproveCommunity', false)
+      })
       getSpecifyCommunityInfo(this.communityId).then(community => {
         getCToken(community.id, true).then(ctoken => {
           this.saveCtoken(ctoken)

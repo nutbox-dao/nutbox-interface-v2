@@ -3,7 +3,7 @@
     <StakingCardHeader :card="card"/>
     <div class="c-card border-0">
       <div class="d-flex align-items-center">
-        <span class="font-bold text-grey-47 mr-2 font14">{{ cToken ? cToken.symbol : 'Pnut' }}</span>
+        <span class="font-bold text-grey-47 mr-2 font14">{{ cToken ? cToken.symbol : '' }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">EARNED</span>
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(cToken ? cToken.address : '')"></i>
@@ -19,10 +19,10 @@
         </button>
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
-        <span class="text-grey-47 font-bold mr-2 font14">{{ type === homeName ? stakeToken.symbol : type === 'STEEM' ? 'SP' : 'HP' }}</span>
+        <span class="text-grey-47 font-bold mr-2 font14">{{ type === 'erc20staking' ? stakeToken.symbol : type === 'steem' ? 'SP' : 'HP' }}</span>
         <div class="d-flex align-items-center">
-          <span class="font14 text-grey-7"> {{ type === homeName ? 'STAKED' : 'DELEGATED'}}</span>
-          <template v-if="type === homeName">
+          <span class="font14 text-grey-7"> {{ type === 'erc20staking' ? 'STAKED' : 'DELEGATED'}}</span>
+          <template v-if="type === 'erc20staking'">
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
           <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
           </template>
@@ -66,11 +66,11 @@
 <script>
 import StakingHomeChainAssetModal from '@/components/common/StakingHomeChainAssetModal'
 import { mapState } from 'vuex'
-import { approvePool, withdrawReward, getPoolType } from '@/utils/web3/pool'
+import { withdrawReward, getPoolType } from '@/utils/web3/pool'
 import { formatUserAddress, handleApiErrCode } from '@/utils/helper'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
 import showToastMixin from '@/mixins/copyToast'
-import { CHAIN_NAME, BLOCK_CHAIN_BROWER } from '@/config'
+import { BLOCK_CHAIN_BROWER } from '@/config'
 import PoolOperation from '@/components/community/PoolOperation'
 import { BLOCK_SECOND } from '@/constant'
 import { getUserBaseInfo } from '@/utils/web3/account'
@@ -101,7 +101,7 @@ export default {
     ...mapState('currentCommunity', ['cToken']),
     ...mapState(['prices']),
     stakeToken() {
-        if (this.type !== CHAIN_NAME || !this.allTokens) return {}
+        if (this.type !== 'erc20staking' || !this.allTokens) return {}
         const token = this.allTokens.filter(t => t.address.toLowerCase() == this.card.asset)[0]
         return token
     },
@@ -117,11 +117,11 @@ export default {
       const total =
         this.totalStaked[this.card.id]
       if (!total) return 0
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         return total.toString() / 1e18
-      } else if (this.type === 'STEEM') {
+      } else if (this.type === 'steem') {
         return total.toString() / 1e6 * this.vestsToSteem
-      } else if (this.type === 'HIVE') {
+      } else if (this.type === 'hive') {
         return total.toString() /1e6 * this.vestsToHive
       }
       return 0
@@ -129,11 +129,11 @@ export default {
     stakePrice(){
       if(!this.prices) return 0
       let price
-      if (this.type === CHAIN_NAME) {
+      if (this.type === 'erc20staking') {
         price = this.stakeToken.price
-      } else if (this.type === "STEEM") {
+      } else if (this.type === "steem") {
         price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
-      } else if (this.type === "HIVE") {
+      } else if (this.type === "hive") {
         price = this.prices['HIVEUSDT']
       }
       return price ? parseFloat(price) : 0
@@ -157,7 +157,6 @@ export default {
   data () {
     return {
       isWithdrawing: false,
-      homeName: CHAIN_NAME,
       stakers: [],
       rewardPerBlock: 0
     }

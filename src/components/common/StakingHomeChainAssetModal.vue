@@ -33,6 +33,9 @@
       <button class="primary-btn mx-3" @click="confirm" :disabled='loading'><b-spinner small type="grow" v-show="loading"></b-spinner
       >{{ $t("operation.confirm") }}</button>
     </div>
+    <div v-if="takeFee" class="font14 my-1" style="text-align:center">
+          {{ `Operation fee: ${fee} NUT` }}
+        </div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
 </template>
@@ -57,6 +60,7 @@ export default {
     ...mapState('pool', ['userStaked']),
     ...mapState('user', ['userGraphInfo']),
     ...mapState('currentCommunity', ['communityId']),
+    ...mapState('web3', ['fees']),
     staked(){
       if (!this.userStaked) return 0;
       return this.userStaked[this.card.id] ?? 0
@@ -68,8 +72,19 @@ export default {
     formStaked(){
       const staked = this.staked;
       return parseFloat(staked.toString() / (1e18))
+    }, 
+    fee() {
+      if (this.fees){
+        return this.fees['COMMUNITY'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['COMMUNITY'] > 0
+      }
+      return false
     }
-
   },
   props: {
     operate: {
