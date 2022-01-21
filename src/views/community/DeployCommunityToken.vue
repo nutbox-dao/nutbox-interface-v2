@@ -75,7 +75,7 @@
               <div class="c-loading"></div>
             </div>
             <template v-else>
-              <div v-if="searchResult==='error'" class="text-center mt-2 font14 text-grey-7">地址输入错误</div>
+              <div v-if="searchResult==='error'" class="text-center mt-2 font14 text-grey-7">Wrong Address</div>
               <div @click="choseToken()" v-if="provideName && provideSymbol">
                 <TokenItem class="my-3"
                            :logo="provideLogo"
@@ -182,7 +182,7 @@
             </div>
           </div>
         </div>
-        <button class="next-btn primary-btn w-auto" :disabled="loadingApprovement || isApproving" v-show="cardStep === 2 && (loadingApprovement || !approvementCommunityFactory)" @click="approveCommunityFactory()">
+        <button class="next-btn primary-btn w-auto" :disabled="loadingApprovement || isApproving" v-show="takeFee && (cardStep === 2 && (loadingApprovement || !approvementCommunityFactory))" @click="approveCommunityFactory()">
           <b-spinner
               small
               type="grow"
@@ -190,7 +190,7 @@
             ></b-spinner>
           Approve
         </button>
-        <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2 && approvementCommunityFactory" @click="confirmDeploy()">
+        <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2 && (!takeFee || approvementCommunityFactory)" @click="takeFee ? showFeeTip = true : confirmDeploy()">
           <b-spinner
               small
               type="grow"
@@ -201,6 +201,36 @@
         </button>
       </div>
     </div>
+    <!-- show fee tip -->
+     <b-modal
+      v-model="showFeeTip"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form">
+        <h3 style="text-align:center">Charge Fee</h3>
+
+        <div class="mb-4 my-3 font20 line-height24 text-center">
+            Create community will toke you {{fees['COMMUNITY']}} NUT for fee.
+          </div>
+
+        <div class="d-flex justify-content-between" style="gap: 2rem">
+          <button class="dark-btn" 
+            @click="showFeeTip = false">
+            {{ $t("operation.cancel") }}
+          </button>
+          <button
+            class="primary-btn"
+            @click="confirmDeploy();showFeeTip = false"
+          >
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -256,6 +286,7 @@ export default {
       cardStep: 0,
       cardStep: 0,
       loading: false,
+      showFeeTip: false,
       searchResult: ''
     }
   },
@@ -271,6 +302,18 @@ export default {
     // total supply of the distribution that user designed
     totalSupply () {
       return this.progressData.reduce((t, p) => t += (parseInt(p.stopHeight) - parseInt(p.startHeight) + 1) * parseFloat(p.amount), 0)
+    },
+    fee() {
+      if (this.fees){
+        return this.fees['COMMUNITY'].toFixed(2)
+      }
+      return 0
+    },
+    takeFee() {
+      if (this.fees) {
+        return this.fees['COMMUNITY'] > 0
+      }
+      return false
     }
   },
   watch: {
