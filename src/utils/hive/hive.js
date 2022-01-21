@@ -93,10 +93,10 @@ export async function hiveTransferVest (from, to, amount, address, fee) {
 export async function getGlobalProperties () {
   return new Promise(async (resolve, reject) => {
     axios.post(RPC_NODE, '{"jsonrpc":"2.0", "method":"database_api.get_dynamic_global_properties", "id":1}').then(res => {
-    if (res.data.result)  
-      resolve(res.data.result)
-    else
-      reject();
+      if (res.data.result)  
+        resolve(res.data.result)
+      else
+        reject();
     }).catch(err => {
       console.log('Get steem global data fail:', err)
       reject(err)

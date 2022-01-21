@@ -132,9 +132,9 @@ export default {
       if (this.type === 'erc20staking') {
         price = this.stakeToken.price
       } else if (this.type === "steem") {
-        price = this.prices['STEEMETH'] * this.prices['ETHUSDT']
+        price = this.prices['steem']
       } else if (this.type === "hive") {
-        price = this.prices['HIVEUSDT']
+        price = this.prices['hive']
       }
       return price ? parseFloat(price) : 0
     },

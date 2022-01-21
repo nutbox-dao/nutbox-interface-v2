@@ -19,16 +19,12 @@ import {
 } from './ethers'
 import {
   getAllTokens,
-  updateTokenIcon as uti,
-  getPricesOnCEX
+  updateTokenIcon as uti
 } from '@/apis/api'
-import { ASSET_LOGO_URL, PRICES_SYMBOL } from '@/constant'
 import { 
   errCode,
-  DELEGATION_CHAINID_TO_NAME,
   Multi_Config
 } from "@/config";
-import { signMessage } from './utils'
 
 /**
  * Get community ctoken info
@@ -245,39 +241,9 @@ export const getAllTokenFromBackend = async (update = false) => {
 /**update tokens info from db */
 export const updateAllTokensFromBackend = async () => {
   while(true){
-    await getPrices()
+    await getAllTokenFromBackend(true)
     await sleep(10)
   }
-}
-
-const getPrices = async () => {
-  // tokenPrices is against eth price
-  let tokenPrices = await getAllTokenFromBackend(true)
-  let binancePrice
-  try {
-    // maybe fail with the network status
-    binancePrice = await getPricesOnCEX();
-  }catch(e) {
-    // get price from binance fail
-    console.log('Get price from binance fail', e);
-  }
-  let res = {}
-  if (binancePrice) {
-    binancePrice = binancePrice.filter(p => 
-      PRICES_SYMBOL.indexOf(p.symbol) !== -1
-    )
-    for (let p of binancePrice) {
-      if (p.symbol === 'ETHUSDT'){
-        store.commit('saveEthPrice', parseFloat(p.price))
-      }
-      res[p.symbol] = p.price
-    }
-  }
-  for (let p of tokenPrices) {
-    res[p.address] = p.price
-  }
-  store.commit('savePrices', res)
-  return res
 }
 
 /**

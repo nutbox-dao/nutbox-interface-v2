@@ -79,8 +79,9 @@
             </div>
           </div>
         </section>
-        <section @click="gotoOfficial" class="my-4 font-bold font20 text-center hover">
+        <section @click="gotoOfficial" class="my-3 font-bold font20 text-center hover">
           About Nutbox
+          <p/>
         </section>
       </div>
     </div>
@@ -92,9 +93,6 @@ import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
 import CommunityCard from '@/components/community/CommunityCard'
 import { getAllCommunities } from '@/utils/web3/community'
-import { getAllPools } from '@/utils/graphql/pool'
-import { rollingFunction, sleep } from '@/utils/helper';
-import { ethers } from 'ethers'
 
 export default {
   name: 'Home',
@@ -103,12 +101,11 @@ export default {
     return {
       loadingAllCommunity: true,
       loading: true,
-      tvl: 0,
-      loadingTvl:true
+      loadingTvl:false
     }
   },
   computed: {
-    ...mapState(['prices']),
+    ...mapState(['prices', 'tvl']),
     ...mapState('web3', ['walnutInfo', 'allTokens']),
     ...mapState('community', ['allCommunityInfo']),
     ...mapState('steem', ['vestsToSteem']),
@@ -139,39 +136,6 @@ export default {
       this.loading = false
     })
     getAllCommunities()
-    while(true) {
-      if(this.allTokens && this.prices) {
-        break;
-      }
-      await sleep(0.3)
-    }
-    const rolling = rollingFunction(getAllPools, null, 12, res => {
-      if (res && this.allTokens && this.prices) {
-        const steemPrice = this.prices['STEEMETH'] * this.prices['ETHUSDT']
-        const hivePrice = this.prices['HIVEUSDT']
-        let t = 0;
-        res.map(p => {
-          if(parseInt(p.chainId) === 1) {
-            const amount = p.totalAmount.toString() / 1e6 * this.vestsToSteem
-            t += amount * steemPrice
-          }else if(parseInt(p.chainId) === 2) {
-            const amount = p.totalAmount.toString() / 1e6 * this.vestsToHive
-            t += amount * hivePrice
-          }else {
-            const price = this.prices[ethers.utils.getAddress(p.asset)]
-            if (price && price > 0 && p.totalAmount > 0){
-              t += p.totalAmount.toString() / 1e18 * price;
-            }
-          }
-        })
-        this.loadingTvl = false
-        this.tvl = t;
-      }
-    })
-    rolling.start();
-    this.$once('hook:beforeDestroy', () => {
-      rolling.stop();
-    })
   }
 }
 </script>

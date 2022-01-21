@@ -135,6 +135,7 @@ import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
+import { getCommon } from '@/apis/api'
 
 export default {
   computed: {
@@ -266,10 +267,22 @@ export default {
     } catch (e) {
       console.log('Get accounts fail', e)
     }
-
-    // get steem vests ratio
-    this.setVestsToSteem()
-    this.setVestsToHive()
+    getCommon().then(res => {
+        if (!res) return
+        this.$store.commit('saveTvl', res.tvl)
+        this.$store.commit('savePrices', res.prices)
+        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
+        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
+      })
+    setInterval(() => {
+      getCommon().then(res => {
+        if (!res) return
+        this.$store.commit('saveTvl', res.tvl)
+        this.$store.commit('savePrices', res.prices)
+        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
+        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
+      })
+    }, 15000);
   }
 }
 </script>

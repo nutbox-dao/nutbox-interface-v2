@@ -4,12 +4,20 @@ import {
 } from "../config";
 
 // ============================================ commen ============================================
-export const getDataCounts = async () => {
+export const getDataCounts = async () => 
   get(BACKEND_API_URL + '/getdatacounts')
-}
 
-export const getPricesOnCEX = async () =>
-  get("https://api.binance.com/api/v3/ticker/price");
+
+export const getCommonPrice = async () => 
+  get(BACKEND_API_URL + '/common/prices')
+
+
+export const getHoleTvl = async () => 
+  get(BACKEND_API_URL + '/common/tvl')
+
+
+export const getCommon = async () => 
+  get(BACKEND_API_URL + '/common')
 
 // ============================================ backend v2 ============================================
 
