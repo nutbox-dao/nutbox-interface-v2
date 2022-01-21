@@ -404,7 +404,7 @@ module.exports = {
     tokenAddress: "Token address",
     price: "Price",
     totalSupply: 'Supply',
-    cap: 'Mk Cap',
+    cap: 'Mkt Cap',
     distributionAmount: "Premine amount"
   }
 };

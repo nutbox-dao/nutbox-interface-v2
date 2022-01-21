@@ -49,23 +49,39 @@ export async function getPools(poolIds) {
  * @returns 
  */
  export async function getAllPools() {
+    let allPools = []
+    let createdAt = parseInt((new Date().getTime()) / 1e3).toString()
+    while(true) {
+        const data = await getPoolsByCreate(createdAt)
+        allPools = allPools.concat(data)
+        if (data.length < 1000) {
+            break;
+        }
+        createdAt = data[data.length - 1].createdAt
+    }
+    return allPools
+}
+
+async function getPoolsByCreate(createdAt) {
     const query = gql`
-    {
-        pools (where: {status: OPENED}) {
+    query Pools($createdAt: String!) {
+        pools(where: {status: OPENED, createdAt_lt: $createdAt}, first: 1000, orderBy:createdAt, orderDirection: desc){
             id
             asset
             chainId
             totalAmount
+            createdAt
         }
     }
     `
     try{
-        const data = await client.request(query)
+        const data = await client.request(query,{createdAt})
         if (data && data.pools) {
             const pools = data.pools
             return pools
         }
     }catch(e) {
         console.log('Get community from graph fail:', e);
+        return []
     }
 }

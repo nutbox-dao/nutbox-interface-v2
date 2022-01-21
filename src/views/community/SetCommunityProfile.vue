@@ -46,7 +46,7 @@
 
             <div class="d-flex justify-content-between align-items-center font14 my-3">
             </div>
-            <div class="font14 font-bold">Distribution Stratage</div>
+            <div class="font14 font-bold">Distribution Strategy</div>
             <Progress :progress-data="distributions || []"/>
           </div>
         </div>

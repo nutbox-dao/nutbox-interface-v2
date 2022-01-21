@@ -12,7 +12,7 @@
                   <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
                     <span>Bootstrap</span>
                     <span class="text-dot mx-2">·</span>
-                    <span>Goverance</span>
+                    <span>Governance</span>
                     <span class="text-dot mx-2">·</span>
                     <span>Extensions</span>
                   </div>
@@ -145,7 +145,7 @@ export default {
       }
       await sleep(0.3)
     }
-    const rolling = rollingFunction(getAllPools, null, 8, res => {
+    const rolling = rollingFunction(getAllPools, null, 12, res => {
       if (res && this.allTokens && this.prices) {
         const steemPrice = this.prices['STEEMETH'] * this.prices['ETHUSDT']
         const hivePrice = this.prices['HIVEUSDT']
@@ -159,7 +159,7 @@ export default {
             t += amount * hivePrice
           }else {
             const price = this.prices[ethers.utils.getAddress(p.asset)]
-            if (price && price > 0){
+            if (price && price > 0 && p.totalAmount > 0){
               t += p.totalAmount.toString() / 1e18 * price;
             }
           }
