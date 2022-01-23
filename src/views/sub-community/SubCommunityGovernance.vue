@@ -7,7 +7,7 @@
           <Markdown :body="remark" />
         </div>
       </div>
-      <div class="view-top-header view-top-header-sticky d-flex justify-content-between align-items-center my-3">
+      <div class="view-top-header d-flex justify-content-between align-items-center my-3">
         <div class="nav-box nav-box-bg">
           <div class="nav">
                 <span
