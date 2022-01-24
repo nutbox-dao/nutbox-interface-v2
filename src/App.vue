@@ -80,6 +80,10 @@
                 <i class="dropdown-item-icon twitter-icon"></i>
                 <span>Twitter</span>
               </b-dropdown-item>
+              <b-dropdown-item @click="faucet">
+                <i class="dropdown-item-icon"></i>
+                <span>Faucet NUT</span>
+              </b-dropdown-item>
               <!-- <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.auditReport") }}</span>
@@ -217,6 +221,9 @@ export default {
     gotoCommunity(communityId) {
       this.$store.commit('currentCommunity/saveCommunityId', communityId);
       this.$router.push('/sub-community/home/?id=' + communityId)
+    },
+    faucet() {
+      this.$router.push('/faucet')
     },
     goHome() {
       this.$router.push('/')

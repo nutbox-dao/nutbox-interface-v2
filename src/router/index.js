@@ -19,6 +19,7 @@ import CommunityAsset from '@/views/manage-community/CommunityAsset'
 import CommunityStaking from '@/views/manage-community/CommunityStaking'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
+import Faucet from '@/views/Faucet'
 Vue.use(VueRouter)
 
 const routes = [
@@ -127,6 +128,10 @@ const routes = [
         component: CommunityVote
       }
     ]
+  },
+  {
+    path: '/faucet',
+    component: Faucet
   }
 ]
 

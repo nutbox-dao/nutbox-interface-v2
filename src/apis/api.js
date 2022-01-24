@@ -19,6 +19,9 @@ export const getHoleTvl = async () =>
 export const getCommon = async () => 
   get(BACKEND_API_URL + '/common')
 
+export const faucet = async (account) => 
+  post(BACKEND_API_URL + '/faucet', {account})
+
 // ============================================ backend v2 ============================================
 
 export const getMyCommunityInfo = async (communityId) =>
