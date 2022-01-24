@@ -5,8 +5,8 @@ export const DEBUG = false;
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
 // export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
-// export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = "https://v2-api-test.nutbox.io" + "/qiNiu/upload";
 
@@ -68,21 +68,22 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 /** ==================================Main chain============================================*/
 
-export const RPC_NODE = process.env.VUE_APP_RPC_NODE;
-export const BSC_CHAIN_ID = process.env.VUE_APP_BSC_CHAIN_ID || 1337;
-export const BLOCK_CHAIN_BROWER = process.env.VUE_APP_BLOCK_CHAIN_BROWER;
-export const CHAIN_NAME = process.env.VUE_APP_CHAIN_NAME;
-export const BSC_CHAIN_NAME = process.env.VUE_APP_BSC_CHAIN_NAME;
-export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
-export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
-
-export const MAIN_COMMUNITY_ID = process.env.VUE_APP_MAIN_COMMUNITY_ID;
-
+//  moonbase alpha
+export const RPC_NODE = 'https://rpc.api.moonbase.moonbeam.network';
+export const BSC_CHAIN_ID = 1287;
+export const BLOCK_CHAIN_BROWER = 'https://moonbase.moonscan.io/';
+export const CHAIN_NAME = 'Moonbase-alpha';
+export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'DEV',
+  symbol: 'DEV',
   decimals: 18
 }
+
+export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
+export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
+export const MAIN_COMMUNITY_ID = process.env.VUE_APP_MAIN_COMMUNITY_ID;
+
 
 export const FEE_TYPES = [
   'COMMUNITY',
@@ -111,8 +112,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 
 // bsc test
-export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
-export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
+// export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
+// export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
+
+// moonbase alpha
+export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
+export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
 // bsc net
 // export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"

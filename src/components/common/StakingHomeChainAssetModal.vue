@@ -75,13 +75,13 @@ export default {
     }, 
     fee() {
       if (this.fees){
-        return this.fees['COMMUNITY'].toFixed(2)
+        return this.fees['USER'].toFixed(2)
       }
       return 0
     },
     takeFee() {
       if (this.fees) {
-        return this.fees['COMMUNITY'] > 0
+        return this.fees['USER'] > 0
       }
       return false
     }
