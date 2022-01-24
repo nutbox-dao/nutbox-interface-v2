@@ -59,7 +59,7 @@
       <!-- distribution -->
       <div class="c-card">
         <div class="content2 mb-5">
-          <div class="title mb-3">Distribution Stratage</div>
+          <div class="title mb-3">Distribution Strategy</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>

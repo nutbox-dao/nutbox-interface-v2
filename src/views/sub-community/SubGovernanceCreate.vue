@@ -55,6 +55,8 @@
             id="proposalStart"
             required
             class="mb-2"
+            type="number"
+            :step="1"
             :placeholder="$t('nps.proposalFirst_Block')"
             v-model="proposal.first_block"
           ></b-form-input>
@@ -72,6 +74,8 @@
             id="proposalEnd"
             required
             class="mb-2"
+            type="number"
+            :step="1"
             :placeholder="$t('nps.proposalEnd_Block')"
             v-model="proposal.end_block"
           ></b-form-input>
