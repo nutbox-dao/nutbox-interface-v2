@@ -7,7 +7,7 @@
           <Markdown :body="remark" />
         </div>
       </div>
-      <div class="view-top-header d-flex justify-content-between align-items-center my-3">
+      <div class="view-top-header d-flex my-3">
         <div class="nav-box nav-box-bg">
           <div class="nav">
                 <span
@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="c-btn-group">
-          <button class="primary-btn d-flex align-items-center px-2"
+          <button class="primary-btn d-flex align-items-center px-2 c-btn"
                   @click="$router.push(`/sub-community/governance/create`)">
             <i class="add-icon add-icon-dark mr-1"></i>
             <span>{{ $t('nps.createProposal') }}</span>
@@ -133,13 +133,31 @@ export default {
     background-blend-mode: color;
   }
 }
+.view-top-header {
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .view-top-header {
+    flex-direction: column;
+    overflow: hidden;
+    .nav-box {
+      width: 100%;
+      overflow: auto;
+    }
+  }
+  .c-btn {
+    margin-top: 0.5rem;
+    margin-right: 0;
+    width: fit-content;
+  }
+}
 @media (max-width: 560px) {
   .view-top-header {
     flex-direction: column;
     align-items: flex-end;
-  }
-  .nav-box {
-    margin-bottom: 0.5rem;
   }
 }
 </style>

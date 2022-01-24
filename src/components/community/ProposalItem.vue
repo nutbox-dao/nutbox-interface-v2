@@ -1,26 +1,25 @@
 <template>
   <div class="c-card">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="p-content h-100 d-flex align-items-center hover">
-          <span class="number-circle">{{index + 1}}</span>
-          <div class="content-info mx-3 font14 line-height18" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
+    <div class="box-content">
+      <div class="p-content d-flex align-items-center hover">
+        <span class="number-circle">{{index + 1}}</span>
+        <div class="d-flex flex-column justify-content-between h-100 overflow-hidden mx-3">
+          <div class="content-info name font14 line-height18" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
             {{ getName }}
           </div>
-          <div class="content-info mx-3 font16 line-height20 font-bold" style="overflow: hidden" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
+          <div class="content-info font16 line-height20 font-bold" style="overflow: hidden" @click="$router.push(`/sub-community/governance/detail/${proposalItem.id}`)">
             {{ proposalItem.title }}
           </div>
         </div>
       </div>
-      <div class="col-md-6 mt-3 mt-md-0">
-        <div class=" d-flex justify-content-between other-info">
-          <div class="font18 d-flex justify-content-between info-start font14 line-height20">
-            <div style="color: #50BF00; white-space: nowrap">Agree: {{proposalItem.voteAgreeTotalScore || 0}}</div>
-            <div style="color: #FF5B4D; white-space: nowrap">Disagree: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
-          </div>
-          <div class="d-flex align-items-end info-end">
-            <div class="t-flag px-1 font14 line-height16 py-1"
-                 :class="
+      <div class="other-info d-flex justify-content-between ">
+        <div class="font18 d-flex justify-content-between info-start font14 line-height20">
+          <div style="color: #50BF00; white-space: nowrap">Agree: {{proposalItem.voteAgreeTotalScore || 0}}</div>
+          <div style="color: #FF5B4D; white-space: nowrap">Disagree: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
+        </div>
+        <div class="d-flex align-items-end info-end">
+          <div class="t-flag px-1 font14 line-height16 py-1"
+               :class="
              proposalItem.status == 0
               ? 'proposal-pending'
               : proposalItem.status == 1
@@ -28,24 +27,22 @@
               : proposalItem.proposalResult === 1
               ? 'proposal-pass'
               : 'proposal-unpass'">
-              {{
-                proposalItem.status == 0
-                  ? $t("nps.propsalVoteStatusWaitStart")
-                  : proposalItem.status == 1
-                    ? $t("nps.propsalVoteStatusDoing")
-                    : proposalItem.proposalResult === 1
-                      ? $t("nps.pass")
-                      : $t("nps.unpass")
-              }}
-            </div>
-            <div class="w-auto mt-1 text-grey-7 font14 line-height20" style="white-space: nowrap">
-              {{ $t("nps.proposalEnd") + ":" + endTime }}
-            </div>
+            {{
+              proposalItem.status == 0
+                ? $t("nps.propsalVoteStatusWaitStart")
+                : proposalItem.status == 1
+                  ? $t("nps.propsalVoteStatusDoing")
+                  : proposalItem.proposalResult === 1
+                    ? $t("nps.pass")
+                    : $t("nps.unpass")
+            }}
+          </div>
+          <div class="w-auto mt-1 text-grey-7 font12 line-height20" style="white-space: nowrap">
+            {{ $t("nps.proposalEnd") + ":" + endTime }}
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -102,6 +99,8 @@ export default {
   position: relative;
   @include card(1.2rem, var(--card-bg-primary), hidden, fit-conent);
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
   .number-circle {
     width: 40px;
     height: 40px;
@@ -151,6 +150,64 @@ export default {
   border: 1px solid #408fff4d;
   color: var(--link);
 }
+.box-content {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  .p-content {
+    flex: 0.7;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .other-info {
+    flex: 0.3;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1400px) {
+  .box-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    .p-content {
+      flex: 0.6;
+    }
+    .other-info {
+      flex: 0.4;
+    }
+  }
+}
+@media (max-width: 960px) {
+  .box-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    .p-content {
+      flex: 1;
+    }
+    .other-info {
+      flex: 1;
+    }
+  }
+}
+@media (max-width: 760px) {
+  .box-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .p-content {
+      flex: 1;
+      margin-bottom: 10px;
+    }
+    .other-info {
+      flex: 1;
+    }
+    .name {
+      margin-bottom: 6px;
+    }
+  }
+}
 @media (max-width: 560px) {
   .c-card {
     padding-top: 2.2rem;
@@ -169,7 +226,7 @@ export default {
     }
     .t-flag {
       position: absolute;
-      top: -5.2rem;
+      top: 0.5rem;
     }
   }
 }
