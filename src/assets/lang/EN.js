@@ -175,7 +175,8 @@ module.exports = {
     wrongApy: "Please input correct APR",
     wrongRewardNum: "Please input correct rewards",
     deployCommunitySuccess: "Deploy success!",
-    communityNameLimit: "The community name cannot exceed {count} words",
+    communityNameLimit: "The community name cannot exceed {count} word",
+    descriptionLimit: "The community description cannot exceed {count} words",
     needRightUrl: "Please input right url.",
     selectCowdloan: "Please select a crowdloan project.",
     inputRightBlogTag:

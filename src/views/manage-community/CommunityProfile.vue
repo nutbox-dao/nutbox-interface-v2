@@ -12,6 +12,8 @@
         >
           <b-form-input
             v-model="form.name"
+            minlength="4"
+            maxlength="32"
             :placeholder="$t('placeHolder.inputName')"
           ></b-form-input>
         </b-form-group>
@@ -40,6 +42,8 @@
           <b-form-textarea
             v-model="form.description"
             :placeholder="$t('placeHolder.inputDesc')"
+            minlength="4"
+            maxlength="1024"
             rows="5"
           ></b-form-textarea>
         </b-form-group>
@@ -439,6 +443,8 @@ export default {
         tips = this.$t('tip.communityNameLimit', { count: 32 })
       } else if (!description || description.length === 0) {
         tips = this.$t('tip.needDescription')
+      } else if (description.length >= 1024) {
+        tips = this.$t('tip.descriptionLimit', { count: 1024 })
       } else if (!icon || icon.length === 0) {
         tips = this.$t('tip.needIcon')
       } else if (!poster || poster.length === 0) {

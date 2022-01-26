@@ -13,7 +13,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <span class="value flex-fill font-bold font24 line-height24"> {{ pendingReward | amountForm }} </span>
         <button class="primary-btn m-0 w-auto d-flex align-items-center"
-                :disabled="isWithdrawing" @click="withdraw">
+                :disabled="isWithdrawing || parseFloat(pendingReward) === 0" @click="withdraw">
           <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
           {{ $t("operation.harvest") }}
         </button>

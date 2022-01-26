@@ -7,7 +7,7 @@
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center "
-        v-if="approved && approvedCommunity || (!needLogin && type !== 'erc20staking')"
+        v-if="approved && (!takeFee || approvedCommunity) || (!needLogin && type !== 'erc20staking')"
       >
         <span class="value flex-fill">
           {{ staked | amountForm }}
@@ -48,7 +48,7 @@
             v-if="takeFee && (loadingApproveCommunity || !approvedCommunity)"
             class="primary-btn"
             @click="approveCommunity"
-            :disabled="approved || loadingApproveCommunity || isApprovingCommunity || card.status === 'CLOSED'"
+            :disabled="loadingApproveCommunity || isApprovingCommunity || card.status === 'CLOSED'"
           >
             <b-spinner
               small
@@ -62,7 +62,7 @@
             v-else
             class="primary-btn"
             @click="approve"
-            :disabled="approved || isApproving || card.status === 'CLOSED'"
+            :disabled="isApproving || card.status === 'CLOSED'"
           >
             <b-spinner
               small
