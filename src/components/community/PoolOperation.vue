@@ -214,7 +214,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { CHAIN_NAME, NutAddress } from "@/config";
 import {
   getPoolType,
@@ -273,6 +273,7 @@ export default {
       "userReward",
       "loadingApprovements",
     ]),
+    ...mapGetters('web3', ['tokenDecimals']),
     fee() {
       if (this.fees){
         return this.fees['USER'].toFixed(2)
@@ -305,7 +306,7 @@ export default {
       const userStakingBn = this.userStaked[this.card.id];
       if (!userStakingBn) return 0;
       if (this.type === 'erc20staking') {
-        return userStakingBn.toString() / 1e18;
+        return userStakingBn.toString() / (10 ** this.tokenDecimals(this.card.asset));
       } else if (this.type === "steem") {
         return (userStakingBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {

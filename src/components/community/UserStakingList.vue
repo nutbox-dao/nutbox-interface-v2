@@ -358,6 +358,7 @@ export default {
   mixins: [showToastMixin],
   computed: {
     ...mapGetters("community", ["getCommunityInfoById"]),
+    ...mapGetters("web3", ["tokenDecimals", 'tokenByKey']),
     ...mapState(["prices", "metamaskConnected"]),
     ...mapState("web3", ["tokenIcons", "allTokens"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
@@ -398,16 +399,12 @@ export default {
       return this.approvements[this.pool.id];
     },
     cToken() {
-      const token = this.allTokens.filter(
-        (t) => t.address.toLowerCase() == this.pool.community.cToken
-      )[0];
+      const token = this.tokenByKey(this.pool.community.cToken);
       return token;
     },
     stakeToken() {
       if (this.type !== 'erc20staking' || !this.allTokens) return {};
-      const token = this.allTokens.filter(
-        (t) => t.address.toLowerCase() == this.pool.asset
-      )[0];
+      const token = this.tokenByKey(this.pool.asset)
       return token;
     },
     staked() {
@@ -415,7 +412,7 @@ export default {
       const stakedBn = this.userStaked[this.pool.id];
       if (!stakedBn) return 0;
       if (this.type === 'erc20staking') {
-        return stakedBn.toString() / 1e18;
+        return stakedBn.toString() / (10 ** this.tokenDecimals(this.pool.asset));
       } else if (this.type === "steem") {
         return (stakedBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
@@ -426,14 +423,14 @@ export default {
       if (!this.userReward) return 0;
       const pendingBn = this.userReward[this.pool.id];
       if (!pendingBn) return 0;
-      return pendingBn.toString() / 1e18;
+      return pendingBn.toString() / (10 ** this.tokenDecimals(this.pool.community.cToken));
     },
     totalDeposited() {
       if (!this.totalStaked) return 0;
       const total = this.totalStaked[this.pool.id];
       if (!total) return 0;
       if (this.type === 'erc20staking') {
-        return total.toString() / 1e18;
+        return total.toString() / (10 ** this.tokenDecimals(this.pool.asset));
       } else if (this.type === "steem") {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {

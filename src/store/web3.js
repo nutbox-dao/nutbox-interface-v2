@@ -1,6 +1,7 @@
 import Cookie from "vue-cookies";
 import { BSC_CHAIN_ID } from "@/config";
 import { ASSET_LOGO_URL } from "@/constant";
+import { ethers } from 'ethers'
 
 export default {
   namespaced: true,
@@ -14,6 +15,8 @@ export default {
     stakingFactoryId: null,
     allAssetsOfUser: null,
     allTokens: null,
+    tokenByKey: {},
+    tokenDecimals: {},
     tokenIcons: {},
     blockNum: null,
     nonce: null,
@@ -88,10 +91,16 @@ export default {
     saveAllTokens: (state, allTokens) => {
       state.allTokens = allTokens;
       let icons = {}
+      let decimals = {}
+      let tokenByKey = {}
       for (let i in allTokens) {
         icons[allTokens[i].address.toLowerCase()] = allTokens[i].icon;
+        decimals[allTokens[i].address.toLowerCase()] = allTokens[i].token_decimal;
+        tokenByKey[allTokens[i].address.toLowerCase()] = allTokens[i]
       }
+      state.tokenByKey = tokenByKey;
       state.tokenIcons = icons;
+      state.tokenDecimals = decimals;
     },
     saveBlockNum: (state, blockNum) => {
       state.blockNum = blockNum;
@@ -204,5 +213,17 @@ export default {
     isMainChain: (state) => {
       return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID);
     },
+    tokenDecimals: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return 18;
+      return state.tokenDecimals[address.toLowerCase()] || 18
+    },
+    tokenIcons: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return;
+      return state.tokenIcons[address.toLowerCase()]
+    },
+    tokenByKey: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return;
+      return state.tokenByKey[address.toLowerCase()];
+    }
   },
 };

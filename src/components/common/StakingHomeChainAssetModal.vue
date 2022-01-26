@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { deposit, withdraw } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
 import { getERC20Balance } from '@/utils/web3/asset'
@@ -53,7 +53,9 @@ export default {
     return {
       stakingValue: '',
       loading: false,
-      balance: 0
+      balance: 0,
+      stakedDecimal: 18,
+      ctokenDecimal: 18
     }
   },
   computed: {
@@ -61,17 +63,18 @@ export default {
     ...mapState('user', ['userGraphInfo']),
     ...mapState('currentCommunity', ['communityId']),
     ...mapState('web3', ['fees']),
+    ...mapGetters('web3', ['tokenDecimals']),
     staked(){
       if (!this.userStaked) return 0;
       return this.userStaked[this.card.id] ?? 0
     },
     formBalance(){
       const balance = this.balance;
-      return parseFloat(balance.toString() / (1e18));
+      return parseFloat(balance.toString() / (10 ** this.ctokenDecimal));
     },
     formStaked(){
       const staked = this.staked;
-      return parseFloat(staked.toString() / (1e18))
+      return parseFloat(staked.toString() / (10 ** this.stakedDecimal))
     }, 
     fee() {
       if (this.fees){
@@ -96,7 +99,6 @@ export default {
     }
   },
   methods: {
-
     hide() {
       if (this.loading) return;
       this.$emit("hideStakeMask");
@@ -152,7 +154,8 @@ export default {
   },
   async mounted () {
     // get user's balance
-    console.log(this.userGraphInfo);
+    this.ctokenDecimal = this.tokenDecimals(this.card.community.cToken)
+    this.stakedDecimal = this.tokenDecimals(this.card.asset)
     this.balance = await getERC20Balance(this.card.asset)
   },
 }

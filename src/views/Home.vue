@@ -106,7 +106,7 @@ export default {
   },
   computed: {
     ...mapState(['prices', 'tvl']),
-    ...mapState('web3', ['walnutInfo', 'allTokens']),
+    ...mapState('web3', ['walnutInfo']),
     ...mapState('community', ['allCommunityInfo']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),

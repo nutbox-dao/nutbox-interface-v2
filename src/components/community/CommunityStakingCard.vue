@@ -65,7 +65,7 @@
 
 <script>
 import StakingHomeChainAssetModal from '@/components/common/StakingHomeChainAssetModal'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { withdrawReward, getPoolType } from '@/utils/web3/pool'
 import { formatUserAddress, handleApiErrCode } from '@/utils/helper'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
@@ -95,6 +95,7 @@ export default {
     ...mapState('pool', ['totalStaked', 'userStaked', 'approvements', 'userReward', 'loadingApprovements']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
+    ...mapGetters('web3', ['tokenDecimals', 'tokenByKey']),
     type() {
       return getPoolType(this.card.poolFactory, this.card.chainId)
     },
@@ -102,7 +103,7 @@ export default {
     ...mapState(['prices']),
     stakeToken() {
         if (this.type !== 'erc20staking' || !this.allTokens) return {}
-        const token = this.allTokens.filter(t => t.address.toLowerCase() == this.card.asset)[0]
+        const token = this.tokenByKey(this.card.asset)
         return token
     },
     pendingReward () {
@@ -110,7 +111,7 @@ export default {
       const pendingBn =
         this.userReward[this.card.id]
       if (!pendingBn) return 0
-      return parseFloat(pendingBn.toString() / 1e18).toFixed(3)
+      return parseFloat(pendingBn.toString() / (10 ** this.cToken.decimal)).toFixed(3)
     },
     totalDeposited () {
       if (!this.totalStaked) return 0;
@@ -118,7 +119,7 @@ export default {
         this.totalStaked[this.card.id]
       if (!total) return 0
       if (this.type === 'erc20staking') {
-        return total.toString() / 1e18
+        return total.toString() / (10 ** this.stakeToken.decimal)
       } else if (this.type === 'steem') {
         return total.toString() / 1e6 * this.vestsToSteem
       } else if (this.type === 'hive') {

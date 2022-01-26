@@ -241,7 +241,7 @@ export const getCtokenBalance = async () => {
           account
         ],
         returns:[
-          [c.ctoken, val => val.toString() / 1e18]
+          [c.ctoken, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](c.ctoken))]
         ]
       })), Multi_Config)
       resolve(result.results.transformed)

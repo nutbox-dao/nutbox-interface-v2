@@ -69,12 +69,12 @@
             <div class="c-input-group c-input-group-bg">
               <b-form-input
                 :disabled="true"
-                :placeholder="communityData ? (communityData.retainedRevenue.toString() / 1e18).toString() : '0'"
+                :placeholder="communityData ? (communityData.retainedRevenue.toString() / (10 ** cToken.decimal)).toString() : '0'"
               >
               </b-form-input>
               <span class="c-append">{{ cToken.symbol }}</span>
             </div>
-            <button class="primary-btn ml-2" style="width: 5rem" :disabled="withdrawingRevenue || !communityData || (communityData.retainedRevenue.toString() / 1e18) === 0" @click="withdrawRevenue">
+            <button class="primary-btn ml-2" style="width: 5rem" :disabled="withdrawingRevenue || !communityData || (communityData.retainedRevenue.toString() / (10 ** cToken.decimal)) === 0" @click="withdrawRevenue">
               <b-spinner small type="grow" v-show="!communityData || withdrawingRevenue" />
               {{$t("operation.withdraw") }}
             </button>
@@ -487,7 +487,7 @@ export default {
           this.communityData.retainedRevenue = ethers.constants.Zero
           this.$store.commit('community/saveCommunityData', this.communityData)
         }else{
-          let retained = (this.communityData.retainedRevenue.toString() / 1e18)
+          let retained = (this.communityData.retainedRevenue.toString() / (10 ** cToken.decimal))
           const temBalacne = this.communityBalance
           this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
           retained = this.communityBalance > retained ? 0 : (retained - temBalacne)
@@ -571,13 +571,13 @@ export default {
         const interval = setInterval(() => {
           // update admin's balance
           getERC20Balance(this.cToken.address).then(res => {
-            this.adminBalance = res.toString() / 1e18
+            this.adminBalance = res.toString() / (10 ** this.cToken.decimal)
           }).catch(res => {
             console.log(33, res);
           })
           // update dao fund balance
           getCommunityBalance(communityInfo.id, this.cToken.address).then(res => {
-            this.communityBalance = (res.toString() / 1e18).toFixed(2)
+            this.communityBalance = (res.toString() / (10 ** this.cToken.decimal)).toFixed(2)
           }).catch()
         }, 1000)
         this.$once('hook:beforeDestroy', () => {

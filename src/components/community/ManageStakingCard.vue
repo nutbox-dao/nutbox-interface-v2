@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import { closePool, getPoolType } from '@/utils/web3/pool'
 import { getERC20Info } from '@/utils/web3/asset'
@@ -103,6 +103,7 @@ export default {
   computed: {
     ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
     ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
+    ...mapGetters('web3', ['tokenByKey']),
     ...mapState({
       steemVests: state => state.steem.vestsToSteem,
       hiveVests: state => state.hive.vestsToHive,
@@ -116,7 +117,7 @@ export default {
     },
     stakeToken() {
       if (this.type !== 'erc20staking' || !this.allTokens) return {}
-      const token = this.allTokens.filter(t => t.address.toLowerCase() == this.pool.asset.toLowerCase())[0]
+      const token = this.tokenByKey(this.pool.asset)
       return token
     },
     tvl () {

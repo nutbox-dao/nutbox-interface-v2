@@ -524,7 +524,7 @@ export const getApprovements = async (pools) => {
           pool.id
         ],
         returns: [
-          [pool.id, val => val.toString() / 1e18 > 1e10]
+          [pool.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](pool.asset)) > 1e12]
         ]
       }))
       const result = await aggregate(calls, Multi_Config)

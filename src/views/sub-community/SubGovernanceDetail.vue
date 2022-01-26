@@ -264,7 +264,7 @@ export default {
       try {
         this.voteing = true;
         const b = await getERC20Balance(this.cToken.address)
-        const score = b.toString() / 1e18;
+        const score = b.toString() / (10 ** this.cToken.decimal);
         this.vote.communityId = this.communityId;
         this.vote.proposalId = this.proposal.id;
         this.vote.voteType = this.type == "agree" ? 1 : 0;

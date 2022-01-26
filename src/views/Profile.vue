@@ -119,6 +119,7 @@ export default {
     ...mapState('web3', ['account', 'allTokens']),
     ...mapState('user', ['userGraphInfo']),
     ...mapState('community', ['allCommunityInfo']),
+    ...mapGetters('web3', ['tokenByKey']),
     joinedCommunity() {
       if (!this.userGraphInfo || !this.userGraphInfo.inCommunities) return [];
       if (!this.allCommunityInfo || this.allCommunityInfo.length === 0) return [];
@@ -177,10 +178,10 @@ export default {
       if(!this.allTokens) return;
       let ctokens = []
       Object.keys(res).forEach(address => {
-        const token = this.allTokens.filter(t => t.address.toLowerCase() === address.toLowerCase())
-        if (token && token.length > 0){
+        const token = this.tokenByKey(address)
+        if (token){
           ctokens.push({
-            ...token[0],
+            ...token,
             balance: res[address]
           })
         }

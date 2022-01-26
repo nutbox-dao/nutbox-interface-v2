@@ -267,12 +267,12 @@ export default {
       await sleep(0.2)
     }
     this.fund = this.communityInfo.daoFund
-    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / 1e18;
     getCToken(this.communityId, true).then(async (res) => {
       if (!res.isMintable) {
         const bb = await getCommunityBalance(this.communityId, res.address)
         this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
       }
+    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** res.decimal);
       // start watch history
       while (!this.operationHistory || this.operationHistory.length === 0) {
         await sleep(0.3)

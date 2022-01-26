@@ -214,7 +214,8 @@ export const getCommunityRewardPerBlock = async (communityId) => {
     try{
       const contract = await getContract('LinearCalculator')
       const amount = await contract.getCurrentRewardPerBlock(communityId)
-      resolve(amount.toString() / 1e18)
+      const ctoken = await getCToken(communityId)
+      resolve(amount.toString() / (10 ** ctoken.decimal))
     }catch(e) {
 
     }
@@ -438,13 +439,14 @@ export const chargeCommunityBalance = async (amount) => {
   return new Promise(async (resolve, reject) => {
     let communityId = null;
     let erc20;
+    let ctoken;
     try {
       communityId = await getMyCommunityContract();
       if (!communityId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }
-      const ctoken = await getCToken(communityId);
+      ctoken = await getCToken(communityId);
       erc20 = await getContract('ERC20', ctoken.address, false);
     } catch (e) {
       reject(e);
@@ -454,11 +456,11 @@ export const chargeCommunityBalance = async (amount) => {
     try {
       let account = await getAccounts();
       const balance = await erc20.balanceOf(account);
-      if (balance.toString() / 1e18 <= parseFloat(amount)){
+      if (balance.toString() / (10 ** ctoken.decimal) <= parseFloat(amount)){
         reject(errCode.INSUFIENT_BALANCE);
         return;
       }
-      const tx = await erc20.transfer(communityId, ethers.utils.parseUnits(amount.toString(), 18));
+      const tx = await erc20.transfer(communityId, ethers.utils.parseUnits(amount.toString(), ctoken.decimal));
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
@@ -688,7 +690,7 @@ export const watchMemberBalance = (callback) => {
           u.address
         ],
         returns: [
-          [u.address, val => val.toString() / 1e18]
+          [u.address, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](ctoken))]
         ]
       })), Multi_Config)
       callback(res.results.transformed)
@@ -824,8 +826,8 @@ export const getApprovement = async (token, target) => {
     try{
       const contract = await getContract('ERC20', token)
       const account = await getAccounts()
-      const res = await contract.allowance(account, target)
-      resolve(res.toString() / 1e18 > 1e12)
+      const [decimals, allowrance] = await Promise.all([contract.decimals(), contract.allowance(account, target)]) 
+      resolve(allowrance.toString() / (10 ** decimals) > 1e12)
     }catch(e) {
       // console.log('get approvement fail', e);
       reject(e)

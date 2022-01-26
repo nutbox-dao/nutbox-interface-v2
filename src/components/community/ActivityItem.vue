@@ -67,12 +67,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('web3', ['allTokens']),
+    ...mapState('web3', ['allTokens', 'tokenByKey']),
     ...mapState('user', ['users']),
     ...mapState('steem', ['vestsToSteem']),
     ...mapState('hive', ['vestsToHive']),
     ...mapState('currentCommunity', ['cToken']),
     ...mapGetters('user', ['getUserByAddress']),
+    ...mapGetters('web3', ['tokenDecimals'])
   },
   methods: {
     gotoTransaction() {
@@ -103,6 +104,7 @@ export default {
     }
     this.username = accName
     let symbol;
+    let decimals = 18;
     let ctokenSymbol;
     let delegatee;
     if (this.operation.asset && this.operation.asset.length > 0 && this.operation.type !== 'ADMINSETDAOFUND' && this.operation.type !== 'ADMINWITHDRAWNREVENUE' ){
@@ -111,13 +113,14 @@ export default {
           await sleep(0.3)
         }
         const tokenAddress = ethers.utils.getAddress(this.operation.asset)
-        const token = this.allTokens.filter(t => t.address == tokenAddress)[0]
-        symbol = token.symbol;
+        const token = this.tokenByKey[tokenAddress]
+        symbol = token && token.symbol;
+        decimals = token && token.decimal
       }catch(e){
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
-    const amount = (this.operation.amount?.toString() / 1e18).toFixed(2)
+    const amount = (this.operation.amount?.toString() / (10 ** decimals)).toFixed(2)
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":
@@ -156,7 +159,7 @@ export default {
           await sleep(0.2)
         }
         ctokenSymbol = this.cToken.symbol;
-        this.description = (this.showName ? ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
+        this.description = (this.showName ? ' harvest' : 'Harvest') + ` ${(this.operation.amount.toString() / (10 ** this.tokenDecimals(this.cToken.decimal))).toFixed(2)} ${ctokenSymbol} from pool: ${this.operation.pool.name}`
         break;
       case "HARVESTALL":
         this.opType = "Harvest all"

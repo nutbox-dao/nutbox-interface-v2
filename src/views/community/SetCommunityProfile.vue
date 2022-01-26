@@ -416,7 +416,7 @@ export default {
       }
       const ctoken = this.communityInfo && this.communityInfo.cToken;
       if (!ctoken || !ctoken.totalSupply) return 0;
-      return ctoken.totalSupply.toString() / 1e18;
+      return ctoken.totalSupply.toString() / (10 ** ctoken.decimal);
     }
   },
   async mounted () {

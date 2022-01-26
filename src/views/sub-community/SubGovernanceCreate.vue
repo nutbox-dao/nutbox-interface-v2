@@ -200,7 +200,7 @@ export default {
         }
         this.commiting = true
         const b = await getERC20Balance(this.cToken.address);
-        if (b.toString() / 1e18 < this.form.threshold) {
+        if (b.toString() / (10 ** this.cToken.decimal) < this.form.threshold) {
           this.$bvToast.toast(this.$t("nps.validationWarning.basic.minScore", [
             this.form.threshold,
             this.form.symbol,
