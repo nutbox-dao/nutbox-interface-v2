@@ -145,7 +145,7 @@ export default {
           })
           return;
         }
-        if (this.socialForm.discord && this.socialForm.discord.indexOf('https://discord.com/') === -1){
+        if (this.socialForm.discord && this.socialForm.discord.indexOf('https://discord') === -1){
           this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Discord'}), {
             title: this.$t('tip.tips'),
             variant: 'info'
