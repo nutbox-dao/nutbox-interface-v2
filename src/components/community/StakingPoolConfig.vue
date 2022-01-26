@@ -4,7 +4,7 @@
     <i v-else :disable="!enableOp" class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="pool-config-modal-content overflow-hidden d-flex flex-column">
       <div class="mt-4 mb-4 text-center">{{ type === 'create' ? 'Create new pool' : 'Pool Configuration' }}</div>
-      <div class="col-lg-10 mx-auto custom-form overflow-hidden flex-fill d-flex flex-column">
+      <div class="col-lg-10 mx-auto custom-form ">
         <b-form-group class="mb-4"
                       v-if="type === 'create' && activePools && activePools.length > 0"
                       label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
@@ -350,6 +350,12 @@ export default {
 .pool-config-modal-content {
   height: 60vh;
 }
+.custom-form {
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .pool-form {
   padding: 1rem 1.2rem 1.2rem;
 
@@ -383,6 +389,17 @@ export default {
     }
   }
 }
+@media (max-height: 820px) {
+  .pool-config-modal-content {
+    height: 80vh;
+  }
+}
+@media (max-height: 600px) {
+  .custom-form {
+    overflow: auto;
+    display: block;
+  }
+}
 @media (min-width: 992px) {
   .pool-chart-box {
     flex: 1;
@@ -399,9 +416,11 @@ export default {
   .pool-chart-box {
     flex-direction: column;
     overflow: auto;
+    align-items: center;
   }
   .pool-data-box {
     box-sizing: border-box;
+    width: 100%;
   }
 }
 </style>
