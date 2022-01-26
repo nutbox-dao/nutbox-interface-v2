@@ -11,7 +11,7 @@
           :label="$t('community.communityName')"
         >
           <b-form-input
-            v-model="form.name"
+            v-model.trim="form.name"
             minlength="4"
             maxlength="32"
             :placeholder="$t('placeHolder.inputName')"
@@ -26,7 +26,7 @@
           :label="$t('community.communityLink')"
         >
           <b-form-input
-            v-model="form.website"
+            v-model.trim="form.website"
             :placeholder="$t('placeHolder.inputLink')"
           ></b-form-input>
           <span class="font12 text-grey-5">{{ $t('commen.optional') }}</span>
@@ -40,7 +40,7 @@
           :label="$t('community.communityDesc')"
         >
           <b-form-textarea
-            v-model="form.description"
+            v-model.trim="form.description"
             :placeholder="$t('placeHolder.inputDesc')"
             minlength="4"
             maxlength="1024"
@@ -437,9 +437,9 @@ export default {
         }
       }
 
-      if (!name || name.length === 0) {
+      if (!name || name.trim().length === 0) {
         tips = this.$t('tip.needName')
-      } else if (name && name.length > 32) {
+      } else if (name && name.trim().length > 32) {
         tips = this.$t('tip.communityNameLimit', { count: 32 })
       } else if (!description || description.length === 0) {
         tips = this.$t('tip.needDescription')

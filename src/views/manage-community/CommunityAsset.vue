@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- strategy -->
-    <div class="c-card mt-3">
+    <div class="c-card mt-3" style="padding-bottom:2.5rem">
       <div class="font20 font-bold">Token Release Strategy</div>
       <Progress :progress-data="distributions"></Progress>
     </div>

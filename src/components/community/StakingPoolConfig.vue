@@ -10,7 +10,7 @@
                       label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
                       label-cols-md="3" content-cols-md="9"
                       label="Pool Name">
-          <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model="newName"></b-form-input>
+          <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model.trim="newName"></b-form-input>
         </b-form-group>
         <!-- token logo -->
         <b-form-group

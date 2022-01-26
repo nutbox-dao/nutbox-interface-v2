@@ -7,7 +7,7 @@
         <div class="mb-2 font14">Your {{delegateType}} delegatee account</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <b-input-group class="d-flex flex-between-center">
-            <b-input :placeholder="$t('placeHolder.inputDelegatee')" class="flex-full" v-model="delegatee"></b-input>
+            <b-input :placeholder="$t('placeHolder.inputDelegatee')" class="flex-full" v-model.trim="delegatee"></b-input>
           </b-input-group>
         </div>
         <div class="col-md-6 mx-auto mt-5">
