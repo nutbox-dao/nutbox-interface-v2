@@ -95,7 +95,7 @@ export default {
       let tokenByKey = {}
       for (let i in allTokens) {
         icons[allTokens[i].address.toLowerCase()] = allTokens[i].icon;
-        decimals[allTokens[i].address.toLowerCase()] = allTokens[i].token_decimal;
+        decimals[allTokens[i].address.toLowerCase()] = allTokens[i].decimal;
         tokenByKey[allTokens[i].address.toLowerCase()] = allTokens[i]
       }
       state.tokenByKey = tokenByKey;

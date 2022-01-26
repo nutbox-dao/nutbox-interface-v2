@@ -309,7 +309,7 @@ export default {
         const strategyParamsObj = {}
         strategyParamsObj.address = token.address
         strategyParamsObj.symbol = token.symbol
-        strategyParamsObj.decimals = token.token_decimal
+        strategyParamsObj.decimals = token.decimal
         this.form.symbol = token.symbol
 
         const currentItem = {

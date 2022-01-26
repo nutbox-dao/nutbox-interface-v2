@@ -6,7 +6,7 @@
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
         <div class="type-box type-box-bsc">
           <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
-            BSC <br> Staking
+            ERC20 <br> Staking
           </button>
         </div>
         <div class="type-box type-box-steem">
