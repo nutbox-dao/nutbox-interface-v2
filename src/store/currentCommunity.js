@@ -12,6 +12,7 @@ export default {
       cToken: null,
       operationHistory: null,
       allUsers: null,
+      communityBalance: 0, // only non-mintable communtiy has this field
       feeRatio: 0,
       operationCount: 0,
       specifyDistributionEras: [],
@@ -38,6 +39,9 @@ export default {
       },
       saveCtoken (state, cToken) {
         state.cToken = cToken
+      },
+      saveCommunityBalance (state, communityBalance) {
+        state.communityBalance = communityBalance
       },
       saveFeeRatio (state, feeRatio) {
         state.feeRatio = feeRatio

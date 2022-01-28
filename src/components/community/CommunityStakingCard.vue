@@ -60,6 +60,34 @@
         </div>
       </div>
     </div>
+    <!-- showAttention tip: when the balance of community cant cover the amount -->
+    <b-modal
+      v-model="showAttention"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form">
+        <h3 style="color: red;text-align:center">{{ $t("tip.tips") }}</h3>
+        <div class="my-3 font20 line-height24 text-center">
+          {{ $t("community.insufficientBalance") }}
+        </div>
+        <div class="mb-4 font20 line-height24 text-center">
+          {{ `Please contact community manager to recharge balance.` }}
+        </div>
+
+        <div class="d-flex justify-content-between" style="gap: 2rem">
+          <button
+            class="primary-btn"
+            @click="showAttention = false"
+          >
+            {{ $t("operation.cancel") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -89,7 +117,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['allPools']),
+    ...mapState('currentCommunity', ['allPools', 'cToken', 'communityBalance']),
     ...mapState('web3', ['allTokens']),
     ...mapState(['prices']),
     ...mapState('pool', ['totalStaked', 'userStaked', 'approvements', 'userReward', 'loadingApprovements']),
@@ -159,7 +187,8 @@ export default {
     return {
       isWithdrawing: false,
       stakers: [],
-      rewardPerBlock: 0
+      rewardPerBlock: 0,
+      showAttention: false
     }
   },
   mixins: [showToastMixin],
@@ -187,6 +216,12 @@ export default {
     },
     async withdraw () {
       try {
+        if (!this.cToken.isMintable) {
+          if (this.userReward[this.card.id] > this.communityBalance) {
+            this.showAttention = true;
+            return;
+          }
+        }
         this.isWithdrawing = true
         await withdrawReward(this.card.community.id, this.card.id)
         this.$bvToast.toast(this.$t('tip.withdrawSuccess'), {

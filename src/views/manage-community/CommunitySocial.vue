@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     checkInput() {
-        if (this.socialForm.github && this.socialForm.github.indexOf('https://github.com/') === -1){
+        if (this.socialForm.github && this.socialForm.github.indexOf('https://github.com') === -1){
           this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Github'}), {
             title: this.$t('tip.tips'),
             variant: 'info'
@@ -152,14 +152,21 @@ export default {
           })
           return;
         }
-        if (this.socialForm.telegram && this.socialForm.telegram.indexOf('https://t.me/') === -1){
+        if (this.socialForm.telegram && this.socialForm.telegram.indexOf('https://t.me') === -1){
           this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Telegram'}), {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
           return;
         }
-        if (this.socialForm.twitter && this.socialForm.twitter.indexOf('https://twitter.com/') === -1){
+        if (this.socialForm.facebook && this.socialForm.facebook.indexOf('https://facebook.com') === -1){
+          this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Facebook'}), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.socialForm.twitter && this.socialForm.twitter.indexOf('https://twitter.com') === -1){
           this.$bvToast.toast(this.$t('tip.wrongSocialInfo', {type:'Twitter'}), {
             title: this.$t('tip.tips'),
             variant: 'info'

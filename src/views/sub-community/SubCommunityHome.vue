@@ -13,8 +13,8 @@
                  :href="baseInfo && baseInfo.website"
                  target="_blank">{{ baseInfo && baseInfo.name }}</a>
               <div v-else>{{ baseInfo && baseInfo.name }}</div>
-              <i class="official-link-icon ml-2" v-show="baseInfo && baseInfo.website && baseInfo.website.indexOf('https://') !== -1"></i>
               <i class="v-line mx-2" v-show="baseInfo && baseInfo.website && baseInfo.website.length > 4"></i>
+              <i class="official-link-icon ml-2" @click="open(baseInfo.website)" v-show="baseInfo && baseInfo.website && baseInfo.website.indexOf('https://') !== -1"></i>
             </div>
             <div class="desc font14 line-height18 mt-2"
                  v-html="(baseInfo && baseInfo.description)"></div>
@@ -199,7 +199,6 @@ export default {
   },
   data () {
     return {
-      communityBalanceValue: 0,
       retainedRevenue: 0,
       loadingPool: true,
       laodingHistory: false,
@@ -208,7 +207,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
@@ -228,9 +227,16 @@ export default {
         return false;
       }
       return !this.cToken.isMintable
+    },
+    communityBalanceValue () {
+      if (!this.cToken) return 0;
+      return this.communityBalance.toString() / (10 ** this.cToken.decimal)
     }
   },
   methods: {
+    open(url) {
+      window.open(url, '_blank')
+    },
     formatUserAddress (address, long = true) {
       if (!address) return 'Loading Account'
       if (long) {
@@ -263,30 +269,23 @@ export default {
     }
   },
   async mounted () {
-    while (!this.communityInfo) {
+    while (!this.communityInfo || !this.cToken) {
       await sleep(0.2)
     }
     this.fund = this.communityInfo.daoFund
-    getCToken(this.communityId, true).then(async (res) => {
-      if (!res.isMintable) {
-        const bb = await getCommunityBalance(this.communityId, res.address)
-        this.communityBalanceValue = formatBalance(bb.toString() / (10 ** res.decimal))
-      }
-    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** res.decimal);
-      // start watch history
-      while (!this.operationHistory || this.operationHistory.length === 0) {
-        await sleep(0.3)
-      }
-      const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
-      interval.start();
-      this.$once('hook:beforeDestroy', () => {
-        interval.stop();
-      })
-    }).catch(e => {
-      console.log('[Sub community home]: get ctoken fail', e);
-    })
+
     getSpecifyDistributionEras(this.communityId).then(res => {
       console.log('dis', res);
+    })
+    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
+    // start watch history
+    while (!this.operationHistory || this.operationHistory.length === 0) {
+      await sleep(0.3)
+    }
+    const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
+    interval.start();
+    this.$once('hook:beforeDestroy', () => {
+      interval.stop();
     })
   },
 }

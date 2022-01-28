@@ -576,7 +576,7 @@ export default {
             console.log(33, res);
           })
           // update dao fund balance
-          getCommunityBalance(communityInfo.id, this.cToken.address).then(res => {
+          getCommunityBalance({communityId: communityInfo.id, ctokenAddress: this.cToken.address}).then(res => {
             this.communityBalance = (res.toString() / (10 ** this.cToken.decimal)).toFixed(2)
           }).catch()
         }, 1000)

@@ -111,8 +111,8 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { getSpecifyCommunityInfo } from '@/utils/graphql/community'
-import { getApprovement } from '@/utils/web3/community'
-import { handleApiErrCode } from '@/utils/helper';
+import { getApprovement, getCommunityBalance } from '@/utils/web3/community'
+import { handleApiErrCode, rollingFunction } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
 import { NutAddress } from '@/config'
 
@@ -132,7 +132,6 @@ export default {
       }
       return {}
     },
-
   },
   data () {
     return {
@@ -156,11 +155,22 @@ export default {
         this.$store.commit('community/saveLoadingApproveCommunity', false)
       })
       getSpecifyCommunityInfo(this.communityId).then(community => {
-        getCToken(community.id, true).then(ctoken => {
+        getCToken(community.id).then(ctoken => {
           this.saveCtoken(ctoken)
+          if (!ctoken.isMintable) {
+            const interval = rollingFunction(getCommunityBalance, { communityId: this.communityId, ctokenAddress: ctoken.address }, 3, (balance) => {
+              this.saveCommunityBalance(balance);
+            })
+            interval.start();
+            this.$once('hook:beforeDestroy', () => {
+              interval.stop();
+            })
+          }
         }).catch(e => {
-          console.log('get ctoken fail');
+          console.log('get ctoken fail:', e);
         })
+
+
         this.saveFeeRatio(community.feeRatio)
         this.saveOperationCount(community.operationCount)
         this.saveAllPools(community.pools)
@@ -189,7 +199,8 @@ export default {
       'saveFeeRatio',
       'saveOperationCount',
       'saveOperationHistory',
-      'saveAllUsers']),
+      'saveAllUsers',
+      'saveCommunityBalance']),
       ...mapMutations('pool', ['clear']),
       openTab(url) {
         window.open(url, '_blank')

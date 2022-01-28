@@ -377,6 +377,7 @@ module.exports = {
     noJoinedPool: "No joined pools",
     exploreCommunity: 'Explore Communities',
     retainedRevenue: 'Retained Revenue',
+    insufficientBalance: "Insufficient Community Balance",
 
     noCommunity: "You have no community yet",
 

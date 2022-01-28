@@ -786,7 +786,7 @@ export const getCommunityDaoRatio = async (communityId) => {
  * @param {String} communityId  community address
  * @param {String} ctokenaddress c token address
  */
-export const getCommunityBalance = async (communityId, ctokenAddress) => {
+export const getCommunityBalance = async ({communityId, ctokenAddress}) => {
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20', ctokenAddress)
