@@ -41,6 +41,9 @@ ponsived {
     padding-right: 24px;
   }
 }
+.w-60px {
+  width: 60px;
+}
 .tr-light.b-table-row-selected {
   background-color: var(--block-bg) !important;
   color: var(--sub-primary);
@@ -408,6 +411,15 @@ input::-webkit-input-placeholder {
     box-sizing: border-box;
     min-width: 2rem;
     border-radius: .6rem;
+  }
+  &-24 {
+    height: 24px;
+    max-height: 24px;
+    width: 24px;
+    max-width: 24px;
+    box-sizing: border-box;
+    min-width: 24px;
+    border-radius: 8px;
   }
   &-bg {
     color: white;

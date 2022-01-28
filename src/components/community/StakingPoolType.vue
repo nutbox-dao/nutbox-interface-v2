@@ -4,8 +4,8 @@
     <div class="pool-type-modal-content d-flex flex-column">
       <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
-        <div class="type-box type-box-bsc">
-          <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
+        <div class="type-box type-box-moonbeam">
+          <button class="moonbeam-btn" @click="$emit('onType', 'erc20staking')">
             ERC20 <br> Staking
           </button>
         </div>
@@ -54,6 +54,9 @@ export default {
   width: 180px;
   height: 260px;
   position: relative;
+  &-moonbeam {
+    background-image: url("~@/static/images/m-bg-moonbeam.png"), url("~@/static/images/m-bg-icon-moonbeam.png");
+  }
   &-bsc {
     background-image: url("~@/static/images/m-bg-bsc.png"), url("~@/static/images/m-bg-icon-bsc.svg");
   }
@@ -73,6 +76,9 @@ export default {
     border-radius: 2.8rem;
     position: absolute;
     bottom: 1.6rem;
+  }
+  .moonbeam-btn {
+    background-image: linear-gradient(to bottom, #66EDEA, #53CBC8);
   }
   .bsc-btn {
     background-color: #F5B638;

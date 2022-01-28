@@ -55,7 +55,7 @@
                 {{ user.name ? user.name : (user.id.slice(0, 6) + '...' + user.id.slice(36, 42)) }}
               </b-popover>
             </div>
-            <span class="ml-1">{{ card.stakersCount }}</span>
+            <span class="ml-1" style="line-height: 28px">{{ card.stakersCount }}</span>
           </div>
         </div>
       </div>
