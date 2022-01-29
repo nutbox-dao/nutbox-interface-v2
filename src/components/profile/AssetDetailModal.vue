@@ -34,8 +34,8 @@
                  :src="row.item.icon || './default.png'" alt="">
             <empty-img v-else width="1.6rem" height="1.6rem" class="rounded-circle"></empty-img>
           </template>
-          <template #cell(actions)>
-            <button class="symbol-btn symbol-btn-24 symbol-btn-outline mx-auto asset-add-btn">
+          <template #cell(actions)="row">
+            <button @click="addToWallet(row.item)" class="symbol-btn symbol-btn-24 symbol-btn-outline mx-auto asset-add-btn">
               <i class="add-icon add-icon-primary"></i>
             </button>
           </template>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { addAssetToWallet } from '@/utils/web3/web3'
 export default {
   name: 'AssetDetailModal',
   props: {
@@ -71,10 +72,16 @@ export default {
         { key: 'symbol', label: 'Symbol' },
         { key: 'balance', label: 'Balance', class: 'text-center' },
         { key: 'value', label: 'Value', class: 'text-right' },
-        { key: 'actions', label: '', class: 'w-60px' }
+        { key: 'actions', label: 'Add to wallet', class: 'w-60px' }
       ]
     }
-  }
+  },
+  methods: {
+    async addToWallet(item) {
+      console.log(item);
+      await addAssetToWallet(item.address, item.symbol, item.decimal, item.icon)
+    }
+  },
 }
 </script>
 

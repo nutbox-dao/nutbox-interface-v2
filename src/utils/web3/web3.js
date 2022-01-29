@@ -168,7 +168,7 @@ export const lockStatusChanged = async (refresh) => {
 /**
  * Add asset to metamask
  */
-export const addAssetToWallet = async (address, symbol, decimals, image) => {
+ export const addAssetToWallet = async (address, symbol, decimals, image) => {
   const metamask = await getEthWeb()
   metamask.request({
     method: 'wallet_watchAsset',

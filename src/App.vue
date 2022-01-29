@@ -116,7 +116,7 @@
           <div v-else class="page-title font-bold font28 line-height32">{{ pageTitle }}</div>
           <div class="address-box" @click="connect">
             <i class="wallet-icon"></i>
-            <div class="font12">{{ address || $t("commen.connectMetamask") }}</div>
+            <div class="font12">{{ metamaskConnected ? address : $t("commen.connectMetamask") }}</div>
           </div>
         </div>
         <div class="page-content">
