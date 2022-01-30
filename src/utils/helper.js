@@ -9,7 +9,7 @@ var cryptoOptions = {
   key: process.env.VUE_APP_CRYPTO_KEY,
   iv: process.env.VUE_APP_CRYPTO_IV,
   method: process.env.VUE_APP_CRYPTO_METHOD,
-};
+}
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -19,13 +19,21 @@ export const firstToUpper = function (str) {
     return str;
   }
   return str.trim().replace(str[0], str[0].toUpperCase());
-};
+}
 
 export const sleep = async function (interval = 6) {
   return new Promise((resolve) => {
     setTimeout(resolve, interval * 1000); // 6秒
   });
-};
+}
+
+export function utf8ToHex(str) 
+{
+    return Array.from(str).map(c =>
+        c.charCodeAt(0) < 128 ? c.charCodeAt(0).toString(16) :
+        encodeURIComponent(c).replace(/\%/g,'').toLowerCase()
+    ).join('');
+}
 
 export const retryMethod = async function (func, retries = 5, interval = 1) {
   return new Promise((resolve, reject) => {
