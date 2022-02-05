@@ -103,7 +103,9 @@ export const approvePool = async (pool) => {
       }
       
       try{
-        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(60)).toString())
+        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(60)).toString(), {
+          gasLimit: 75402
+        })
         await waitForTx(tx.hash);
         resolve(tx.hash)
       }catch(e){
