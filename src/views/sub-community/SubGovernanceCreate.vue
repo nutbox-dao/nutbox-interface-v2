@@ -197,6 +197,14 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
+          return;
+        }
+        if (this.proposal.end_block < this.blockNum + 3) {
+          this.$bvToast.toast(this.$t('nps.blockExceed'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
         }
         this.commiting = true
         const b = await getERC20Balance(this.cToken.address);
