@@ -3,12 +3,13 @@
     <i class="modal-back-icon" @click="$emit('back')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
-        <div class="my-4 modal-title">Create staking pool on BSC</div>
+        <div class="my-4 modal-title">Create staking pool on {{chainName}}</div>
         <div class="custom-form col-lg-8 mx-auto">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full"
                        :placeholder="$t('asset.tokenAddress')"
+                       @keyup="checkTokenAddress"
                        v-model="provideAddress"></b-input>
             </b-input-group>
             <div class="c-append">
@@ -51,6 +52,8 @@
 import TokenItem from '@/components/community/TokenItem'
 import { mapState } from 'vuex'
 import { getERC20Info } from '@/utils/web3/asset'
+import { BSC_CHAIN_NAME } from '@/config'
+import { ethers } from 'ethers'
 
 export default {
   name: 'StakingBSCPool',
@@ -62,7 +65,8 @@ export default {
       provideLogo: null,
       provideName: null,
       provideSymbol: null,
-      provideAddress: null
+      provideAddress: null,
+      chainName: BSC_CHAIN_NAME,
     }
   },
   computed: {
@@ -74,6 +78,7 @@ export default {
   },
   methods: {
     async checkTokenAddress () {
+      if (!ethers.utils.isAddress(this.provideAddress)) return;
       this.loading = true
       try{
         const token = await getERC20Info(this.provideAddress);

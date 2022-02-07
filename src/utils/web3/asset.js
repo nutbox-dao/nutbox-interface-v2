@@ -48,7 +48,7 @@ export const getCToken = async (communityId, update=false) => {
     }
 
     try{
-      const [tokenAddress, isMintable] = await Promise.all([contract.communityToken(), contract.isMintableCommunityToken()])
+      const [tokenAddress, isMintable] = await Promise.all([contract.getCommunityToken(), contract.isMintableCommunityToken()])
       try{
         const cToken = await getERC20Info(tokenAddress);
         cToken['isMintable'] = isMintable;

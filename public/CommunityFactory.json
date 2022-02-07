@@ -111,31 +111,14 @@
           "type": "address"
         },
         {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "symbol",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "supply",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            }
-          ],
-          "internalType": "struct CommunityFactory.TokenProperties",
-          "name": "properties",
-          "type": "tuple"
+          "internalType": "address",
+          "name": "communityTokenFactory",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "tokenMeta",
+          "type": "bytes"
         },
         {
           "internalType": "address",

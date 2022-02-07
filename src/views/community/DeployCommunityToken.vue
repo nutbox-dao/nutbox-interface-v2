@@ -64,6 +64,7 @@
             <div class="c-input-group c-input-group-border">
               <b-input-group class="d-flex flex-between-center">
                 <b-input class="flex-full"
+                         @keyup="checkTokenAddress"
                          :placeholder="$t('asset.tokenAddress')"
                          v-model="provideAddress"></b-input>
               </b-input-group>
@@ -355,8 +356,8 @@ export default {
       this.cardStep = 0;
     },
     async checkTokenAddress () {
+      if (!ethers.utils.isAddress(this.provideAddress)) return;
       this.provideAddress = getAddress(this.provideAddress);
-      console.log(this.provideAddress)
       if (this.provideAddress) {
         try {
           this.loading = true

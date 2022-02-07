@@ -12,7 +12,7 @@ import {
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
-import { sleep } from "@/utils/helper";
+import { sleep, utf8ToHex } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
 import { getAccounts } from "@/utils/web3/account";
@@ -222,6 +222,16 @@ export const getCommunityRewardPerBlock = async (communityId) => {
   })
 }
 
+function makeSimpleMintableERC20Metadata(name, symbol, supply, recipient) {
+  const meta = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(name.length), 1).substring(2)
+   + utf8ToHex(name)
+   + ethers.utils.hexZeroPad(ethers.utils.hexlify(symbol.length), 1).substring(2)
+   + utf8ToHex(symbol)
+   + ethers.utils.hexZeroPad(ethers.utils.parseUnits(supply.toString(), 18), 32).substring(2)
+   + recipient.substring(2)
+   return meta
+}
+
 /**
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
@@ -292,15 +302,11 @@ export const createCommunity = async (cToken, distribution) => {
         }
       })
       // call contract 
-      const preMine = (cToken && cToken.supply) ? cToken.supply.toString() : "0"
+      const preMine = (cToken && cToken.supply) ? cToken.supply : 0
       const res = await contract.createCommunity(
         isMintable ? ethers.constants.AddressZero : cToken.address,
-        {
-          name: cToken.name,
-          symbol: cToken.symbol,
-          supply: ethers.utils.parseUnits(preMine, 18),
-          owner: account
-        },
+        contractAddress['SimpleMintableERC20Factory'],
+        isMintable ? makeSimpleMintableERC20Metadata(cToken.name, cToken.symbol, preMine, account) : '0x',
         contractAddress["LinearCalculator"],
         distributionStr);
       await waitForTx(res.hash);
