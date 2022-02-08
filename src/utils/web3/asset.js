@@ -15,7 +15,8 @@ import {
 } from "ethers";
 import {
   waitForTx,
-  getProvider
+  getProvider,
+  getReadonlyProvider
 } from './ethers'
 import {
   getAllTokens,
@@ -132,49 +133,63 @@ export const getERC20Info = async (address) => {
   })
 }
 
-/**
- * Depoly ERC20 token
- * @param {*} param0 token object
- * @param {Bool} isMintalbel  
- * @returns
- */
-export const deployERC20 = async ({
-  name,
-  symbol,
-  decimal,
-  totalSupply
-}, isMintable, callback) => {
+// judge whether the user has mint admin role
+export const hasMintRole = async (token) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      debugger
-      const contract = await getContract('ERC20Factory', null, false)
-      let tokenDeploying = store.state.web3.tokenDeploying
-      if (tokenDeploying){
-        reject(errCode.TOKEN_DEPLOYING)
-        return;
-      }
-      contract.on('ERC20TokenCreated', (_creator, _name, _symbol, _tokenAddress, _isMintable) => {
-        if (store.state.web3.account.toLowerCase() === _creator.toLowerCase() && name === _name && symbol === _symbol && isMintable === _isMintable){
-          contract.removeAllListeners('ERC20TokenCreated')
-          store.commit('web3/saveTokenDeploying', false)
-          resolve(_tokenAddress)
-          return;
+    const abi = [
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            }
+          ],
+          "name": "getRoleAdmin",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "hasRole",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         }
-      })
-      tokenDeploying = true
-      store.commit('web3/saveTokenDeploying', tokenDeploying)
-      const tx = await contract.createERC20(name, symbol, ethers.utils.parseUnits(totalSupply, decimal), 
-            store.state.web3.account, 
-            isMintable);
-      callback()
-    } catch (e) {
-      store.commit('web3/saveTokenDeploying', false)
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else{
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log(`Deploy mintable token ${name} failed`, e);
+    ]
+    try{
+      const mintRole = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"));
+      const contract = new ethers.Contract(token, abi, getReadonlyProvider())
+      const mintAdminRole = await contract.getRoleAdmin(mintRole);
+      const account = await getAccounts();
+      const hasMintRole = await contract.hasRole(mintAdminRole, account);
+      resolve(hasMintRole);
+    }catch(e) {
+      reject(e);
     }
   })
 }

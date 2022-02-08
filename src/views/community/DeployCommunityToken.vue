@@ -245,7 +245,7 @@ import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
 import { getAddress } from '@/utils/web3/ethers'
-import { getERC20Info } from '@/utils/web3/asset'
+import { getERC20Info, hasMintRole } from '@/utils/web3/asset'
 import { contractAddress } from '@/utils/web3/contract'
 import { sleep } from '@/utils/helper'
 import { ethers } from "ethers";
@@ -270,6 +270,7 @@ export default {
       loadingApprovement: true,
       approvementCommunityFactory: false,
       isApproving: false,
+      readingRole: false,
       form: {
         address: null,
         name: null,
@@ -377,7 +378,7 @@ export default {
         this.searchResult = 'error'
       }
     },
-    choseToken (token) {
+    async choseToken (token) {
       if(!token) {
         this.cToken = {
           name: this.provideName,
@@ -389,6 +390,10 @@ export default {
       }else {
         this.cToken = {...token, isMintable: false}
       }
+      this.readingRole = true
+      const res = await hasMintRole(this.cToken.address)
+      console.log(235, res);
+      this.readingRole = false
       this.cardStep = 2;
     },
     registerToken() {
