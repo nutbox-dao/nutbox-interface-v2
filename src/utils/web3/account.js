@@ -1,7 +1,6 @@
 import { getEthWeb } from './web3.js'
 import store from '@/store'
 import {  getMyCommunityInfo, getNonce, getDistributionEras } from './community'
-import { getRegitryAssets, monitorCtokenBalance } from './asset.js'
 import { ethers } from 'ethers'
 import { updateUserInfo as uui, getSomeUsers, getAllUsers } from '@/apis/api'
 import { sleep } from '../helper.js'
@@ -56,14 +55,12 @@ export const accountChanged = async (refresh) => {
         store.commit('web3/saveMyPools', null)
         store.commit('web3/saveAllAssetsOfUser', null)
         store.commit('web3/saveCommunityInfo', null)
-        getRegitryAssets(true)
         getMyCommunityInfo(true).then(res => {
             if (res){
                 getNonce(true)
                 getDistributionEras(true)
             }
         }).catch(console.error)
-        monitorCtokenBalance(true)
     })
 }
 

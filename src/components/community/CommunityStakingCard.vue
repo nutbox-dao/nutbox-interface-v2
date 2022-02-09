@@ -138,7 +138,7 @@ export default {
       if (!this.userReward) return 0;
       const pendingBn =
         this.userReward[this.card.id]
-      if (!pendingBn) return 0
+      if (!pendingBn || !this.cToken) return 0
       return parseFloat(pendingBn.toString() / (10 ** this.cToken.decimal)).toFixed(3)
     },
     totalDeposited () {
@@ -147,7 +147,7 @@ export default {
         this.totalStaked[this.card.id]
       if (!total) return 0
       if (this.type === 'erc20staking') {
-        return total.toString() / (10 ** this.stakeToken.decimal)
+        return total.toString() / (10 ** (this.stakeToken ? this.stakeToken.decimal : 18))
       } else if (this.type === 'steem') {
         return total.toString() / 1e6 * this.vestsToSteem
       } else if (this.type === 'hive') {

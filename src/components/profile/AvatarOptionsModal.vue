@@ -30,7 +30,11 @@ export default {
         require('../../static/images/avatars/3.png'),
         require('../../static/images/avatars/4.png'),
         require('../../static/images/avatars/5.png'),
-        require('../../static/images/avatars/6.png')
+        require('../../static/images/avatars/6.png'),
+        require('../../static/images/avatars/7.png'),
+        require('../../static/images/avatars/8.png'),
+        require('../../static/images/avatars/9.png'),
+        require('../../static/images/avatars/10.png')
       ]
     }
   },

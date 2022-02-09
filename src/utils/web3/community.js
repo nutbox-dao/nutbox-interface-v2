@@ -304,9 +304,11 @@ export const createCommunity = async (cToken, distribution) => {
       // call contract 
       const preMine = (cToken && cToken.supply) ? cToken.supply : 0
       const res = await contract.createCommunity(
-        isMintable ? ethers.constants.AddressZero : cToken.address,
-        contractAddress['SimpleMintableERC20Factory'],
-        isMintable ? makeSimpleMintableERC20Metadata(cToken.name, cToken.symbol, preMine, account) : '0x',
+        isMintable,
+        // isCustom means use exists token
+        cToken.isCustom ? cToken.address : ethers.constants.AddressZero,
+        contractAddress['MintableERC20Factory'],
+        cToken.isCustom ? '0x' : makeSimpleMintableERC20Metadata(cToken.name, cToken.symbol, preMine, account),
         contractAddress["LinearCalculator"],
         distributionStr);
       await waitForTx(res.hash);

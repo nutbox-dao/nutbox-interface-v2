@@ -4,9 +4,6 @@ import {
   getPoolFactory
 } from './contract'
 import store from '@/store'
-import {
-  getAllPools as gap
-} from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
 import {
   errCode,
@@ -30,38 +27,7 @@ import {
 import BN from 'bn.js'
 import { NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
-import {
-  BLOCK_SECOND,
-  PRICES_SYMBOL
-} from "@/constant"
 import { rollingFunction } from '@/utils/helper'
-import { getUsers } from './account'
-
-/**
- * Get all pools that user have upload to backend
- * @returns 
- */
-export const getAllPools = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    const poolsCache = store.state.web3.allPools
-    if (!update && poolsCache) {
-      resolve(poolsCache)
-      return;
-    }
-    try {
-      const currentCommunityId = store.state.currentCommunityId
-      const allPools = await gap(currentCommunityId)
-      store.commit('web3/saveAllPools', allPools);
-      store.commit('web3/saveLoadingAllPools', false)
-      // remonitor pools info
-      monitorPoolInfos()
-      resolve(allPools)
-    } catch (e) {
-      reject(e)
-      return
-    }
-  })
-}
 
 export const getPoolFactoryAddress = (type) => {
   switch (type){

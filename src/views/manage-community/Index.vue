@@ -32,6 +32,43 @@
         <router-view></router-view>
       </div>
     </div>
+     <!-- grant mint role tip -->
+    <b-modal
+      v-model="showGrantRole"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+       <div class="custom-form">
+        <h3 style="color: red;text-align:center">Grant mint role</h3>
+        <div class="mb-4 font20 line-height24 text-center my-3">
+          <p>
+              You have set c-Token mintable when you create community. 
+          </p>
+          <p>
+            Now you must grant mint role to the community contract, otherwise you can't use functions of this community.
+          </p>
+        </div>
+
+        <div class="d-flex justify-content-between" style="gap: 2rem">
+          <button
+            class="primary-btn"
+            @click="grant"
+            :disabled="granting"
+          >
+          <b-spinner
+            small
+            type="grow"
+            v-show="granting"
+          ></b-spinner>
+            {{ $t("operation.grant") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -39,16 +76,29 @@
 import { getMyCommunityData } from '@/utils/graphql/user'
 import { getMyCommunityContract, getApprovement } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
+import { hasMintRole, getCToken, grantMintRole } from '@/utils/web3/asset'
 
 export default {
   name: 'Index',
+  data() {
+    return {
+      showGrantRole: false,
+      granting: false,
+      communityId: ''
+    }
+  },
   async mounted () {
     try{
-      const res = await getMyCommunityContract()
-      getMyCommunityData();
+      const communityId = await getMyCommunityContract()
+      this.communityId = communityId;
+      getMyCommunityData().then(async (res) => {
+        const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
+        console.log(235, hasRole, res);
+        this.showGrantRole = isMintable && !hasRole
+      });
       this.$store.commit('community/saveLoadingApproveCommunity', true)
 
-      getApprovement(NutAddress, res).then(res => {
+      getApprovement(NutAddress, communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
       }).finally(() => {
         this.$store.commit('community/saveLoadingApproveCommunity', false)
@@ -57,6 +107,28 @@ export default {
       // no registered
       this.$router.replace('/')
     }
+  },
+  methods: {
+    async grant() {
+      try {
+        this.granting = true
+        const {address} = await getCToken(this.communityId)
+        await grantMintRole(address, this.communityId)
+        this.$bvToast.toast('Grant success!', {
+          title: this.$t('tip.success'),
+          variant: 'success'
+        })
+        this.showGrantRole = false
+      } catch (e) {
+        console.log(456, e);
+        this.$bvToast.toast('Grant fail!', {
+          title: this.$t('tip.error'),
+          variant: 'danger'
+        })
+      } finally {
+        this.granting = false
+      }
+    }   
   },
 }
 </script>

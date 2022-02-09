@@ -134,7 +134,7 @@ export const getERC20Info = async (address) => {
 }
 
 // judge whether the user has mint admin role
-export const hasMintRole = async (token) => {
+export const hasMintAdmminRole = async (token) => {
   return new Promise(async (resolve, reject) => {
     const abi = [
         {
@@ -190,6 +190,90 @@ export const hasMintRole = async (token) => {
       resolve(hasMintRole);
     }catch(e) {
       reject(e);
+    }
+  })
+}
+
+// judge whether the community has the token's mint role
+export const hasMintRole = async (token, community) => {
+  return new Promise(async (resolve) => {
+    try{
+    const abi = [
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          }
+        ],
+        "name": "hasRole",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "name": "getRoleMember",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },]
+    const contract = new ethers.Contract(token, abi, getReadonlyProvider());
+    const account = await getAccounts()
+    const adminRole = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    const mintRole = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"));
+    const hasMintRole = await contract.hasRole(mintRole, community);
+    // const ddd = await Promise.all([contract.getRoleMember(mintRole, 0), contract.getRoleMember(mintRole, 1)])
+    console.log(224, token, community, mintRole, hasMintRole, await contract.hasRole(adminRole, account), await contract.hasRole(adminRole, community));
+
+    resolve(hasMintRole);
+    }catch(err) {
+      console.log(643, err);
+      resolve(false)
+    }
+  })
+}
+
+// grant mint role to community
+export const grantMintRole = async (token, target) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const contract = await getContract('ERC20', token, false)
+      const mintRole = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"));
+      const tx = await contract.grantRole(mintRole, target);
+      await waitForTx(tx.hash);
+      resolve(true);
+    }catch(e) {
+      reject(e)
     }
   })
 }

@@ -61,7 +61,8 @@ module.exports = {
     edit: "Edit",
     charge: 'Charge',
     enter: 'Enter',
-    approve: 'Approve'
+    approve: 'Approve',
+    grant: 'Grant'
   },
   wallet: {
     wallet: "Wallet",

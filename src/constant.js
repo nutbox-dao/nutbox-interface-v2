@@ -1,5 +1,3 @@
-import BN from 'bn.js'
-
 export const BLOCK_SECOND = 12
 
 export const SP_DELEGATE_DECIMAL = 6
@@ -20,11 +18,6 @@ export const API_CONNECT_STATE = {
     CONNECT_SUCCESS: 'CONNECT_SUCCESS',
     CONNECT_ERROR:'CONNECT_ERROR'
 }
-
-export const PRICES_SYMBOL = [
-    'BNBETH','DOTUSDT', 'KSMUSDT','ETHUSDT', 'HIVEUSDT', 'STEEMETH'
-]
-
 
 /**
  * Parachain project logo url

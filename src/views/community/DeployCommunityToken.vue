@@ -7,6 +7,7 @@
         </div>
       </div>
       <div class="col-md-7 mx-auto position-relative mb-5">
+        <!-- select token type -->
         <div v-show="cardStep===0" class="form-card">
           <div class="text-left">
             <div class="font-bold line-height24 font20">Chose an asset</div>
@@ -58,7 +59,9 @@
             </div>
           </div>
         </div>
+        <!-- chose custom token -->
         <div v-show="cardStep===1" class="form-card">
+          <div class="c-loading c-loading-absolute c-loading-bg" v-show="readingRole"></div>
           <div class="custom-form">
             <i class="close-icon" @click="cardStep=0"></i>
             <div class="c-input-group c-input-group-border">
@@ -98,6 +101,7 @@
             </div>
           </div>
         </div>
+        <!-- deploy community -->
         <div v-show="cardStep===2" class="form-card">
           <div class="custom-form">
             <i class="back-icon" @click="goBackTo0()"></i>
@@ -183,6 +187,55 @@
             </div>
           </div>
         </div>
+        <!-- grant mint role tips -->
+        <div v-show="cardStep === 3" class="form-card">
+          <i class="close-icon" @click="cardStep=0"></i>
+          <TokenItem :logo="cToken.icon"
+                     :token-name="cToken.name"
+                     :token-symbol="cToken.symbol"
+                     :token-address="cToken.address"
+          />
+          <p>
+            The token you choose is mintable.
+          </p>
+          <p>
+            For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.
+          </p>
+          <p>
+            It should be noted that once you set this option, it cannot be changed in the future.
+          </p>
+          <p>
+            If you don't understand the mechanism, just keep the box unchecked.
+          </p>
+          <ToggleSwitch v-model="isMintable"/>
+          <span>
+            Yes, I will grant mint role to community contract later.
+          </span>
+          <button class="primary-btn" @click="cToken.isMintable = isMintable; cardStep = 2">
+            {{ $t('operation.confirm') }}
+          </button>
+        </div>
+        <!-- grant operation -->
+        <div v-show="cardStep === 4" class="form-card">
+          <img src="" alt="">
+          <p>
+            Your community contract is deployed successfully!
+          </p>
+          <p>
+            Please confirm to grant the mint role to the contract:
+          </p>
+          <p>
+            {{ communtiyInfo && communtiyInfo.id }}
+          </p>
+          <button class="primary-btn" :disabled="grantingRole" @click="grantMintRole">
+            <b-spinner
+              small
+              type="grow"
+              v-show="grantingRole"
+            ></b-spinner>
+            Grant
+          </button>
+        </div>
         <button class="next-btn primary-btn w-auto" :disabled="loadingApprovement || isApproving" v-show="takeFee && (cardStep === 2 && (loadingApprovement || !approvementCommunityFactory))" @click="approveCommunityFactory()">
           <b-spinner
               small
@@ -245,14 +298,15 @@ import Step from '@/components/common/Step'
 import TokenItem from '@/components/community/TokenItem'
 import Progress from '@/components/community/Progress'
 import { getAddress } from '@/utils/web3/ethers'
-import { getERC20Info, hasMintRole } from '@/utils/web3/asset'
+import { getERC20Info, hasMintAdmminRole, grantMintRole } from '@/utils/web3/asset'
 import { contractAddress } from '@/utils/web3/contract'
 import { sleep } from '@/utils/helper'
 import { ethers } from "ethers";
+import ToggleSwitch from '@/components/common/ToggleSwitch'
 
 export default {
   name: 'CreateEconomy',
-  components: { Step, TokenItem, Progress },
+  components: { Step, TokenItem, Progress, ToggleSwitch },
   data () {
     return {
       selectedKey: 'name',
@@ -270,7 +324,9 @@ export default {
       loadingApprovement: true,
       approvementCommunityFactory: false,
       isApproving: false,
+      grantingRole: false,
       readingRole: false,
+      isMintable: false,
       form: {
         address: null,
         name: null,
@@ -286,7 +342,6 @@ export default {
         reward: ''
       },
       cardStep: 0,
-      cardStep: 0,
       loading: false,
       showFeeTip: false,
       searchResult: ''
@@ -297,6 +352,7 @@ export default {
       blockNum: state => state.web3.blockNum
     }),
     ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
+    ...mapState('community', ['communtiyInfo']),
     OfficialAssets() {
       if (!this.allTokens) return []
       return this.allTokens.filter(c => c.isRecommend)
@@ -391,10 +447,11 @@ export default {
         this.cToken = {...token, isMintable: false}
       }
       this.readingRole = true
-      const res = await hasMintRole(this.cToken.address)
-      console.log(235, res);
+      const res = await hasMintAdmminRole(this.cToken.address)
+      this.cToken.isCustom = true;
       this.readingRole = false
-      this.cardStep = 2;
+      this.isMintable = false
+      this.cardStep = res ? 3 : 2;
     },
     registerToken() {
       // check input
@@ -416,7 +473,8 @@ export default {
         symbol: this.form.symbol,
         supply: this.form.supply,
         totalSupply: ethers.utils.parseUnits(this.form.supply, 18),
-        isMintable: true
+        isMintable: true,
+        isCustom: false
       }
       this.cardStep = 2;
     },
@@ -506,6 +564,18 @@ export default {
         background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`
       }))
     },
+    async grantMintRole () {
+      try {
+        this.grantingRole = true
+        await grantMintRole(this.cToken.address, this.communityInfo.id)
+      } catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.grantingRole = false
+      }
+    },
     async confirmDeploy () {
       if (Object.keys(this.cToken).length === 0 || this.progressData.length === 0) {
         this.$bvToast.toast(this.$t('tip.pleaseFillData'), {
@@ -514,7 +584,6 @@ export default {
         })
         return
       }
-      console.log(this.progressData[0].startHeight, this.blockNum);
       if (this.progressData[0].startHeight <= this.blockNum + 2) {
         this.$bvToast.toast(this.$t('tip.startHeightOut'), {
           title: this.$t('tip.tips'),
@@ -530,6 +599,10 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
+          if (this.cToken.isCustom && this.cToken.isMintable) {
+            this.cardStep = 4
+            return;
+          }
           await sleep(3)
           this.$router.replace('set-profile')
         }

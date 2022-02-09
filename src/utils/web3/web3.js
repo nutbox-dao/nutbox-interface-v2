@@ -12,7 +12,6 @@ import store from '@/store'
 
 import { getProvider } from './ethers'
 import { getAccounts } from "./account"
-import { getRegitryAssets } from './asset'
 import { getMyCommunityInfo } from './community'
 
 /**
@@ -131,7 +130,6 @@ export const chainChanged = async (refresh) => {
       await getAccounts(true)
       getProvider(true)
       store.commit('saveMetamaskConnected', true)
-      getRegitryAssets(true)
       getMyCommunityInfo(true).catch(e=>{})
       getMyOpenedPools(true)
     }

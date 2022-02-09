@@ -136,7 +136,7 @@ export default {
           variant: 'success'
         })
         setTimeout(() => {
-          if (this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
+          if (!this.userGraphInfo.inCommunities || this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
             // first join
             getAllCommunities(true)
             getMyJoinedCommunity()
