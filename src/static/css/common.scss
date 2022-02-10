@@ -492,6 +492,11 @@ input::-webkit-input-placeholder {
     margin: 8px;
   }
 }
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: var(--primary-custom);
+  border-color: var(--primary-custom);
+}
+
 @media (max-width: 1420px) {
   .cards-box {
     justify-content: center;

@@ -42,11 +42,12 @@
       hide-footer
       no-close-on-backdrop
     >
-       <div class="custom-form">
-        <h3 style="color: red;text-align:center">Grant mint role</h3>
-        <div class="mb-4 font20 line-height24 text-center my-3">
+      <div class="custom-form position-relative">
+        <i class="modal-close-icon-right" @click="showGrantRole=false"></i>
+        <div class="modal-title text-red font-bold">Grant mint role</div>
+        <div class="mb-4 font16 line-height24 text-center my-3">
           <p>
-              You have set c-Token mintable when you create community. 
+              You have set c-Token mintable when you create community.
           </p>
           <p>
             Now you must grant mint role to the community contract, otherwise you can't use functions of this community.
@@ -128,7 +129,7 @@ export default {
       } finally {
         this.granting = false
       }
-    }   
+    }
   },
 }
 </script>

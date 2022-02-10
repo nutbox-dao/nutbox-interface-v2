@@ -7,12 +7,17 @@
 <script>
 export default {
   name: 'ToggleSwitch',
-  data() {
-    return {
-      value: false
+  // data() {
+  //   return {
+  //     value: false
+  //   }
+  // },
+  props: {
+    value: {
+      type: Boolean,
+      default: false
     }
-  },
-
+  }
 }
 </script>
 

@@ -62,7 +62,7 @@
         <!-- chose custom token -->
         <div v-show="cardStep===1" class="form-card">
           <div class="c-loading c-loading-absolute c-loading-bg" v-show="readingRole"></div>
-          <div class="custom-form">
+          <div class="custom-form mt-4">
             <i class="close-icon" @click="cardStep=0"></i>
             <div class="c-input-group c-input-group-border">
               <b-input-group class="d-flex flex-between-center">
@@ -189,45 +189,56 @@
         </div>
         <!-- grant mint role tips -->
         <div v-show="cardStep === 3" class="form-card">
-          <i class="close-icon" @click="cardStep=0"></i>
-          <TokenItem :logo="cToken.icon"
-                     :token-name="cToken.name"
-                     :token-symbol="cToken.symbol"
-                     :token-address="cToken.address"
-          />
-          <p>
-            The token you choose is mintable.
-          </p>
-          <p>
-            For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.
-          </p>
-          <p>
-            It should be noted that once you set this option, it cannot be changed in the future.
-          </p>
-          <p>
-            If you don't understand the mechanism, just keep the box unchecked.
-          </p>
-          <ToggleSwitch v-model="isMintable"/>
-          <span>
-            Yes, I will grant mint role to community contract later.
-          </span>
-          <button class="primary-btn" @click="cToken.isMintable = isMintable; cardStep = 2">
-            {{ $t('operation.confirm') }}
-          </button>
+          <div class="mt-4">
+            <i class="close-icon" @click="cardStep=0"></i>
+            <TokenItem :logo="cToken.icon"
+                       :token-name="cToken.name"
+                       :token-symbol="cToken.symbol"
+                       :token-address="cToken.address"
+            />
+            <div class="text-grey-bd">
+              <p class="font16 font-bold mt-3">
+                The token you choose is mintable.
+              </p>
+              <p>
+                For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.
+              </p>
+              <p>
+                It should be noted that once you set this option, it cannot be changed in the future.
+              </p>
+              <p>
+                If you don't understand the mechanism, just keep the box unchecked.
+              </p>
+            </div>
+            <b-form-checkbox
+              id="checkbox-mint"
+              class="font-bold font14"
+              v-model="isMintable"
+              :value="true"
+              :unchecked-value="false"
+            >
+              Yes, I will grant mint role to community contract later.
+            </b-form-checkbox>
+            <button class="primary-btn mt-4" @click="cToken.isMintable = isMintable; cardStep = 2">
+              {{ $t('operation.confirm') }}
+            </button>
+          </div>
         </div>
         <!-- grant operation -->
-        <div v-show="cardStep === 4" class="form-card">
-          <img src="" alt="">
+        <div v-show="cardStep === 4" class="form-card-auto text-center">
+          <div class="text-center">
+            <img style="width: 120px; height: 120px;" src="~@/static/images/celebrate-img.png" alt="">
+          </div>
           <p>
             Your community contract is deployed successfully!
           </p>
           <p>
-            Please confirm to grant the mint role to the contract:
+            Please confirm to grant the mint role to the contract.
           </p>
           <p>
             {{ communtiyInfo && communtiyInfo.id }}
           </p>
-          <button class="primary-btn" :disabled="grantingRole" @click="grantMintRole">
+          <button class="primary-btn mb-4" :disabled="grantingRole" @click="grantMintRole">
             <b-spinner
               small
               type="grow"
@@ -272,7 +283,7 @@
           </div>
 
         <div class="d-flex justify-content-between" style="gap: 2rem">
-          <button class="dark-btn" 
+          <button class="dark-btn"
             @click="showFeeTip = false">
             {{ $t("operation.cancel") }}
           </button>
@@ -302,11 +313,10 @@ import { getERC20Info, hasMintAdmminRole, grantMintRole } from '@/utils/web3/ass
 import { contractAddress } from '@/utils/web3/contract'
 import { sleep } from '@/utils/helper'
 import { ethers } from "ethers";
-import ToggleSwitch from '@/components/common/ToggleSwitch'
 
 export default {
   name: 'CreateEconomy',
-  components: { Step, TokenItem, Progress, ToggleSwitch },
+  components: { Step, TokenItem, Progress },
   data () {
     return {
       selectedKey: 'name',
@@ -513,7 +523,7 @@ export default {
           variant: 'success'
         })
         this.approvementCommunityFactory = true
-      }catch(e) { 
+      }catch(e) {
 
       }finally{
         this.isApproving = false
@@ -624,6 +634,10 @@ export default {
   @include card(2rem 10% 2rem, var(--card-bg-primary), auto);
   position: relative;
   min-height: 600px;
+}
+.form-card-auto {
+  @include card(2rem 10% 2rem, var(--card-bg-primary), auto);
+  position: relative;
 }
 .divide-line {
   width: 50%;
