@@ -107,6 +107,12 @@ export default {
   color: white;
   font-weight: bold;
   border-radius: .6rem;
+  &:hover {
+    background: var(--primary-custom);
+  }
+  &:active {
+    background: var(--primary-custom);
+  }
 }
 .gradient-outline-btn {
   color: white;
@@ -117,5 +123,11 @@ export default {
   background-image: linear-gradient(to right, #3F75D5, #D27947);
   background-origin: border-box;
   box-shadow: 2px 1000px 1px var(--card-bg-primary) inset;
+  &:hover {
+    box-shadow: none;
+  }
+  &:active {
+    box-shadow: none;
+  }
 }
 </style>

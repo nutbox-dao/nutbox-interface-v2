@@ -223,6 +223,9 @@ export default {
 .user-avatar {
   width: 6rem;
   height: 6rem;
+  &:hover {
+    box-shadow: 0 0 8px 2px var(--primary-custom);
+  }
 }
 .name-input {
   width: 8rem;

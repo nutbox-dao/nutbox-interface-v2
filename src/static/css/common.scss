@@ -31,6 +31,14 @@ ponsived {
   border-left: 1px solid rgba(246, 247, 249, 1);
   border-right: 2px solid rgba(246, 247, 249, 1);
 }
+.tr-hover-block-bg:hover {
+  background: var(--block-bg);
+  cursor: pointer;
+}
+.tr-hover-dark-bg:hover {
+  background: var(--card-bg-primary);
+  cursor: pointer;
+}
 .asset-tr td, .asset-tr th {
   vertical-align: middle;
   padding: .4rem;
@@ -78,6 +86,12 @@ ponsived {
   @extend .custom-btn;
   background: var(--primary-custom);
   color: var(--primary-btn-text-color);
+  &:hover {
+    box-shadow: 0 0 8px 2px var(--primary-custom);
+  }
+  &:disabled {
+    box-shadow: none;
+  }
   &-outline {
     background-color: transparent;
     border: 1px solid var(--primary-custom);
@@ -102,6 +116,12 @@ ponsived {
 .sub-community-page .primary-btn, .sub-modal .primary-btn {
   background: var(--sub-primary);
   color: var(--card-bg-primary);
+  &:hover {
+    box-shadow: 0 0 8px 2px var(--sub-primary);
+  }
+  &:disabled {
+    box-shadow: none;
+  }
 }
 .primary-btn:disabled {
   color: var(--text-74);
@@ -348,6 +368,9 @@ input::-webkit-input-placeholder {
 
 .hover {
   cursor: pointer;
+}
+.shadow-hover:hover {
+  box-shadow: 0 0 6px 2px var(--primary-custom);
 }
 .c-loading {
   position: relative;

@@ -113,6 +113,9 @@
 .side-menu-dropdown .dropdown-menu {
   background: transparent;
 }
+.side-menu-dropdown .dropdown-item:hover {
+  background: var(--background);
+}
 .top-header-dropdown .dropdown-toggle {
   @extend .c-dropdown-btn;
   height: 2rem;

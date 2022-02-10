@@ -21,6 +21,9 @@
   .apps-icon-box {
     .app-icon {
       background-image: url("~@/static/images/apps-white-icon.png");
+      &:hover {
+        background-image: url("~@/static/images/apps-icon.png");
+      }
     }
     &.active .app-icon {
       background-image: url("~@/static/images/apps-icon.png");
@@ -34,6 +37,9 @@
   .add-user-icon {
     @include icon(2rem, 2rem);
     background-image: url("~@/static/images/add-user-icon.svg");
+    &:hover {
+      background-image: url("~@/static/images/add-user-icon-active.svg");
+    }
   }
   .menu-icon {
     @include icon(2rem, 2rem);
@@ -48,10 +54,18 @@
   #tipmanagecommunity .setting-icon {
     @include icon(2rem, 2rem);
     background-image: url("~@/static/images/setting-icon-grey.svg");
+    &:hover {
+      background-image: url("~@/static/images/setting-icon-active.svg");
+    }
   }
   #tipmanagecommunity.active .setting-icon {
     @include icon(2rem, 2rem);
     background-image: url("~@/static/images/setting-icon-active.svg");
+  }
+  #tipprofile .user-avatar {
+    &:hover {
+      box-shadow: 0 0 6px 2px var(--primary-custom);
+    }
   }
 }
 .page-container {

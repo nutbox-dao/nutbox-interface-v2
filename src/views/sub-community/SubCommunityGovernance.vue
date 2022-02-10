@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="c-btn-group">
-          <button class="primary-btn d-flex align-items-center px-2 c-btn"
+          <button class="primary-btn d-flex align-items-center px-2 c-btn mx-1"
                   @click="$router.push(`/sub-community/governance/create`)">
             <i class="add-icon add-icon-dark mr-1"></i>
             <span>{{ $t('nps.createProposal') }}</span>

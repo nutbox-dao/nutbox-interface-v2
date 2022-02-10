@@ -244,6 +244,9 @@ export default {
       display: flex;
       align-items: center;
       padding: 12px 20px;
+      &:hover {
+        background: var(--block-bg);
+      }
     }
     i {
       margin-right: .5rem;

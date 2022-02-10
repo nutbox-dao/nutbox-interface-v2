@@ -201,6 +201,9 @@ $home-primary-color: #F8B62A;
     font-size: 1rem;
     font-weight: bolder;
     white-space: nowrap;
+    &:hover {
+      background-image: linear-gradient(to right, #4826DF, #4826DF);
+    }
   }
 }
 .section2 {

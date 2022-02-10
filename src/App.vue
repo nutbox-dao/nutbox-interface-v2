@@ -3,7 +3,7 @@
     <div class="page-layout">
       <div class="page-side">
         <div class="text-center">
-          <div @click="goHome()" class="hover">
+          <div @click="goHome()" class="hover shadow-hover rounded-circle">
             <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" alt="">
           </div>
           <router-link to="/community" class="apps-icon-box">
@@ -40,7 +40,7 @@
             </b-popover>
           </router-link>
           <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
-            <i class="add-user-icon mt-4" style="opacity: .7" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
+            <i class="add-user-icon mt-4" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
             <b-popover target="tipcreatecommunity" triggers="hover"
                   :delay="{show: 800}"
                   placement="right">
@@ -367,6 +367,13 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    &:hover {
+      border-radius: 48px;
+      width: 48px;
+      height: 48px;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px 2px var(--primary-custom);
+    }
   }
   .active {
     border: 2px solid var(--primary-custom);
@@ -402,11 +409,21 @@ body {
     &::after {
       content: '';
       position: absolute;
-      @include icon;
+      @include icon(12px, 12px);
       background-image: url("~@/static/images/wallet.svg");
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
+  }
+  &:hover {
+    border-color: var(--primary-custom);
+    color: var(--primary-custom);
+    .wallet-icon {
+      border-color: var(--primary-custom);
+      &::after {
+        background-image: url("~@/static/images/wallet-hover.svg");
+      }
     }
   }
 }

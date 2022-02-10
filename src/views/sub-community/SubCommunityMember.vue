@@ -8,7 +8,7 @@
                     v-else
                    ref="selectableTable"
                    thead-tr-class="asset-tr text-grey-7 px-3"
-                   tbody-tr-class="asset-tr tr-light font-bold font14"
+                   tbody-tr-class="asset-tr tr-light font-bold font14 tr-hover-block-bg"
                    details-td-class="p-0"
                    selectable
                    select-mode="single"

@@ -80,6 +80,9 @@ export default {
     z-index: 2;
     position: relative;
     border-radius: 50%;
+    &:hover {
+      box-shadow: 0 0 6px 2px var(--primary-custom);
+    }
   }
   &.active::after {
     content: '';

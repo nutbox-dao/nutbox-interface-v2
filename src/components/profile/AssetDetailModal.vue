@@ -11,7 +11,7 @@
       <div class="asset-list flex-fill overflow-auto">
         <b-table :fields="fields" :items="tokens"
                  thead-tr-class="asset-tr text-grey-7"
-                 tbody-tr-class="asset-tr"
+                 tbody-tr-class="asset-tr tr-hover-dark-bg"
                  details-td-class="p-0"
                  class="text-white border-0 font12" borderless>
           <template #table-colgroup="scope">
