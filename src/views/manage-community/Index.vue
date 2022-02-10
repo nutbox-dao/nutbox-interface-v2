@@ -43,7 +43,7 @@
       no-close-on-backdrop
     >
       <div class="custom-form position-relative">
-        <i class="modal-close-icon-right" @click="showGrantRole=false"></i>
+        <i class="modal-close-icon-right" @click="goHome"></i>
         <div class="modal-title text-red font-bold">Grant mint role</div>
         <div class="mb-4 font16 line-height24 text-center my-3">
           <p>
@@ -110,6 +110,9 @@ export default {
     }
   },
   methods: {
+    goHome() {
+      this.$router.push('/')
+    },
     async grant() {
       try {
         this.granting = true
