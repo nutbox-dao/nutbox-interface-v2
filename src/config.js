@@ -69,14 +69,26 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 /** ==================================Main chain============================================*/
 
 //  moonbase alpha
-export const RPC_NODE = 'https://rpc.api.moonbase.moonbeam.network';
-export const BSC_CHAIN_ID = 1287;
-export const BLOCK_CHAIN_BROWER = 'https://moonbase.moonscan.io/';
-export const CHAIN_NAME = 'Moonbase-alpha';
+// export const RPC_NODE = 'https://rpc.api.moonbase.moonbeam.network';
+// export const BSC_CHAIN_ID = 1287;
+// export const BLOCK_CHAIN_BROWER = 'https://moonbase.moonscan.io/';
+// export const CHAIN_NAME = 'Moonbase-alpha';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'DEV',
+//   symbol: 'DEV',
+//   decimals: 18
+// }
+
+// chapel
+export const RPC_NODE = 'https://data-seed-prebsc-1-s1.binance.org:8545';
+export const BSC_CHAIN_ID = 97;
+export const BLOCK_CHAIN_BROWER = 'https://testnet.bscscan.com//';
+export const CHAIN_NAME = 'BSC-Test';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'DEV',
-  symbol: 'DEV',
+  name: 'BNB',
+  symbol: 'BNB',
   decimals: 18
 }
 
