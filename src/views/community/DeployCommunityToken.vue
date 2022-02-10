@@ -578,6 +578,7 @@ export default {
       try {
         this.grantingRole = true
         await grantMintRole(this.cToken.address, this.communityInfo.id)
+        this.$router.replace('set-profile')
       } catch(e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

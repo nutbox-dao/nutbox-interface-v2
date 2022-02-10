@@ -367,26 +367,24 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    border-radius: 48px;
+    width: 48px;
+    height: 48px;
+    box-sizing: border-box;
     &:hover {
-      border-radius: 48px;
-      width: 48px;
-      height: 48px;
-      box-sizing: border-box;
       box-shadow: 0 0 8px 2px var(--primary-custom);
     }
   }
   .active {
     border: 2px solid var(--primary-custom);
-    border-radius: 48px;
-    width: 48px;
-    height: 48px;
-    box-sizing: border-box;
   }
   .community-logo-box img {
     max-width: 40px;
     max-height: 40px;
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
 }
 .address-box {
