@@ -132,6 +132,18 @@ const routes = [
   {
     path: '/faucet',
     component: Faucet
+  },
+  {
+    path: '/error-404',
+    name: 'error-404',
+    component: () => import('@/views/Error404.vue'),
+    meta: {
+      rule: 'editor'
+    }
+  },
+  {
+    path: '*',
+    redirect: '/error-404'
   }
 ]
 
