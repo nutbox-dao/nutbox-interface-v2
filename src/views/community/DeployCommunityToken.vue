@@ -236,7 +236,7 @@
             Please confirm to grant the mint role to the contract.
           </p>
           <p>
-            {{ communtiyInfo && communtiyInfo.id }}
+            {{ communityInfo && communityInfo.id }}
           </p>
           <button class="primary-btn mb-4" :disabled="grantingRole" @click="grantMintRole">
             <b-spinner
@@ -362,7 +362,7 @@ export default {
       blockNum: state => state.web3.blockNum
     }),
     ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
-    ...mapState('community', ['communtiyInfo']),
+    ...mapState('community', ['communityInfo']),
     OfficialAssets() {
       if (!this.allTokens) return []
       return this.allTokens.filter(c => c.isRecommend)

@@ -189,7 +189,7 @@ export const hasMintAdmminRole = async (token) => {
       const hasMintRole = await contract.hasRole(mintAdminRole, account);
       resolve(hasMintRole);
     }catch(e) {
-      reject(e);
+      resolve(false);
     }
   })
 }
