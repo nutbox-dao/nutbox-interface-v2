@@ -248,12 +248,8 @@ export const hasMintRole = async (token, community) => {
         "type": "function"
       },]
     const contract = new ethers.Contract(token, abi, getReadonlyProvider());
-    const account = await getAccounts()
-    const adminRole = '0x0000000000000000000000000000000000000000000000000000000000000000'
     const mintRole = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"));
     const hasMintRole = await contract.hasRole(mintRole, community);
-    // const ddd = await Promise.all([contract.getRoleMember(mintRole, 0), contract.getRoleMember(mintRole, 1)])
-    console.log(224, token, community, mintRole, hasMintRole, await contract.hasRole(adminRole, account), await contract.hasRole(adminRole, community));
 
     resolve(hasMintRole);
     }catch(err) {

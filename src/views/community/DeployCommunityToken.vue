@@ -61,7 +61,6 @@
         </div>
         <!-- chose custom token -->
         <div v-show="cardStep===1" class="form-card">
-          <div class="c-loading c-loading-absolute c-loading-bg" v-show="readingRole"></div>
           <div class="custom-form mt-4">
             <i class="close-icon" @click="cardStep=0"></i>
             <div class="c-input-group c-input-group-border">
@@ -100,6 +99,7 @@
               </div>
             </div>
           </div>
+          <div class="c-loading c-loading-absolute c-loading-bg" v-show="readingRole"></div>
         </div>
         <!-- deploy community -->
         <div v-show="cardStep===2" class="form-card">

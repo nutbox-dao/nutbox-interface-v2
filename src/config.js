@@ -124,12 +124,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 
 // bsc test
-// export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
-// export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
+export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
+export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
 
 // moonbase alpha
-export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
-export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
+// export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
+// export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
 // bsc net
 // export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
