@@ -1,22 +1,25 @@
 <template>
   <input type="checkbox" class="toggle"
-         v-model="value"
-         @change="$emit('input', value)">
+         v-model="value0"
+         @change="$emit('input', value0)">
 </template>
 
 <script>
 export default {
   name: 'ToggleSwitch',
-  // data() {
-  //   return {
-  //     value: false
-  //   }
-  // },
+  data() {
+    return {
+      value0: false
+    }
+  },
   props: {
     value: {
       type: Boolean,
       default: false
     }
+  },
+  mounted() {
+    this.value0 = this.value
   }
 }
 </script>

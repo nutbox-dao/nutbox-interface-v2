@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    <b-collapse :id="'accordion' + pool.id" visible>
+    <b-collapse :id="'accordion' + pool.id" :visible="isFold">
       <div class="collapse-content-grid font16 py-3 px-4">
         <div class="link-box d-flex flex-column justify-content-center text-primary-0" style="grid-area: link">
           <div class="d-flex align-items-center">
@@ -329,6 +329,9 @@ export default {
     pool: {
       type: Object
     },
+    isFold: {
+      type: Boolean
+    }
   },
   components: {
     ConnectMetaMask,
