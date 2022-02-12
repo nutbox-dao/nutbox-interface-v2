@@ -81,14 +81,26 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 // }
 
 // chapel
-export const RPC_NODE = 'https://data-seed-prebsc-1-s1.binance.org:8545';
-export const BSC_CHAIN_ID = 97;
-export const BLOCK_CHAIN_BROWER = 'https://testnet.bscscan.com//';
-export const CHAIN_NAME = 'BSC-Test';
+// export const RPC_NODE = 'https://data-seed-prebsc-1-s1.binance.org:8545';
+// export const BSC_CHAIN_ID = 97;
+// export const BLOCK_CHAIN_BROWER = 'https://testnet.bscscan.com//';
+// export const CHAIN_NAME = 'BSC-Test';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
+
+// goerli
+export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+export const BSC_CHAIN_ID = 5;
+export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
+export const CHAIN_NAME = 'Goerli';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'ETH',
+  symbol: 'ETH',
   decimals: 18
 }
 
@@ -120,12 +132,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-// export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
+export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 
 // bsc test
-export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
-export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
+// export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
+// export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
 
 // moonbase alpha
 // export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'

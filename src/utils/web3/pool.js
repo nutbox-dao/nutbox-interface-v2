@@ -165,6 +165,7 @@ export const addPool = async (form) => {
         })
       }
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
+      await waitForTx(tx.hash)
     } catch (e) {
       console.log('Create pool fail', e);
       if (form.type === 'erc20staking') {

@@ -610,11 +610,11 @@ export default {
             title: this.$t('tip.tips'),
             variant: 'success'
           })
+          await sleep(3)
           if (this.cToken.isCustom && this.cToken.isMintable) {
             this.cardStep = 4
             return;
           }
-          await sleep(3)
           this.$router.replace('set-profile')
         }
       } catch (e) {

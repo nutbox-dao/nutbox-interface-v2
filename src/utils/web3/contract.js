@@ -18,12 +18,12 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0x7CEAD62ec76a4bF7AD4447455465AFE26fFe2d40",
-  "MintableERC20Factory": "0xF8869C07E5fE7914b8F78A1E3b2e57C1f0CA1e0a",
-  "CommunityFactory": "0xA47EC6C4fb0Acc390e14CD5776Ea9A49AD5d1fe4",
-  "LinearCalculator": "0x330d8FC2CC958C53Dc4D1077705262BB39367831",
-  "SPStakingFactory": "0x8c13857eeA5E658D02733e238414C45a8A3eaC87",
-  "ERC20StakingFactory": "0x2b8e1ECE583B170c013aa4bf3d831f4b8Ea539E1"
+  "Committee": "0x5245dd378Ed1B0aE4aE41fFa28019a910bC0648D",
+  "MintableERC20Factory": "0x750C8b3b0e00A799Bb98953e597D02f6736C3B11",
+  "CommunityFactory": "0x2FddC4c37077b0E4755e143CbC3BB3A21014849F",
+  "LinearCalculator": "0x9e8d8D322c64a850a295cB24D2742f3912547A46",
+  "SPStakingFactory": "0x49589033a856A6B9cFE21832e5A0e4cB1EC411Ea",
+  "ERC20StakingFactory": "0x212074e18CE6b81064C8AbBBbaEb3e6dF7a4f27d"
 }
 
 export const getPoolFactory = (type) => {
