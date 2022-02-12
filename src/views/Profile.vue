@@ -82,7 +82,7 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <AvatarOptionsModal @close="avatarModalVisible=false"/>
+      <AvatarOptionsModal @close="closeAvatar"/>
     </b-modal>
   </div>
 </template>
@@ -162,6 +162,12 @@ export default {
       }finally{
         this.isEditName = false;
       }
+    },
+    closeAvatar (avatar) {
+      if (avatar) {
+        this.user.avatar = avatar
+      }
+      this.avatarModalVisible=false
     }
   },
   async mounted () {

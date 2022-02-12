@@ -18,6 +18,7 @@
 <script>
 import { updateUserInfo } from '@/utils/web3/account'
 import { mapGetters, mapState } from 'vuex'
+import { handleApiErrCode } from '../../utils/helper'
 
 export default {
   name: 'AvatarOptionsModal',
@@ -54,9 +55,17 @@ export default {
       }
       index++;
       const avatar = 'https://cdn.wherein.mobi/walnut/avatar/default/'+ index +'.png'
-      user.avatar = avatar
-      await updateUserInfo(user);
-      this.$emit('close');
+      try{
+        await updateUserInfo({...user, avatar});
+        user.avatar = avatar
+        this.$emit('close', avatar);
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+        this.selectedIndex = -1;
+      } finally {
+      }
     }
   },
 }
