@@ -7,7 +7,7 @@
     <template v-else>
       <div
         class="d-flex justify-content-between align-items-center "
-        v-if="approved && (!takeFee || approvedCommunity) || (!needLogin && type !== 'erc20staking')"
+        v-if="approved && (!takeFee || approvedCommunity) && !needLogin"
       >
         <span class="value flex-fill">
           {{ staked | amountForm }}
