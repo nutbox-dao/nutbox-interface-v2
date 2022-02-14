@@ -266,9 +266,10 @@ export default {
         });
 
 
-        await connectKeplr();
+        await connectKeplr(() => {
+          this.$router.go(0);
+        });
         getCosAcc().then(async (res) => {
-          console.log(23556, res);
           // const ddd = await delegate('cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv', 100000, '0x1234', account)
           const ddd = await test()
           console.log(666, ddd);
