@@ -1,5 +1,7 @@
-import { SigningCosmosClient, coin, conins, coins, MsgBeginRedelegate, MsgUndelegate } from "@cosmjs/launchpad";
+import { SigningCosmosClient, coin, coins, MsgBeginRedelegate, MsgUndelegate, AminoMsg, 
+StdSignDoc } from "@cosmjs/launchpad";
 import store from '@/store'
+import { makeSignDoc, serializeSignDoc } from '@cosmjs/amino'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
 
 const chainId = "cosmoshub-4"
@@ -21,38 +23,58 @@ const getKeplr = async () => {
 
 }
 
-export const connectWallet = async () => {
+export const connectWallet = async (callback) => {
     const keplr = await getKeplr()
     await keplr.enable(chainId)
+    window.addEventListener('keplr_keystorechange', () => {
+        console.log('keplr account changed');
+        callback && callback();
+    })
 }
 
 export const test = async () => {
-    const chainId = "cosmoshub-3";
     await window.keplr.enable(chainId);
     const offlineSigner = window.getOfflineSigner(chainId);
-
-    const accounts = await offlineSigner.getAccounts();
-
-    // Initialize the gaia api with the offline signer that is injected by Keplr extension.
-    const cosmJS = new SigningCosmosClient(
-        "https://node-cosmoshub-3.keplr.app/rest",
-        accounts[0].address,
-        offlineSigner
-    );
-
-    const result = await cosmJS.sendTokens('cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4', [{
-        denom: "uatom",
-        amount: '100000',
-    }]);
-
-    console.log(result);
-
-    if (result.code !== undefined &&
-        result.code !== 0) {
-        alert("Failed to send tx: " + result.log || result.rawLog);
-    } else {
-        alert("Succeed to send tx");
-    }
+    const key = await window.keplr.getKey(chainId)
+    console.log(67623, key);
+    const doc = makeSignDoc([{
+        type: 'cosmos-sdk/MsgSend',
+        value: {
+            from_address: store.state.cosmos.account,
+            to_address: COSMOS_GAS_ACCOUNT,
+            amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
+        }
+    }], {
+        amount: coins(6250, 'uatom'),
+        gas: "250000"
+    }, chainId, 'test', 808868, 3)
+    console.log(2345, doc);
+    const stdDoc = serializeSignDoc(doc)
+    console.log(1111, stdDoc);
+    const res =  await offlineSigner.signAmino(store.state.cosmos.account, {
+        chain_id: chainId,
+        account_number: '808868',
+        sequence: 4,
+        fee: {
+            amount: coins(6250, 'uatom'),
+            gas: "250000"
+        },
+        memo: 'test',
+        msgs: [
+            {
+                type: 'cosmos-sdk/MsgSend',
+                value: {
+                    from_address: store.state.cosmos.account,
+                    to_address: COSMOS_GAS_ACCOUNT,
+                    amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
+                }
+            }
+        ]
+    } 
+      ).catch(e => {
+          console.log(722, e);
+      })
+    console.log(6686, res);
 }
 
 export const getAccount = async () => {
@@ -137,3 +159,68 @@ export const unDelegate = async (validator, amount, pid, address) => {
 
     return signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
 }
+
+
+
+// ======================================Transaction demo======================================
+// delegate
+const delegate_demo = {
+    "chain_id": "cosmoshub-4",
+    "account_number": "808868",
+    "sequence": "0",
+    "fee": {
+      "gas": "250000",
+      "amount": [
+        {
+          "denom": "uatom",
+          "amount": "6250"
+        }
+      ]
+    },
+    "msgs": [
+      {
+        "type": "cosmos-sdk/MsgDelegate",
+        "value": {
+          "delegator_address": "cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv",
+          "validator_address": "cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf",
+          "amount": {
+            "denom": "uatom",
+            "amount": "100000"
+          }
+        }
+      }
+    ],
+    "memo": ""
+  }
+
+  const send_demo = {
+    "chain_id": "cosmoshub-4",
+    "account_number": "808868",
+    "sequence": "1",
+    "fee": {
+      "gas": "80000",
+      "amount": [
+        {
+          "denom": "uatom",
+          "amount": "2000"
+        }
+      ]
+    },
+    "msgs": [
+      {
+        "type": "cosmos-sdk/MsgSend",
+        "value": {
+          "from_address": "cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv",
+          "to_address": "cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4",
+          "amount": [
+            {
+              "denom": "uatom",
+              "amount": "100000"
+            }
+          ]
+        }
+      }
+    ],
+    "memo": "test"
+  }
+  
