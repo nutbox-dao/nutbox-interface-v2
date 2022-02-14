@@ -12,6 +12,7 @@ import hive from './hive'
 import currentCommunity from './currentCommunity'
 import user from './user'
 import pool from './pool'
+import cosmos from './cosmos'
 
 Vue.use(Vuex)
 
@@ -54,6 +55,7 @@ export default new Vuex.Store({
     hive,
     currentCommunity,
     user,
-    pool
+    pool,
+    cosmos
   }
 })

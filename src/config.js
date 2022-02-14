@@ -66,6 +66,10 @@ export const HIVE_GAS_ACCOUNT = "test.walnut.gas";
 // Hive Config
 export const HIVE_API_URLS = ["https://api.hive.blog"];
 
+/**===================================== cosmos  =======================================*/
+export const COSMOS_STAKE_FEE = 0.01;
+export const COSMOS_GAS_ACCOUNT = "cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4";
+
 /** ==================================Main chain============================================*/
 
 //  moonbase alpha
