@@ -136,6 +136,7 @@ import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
+import { getAccount as getCosAcc, connectWallet as connectKeplr, delegate, test } from '@/utils/cosmos/cosmos'
 
 export default {
   computed: {
@@ -251,7 +252,7 @@ export default {
     } catch (e) {
       console.log('Initial network fail', e)
     }
-        // bsc related
+    // bsc related
     try {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();
@@ -263,10 +264,20 @@ export default {
         getMyCommunityInfo().catch(e => {
           console.log('No created token by current user');
         });
+
+
+        await connectKeplr();
+        getCosAcc().then(async (res) => {
+          console.log(23556, res);
+          // const ddd = await delegate('cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv', 100000, '0x1234', account)
+          const ddd = await test()
+          console.log(666, ddd);
+        }).catch(console.log)
       }
     } catch (e) {
       console.log('Get accounts fail', e)
     }
+
     getCommon().then(res => {
         if (!res) return
         this.$store.commit('saveTvl', res.tvl)
