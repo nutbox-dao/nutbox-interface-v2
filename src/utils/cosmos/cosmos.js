@@ -1,7 +1,4 @@
-import { SigningCosmosClient, coin, coins, MsgBeginRedelegate, MsgUndelegate, AminoMsg, 
-StdSignDoc } from "@cosmjs/launchpad";
 import store from '@/store'
-import { makeSignDoc, serializeSignDoc } from '@cosmjs/amino'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
 
 const chainId = "cosmoshub-4"
@@ -35,22 +32,6 @@ export const connectWallet = async (callback) => {
 export const test = async () => {
     await window.keplr.enable(chainId);
     const offlineSigner = window.getOfflineSigner(chainId);
-    const key = await window.keplr.getKey(chainId)
-    console.log(67623, key);
-    const doc = makeSignDoc([{
-        type: 'cosmos-sdk/MsgSend',
-        value: {
-            from_address: store.state.cosmos.account,
-            to_address: COSMOS_GAS_ACCOUNT,
-            amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
-        }
-    }], {
-        amount: coins(6250, 'uatom'),
-        gas: "250000"
-    }, chainId, 'test', 808868, 3)
-    console.log(2345, doc);
-    const stdDoc = serializeSignDoc(doc)
-    console.log(1111, stdDoc);
     const res =  await offlineSigner.signAmino(store.state.cosmos.account, {
         chain_id: chainId,
         account_number: '808868',
@@ -85,26 +66,14 @@ export const getAccount = async () => {
     return accounts[0].address;
 }
 
-export const getCosmJS = () => {
-    const cosm = new SigningCosmosClient(
-        "https://node-cosmoshub-3.keplr.app/rest",
-        store.state.cosmos.account, 
-        window.getOfflineSigner(chainId));
-    return cosm
-}
-
 export const signAndBroadcast = async (msgs, memo) => {
     return new Promise((resolve) => {
-        const cosm = getCosmJS()
+        const offlineSigner = window.getOfflineSigner(chainId);
         const fee = {
             amount: coins(6250, 'uatom'),
             gas: "250000"
         }
-        cosm.signAndBroadcast(msgs, fee, memo).then(res => {
-            resolve(res)
-        }).catch(e => {
-            console.log(677, e);
-        })
+        const tx = await offlineSigner.signAmino(msgs, fee, memo)
     })
 }
 
