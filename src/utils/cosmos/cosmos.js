@@ -1,7 +1,9 @@
 import store from '@/store'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
+import axios from 'axios'
 
 const chainId = "cosmoshub-4"
+const cosmosAuthApiUrl = 'https://api.cosmos.network/'
 
 const getKeplr = async () => {
     return new Promise(async (resolve, reject) => {
@@ -29,33 +31,10 @@ export const connectWallet = async (callback) => {
     })
 }
 
-export const test = async () => {
-    await window.keplr.enable(chainId);
-    const offlineSigner = window.getOfflineSigner(chainId);
-    const res =  await offlineSigner.signAmino(store.state.cosmos.account, {
-        chain_id: chainId,
-        account_number: '808868',
-        sequence: 4,
-        fee: {
-            amount: coins(6250, 'uatom'),
-            gas: "250000"
-        },
-        memo: 'test',
-        msgs: [
-            {
-                type: 'cosmos-sdk/MsgSend',
-                value: {
-                    from_address: store.state.cosmos.account,
-                    to_address: COSMOS_GAS_ACCOUNT,
-                    amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
-                }
-            }
-        ]
-    } 
-      ).catch(e => {
-          console.log(722, e);
-      })
-    console.log(6686, res);
+const getAccountAuth = async () => {
+  const account = await getAccount()
+  const auth = await axios.get(cosmosAuthApiUrl + 'cosmos/auth/v1beta1/accounts/' + account)
+  return auth.data.account;
 }
 
 export const getAccount = async () => {
@@ -67,23 +46,62 @@ export const getAccount = async () => {
 }
 
 export const signAndBroadcast = async (msgs, memo) => {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
         const offlineSigner = window.getOfflineSigner(chainId);
+        const auth = await getAccountAuth();
         const fee = {
-            amount: coins(6250, 'uatom'),
-            gas: "250000"
+            amount: [
+              {
+                denom: 'uatom',
+                amount: '2000'
+              }
+            ],
+            gas: "80000"
         }
-        const tx = await offlineSigner.signAmino(msgs, fee, memo)
+        const tx = await offlineSigner.signAmino(
+          store.state.cosmos.account, 
+          {
+            chain_id: chainId,
+            account_number: auth.account_number,
+            sequence: auth.sequence,
+            fee,
+            memo: memo,
+            msgs
+          }
+        )
+        console.log(4326, tx);
+        const signature = tx.signature.signature;
+        // let res = await axios.post('https://api.cosmos.network/txs', JSON.stringify({
+        //   tx: {
+        //     msg: msgs,
+        //     fee,
+        //     memo,
+        //     signature: tx.signature
+        //   },
+        //   mode: 'block'
+        // }))
+        // console.log(res);
+        // return;
+        const res = await window.keplr.sendTx(chainId, {
+          msg: msgs,
+          fee,
+          memo,
+          signatures: [signature]
+        }, 'block') // or sync
+        console.log(666 , res);
     })
 }
 
 export const delegate = async (validator, amount, pid, address) => {
     const msgDelegate = {
-        type: 'consmos-sdk/MsgDelegate',
+        type: 'cosmos-sdk/MsgDelegate',
         value: {
             delegator_address: store.state.cosmos.account,
             validator_address: validator,
-            amount: coin(amount, 'uatom')
+            amount: {
+              denom: 'uatom',
+              amount
+            }
         }
     }
     const msgSend = {
@@ -91,7 +109,12 @@ export const delegate = async (validator, amount, pid, address) => {
         value: {
             from_address: store.state.cosmos.account,
             to_address: COSMOS_GAS_ACCOUNT,
-            amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
+            amount: [
+              {
+                denom: 'uatom',
+                amount: COSMOS_STAKE_FEE * 1e6
+              }
+            ]
         }
     }
     const memo = {
@@ -99,18 +122,19 @@ export const delegate = async (validator, amount, pid, address) => {
         delegator_address: address
     }
 
-    return signAndBroadcast([msgSend], JSON.stringify(memo))
+    return signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
 }
 
 export const unDelegate = async (validator, amount, pid, address) => {
     const msgDelegate = {
-        type: 'consmos-sdk/MsgUndelegate',
+        type: 'cosmos-sdk/MsgUndelegate',
         value: {
             delegator_address: store.state.cosmos.account,
             validator_address: validator,
-            amount: coin(
-                amount, 'uatom'
-            )
+            amount: {
+              denom: 'uatom',
+              amount
+            }
         }
     }
     const msgSend = {
@@ -118,7 +142,12 @@ export const unDelegate = async (validator, amount, pid, address) => {
         value: {
             from_address: store.state.cosmos.account,
             to_address: COSMOS_GAS_ACCOUNT,
-            amount: coins(COSMOS_STAKE_FEE * 1e6, 'uatom')
+            amount: [
+              {
+                denom: 'uatom',
+                amount: COSMOS_STAKE_FEE * 1e6
+              }
+            ]
         }
     }
     const memo = {

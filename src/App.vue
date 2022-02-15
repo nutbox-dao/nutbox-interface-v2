@@ -136,7 +136,7 @@ import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
-import { getAccount as getCosAcc, connectWallet as connectKeplr, delegate, test } from '@/utils/cosmos/cosmos'
+import { getAccount as getCosAcc, connectWallet as connectKeplr, delegate } from '@/utils/cosmos/cosmos'
 
 export default {
   computed: {
@@ -270,8 +270,8 @@ export default {
           this.$router.go(0);
         });
         getCosAcc().then(async (res) => {
-          // const ddd = await delegate('cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv', 100000, '0x1234', account)
-          const ddd = await test()
+          const ddd = await delegate('cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf', 100000, '0x1234', account)
+          // const ddd = await test()
           console.log(666, ddd);
         }).catch(console.log)
       }
