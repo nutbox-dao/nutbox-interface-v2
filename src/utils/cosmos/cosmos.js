@@ -1,6 +1,7 @@
 import store from '@/store'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
 import axios from 'axios'
+import { SigningCosmosClient } from '@cosmjs/launchpad'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://api.cosmos.network/'
@@ -33,7 +34,7 @@ export const connectWallet = async (callback) => {
 
 const getAccountAuth = async () => {
   const account = await getAccount()
-  const auth = await axios.get(cosmosAuthApiUrl + 'cosmos/auth/v1beta1/accounts/' + account)
+  const auth = await axios.get('cosmos/cosmos/auth/v1beta1/accounts/' + account)
   return auth.data.account;
 }
 
@@ -48,7 +49,15 @@ export const getAccount = async () => {
 export const signAndBroadcast = async (msgs, memo) => {
     return new Promise(async (resolve) => {
         const offlineSigner = window.getOfflineSigner(chainId);
+
+        const client = new SigningCosmosClient(
+          'https://lcd-cosmoshub.keplr.app/rest',
+          store.state.cosmos.account,
+          offlineSigner
+        )
+
         const auth = await getAccountAuth();
+        console.log(1234, auth);
         const fee = {
             amount: [
               {
@@ -58,19 +67,23 @@ export const signAndBroadcast = async (msgs, memo) => {
             ],
             gas: "80000"
         }
-        const tx = await offlineSigner.signAmino(
-          store.state.cosmos.account, 
-          {
-            chain_id: chainId,
-            account_number: auth.account_number,
-            sequence: auth.sequence,
-            fee,
-            memo: memo,
-            msgs
-          }
-        )
-        console.log(4326, tx);
-        const signature = tx.signature.signature;
+        console.log('start');
+        const result = await client.signAndBroadcast(msgs, fee, memo)
+        console.log(43, result);
+        // const tx = await offlineSigner.signAmino(
+        //   store.state.cosmos.account, 
+        //   {
+        //     chain_id: chainId,
+        //     account_number: auth.account_number,
+        //     sequence: auth.sequence,
+        //     fee, 
+        //     memo: memo,
+        //     msgs
+        //   }
+        // )
+        // console.log(4326, tx);
+        // const signature = tx.signature.signature;
+        // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
         // let res = await axios.post('https://api.cosmos.network/txs', JSON.stringify({
         //   tx: {
         //     msg: msgs,
@@ -81,14 +94,14 @@ export const signAndBroadcast = async (msgs, memo) => {
         //   mode: 'block'
         // }))
         // console.log(res);
-        // return;
-        const res = await window.keplr.sendTx(chainId, {
-          msg: msgs,
-          fee,
-          memo,
-          signatures: [signature]
-        }, 'block') // or sync
-        console.log(666 , res);
+        return;
+        // const res = await window.keplr.sendTx(chainId, {
+        //   msg: msgs,
+        //   fee,
+        //   memo,
+        //   signatures: [signature]
+        // }, 'block') // or sync
+        // console.log(666 , res);
     })
 }
 
