@@ -1,10 +1,12 @@
 import store from '@/store'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
 import axios from 'axios'
-import { SigningCosmosClient } from '@cosmjs/launchpad'
+import { SigningStargateClient } from '@cosmjs/stargate'
 
 const chainId = "cosmoshub-4"
-const cosmosAuthApiUrl = 'https://api.cosmos.network/'
+const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
+// const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
+// const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
 
 const getKeplr = async () => {
     return new Promise(async (resolve, reject) => {
@@ -20,7 +22,6 @@ const getKeplr = async () => {
             )
         }
     })
-
 }
 
 export const connectWallet = async (callback) => {
@@ -50,14 +51,6 @@ export const signAndBroadcast = async (msgs, memo) => {
     return new Promise(async (resolve) => {
         const offlineSigner = window.getOfflineSigner(chainId);
 
-        const client = new SigningCosmosClient(
-          'https://lcd-cosmoshub.keplr.app/rest',
-          store.state.cosmos.account,
-          offlineSigner
-        )
-
-        const auth = await getAccountAuth();
-        console.log(1234, auth);
         const fee = {
             amount: [
               {
@@ -65,11 +58,17 @@ export const signAndBroadcast = async (msgs, memo) => {
                 amount: '2000'
               }
             ],
-            gas: "80000"
+            gas: "260000"
         }
         console.log('start');
-        const result = await client.signAndBroadcast(msgs, fee, memo)
-        console.log(43, result);
+        
+        const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
+        const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
+        if (res.code === 0){
+          resolve(res.transactionHash)
+        }
+        console.log(645, res);
+        
         // const tx = await offlineSigner.signAmino(
         //   store.state.cosmos.account, 
         //   {
@@ -83,78 +82,75 @@ export const signAndBroadcast = async (msgs, memo) => {
         // )
         // console.log(4326, tx);
         // const signature = tx.signature.signature;
-        // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-        // let res = await axios.post('https://api.cosmos.network/txs', JSON.stringify({
-        //   tx: {
-        //     msg: msgs,
-        //     fee,
+        // const { signed, signature } = tx
+        // const stdTx = {
+        //   type: 'auth/StdTx',
+        //   value: {
+        //     msg: signed.msgs,
+        //     fee: signed.fee,
         //     memo,
-        //     signature: tx.signature
-        //   },
-        //   mode: 'block'
-        // }))
-        // console.log(res);
-        return;
-        // const res = await window.keplr.sendTx(chainId, {
-        //   msg: msgs,
-        //   fee,
-        //   memo,
-        //   signatures: [signature]
-        // }, 'block') // or sync
-        // console.log(666 , res);
+        //     signatures: Array.isArray(signature) ? signature : [signature]
+        //   }
+        // }
+        // const txs = JSON.parse(JSON.stringify(stdTx))
+
+        // const res  = await axios.post('https://api.cosmos.network/cosmos/tx/v1beta1/txs', {
+        //   tx_bytes: marshalStdTx(txs),
+        //   mode: 'BROADCAST_MODE_BLOCK'
+        // })
     })
 }
 
-export const delegate = async (validator, amount, pid, address) => {
+export const delegate = async (validator, amount, pid) => {
     const msgDelegate = {
-        type: 'cosmos-sdk/MsgDelegate',
+      typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
         value: {
-            delegator_address: store.state.cosmos.account,
-            validator_address: validator,
+            delegatorAddress: store.state.cosmos.account,
+            validatorAddress: validator,
             amount: {
               denom: 'uatom',
-              amount
+              amount: amount.toString()
             }
         }
     }
     const msgSend = {
-        type: 'cosmos-sdk/MsgSend',
+      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
         value: {
-            from_address: store.state.cosmos.account,
-            to_address: COSMOS_GAS_ACCOUNT,
+            fromAddress: store.state.cosmos.account,
+            toAddress: COSMOS_GAS_ACCOUNT,
             amount: [
               {
                 denom: 'uatom',
-                amount: COSMOS_STAKE_FEE * 1e6
+                amount: (COSMOS_STAKE_FEE * 1e6).toString()
               }
             ]
         }
     }
     const memo = {
         pid,
-        delegator_address: address
+        delegator_address: store.state.web3.account
     }
 
     return signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
 }
 
 export const unDelegate = async (validator, amount, pid, address) => {
-    const msgDelegate = {
-        type: 'cosmos-sdk/MsgUndelegate',
+    const msgUndelegate = {
+        typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
         value: {
-            delegator_address: store.state.cosmos.account,
-            validator_address: validator,
+            delegatorAddress: store.state.cosmos.account,
+            validatorAddress: validator,
             amount: {
               denom: 'uatom',
-              amount
+              amount: amount.toString()
             }
         }
     }
     const msgSend = {
-        type: 'cosmos-sdk/MsgSend',
+      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
         value: {
-            from_address: store.state.cosmos.account,
-            to_address: COSMOS_GAS_ACCOUNT,
+            fromAddress: store.state.cosmos.account,
+            toAddress: COSMOS_GAS_ACCOUNT,
             amount: [
               {
                 denom: 'uatom',
@@ -165,10 +161,10 @@ export const unDelegate = async (validator, amount, pid, address) => {
     }
     const memo = {
         pid,
-        delegator_address: address
+        delegator_address: store.state.web3.account
     }
 
-    return signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
+    return signAndBroadcast([msgUndelegate, msgSend], JSON.stringify(memo))
 }
 
 
@@ -234,4 +230,3 @@ const delegate_demo = {
     ],
     "memo": "test"
   }
-  
