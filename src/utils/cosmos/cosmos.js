@@ -2,6 +2,11 @@ import store from '@/store'
 import  { COSMOS_STAKE_FEE, COSMOS_GAS_ACCOUNT } from '@/config'
 import axios from 'axios'
 import { SigningStargateClient } from '@cosmjs/stargate'
+import { decodeTxRaw } from '@cosmjs/proto-signing'
+import { fromBase64 } from '@cosmjs/encoding'
+import { pubkeyToAddress } from '@cosmjs/amino'
+import { AccAddress } from '@chainapsis/cosmosjs/common/address'
+import { ethers } from 'ethers'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
@@ -38,11 +43,18 @@ const getAccountAuth = async () => {
   const auth = await axios.get('cosmos/cosmos/auth/v1beta1/accounts/' + account)
   return auth.data.account;
 }
+// osmo  1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477
+// cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const getAccount = async () => {
     // if (store.state.cosmos.account) return store.state.cosmos.account
     const offlineSigner = window.getOfflineSigner(chainId);
     const accounts = await offlineSigner.getAccounts();
+    const accAddress = new AccAddress.fromBech32(accounts[0].address, 'cosmos')
+    console.log(45, accAddress, accAddress.toBech32() ,accAddress.toBytes());
+    const ii = ethers.utils.hexlify(accAddress.toBytes())
+    console.log(11, ii);
+
     store.commit('cosmos/saveAccount', accounts[0].address)
     return accounts[0].address;
 }
@@ -170,6 +182,8 @@ export const unDelegate = async (validator, amount, pid, address) => {
 
 
 // ======================================Transaction demo======================================
+
+// tx: CpQBCpEBChwvY29zbW9zLmJhbmsudjFiZXRhMS5Nc2dTZW5kEnEKLWNvc21vczFsMHpuc3ZkZGxsdzlrbmhhM3l4MnN2bmx4bnk2NzZkOG5zN3V5cxItY29zbW9zMWtxd2NxNzZ4bXBrcWc1ajh3bWg1dDhmbXcyN2w2cGFjN3V0bTQ2GhEKBXVhdG9tEggxNzkyMTcxOBJpClIKRgofL2Nvc21vcy5jcnlwdG8uc2VjcDI1NmsxLlB1YktleRIjCiECX9MXzHSLirRcEAjuy7h7HNnpPjkn/WN1VUOxpuZQl1ESBAoCCAEYnqgJEhMKDQoFdWF0b20SBDMwMDAQ4KcSGkDOuF1Zpczvkw2DKIhO25A6LZeQNRV2c355fXcpSMbjsgnixAQi9GSc+SvEQCyF+NI5O9HhLwgUPWTr/LZ25TSk
 // delegate
 const delegate_demo = {
     "chain_id": "cosmoshub-4",
