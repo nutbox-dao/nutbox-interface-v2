@@ -6,7 +6,7 @@
           <b-nav vertical class="overflow-hidden">
             <b-nav-item to="/manage-community/profile">
               <i class="menu-icon home-icon" />
-              <span>{{ $t('router.information') }}</span>
+              <span>{{ $t('router.profile') }}</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/asset">
               <i class="menu-icon asset-icon" />

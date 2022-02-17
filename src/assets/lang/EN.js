@@ -333,9 +333,10 @@ module.exports = {
   // navigator
   router: {
     information: "Information",
+    profile: "Profile",
     asset: "Asset",
     pool: "Pool",
-    social: "Social",
+    social: "Social Info",
     governance: "Governance",
     staking: "Staking",
     blog: "Blog",
