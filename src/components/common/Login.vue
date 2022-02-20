@@ -74,7 +74,7 @@ export default {
     getKeychain () {
       const url =
         this.type === 'STEEM'
-          ? 'https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm'
+          ? 'https://chrome.google.com/webstore/detail/steemkeychain/jhgnbkkipaallpehbohjmkbjofjdmeid/related'
           : 'https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep?hl=zh-CN'
       window.open(url, '_blank')
     },
