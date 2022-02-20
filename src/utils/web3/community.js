@@ -7,54 +7,72 @@ import {
   insertCommunity,
   updateCommunity,
   getAllCommunities as gac,
-  updateBlogTag as ubt,
   updateSocial,
-  getCommunityToken as gct,
-  getStakingFeast
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasTimes } from "@/config";
+import { errCode, Multi_Config, FEE_TYPES, NutAddress } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
-import { sleep } from "@/utils/helper";
+import { sleep, utf8ToHex } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
 import { getCToken } from "./asset";
-import BN from "bn.js";
 import { getAccounts } from "@/utils/web3/account";
 
 /**
  * Get community admin's staking factory id
  * @returns
  */
-export const getMyStakingFactory = async (update = false) => {
+export const getMyCommunityContract = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     const id = store.state.web3.stakingFactoryId;
     if (!update && id) {
       resolve(id);
       return;
     }
-    store.commit("web3/saveLoadingCommunity", true);
-    
-
-    const account = await getAccounts();
-    let stakingFactoryId = null;
-    try {
-      stakingFactoryId = await getStakingFeast(account);
-      if (!stakingFactoryId || stakingFactoryId.length === 0) {
-        store.commit("web3/saveStakingFactoryId", null);
-        store.commit("web3/saveLoadingCommunity", false);
-        resolve(null);
+    while(store.state.web3.loadingCommunity) {
+      await sleep(0.3)
+      if (!store.state.web3.loadingCommunity){
+        await sleep(0.2)
+        resolve(store.state.web3.stakingFactoryId)
         return;
       }
-    } catch (e) {
-      console.log("Get staking feast record fail", e);
-      reject(errCode.BLOCK_CHAIN_ERR);
+    }
+    // store.commit('user/saveLoadingUserGraph', false)
+    store.commit("web3/saveLoadingCommunity", true);
+    const account = await getAccounts();
+    if (!account){
+      console.log('no account');
+      reject(errCode.NO_STAKING_FACTORY);
       return;
     }
-    console.log("community", stakingFactoryId);
-    stakingFactoryId = stakingFactoryId[0].stakingFeast;
+    while(true) {
+      if (!store.state.user.loadingUserGraph) {
+        await sleep(0.1)
+        break;
+      }
+      await sleep(0.2)
+    }
+
+    let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
+    if (!joinedCommunity || joinedCommunity.length === 0) {
+      store.commit("web3/saveStakingFactoryId", null);
+      store.commit("web3/saveLoadingCommunity", false);
+      reject(errCode.NO_STAKING_FACTORY)
+      return;
+    }
+    let stakingFactoryId = null;
+    for (let i = 0; i < joinedCommunity.length; i++){
+      if (joinedCommunity[i].owner.id === account.toLowerCase()){
+        stakingFactoryId = joinedCommunity[i].id;
+        store.commit("web3/saveLoadingCommunity", false);
+        store.commit("web3/saveStakingFactoryId", stakingFactoryId);
+        resolve(stakingFactoryId);
+        return;
+      }
+    }
+    store.commit("web3/saveStakingFactoryId", null);
     store.commit("web3/saveLoadingCommunity", false);
-    store.commit("web3/saveStakingFactoryId", stakingFactoryId);
-    resolve(stakingFactoryId);
+    reject(errCode.NO_STAKING_FACTORY);
+    return;
   });
 };
 
@@ -66,38 +84,51 @@ export const getMyStakingFactory = async (update = false) => {
 export const getMyCommunityInfo = async (update = false) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null;
+    if(!store.state.community.communityInfo){
+      store.commit('community/saveLoadingMyCommunityInfo', true)
+    }
     try {
-      stakingFactoryId = await getMyStakingFactory(update);
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
+        store.commit('community/saveLoadingMyCommunityInfo', false)
         return;
       }
     } catch (e) {
       console.log("Get my staking factory fail", e);
+      store.commit('community/saveLoadingMyCommunityInfo', false)
       reject(e);
       return;
     }
-    if (!update && store.state.web3.communityInfo) {
-      resolve(store.state.web3.communityInfo);
+
+    if (!update && store.state.community.communityInfo) {
+      resolve(store.state.community.communityInfo);
+      store.commit('community/saveLoadingMyCommunityInfo', false)
       return;
     }
     let communityInfo = null;
     try {
       communityInfo = await gci(stakingFactoryId);
+      const cToken = await getCToken(stakingFactoryId);
 
       if (communityInfo && communityInfo.length > 0) {
-        store.commit("web3/saveCommunityInfo", communityInfo[0]);
+        communityInfo[0].cToken = cToken;
+        store.commit("community/saveCommunityInfo", communityInfo[0]);
         resolve(communityInfo[0]);
         return;
       } else {
         console.log("first get communityInfo");
-        store.commit("web3/saveCommunityInfo", { id: stakingFactoryId });
-        resolve({ id: stakingFactoryId });
+        // get first distribution
+        const dis = await getDistributionEras();
+        store.commit("community/saveCommunityInfo", { id: stakingFactoryId, cToken, firstBlock: dis[0].startHeight });
+        resolve({ id: stakingFactoryId, cToken, firstBlock: dis[0].startHeight });
       }
     } catch (e) {
       console.log("Get community info from backend fail", e);
-      store.commit("web3/saveCommunityInfo", null);
+      store.commit("community/saveCommunityInfo", null);
       reject(e);
+    } finally{
+      store.commit('community/saveLoadingMyCommunityInfo', false)
     }
   });
 };
@@ -107,33 +138,31 @@ export const getMyCommunityInfo = async (update = false) => {
  */
 export const getAllCommunities = async (update = false) => {
   return new Promise(async (resolve, reject) => {
+    while(store.state.community.loadingAllCommunityInfo) {
+      await sleep(0.5)
+    }
     if (
       !update &&
-      store.state.web3.allCommunities &&
-      store.state.web3.allCommunities.length > 0
+      store.state.community.allCommunityInfo &&
+      store.state.community.allCommunityInfo.length > 0
     ) {
-      resolve(store.state.web3.allCommunities);
+      resolve(store.state.community.allCommunityInfo);
       return;
     }
+    store.commit('community/saveLoadingAllCommunityInfo', true)
     try {
-      if(store.state.web3.loadingAllCommunities){
-        while(store.state.web3.loadingAllCommunities) {
-          await sleep(0.2)
-        }
-        resolve(store.state.web3.allCommunities)
-        return;
-      }
-      console.log(22222222222);
-      store.commit('web3/saveLoadingAllCommunities', true);
-      const currentCommunityId = store.state.currentCommunityId;
-      const communities = await gac(currentCommunityId);
-      store.commit("web3/saveAllCommunities", communities);
-      store.commit('web3/saveLoadingAllCommunities', false);
-      resolve(communities);
+      const communities = await gac();
+      let comms = {}
+      communities.map(c => {
+        comms[c.id.toLowerCase()] = c
+      })
+      store.commit("community/saveAllCommunityInfo", comms);
+      resolve(comms);
     } catch (e) {
       console.log("Get all community fail", e);
-      store.commit('web3/saveLoadingAllCommunities', false);
       reject(e);
+    } finally{
+      store.commit('community/saveLoadingAllCommunityInfo', false)
     }
   });
 };
@@ -141,32 +170,87 @@ export const getAllCommunities = async (update = false) => {
 /**update tokens info from db */
 export const updateAllCommunitiesFromBackend = async () => {
   while (true) {
-    await sleep(18);
     await getAllCommunities(true);
+    await sleep(18);
   }
 };
+
+/**
+ * get operation fee amount
+ */
+export const getOperationFee = async () => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      store.commit('web3/saveLoadingFees', true)
+      const calls = FEE_TYPES.map(type => ({
+        target: contractAddress['Committee'],
+        call: [
+          'getFee(string)(uint256)',
+          type
+        ],
+        returns: [
+          [type, val => val.toString() / 1e18]
+        ]
+      }))
+      const res = await aggregate(calls, Multi_Config);
+      store.commit('web3/saveFees', res.results.transformed)
+      store.commit('web3/saveLoadingFees', false)
+      resolve(res.results.transformed);
+    }catch(e){
+      console.log('Get operation fees fail', e);
+      store.commit('web3/saveLoadingFees', false)
+      reject(errCode.BLOCK_CHAIN_ERR);
+    }
+  })
+}
+
+/**
+ * Get community token reward per block
+ * @param {*} communityId 
+ * @returns 
+ */
+export const getCommunityRewardPerBlock = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('LinearCalculator')
+      const amount = await contract.getCurrentRewardPerBlock(communityId)
+      const ctoken = await getCToken(communityId)
+      resolve(amount.toString() / (10 ** ctoken.decimal))
+    }catch(e) {
+
+    }
+  })
+}
+
+function makeSimpleMintableERC20Metadata(name, symbol, supply, recipient) {
+  const meta = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(name.length), 1).substring(2)
+   + utf8ToHex(name)
+   + ethers.utils.hexZeroPad(ethers.utils.hexlify(symbol.length), 1).substring(2)
+   + utf8ToHex(symbol)
+   + ethers.utils.hexZeroPad(ethers.utils.parseUnits(supply.toString(), 18), 32).substring(2)
+   + recipient.substring(2)
+   return meta
+}
 
 /**
  * Create Community Staking Factory Contracts
  * @param {*} form contract params
  */
-export const createStakingFeast = async (form) => {
+export const createCommunity = async (cToken, distribution) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const comId = await getMyStakingFactory();
+      const comId = await getMyCommunityContract();
       if (comId) {
-        console.log("Can only register one community for an account");
-        reject(errCode.CONTRACT_CREATE_FAIL);
+        console.log("Can only register one community for an account", comId);
+        reject(errCode.HAVE_CREATED_COMMUNITY);
         return;
       }
     } catch (e) {
-      reject(e);
-      return;
     }
 
     let contract;
     try {
-      contract = await getContract("StakingFactory", null, false);
+      contract = await getContract("CommunityFactory", null, false);
     } catch (e) {
       reject(e);
       return;
@@ -174,15 +258,13 @@ export const createStakingFeast = async (form) => {
 
     try {
       // make params
-      const gas = await getGasPrice();
       const account = await getAccounts();
-      const assetId = form.assetId;
-      let distribution = form.poolData;
+      const isMintable = cToken.isMintable;
       let distributionStr =
         "0x" +
         ethers.utils
           .hexZeroPad(ethers.utils.hexlify(distribution.length), 1)
-          .substr(2);
+          .substring(2);
       for (let dis of distribution) {
         distributionStr +=
           ethers.utils
@@ -190,31 +272,43 @@ export const createStakingFeast = async (form) => {
               ethers.BigNumber.from(dis.startHeight).toHexString(),
               32
             )
-            .substr(2) +
+            .substring(2) +
           ethers.utils
             .hexZeroPad(ethers.BigNumber.from(dis.stopHeight).toHexString(), 32)
-            .substr(2) +
+            .substring(2) +
           ethers.utils
             .hexZeroPad(
               ethers.utils
-                .parseUnits(dis.amount.toString(), form.decimal)
+                .parseUnits(dis.amount.toString(), 18)
                 .toHexString(),
               32
             )
-            .substr(2);
+            .substring(2);
       }
-      contract.on('StakingFeastCreated', async (user, feast, asset) => {
-        if (account.toLowerCase() === user.toLowerCase() && asset.toLowerCase() == assetId.toLowerCase()){
-          console.log('Create new staking feast', feast);
-          store.commit("web3/saveStakingFactoryId", ethers.utils.getAddress(feast));
-          await monitorCommunity();
-          contract.removeAllListeners('StakingFeastCreated');
-          resolve(feast);
+      contract.on('CommunityCreated', async (user, community, token) => {
+        if (account.toLowerCase() === user.toLowerCase()){
+          console.log('Create new staking feast', community, 'ctoken:', token);
+          contract.removeAllListeners('CommunityCreated');
+          const communityInfo = {
+            id: ethers.utils.getAddress(community),
+            cToken: {...cToken, address: ethers.utils.getAddress(token)},
+            firstBlock: distribution[0].startHeight
+          }
+          // Created a new community
+          store.commit('community/saveCommunityInfo', communityInfo)
+          store.commit("community/saveDistributions", distribution);
+          store.commit("web3/saveStakingFactoryId", community);
+          resolve(communityInfo);
         }
       })
-      // call contract
-      const res = await contract.createStakingFeast(
-        assetId,
+      // call contract 
+      const preMine = (cToken && cToken.supply) ? cToken.supply : 0
+      const res = await contract.createCommunity(
+        isMintable,
+        // isCustom means use exists token
+        cToken.isCustom ? cToken.address : ethers.constants.AddressZero,
+        contractAddress['MintableERC20Factory'],
+        cToken.isCustom ? '0x' : makeSimpleMintableERC20Metadata(cToken.name, cToken.symbol, preMine, account),
         contractAddress["LinearCalculator"],
         distributionStr);
       await waitForTx(res.hash);
@@ -235,9 +329,13 @@ export const completeCommunityInfo = async (form, type) => {
   return new Promise(async (resolve, reject) => {
     let nonce = await getNonce();
     const userId = await getAccounts();
+    const communityId = await getMyCommunityContract();
+    form.id = communityId;
     nonce = nonce ? nonce + 1 : 1;
     try {
       const distri = await getDistributionEras(true);
+      const ctoken = await getCToken(form.id)
+      form.tokenAddress = ctoken.address;
       form.firstBlock = distri[0].startHeight;
     } catch (e) {
       reject(e);
@@ -277,28 +375,100 @@ export const completeCommunityInfo = async (form, type) => {
 };
 
 /**
- * Charge community's balance
- * Only non-mintable ctoken need to charge balance
- * @param {*} amount
+ * update new dao fund address
+ * @param {*} daofund 
+ * @returns 
  */
-export const chargeCommunityBalance = async (amount) => {
+export const setDevAddress = async (daofund) => {
   return new Promise(async (resolve, reject) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }
-      contract = await getContract("StakingTemplate", stakingFactoryId, false);
+      contract = await getContract("Community", stakingFactoryId, false);
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminSetDev(daofund);
+      await waitForTx(tx.hash);
+      resolve(tx.hash);
+    } catch (e) {
+      console.log("Set dao fund Failed", e);
+      reject(errCode.BLOCK_CHAIN_ERR);
+      return;
+    }
+  })
+}
+
+/**
+ * withdraw retained revenue
+ * @param {*} daofund 
+ * @returns 
+ */
+ export const withdrawRevenue = async () => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null;
+    let contract = null;
+    try {
+      stakingFactoryId = await getMyCommunityContract();
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY);
+        return;
+      }
+      contract = await getContract("Community", stakingFactoryId, false);
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminWithdrawRevenue();
+      await waitForTx(tx.hash);
+      resolve(tx.hash);
+    } catch (e) {
+      console.log("Withdraw revenue Failed", e);
+      reject(errCode.BLOCK_CHAIN_ERR);
+      return;
+    }
+  })
+}
+
+/**
+ * Charge community's balance
+ * Only non-mintable ctoken need to charge balance
+ * @param {*} amount origin data, no need to convert to big int
+ */
+export const chargeCommunityBalance = async (amount) => {
+  return new Promise(async (resolve, reject) => {
+    let communityId = null;
+    let erc20;
+    let ctoken;
+    try {
+      communityId = await getMyCommunityContract();
+      if (!communityId) {
+        reject(errCode.NO_STAKING_FACTORY);
+        return;
+      }
+      ctoken = await getCToken(communityId);
+      erc20 = await getContract('ERC20', ctoken.address, false);
     } catch (e) {
       reject(e);
       return;
     }
 
     try {
-      const tx = await contract.adminDepositReward(amount.toString());
+      let account = await getAccounts();
+      const balance = await erc20.balanceOf(account);
+      if (balance.toString() / (10 ** ctoken.decimal) <= parseFloat(amount)){
+        reject(errCode.INSUFIENT_BALANCE);
+        return;
+      }
+      const tx = await erc20.transfer(communityId, ethers.utils.parseUnits(amount.toString(), ctoken.decimal));
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
@@ -319,19 +489,18 @@ export const withdrawCommunityBalance = async (amount) =>  {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }
-      contract = await getContract("StakingTemplate", stakingFactoryId, false);
+      contract = await getContract("Community", stakingFactoryId, false);
     } catch (e) {
       reject(e);
       return;
     }
-
     try {
-      const tx = await contract.adminWithdrawReward(amount.toString());
+      const tx = await contract.adminWithdrawReward(ethers.utils.parseUnits(amount.toString(), 18));
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
@@ -341,77 +510,6 @@ export const withdrawCommunityBalance = async (amount) =>  {
     }
   });
 }
-
-/**
- * Approve erc20handler to user users ctoken
- * @param {*} address ctoken address
- */
-export const approveCommunityBalance = async (address) => {
-  return new Promise(async (resolve, reject) => {
-    let contract;
-    try {
-      contract = await getContract("ERC20", address, false);
-    } catch (e) {
-      reject(e);
-      return;
-    }
-
-    const erc20Handler = contractAddress["ERC20AssetHandler"];
-    try {
-      new BN(10).pow(new BN(18 + 50));
-      const tx = await contract.approve(
-        erc20Handler,
-        new BN(10).pow(new BN(18 + 50)).toString()
-      );
-      await waitForTx(tx.hash);
-      resolve(tx.hash);
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-      } else {
-        reject(errCode.BLOCK_CHAIN_ERR);
-      }
-      console.log("Approve community banlance Fail", e);
-    }
-  });
-};
-
-/**
- * Update dev address
- * @param {*} address
- * @returns
- */
-export const setDevAddress = async (address) => {
-  return new Promise(async (resolve, reject) => {
-    if (!ethers.utils.isAddress(address)) {
-      reject(errCode.WRONG_ETH_ADDRESS);
-      return;
-    }
-    let stakingFactoryId = null;
-    let contract = null;
-    try {
-      stakingFactoryId = await getMyStakingFactory();
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY);
-        return;
-      }
-      contract = await getContract("StakingTemplate", stakingFactoryId, false);
-    } catch (e) {
-      reject(e);
-      return;
-    }
-
-    try {
-      const tx = await contract.setDev(address);
-      await waitForTx(tx.hash);
-      resolve(tx.hash);
-    } catch (e) {
-      console.log("Set community address Failed", e);
-      reject(errCode.BLOCK_CHAIN_ERR);
-      return;
-    }
-  });
-};
 
 /**
  * Update dev ratio
@@ -427,19 +525,22 @@ export const setDevRatio = async (ratio) => {
     let stakingFactoryId = null;
     let contract = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
       }
-      contract = await getContract("StakingTemplate", stakingFactoryId, false);
+      contract = await getContract("Community", stakingFactoryId, false);
     } catch (e) {
       reject(e);
       return;
     }
 
     try {
-      const tx = await contract.setDevRewardRatio(ratio);
+      const tx = await contract.adminSetFeeRatio(ratio, {
+        gasLimit: 10000000,
+        gasPrice: await getGasPrice()
+      });
       await waitForTx(tx.hash);
       resolve(tx.hash);
     } catch (e) {
@@ -456,7 +557,7 @@ export const setDevRatio = async (ratio) => {
  */
 export const getDistributionEras = async (update = false) => {
   return new Promise(async (resolve, reject) => {
-    const distribuitons = store.state.web3.distributions;
+    const distribuitons = store.state.community.distributions;
     if (!update && distribuitons) {
       resolve(distribuitons);
       return;
@@ -464,7 +565,7 @@ export const getDistributionEras = async (update = false) => {
 
     let stakingFactoryId = null;
     try {
-      stakingFactoryId = await getMyStakingFactory();
+      stakingFactoryId = await getMyCommunityContract();
       if (!stakingFactoryId) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -478,7 +579,7 @@ export const getDistributionEras = async (update = false) => {
     let decimal;
     let rewardCalculator;
     try {
-      contract = await getContract("StakingTemplate", stakingFactoryId);
+      contract = await getContract("Community", stakingFactoryId);
       const cToken = await getCToken(stakingFactoryId);
       rewardCalculator = await getContract("LinearCalculator");
       decimal = cToken.decimal;
@@ -506,9 +607,9 @@ export const getDistributionEras = async (update = false) => {
           amount: item.amount.toString() / 10 ** decimal,
           startHeight: item.startHeight.toString(),
           stopHeight: item.stopHeight.toString(),
-          background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`,
+          background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`,
         }));
-        store.commit("web3/saveDistributions", distri);
+        store.commit("community/saveDistributions", distri);
         resolve(distri);
       }
     } catch (e) {
@@ -525,8 +626,8 @@ export const getDistributionEras = async (update = false) => {
  */
 export const getSpecifyDistributionEras = async (communityId) => {
   return new Promise(async (resolve, reject) => {
-    const distribuitons = store.state.web3.specifyDistributionEras;
-    if (distribuitons) {
+    const distribuitons = store.state.currentCommunity.specifyDistributionEras;
+    if (distribuitons && distribuitons.length > 0) {
       resolve(distribuitons);
       return;
     }
@@ -534,7 +635,7 @@ export const getSpecifyDistributionEras = async (communityId) => {
     let decimal;
     let rewardCalculator;
     try {
-      contract = await getContract("StakingTemplate", communityId);
+      contract = await getContract("Community", communityId);
       const cToken = await getCToken(communityId);
       rewardCalculator = await getContract("LinearCalculator");
       decimal = cToken.decimal;
@@ -562,9 +663,9 @@ export const getSpecifyDistributionEras = async (communityId) => {
           amount: item.amount.toString() / 10 ** decimal,
           startHeight: item.startHeight.toString(),
           stopHeight: item.stopHeight.toString(),
-          background: `rgba(80, 191, 0, ${(i + 1) * (1.0 / count)})`,
+          background: `rgba(255, 149, 0, ${(i + 1) * (1.0 / count)})`,
         }));
-        store.commit("web3/saveSpecifyDistributionEras", distri);
+        store.commit("currentCommunity/saveSpecifyDistributionEras", distri);
         resolve(distri);
       }
     } catch (e) {
@@ -576,55 +677,36 @@ export const getSpecifyDistributionEras = async (communityId) => {
 }
 
 /**
- * Post community blog tag to backend
- * @param {*} blogTag
- * @returns
+ * watch current community's users balances
+ * Must clear time interval to close this watcher
+ * @param {*} callback 
+ * @returns 
  */
-export const publishBlog = async (blogTag) => {
-  return new Promise(async (resolve, reject) => {
-    let id;
-    try {
-      id = await getMyStakingFactory();
-      if (!id) {
-        reject(errCode.NO_STAKING_FACTORY);
-        return;
+export const watchMemberBalance = (callback) => {
+  return setInterval(async () => {
+    try{
+      const users = store.state.currentCommunity.communityInfo.users;
+      const ctoken = store.state.currentCommunity.communityInfo.cToken;
+      if (!users || users.length === 0 || !ctoken) {
+        callback({});
+        return
       }
-    } catch (e) {
-      reject(e);
-      return;
+      let res = await aggregate(users.map(u => ({
+        target: ctoken,
+        call: [
+          'balanceOf(address)(uint256)',
+          u.address
+        ],
+        returns: [
+          [u.address, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](ctoken))]
+        ]
+      })), Multi_Config)
+      callback(res.results.transformed)
+    }catch(err) {
+      console.log('Watch members balance fail:', err);
     }
-    let nonce = await getNonce();
-    const userId = await getAccounts();
-    nonce = nonce ? nonce + 1 : 1;
-    const infoStr = JSON.stringify({
-      id,
-      blogTag,
-    });
-    let signature = "";
-    try {
-      signature = await signMessage(infoStr + nonce);
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-        return;
-      }
-    }
-    const params = {
-      userId,
-      infoStr,
-      nonce,
-      signature,
-    };
-    try {
-      let res = await ubt(params);
-      store.commit("web3/saveNonce", nonce);
-      resolve(res);
-    } catch (e) {
-      console.log("Update community blogTag info failed", e);
-      reject(e);
-    }
-  });
-};
+  }, 3000)
+}
 
 /**
  * update social info
@@ -634,7 +716,7 @@ export const udpateSocialInfo = async (social) => {
   return new Promise(async (resolve, reject) => {
     let id;
     try {
-      id = await getMyStakingFactory();
+      id = await getMyCommunityContract();
       if (!id) {
         reject(errCode.NO_STAKING_FACTORY);
         return;
@@ -692,44 +774,15 @@ export const getNonce = async (update = false) => {
 };
 
 /**
- * get community balance by ctoken
- * @param {*} ctoken 
- * @returns 
- */
-export const getCommunityBalance = async (communityId, ctoken) => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      const assetId = ctoken.assetId;
-      let contract;
-      try{
-        contract = await getContract("ERC20AssetHandler");
-      }catch(e) {
-        reject(e);
-      }
-      const source = ethers.utils.keccak256(
-        "0x" +
-        communityId.substr(2) +
-        assetId.substr(2) +
-          "61646d696e"
-      )
-      const balance = await contract.getBalance(source);
-      resolve(balance);
-    }catch(e) {
-      reject(e)
-    }
-  })
-}
-
-/**
- * get specify community dao fund info
+ * get specify community dao fund ratio
  * @param {*} communityId 
  */
-export const getCommunityDaoInfo = async (communityId) => {
+export const getCommunityDaoRatio = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const contract = await getContract("StakingTemplate", communityId);
-      const [dev, ratio] = await Promise.all([contract.getDev(), contract.getDevRewardRatio()]);
-      resolve({ dev, ratio })
+      const contract = await getContract("Community", communityId);
+      const ratio = await contract.feeRatio();
+      resolve(ratio)
     }catch(e) {
       reject(e)
     }
@@ -737,74 +790,75 @@ export const getCommunityDaoInfo = async (communityId) => {
 }
 
 /**
- * monityor Community balance and allowance
- * If cToken of this community is not a mintable token, he may need to charge balance of community
+ * get Community balance and allowance
+ * @param {String} communityId  community address
+ * @param {String} ctokenaddress c token address
  */
-export const monitorCommunityBalance = async (communityInfo) => {
+export const getCommunityBalance = async ({communityId, ctokenAddress}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const cToken = await getCToken(communityInfo.id);
-      if (cToken.isMintable) {
-        resolve();
-        return;
-      }
-      store.commit("web3/saveLoadingCommunityBalance", true);
-      store.commit("web3/saveLoadingApprovementCtoken", true);
-      let watchers = store.state.web3.watchers;
-      let watcher = watchers["communityBalance"];
-      const erc20HandlerAddress = contractAddress["ERC20AssetHandler"];
-      watcher && watcher.stop();
-      const account = await getAccounts();
-      watcher = createWatcher(
-        [
-          {
-            target: erc20HandlerAddress,
-            call: [
-              "getBalance(bytes32)(uint256)",
-              ethers.utils.keccak256(
-                "0x" +
-                  communityInfo.id.substr(2) +
-                  cToken.assetId.substr(2) +
-                  "61646d696e"
-              ),
-            ],
-            returns: [["communityBalance"]],
-          },
-          {
-            target: cToken.address,
-            call: [
-              "allowance(address,address)(uint256)",
-              account,
-              erc20HandlerAddress,
-            ],
-            returns: [["allowance", (val) => val / 1e18 > 1e10]],
-          },
-        ],
-        Multi_Config
-      );
-      watcher.subscribe((update) => {
-        const type = update.type;
-        const value = update.value;
-        if (type === "communityBalance") {
-          // console.log('Updates community balance', update);
-          store.commit("web3/saveCommunityBalance", value);
-        } else if (type === "allowance") {
-          // console.log('Updates community approvement', update);
-          store.commit("web3/saveCtokenApprovement", value);
-        }
-      });
-      watcher.start();
-      watchers["communityBalance"] = watcher;
-      store.commit("web3/saveWatchers", { ...watchers });
-      resolve();
+      const contract = await getContract('ERC20', ctokenAddress)
+      const balance = contract.balanceOf(communityId)
+      resolve(balance)
     } catch (e) {
       reject(e);
     } finally {
-      store.commit("web3/saveLoadingCommunityBalance", false);
-      store.commit("web3/saveLoadingApprovementCtoken", false);
     }
   });
 };
+
+/**
+ * Get community's owner
+ * @param {*} communityId 
+ * @returns 
+ */
+export const getCommunityOwner = async (communityId) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('Community', communityId);
+      const owner = await contract.owner();
+      resolve(owner)
+    }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+/**
+ * 
+ * @param {*} token 
+ * @param {*} target 
+ */
+export const getApprovement = async (token, target) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('ERC20', token)
+      const account = await getAccounts()
+      const [decimals, allowrance] = await Promise.all([contract.decimals(), contract.allowance(account, target)]) 
+      resolve(allowrance.toString() / (10 ** decimals) > 1e12)
+    }catch(e) {
+      // console.log('get approvement fail', e);
+      reject(e)
+    }
+  })
+}
+
+export const approveUseERC20 = async (token, target) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('ERC20', token, false)
+      const account = await getAccounts() 
+      const tx = await contract.approve(target, ethers.constants.MaxUint256, {
+        gasLimit: 75402
+      })
+      await waitForTx(tx.hash)
+      resolve()
+    }catch(e) {
+      console.log('Approve fail', e);
+      reject(e)
+    }
+  })
+}
 
 /**
  * Monitor community dev address and dev ratio
@@ -854,20 +908,4 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
       store.commit("web3/saveLoadingDevInfo", false);
     }
   });
-};
-
-export const monitorCommunity = async () => {
-  let communityInfo;
-  try {
-    communityInfo = await getMyCommunityInfo();
-    if (!communityInfo) {
-      return;
-    }
-  } catch (e) {
-    return;
-  }
-  await Promise.all([
-    monitorCommunityBalance(communityInfo),
-    monitorCommunityDevInfo(communityInfo),
-  ]).catch(console.error);
 };

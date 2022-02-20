@@ -1,19 +1,23 @@
 import Cookie from "vue-cookies";
 import { BSC_CHAIN_ID } from "@/config";
 import { ASSET_LOGO_URL } from "@/constant";
+import { ethers } from 'ethers'
 
 export default {
   namespaced: true,
   state: {
     ethers: null,
+    walnutInfo: {},
     account: Cookie.get("bsc-account"),
     allAccounts: [],
     abis: {},
     chainId: -1,
     stakingFactoryId: null,
-    communityInfo: null,
     allAssetsOfUser: null,
     allTokens: null,
+    tokenByKey: {},
+    tokenDecimals: {},
+    tokenIcons: {},
     blockNum: null,
     nonce: null,
     allCommunities: null,
@@ -24,13 +28,13 @@ export default {
     readonlyProvider: null,
     allPools: null,
     tokenDeploying: false,
+    fees: {},
     // user deposit data
     depositDatas: {},
     // multicall get data
     pendingRewards: {},
     userStakings: {},
     approvements: {},
-    monitorPools: {},
     userBalances: {},
     communityBalance: 1,
     ctokenApprovement: false,
@@ -49,12 +53,10 @@ export default {
     loadingCommunityBalance: true,
     loadingApprovementCtoken: true,
     loadingDevInfo: true,
-    loadingCommunity: true,
+    loadingCommunity: false,
     loadingCtokenBalances: true,
+    loadingFees: true,
 
-    // proposal
-    proposals: null,
-    communityProposalConfig: null,
     //games
     games: null,
 
@@ -68,6 +70,9 @@ export default {
     saveAccount: (state, account) => {
       (state.account = account), Cookie.set("bsc-account", account, "30d");
     },
+    saveWalnutInfo: (state, walnutInfo) => {
+      state.walnutInfo = walnutInfo;
+    },
     saveAllAccounts: (state, allAccounts) => {
       state.allAccounts = allAccounts;
     },
@@ -80,14 +85,22 @@ export default {
     saveStakingFactoryId: (state, stakingFactoryId) => {
       state.stakingFactoryId = stakingFactoryId;
     },
-    saveCommunityInfo: (state, communityInfo) => {
-      state.communityInfo = communityInfo;
-    },
     saveAllAssetsOfUser: (state, allAssetsOfUser) => {
       state.allAssetsOfUser = allAssetsOfUser;
     },
     saveAllTokens: (state, allTokens) => {
       state.allTokens = allTokens;
+      let icons = {}
+      let decimals = {}
+      let tokenByKey = {}
+      for (let i in allTokens) {
+        icons[allTokens[i].address.toLowerCase()] = allTokens[i].icon;
+        decimals[allTokens[i].address.toLowerCase()] = allTokens[i].decimal;
+        tokenByKey[allTokens[i].address.toLowerCase()] = allTokens[i]
+      }
+      state.tokenByKey = tokenByKey;
+      state.tokenIcons = icons;
+      state.tokenDecimals = decimals;
     },
     saveBlockNum: (state, blockNum) => {
       state.blockNum = blockNum;
@@ -122,6 +135,9 @@ export default {
     saveTokenDeploying: (state, tokenDeploying) => {
       state.tokenDeploying = tokenDeploying;
     },
+    saveFees: (state, fees) => {
+      state.fees = fees
+    },
 
     savePendingRewards: (state, pendingRewards) => {
       state.pendingRewards = pendingRewards;
@@ -150,9 +166,6 @@ export default {
     saveUserStakings: (state, userStakings) => {
       state.userStakings = userStakings;
     },
-    saveMonitorPools: (state, monitorPools) => {
-      state.monitorPools = monitorPools;
-    },
     saveUserBalances: (state, userBalances) => {
       state.userBalances = userBalances;
     },
@@ -174,6 +187,9 @@ export default {
     saveLoadingDevInfo: (state, loadingDevInfo) => {
       state.loadingDevInfo = loadingDevInfo;
     },
+    saveLoadingFees: (state, loadingFees) => {
+      state.loadingFees = loadingFees
+    },
     saveDevAddress: (state, devAddress) => {
       state.devAddress = devAddress;
     },
@@ -189,85 +205,25 @@ export default {
     saveCtokenBalances: (state, ctokenBalances) => {
       state.ctokenBalances = ctokenBalances;
     },
-    saveProposals: (state, proposals) => {
-      state.proposals = proposals;
-    },
-    saveCommunityProposalConfig: (state, communityProposalConfig) => {
-      state.communityProposalConfig = communityProposalConfig;
-    },
     saveGames: (state, games) => {
       state.games = games;
     },
-    saveSpecifyDistributionEras: (state, specifyDistributionEras) => {
-      state.specifyDistributionEras = specifyDistributionEras
-    }
   },
   getters: {
     isMainChain: (state) => {
       return parseInt(state.chainId) === parseInt(BSC_CHAIN_ID);
     },
-    // Get tourist step of user
-    createState: (state) => {
-      // if loading, do not show tourist
-      if (state.loadingCommunity) {
-        return 0;
-      }
-      if (state.myPools && state.myPools.length > 0) {
-        return 0;
-      }
-      if (state.communityInfo?.name) {
-        return 3;
-      }
-      if (state.stakingFactoryId) {
-        return 2;
-      } else {
-        return 1;
-      }
+    tokenDecimals: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return 18;
+      return state.tokenDecimals[address.toLowerCase()] || 18
     },
-    communityCard: (state) => {
-      const allPools = state.allPools;
-      const allCommunities = state.allCommunities;
-      if (!allPools || !allCommunities) return [];
-      const cardInfo = allCommunities.map((c) => {
-        const pools = allPools.filter((pool) => pool.communityId === c.id);
-        return {
-          ...c,
-          assetLogos: pools.map((p) => {
-            if (p.type === "SubstrateCrowdloanAssetRegistry") {
-              return p.chainId === 2
-                ? ASSET_LOGO_URL.polkadot.icon
-                : ASSET_LOGO_URL.kusama.icon;
-            }
-            return p.icon;
-          }),
-          apys: pools.map((p) => p.apy),
-        };
-      });
-      return cardInfo;
+    tokenIcons: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return;
+      return state.tokenIcons[address.toLowerCase()]
     },
-    /**
-     * Get community's info contains pools info
-     * @param {*} state
-     * @returns
-     */
-    communityById: (state) => (communityId) => {
-      if (!state.allCommunities || !state.allPools) return {};
-      let community = state.allCommunities.filter((c) => c.id === communityId);
-      const pools = state.allPools.filter((p) => p.communityId === communityId);
-      if (!community || community.length === 0) {
-        return {};
-      }
-      community = community[0];
-      community.pools = pools;
-      return community;
-    },
-    poolCards: (state) => {
-      const showingPools = state.allPools
-        ? state.allPools.filter(
-            (p) => parseInt(p.firstBlock) <= parseInt(state.blockNum)
-          )
-        : [];
-      return showingPools;
-    },
+    tokenByKey: (state) => (address) => {
+      if (!ethers.utils.isAddress(address)) return;
+      return state.tokenByKey[address.toLowerCase()];
+    }
   },
 };

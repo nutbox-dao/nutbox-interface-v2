@@ -1,27 +1,39 @@
 .custom-form input, .custom-form textarea {
   border-color: transparent;
-  background: #F6F7F9;
+  background: var(--input-bg);
   border-radius: .8rem;
   font-size: .8rem;
   padding: .8rem;
+  color: white;
 }
 .custom-form input {
   height: 2.4rem;
 }
-.custom-form::-webkit-input-placeholder {
-  color: #BDBFC2;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+.custom-form input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  color: var(--text-74);
 }
 
-.custom-form::-moz-placeholder {
-  color: #BDBFC2;
+.custom-form input::-moz-placeholder, textarea::-webkit-input-placeholder {
+  color: var(--text-74);
+}
+.custom-form .input-border {
+  border: 1px solid var(--input-border);
 }
 .input-file-logo {
-  width: 6rem;
-  height: 6rem;
-  background-color: #F6F7F9;
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--input-bg);
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid var(--input-border);
   .logo-preview {
     width: 100%;
     height: 100%;
@@ -34,27 +46,20 @@
 .input-file-cover {
   width: 100%;
   height: 100%;
-  background-color: #F6F7F9;
+  background-color: var(--input-bg);
   display: flex;
   justify-content: center;
   align-items: center;
+  .add-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }
 .custom-form .add-text {
   position: absolute;
   top: 62%;
   font-size: .6rem;
-  color: #BDBFC2;
-}
-.append-input-btn {
-  background-color: #F6F7F9;
-  border-radius: 0 .8rem .8rem 0;
-  height: 2.4rem;
-  border-color: transparent;
-  color: var(--primary-text);
-  font-size: 1rem;
-  line-height: 2.4rem;
-  padding: 0 .8rem;
-  cursor: pointer;
+  color: var(--text-74);
 }
 .upload-loading {
   position: absolute;
@@ -62,12 +67,32 @@
 }
 .c-input-group {
   @include c-flex-between-center;
-  background: #F6F7F9;
   border-radius: .8rem;
   flex: 1;
+  &-border {
+    border: 1px solid var(--input-border);
+  }
+  &-bg {
+    background: var(--input-bg);
+  }
+  &-bg-dark {
+    background: #141414;
+  }
   .c-append {
     padding: 0 .8rem;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+  input {
+    background: transparent;
+    color: white;
+    flex: 1;
+  }
+  .search-icon {
+    @include icon();
+    background-image: url("~@/static/images/search-icon.svg");
+    cursor: pointer;
   }
 }
 .c-date-picker .b-form-datepicker {
@@ -128,4 +153,22 @@
   width: 1px;
   height: 20px;
   background-color: var(--dividers);
+}
+.search-input {
+  background: var(--nav-tab-bg);
+  @include c-flex-between-center;
+  border-radius: .4rem;
+  height: 2rem;
+  input {
+    border: none;
+    height: 2rem;
+    outline: none;
+    border-radius: .4rem;
+    background-color: var(--nav-tab-bg);
+  }
+  .search-icon {
+    @include icon(1.2rem, 1.2rem);
+    margin-right: .8rem;
+    background-image: url("~@/static/images/search-icon.svg");
+  }
 }

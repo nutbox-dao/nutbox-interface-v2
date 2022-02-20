@@ -1,48 +1,13 @@
-import store from "@/store";
 import {
-  getMyStakingFactory,
   getNonce,
-  getDistributionEras,
 } from "./community";
 import {
-  getMyCommunityProposalConfigInfo as gmcpci,
   updateCommunityProposalConfig,
   getScores as gScores,
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, GasLimit } from "../../config";
+import { errCode } from "../../config";
 import { getAccounts } from "@/utils/web3/account";
-
-/**
- * Get CommunityProposalConfig infos from backend
- * @param {*} update
- * @returns
- */
-export const getMyCommunityProposalConfigInfo = async (stakingFactoryId) => {
-  return new Promise(async (resolve, reject) => {
-    let communityProposalConfigInfo = null;
-    try {
-      communityProposalConfigInfo = await gmcpci(stakingFactoryId);
-
-      if (
-        communityProposalConfigInfo &&
-        communityProposalConfigInfo.length > 0
-      ) {
-        store.commit('web3/saveCommunityProposalConfig', communityProposalConfigInfo[0])
-        resolve(communityProposalConfigInfo[0]);
-        return;
-      } else {
-        console.log("first get communityProposalConfigInfo");
-
-        resolve(null);
-      }
-    } catch (e) {
-      console.log("Get communityProposalConfig info from backend fail", e);
-
-      reject(e);
-    }
-  });
-};
 
 /**
  * Create or update communityProposalConfig info to backend
@@ -119,13 +84,11 @@ export const getScore = async (params) => {
 export const getScores = async (params) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (params.network) {
-        const res = await gScores(params);
+      const res = await gScores(params);
 
-        const totalScore = res.result.scores;
+      const totalScore = res.result.scores;
 
-        resolve(totalScore);
-      }
+      resolve(totalScore);
     } catch (e) {
       console.log("Get all score  failed", e);
       reject(e);

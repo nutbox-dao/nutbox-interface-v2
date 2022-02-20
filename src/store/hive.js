@@ -5,18 +5,12 @@ import {
   getHiveBalance,
   getVestingShares
 } from '@/utils/hive/hive'
-import {
-  encrpty,
-  decrypt
-} from '@/utils/helper'
 
 export default {
   namespaced: true,
   state: {
     // hive
     hiveAccount: Cookie.get('hiveAccount'),
-    hiveActiveKey: Cookie.get('hiveActiveKey'),
-    hiveLoginType: Cookie.get('hiveLoginType'),
     
     hiveBalance: 0,
     vestsBalance: 0,
@@ -35,14 +29,6 @@ export default {
     saveHiveAccount: function (state, hiveAccount) {
       state.hiveAccount = hiveAccount
       Cookie.set('hiveAccount', hiveAccount, '30d')
-    },
-    saveHiveActiveKey: function (state, activeKey) {
-      state.hiveActiveKey = encrpty(activeKey)
-      Cookie.set('hiveActiveKey', state.hiveActiveKey, '30d')
-    },
-    saveHiveLoginType: function (state, hiveLoginType) {
-      state.hiveLoginType = hiveLoginType
-      Cookie.set('hiveLoginType', hiveLoginType, '30d')
     },
     saveHiveBalance: function (state, hiveBalance) {
       state.hiveBalance = hiveBalance
@@ -70,10 +56,6 @@ export default {
     },
     depositedHP: state => (account) => {
       return parseFloat(state.depositedVestsInt[account] * 1e-6 * state.vestsToHive).toFixed(6)
-    },
-    hiveActiveKey: state => {
-      if (!state.hiveActiveKey) return;
-      return decrypt(state.hiveActiveKey)
     },
   },
   actions: {
@@ -105,7 +87,7 @@ export default {
     },
     async initializeHiveAccount({
       commit
-    }, { hiveAccount, activeKey, hiveLoginType }) {
+    }, hiveAccount) {
       try {
         const account = await getAccountInfo(hiveAccount)
         const hive = parseFloat(account.balance)
@@ -113,13 +95,9 @@ export default {
         commit('saveHiveBalance', hive)
         commit('saveVestsBalance', vests)
         commit('saveHiveAccount', hiveAccount)
-        commit('saveHiveLoginType', hiveLoginType)
-        if(activeKey){
-          commit('saveHiveActiveKey', activeKey)
-        }
         return true
       } catch (err) {
-        // console.error('initializeHiveAccount Fail:', err.message)
+        console.error('initializeHiveAccount Fail:', err)
         return false
       }
     },

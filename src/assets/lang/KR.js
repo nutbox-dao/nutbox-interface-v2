@@ -3,8 +3,6 @@ module.exports = {
     userlogin: "로그인",
     steemAccoutPlaceHolder: "스팀 계정",
     hiveAccountPlaceHolder: "하이브 계정",
-    steemActiveKeyPlaceHolder: "스팀 액티브 키를 입력해 주세요.",
-    hiveActiveKeyPlaceHolder: "하이브 액티브 키를 입력해 주세요.",
     login: "로그인",
     loginByKeychain: "키체인으로 로그인 하기",
     loging: "로그인 중...",

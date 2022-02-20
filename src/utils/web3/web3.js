@@ -3,15 +3,16 @@ import {
 } from "../helper"
 import {
   BSC_CHAIN_ID,
-  RPC_NODE
+  RPC_NODE,
+  CHAIN_NAME,
+  NATIVE_CURRENCY,
+  BLOCK_CHAIN_BROWER
 } from '@/config'
 import store from '@/store'
 
 import { getProvider } from './ethers'
 import { getAccounts } from "./account"
-import { getRegitryAssets } from './asset'
 import { getMyCommunityInfo } from './community'
-import { getMyOpenedPools } from './pool'
 
 /**
  * Add bsc to metamask
@@ -22,7 +23,7 @@ export const setupNetwork = async () => {
   const eth = await getEthWeb()
   const chainId = parseInt(BSC_CHAIN_ID)
   try {
-    await eth.request({
+    const res = await eth.request({
       method: 'wallet_switchEthereumChain',
       params: [{
         chainId: `0x${chainId.toString(16)}`
@@ -32,25 +33,48 @@ export const setupNetwork = async () => {
     store.commit('web3/saveChainId', chainId)
     return true
   } catch (error) {
+    if (error.code === 4001) return;
     try{
       await eth.request({
         method: 'wallet_addEthereumChain',
         params: [{
           chainId: `0x${chainId.toString(16)}`,
           chainName: CHAIN_NAME,
-          rpcUrls:[RPC_NODE]
+          rpcUrls:[RPC_NODE],
+          nativeCurrency: NATIVE_CURRENCY,
+          blockExplorerUrls: [BLOCK_CHAIN_BROWER]
         }],
       })
-    }catch(error){
-      console.log(333, error);
+      store.commit('saveMetamaskConnected', true)
       store.commit('web3/saveChainId', chainId)
+      return true
+    }catch(error){
+      console.log(43256, error);
+      store.commit('web3/saveChainId', 0)
       store.commit('web3/saveAccount', null)
-      store.commit('web3/saveStakingFactoryId', null)
-      store.commit('web3/saveMyPools', null)
-      store.commit('web3/saveAllAssetsOfUser', null)
       store.commit('saveMetamaskConnected', false)
       return false
     }
+  }
+}
+
+export const checkNetwork = async () => {
+  const eth = await getEthWeb()
+  const chainId = parseInt(BSC_CHAIN_ID)
+  if (!eth) {
+    store.commit('web3/saveAccount', null)
+    store.commit('saveMetamaskConnected', false)
+  }
+  while(!eth.networkVersion) {
+    await sleep(0.3)
+  }
+  if (parseInt(eth.networkVersion) == chainId) {
+    store.commit('web3/saveChainId', chainId)
+    store.commit('saveMetamaskConnected', true)
+  }else {
+    store.commit('web3/saveChainId', parseInt(eth.networkVersion))
+    store.commit('web3/saveAccount', null)
+    store.commit('saveMetamaskConnected', false)
   }
 }
 
@@ -89,14 +113,13 @@ export const connectMetamask = async () => {
 /**
  * User changed chain
  */
-export const chainChanged = async () => {
-  
+export const chainChanged = async (refresh) => {
   const metamask = await getEthWeb()
- 
-  console.log('monitor chain id');
   metamask.on('chainChanged', async(chainId) => {
     console.log('Changed to new chain', parseInt(chainId));
     store.commit('web3/saveChainId', parseInt(chainId))
+    refresh();
+    return;
     if (parseInt(chainId) !== parseInt(BSC_CHAIN_ID)){
       store.commit('web3/saveAccount', null)
       store.commit('web3/saveStakingFactoryId', null)
@@ -107,8 +130,7 @@ export const chainChanged = async () => {
       await getAccounts(true)
       getProvider(true)
       store.commit('saveMetamaskConnected', true)
-      getRegitryAssets(true)
-      getMyCommunityInfo(true)
+      getMyCommunityInfo(true).catch(e=>{})
       getMyOpenedPools(true)
     }
   })
@@ -124,9 +146,27 @@ export const isUnlocked = async () => {
 }
 
 /**
+ * Monitor metamask lock state
+ * @param {*} refresh 
+ */
+export const lockStatusChanged = async (refresh) => {
+  while(true) {
+    await sleep(3)
+    if (await isUnlocked()){
+    }else{
+      store.commit('saveMetamaskConnected', false)
+      if(!store.state.web3.account) continue;
+      store.commit('web3/saveAccount', null)
+      refresh()
+      break;
+    }
+  }
+}
+
+/**
  * Add asset to metamask
  */
-export const addAssetToWallet = async (address, symbol, decimals, image) => {
+ export const addAssetToWallet = async (address, symbol, decimals, image) => {
   const metamask = await getEthWeb()
   metamask.request({
     method: 'wallet_watchAsset',

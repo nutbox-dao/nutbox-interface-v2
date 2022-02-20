@@ -1,0 +1,29 @@
+.copy-icon {
+  @include icon(1rem, 1rem);
+  cursor: pointer;
+  &-gray {
+    background-image: url("~@/static/images/copy.svg");
+  }
+  &-primary {
+    background-image: url("~@/static/images/copy-primary-icon.svg");
+  }
+}
+.link-icon {
+  @include icon(1rem, 1rem);
+  cursor: pointer;
+  &-gray {
+    background-image: url("~@/static/images/link-gray.svg");
+  }
+  &-primary {
+    background-image: url("~@/static/images/link-primary-icon.svg");
+  }
+}
+.add-icon {
+  @include icon;
+  &-white {
+    background-image: url("~@/static/images/add-white-icon.svg");
+  }
+  &-dark {
+    background-image: url("~@/static/images/add-icon-dark.svg");
+  }
+}

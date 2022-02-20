@@ -18,39 +18,33 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "RegistryHub": "0xCf1f551a9eE0270275416a73ae8Af7180F4FFbDf",
-  "ERC20Factory": "0xCd809876f74BD4336E2E5cA34B185AC5bC18AB04",
-  "HomeChainAssetRegistry": "0x27d92bBc27D22e01769a9cE2B603DB61dBB706Ee",
-  "SteemHiveDelegateAssetRegistry": "0x00e5736503ECd2224b472084A55Ea933064CA69e",
-  "SubstrateCrowdloanAssetRegistry": "0xa970A3D076Bb05dDF62d2bE8d464701435827C35",
-  "SubstrateNominateAssetRegistry": "0x2c562026c0821CeE1864343Cc790688A00c4C084",
-  "ERC20AssetHandler": "0x4f0F6ec7f5b1581AF975B002dcaE47E0b2f07095",
-  "ERC721AssetHandler": "Not Deployed",
-  "TrustlessAssetHandler": "0x4c4634DccB5566295245Bc3A298A69658b7F0ca0",
-  "Executor": "0x0DcF533C7a1a83c759293B6f80c8924f96038Fe2",
-  "Bridge": "0xDAfde7eF7673eDc336f41B1A3Fbc4511B629a9bC",
-  "StakingFactory": "0xc6C3b3F90B9d9cA16551EAdE6fF22d874E90B6B3",
-  "LinearCalculator": "0x11f49dad513f0ffc7476F18A58e4A164e6d5247B"
+  "Committee": "0xd10e4C1e301A13A9B874bd1757c135Eda075769D",
+  "MintableERC20Factory": "0xa183D96a7e84BF77Fb7825026fA8b9BF6894cfa8",
+  "CommunityFactory": "0x1A4EeE210Bc54a75D25989546F648474EdF1C0A3",
+  "LinearCalculator": "0x6ab448C1C6e1870602d3FB867F167029bbFb3181",
+  "SPStakingFactory": "0xF7Fa41BF814eDC767691DDB1864a334D83f4acf7",
+  "ERC20StakingFactory": "0xf870724476912057C807056b29c1161f5Fe0199a"
+}
+
+export const getPoolFactory = (type) => {
+  if (type === 'erc20staking') {
+    return contractAddress.ERC20StakingFactory
+  }else if (type === 'steem' || type === 'hive') {
+    return contractAddress.SPStakingFactory
+  }
 }
 
 // contract file name
 const CONTRACT_ABI_FILE_NAME_LIST = {
-  RegistryHub: 'RegistryHub.json',
-  HomeChainAssetRegistry: 'HomeChainAssetRegistry.json',
-  SteemHiveDelegateAssetRegistry: 'SteemHiveDelegateAssetRegistry.json',
-  SubstrateCrowdloanAssetRegistry: 'SubstrateCrowdloanAssetRegistry.json',
-  SubstrateNominateAssetRegistry: 'SubstrateNominateAssetRegistry.json',
-  ERC20AssetHandler: 'ERC20AssetHandler.json',
-  TrustlessAssetHandler: 'TrustlessAssetHandler.json',
-  Executor: '',
-  Bridge: 'Bridge.json',
-  StakingFactory: 'StakingFactory.json',
-  StakingTemplate: 'StakingTemplate.json',
-  ERC20: 'ERC20.json',
-  SimpleERC20: 'SimpleERC20.json',
-  MintableERC20: 'MintableERC20.json',
-  ERC20Factory: 'ERC20Factory.json',
-  LinearCalculator: 'LinearCalculator.json'
+  "Committee": "Committee.json",
+  "CommunityFactory": "CommunityFactory.json",
+  "Community": "Community.json",
+  "LinearCalculator": "LinearCalculator.json",
+  "SPStakingFactory": "SPStakingFactory.json",
+  "ERC20StakingFactory": "ERC20StakingFactory.json",
+  "ERC20Staking": "ERC20Staking.json",
+  "SPStaking":"SPStaking.json",
+  "ERC20": "ERC20.json"
 }
 
 // Get contract Abi

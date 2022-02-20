@@ -1,20 +1,25 @@
-const getUserDeployTokens = () => {
-  const t = localStorage.getItem('userDeployTokens')
-  if (!t) return []
-  return JSON.parse(t)
-}
-
-const getUserEconomy = () => {
-  const t = localStorage.getItem('userDeployEconomy')
-  if (!t) return null
-  return JSON.parse(t)
-}
+import { ethers } from "ethers"
 
 export default {
   namespaced: true,
   state: {
-    userDeployTokens: getUserDeployTokens(),
-    userEconomy: getUserEconomy()
+    // my community info data from backend
+    communityInfo: null,
+    // my community data from grapg
+    communityData: null,
+    // my ctoken distributions
+    distributions: null,
+    // loading flag
+    loadingMyCommunityInfo: false,
+    loadingAllCommunityInfo: false,
+    loadingApproveCommunity: false,
+
+    approvedCommunity: false,
+    // all i joined community from graph
+    joinedCommunityData: null,
+
+    // all community from backend
+    allCommunityInfo: null,
   },
   mutations: {
     setUserDeployToken (state, data) {
@@ -24,6 +29,40 @@ export default {
     setUserDeployEconomy (state, data) {
       state.userEconomy = data
       localStorage.setItem('userDeployEconomy', JSON.stringify(data))
+    },
+    saveCommunityInfo (state, data) {
+      state.communityInfo = data;
+    },
+    saveDistributions (state, distr) {
+      state.distributions = distr
+    },
+    saveLoadingMyCommunityInfo (state, loadingMyCommunityInfo) {
+      state.loadingMyCommunityInfo = loadingMyCommunityInfo;
+    },
+    saveLoadingAllCommunityInfo (state, loadingAllCommunityInfo) {
+      state.loadingAllCommunityInfo = loadingAllCommunityInfo
+    },
+    saveAllCommunityInfo (state, allCommunityInfo) {
+      state.allCommunityInfo = allCommunityInfo
+    },
+    saveCommunityData (state, communityData) {
+      state.communityData = communityData
+    },
+    saveJoinedCommunityData (state, joinedCommunityData) {
+      state.joinedCommunityData = joinedCommunityData
+    },
+    saveLoadingApproveCommunity (state, loadingApproveCommunity) {
+      state.loadingApproveCommunity = loadingApproveCommunity
+    },
+    saveApprovedCommunity (state, approvedCommunity) {
+      state.approvedCommunity = approvedCommunity
+    }
+  },
+  getters: {
+    getCommunityInfoById: (state) => (communityId) => {
+      if (!state.allCommunityInfo) return null
+      communityId = communityId.toLowerCase();
+      return state.allCommunityInfo[communityId]
     }
   }
 }

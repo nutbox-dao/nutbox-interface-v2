@@ -21,7 +21,6 @@ export const completeProposal = async (form, type) => {
     nonce = nonce ? nonce + 1 : 1;
 
     form.userId = userId;
-
     form.blockNumber = 0;
 
     const originMessage = JSON.stringify(form);
@@ -43,7 +42,6 @@ export const completeProposal = async (form, type) => {
     };
     try {
       let res = null;
-
       res = await insertProposal(params);
 
       // update nonce in storage
@@ -62,7 +60,7 @@ export const getAllProposal = async communityId => {
   return new Promise(async (resolve, reject) => {
     try {
       const proposals = await gap(communityId);
-      store.commit('web3/saveProposals', proposals)
+      store.commit('currentCommunity/saveProposals', proposals)
       resolve(proposals);
     } catch (e) {
       console.log("Get all proposal fail", e);

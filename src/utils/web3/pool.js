@@ -1,327 +1,57 @@
 import {
   getContract,
-  contractAddress
+  contractAddress,
+  getPoolFactory
 } from './contract'
 import store from '@/store'
-import {
-  updatePoolInfo,
-  getAllPools as gap,
-  getAllParachain as getAP,
-  getPricesOnCEX
-} from '@/apis/api'
 import { getAccounts } from '@/utils/web3/account'
 import {
-  signMessage
-} from './utils'
-import {
   errCode,
-  Multi_Config,
-  OfficialAssets
+  Multi_Config
 } from '@/config'
 import {
-  waitForTx,
-  getGasPrice
+  waitForTx
 } from './ethers'
 import {
   aggregate,
   createWatcher
 } from '@makerdao/multicall'
 import {
-  getRegitryAssets,
-  getAllTokenFromBackend,
-  getERC20Info
+  getAllTokenFromBackend
 } from './asset'
 import {
-  getMyStakingFactory,
-  getNonce,
-  getAllCommunities
+  getMyCommunityContract,
+  getAllCommunities,
+  getOperationFee
 } from './community'
-import {
-  loadFunds as loadKusamaFunds
-} from '../kusama/crowdloan'
-import {
-  loadFunds as loadPolkadotFunds
-} from '../polkadot/crowdloan'
 import BN from 'bn.js'
-import { GasTimes, NutAddress } from '@/config'
+import { NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
-import {
-  BLOCK_SECOND,
-  PRICES_SYMBOL
-} from "@/constant"
+import { rollingFunction } from '@/utils/helper'
 
-/**
- * Get all pools that user have upload to backend
- * @returns 
- */
-export const getAllPools = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    const poolsCache = store.state.web3.allPools
-    if (!update && poolsCache) {
-      resolve(poolsCache)
-      return;
-    }
-    try {
-      const currentCommunityId = store.state.currentCommunityId
-      const allPools = await gap(currentCommunityId)
-      store.commit('web3/saveAllPools', allPools);
-      store.commit('web3/saveLoadingAllPools', false)
-      // remonitor pools info
-      monitorPoolInfos()
-      resolve(allPools)
-    } catch (e) {
-      reject(e)
-      return
-    }
-  })
+export const getPoolFactoryAddress = (type) => {
+  switch (type){
+    case 'erc20staking':
+      return contractAddress['ERC20StakingFactory'].toLowerCase()
+    case 'steem':
+      return contractAddress['SPStakingFactory'].toLowerCase()
+    case 'hive':
+      return contractAddress['SPStakingFactory'].toLowerCase()
+  }
 }
 
-/**
- * Get opened pools of community
- * @returns
- */
-export const getMyOpenedPools = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    if (!update && store.state.web3.myPools) {
-      resolve(store.state.web3.myPools);
-      return;
-    }
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyStakingFactory()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY);
-        return;
+export const getPoolType = (factory, chainId) => {
+  factory = ethers.utils.getAddress(factory)
+  switch (factory) {
+    case contractAddress['ERC20StakingFactory']:
+      return 'erc20staking'
+    case contractAddress['SPStakingFactory']:
+      if (parseInt(chainId) === 1) {
+        return 'steem'
+      }else if (parseInt(chainId) === 2) {
+        return 'hive'
       }
-    } catch (e) {
-      reject(e);
-      return;
-    }
-
-    let contract;
-    try {
-      contract = await getContract('StakingTemplate', stakingFactoryId, false);
-    } catch (e) {
-      store.commit('web3/saveMyPools', [])
-      reject(e);
-      return;
-    }
-
-    try {
-      const poolCount = await contract.numberOfPools()
-      if (poolCount === 0) {
-        store.commit('web3/saveMyPools', [])
-        resolve([])
-        return;
-      }
-      // get active pools
-      let pools = await Promise.all((new Array(30).toString().split(',')).map((item, i) => contract.openedPools(i)))
-      pools = pools.filter(pool => pool.hasActived)
-
-      try {
-        // get pool asset info
-        let myAsset = await getRegitryAssets()
-        myAsset = myAsset.concat(OfficialAssets);
-        let idToIndex = {}
-        myAsset.map((a, i) => idToIndex[a.asset] = i)
-        pools = pools.map(pool => ({
-          pid: pool.pid,
-          NUT: pool.NUT,
-          stakedNUT: pool.stakedNUT,
-          poolName: pool.poolName,
-          poolRatio: pool.poolRatio,
-          stakerCount: pool.stakerCount,
-          stakingPair: pool.stakingPair,
-          canRemove: pool.canRemove,
-          hasRemoved: pool.hasRemoved,
-          hasActived: pool.hasActived,
-          hasStopped: pool.hasStopped,
-          totalStakedAmount: pool.totalStakedAmount,
-          asset: myAsset[idToIndex[pool.stakingPair]],
-        }))
-        store.commit('web3/saveMyPools', pools)
-        resolve(pools);
-      } catch (e) {
-        reject(e);
-      }
-    } catch (e) {
-      reject(errCode.BLOCK_CHAIN_ERR)
-      return;
-    }
-  })
-}
-
-/**
- * Get info for create a pool
- * Include erc20token info and amount
- * @returns 
- */
-export const getStakedNUTInfo = async () => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      const registryHub = await getContract('RegistryHub')
-      let NUT = await registryHub.getNUT();
-      NUT = await registryHub.getHomeLocation(NUT);
-      NUT = await getERC20Info(NUT)
-      const stakedNUT = await registryHub.getStakedNUT();
-      resolve([NUT, stakedNUT])
-    }catch(e) {
-      reject(e);
-    }
-  })
-}
-
-/**
- * Add new pool
- * @param {*} form 
- */
-export const addPool = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyStakingFactory()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-    let contract;
-    try {
-      contract = await getContract('StakingTemplate', stakingFactoryId, false)
-    } catch (e) {
-      reject(e);
-      return
-    }
-
-    console.log(466, form);
-
-    try {
-      const tx = await contract.addPool(form.assetId, form.name, form.ratios.map(r => parseInt(r * 100)))
-      await waitForTx(tx.hash)
-      // re monitor
-      resolve(tx.hash)
-    } catch (e) {
-      console.log('Create pool fail', e);
-      reject(errCode.BLOCK_CHAIN_ERR)
-    }
-  })
-}
-
-/**
- * Update Pools ratios
- * @param {*} form 
- * @returns 
- */
-export const updatePoolsRatio = async (form) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyStakingFactory()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-    let contract;
-    try {
-      contract = await getContract('StakingTemplate', stakingFactoryId, false)
-    } catch (e) {
-      reject(e);
-      return;
-    }
-    try {
-      const tx = await contract.setPoolRatios(form.map(val => val * 100))
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    } catch (e) {
-      reject(errCode.CONTRACT_CREATE_FAIL)
-    }
-
-  })
-}
-
-
-/**
- * Update Pool APY to backend
- * @param {*} pool 
- */
-export const publishPool = async (pool) => {
-  return new Promise(async (resolve, reject) => {
-    let stakingFactoryId = null
-    try {
-      stakingFactoryId = await getMyStakingFactory()
-      if (!stakingFactoryId) {
-        reject(errCode.NO_STAKING_FACTORY)
-        return;
-      }
-    } catch (e) {
-      reject(e)
-      return
-    }
-
-    let nonce = await getNonce()
-    const userId = await getAccounts();
-    nonce = nonce ? nonce + 1 : 1
-
-    pool['communityId'] = stakingFactoryId;
-    pool['pid'] = parseInt(pool.pid)
-    pool['stakerCount'] = parseInt(pool.stakerCount)
-    pool['totalStakedAmount'] = pool.totalStakedAmount.toString()
-    const originMessage = JSON.stringify(pool)
-    let signature = ''
-    try {
-      signature = await signMessage(originMessage + nonce)
-    } catch (e) {
-      if (e.code === 4001) {
-        reject(errCode.USER_CANCEL_SIGNING);
-        return;
-      }
-    }
-    const params = {
-      userId,
-      infoStr: originMessage,
-      nonce,
-      signature
-    }
-    try {
-      const res = await updatePoolInfo(params)
-      // update nonce in storage
-      store.commit('web3/saveNonce', nonce)
-      resolve(res)
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
-
-/**
- * Get All parachain from backend
- */
-export const getAllParachain = async (update = false) => {
-  return new Promise(async (resolve, reject) => {
-    const allParachian = store.state.allParachain
-    if (!update && allParachian) {
-      resolve(allParachian)
-      return;
-    }
-    try {
-      const res = await getAP()
-      const kusamaCL = res.filter(r => r.chainId === 3)
-      const polkadotCL = res.filter(r => r.chainId === 2)
-      loadKusamaFunds(kusamaCL)
-      // loadPolkadotFunds(polkadotCL)
-      store.commit('saveAllParachain', res)
-      resolve(res)
-    } catch (e) {
-      reject(e)
-    }
-  })
+  }
 }
 
 /**
@@ -332,16 +62,17 @@ export const approvePool = async (pool) => {
   return new Promise(async (resolve, reject) => {
       let contract;
       try {
-        contract = await getContract('ERC20', pool.address, false)
+        contract = await getContract('ERC20', pool.asset, false)
       } catch (e) {
         reject(e);
         return;
       }
-     
-      const erc20Handler = contractAddress['ERC20AssetHandler']
+      
       try{
-        const tx = await contract.approve(erc20Handler, new BN(10).pow(new BN(pool.decimal + 50)).toString())
-        await waitForTx(tx.hash)
+        const tx = await contract.approve(pool.id, new BN(10).pow(new BN(60)).toString(), {
+          gasLimit: 75402
+        })
+        await waitForTx(tx.hash);
         resolve(tx.hash)
       }catch(e){
         if (e.code === 4001){
@@ -370,27 +101,169 @@ export const approveNUT = async (pool) => {
 }
 
 /**
- * Deposit homechain asset
- * @param {*} communityId  
- * @param {*} pid 
- * @param {*} amount formed amount can directly as a param of contract
+ * Add new pool
+ * @param {Object} form {name, ratios, type, asset}
  */
-export const deposit = async (communityId, pid, amount, boundAccount) => {
+export const addPool = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyCommunityContract()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+    let contract;
+    let factory;
+    try {
+      contract = await getContract('Community', stakingFactoryId, false)
+      factory = await getContract(form.type === 'erc20staking' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
+    } catch (e) {
+      reject(e);
+      return
+    }
+
+    try {
+      if (form.type === 'erc20staking') {
+        factory.on('ERC20StakingCreated', (pool, community, name, token) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('ERC20StakingCreated')
+          }
+        })
+      }else {
+        factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId,
+              stakersCount: 0,
+              totalAmount: 0
+            })
+            factory.removeAllListeners('SPStakingCreated')
+          }
+        })
+      }
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
+      await waitForTx(tx.hash)
+    } catch (e) {
+      console.log('Create pool fail', e);
+      if (form.type === 'erc20staking') {
+        factory.removeAllListeners('ERC20StakingCreated')
+      }else{
+        factory.removeAllListeners('SPStakingCreated')
+      }
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+  })
+}
+
+/**
+ * Update Pools ratios
+ * @param {Array} form ratios array
+ * @returns 
+ */
+export const updatePoolsRatio = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    let stakingFactoryId = null
+    try {
+      stakingFactoryId = await getMyCommunityContract()
+      if (!stakingFactoryId) {
+        reject(errCode.NO_STAKING_FACTORY)
+        return;
+      }
+    } catch (e) {
+      reject(e)
+      return
+    }
+    let contract;
+    try {
+      contract = await getContract('Community', stakingFactoryId, false)
+    } catch (e) {
+      reject(e);
+      return;
+    }
+    try {
+      const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
+      console.log('Update pool ratios', tx.hash);
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      console.log(e);
+      reject(errCode.BLOCK_CHAIN_ERR)
+    }
+
+  })
+}
+
+/**
+ * Remove Pool
+ * Can't be reopened if do this operation
+ * @param {Object} form {poolAddress,activedPools,ratios} 
+ * @returns 
+ */
+export const closePool = async (form) => {
+  return new Promise(async (resolve, reject) => {
+    const communityId = store.state.web3.stakingFactoryId
+    let contract = null
+    try{
+      contract = await getContract('Community', communityId, false)
+    }catch(e) {
+      reject(e)
+      return;
+    }
+    try{
+      const tx = await contract.adminClosePool(form.poolAddress, form.activedPools, form.ratios)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Close pool Fail', e);
+    }
+  })
+}
+
+/**
+ * Deposit homechain asset
+ * @param {*} poolId
+ * @param {*} amount
+ */
+export const deposit = async (poolId, amount) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('ERC20Staking', poolId, false)
     }catch(e){
       reject(e)
       return;
     }
-    const account = await getAccounts();
-    if (!boundAccount){
-      boundAccount = ethers.utils.keccak256(account)
-    }
 
     try{
-      const tx = await contract.deposit(pid, account, amount.toString(), boundAccount)
+      const tx = await contract.deposit(ethers.utils.parseUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -405,25 +278,23 @@ export const deposit = async (communityId, pid, amount, boundAccount) => {
 }
 
 /**
- * Withdraw deposit
- * @param {*} communityId 
- * @param {*} pid 
- * @param {*} amount formed amount can directly as a param of contract
+ * Withdraw 
+ * @param {*} poolId 
+ * @param {*} amount
  * @returns 
  */
-export const withdraw = async (communityId, pid, amount) => {
+export const withdraw = async (poolId, amount) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('ERC20Staking', poolId, false)
     }catch(e){
       reject(e)
       return;
     }
 
     try{
-      const account = await getAccounts();
-      const tx = await contract.withdraw(pid, account, amount.toString())
+      const tx = await contract.withdraw(ethers.utils.parseUnits(amount.toString(), 18))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -442,18 +313,18 @@ export const withdraw = async (communityId, pid, amount) => {
  * @param {*} communityId 
  * @param {*} pid 
  */
-export const withdrawReward = async (communityId, pid) => {
+export const withdrawReward = async (communityId, poolId) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      contract = await getContract('Community', communityId, false)
     }catch(e){
       reject(e)
       return;
     }
 
     try{
-      const tx = await contract.withdrawPoolRewards(pid)
+      const tx = await contract.withdrawPoolsRewards([poolId])
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -467,292 +338,171 @@ export const withdrawReward = async (communityId, pid) => {
   })
 }
 
-/**
- * Stop pool
- * @param {*} pid 
- * @returns 
- */
-export const stopPool = async (pid) => {
+// get user's bind account
+export const getBindSteemAccount = async (pool) => {
   return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
     try{
-      contract = await getContract('StakingTemplate', communityId, false)
+      const contract = await getContract('SPStaking', pool.id)
+      const account = await getAccounts();
+      const bindAccount = parseInt(pool.chainId) === 1 ? store.state.steem.steemAccount : store.state.hive.hiveAccount;
+      const bindAccountBytes = ethers.utils.formatBytes32String(bindAccount);
+      const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccountBytes)])
+      const _bindAccount = ethers.utils.parseBytes32String(accountInfo.bindAccount);
+      resolve({
+        account: [account, _bindAccount],
+        bindAccount: [bindAccount, _account]
+      })
     }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.stopPool(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log('Stop pool Fail', e);
-    }
+      reject(e);
+    } 
   })
 }
 
 /**
- * tryWithdraw
- * @param {*} pid 
+ * update pools info
+ * @param {*} pools 
  * @returns 
  */
-export const tryWithdraw = async (pid) => {
-  return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
-    try{
-      contract = await getContract('StakingTemplate', communityId, false)
-    }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.tryWithdraw(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
-      }
-      console.log('tryWithdraw pool Fail', e);
-    }
+export const updatePoolsByPolling = (pools) => {
+  const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
+    store.commit('pool/saveUserStaked', res || {})
   })
+  const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 3, res => {
+    store.commit('pool/saveTotalStaked', res || {})
+  })
+  const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
+    store.commit('pool/saveUserReward', res || {})
+  })
+  store.commit('pool/saveLoadingApprovements', true)
+  const approvmentRolling = rollingFunction(getApprovements, pools, 3, res => {
+    store.commit('pool/saveApprovements', res || {})
+  })
+  stakingRolling.start();
+  totalStakingRolling.start();
+  rewardRolling.start();
+  approvmentRolling.start();
+
+  return [stakingRolling, totalStakingRolling, rewardRolling, approvmentRolling]
 }
 
-/**
- * removePool
- * @param {*} pid 
- * @returns 
+/** 
+ * Get users staking
  */
-export const removePool = async (pid) => {
+export const getUserStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
-    const communityId = store.state.web3.stakingFactoryId
-    let contract = null
-    try{
-      contract = await getContract('StakingTemplate', communityId, false)
-    }catch(e) {
-      reject(e)
-      return;
-    }
-    try{
-      const tx = await contract.removePool(pid)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
-    }catch(e) {
-      if (e.code === 4001){
-        reject(errCode.USER_CANCEL_SIGNING)
-      }else {
-        reject(errCode.BLOCK_CHAIN_ERR)
+    try {
+      const account = await getAccounts();
+      if (!account) {
+        resolve();
+        return;
       }
-      console.log('RemovePool pool Fail', e);
+      const result = await aggregate(pools.map(p => {
+        return {
+          target: p.id,
+          call: [
+            'getUserStakedAmount(address)(uint256)',
+            account
+          ],
+          returns: [
+            [p.id]
+          ]
+        }
+      }), Multi_Config)
+      resolve(result.results.transformed)
+    } catch (e) {
+      console.log('Get UserStaking fail', e);
+      reject(e)
     }
   })
 }
 
 /** 
- * monitor users staking
+ * Get pool total staked
  */
-export const monitorUserStakings = async () => {
+ export const getPoolTotalStakings = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pools = await getAllPools()
-      store.commit('web3/saveLoadingUserStakings', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['userStakings']
-      watcher && watcher.stop()
-      const account = await getAccounts();
-      watcher = createWatcher(pools.map(p => {
+      const result = await aggregate(pools.map(p => {
         return {
-          target: p.communityId,
+          target: p.id,
           call: [
-            'getUserStakedAmount(uint8,address)(uint256)',
-            p.pid,
-            account
+            'getTotalStakedAmount()(uint256)'
           ],
           returns: [
-            [p.communityId + '-' + p.pid]
+            [p.id]
           ]
         }
       }), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        // console.log('Updates user staking', updates);
-        store.commit('web3/saveLoadingUserStakings', false)
-        let userStakings = store.state.web3.userStakings
-        updates.map(u => {
-          userStakings[u.type] = u.value
-        })
-        store.commit('web3/saveUserStakings', {...userStakings})
-      });
-      watcher.start()
-      watchers['userStakings'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('monitorUserStaking fail', e);
+      console.log('Get pool total fail', e);
       reject(e)
     }
   })
 }
 
 /**
- * monitor users pending rewards
+ * Get users pending rewards
  * @returns 
  */
-export const monitorPendingRewards = async () => {
+export const getPendingRewards = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pools = await getAllPools()
-      store.commit('web3/saveLoadingPendingRewards', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['pendingRewards']
-      watcher && watcher.stop()
       const account = await getAccounts();
-      watcher = createWatcher(pools.map(p => ({
-          target: p.communityId,
+      if (!account) {
+        resolve()
+        return
+      }
+      const result = await aggregate(pools.map(p => ({
+          target: p.community.id,
           call: [
-            'getUserPendingRewards(uint8,address)(uint256)',
-            p.pid,
+            'getPoolPendingRewards(address,address)(uint256)',
+            p.id,
             account
           ],
           returns: [
-            [p.communityId + '-' + p.pid]
+            [p.id]
           ]
         })), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        // console.log('Updates pending rewards', updates);
-        store.commit('web3/saveLoadingPendingRewards', false)
-        let pendingRewards = store.state.web3.pendingRewards
-        updates.map(u => {
-          pendingRewards[u.type] = u.value
-        })
-        store.commit('web3/savePendingRewards', {...pendingRewards})
-      });
-      watcher.start()
-      watchers['pendingRewards'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('monitorPendingreward fail', e);
+      console.log('Get Pendingreward fail', e);
       reject(e)
     }
   })
 }
 
 /**
- * Monitor users token approvement
+ * Get users token approvement
  * @returns 
  */
-export const monitorApprovements = async () => {
+export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let pools = await getAllPools()
-      const erc20HandlerAddress = contractAddress['ERC20AssetHandler']
-      pools = pools.filter(pool => pool.type === "HomeChainAssetRegistry")
-      store.commit('web3/saveLoadingApprovements', true)
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['approvements']
-      watcher && watcher.stop()
+      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
       const account = await getAccounts();
+      if (!account) {
+        resolve();
+        return
+      }
       let calls = pools.map(pool => ({
-        target: pool.address,
+        target: pool.asset,
         call: [
           'allowance(address,address)(uint256)',
           account,
-          erc20HandlerAddress
+          pool.id
         ],
         returns: [
-          [pool.communityId + '-' + pool.pid, val => val / (10 ** pool.decimal) > 1e10]
+          [pool.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](pool.asset)) > 1e12]
         ]
       }))
-      calls.push({
-        target: NutAddress,
-        call: [
-          'allowance(address,address)(uint256)',
-          account,
-          erc20HandlerAddress
-        ],
-        returns: [
-          ['NUTAllowance', val => val / (1e18) > 1e10]
-        ]
-      })
-      watcher = createWatcher(calls, Multi_Config)
-      watcher.batch().subscribe(updates => {
-        store.commit('web3/saveLoadingApprovements', false)
-        let approvements = store.state.web3.approvements
-        updates.map(u => {
-          approvements[u.type] = u.value
-        })
-        // console.log('Updates approve', approvements);
-        store.commit('web3/saveApprovements', {...approvements})
-      });
-      watcher.start()
-      watchers['Updates approve'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
+      const result = await aggregate(calls, Multi_Config)
+      resolve(result.results.transformed)
     } catch (e) {
-      console.log('Monitor approvment fail', e);
+      console.log('Get approvment fail', e);
       reject(e)
-    }
-  })
-}
-
-/**
- * Monitor all pools info
- */
-export const monitorPoolInfos = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const pools = await getAllPools()
-      let watchers = store.state.web3.watchers
-      let watcher = watchers['poolInfos']
-      watcher && watcher.stop()
-      watcher = createWatcher(pools.map(p => {
-        return {
-          target: p.communityId,
-          call: [
-            'openedPools(uint256)(uint8,bytes32,uint256,uint64,string,bool,bool,bool,bool,uint16,bytes32,uint256,uint256)',
-            p.pid,
-          ],
-          returns: [
-            [p.communityId + '-' + p.pid + "-pid", pid => parseInt(pid)],
-            [p.communityId + '-' + p.pid + "-NUT"],
-            [p.communityId + '-' + p.pid + "-stakedNUT", val => val.toString() / 1e18],
-            [p.communityId + '-' + p.pid + "-stakerCount", count => parseInt(count)],
-            [p.communityId + '-' + p.pid + "-poolName"],
-            [p.communityId + '-' + p.pid + "-hasActived"],
-            [p.communityId + '-' + p.pid + "-hasStopped"],
-            [p.communityId + '-' + p.pid + "-canRemove"],
-            [p.communityId + '-' + p.pid + "-hasRemoved"],
-            [p.communityId + '-' + p.pid + "-poolRatio", ratio => parseInt(ratio)],
-            [p.communityId + '-' + p.pid + "-stakingPair"],
-            [p.communityId + '-' + p.pid + "-shareAcc"],
-            [p.communityId + '-' + p.pid + "-totalStakedAmount", amount => amount.toString()]
-          ]
-        }
-      }), Multi_Config)
-      watcher.batch().subscribe(updates => {
-        // console.log('update pools info', updates);
-        let monitorPools = store.state.web3.monitorPools 
-        updates.map(u => {
-          monitorPools[u.type] = u.value
-        })
-        store.commit('web3/saveMonitorPools', {...monitorPools})
-      });
-      watcher.start()
-      watchers['poolInfos'] = watcher
-      store.commit('web3/saveWatchers', {...watchers})
-      resolve()
-    } catch (e) {
-      console.log('monitor pools info fail', e);
-      reject(e)
+    } finally{
+      store.commit('pool/saveLoadingApprovements', false)
     }
   })
 }
@@ -763,12 +513,16 @@ export const monitorPoolInfos = async () => {
 export const monitorUserBalances = async () => {
   return new Promise(async (resolve, reject) => {
     try{
-      const allTokens = await getAllTokenFromBackend(true)
+      const allTokens = await getAllTokenFromBackend()
       store.commit('web3/saveLoadingUserBalances', true)
       let watchers = store.state.web3.watchers
       let watcher = watchers['userBalances']
       watcher && watcher.stop()
       const account = await getAccounts();
+      if (!account) {
+        resolve()
+        return;
+      }
       watcher = createWatcher(allTokens.map(token => ({
         target: token.address,
         call:[
@@ -795,127 +549,5 @@ export const monitorUserBalances = async () => {
     }catch(e){
       reject(e)
     }
-  })
-}
-
-
-/**
- * Monitor pools apy by polling
- */
- export const UpdateApysOfPool = async () => {
-  // apy calculate:
-  // need token price, ctoken price, poolRatio, devRatio, currentblockreward, tvl
-  // a pool's apy = a year's reward / tvl
-  // = currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
-  // if tvl = 0 => apy = 0
-  // token price = 0 or ctoken price = 0 => apy = 0
-  const update = async () => {
-    try{
-      let [price, pools, communities] = await Promise.all([getPrices(), getAllPools(), getAllCommunities()])
-      const monitorPools = store.state.web3.monitorPools
-      let temp = {}
-      for (let c of communities) {
-        temp[c.id] = c
-      }
-      communities = temp
-      const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
-      const vestsToSteem = store.state.steem.vestsToSteem
-      const vestsToHive = store.state.hive.vestsToHive
-      for (let pool of pools){
-        const key = pool.communityId + '-' + pool.pid + '-'
-        const tvl = monitorPools[key + 'totalStakedAmount']
-        const poolRatio = monitorPools[key + 'poolRatio']
-        if (monitorPools[key + 'hasStopped']) continue
-        if (monitorPools[key + 'hasRemoved']) continue
-        if (tvl === '0') continue;
-        if (poolRatio === 0) continue;
-        const com = communities[pool.communityId]
-        let ctokenDecimal = pool.decimal ?? 18;
-        let decimal = pool.tokenDecimal ?? 18;
-        ctokenDecimal = 10 ** ctokenDecimal;
-        decimal = 10 ** decimal;
-        
-        if (!com) continue;
-        const ctokenAddress = com.ctoken
-        const ctokenPrice = price[ctokenAddress]
-        if (ctokenPrice === 0) continue;
-        const devRatio = com.rewardRatio
-        const rewardPerBlock = com.rewardPerBlock
-        if (pool.type === 'HomeChainAssetRegistry'){
-          const p = price[pool.address]
-          if (p === 0){
-            continue
-          }          
-          //currenReward * a years block * poolRatio / 10000 * (1 - devRatio) * ctoken price / (tvl * token Price)
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / decimal * p)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-        if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'sp'){
-          const steemPrice = parseFloat(price['STEEMETH']) * parseFloat(price['ETHUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToSteem * steemPrice)
-          pool.apy = pool.apy * 100;
-          continue;
-        }
-        if (pool.type === 'SteemHiveDelegateAssetRegistry' && pool.assetType === 'hp'){
-          const hivePrice = parseFloat(price['HIVUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e6 * vestsToHive * hivePrice)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 2) {// polkadot
-          const dotPrice = parseFloat(price['DOTUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e10 * dotPrice)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-        if ((pool.type === 'SubstrateCrowdloanAssetRegistry' || pool.type === 'SubstrateNominateAssetRegistry') && pool.chainId === 3) {// kusama
-          const ksmPrice = parseFloat(price['KSMUSDT'])
-          pool.apy = blocksPerYear * (rewardPerBlock / ctokenDecimal) * (poolRatio / 10000) * (1 - devRatio / 10000) * ctokenPrice / (tvl / 1e12 * ksmPrice)
-          pool.apy = 100 * pool.apy;
-          continue;
-        }
-      }
-      store.commit('web3/saveAllPools', [...pools])
-    }catch(e) {
-      console.log('Update apys faile', e);
-    }
-    setTimeout(update, 10000)
-  }
-  update()
-}
-
-const getPrices = async () => {
-  // tokenPrices is against eth price
-  let [binancePrice, tokenPrices] = await Promise.all([getPricesOnCEX(), getAllTokenFromBackend()])
-  binancePrice = binancePrice.filter(p => 
-    PRICES_SYMBOL.indexOf(p.symbol) !== -1
-  )
-  let res = {}
-  for (let p of binancePrice) {
-    if (p.symbol === 'ETHUSDT'){
-      store.commit('saveEthPrice', parseFloat(p.price))
-    }
-    res[p.symbol] = p.price
-  }
-  for (let p of tokenPrices) {
-    res[p.address] = p.price
-  }
-  store.commit('savePrices', res)
-  return res
-}
-
-/**
- * Monitor pools data
- */
-export const monitorPools = async () => {
-  getAllPools().then(() => {
-    Promise.all([
-      monitorUserStakings(),
-      monitorPendingRewards(),
-      monitorApprovements(),
-      monitorPoolInfos(),
-      monitorUserBalances()
-    ]).catch(console.error)
   })
 }

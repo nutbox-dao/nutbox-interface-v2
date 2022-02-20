@@ -9,7 +9,7 @@ var cryptoOptions = {
   key: process.env.VUE_APP_CRYPTO_KEY,
   iv: process.env.VUE_APP_CRYPTO_IV,
   method: process.env.VUE_APP_CRYPTO_METHOD,
-};
+}
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -19,13 +19,21 @@ export const firstToUpper = function (str) {
     return str;
   }
   return str.trim().replace(str[0], str[0].toUpperCase());
-};
+}
 
 export const sleep = async function (interval = 6) {
   return new Promise((resolve) => {
     setTimeout(resolve, interval * 1000); // 6秒
   });
-};
+}
+
+export function utf8ToHex(str) 
+{
+    return Array.from(str).map(c =>
+        c.charCodeAt(0) < 128 ? c.charCodeAt(0).toString(16) :
+        encodeURIComponent(c).replace(/\%/g,'').toLowerCase()
+    ).join('');
+}
 
 export const retryMethod = async function (func, retries = 5, interval = 1) {
   return new Promise((resolve, reject) => {
@@ -64,16 +72,44 @@ export const formatBalance = function (value, digit = 4) {
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
 };
 
-export const formatPrice = function (value) {
+/**
+ * 
+ * @param {*} value 
+ * @param {*} abb is abbreviations 
+ * @returns 
+ */
+export const formatPrice = function (value, abb=false) {
   if (!value) return "--";
-  const str = Number(value).toFixed(3).toString();
+  let unit = ''
+  if(Number(value) > 1e6) {
+    abb = true
+  }
+  let digit = 3
+  if(Number(value) < 1) {
+    digit = 4
+  }
+  if (abb) {
+    value = Number(value)
+    if (value < 1000) {}
+    else if (value < 1e6) {
+      value = value / 1000
+      unit ='K'
+    }else if (value < 1e9){
+      value = value / 1e6
+      unit = 'M'
+    }else if(value < 1e12) {
+      value = value / 1e9
+      unit = 'B'
+    }
+  }
+  const str = Number(value).toFixed(digit).toString();
   let integer = str;
   let fraction = "";
   if (str.includes(".")) {
     integer = str.split(".")[0];
     fraction = "." + str.split(".")[1];
   }
-  return "$" + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
+  return "$" + integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction + unit;
 };
 
 export const formatUserAddress = (address, long = true) => {
@@ -96,6 +132,35 @@ export function getDateString(now, timezone, extra = 0) {
   now = new Date(now.getTime() + (offset + extra) * 1000);
 
   return now.toISOString().replace("T", " ").substring(0, 19);
+}
+
+export function parseTimestamp(timestamp) {
+  if (!timestamp) {
+    return ''
+  }
+  let nowStamp = (new Date().getTime()) / 1000;
+  nowStamp = parseInt(nowStamp)
+  timestamp = parseInt(timestamp)
+  if (timestamp > nowStamp) {
+    return getDateString(null, null, timestamp - nowStamp);
+  }else {
+    const diff = nowStamp - timestamp;
+    if (diff < 10) {
+      return 'Now'
+    }else if(diff < 60) {
+      return `${diff} seconds ago`
+    }else if (diff < 3600) {
+      return `${Math.floor(diff / 60)} mins ago`
+    }else if (diff < 3600 * 24) {
+      return `${Math.floor(diff / 3600)} hours ago`
+    }else if (diff < 3600 * 24 * 30) {
+      return `${Math.floor(diff / 3600 / 24)} days ago`
+    }else if (diff < 3600 * 24 * 60) {
+      return '1 month ago'
+    }else {
+      return getDateString(null, null, timestamp - nowStamp)
+    }
+  }
 }
 
 // block time
@@ -161,6 +226,8 @@ export function formatCountdown(end, currentBlockNum, blockInterval) {
  */
 export const uploadImage = async (img) => {
   return new Promise((resolve, reject) => {
+    // resolve('https://cdn.wherein.mobi/nutbox/v2/1636516942582');
+    // return;
     let param = new FormData();
     param.append("file", img);
     const config = {
@@ -196,6 +263,8 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t("error.blockChainError");
   } else if (code === errCode.CONTRACT_CREATE_FAIL) {
     tipStr = $t("error.blockChainError");
+  } else if (code === errCode.HAVE_CREATED_COMMUNITY) {
+    tipStr = $t("error.haveCreatedCommunity")
   } else if (code === errCode.USER_CANCEL_SIGNING) {
     tipStr = $t("error.cancelSigning");
   } else if (code === errCode.TRANSACTION_FAIL) {
@@ -272,4 +341,32 @@ export function blockTimeWithoutUTC(start, end) {
   if (end - start > 9999999999) return "";
   const diff = (end - start) * BLOCK_SECOND;
   return getDateString(null, null, diff);
+}
+
+
+export function rollingFunction(func, params, interval, callback) {
+  var flag = true;
+
+  var rolling = {
+    start: async function start() {
+      while (flag) {
+        try {
+          const res = await func(params);
+          if (flag) {
+            if (callback) {
+              callback(res);
+            }
+          }
+        }catch(e) {
+          console.log('Rolling fail', e);
+        }
+        await sleep(interval)
+      }
+    },
+    stop: function stop() {
+      flag = false
+    }
+  }
+
+  return rolling
 }

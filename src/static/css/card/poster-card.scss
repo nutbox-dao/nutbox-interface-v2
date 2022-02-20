@@ -2,56 +2,47 @@
   @include card(0);
   @include c-col-flex-between-center;
   position: relative;
+  border: none;
   .poster{
-    @include card-poster-bg(6.2rem);
-    min-height: 6.2rem;
+    @include card-poster-bg(107px);
+    min-height: 107px;
     background-color: white;
   }
   .large-poster{
     @include card-poster-bg(9.6rem);
   }
-  .logo {
-    @include card-icon;
+  .logo-box {
     position: absolute;
-    top: -2rem;
-    left: 1.2rem;
-    border: 1px solid white;
+    top: -1rem;
+    left: 1rem;
+  }
+  .logo {
+    @include card-icon(56px, 56px);
+    border: 2px solid white;
   }
   .large-logo {
-    @include card-icon(3.6rem, 3.6rem);
+    @include card-icon(72px, 72px);
     position: absolute;
-    border: 1px solid white;
-    left: 1.2rem;
-    top: -1.2rem;
+    border: .2rem solid white;
+    left: 1rem;
+    top: -36px;
     background-color: white;
+    box-sizing: border-box;
   }
   .second-card {
-    @include card(1.2rem, white, none)
+    @include card(3rem 1rem 1.2rem, var(--card-bg-primary), none);
+    margin-top: -12px;
   }
-  .project-info {
-    margin-left: 4.2rem;
-    .desc {
-      text-align: justify;
-    }
+  .second-card-home {
+    @include card(58px 1rem 1.2rem, var(--card-bg-primary), none);
   }
-  .official-link-title {
-
+  .official-link-icon{
+    @include icon();
+    background-image: url("~@/static/images/official-link.svg");
   }
-  .icon-title {
-    padding-right: 1.8rem;
-    background-position: right center;
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-    text-align: left;
-    color: #242629;
-    width: fit-content;
-    margin-bottom: .8rem;
-    &.official-link-icon{
-      background-image: url("~@/static/images/official-link.png");
-    }
-    &.link-icon {
-      background-image: url("~@/static/images/auctionPlanLink.png");
-    }
+  .link-icon {
+    @include icon();
+    background-image: url("~@/static/images/official-link1.svg");
   }
 }
 @media (max-width: 500px) {

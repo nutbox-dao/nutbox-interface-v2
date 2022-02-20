@@ -5,12 +5,13 @@ import {
   LOCALE_KEY
 } from '../config'
 
-import polkadot from './polkadot'
-import kusama from './kusama'
 import web3 from './web3'
 import community from '@/store/community'
 import steem from './steem'
 import hive from './hive'
+import currentCommunity from './currentCommunity'
+import user from './user'
+import pool from './pool'
 
 Vue.use(Vuex)
 
@@ -18,12 +19,10 @@ export default new Vuex.Store({
   state: {
     lang: Cookie.get(LOCALE_KEY) || 'zh-CN',
     allParachain: null,
-    ethPrice: 0,
     prices: {},
     metamaskConnected: false,
     apys: {},
-    // exist in child community page
-    currentCommunityId: null
+    tvl: 0
   },
   mutations: {
     saveLang: (state, lang) => {
@@ -32,9 +31,6 @@ export default new Vuex.Store({
     },
     saveAllParachain:(state, allParachain) => {
       state.allParachain = allParachain
-    },
-    saveEthPrice: (state, ethPrice) => {
-      state.ethPrice = ethPrice
     },
     savePrices: (state, prices) => {
       state.prices = prices
@@ -45,18 +41,19 @@ export default new Vuex.Store({
     saveApys: (state, apys) => {
       state.apys = apys
     },
-    saveCurrentCommunityId: (state, currentCommunityId) => {
-      state.currentCommunityId = currentCommunityId
+    saveTvl: (state, tvl) => {
+      state.tvl = tvl
     }
   },
   getters: {
   },
   modules: {
-    polkadot,
-    kusama,
     web3,
     community,
     steem,
-    hive
+    hive,
+    currentCommunity,
+    user,
+    pool
   }
 })

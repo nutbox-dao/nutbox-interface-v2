@@ -3,7 +3,7 @@
   @include c-col-flex-between-center;
 }
 .c-card {
-  @include card;
+  @include card();
   @include c-col-flex-between-center;
   .h-line {
     @include line(2rem, .2rem, .2rem);
@@ -13,9 +13,6 @@
     margin: .8rem 0;
     text-align: left;
     @include text-multi-line(2);
-  }
-  .primary-btn {
-    margin-top: 1rem;
   }
 }
 .card-single-icon img{
@@ -46,26 +43,30 @@
   align-items: center;
 }
 .card-link-top-box {
-  border-top-left-radius: 1.4rem;
-  border-top-right-radius: 1.4rem;
-  background-image: linear-gradient(to bottom, #ffffff, #F6F7F9);
-  padding: .8rem 1.2rem 2.2rem;
+  height: 128px;
+  box-sizing: border-box;
+  border-radius: 16px 16px 0 0;
+  background-image: linear-gradient(to bottom, #141414, #1D1E1F);
+  padding-top: 24px;
+  padding-left: 20px;
+  padding-right: 8px;
   overflow: hidden;
 }
 .card-link-icons {
   display: flex;
   align-items: flex-end;
-  width: 3.5rem;
+  width: 74px;
   margin-right: .4rem;
   img {
-    border: 1px solid white;
+    border: 2px solid white;
+    background-color: var(--card-bg-primary);
   }
   .icon1 {
-    @include card-icon;
+    @include card-icon(56px, 56px);
   }
   .icon2 {
     margin-left: -1rem;
-    @include card-icon(1.8rem, 1.8rem);
+    @include card-icon(32px, 32px);
   }
 }
 .card-link-title-text {
@@ -80,20 +81,7 @@
       text-align: left;
       margin-right: .4rem;
     }
-    .link-icon {
-      @include icon(.8rem, .8rem);
-      min-width: .8rem;
-      background-image: url("~@/static/images/link-icon.png");
-    }
   }
-}
-.more-text-icon {
-  padding-right: .8rem;
-  background-image: url("~@/static/images/right-arrow.svg");
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: .6rem .6rem;
-  color: #717376;
 }
 .validator-container{
   display: flex;
@@ -110,27 +98,32 @@
 .project-info-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.6rem;
+  margin-top: 12px;
   margin-bottom: 0;
+  font-size: 14px;
   .name {
     flex: 1;
     text-align: left;
-    color: rgba(189, 191, 194, 1);
-    font-weight: bold;
     white-space: nowrap;
     margin-right: .4rem;
+    line-height: 14px;
   }
   .info {
     text-align: right;
     font-weight: 500;
+    line-height: 14px;
   }
 }
 
 .status-container {
+  display: flex;
+  justify-content: center;
   span {
     border: 1px solid;
-    padding: .1rem .3rem;
+    padding: 0 14px;
     border-radius: 2rem;
+    font-size: 14px;
+    height: 24px;
   }
   .Active {
     color: rgba(80, 191, 0, 1);
@@ -148,4 +141,12 @@
     color: rgba(80, 191, 0, 1);
     background: rgba(80, 191, 0, .05);
   }
+}
+
+.info-icon {
+  width: 28px;
+  height: 28px;
+  margin-left: -12px;
+  border-radius: 28px;
+  background-color: var(--card-bg-primary);
 }

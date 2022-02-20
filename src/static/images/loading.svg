@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>loading</title>
+    <defs>
+        <linearGradient x1="78.9576805%" y1="0%" x2="0%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FE6809" offset="0%"></stop>
+            <stop stop-color="#FFC7A4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nutbox-loading" transform="translate(-305.000000, -651.000000)" fill-rule="nonzero">
+            <g id="loading" transform="translate(305.000000, 651.000000)">
+                <path d="M23,0 C10.2974508,0 0,10.2974508 0,23 C0,35.7025492 10.2974508,46 23,46 C35.7025492,46 46,35.7025492 46,23 C46,10.2974508 35.7025492,0 23,0 Z M23,6 C32.3888407,6 40,13.6111593 40,23 C40,32.3888407 32.3888407,40 23,40 C13.6111593,40 6,32.3888407 6,23 C6,13.6111593 13.6111593,6 23,6 Z" id="椭圆形" fill="#1C1D1E"></path>
+                <path d="M23,0 C24.6568542,0 26,1.34314575 26,3 C26,4.65685425 24.6568542,6 23,6 C13.6111593,6 6,13.6111593 6,23 C6,24.6568542 4.65685425,26 3,26 C1.34314575,26 0,24.6568542 0,23 C0,10.2974508 10.2974508,0 23,0 Z" id="路径" fill="url(#linearGradient-1)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

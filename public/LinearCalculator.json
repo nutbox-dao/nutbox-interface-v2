@@ -2,41 +2,15 @@
   "contractName": "LinearCalculator",
   "abi": [
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_communityFactory",
+          "type": "address"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "factory",
-          "type": "address"
-        }
-      ],
-      "name": "AdminSetStakingFactory",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
     },
     {
       "anonymous": false,
@@ -54,7 +28,7 @@
           "type": "bytes"
         }
       ],
-      "name": "SetDistributionEra",
+      "name": "DistributionEraSet",
       "type": "event"
     },
     {
@@ -108,52 +82,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_factory",
-          "type": "address"
-        }
-      ],
-      "name": "adminSetStakingFactory",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -256,8 +184,8 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct Types.Distribution",
-          "name": "",
+          "internalType": "struct LinearCalculator.Distribution",
+          "name": "era",
           "type": "tuple"
         }
       ],

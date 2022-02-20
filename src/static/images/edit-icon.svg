@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/l/autograph/n</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Nutbox-Profile" transform="translate(-246.000000, -246.000000)">
+            <g id="社区" transform="translate(120.000000, 130.000000)">
+                <g id="icon/autograph/l/n" transform="translate(126.000000, 116.000000)">
+                    <rect id="Rectangle-34" x="0" y="0" width="24" height="24"></rect>
+                    <path d="M16.3649323,5.66421356 L5.02042582,17.00872 L4.94599353,19.9115794 L7.84885295,19.8371472 L19.1933594,8.49264069 L16.3649323,5.66421356 Z M17.0720391,3.54289322 L21.3146798,7.78553391 C21.705204,8.1760582 21.705204,8.80922318 21.3146798,9.19974747 L8.69840613,21.8160211 L3.94497302,21.937904 C3.39286973,21.9520605 2.93382548,21.5159684 2.91966898,20.9638652 C2.91944994,20.9524748 2.96007757,19.3509087 3.04155188,16.1591668 L15.6578255,3.54289322 C16.0483498,3.15236893 16.6815148,3.15236893 17.0720391,3.54289322 Z" id="Path-18" fill="#747576" fill-rule="nonzero"></path>
+                    <polygon id="Rectangle-35" points="15.7989899 7.58220863 17.2132034 8.9964222 7.3137085 18.8959171 5.89949494 18.8959171 5.89949494 17.4817036"></polygon>
+                    <rect id="Rectangle-41" fill="#747576" fill-rule="nonzero" x="12" y="20" width="10" height="2" rx="1"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

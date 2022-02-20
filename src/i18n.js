@@ -10,12 +10,10 @@ console.log('default language', DEFAULT_LANG)
 const i18n = new VueI18n({
   locale: 'en',
   messages: {
-    zh: require('./assets/lang/zh_CN'),
     en: require('./assets/lang/EN'),
     kr: require('./assets/lang/KR'),
     es: require('./assets/lang/ES'),
-    my: require('./assets/lang/MY'),
-    jp: require('./assets/lang/JP')
+    my: require('./assets/lang/MY')
   },
   fallbackLocale: 'en',
   silentFallbackWarn: true
