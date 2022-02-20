@@ -116,7 +116,6 @@ export default {
         symbol = token && token.symbol;
         decimals = token && token.decimal
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
-        console.log(433, token);
       }catch(e){
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
