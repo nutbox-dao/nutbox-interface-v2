@@ -4,9 +4,9 @@
     <div class="pool-type-modal-content d-flex flex-column">
       <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
-        <div class="type-box type-box-moonbeam">
-          <button class="moonbeam-btn" @click="$emit('onType', 'erc20staking')">
-            ERC20 <br> Staking
+        <div class="type-box type-box-bsc">
+          <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
+            BEP20 <br> Staking
           </button>
         </div>
         <div class="type-box type-box-steem">
