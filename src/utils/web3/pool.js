@@ -364,17 +364,17 @@ export const getBindSteemAccount = async (pool) => {
  * @returns 
  */
 export const updatePoolsByPolling = (pools) => {
-  const stakingRolling = rollingFunction(getUserStakings, pools, 3, res => {
+  const stakingRolling = rollingFunction(getUserStakings, pools, 5, res => {
     store.commit('pool/saveUserStaked', res || {})
   })
-  const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 3, res => {
+  const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 8, res => {
     store.commit('pool/saveTotalStaked', res || {})
   })
   const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
     store.commit('pool/saveUserReward', res || {})
   })
   store.commit('pool/saveLoadingApprovements', true)
-  const approvmentRolling = rollingFunction(getApprovements, pools, 3, res => {
+  const approvmentRolling = rollingFunction(getApprovements, pools, 5, res => {
     store.commit('pool/saveApprovements', res || {})
   })
   stakingRolling.start();
