@@ -16,13 +16,13 @@
               <i class="menu-icon stake-icon" />
               <span>{{ $t('router.pool') }}</span>
             </b-nav-item>
-            <b-nav-item to="/manage-community/social">
-              <i class="menu-icon social-icon" />
-              <span>{{ $t('router.social') }}</span>
-            </b-nav-item>
             <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />
               <span>{{ $t('router.governance') }}</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/social">
+              <i class="menu-icon social-icon" />
+              <span>{{ $t('router.social') }}</span>
             </b-nav-item>
       <!--      <b-nav-item to="/manage-community/game">{{ $t('game.game') }}</b-nav-item>-->
           </b-nav>
