@@ -304,6 +304,7 @@ input::-webkit-input-placeholder {
   border: transparent!important;
   padding: 0!important;
   box-sizing: content-box;
+  cursor: pointer;
 }
 .custom-file-label::after{
   display: none!important;
