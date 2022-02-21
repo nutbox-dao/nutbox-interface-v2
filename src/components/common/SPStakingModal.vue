@@ -113,7 +113,7 @@ export default {
       if (this.steemBalance >= this.fee){
         return true;
       }
-      this.$bvToast.toast(this.$t('error.delegateeroor'), {
+      this.$bvToast.toast(this.$t('error.delegateerror'), {
         title: this.$t('error.notEnoughFee'),
         variant: 'info'
       })
