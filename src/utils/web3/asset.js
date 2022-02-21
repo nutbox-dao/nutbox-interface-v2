@@ -127,7 +127,7 @@ export const getERC20Info = async (address) => {
         icon
       })
     }catch(e){
-      console.log('Wrong ERC20 address', e);
+      console.log('Wrong BEP20 address', e);
       reject(e)
     }
   })
