@@ -364,25 +364,114 @@ export const getBindSteemAccount = async (pool) => {
  * @returns 
  */
 export const updatePoolsByPolling = (pools) => {
-  const stakingRolling = rollingFunction(getUserStakings, pools, 5, res => {
-    store.commit('pool/saveUserStaked', res || {})
+  const polling = rollingFunction(getPoolStakingInfo, pools, 6, res => {
+    let staked = {}
+    let total = {}
+    let pending = {}
+    let approve = {}
+    for (let d in res) {
+      const [type, pid] = d.split('-')
+      if (type === 'staked') {
+        staked[pid] = res[d]
+      }else if(type === 'total'){
+        total[pid] = res[d]
+      }else if(type === 'pending') {
+        pending[pid] = res[d]
+      }else if (type === 'approve') {
+        approve[pid] = res[d]
+      }
+    }
+    store.commit('pool/saveUserStaked', staked || {})
+    store.commit('pool/saveTotalStaked', total || {})
+    store.commit('pool/saveUserReward', pending || {})
+    store.commit('pool/saveApprovements', approve || {})
   })
-  const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 8, res => {
-    store.commit('pool/saveTotalStaked', res || {})
-  })
-  const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
-    store.commit('pool/saveUserReward', res || {})
-  })
-  store.commit('pool/saveLoadingApprovements', true)
-  const approvmentRolling = rollingFunction(getApprovements, pools, 5, res => {
-    store.commit('pool/saveApprovements', res || {})
-  })
-  stakingRolling.start();
-  totalStakingRolling.start();
-  rewardRolling.start();
-  approvmentRolling.start();
+  // const stakingRolling = rollingFunction(getUserStakings, pools, 5, res => {
+  //   console.log(46325,res);
+  //   store.commit('pool/saveUserStaked', res || {})
+  // })
+  // const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 8, res => {
+  //   store.commit('pool/saveTotalStaked', res || {})
+  // })
+  // const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
+  //   store.commit('pool/saveUserReward', res || {})
+  // })
+  // store.commit('pool/saveLoadingApprovements', true)
+  // const approvmentRolling = rollingFunction(getApprovements, pools, 5, res => {
+  //   store.commit('pool/saveApprovements', res || {})
+  // })
+  // stakingRolling.start();
+  // totalStakingRolling.start();
+  // rewardRolling.start();
+  // approvmentRolling.start();
+  polling.start();
 
-  return [stakingRolling, totalStakingRolling, rewardRolling, approvmentRolling]
+  return polling;
+}
+
+// get pools' stake,totalstake,reward,approvement info
+const getPoolStakingInfo = async (pools) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const account = await getAccounts();
+      if (!account) {
+        resolve();
+        return;
+      }
+      let calls = []
+      for (let i = 0; i < pools.length; i++) {
+        const p = pools[i]
+        calls.push({
+          target: p.id,
+          call: [
+            'getUserStakedAmount(address)(uint256)',
+            account
+          ],
+          returns: [
+            ['staked-'+p.id]
+          ]
+        });
+        calls.push({
+          target: p.id,
+          call: [
+            'getTotalStakedAmount()(uint256)'
+          ],
+          returns: [
+            ['total-'+p.id]
+          ]
+        });
+        calls.push({
+          target: p.community.id,
+          call: [
+            'getPoolPendingRewards(address,address)(uint256)',
+            p.id,
+            account
+          ],
+          returns: [
+            ['pending-'+p.id]
+          ]
+        });
+        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking')){
+          calls.push({
+            target: p.asset,
+            call: [
+              'allowance(address,address)(uint256)',
+              account,
+              p.id
+            ],
+            returns: [
+              ['approve-'+p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset)) > 1e12]
+            ]
+          })
+        }
+      }
+      const result = await aggregate(calls, Multi_Config)
+      resolve(result.results.transformed)
+    }catch(e) {
+      console.log("Get user's staking info fail");
+      reject(e)
+    }
+  })
 }
 
 /** 
