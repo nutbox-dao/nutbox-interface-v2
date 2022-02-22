@@ -204,7 +204,7 @@ export const updatePoolsRatio = async (form) => {
       return;
     }
     try {
-      const tx = await contract.adminSetPoolRatios(form.map(val => val * 100))
+      const tx = await contract.adminSetPoolRatios(form.map(val => parseInt(val * 100)))
       console.log('Update pool ratios', tx.hash);
       await waitForTx(tx.hash)
       resolve(tx.hash)

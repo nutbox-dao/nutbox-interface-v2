@@ -320,8 +320,8 @@ export default {
         }
         this.$emit('create', this.activePools)
       }else {
-        const res = this.activePools.reduce((t, r) => t + parseFloat(r.ratio), 0)
-        if (res !== 100) {
+        const res = this.activePools.reduce((t, r) => t + parseInt(parseFloat(r.ratio) * 100), 0)
+        if (res !== 10000) {
           this.$bvToast.toast('Ratios summary must be 100', {
             title: this.$t('tip.tips'),
             variant: 'info'
