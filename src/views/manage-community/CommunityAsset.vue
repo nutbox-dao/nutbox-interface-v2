@@ -259,7 +259,7 @@
     >
       <div class="custom-form font20 line-height28">
         <div class="modal-title font-bold mb-2">
-          {{ $t("community.fundRatio") }}
+          {{ $t("community.fundAddress") }}
         </div>
         <div class="input-group-box mb-4">
           <div class="input-box flex-between-center">
