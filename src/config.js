@@ -106,6 +106,7 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 // bsc
 export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
 export const BSC_CHAIN_ID = 56;
 export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
 export const CHAIN_NAME = 'BSC-Mainnet';
