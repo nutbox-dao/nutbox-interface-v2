@@ -115,7 +115,9 @@ export default {
         const token = this.tokenByKey(this.operation.asset)
         symbol = token && token.symbol;
         decimals = token && token.decimal
-        delegatee = ethers.utils.parseBytes32String(this.operation.asset)
+        if (!token) {
+          delegatee = ethers.utils.parseBytes32String(this.operation.asset)
+        }
       }catch(e){
         delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
