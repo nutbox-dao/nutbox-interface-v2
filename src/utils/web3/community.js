@@ -798,9 +798,10 @@ export const getCommunityBalance = async ({communityId, ctokenAddress}) => {
   return new Promise(async (resolve, reject) => {
     try {
       const contract = await getContract('ERC20', ctokenAddress)
-      const balance = contract.balanceOf(communityId)
+      const balance = await contract.balanceOf(communityId)
       resolve(balance)
     } catch (e) {
+      
       reject(e);
     } finally {
     }
