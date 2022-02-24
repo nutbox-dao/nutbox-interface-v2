@@ -217,7 +217,7 @@ export default {
     async withdraw () {
       try {
         if (!this.cToken.isMintable) {
-          if (this.userReward[this.card.id] > this.communityBalance) {
+          if (this.userReward[this.card.id].gt(this.communityBalance)) {
             this.showAttention = true;
             return;
           }
