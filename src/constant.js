@@ -1,4 +1,4 @@
-export const BLOCK_SECOND = 3
+export const BLOCK_SECOND = 12
 
 export const SP_DELEGATE_DECIMAL = 6
 
