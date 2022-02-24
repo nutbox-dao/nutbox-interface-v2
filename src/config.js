@@ -4,11 +4,11 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+// export const BACKEND_API_URL = "https://api-astar.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-// export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "http://localhost:3000";
 
-export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
+export const QN_UPLOAD_URL = 'https://api-walnut.nutbox.app' + "/qiNiu/upload";
 
 /**
  * ERROR CODE DEFINE
@@ -105,15 +105,28 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 // }
 
 // bsc
-export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
+
+// Astar
+export const RPC_NODE = 'https://rpc.astar.network:8545';
 // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
-export const BSC_CHAIN_ID = 56;
-export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-export const CHAIN_NAME = 'BSC-Mainnet';
+export const BSC_CHAIN_ID = 592;
+export const BLOCK_CHAIN_BROWER = 'https://blockscout.com/astar/';
+export const CHAIN_NAME = 'Astar Network';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'ASTR',
+  symbol: 'ASTR',
   decimals: 18
 }
 
@@ -157,8 +170,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
 // bsc net
-export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
-export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+// export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+// export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+
+// astar
+export const MultiAddress = '0x79D106b1af3C3cb712B49e405825905e4ee0Db32'
+export const NutAddress = "0xd10e4C1e301A13A9B874bd1757c135Eda075769D"
 
 // Register by nutbox
 export const OfficialAssets = [
