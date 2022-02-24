@@ -4,10 +4,10 @@ import store from "@/store";
 import { BLOCK_SECOND } from '@/constant'
 
 export const subBlockNum = async () => {
-  const provider = await getReadonlyProvider();
+  const provider = await getProvider();
   while (true) {
     try {
-      const blockNumber = await provider.getProvider();
+      const blockNumber = await provider.getBlockNumber();
       store.commit("web3/saveBlockNum", blockNumber);
     } catch (e) {}
     await sleep(BLOCK_SECOND);
