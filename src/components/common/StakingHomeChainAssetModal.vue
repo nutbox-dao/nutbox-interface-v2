@@ -70,7 +70,7 @@ export default {
     },
     formBalance(){
       const balance = this.balance;
-      return parseFloat(balance.toString() / (10 ** this.ctokenDecimal));
+      return parseFloat(balance.toString() / (10 ** this.stakedDecimal));
     },
     formStaked(){
       const staked = this.staked;
@@ -125,10 +125,10 @@ export default {
       try{
         let message;
         if (this.operate === 'add'){
-          await deposit(this.card.id, this.stakingValue)
+          await deposit(this.card.id, this.stakingValue, this.stakedDecimal)
           message = this.$t('transaction.depositOk')
         }else{
-          await withdraw(this.card.id, this.stakingValue)
+          await withdraw(this.card.id, this.stakingValue, this.stakedDecimal)
           message = this.$t('transaction.withdrawOk')
         }
         this.$bvToast.toast(message, {

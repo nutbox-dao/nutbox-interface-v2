@@ -46,7 +46,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive'],
+      tabOptions: ['All'],
     }
   },
   computed: {
@@ -58,12 +58,6 @@ export default {
           return this.inActivedPools;
         case 0:
           return this.activedPools;
-        case 1:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
-        case 2:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
-        case 3:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive')) && parseInt(p.chainId) == 2)
       }
     },
     activedPools() {

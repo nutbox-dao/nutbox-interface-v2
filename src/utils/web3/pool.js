@@ -29,15 +29,8 @@ import { NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
 import { rollingFunction } from '@/utils/helper'
 
-export const getPoolFactoryAddress = (type) => {
-  switch (type){
-    case 'erc20staking':
-      return contractAddress['ERC20StakingFactory'].toLowerCase()
-    case 'steem':
-      return contractAddress['SPStakingFactory'].toLowerCase()
-    case 'hive':
-      return contractAddress['SPStakingFactory'].toLowerCase()
-  }
+export const getPoolFactoryAddress = () => {
+  return contractAddress['ERC20StakingFactory'].toLowerCase()
 }
 
 export const getPoolType = (factory, chainId) => {
@@ -45,12 +38,6 @@ export const getPoolType = (factory, chainId) => {
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
       return 'erc20staking'
-    case contractAddress['SPStakingFactory']:
-      if (parseInt(chainId) === 1) {
-        return 'steem'
-      }else if (parseInt(chainId) === 2) {
-        return 'hive'
-      }
   }
 }
 
@@ -121,58 +108,34 @@ export const addPool = async (form) => {
     let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
-      factory = await getContract(form.type === 'erc20staking' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
+      factory = await getContract('ERC20StakingFactory')
     } catch (e) {
       reject(e);
       return
     }
 
     try {
-      if (form.type === 'erc20staking') {
-        factory.on('ERC20StakingCreated', (pool, community, name, token) => {
-          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
-            console.log('Create a new pool:', pool);
-            resolve({
-              id: ethers.utils.getAddress(pool),
-              status: 'OPENED',
-              name,
-              asset: form.asset,
-              poolFactory: getPoolFactory(form.type),
-              ratio: form.ratios[form.ratios.length - 1] * 100,
-              chainId: 0,
-              stakersCount: 0
-            })
-            factory.removeAllListeners('ERC20StakingCreated')
-          }
-        })
-      }else {
-        factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
-          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
-            console.log('Create a new pool:', pool);
-            resolve({
-              id: ethers.utils.getAddress(pool),
-              status: 'OPENED',
-              name,
-              asset: form.asset,
-              poolFactory: getPoolFactory(form.type),
-              ratio: form.ratios[form.ratios.length - 1] * 100,
-              chainId,
-              stakersCount: 0,
-              totalAmount: 0
-            })
-            factory.removeAllListeners('SPStakingCreated')
-          }
-        })
-      }
-      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
+      factory.on('ERC20StakingCreated', (pool, community, name, token) => {
+        if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+          console.log('Create a new pool:', pool);
+          resolve({
+            id: ethers.utils.getAddress(pool),
+            status: 'OPENED',
+            name,
+            asset: form.asset,
+            poolFactory: getPoolFactory(),
+            ratio: form.ratios[form.ratios.length - 1] * 100,
+            chainId: 0,
+            stakersCount: 0
+          })
+          factory.removeAllListeners('ERC20StakingCreated')
+        }
+      })
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(), form.asset)
       await waitForTx(tx.hash)
     } catch (e) {
       console.log('Create pool fail', e);
-      if (form.type === 'erc20staking') {
-        factory.removeAllListeners('ERC20StakingCreated')
-      }else{
-        factory.removeAllListeners('SPStakingCreated')
-      }
+      factory.removeAllListeners('ERC20StakingCreated')
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })
@@ -252,7 +215,7 @@ export const closePool = async (form) => {
  * @param {*} poolId
  * @param {*} amount
  */
-export const deposit = async (poolId, amount) => {
+export const deposit = async (poolId, amount, decimals = 18) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
@@ -263,7 +226,7 @@ export const deposit = async (poolId, amount) => {
     }
 
     try{
-      const tx = await contract.deposit(ethers.utils.parseUnits(amount.toString(), 18))
+      const tx = await contract.deposit(ethers.utils.parseUnits(amount.toString(), decimals))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -283,7 +246,7 @@ export const deposit = async (poolId, amount) => {
  * @param {*} amount
  * @returns 
  */
-export const withdraw = async (poolId, amount) => {
+export const withdraw = async (poolId, amount, decimals = 18) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
     try{
@@ -294,7 +257,7 @@ export const withdraw = async (poolId, amount) => {
     }
 
     try{
-      const tx = await contract.withdraw(ethers.utils.parseUnits(amount.toString(), 18))
+      const tx = await contract.withdraw(ethers.utils.parseUnits(amount.toString(), decimals))
       await waitForTx(tx.hash)
       resolve(tx.hash)
     }catch(e){
@@ -338,26 +301,6 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
-// get user's bind account
-export const getBindSteemAccount = async (pool) => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      const contract = await getContract('SPStaking', pool.id)
-      const account = await getAccounts();
-      const bindAccount = parseInt(pool.chainId) === 1 ? store.state.steem.steemAccount : store.state.hive.hiveAccount;
-      const bindAccountBytes = ethers.utils.formatBytes32String(bindAccount);
-      const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccountBytes)])
-      const _bindAccount = ethers.utils.parseBytes32String(accountInfo.bindAccount);
-      resolve({
-        account: [account, _bindAccount],
-        bindAccount: [bindAccount, _account]
-      })
-    }catch(e) {
-      reject(e);
-    } 
-  })
-}
-
 /**
  * update pools info
  * @param {*} pools 
@@ -386,24 +329,6 @@ export const updatePoolsByPolling = (pools) => {
     store.commit('pool/saveUserReward', pending || {})
     store.commit('pool/saveApprovements', approve || {})
   })
-  // const stakingRolling = rollingFunction(getUserStakings, pools, 5, res => {
-  //   console.log(46325,res);
-  //   store.commit('pool/saveUserStaked', res || {})
-  // })
-  // const totalStakingRolling = rollingFunction(getPoolTotalStakings, pools, 8, res => {
-  //   store.commit('pool/saveTotalStaked', res || {})
-  // })
-  // const rewardRolling = rollingFunction(getPendingRewards, pools, 3, res => {
-  //   store.commit('pool/saveUserReward', res || {})
-  // })
-  // store.commit('pool/saveLoadingApprovements', true)
-  // const approvmentRolling = rollingFunction(getApprovements, pools, 5, res => {
-  //   store.commit('pool/saveApprovements', res || {})
-  // })
-  // stakingRolling.start();
-  // totalStakingRolling.start();
-  // rewardRolling.start();
-  // approvmentRolling.start();
   polling.start();
 
   return polling;
@@ -451,7 +376,7 @@ const getPoolStakingInfo = async (pools) => {
             ['pending-'+p.id]
           ]
         });
-        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking')){
+        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress()){
           calls.push({
             target: p.asset,
             call: [
@@ -568,7 +493,7 @@ export const getPendingRewards = async (pools) => {
 export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
+      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress())
       const account = await getAccounts();
       if (!account) {
         resolve();

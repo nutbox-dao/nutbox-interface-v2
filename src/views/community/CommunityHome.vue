@@ -25,13 +25,6 @@
       <div class="view-top-header view-top-header-sticky mt-5">
         <div class="row">
           <div class="col-lg-6">
-            <!-- <div class="nav-box nav-box-bg">
-              <div class="nav">
-                <span v-for="(item, index) of tabOptions" :key="index"
-                      :class="activeTab===index?'active':''"
-                      @click="activeTab = index">{{item}}</span>
-              </div>
-            </div> -->
           </div>
           <div class="col-lg-6 mt-lg-0 mt-3">
             <div class="row">
@@ -146,7 +139,6 @@ export default {
     return {
       activeTab: 0,
       loading: true,
-      tabOptions: ['All', CHAIN_NAME, 'Polkadot', 'Steem', 'Hive'],
       searchText: '',
       isOfficial: false,
       selectType: 'TVL'

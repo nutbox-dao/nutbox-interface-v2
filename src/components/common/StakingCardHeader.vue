@@ -69,13 +69,7 @@ export default {
       return this.getCommunityInfoById(this.communityId)
     },
     icon() {
-      switch (this.card.poolFactory.toLowerCase()){
-        case getPoolFactory('erc20staking').toLowerCase():
-          return this.tokenIcons[this.card.asset]
-        case getPoolFactory('steem').toLowerCase():
-          const chainId = this.card.chainId
-          return ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
-      }
+      return this.tokenIcons[this.card.asset]
     },
     poolType() {
       const type = getPoolType(this.card.poolFactory, this.card.chainId)

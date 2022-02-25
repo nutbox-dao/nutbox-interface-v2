@@ -27,11 +27,7 @@ export const contractAddress = {
 }
 
 export const getPoolFactory = (type) => {
-  if (type === 'erc20staking') {
-    return contractAddress.ERC20StakingFactory
-  }else if (type === 'steem' || type === 'hive') {
-    return contractAddress.SPStakingFactory
-  }
+  return contractAddress.ERC20StakingFactory
 }
 
 // contract file name

@@ -94,7 +94,6 @@ export default {
       this.communityId = communityId;
       getMyCommunityData().then(async (res) => {
         const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
-        console.log(235, hasRole, res);
         this.showGrantRole = isMintable && !hasRole
       });
       this.$store.commit('community/saveLoadingApproveCommunity', true)
