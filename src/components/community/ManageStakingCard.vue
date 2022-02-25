@@ -105,8 +105,6 @@ export default {
     ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
     ...mapGetters('web3', ['tokenByKey']),
     ...mapState({
-      steemVests: state => state.steem.vestsToSteem,
-      hiveVests: state => state.hive.vestsToHive,
       prices: state => state.prices
     }),
     totalDeposited () {
@@ -123,13 +121,7 @@ export default {
     tvl () {
       if(!this.prices || !this.stakeToken) return 0
       let price
-      if (this.type === 'erc20staking') {
-        price = this.stakeToken.price
-      } else if (this.type === "steem") {
-        price = this.prices['steem']
-      } else if (this.type === "hive") {
-        price = this.prices['hive']
-      }
+      price = this.stakeToken.price
       price = price ? parseFloat(price) : 0
       return this.totalDeposited * price
     },
@@ -246,17 +238,9 @@ export default {
   },
 
   async mounted () {
-    switch (this.pool.poolFactory.toLowerCase()){
-      case getPoolFactory('erc20staking').toLowerCase():
-        this.stakedERC20 = await getERC20Info(this.pool.asset)
-        this.icon = this.stakedERC20.icon
-        this.vert = (10 ** this.stakedERC20.decimal)
-        break;
-      case getPoolFactory('steem').toLowerCase():
-        const chainId = this.pool.chainId
-        this.icon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
-        this.vert = this.pool.chainId === 1 ? 1e6 / this.steemVests : 1e6 / this.hiveVests
-    }
+    this.stakedERC20 = await getERC20Info(this.pool.asset)
+    this.icon = this.stakedERC20.icon
+    this.vert = (10 ** this.stakedERC20.decimal)
   }
 }
 </script>

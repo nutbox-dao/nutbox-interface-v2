@@ -7,8 +7,6 @@ import {
 
 import web3 from './web3'
 import community from '@/store/community'
-import steem from './steem'
-import hive from './hive'
 import currentCommunity from './currentCommunity'
 import user from './user'
 import pool from './pool'
@@ -50,8 +48,6 @@ export default new Vuex.Store({
   modules: {
     web3,
     community,
-    steem,
-    hive,
     currentCommunity,
     user,
     pool

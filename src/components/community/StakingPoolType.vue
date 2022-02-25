@@ -4,21 +4,7 @@
     <div class="pool-type-modal-content d-flex flex-column">
       <div class="modal-title mt-4">Choose a pool type</div>
       <div class="col-lg-10 mx-auto flex-fill d-flex my-4 align-items-center h-100 types">
-        <div class="type-box type-box-bsc">
-          <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
-            BEP20 <br> Staking
-          </button>
-        </div>
-        <div class="type-box type-box-steem">
-          <button class="steem-btn" @click="$emit('onType', 'steem')">
-            Steem <br> Staking
-          </button>
-        </div>
-        <div class="type-box type-box-hive">
-          <button class="hive-btn" @click="$emit('onType', 'hive')">
-            Hive <br> Staking
-          </button>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -54,18 +40,6 @@ export default {
   width: 180px;
   height: 260px;
   position: relative;
-  &-moonbeam {
-    background-image: url("~@/static/images/m-bg-moonbeam.png"), url("~@/static/images/m-bg-icon-moonbeam.png");
-  }
-  &-bsc {
-    background-image: url("~@/static/images/m-bg-bsc.png"), url("~@/static/images/m-bg-icon-bsc.svg");
-  }
-  &-steem {
-    background-image: url("~@/static/images/m-bg-steem.png"), url("~@/static/images/m-bg-icon-steem.svg");
-  }
-  &-hive {
-    background-image: url("~@/static/images/m-bg-hive.png"), url("~@/static/images/m-bg-icon-hive.svg");
-  }
   button {
     border: none;
     font-size: 1rem;
@@ -82,12 +56,6 @@ export default {
   }
   .bsc-btn {
     background-color: #F5B638;
-  }
-  .steem-btn {
-    background-image: linear-gradient(to bottom, #6176D6, #425CF0);
-  }
-  .hive-btn {
-    background-image: linear-gradient(to bottom, #F32B68, #E31337);
   }
 }
 @media (max-width: 991px) {

@@ -319,7 +319,7 @@ module.exports = {
     wrongChainId: "Wrong ChainID",
     wrongETHAddress: "Wrong ETH Address",
     wrongInputDevRatio: "Please input number between 0-100",
-    notTokenContract: "The address you input is not a BEP20 contract address.",
+    notTokenContract: "The address you input is not a ERC20 contract address.",
     transactionFail: "Transaction fail!",
     assetHasRegisterd: "Asset has been registered by someone.",
     steemAccountEmpty: "Steem account missing",

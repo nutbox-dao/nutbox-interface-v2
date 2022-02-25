@@ -100,7 +100,6 @@
 <script>
 import { mapState } from 'vuex'
 import { getMyCommunityInfo, udpateSocialInfo } from '@/utils/web3/community'
-import Login from '@/components/common/Login'
 import { handleApiErrCode } from '@/utils/helper'
 
 export default {
@@ -121,20 +120,9 @@ export default {
       }
     }
   },
-  components: {
-    Login,
-  },
   computed: {
     ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
-    ...mapState("steem", ['steemAccount']),
     ...mapState('community', ['communityInfo']),
-  },
-  watch: {
-    steemAccount(newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.state = 'create'
-      }
-    }
   },
   methods: {
     checkInput() {

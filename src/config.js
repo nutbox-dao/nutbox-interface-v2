@@ -4,9 +4,9 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-// export const BACKEND_API_URL = "https://api-astar.nutbox.app"
+export const BACKEND_API_URL = "https://api-astar.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = 'https://api-walnut.nutbox.app' + "/qiNiu/upload";
 
@@ -36,35 +36,6 @@ export const errCode = {
   DB_ERROR: 453,
   SERVER_ERR: 500,
 };
-
-/**======================================= steem  ====================================*/
-
-// steem node storage
-export const STEEM_CONF_KEY = "steemNodeKey";
-// delegate fee
-export const STEEM_STAKE_FEE = 3;
-// official fee account
-export const STEEM_GAS_ACCOUNT = "walnut.gas";
-
-// Steem Config
-export const STEEM_API_URLS = [
-  process.env.STEEM_API_URL || "https://api.steemitdev.com",
-  "https://api.steemit.com",
-  "https://cn.steems.top",
-  "https://api.justyy.com",
-  "https://aksaiapi.wherein.mobi",
-];
-
-/**===================================== hive  =======================================*/
-// hive node storage
-export const HIVE_CONF_KEY = "hiveNodeKey";
-// delegate fee
-export const HIVE_STAKE_FEE = 1;
-// official fee account
-export const HIVE_GAS_ACCOUNT = "walnut.gas";
-
-// Hive Config
-export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 /** ==================================Main chain============================================*/
 
@@ -139,13 +110,6 @@ export const FEE_TYPES = [
   'COMMUNITY',
   'USER'
 ]
-/**
- * chainId on blockchain to chain name
- */
-export const DELEGATION_CHAINID_TO_NAME = {
-  1: "steem",
-  2: "hive",
-};
 
 export const GasTimes = 1.5;
 

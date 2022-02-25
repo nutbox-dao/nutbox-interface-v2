@@ -20,7 +20,7 @@
               {{ $t('pool.updatePoolRatios') }}</button>
             <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
-                    @click="poolTypeModal=true, createPoolStep=1">
+                    @click="poolTypeModal=true, createPoolStep=2">
               <i class="add-icon add-icon-white mr-2"></i>
               <span>{{ $t('pool.addPool') }}</span>
             </button>
@@ -54,12 +54,9 @@
                             @close="poolTypeModal=false"
                             @onType="selectPoolType"/>
       <div v-show="createPoolStep===2">
-        <StakingBSCPool v-if="poolType==='erc20staking'"
+        <StakingBSCPool
                         @confirm="selectPoolToken"
-                        @back="createPoolStep=1"/>
-        <StakingDelegatePool v-else :delegate-type="poolType"
-                             @confirm="selectPoolToken"
-                             @back="createPoolStep=1"/>
+                        @back="poolTypeModal=false"/>
       </div>
       <StakingPoolConfig v-if="createPoolStep===3"
                          type="create"
@@ -108,7 +105,7 @@ export default {
       tabOptions: ['Active', 'Inactive'],
       activeTab: 0,
       poolTypeModal: false,
-      createPoolStep: 1,
+      createPoolStep: 2,
       poolType: '',
       configPoolModal: false,
       stakeAsset: '',
@@ -144,19 +141,13 @@ export default {
       this.createPoolStep = 2
     },
     selectPoolToken (tokenData) {
-      if (this.poolType === 'erc20staking') {
-        this.stakeAsset = tokenData.address
-        if (tokenData.icon) {
-          this.needIcon =false
-        }else {
-          // need to upload token icon
-          this.needIcon = true;
-          this.selectToken = tokenData;
-        }
-      }else if (this.poolType === 'steem') {
-        this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }else if (this.poolType === 'hive') {
-        this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      this.stakeAsset = tokenData.address
+      if (tokenData.icon) {
+        this.needIcon =false
+      }else {
+        // need to upload token icon
+        this.needIcon = true;
+        this.selectToken = tokenData;
       }
       this.createPoolStep = 3
     },
@@ -170,6 +161,7 @@ export default {
       }
       try {
         this.creating  = true
+        console.log(form);
         const newPool = await addPool(form)
         newPool.poolIndex = form.ratios.length - 1;
         this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
@@ -186,6 +178,7 @@ export default {
         await sleep(2);
         this.poolTypeModal = false
       }catch (err) {
+        console.log(465, err);
         handleApiErrCode(err, (tip, params) => {
           this.$bvToast.toast(tip, params)
         })

@@ -19,13 +19,11 @@
         </button>
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
-        <span class="text-grey-47 font-bold mr-2 font14">{{ type === 'erc20staking' ? stakeToken.symbol : type === 'steem' ? 'SP' : 'HP' }}</span>
+        <span class="text-grey-47 font-bold mr-2 font14">{{ stakeToken.symbol }}</span>
         <div class="d-flex align-items-center">
-          <span class="font14 text-grey-7"> {{ type === 'erc20staking' ? 'STAKED' : 'DELEGATED'}}</span>
-          <template v-if="type === 'erc20staking'">
+          <span class="font14 text-grey-7">STAKED</span>
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
           <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
-          </template>
         </div>
       </div>
 
@@ -121,8 +119,6 @@ export default {
     ...mapState('web3', ['allTokens']),
     ...mapState(['prices']),
     ...mapState('pool', ['totalStaked', 'userStaked', 'approvements', 'userReward', 'loadingApprovements']),
-    ...mapState('steem', ['vestsToSteem']),
-    ...mapState('hive', ['vestsToHive']),
     ...mapGetters('web3', ['tokenDecimals', 'tokenByKey']),
     type() {
       return getPoolType(this.card.poolFactory, this.card.chainId)
@@ -146,25 +142,12 @@ export default {
       const total =
         this.totalStaked[this.card.id]
       if (!total) return 0
-      if (this.type === 'erc20staking') {
-        return total.toString() / (10 ** (this.stakeToken ? this.stakeToken.decimal : 18))
-      } else if (this.type === 'steem') {
-        return total.toString() / 1e6 * this.vestsToSteem
-      } else if (this.type === 'hive') {
-        return total.toString() /1e6 * this.vestsToHive
-      }
-      return 0
+      return total.toString() / (10 ** (this.stakeToken ? this.stakeToken.decimal : 18))
     },
     stakePrice(){
       if(!this.prices) return 0
       let price
-      if (this.type === 'erc20staking') {
-        price = this.stakeToken.price
-      } else if (this.type === "steem") {
-        price = this.prices['steem']
-      } else if (this.type === "hive") {
-        price = this.prices['hive']
-      }
+      price = this.stakeToken.price
       return price ? parseFloat(price) : 0
     },
     apr() {

@@ -69,8 +69,6 @@ export default {
   computed: {
     ...mapState('web3', ['allTokens']),
     ...mapState('user', ['users']),
-    ...mapState('steem', ['vestsToSteem']),
-    ...mapState('hive', ['vestsToHive']),
     ...mapState('currentCommunity', ['cToken']),
     ...mapGetters('user', ['getUserByAddress']),
     ...mapGetters('web3', ['tokenDecimals', 'tokenByKey'])
@@ -128,30 +126,12 @@ export default {
       case "DEPOSIT":
         this.opType = "Deposit"
         this.isAdmin =false;
-        if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = (this.showName ? ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
-        }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
-          const sp = (this.operation.amount?.toString() / 1e6)
-          if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? ' add' : 'Add') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
-          }else {
-            this.description = (this.showName ? ' add' : 'Add') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
-          }
-        }
+        this.description = (this.showName ? ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
         break;
       case "WITHDRAW":
         this.opType = "Withdraw"
         this.isAdmin =false;
-         if (this.operation.poolFactory.toLowerCase() == contractAddress.ERC20StakingFactory.toLowerCase()){
-          this.description = (this.showName ? ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} from ${this.operation.pool.name}`
-        }else if (this.operation.poolFactory.toLowerCase() == contractAddress.SPStakingFactory.toLowerCase()) {
-          const sp = (this.operation.amount?.toString() / 1e6)
-          if (parseInt(this.operation.chainId) === 1){
-            this.description = (this.showName ? ' minus' : 'Minus') + ` ${(sp * this.vestsToSteem).toFixed(2)} sp to ${delegatee} from ${this.operation.pool.name}`
-          }else {
-            this.description = (this.showName ? ' minus' : 'Minus') + ` ${(sp * this.vestsToHive).toFixed(2)} hp to ${delegatee} from ${this.operation.pool.name}`
-          }
-        }
+        this.description = (this.showName ? ' withdraw' : 'Withdraw')  + ` ${amount} ${symbol} from ${this.operation.pool.name}`
         break;
       case "HARVEST":
         this.opType = "Harvest"
