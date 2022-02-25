@@ -39,7 +39,7 @@
         class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'BEP20' : type.toUpperCase() }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'ERC20' : type.toUpperCase() }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -96,16 +96,10 @@
             v-if="!metamaskConnected"
           />
           <template v-else>
-            <template v-if="approved && !needLogin">
+            <template v-if="approved">
               <div>
                 <div class="font-bold text-grey-7">
-                  {{
-                    type === 'erc20staking'
-                      ? stakeToken.symbol + " Staked"
-                      : type === "steem"
-                      ? "SP Delegated"
-                      : "HP Delegated"
-                  }}
+                  {{stakeToken.symbol + " Staked"}}
                 </div>
                 <div class="font12 text-grey-7">{{ staked | amountForm }}</div>
               </div>
@@ -130,18 +124,6 @@
             </template>
             <template v-else>
                 <button
-                class="primary-btn primary-btn-40 w-100"
-                v-if="needLogin"
-                @click="showLogin = true"
-                >
-                {{
-                    type === "steem"
-                    ? $t("wallet.connectSteem")
-                    : $t("wallet.connectHive")
-                }}
-                </button>
-                <button
-                v-else
                 class="primary-btn"
                 @click="approve"
                 :disabled="approved || isApproving || pool.status === 'CLOSED'"
@@ -179,149 +161,19 @@
         @hideStakeMask="updateStaking = false"
       />
     </b-modal>
-      <!-- sp stake  -->
-    <b-modal
-      v-model="showSpStake"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <SPStakingModal
-        :operate="operate"
-        :pool="pool"
-        @hideStakeMask="showSpStake = false"
-      />
-    </b-modal>
-
-      <!-- hp stake  -->
-    <b-modal
-      v-model="showHpStake"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <HPStakingModal
-        :operate="operate"
-        :pool="pool"
-        @hideStakeMask="showHpStake = false"
-      />
-    </b-modal>
-
-    <!-- wrong steem account -->
-    <b-modal
-      v-model="showWrongSteem"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="position-relative">
-        <i class="modal-close-icon-right" @click="showWrongSteem = false"></i>
-        <div class="custom-form text-center pt-3 font20 line-height28">
-          <div class="pt-4">Please change <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span> Account</div>
-          <div>
-            Your <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span>
-            account haven't binding with current <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span>
-            address, please
-            change <span class="text-primary-0 font-bold">{{type.toUpperCase()}}</span> account in your wallet first.
-          </div>
-          <div class="mt-2 mb-1">Your binding {{type.toUpperCase()}} account is:</div>
-          <div class="c-input-group c-input-group-bg-dark c-input-group-border">
-            <input
-              class="text-center"
-              disabled
-              type="text"
-              :value="bindSteem"
-            />
-          </div>
-        </div>
-        <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-          <button
-            class="dark-btn primary-btn-outline mx-3"
-            @click="showWrongSteem = false"
-          >
-            Cancel
-          </button>
-          <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
-            OK
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <!-- wrong main chain account -->
-    <b-modal
-      v-model="showWrongAccount"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <div class="custom-form position-relative pt-2 text-center font20 line-height28">
-        <i
-          class="modal-close-icon-right"
-          @click="showWrongAccount = false"
-        ></i>
-        <div class="mt-4">Please change <span class="text-primary-0 font-bold">{{ chainName }} </span>address</div>
-        <div>
-          Your <span class="text-primary-0 font-bold">{{ chainName }} </span>
-          address haven't binding with current
-          <span class="text-primary-0 font-bold">{{ type.toUpperCase() }} </span>
-          account, please
-          change <span class="text-primary-0 font-bold">{{ chainName }} </span>
-          address in your wallet first.
-        </div>
-        <div class="mt-2 mb-1">Your binding address is:</div>
-        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
-          <input
-            class="text-center"
-            disabled
-            type="text"
-            :value="bindAddress"
-          />
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-        <button class="primary-btn primary-btn-outline mx-3" @click="showWrongAccount = false">
-          OK
-        </button>
-        <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change {{type.toUpperCase()}}
-        </button>
-      </div>
-    </b-modal>
-    <!-- Login -->
-    <b-modal
-      v-model="showLogin"
-      modal-class="custom-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <Login :type="type.toUpperCase()" @hideMask="showLogin = false" />
-    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { approvePool, withdrawReward, getPoolType, getBindSteemAccount } from "@/utils/web3/pool";
+import { approvePool, withdrawReward } from "@/utils/web3/pool";
 import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 import { CHAIN_NAME } from "@/config";
-import { handleApiErrCode, formatBalance } from "@/utils/helper";
+import { handleApiErrCode } from "@/utils/helper";
 import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
-import { BLOCK_SECOND, ASSET_LOGO_URL } from '@/constant'
-import Login from "@/components/common/Login";
+import { BLOCK_SECOND } from '@/constant'
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
-import SPStakingModal from "@/components/common/SPStakingModal";
-import HPStakingModal from "@/components/common/HPStakingModal";
 
 export default {
   name: "",
@@ -335,10 +187,7 @@ export default {
   },
   components: {
     ConnectMetaMask,
-    Login,
     StakingHomeChainAssetModal,
-    SPStakingModal,
-    HPStakingModal
   },
   data() {
     return {
@@ -347,14 +196,7 @@ export default {
       operate: '',
       updateStaking: false,
       rewardPerBlock: 0,
-      showLogin: false,
-      showWrongSteem: false,
-      showWrongAccount: false,
-      showSpStake: false,
-      showHpStake: false,
       isCheckingAccount: false,
-      bindSteem: '',
-      bindAddress:'',
       chainName: CHAIN_NAME
     };
   },
@@ -364,8 +206,6 @@ export default {
     ...mapGetters("web3", ["tokenDecimals", 'tokenByKey']),
     ...mapState(["prices", "metamaskConnected"]),
     ...mapState("web3", ["tokenIcons", "allTokens"]),
-    ...mapState("steem", ["steemAccount", "vestsToSteem"]),
-    ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -377,24 +217,10 @@ export default {
       return this.pool.status === "OPENED" ? "active" : "";
     },
     type() {
-      return getPoolType(this.pool.poolFactory, this.pool.chainId);
-    },
-    needLogin() {
-      if (this.type === "steem") {
-        return !this.steemAccount;
-      } else if (this.type === "hive") {
-        return !this.hiveAccount;
-      }
-      return false;
+      return 'erc20staking';
     },
     stakeIcon() {
-      if (this.type === 'erc20staking') {
-        return this.stakeToken.icon
-      } else if (this.type === "steem") {
-        return ASSET_LOGO_URL['steem']
-      } else if (this.type === "hive") {
-        return ASSET_LOGO_URL['hive']
-      }
+      return this.stakeToken.icon
     },
     approved() {
       if (this.type !== 'erc20staking') return true;
@@ -414,13 +240,7 @@ export default {
       if (!this.userStaked) return 0;
       const stakedBn = this.userStaked[this.pool.id];
       if (!stakedBn) return 0;
-      if (this.type === 'erc20staking') {
-        return stakedBn.toString() / (10 ** this.tokenDecimals(this.pool.asset));
-      } else if (this.type === "steem") {
-        return (stakedBn.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "hive") {
-        return (stakedBn.toString() / 1e6) * this.vestsToHive;
-      }
+      return stakedBn.toString() / (10 ** this.tokenDecimals(this.pool.asset));
     },
     pendingReward() {
       if (!this.userReward) return 0;
@@ -432,25 +252,12 @@ export default {
       if (!this.totalStaked) return 0;
       const total = this.totalStaked[this.pool.id];
       if (!total) return 0;
-      if (this.type === 'erc20staking') {
-        return total.toString() / (10 ** this.tokenDecimals(this.pool.asset));
-      } else if (this.type === "steem") {
-        return (total.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "hive") {
-        return (total.toString() / 1e6) * this.vestsToHive;
-      }
+      return total.toString() / (10 ** this.tokenDecimals(this.pool.asset));
       return 0;
     },
     stakePrice(){
       if(!this.prices) return 0
-      let price
-      if (this.type === 'erc20staking') {
-        price = this.stakeToken.price
-      } else if (this.type === "steem") {
-        price = this.prices['steem']
-      } else if (this.type === "hive") {
-        price = this.prices['hive']
-      }
+      let price = this.stakeToken.price
       return price ? price : 0
     },
     apr() {
@@ -499,63 +306,13 @@ export default {
     gotoContract(address) {
       window.open("https://goerli.etherscan.io/address/" + address, "_blank");
     },
-    async checkAccount() {
-      this.isCheckingAccount = true;
-      try {
-        const bindInfo = await getBindSteemAccount(this.pool);
-        const steemAcc = parseInt(this.pool.chainId) === 1 ? this.steemAccount : this.hiveAccount
-        if(bindInfo.account[1] === steemAcc) return true;
-        if(bindInfo.account[1] === '') {
-          if(bindInfo.bindAccount[1] === "0x0000000000000000000000000000000000000000") return true;
-          if(bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()) {
-            this.bindAddress = bindInfo.bindAccount[1];
-            this.showWrongAccount = true;
-            return;
-          }
-        }
-        if(bindInfo.account[1] !== steemAcc) {
-          this.bindSteem = bindInfo.account[1]
-          this.showWrongSteem = true;
-          return;
-        }
-        return true
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param)
-        })
-      } finally {
-        this.isCheckingAccount = false;
-      }
-    },
     async increase() {
       this.operate = "add";
-      if (this.type === 'erc20staking') {
-        this.updateStaking = true;
-      } else if (this.type === "steem") {
-        // check account first
-        if(await this.checkAccount()){
-          this.showSpStake = true;
-        }
-      } else if (this.type === "hive") {
-        if(await this.checkAccount()){
-          this.showHpStake = true;
-        }
-      }
+      this.updateStaking = true;
     },
     async decrease() {
       this.operate = "minus";
-      if (this.type === 'erc20staking') {
-        this.updateStaking = true;
-      } else if (this.type === "steem") {
-        // check account first
-        if(await this.checkAccount()){
-          this.showSpStake = true;
-        }
-      } else if (this.type === "hive") {
-        if(await this.checkAccount()){
-          this.showHpStake = true;
-        }
-      }
+      this.updateStaking = true;
     },
     // Approve contract
     async approve() {

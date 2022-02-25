@@ -199,8 +199,6 @@ export default {
   },
   mixins: [showToastMixin],
   methods: {
-    ...mapActions('steem', ['setVestsToSteem']),
-    ...mapActions('hive', ['setVestsToHive']),
     setLanguage (lang) {
       this.langActive = false
       localStorage.setItem(LOCALE_KEY, lang)
@@ -271,16 +269,12 @@ export default {
         if (!res) return
         this.$store.commit('saveTvl', res.tvl)
         this.$store.commit('savePrices', res.prices)
-        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
-        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
       })
     setInterval(() => {
       getCommon().then(res => {
         if (!res) return
         this.$store.commit('saveTvl', res.tvl)
         this.$store.commit('savePrices', res.prices)
-        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
-        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
       })
     }, 15000);
   }

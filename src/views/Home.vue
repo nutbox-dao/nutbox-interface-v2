@@ -108,8 +108,6 @@ export default {
     ...mapState(['prices', 'tvl']),
     ...mapState('web3', ['walnutInfo']),
     ...mapState('community', ['allCommunityInfo']),
-    ...mapState('steem', ['vestsToSteem']),
-    ...mapState('hive', ['vestsToHive']),
     recommendCommunity () {
       if (!this.allCommunityInfo) {
         this.loadingAllCommunity = false
