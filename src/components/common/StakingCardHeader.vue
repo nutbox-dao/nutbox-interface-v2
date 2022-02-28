@@ -73,7 +73,7 @@ export default {
     },
     poolType() {
       const type = getPoolType(this.card.poolFactory, this.card.chainId)
-      if (type === 'erc20staking') return 'BEP20'
+      if (type === 'erc20staking') return 'ERC20'
       return type.toUpperCase()
     },
   },
