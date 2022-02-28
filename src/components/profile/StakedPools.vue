@@ -97,12 +97,9 @@ export default {
     }
     // update pools data
     if (this.userGraphInfo && this.userGraphInfo.inPools){
-      const [stake, total, reward, approve] = updatePoolsByPolling(this.userGraphInfo.inPools)
+      const polling = updatePoolsByPolling(this.userGraphInfo.inPools)
       this.$once('hook:beforeDestroy', () => {
-          stake.stop();
-          total.stop();
-          reward.stop();
-          approve.stop();
+          polling.stop();
       });
     }
   },

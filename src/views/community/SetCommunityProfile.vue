@@ -193,7 +193,7 @@
                     </template>
                   </b-form-file>
                   <div class="font12 text-grey-5 ml-3 text-grey-7">
-                    {{ $t("tip.picTip", { size: "1200*280" }) }}
+                    {{ $t("tip.picTip", { size: "200*200" }) }}
                   </div>
                 </div>
               </b-form-group>

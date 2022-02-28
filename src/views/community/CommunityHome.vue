@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-md-7 d-flex flex-column justify-content-center">
             <div class="text-left font20 line-height28 font-bold py-lg-4">
-              It's easy to bring DeFi,social media and Governance to the community
+              It's easy to bring DeFi, social media and Governance to the community
             </div>
           </div>
           <div class="col-md-1 d-flex flex-column justify-content-center">

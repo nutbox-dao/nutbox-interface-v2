@@ -158,7 +158,7 @@ export default {
         getCToken(community.id).then(ctoken => {
           this.saveCtoken(ctoken)
           if (!ctoken.isMintable) {
-            const interval = rollingFunction(getCommunityBalance, { communityId: this.communityId, ctokenAddress: ctoken.address }, 3, (balance) => {
+            const interval = rollingFunction(getCommunityBalance, { communityId: this.communityId, ctokenAddress: ctoken.address }, 10, (balance) => {
               this.saveCommunityBalance(balance);
             })
             interval.start();

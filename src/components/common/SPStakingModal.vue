@@ -113,7 +113,7 @@ export default {
       if (this.steemBalance >= this.fee){
         return true;
       }
-      this.$bvToast.toast(this.$t('error.delegateeroor'), {
+      this.$bvToast.toast(this.$t('error.delegateerror'), {
         title: this.$t('error.notEnoughFee'),
         variant: 'info'
       })
@@ -156,7 +156,7 @@ export default {
           this.account
         )
         if (res.success === true){
-          if (this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
+          if (!this.userGraphInfo.inCommunities || this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
             // first join
             getAllCommunities(true)
             getMyJoinedCommunity()

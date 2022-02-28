@@ -77,7 +77,7 @@ export default {
       state.allAccounts = allAccounts;
     },
     saveAbi: (state, { name, abi }) => {
-      state[name] = abi;
+      state.abis[name] = abi;
     },
     saveChainId: (state, chainId) => {
       state.chainId = chainId;

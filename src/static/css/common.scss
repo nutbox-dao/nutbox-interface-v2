@@ -304,6 +304,7 @@ input::-webkit-input-placeholder {
   border: transparent!important;
   padding: 0!important;
   box-sizing: content-box;
+  cursor: pointer;
 }
 .custom-file-label::after{
   display: none!important;
@@ -313,6 +314,7 @@ input::-webkit-input-placeholder {
   height: 100%;
 }
 .logo-form .custom-file {
+  cursor: pointer;
   width: 4rem;
   min-width: 4rem;
   height: 4rem;
@@ -321,6 +323,7 @@ input::-webkit-input-placeholder {
   border: 1px dashed var(--text-74);
 }
 .logo-form .custom-file-input, .logo-form .custom-file-label {
+  cursor: pointer;
   border-radius: 50%;
 }
 

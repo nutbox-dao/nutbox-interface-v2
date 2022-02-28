@@ -39,7 +39,7 @@
         class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'ERC20' : type.toUpperCase() }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'BEP20' : type.toUpperCase() }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -461,7 +461,7 @@ export default {
       const blocksPerYear = 365 * 24 * 60 * 60 / BLOCK_SECOND
       const fundRatio = this.pool.community.feeRatio
       const poolRatio = this.pool.ratio
-      const reward = this.rewardPerBlock * blocksPerYear * (10000 - fundRatio) * poolRatio * stakePrice;
+      const reward = this.rewardPerBlock * blocksPerYear * (10000 - fundRatio) * poolRatio * cTokenPrice;
       const stake = this.tvl;
       return parseFloat(reward / 1e6 / stake).toFixed(2) + '%';
     },
