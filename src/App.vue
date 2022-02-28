@@ -39,14 +39,14 @@
               Manage your community
             </b-popover>
           </router-link>
-          <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
+          <!-- <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
             <i class="add-user-icon mt-4" v-show="!loadingMyCommunityInfo && settingStep !== 3"></i>
             <b-popover target="tipcreatecommunity" triggers="hover"
                   :delay="{show: 800}"
                   placement="right">
               Create new community
             </b-popover>
-          </div>
+          </div> -->
           <router-link id="tipprofile" to="/profile" v-show="metamaskConnected && account">
             <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
             <img v-else class="user-avatar hover rounded-circle w-75 my-3"
@@ -153,7 +153,7 @@ export default {
     },
     pageTitle() {
       const url = this.$route.path
-      if (url === '/') return 'Home'
+      if (url === '/') return 'Nutbox'
       else if(url.indexOf('/community') !== -1) return 'Community'
       else if(url.indexOf('/manage-community') !== -1) return 'Community Dashboard'
       else if(url.indexOf('/profile') !== -1) return 'Profile'

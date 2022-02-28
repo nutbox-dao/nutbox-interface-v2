@@ -6,9 +6,11 @@
           <div class="s1-card">
             <div class="row">
               <div class="col-md-8 text-left d-flex flex-column justify-content-between">
-                <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt="">
-                <div class="mt-3">
+                <!-- <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt=""> -->
+                <div class="mt-1">
                   <div class="s1-title s-title">Link Community to Web3.0</div>
+                </div>
+                <div class="mt-3">
                   <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
                     <span>Bootstrap</span>
                     <span class="text-dot mx-2">·</span>
