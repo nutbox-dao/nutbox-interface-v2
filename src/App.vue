@@ -266,14 +266,14 @@ export default {
         });
 
 
-        await connectKeplr(() => {
-          this.$router.go(0);
-        });
-        getCosAcc().then(async (res) => {
-          const ddd = await delegate('cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf', 100000, '0x1234', account)
-          // const ddd = await test()
-          console.log(666, ddd);
-        }).catch(console.log)
+        // await connectKeplr(() => {
+        //   this.$router.go(0);
+        // });
+        // getCosAcc().then(async (res) => {
+        //   const ddd = await delegate('cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf', 100000, '0x1234', account)
+        //   // const ddd = await test()
+        //   console.log(666, ddd);
+        // }).catch(console.log)
       }
     } catch (e) {
       console.log('Get accounts fail', e)
