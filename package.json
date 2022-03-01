@@ -28,6 +28,7 @@
     "graphql": "^16.3.0",
     "graphql-request": "^4.0.0",
     "lodash.debounce": "^4.0.8",
+    "module": "^1.2.5",
     "nanoid": "^3.1.29",
     "remarkable": "^2.0.1",
     "utf8": "^3.0.0",

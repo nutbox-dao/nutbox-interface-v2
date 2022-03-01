@@ -4,7 +4,11 @@
       <div class="page-side">
         <div class="text-center">
           <div @click="goHome()" class="hover shadow-hover rounded-circle">
-            <img style="width: 2.8rem;height:2.8rem" src="~@/static/images/logo_small.png" alt="">
+            <img
+              style="width: 2.8rem; height: 2.8rem"
+              src="~@/static/images/logo_small.png"
+              alt=""
+            />
           </div>
           <router-link to="/community" class="apps-icon-box">
             <i class="app-icon mt-4"></i>
@@ -12,30 +16,61 @@
           <div class="divider-line mx-auto my-4"></div>
           <!-- joined community -->
           <div class="pt-3 communities-bar">
-            <div class="community-logo-box"
-                 :class="(inSubCommunityView && (community.id === communityId.toLowerCase())) ? 'active' : ''"
-                 v-for="community of userGraphInfo.inCommunities" :key="community.id">
-              <img class="rounded-circle w-100 hover" @click="gotoCommunity(community.id)"
-                  :id="community.id + 'icon'"
-                   v-show="getCommunityInfoById(community.id)"
-                   :src="getCommunityInfoById(community.id) && getCommunityInfoById(community.id).icon || './default.png'"
-                  alt="">
-              <b-popover :target="community.id + 'icon'"
-                  triggers="hover focus"
-                  placement="top">
-                  {{ getCommunityInfoById(community.id) && getCommunityInfoById(community.id).name }}
-                </b-popover>
+            <div
+              class="community-logo-box"
+              :class="
+                inSubCommunityView && community.id === communityId.toLowerCase()
+                  ? 'active'
+                  : ''
+              "
+              v-for="community of userGraphInfo.inCommunities"
+              :key="community.id"
+            >
+              <img
+                class="rounded-circle w-100 hover"
+                @click="gotoCommunity(community.id)"
+                :id="community.id + 'icon'"
+                v-show="getCommunityInfoById(community.id)"
+                :src="
+                  (getCommunityInfoById(community.id) &&
+                    getCommunityInfoById(community.id).icon) ||
+                  './default.png'
+                "
+                alt=""
+              />
+              <b-popover
+                :target="community.id + 'icon'"
+                triggers="hover focus"
+                placement="top"
+              >
+                {{
+                  getCommunityInfoById(community.id) &&
+                  getCommunityInfoById(community.id).name
+                }}
+              </b-popover>
             </div>
           </div>
         </div>
         <!-- bottom -->
         <div class="text-center">
           <div class="divider-line mx-auto my-2"></div>
-          <router-link id="tipmanagecommunity" v-show="!loadingMyCommunityInfo && account && settingStep === 3 && metamaskConnected" to="/manage-community">
+          <router-link
+            id="tipmanagecommunity"
+            v-show="
+              !loadingMyCommunityInfo &&
+              account &&
+              settingStep === 3 &&
+              metamaskConnected
+            "
+            to="/manage-community"
+          >
             <i class="setting-icon mt-4"></i>
-            <b-popover target="tipmanagecommunity" triggers="hover"
-                  :delay="{show: 800}"
-                  placement="right">
+            <b-popover
+              target="tipmanagecommunity"
+              triggers="hover"
+              :delay="{ show: 800 }"
+              placement="right"
+            >
               Manage your community
             </b-popover>
           </router-link>
@@ -47,28 +82,53 @@
               Create new community
             </b-popover>
           </div> -->
-          <router-link id="tipprofile" to="/profile" v-show="metamaskConnected && account">
-            <img v-if="!!avatar" :src="avatar" class="user-avatar hover rounded-circle w-75 my-3" alt="">
-            <img v-else class="user-avatar hover rounded-circle w-75 my-3"
-                 src="~@/static/images/avatars/default.png" alt="">
+          <router-link
+            id="tipprofile"
+            to="/profile"
+            v-show="metamaskConnected && account"
+          >
+            <img
+              v-if="!!avatar"
+              :src="avatar"
+              class="user-avatar hover rounded-circle w-75 my-3"
+              alt=""
+            />
+            <img
+              v-else
+              class="user-avatar hover rounded-circle w-75 my-3"
+              src="~@/static/images/avatars/default.png"
+              alt=""
+            />
           </router-link>
-          <b-dropdown variant="text" dropup
-                      class="side-menu-dropdown"
-                      menu-class="text-white"
-                      toggle-class="p-0">
+          <b-dropdown
+            variant="text"
+            dropup
+            class="side-menu-dropdown"
+            menu-class="text-white"
+            toggle-class="p-0"
+          >
             <template #button-content>
               <i class="menu-icon hover"></i>
             </template>
             <div class="dropdown-menu-card" v-show="!langActive">
-              <b-dropdown-item href="https://github.com/nutbox-dao" target="_blank" >
+              <b-dropdown-item
+                href="https://github.com/nutbox-dao"
+                target="_blank"
+              >
                 <i class="dropdown-item-icon github-icon"></i>
                 <span>Github</span>
               </b-dropdown-item>
-              <b-dropdown-item href="https://nutbox-io.gitbook.io/nutbox/" target="_blank">
+              <b-dropdown-item
+                href="https://nutbox-io.gitbook.io/nutbox/"
+                target="_blank"
+              >
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.docs") }}</span>
               </b-dropdown-item>
-              <b-dropdown-item href="https://discord.com/invite/zPkMuGY" target="_blank">
+              <b-dropdown-item
+                href="https://discord.com/invite/zPkMuGY"
+                target="_blank"
+              >
                 <i class="dropdown-item-icon discard-icon"></i>
                 <span>Discord</span>
               </b-dropdown-item>
@@ -76,7 +136,10 @@
                 <i class="dropdown-item-icon telegram-icon"></i>
                 <span>Telegram</span>
               </b-dropdown-item>
-              <b-dropdown-item href="https://twitter.com/NutboxDao" target="_blank">
+              <b-dropdown-item
+                href="https://twitter.com/NutboxDao"
+                target="_blank"
+              >
                 <i class="dropdown-item-icon twitter-icon"></i>
                 <span>Twitter</span>
               </b-dropdown-item>
@@ -103,16 +166,28 @@
       </div>
       <!-- right part -->
       <div class="page-container">
-        <div class="page-header d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center" v-if="$route.path.indexOf('sub-community')>=0">
-            <img class="community-logo rounded-circle mr-2"
-                 :src="currentCommunityInfo && currentCommunityInfo.icon" alt="">
+        <div
+          class="page-header d-flex justify-content-between align-items-center"
+        >
+          <div
+            class="d-flex align-items-center"
+            v-if="$route.path.indexOf('sub-community') >= 0"
+          >
+            <img
+              class="community-logo rounded-circle mr-2"
+              :src="currentCommunityInfo && currentCommunityInfo.icon"
+              alt=""
+            />
             <span>{{ currentCommunityInfo && currentCommunityInfo.name }}</span>
           </div>
-          <div v-else class="page-title font-bold font28 line-height32">{{ pageTitle }}</div>
+          <div v-else class="page-title font-bold font28 line-height32">
+            {{ pageTitle }}
+          </div>
           <div class="address-box" @click="connect">
             <i class="wallet-icon"></i>
-            <div class="font12">{{ metamaskConnected ? address : $t("commen.connectMetamask") }}</div>
+            <div class="font12">
+              {{ metamaskConnected ? address : $t("commen.connectMetamask") }}
+            </div>
           </div>
         </div>
         <div class="page-content">
@@ -124,193 +199,225 @@
 </template>
 
 <script>
-import { LOCALE_KEY } from '@/config'
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { setupNetwork, chainChanged, lockStatusChanged, checkNetwork } from '@/utils/web3/web3'
-import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
-import { subBlockNum } from '@/utils/web3/block'
-import { getMyCommunityInfo, updateAllCommunitiesFromBackend, getOperationFee } from '@/utils/web3/community'
-import { updateAllTokensFromBackend } from '@/utils/web3/asset'
-import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
-import { getMyJoinedCommunity } from '@/utils/graphql/user'
-import showToastMixin from './mixins/copyToast'
-import { ethers } from 'ethers'
-import { getCommon } from '@/apis/api'
-import { getAccount as getCosAcc, connectWallet as connectKeplr, delegate } from '@/utils/cosmos/cosmos'
+import { LOCALE_KEY } from "@/config";
+import { mapState, mapActions, mapGetters } from "vuex";
+import {
+  setupNetwork,
+  chainChanged,
+  lockStatusChanged,
+  checkNetwork,
+} from "@/utils/web3/web3";
+import {
+  accountChanged,
+  getAccounts,
+  updateAllUsersByPolling,
+} from "@/utils/web3/account";
+import { subBlockNum } from "@/utils/web3/block";
+import {
+  getMyCommunityInfo,
+  updateAllCommunitiesFromBackend,
+  getOperationFee,
+} from "@/utils/web3/community";
+import { updateAllTokensFromBackend } from "@/utils/web3/asset";
+import { handleApiErrCode, formatUserAddress } from "@/utils/helper";
+import { getMyJoinedCommunity } from "@/utils/graphql/user";
+import showToastMixin from "./mixins/copyToast";
+import { ethers } from "ethers";
+import { getCommon } from "@/apis/api";
+import {
+  getAccount as getCosAcc,
+  connectWallet as connectKeplr,
+  delegate,
+} from "@/utils/cosmos/cosmos";
 
 export default {
   computed: {
-    ...mapState(['lang', 'prices', 'metamaskConnected']),
-    ...mapState('web3', ['allCommunities', 'stakingFactoryId', 'loadingCommunity', 'account']),
-    ...mapState('community', ['loadingMyCommunityInfo', 'communityInfo']),
-    ...mapState('currentCommunity', ['communityId']),
-    ...mapState('user', ['userGraphInfo']),
-    ...mapGetters('community', ['getCommunityInfoById']),
-    ...mapGetters('user', ['getUserByAddress']),
-    address () {
+    ...mapState(["lang", "prices", "metamaskConnected"]),
+    ...mapState("web3", [
+      "allCommunities",
+      "stakingFactoryId",
+      "loadingCommunity",
+      "account",
+    ]),
+    ...mapState("community", ["loadingMyCommunityInfo", "communityInfo"]),
+    ...mapState("currentCommunity", ["communityId"]),
+    ...mapState("user", ["userGraphInfo"]),
+    ...mapGetters("community", ["getCommunityInfoById"]),
+    ...mapGetters("user", ["getUserByAddress"]),
+    address() {
       if (ethers.utils.isAddress(this.account)) {
-        return formatUserAddress(this.account, false)
+        return formatUserAddress(this.account, false);
       }
     },
     pageTitle() {
-      const url = this.$route.path
-      if (url === '/') return 'Nutbox'
-      else if(url.indexOf('/community') !== -1) return 'Community'
-      else if(url.indexOf('/manage-community') !== -1) return 'Community Dashboard'
-      else if(url.indexOf('/profile') !== -1) return 'Profile'
-      else if(url.indexOf('/create') !== -1) return 'Create Community'
+      const url = this.$route.path;
+      if (url === "/") return "Nutbox";
+      else if (url.indexOf("/community") !== -1) return "Community";
+      else if (url.indexOf("/manage-community") !== -1)
+        return "Community Dashboard";
+      else if (url.indexOf("/profile") !== -1) return "Profile";
+      else if (url.indexOf("/create") !== -1) return "Create Community";
     },
     currentCommunityInfo() {
-      if (this.communityId){
-        return this.getCommunityInfoById(this.communityId)
+      if (this.communityId) {
+        return this.getCommunityInfoById(this.communityId);
       }
-      return null
+      return null;
     },
     avatar() {
-      if (!ethers.utils.isAddress(this.account)) return ''
-      const user = this.getUserByAddress(this.account)
+      if (!ethers.utils.isAddress(this.account)) return "";
+      const user = this.getUserByAddress(this.account);
       if (user) {
-        return user.avatar
+        return user.avatar;
       }
     },
-    settingStep () {
-      const c = this.communityInfo
-      if (!this.stakingFactoryId){
+    settingStep() {
+      const c = this.communityInfo;
+      if (!this.stakingFactoryId) {
         return 1;
       }
       if (c && c.name && c.name.length > 0) {
         return 3;
-      }else {
+      } else {
         return 2;
       }
     },
     inSubCommunityView() {
-      if (this.$route.path.indexOf('sub-community') !== -1){
+      if (this.$route.path.indexOf("sub-community") !== -1) {
         return true;
       }
-      return false
-    }
+      return false;
+    },
   },
   data() {
     return {
       screenWidth: document.body.clientWidth,
       langActive: false,
-      langOptions: ['en', 'kr', 'es', 'my']
-    }
+      langOptions: ["en", "kr", "es", "my"],
+    };
   },
   mixins: [showToastMixin],
   methods: {
-    ...mapActions('steem', ['setVestsToSteem']),
-    ...mapActions('hive', ['setVestsToHive']),
-    setLanguage (lang) {
-      this.langActive = false
-      localStorage.setItem(LOCALE_KEY, lang)
-      this.$store.commit('saveLang', lang)
-      this.$i18n.locale = lang
+    ...mapActions("steem", ["setVestsToSteem"]),
+    ...mapActions("hive", ["setVestsToHive"]),
+    setLanguage(lang) {
+      this.langActive = false;
+      localStorage.setItem(LOCALE_KEY, lang);
+      this.$store.commit("saveLang", lang);
+      this.$i18n.locale = lang;
     },
-    gotoCreateCommunity()  {
+    gotoCreateCommunity() {
       if (this.settingStep === 1) {
-        this.$router.push('/create/deploy-token')
-      }else if (this.settingStep === 2) {
-        this.$router.push('/create/set-profile')
+        this.$router.push("/create/deploy-token");
+      } else if (this.settingStep === 2) {
+        this.$router.push("/create/set-profile");
       }
     },
     gotoCommunity(communityId) {
-      this.$store.commit('currentCommunity/saveCommunityId', communityId);
-      this.$router.push('/sub-community/home/?id=' + communityId)
+      this.$store.commit("currentCommunity/saveCommunityId", communityId);
+      this.$router.push("/sub-community/home/?id=" + communityId);
     },
     goHome() {
-      this.$router.push('/')
+      this.$router.push("/");
     },
-    connect () {
+    connect() {
       if (this.metamaskConnected) {
-        this.onCopy(this.$t('tip.copyAddress', {
-          address: formatUserAddress(this.address)
-        }), { title: this.$t('tip.clipboard') })
-        return
+        this.onCopy(
+          this.$t("tip.copyAddress", {
+            address: formatUserAddress(this.address),
+          }),
+          { title: this.$t("tip.clipboard") }
+        );
+        return;
       }
-      setupNetwork()
+      setupNetwork();
     },
   },
-  mounted () {
-    this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
+  mounted() {
+    this.setLanguage(localStorage.getItem(LOCALE_KEY) || "en");
   },
-  async created () {
+  async created() {
     try {
       // setupNetwork()
-      await checkNetwork()
+      await checkNetwork();
       chainChanged(() => {
         this.$router.go(0);
-      })
+      });
       accountChanged(() => {
         this.$router.go(0);
-      })
+      });
       lockStatusChanged(() => {
         this.$router.go(0);
-      })
-      subBlockNum()
+      });
+      subBlockNum();
     } catch (e) {
-      console.log('Initial network fail', e)
+      console.log("Initial network fail", e);
     }
     // bsc related
     try {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();
       updateAllUsersByPolling();
-      getOperationFee()
-      const account = await getAccounts(true)
+      getOperationFee();
+      const account = await getAccounts(true);
       if (account) {
         getMyJoinedCommunity();
-        getMyCommunityInfo().catch(e => {
-          console.log('No created token by current user');
+        getMyCommunityInfo().catch((e) => {
+          console.log("No created token by current user");
         });
-
 
         await connectKeplr(() => {
           this.$router.go(0);
         });
-        getCosAcc().then(async (res) => {
-          const ddd = await delegate('cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf', 100000, '0x1234', account)
-          // const ddd = await test()
-          console.log(666, ddd);
-        }).catch(console.log)
+        /*   getCosAcc()
+          .then(async (res) => {
+            const ddd = await delegate(
+              "cosmosvaloper156gqf9837u7d4c4678yt3rl4ls9c5vuursrrzf",
+              100000,
+              "0x1234",
+              account
+            );
+            // const ddd = await test()
+            console.log(666, ddd);
+          })
+          .catch(console.log); */
       }
     } catch (e) {
-      console.log('Get accounts fail', e)
+      console.log("Get accounts fail", e);
     }
 
-    getCommon().then(res => {
-        if (!res) return
-        this.$store.commit('saveTvl', res.tvl)
-        this.$store.commit('savePrices', res.prices)
-        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
-        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
-      })
+    getCommon().then((res) => {
+      if (!res) return;
+      this.$store.commit("saveTvl", res.tvl);
+      this.$store.commit("savePrices", res.prices);
+      this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);
+      this.$store.commit("hive/saveVestsToHive", res.vestsToHive);
+    });
     setInterval(() => {
-      getCommon().then(res => {
-        if (!res) return
-        this.$store.commit('saveTvl', res.tvl)
-        this.$store.commit('savePrices', res.prices)
-        this.$store.commit('steem/saveVestsToSteem', res.vestsToSteem)
-        this.$store.commit('hive/saveVestsToHive', res.vestsToHive)
-      })
+      getCommon().then((res) => {
+        if (!res) return;
+        this.$store.commit("saveTvl", res.tvl);
+        this.$store.commit("savePrices", res.prices);
+        this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);
+        this.$store.commit("hive/saveVestsToHive", res.vestsToHive);
+      });
     }, 15000);
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
 :root {
   --yellow-background: #f5ecd8;
-  --primary-custom: #FD9800;
+  --primary-custom: #fd9800;
   --primary-custom-rgb: 255, 219, 27;
   --primary-hover: #ffeb75;
   --primary-text: white;
   --primary-btn-text-color: #ffffff;
   --secondary-text: #717376;
-  --disable: #CDCECF;
+  --disable: #cdcecf;
   --dividers: #242526;
-  --background: #1D1E1F;
+  --background: #1d1e1f;
   --error: #ff5040;
   --success: #50bf00;
   --link: #408fff;
@@ -319,17 +426,17 @@ export default {
   --primary: #f8b62a;
   --card-broder: #37383c;
   --card-bg-primary: #141414;
-  --nav-tab-bg: #2C2D2E;
+  --nav-tab-bg: #2c2d2e;
   --nav-tab-bg-active: #141414;
-  --input-border: #2C2D2E;
-  --input-bg: #2C2D2E;
-  --block-bg: #1C1D1E;
-  --modal-bg: #1D1E1F;
+  --input-border: #2c2d2e;
+  --input-bg: #2c2d2e;
+  --block-bg: #1c1d1e;
+  --modal-bg: #1d1e1f;
   --text-47: #474849;
   --text-74: #747576;
-  --text-bd: #BDBFC2;
-  --text-9f: #9FA0A0;
-  --sub-primary: #FFDB1B;
+  --text-bd: #bdbfc2;
+  --text-9f: #9fa0a0;
+  --sub-primary: #ffdb1b;
 }
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
@@ -346,11 +453,13 @@ body {
   margin: 0;
   background-color: var(--background);
 }
-::-webkit-scrollbar{display:none;}
+::-webkit-scrollbar {
+  display: none;
+}
 #app {
-  font-family: PingFang SC, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue";
+  font-family: PingFang SC, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--primary-text);
@@ -399,18 +508,18 @@ body {
   background-color: rgba(255, 219, 38, 0.05);
   display: flex;
   align-items: center;
-  padding: .2rem .5rem .2rem .2rem;
+  padding: 0.2rem 0.5rem 0.2rem 0.2rem;
   cursor: pointer;
   .wallet-icon {
     border: 1px solid var(--card-broder);
     border-radius: 50%;
     height: 1.6rem;
     width: 1.6rem;
-    padding: .2rem;
-    margin-right: .3rem;
+    padding: 0.2rem;
+    margin-right: 0.3rem;
     position: relative;
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       @include icon(12px, 12px);
       background-image: url("~@/static/images/wallet.svg");
@@ -435,15 +544,15 @@ body {
   height: 2rem;
 }
 .dropdown-menu-card {
-  @include card(1.2rem 0, #2C2D2E);
+  @include card(1.2rem 0, #2c2d2e);
   border: 1px solid #747576;
   i {
     @include icon(1.6rem, 1.6rem);
-    margin-right: .4rem;
+    margin-right: 0.4rem;
   }
   span {
     color: white;
-    font-size: .8rem;
+    font-size: 0.8rem;
     font-weight: bold;
     //user-select: none;
   }
