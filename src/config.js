@@ -4,7 +4,9 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
+
 //export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+
 export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
 
@@ -97,11 +99,14 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 //   decimals: 18
 // }
 
+
 //goerli
+
 export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
 export const BSC_CHAIN_ID = 5;
 export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
 export const CHAIN_NAME = 'Goerli';
+
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
   name: 'ETH',
@@ -115,12 +120,26 @@ export const NATIVE_CURRENCY = {
 export const BSC_CHAIN_ID = 56;
 export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
 export const CHAIN_NAME = 'BSC-Mainnet';
+
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'ETH',
+  symbol: 'ETH',
   decimals: 18
 } */
+
+// bsc
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
 
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
@@ -162,8 +181,10 @@ export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
 // bsc net
+
 //export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
 //export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+
 
 // Register by nutbox
 export const OfficialAssets = [{

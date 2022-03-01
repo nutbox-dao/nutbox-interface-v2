@@ -19,6 +19,7 @@ import {
   errCode
 } from '../../config'
 
+
 /* export const contractAddress = {
   "Committee": "0xd10e4C1e301A13A9B874bd1757c135Eda075769D",
   "MintableERC20Factory": "0xa183D96a7e84BF77Fb7825026fA8b9BF6894cfa8",
@@ -39,6 +40,7 @@ export const contractAddress = {
   "ERC20StakingFactory": "0x1BcAf6B35521ac89259d5625B1BfBc157fbd034E",
   "CosmosStakingFactory": "0xf6ecAAd3F991C911253FB887f9d68B9DD41429B0",
   "Gauge": "0xF6d5aB09c6899191712859ff113013E6976842EF"
+
 }
 
 export const getPoolFactory = (type) => {
