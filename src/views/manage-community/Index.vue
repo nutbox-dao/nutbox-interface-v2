@@ -14,7 +14,15 @@
             </b-nav-item>
             <b-nav-item to="/manage-community/staking">
               <i class="menu-icon stake-icon" />
-              <span>{{ $t('router.pool') }}</span>
+              <span>Yield Farming</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/iso">
+              <i class="menu-icon stake-icon" />
+              <span>ISO</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/nut-power">
+              <i class="menu-icon stake-icon" />
+              <span>Nut Power</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />
@@ -89,25 +97,25 @@ export default {
     }
   },
   async mounted () {
-    try{
-      const communityId = await getMyCommunityContract()
-      this.communityId = communityId;
-      getMyCommunityData().then(async (res) => {
-        const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
-        console.log(235, hasRole, res);
-        this.showGrantRole = isMintable && !hasRole
-      });
-      this.$store.commit('community/saveLoadingApproveCommunity', true)
-
-      getApprovement(NutAddress, communityId).then(res => {
-        this.$store.commit('community/saveApprovedCommunity', res)
-      }).finally(() => {
-        this.$store.commit('community/saveLoadingApproveCommunity', false)
-      })
-    }catch(e) {
-      // no registered
-      this.$router.replace('/')
-    }
+    // try{
+    //   const communityId = await getMyCommunityContract()
+    //   this.communityId = communityId;
+    //   getMyCommunityData().then(async (res) => {
+    //     const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
+    //     console.log(235, hasRole, res);
+    //     this.showGrantRole = isMintable && !hasRole
+    //   });
+    //   this.$store.commit('community/saveLoadingApproveCommunity', true)
+    //
+    //   getApprovement(NutAddress, communityId).then(res => {
+    //     this.$store.commit('community/saveApprovedCommunity', res)
+    //   }).finally(() => {
+    //     this.$store.commit('community/saveLoadingApproveCommunity', false)
+    //   })
+    // }catch(e) {
+    //   // no registered
+    //   this.$router.replace('/')
+    // }
   },
   methods: {
     goHome() {
@@ -161,13 +169,16 @@ export default {
   .nav-item {
     width: 100%;
   }
+  .nav-item span {
+    white-space: nowrap;
+  }
   .nav-item a{
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--text-74);
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    padding: 12px 19px;
     user-select: none;
     &.active {
       color: var(--primary-custom);

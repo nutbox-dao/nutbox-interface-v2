@@ -15,10 +15,16 @@
     @include text-multi-line(2);
   }
 }
-.card-single-icon img{
-  @include card-icon;
-  @include coin-shadow;
-  border: 1px solid white;
+.card-single-icon {
+  display: flex;
+  align-items: flex-end;
+  width: 56px;
+  margin-right: .4rem;
+  img {
+    @include card-icon(56px, 56px);
+    border: 2px solid white;
+    background-color: var(--card-bg-primary);
+  }
 }
 .card-icons {
   position: relative;
@@ -56,7 +62,10 @@
   display: flex;
   align-items: flex-end;
   width: 74px;
-  margin-right: .4rem;
+  margin-right: .5rem;
+  &-lg {
+    width: 96px;
+  }
   img {
     border: 2px solid white;
     background-color: var(--card-bg-primary);
@@ -67,6 +76,10 @@
   .icon2 {
     margin-left: -1rem;
     @include card-icon(32px, 32px);
+  }
+  .icon2-lg {
+    margin-left: -1rem;
+    @include card-icon(56px, 56px);
   }
 }
 .card-link-title-text {

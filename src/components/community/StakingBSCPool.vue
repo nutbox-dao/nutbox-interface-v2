@@ -1,6 +1,7 @@
 <template>
   <div class="bsc-pool-modal position-relative">
-    <i class="modal-back-icon" @click="$emit('back')"></i>
+<!--    <i class="modal-back-icon" @click="$emit('back')"></i>-->
+    <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
         <div class="my-4 modal-title">Create staking pool on {{chainName}}</div>

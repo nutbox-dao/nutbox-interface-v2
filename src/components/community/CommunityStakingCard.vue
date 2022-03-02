@@ -51,7 +51,7 @@
                  :style="{zIndex: stakers.length-index}">
               <img class="info-icon" v-if="user.avatar && user.avatar.length > 0" :src="user.avatar">
               <img v-else class="info-icon" src="~@/static/images/avatars/default.png" alt="">
-              <b-popover :target="user.id + card.id" triggers="hover focus" placement="top">
+              <b-popover custom-class="sub-popover" :target="user.id + card.id" triggers="hover focus" placement="top">
                 {{ user.name ? user.name : (user.id.slice(0, 6) + '...' + user.id.slice(36, 42)) }}
               </b-popover>
             </div>

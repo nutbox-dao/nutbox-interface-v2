@@ -108,6 +108,9 @@
   .view-top-header {
     margin: 0 -0.75rem;
     background-color: var(--background);
+    &-m0 {
+      margin: 0;
+    }
     &-sticky {
       position: sticky;
       z-index: 2;
@@ -152,7 +155,7 @@
       overflow-y: hidden;
       overflow-x: scroll;
       a, span {
-        min-width: 90px;
+        min-width: 110px;
         cursor: pointer;
         padding: 0 .5rem;
         text-align: center;
@@ -209,4 +212,8 @@
     padding: 0 15px!important;
   }
 }
-
+@media (max-width: 550px) {
+  .page-container .view-top-header .c-btn-group {
+    flex-direction: column;
+  }
+}

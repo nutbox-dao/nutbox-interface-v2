@@ -27,3 +27,7 @@
     background-image: url("~@/static/images/add-icon-dark.svg");
   }
 }
+.help-icon {
+  @include icon();
+  background-image: url("~@/static/images/help-circle-icon.svg");
+}

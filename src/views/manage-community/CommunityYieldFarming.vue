@@ -1,8 +1,10 @@
 <template>
   <div class="scroll-content">
     <div class="view-top-header view-top-header-sticky">
+      <div class="font24 line-height28 font-bold mb-2">Yield Farming</div>
+      <div class="font16 line-height24 font-bold mb-4">Just stake some tokens to earn.</div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex flex-column justify-content-center">
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
             <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
@@ -12,7 +14,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="c-btn-group" >
+          <div class="c-btn-group mx-2" >
             <button class="primary-btn primary-btn-outline w-auto mr-2 px-3"
                     style="height: 2rem"
                     v-show="activePool.length > 1"
@@ -22,7 +24,8 @@
                     style="height: 2rem"
                     @click="poolTypeModal=true, createPoolStep=1">
               <i class="add-icon add-icon-white mr-2"></i>
-              <span>{{ $t('pool.addPool') }}</span>
+<!--              <span>{{ $t('pool.addPool') }}</span>-->
+              <span>Add Staking Pool</span>
             </button>
           </div>
         </div>
@@ -50,22 +53,14 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <StakingPoolType v-show="createPoolStep===1"
-                            @close="poolTypeModal=false"
-                            @onType="selectPoolType"/>
-      <div v-show="createPoolStep===2">
-        <StakingBSCPool v-if="poolType==='erc20staking'"
-                        @confirm="selectPoolToken"
-                        @back="createPoolStep=1"/>
-        <StakingDelegatePool v-else :delegate-type="poolType"
-                             @confirm="selectPoolToken"
-                             @back="createPoolStep=1"/>
-      </div>
+      <StakingBSCPool v-if="createPoolStep===1"
+                      @confirm="selectPoolToken"
+                      @close="poolTypeModal=false"/>
       <StakingPoolConfig v-if="createPoolStep===3"
                          type="create"
                          :needIcon="needIcon"
                          :token="selectToken"
-                         @back="createPoolStep=2"
+                         @back="createPoolStep=1"
                          @close="poolTypeModal=false"
                          :enable-op="!creating"
                          :enable-back="!creating"
@@ -101,7 +96,7 @@ import { mapState } from 'vuex'
 import { ethers } from 'ethers'
 
 export default {
-  name: 'CommunitySetting',
+  name: 'CommunityYieldFarming',
   components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
   data () {
     return {
@@ -144,7 +139,7 @@ export default {
       this.createPoolStep = 2
     },
     selectPoolToken (tokenData) {
-      if (this.poolType === 'erc20staking') {
+      // if (this.poolType === 'erc20staking') {
         this.stakeAsset = tokenData.address
         if (tokenData.icon) {
           this.needIcon =false
@@ -153,11 +148,11 @@ export default {
           this.needIcon = true;
           this.selectToken = tokenData;
         }
-      }else if (this.poolType === 'steem') {
-        this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }else if (this.poolType === 'hive') {
-        this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }
+      // }else if (this.poolType === 'steem') {
+      //   this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      // }else if (this.poolType === 'hive') {
+      //   this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      // }
       this.createPoolStep = 3
     },
     // create new pool

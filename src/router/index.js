@@ -16,9 +16,11 @@ import SubGovernanceDetail from '@/views/sub-community/SubGovernanceDetail'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
-import CommunityStaking from '@/views/manage-community/CommunityStaking'
+import CommunityStaking from '@/views/manage-community/CommunityYieldFarming'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
+import CommunityISO from '@/views/manage-community/CommunityISO'
+import CommunityNutPower from '@/views/manage-community/CommunityNutPower'
 Vue.use(VueRouter)
 
 const routes = [
@@ -125,6 +127,16 @@ const routes = [
         path: 'vote',
         name: 'CommunityVote',
         component: CommunityVote
+      },
+      {
+        path: 'iso',
+        name: 'CommunityISO',
+        component: CommunityISO
+      },
+      {
+        path: 'nut-power',
+        name: 'CommunityNutPower',
+        component: CommunityNutPower
       }
     ]
   },

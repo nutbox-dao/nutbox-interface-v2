@@ -1,20 +1,22 @@
 <template>
   <div class="multi-card">
-    <div class="status-container text-right">
-      <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
-      <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
-    </div>
     <div class="card-link-top-box">
-      <div class="card-title-box d-flex align-items-center">
+      <div class="status-container text-right">
+        <span v-if="pool.status === 'OPENED'" :class="'Active'">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
+        <span v-else class="Completed">{{ $t('community.' + pool.status.toLowerCase()) }}</span>
+      </div>
+      <div class="d-flex align-items-center">
         <div class="card-single-icon">
           <img class="icon1" :src="icon || './default.png'" alt="">
         </div>
-        <div class="title-text font20 font-bold ml-2">
+        <div class="card-link-title-text font-bold">
           <span>{{ pool.name || '--' }}</span>
         </div>
+        <span class="chain-type mt-2">BEP20</span>
       </div>
     </div>
     <div class="c-card text-grey-7 font14 font-bold">
+      <div class="font20 line-height24 text-white">Stake Nut <br> Earn Monns</div>
       <div class="project-info-container">
         <span class="name">{{ $t('pool.userCount') }}</span>
         <div class="info">{{ pool.stakersCount || 0 }}</div>
@@ -32,7 +34,7 @@
         <div class="info">{{pool.ratio / 100}}%</div>
       </div>
 
-      <button class="primary-btn my-3" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
+      <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
         {{ $t('pool.closePool')}}
       </button>
@@ -97,9 +99,11 @@ import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
 import { approveUseERC20 } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
+import StakingCardHeader from '@/components/common/StakingCardHeader'
 
 export default {
   name: 'ManageStakingCard',
+  components: { StakingCardHeader },
   computed: {
     ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
     ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
@@ -268,5 +272,24 @@ export default {
   position: absolute;
   top: 8px;
   right: 8px;
+  box-sizing: border-box;
+  span {
+    box-sizing: border-box;
+  }
+}
+.card-link-title-text span {
+  word-break: break-word;
+  @include text-multi-line(2);
+}
+.chain-type {
+  border-radius: 24px;
+  color: var(--sub-primary);
+  border: 1px solid var(--sub-primary);
+  font-size: 14px;
+  line-height: 22px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 </style>
