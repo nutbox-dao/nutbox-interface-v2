@@ -71,8 +71,6 @@ import { handleApiErrCode } from "../../utils/helper";
 import { getMyJoinedCommunity } from "@/utils/graphql/user";
 import { getAllCommunities } from "@/utils/web3/community";
 import { COSMOS_STAKE_FEE } from "@/config";
-import { getDelegateFromSteem, steemDelegation } from "@/utils/steem/steem";
-import { ethers } from "ethers";
 import store from "@/store";
 import {
   getAccountBalance,
@@ -82,7 +80,7 @@ import {
   addressAccToValBech32,
 } from "@/utils/cosmos/cosmos";
 export default {
-  name: "SPStakingModal",
+  name: "CosmosStakingModal",
   data() {
     return {
       stakingValue: "",
@@ -143,7 +141,7 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.balance >= this.fee) {
+      if (this.balance >= (this.fee + parseFloat(this.stakingValue))) {
         return true;
       }
       this.$bvToast.toast(this.$t("error.delegateerror"), {
@@ -164,16 +162,10 @@ export default {
 
       this.delegateAtom(atom);
     },
+
     async delegateAtom(atom) {
       try {
-        atom = parseFloat(atom);
-        if (
-          (atom !== 0 && !this.checkInputValue()) ||
-          !this.checkDelegateFee()
-        ) {
-          return;
-        }
-        const amount = parseFloat(atom) * (1e6).toFixed(6);
+        const amount = parseInt(atom * 1e6);
         let res;
 
         if (this.operate === "add") {

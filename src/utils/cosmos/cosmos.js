@@ -24,6 +24,8 @@ import {
 import {
   ethers
 } from 'ethers'
+import { reject } from 'core-js/fn/promise'
+import { errCode } from '../../config'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
@@ -140,7 +142,11 @@ export const signAndBroadcast = async (msgs, memo) => {
       }
       console.log(645, res);
     }catch (e) {
-      console.log('esg', e);
+      if (e === 'Error: Request rejected'){
+        console.log('23525');
+      }
+      console.log('esg', e);  // Error: Request rejected
+      reject(errCode.USER_CANCEL_SIGNING)
     }
 
     // const tx = await offlineSigner.signAmino(
