@@ -141,7 +141,7 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.balance >= (this.fee + parseFloat(this.stakingValue))) {
+      if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
         return true;
       }
       this.$bvToast.toast(this.$t("error.delegateerror"), {
@@ -159,7 +159,7 @@ export default {
       atom = parseFloat(this.stakingValue);
 
       atom = atom < 0 ? 0 : atom;
-
+      debugger;
       this.delegateAtom(atom);
     },
 

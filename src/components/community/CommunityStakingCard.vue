@@ -227,7 +227,7 @@ export default {
       } else if (this.type === "hive") {
         price = this.prices["hive"];
       } else if (this.type === "cosmos") {
-        price = this.prices["cosmos"];
+        price = this.prices["atom"];
       }
       return price ? parseFloat(price) : 0;
     },
