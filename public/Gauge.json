@@ -105,6 +105,19 @@
       "inputs": [
         {
           "indexed": true,
+          "internalType": "uint256",
+          "name": "rewardPerBlock",
+          "type": "uint256"
+        }
+      ],
+      "name": "AdminSetRewardNUTPerBlock",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
           "internalType": "address",
           "name": "pool",
           "type": "address"
@@ -357,7 +370,7 @@
           "type": "address"
         }
       ],
-      "name": "communityTotalStakedNP",
+      "name": "communityTotalLockedNP",
       "outputs": [
         {
           "internalType": "uint256",
@@ -425,7 +438,7 @@
           "type": "address"
         }
       ],
-      "name": "poolFactoryTotalStakedNP",
+      "name": "poolFactoryTotalLockedNP",
       "outputs": [
         {
           "internalType": "uint256",
@@ -458,7 +471,7 @@
     },
     {
       "inputs": [],
-      "name": "totalNPStaked",
+      "name": "totalNPLocked",
       "outputs": [
         {
           "internalType": "uint256",
@@ -525,6 +538,19 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "reward",
+          "type": "uint256"
+        }
+      ],
+      "name": "adminSetRewardNUTPerBlock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -696,6 +722,49 @@
         {
           "internalType": "uint256",
           "name": "rewardCToken",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pool",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserLocked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "locked",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pool",
+          "type": "address"
+        }
+      ],
+      "name": "getGaugeTotalLocked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalLocked",
           "type": "uint256"
         }
       ],

@@ -136,6 +136,7 @@ import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
+import { getGaugeParams, hasGaugeEnabled, updateGaugesByPolling } from '@/utils/nutbox/gauge'
 
 export default {
   computed: {
@@ -251,6 +252,8 @@ export default {
     } catch (e) {
       console.log('Initial network fail', e)
     }
+
+    // updateGaugesByPolling(['0x116C1F8c11c041F5e095B35593cD28C438410096', '0xD8dd76efe29bA2f38b24b8D2EAF23F500b8c95d6'])
         // bsc related
     try {
       updateAllCommunitiesFromBackend();
