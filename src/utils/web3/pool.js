@@ -212,8 +212,10 @@ export const addPool = async (form) => {
       console.log('Create pool fail', e);
       if (form.type === 'erc20staking') {
         factory.removeAllListeners('ERC20StakingCreated')
-      } else {
+      } else if(form.type === 'steem' || form.type === 'hive') {
         factory.removeAllListeners('SPStakingCreated')
+      } else if(form.type === 'cosmos') {
+        factory.removeAllListeners('CosmosStakingCreated')
       }
       reject(errCode.BLOCK_CHAIN_ERR)
     }

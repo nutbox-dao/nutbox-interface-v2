@@ -25,6 +25,6 @@ export const API_CONNECT_STATE = {
 export const ASSET_LOGO_URL = {
   steem: 'https://cdn.wherein.mobi/nutbox/token/logo/steem.png',
   hive: 'https://cdn.wherein.mobi/nutbox/token/logo/hive-logo.png',
-  cosmos: 'https://cdn.wherein.mobi/nutbox/token/logo/cosmos-logo.png'
+  cosmos: 'https://cdn.wherein.mobi/nutbox/token/logo/atom.png'
 
 }

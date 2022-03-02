@@ -212,6 +212,7 @@ import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
 import { getGaugeParams, hasGaugeEnabled, updateGaugesByPolling } from '@/utils/nutbox/gauge'
+import { connectWallet as connectKeplr } from '@/utils/cosmos/cosmos'
 
 export default {
   computed: {
@@ -336,7 +337,7 @@ export default {
     } catch (e) {
       console.log("Initial network fail", e);
     }
-    
+
     try {
       updateAllCommunitiesFromBackend();
       updateAllTokensFromBackend();

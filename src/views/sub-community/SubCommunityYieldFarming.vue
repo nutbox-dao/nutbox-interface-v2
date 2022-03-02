@@ -71,33 +71,13 @@ export default {
     ...mapGetters("community", ["getCommunityInfoById"]),
     stakingCards() {
       switch (this.activeTab) {
-        case -1:
+        case 1:
           return this.inActivedPools;
         case 0:
-          return this.activedPools;
-        case 1:
           return this.activedPools.filter(
             (p) =>
               p.poolFactory.toLowerCase() ===
               getPoolFactoryAddress("erc20staking")
-          );
-        case 2:
-          return this.activedPools.filter(
-            (p) =>
-              p.poolFactory.toLowerCase() === getPoolFactoryAddress("steem") &&
-              parseInt(p.chainId) == 1
-          );
-        case 3:
-          return this.activedPools.filter(
-            (p) =>
-              p.poolFactory.toLowerCase() === getPoolFactoryAddress("hive") &&
-              parseInt(p.chainId) == 2
-          );
-        case 4:
-          return this.activedPools.filter(
-            (p) =>
-              p.poolFactory.toLowerCase() === getPoolFactoryAddress("cosmos") &&
-              parseInt(p.chainId) == 3
           );
       }
     },
@@ -107,7 +87,8 @@ export default {
     },
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter((p) => p.status === "CLOSED");
+      return this.allPools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() ===
+              getPoolFactoryAddress("erc20staking"));
     },
   },
   async mounted() {

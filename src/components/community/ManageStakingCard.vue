@@ -12,7 +12,7 @@
         <div class="card-link-title-text font-bold">
           <span>{{ pool.name || '--' }}</span>
         </div>
-        <span class="chain-type mt-2">BEP20</span>
+        <span class="chain-type mt-2">{{ poolType }}</span>
       </div>
     </div>
     <div class="c-card text-grey-7 font14 font-bold">
@@ -118,6 +118,10 @@ export default {
     },
     type() {
       return getPoolType(this.pool.poolFactory, this.pool.chainId)
+    },
+    poolType() {
+      if (this.type === 'erc20staking') return 'BEP20'
+      return this.type.toUpperCase()
     },
     stakeToken() {
       if (this.type !== 'erc20staking' || !this.allTokens) return {}
@@ -260,6 +264,10 @@ export default {
         const chainId = this.pool.chainId
         this.icon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
         this.vert = this.pool.chainId === 1 ? 1e6 / this.steemVests : 1e6 / this.hiveVests
+        break;
+      case getPoolFactory('cosmos').toLowerCase():
+        this.icon = ASSET_LOGO_URL['cosmos']
+        this.vert = 1e6
     }
   }
 }

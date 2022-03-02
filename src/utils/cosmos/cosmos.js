@@ -9,23 +9,13 @@ import {
   SigningStargateClient
 } from '@cosmjs/stargate'
 import {
-  decodeTxRaw
-} from '@cosmjs/proto-signing'
-import {
-  fromBase64
-} from '@cosmjs/encoding'
-import {
-  pubkeyToAddress
-} from '@cosmjs/amino'
-import {
   AccAddress,
   ValAddress
 } from '@chainapsis/cosmosjs/common/address'
 import {
   ethers
 } from 'ethers'
-import { reject } from 'core-js/fn/promise'
-import { errCode } from '../../config'
+import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
@@ -108,14 +98,11 @@ export const getDelegateFromCosmos = async (account, targetAccount) => {
 // cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const getAccount = async () => {
-  // if (store.state.cosmos.account) return store.state.cosmos.account
-  store.commit('cosmos/saveAccount', null)
+  if (store.state.cosmos.account) return store.state.cosmos.account
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
   const accAddress = new AccAddress.fromBech32(accounts[0].address, 'cosmos')
-  console.log(45, accAddress, accAddress.toBech32(), accAddress.toBytes());
   const ii = ethers.utils.hexlify(accAddress.toBytes())
-  console.log(11, ii);
 
   store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;

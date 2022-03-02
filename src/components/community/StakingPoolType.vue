@@ -15,12 +15,6 @@
           types
         "
       >
-        <div class="type-box type-box-bsc">
-          <button class="bsc-btn" @click="$emit('onType', 'erc20staking')">
-            BEP20 <br />
-            Staking
-          </button>
-        </div>
         <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem')">
             Steem <br />

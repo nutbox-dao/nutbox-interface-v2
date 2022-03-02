@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
           <div class="font24 line-height28 font-bold mb-2">ISO：Initial Staking Offerings</div>
-          <div class="font16 line-height24 font-bold mb-4">ISO enable community cold boot by offering new tokens.Just create POS chain token staking pool.</div>
+          <div class="font16 line-height24 font-bold mb-4">ISO enable community cold boot by offering new tokens. Just create POS chain token staking pool.</div>
         </div>
         <div class="col-xl-5">
           <div class="c-btn-group m-2">
@@ -98,7 +98,7 @@
 
 <script>
 import ManageStakingCard from "@/components/community/ManageStakingCard";
-import { addPool, updatePoolsRatio } from "@/utils/web3/pool";
+import { addPool, updatePoolsRatio, getPoolFactoryAddress } from "@/utils/web3/pool";
 import { handleApiErrCode, sleep } from "@/utils/helper";
 import StakingPoolType from "@/components/community/StakingPoolType";
 import StakingBSCPool from "@/components/community/StakingBSCPool";
@@ -129,18 +129,22 @@ export default {
   computed: {
     ...mapState("community", ["communityData"]),
     pools() {
-      console.log(this.communityData);
       return this.communityData ? this.communityData.pools : [];
     },
     activePool() {
       return this.pools.filter((p) => p.status === "OPENED");
     },
+    activeISOPool() {
+      return this.activePool.filter(p => p.poolFactory.toLowerCase() !=
+              getPoolFactoryAddress("erc20staking"))
+    },
     stakingPools() {
       switch (this.activeTab) {
         case 0:
-          return this.activePool;
+          return this.activeISOPool;
         case 1:
-          return this.pools.filter((p) => p.status === "CLOSED");
+          return this.pools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() !=
+              getPoolFactoryAddress("erc20staking"));
       }
     },
   },
