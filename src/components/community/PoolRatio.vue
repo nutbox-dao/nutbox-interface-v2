@@ -87,7 +87,7 @@ export default {
             key: 'ratio'
           },
           layout: {
-            padding: 70
+            padding: 30
           },
           plugins: {
             tooltip: {
@@ -110,6 +110,9 @@ export default {
               formatter: (value, ctx) => {
                 if (this.showDataLabel) return value.name
                 return Number(value.ratio).toFixed(2) + '%'
+              },
+              display: (ctx) => {
+                return ctx.dataset.data[ctx.dataIndex].ratio > 1
               }
             }
           }
@@ -148,6 +151,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    aspectRatio: {
+      type: Number,
+      default: 1
     }
   },
   watch: {
@@ -164,6 +171,7 @@ export default {
   },
   mounted () {
     if (!this.animation) this.chartData.options.animation = false
+    this.chartData.options.aspectRatio = this.aspectRatio
     const ctx = document.getElementById('pie')
     this.chartData.data.datasets = [{
       data: this.poolsData,

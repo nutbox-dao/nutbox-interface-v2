@@ -11,7 +11,15 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon stake-icon" />
-                <span>{{ $t("router.staking") }}</span>
+                <span>Yield Farming</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/iso">
+                <i class="menu-icon stake-icon" />
+                <span>ISO</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/nut-power">
+                <i class="menu-icon stake-icon" />
+                <span>Nut Power</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
@@ -61,7 +69,7 @@
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/staking">
                     <i class="menu-icon stake-icon" />
-                    <span>{{ $t("router.staking") }}</span>
+                    <span>Yield Farming</span>
                   </b-dropdown-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
@@ -256,6 +264,7 @@ export default {
       font-size: 16px;
       line-height: 16px;
       color: var(--text-74);
+      white-space: nowrap;
     }
     .active span {
       color: var(--sub-primary);

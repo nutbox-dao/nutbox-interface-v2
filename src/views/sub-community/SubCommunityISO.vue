@@ -1,16 +1,17 @@
 <template>
   <div class="sub-staking-page h-100 position-relative">
     <div class="scroll-content position-relative">
-      <div class="view-top-header d-flex my-2">
-        <div class="nav-box nav-box-bg mb-3 mb-md-0">
-          <div class="nav">
+      <div class="view-top-header view-top-header-m0">
+        <div class="mx-2">
+          <div class="font24 line-height28 font-bold mb-2">ISO：Initial Staking Offerings</div>
+          <div class="font16 line-height24 font-bold mb-4">Stake POS chain get community initial offerings c-token.High APR,No risk</div>
+          <div class="nav-box nav-box-bg mb-3 mb-md-0">
+            <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
                       :class="activeTab===index?'active':''"
                       @click="activeTab = index">{{item}}</span>
+            </div>
           </div>
-        </div>
-        <div class="c-btn-group">
-          <button class="primary-btn w-auto px-2 mx-1" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
         </div>
       </div>
       <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>
@@ -46,7 +47,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive'],
+      tabOptions: ['Acitive Pools', 'Inacitive Pools'],
     }
   },
   computed: {
@@ -88,8 +89,8 @@ export default {
     const polling = updatePoolsByPolling(this.allPools)
 
     this.$once('hook:beforeDestroy', () => {
-        polling.stop();
-        updatePoolsFromGraph.stop();
+      polling.stop();
+      updatePoolsFromGraph.stop();
     })
   }
 }
@@ -102,32 +103,5 @@ export default {
 .card-item {
   width: 354px;
   height: 434px;
-}
-.view-top-header {
-  padding: 0 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-@media (max-width: 720px) {
-  .view-top-header {
-    flex-direction: column;
-    overflow: hidden;
-    .nav-box {
-      width: 100%;
-      overflow: auto;
-    }
-  }
-  .c-btn {
-    margin-top: 0.5rem;
-    margin-right: 0;
-    width: fit-content;
-  }
-}
-@media (max-width: 560px) {
-  .view-top-header {
-    flex-direction: column;
-    align-items: flex-end;
-  }
 }
 </style>

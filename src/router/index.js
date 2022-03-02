@@ -8,11 +8,13 @@ import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
-import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
+import SubCommunityStaking from '@/views/sub-community/SubCommunityYieldFarming'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
 import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
 import SubGovernanceDetail from '@/views/sub-community/SubGovernanceDetail'
+import SubCommunityISO from '@/views/sub-community/SubCommunityISO'
+import SubCommunityNutPower from '@/views/sub-community/SubCommunityNutPower'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
@@ -94,6 +96,16 @@ const routes = [
       {
         path: 'governance/detail/:id',
         component: SubGovernanceDetail
+      },
+      {
+        path: 'iso',
+        name: 'SubCommunityISO',
+        component: SubCommunityISO
+      },
+      {
+        path: 'nut-power',
+        name: 'SubCommunityNutPower',
+        component: SubCommunityNutPower
       }
     ]
   },
