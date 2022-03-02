@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Hive</title>
+    <defs>
+        <rect id="path-1" x="1.8189894e-11" y="0" width="48" height="48" rx="1"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Manage-Community-staking-choose-a-type" transform="translate(-888.000000, -418.000000)">
+            <g id="编组-15备份" transform="translate(398.000000, 245.000000)">
+                <g id="编组-14备份-11" transform="translate(424.000000, 110.997500)">
+                    <g id="Hive" transform="translate(66.000000, 62.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="蒙版"></g>
+                        <path d="M36,3 L48,24 L36,45 L12,45 L11.998,44.999 L17.4230769,45 L27.7974143,26.843 L33.1944143,26.843 L22.8423374,45 L28.5,45 L40.4984143,24.002 L40.7345857,24 L28.7345857,3 L36,3 Z M23.0769231,3 L33.4814143,21.247 L28.0844143,21.247 L17.6576626,3 L23.0769231,3 Z M23.9484143,23.955 L23.7654143,23.954265 L11.882,44.795 L-3.68416408e-12,24 L12,3 L23.9484143,23.955 Z" id="形状结合" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

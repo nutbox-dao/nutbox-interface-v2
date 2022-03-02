@@ -42,7 +42,7 @@ export const errCode = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 3;
+export const STEEM_STAKE_FEE = 0.001;
 // official fee account
 export const STEEM_GAS_ACCOUNT = "walnut.gas";
 
@@ -65,6 +65,11 @@ export const HIVE_GAS_ACCOUNT = "walnut.gas";
 
 // Hive Config
 export const HIVE_API_URLS = ["https://api.hive.blog"];
+
+/**===================================== cosmos  =======================================*/
+export const COSMOS_STAKE_FEE = 0.0001;
+export const COSMOS_GAS_ACCOUNT = "cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4";
+export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network", "https://api.cosmos.network"];
 
 /** ==================================Main chain============================================*/
 
@@ -97,12 +102,26 @@ export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa44
 export const BSC_CHAIN_ID = 5;
 export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
 export const CHAIN_NAME = 'Goerli';
+
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
   name: 'ETH',
   symbol: 'ETH',
   decimals: 18
 }
+
+// bsc
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
 
 // bsc
 // export const RPC_NODE = 'https://bsc-dataseed.binance.org';
@@ -161,8 +180,7 @@ export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 // export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 // Register by nutbox
-export const OfficialAssets = [
-  {
+export const OfficialAssets = [{
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",

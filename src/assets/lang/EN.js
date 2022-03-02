@@ -68,6 +68,7 @@ module.exports = {
     wallet: "Wallet",
     connectSteem: "Connect Steem Wallet",
     connectHive: "Connect Hive Wallet",
+    connectCosmos: "Connect Keplr Wallet",
     install: "Install",
     transfer: "Transfer",
     asset: "Asset",
@@ -82,6 +83,7 @@ module.exports = {
     receiveAddress: "Receiver Address",
     transferAmount: "Transfer Amount",
     unbindAmount: "Unbinding amount",
+    intallKeplr: "Please install keplr"
   },
   date: {
     year: " Year ",
@@ -122,19 +124,15 @@ module.exports = {
     noCommunities: "No Registered Communities ",
     noCrowdloan: "No ongoing Crowdloan",
     noStakingProject: "No validators",
-    picTip:
-    "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
-    tokenSafeTip:
-      "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
-    belowMinContribution:
-      "Input is less than the minimum required contribution of {min}",
+    picTip: "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
+    tokenSafeTip: "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
+    belowMinContribution: "Input is less than the minimum required contribution of {min}",
     belowMinBond: "Input is less than the minimum suggested bond amount of 0.1",
     wrongNominatorAddress: "Wrong Nominator Address",
     wrongTransferAddress: "Wrong Transfer Address",
     inputAddressType: "Please Input {relaychain} Address",
     insufficientBalance: "Insufficient Balance",
-    editTip:
-    "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
+    editTip: "Uploading community information requires the use of your wallet signature, this operation will not cost you anything, please rest assured to use。",
     outOfCap: "Out of cap",
     tips: "Tips",
     error: "Error！",
@@ -150,8 +148,7 @@ module.exports = {
     deloyTokenFail: "Token fail to deloy, Please try again",
     notContractAddress: "Please Provide Deploy Token Contract Address",
     registryAssetFail: "Registry Asset Fail",
-    wrongStartBlockNum:
-      "Start BlockNum must be larger than the current BlockNum",
+    wrongStartBlockNum: "Start BlockNum must be larger than the current BlockNum",
     wrongStopBlockNum: "Stop BlcokNum must be larger than the Start BlockNum",
     youHaveCreatedCommunity: "You Have Created Community",
     pleaseFillData: "Please select delpoy asset and distribution policies",
@@ -160,8 +157,7 @@ module.exports = {
     createPoolSuccess: "Create pool success",
     updatePoolSuccess: 'Update pool ratios success',
     chargeSuccess: 'Charge success',
-    storeTokenAddress:
-      "Please confirm the information and store Token Address immediately",
+    storeTokenAddress: "Please confirm the information and store Token Address immediately",
     needName: "Please input Community Name",
     needWebsit: "Please input Community Website",
     needDescription: "Please input Community Description",
@@ -180,8 +176,7 @@ module.exports = {
     descriptionLimit: "The community description cannot exceed {count} words",
     needRightUrl: "Please input right url.",
     selectCowdloan: "Please select a crowdloan project.",
-    inputRightBlogTag:
-      "Please input a right Steem community tag. eg:hive-12345.",
+    inputRightBlogTag: "Please input a right Steem community tag. eg:hive-12345.",
     withdrawSuccess: "Withdraw success!",
     harvestSuccess: "Harvest success!",
     deploying: "Deploying, may take some time, please wait for a moment.",
@@ -207,8 +202,7 @@ module.exports = {
   },
   nps: {
     nps: "Governance",
-    npsTemp:
-      "Show Peanut governance for example. Walnut governance is under development.",
+    npsTemp: "Show Peanut governance for example. Walnut governance is under development.",
     all: "All",
     pass: "Passed",
     pending: "Pending",
@@ -262,11 +256,9 @@ module.exports = {
     editStrategy: "Edit Strategy",
     validationWarning: {
       basic: {
-        minScore:
-          "You need to have a minimum of {0} {1} in order to submit a proposal.",
+        minScore: "You need to have a minimum of {0} {1} in order to submit a proposal.",
       },
-      customValidation:
-        "You need to pass the proposal validation in order to submit a proposal.",
+      customValidation: "You need to pass the proposal validation in order to submit a proposal.",
     },
     remark: "Intro",
     downloadReport: "Download Report",
@@ -283,8 +275,7 @@ module.exports = {
     changeDelegateFail: "Change delegation fail",
     haveCreatedCommunity: "You already created a community. Please refresh for try!",
     approveFail: "Approve fail",
-    accountChanged:
-      "Steem and Tron address mismatch，Please confirm whether the wallet account is switched",
+    accountChanged: "Steem and Tron address mismatch，Please confirm whether the wallet account is switched",
     delegateerror: "Delegation Error！",
     tryrefreshpage: "Error，please refresh page and try again！",
     needkeychainandtronlink: "Need to install Steem Keychain and TronLink！",
@@ -299,8 +290,7 @@ module.exports = {
     illegalTronAddress: "Invalid tron address",
     inputError: "Input wrong value",
     inputOverflow: "Input overflow",
-    inputOutOfRange:
-      "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
+    inputOutOfRange: "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
     inputLinkIllegal: "Please input correct link",
     notEnoughFee: "Insufficient fee",
     insufficentPnut: "Insufficient PNUT",
@@ -326,8 +316,7 @@ module.exports = {
     steemAccountActiveKeyEmpty: "Steem account or active key missing",
     hiveAccountEmpty: "Hive account missing",
     hiveAccountActiveKeyEmpty: "Hive account or active key missing",
-    tokenDeploying:
-      "There's token in deploying, please wait or refresh page to try.",
+    tokenDeploying: "There's token in deploying, please wait or refresh page to try.",
     wrongConfirmInfo: "Wrong confirm info!"
   },
   // navigator
@@ -387,7 +376,7 @@ module.exports = {
     startBlock: "Start block",
     stopBlock: "Stop block",
     mintAmount: "Mint amount",
-    
+
     opened: 'Opened',
     closed: 'Closed'
   },
@@ -413,4 +402,3 @@ module.exports = {
     distributionAmount: "Premine amount"
   }
 };
-
