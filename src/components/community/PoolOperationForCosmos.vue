@@ -288,16 +288,8 @@ export default {
       if (!this.userStaked) return 0;
       const userStakingBn = this.userStaked[this.card.id];
       if (!userStakingBn) return 0;
-      if (this.type === "erc20staking") {
-        return (
-          userStakingBn.toString() / 10 ** this.tokenDecimals(this.card.asset)
-        );
-      } else if (this.type === "steem") {
-        return (userStakingBn.toString() / 1e6) * this.vestsToSteem;
-      } else if (this.type === "hive") {
-        return (userStakingBn.toString() / 1e6) * this.vestsToHive;
-      }
-      return 0;
+
+      return userStakingBn.toString() / 1e6;
     },
     notInstallKeplr() {
       if (!window.getOfflineSigner || !window.keplr) {

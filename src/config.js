@@ -71,7 +71,7 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 /**===================================== cosmos  =======================================*/
 export const COSMOS_STAKE_FEE = 0.0001;
 export const COSMOS_GAS_ACCOUNT = "cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4";
-export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network"];
+export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network", "https://api.cosmos.network"];
 
 /** ==================================Main chain============================================*/
 

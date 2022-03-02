@@ -95,6 +95,13 @@ export const getAccountBalance = async () => {
   const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
   return auth.data.balance.amount / 1e6;
 }
+
+export const getDelegateFromCosmos = async (account, targetAccount) => {
+  debugger
+  const auth = await axios.get(COSMOS_API_URLS[1] + '/cosmos/staking/v1beta1/validators/' + targetAccount + '/delegations/' + account)
+  debugger
+  return auth.data.balance.amount / 1e6;
+}
 // osmo  1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477
 // cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
