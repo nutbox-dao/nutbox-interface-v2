@@ -97,25 +97,25 @@ export default {
     }
   },
   async mounted () {
-    // try{
-    //   const communityId = await getMyCommunityContract()
-    //   this.communityId = communityId;
-    //   getMyCommunityData().then(async (res) => {
-    //     const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
-    //     console.log(235, hasRole, res);
-    //     this.showGrantRole = isMintable && !hasRole
-    //   });
-    //   this.$store.commit('community/saveLoadingApproveCommunity', true)
-    //
-    //   getApprovement(NutAddress, communityId).then(res => {
-    //     this.$store.commit('community/saveApprovedCommunity', res)
-    //   }).finally(() => {
-    //     this.$store.commit('community/saveLoadingApproveCommunity', false)
-    //   })
-    // }catch(e) {
-    //   // no registered
-    //   this.$router.replace('/')
-    // }
+    try{
+      const communityId = await getMyCommunityContract()
+      this.communityId = communityId;
+      getMyCommunityData().then(async (res) => {
+        const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
+        console.log(235, hasRole, res);
+        this.showGrantRole = isMintable && !hasRole
+      });
+      this.$store.commit('community/saveLoadingApproveCommunity', true)
+
+      getApprovement(NutAddress, communityId).then(res => {
+        this.$store.commit('community/saveApprovedCommunity', res)
+      }).finally(() => {
+        this.$store.commit('community/saveLoadingApproveCommunity', false)
+      })
+    }catch(e) {
+      // no registered
+      this.$router.replace('/')
+    }
   },
   methods: {
     goHome() {
