@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       activeTab: 0,
-      tabOptions: ["All", CHAIN_NAME, "Steem", "Hive"],
+      tabOptions: ["All", CHAIN_NAME, "Steem", "Hive", "Cosmos"],
     };
   },
   computed: {
