@@ -74,7 +74,13 @@ import { COSMOS_STAKE_FEE } from "@/config";
 import { getDelegateFromSteem, steemDelegation } from "@/utils/steem/steem";
 import { ethers } from "ethers";
 import store from "@/store";
-import { getAccountBalance } from "@/utils/cosmos/cosmos";
+import {
+  getAccountBalance,
+  getDelegateFromCosmos,
+  delegate,
+  unDelegate,
+  addressAccToValBech32,
+} from "@/utils/cosmos/cosmos";
 export default {
   name: "SPStakingModal",
   data() {
@@ -82,7 +88,7 @@ export default {
       stakingValue: "",
       loading: false,
       fee: COSMOS_STAKE_FEE,
-      spBalance: 0,
+      balance: 0,
     };
   },
   computed: {
@@ -95,7 +101,7 @@ export default {
       return this.userStaked[this.pool.id] ?? 0;
     },
     formBalance() {
-      return this.spBalance;
+      return this.balance;
     },
     formStaked() {
       const staked = this.staked;
@@ -137,7 +143,7 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.steemBalance >= this.fee) {
+      if (this.balance >= this.fee) {
         return true;
       }
       this.$bvToast.toast(this.$t("error.delegateerror"), {
@@ -149,42 +155,40 @@ export default {
     async confirm() {
       if (!this.checkInputValue()) return;
       if (!this.checkDelegateFee()) return;
-      let sp = 0;
+      let atom = 0;
       this.loading = true;
-      const haveDelegated = await getDelegateFromSteem(
-        this.steemAccount,
-        ethers.utils.parseBytes32String(this.pool.asset)
-      );
-      if (haveDelegated < 0) {
-        this.$bvToast.toast(this.$t("error.delegateerror"), {
-          title: this.$t("error.pleaseRetry"),
-          variant: "info",
-        });
-        this.loading = false;
-        return false;
-      }
-      if (this.operate === "add") {
-        sp = parseFloat(haveDelegated) + parseFloat(this.stakingValue);
-      } else {
-        sp = parseFloat(haveDelegated) - parseFloat(this.stakingValue);
-        sp = sp < 0 ? 0 : sp;
-      }
-      this.delegateSp(sp);
+
+      atom = parseFloat(this.stakingValue);
+
+      atom = atom < 0 ? 0 : atom;
+
+      this.delegateAtom(atom);
     },
-    async delegateSp(sp) {
+    async delegateAtom(atom) {
       try {
-        sp = parseFloat(sp);
-        if ((sp !== 0 && !this.checkInputValue()) || !this.checkDelegateFee()) {
+        atom = parseFloat(atom);
+        if (
+          (atom !== 0 && !this.checkInputValue()) ||
+          !this.checkDelegateFee()
+        ) {
           return;
         }
-        const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
-        const res = await steemDelegation(
-          this.steemAccount,
-          ethers.utils.parseBytes32String(this.pool.asset),
-          amount,
-          this.pool.id,
-          this.account
-        );
+        const amount = parseFloat(atom) * (1e6).toFixed(6);
+        let res;
+
+        if (this.operate === "add") {
+          res = await delegate(
+            addressAccToValBech32(this.pool.asset),
+            amount,
+            this.pool.id
+          );
+        } else {
+          res = await unDelegate(
+            addressAccToValBech32(this.pool.asset),
+            amount,
+            this.pool.id
+          );
+        }
         if (res.success === true) {
           if (
             !this.userGraphInfo.inCommunities ||
@@ -196,8 +200,7 @@ export default {
             getAllCommunities(true);
             getMyJoinedCommunity();
           }
-          this.getVests();
-          this.getSteem();
+
           this.$bvToast.toast(
             "Delegate success! The data will be update after 1 or 2 mins later, please wait",
             {
@@ -222,7 +225,7 @@ export default {
   },
   async mounted() {
     // get user's balance
-    this.spBalance = await getAccountBalance();
+    this.balance = await getAccountBalance();
   },
 };
 </script>
