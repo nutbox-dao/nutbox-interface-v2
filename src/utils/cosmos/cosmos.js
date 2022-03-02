@@ -24,8 +24,10 @@ import {
 import {
   ethers
 } from 'ethers'
-import { reject } from 'core-js/fn/promise'
-import { errCode } from '../../config'
+
+import {
+  errCode
+} from '../../config'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
@@ -99,9 +101,9 @@ export const getAccountBalance = async () => {
 }
 
 export const getDelegateFromCosmos = async (account, targetAccount) => {
-  debugger
+
   const auth = await axios.get(COSMOS_API_URLS[1] + '/cosmos/staking/v1beta1/validators/' + targetAccount + '/delegations/' + account)
-  debugger
+
   return auth.data.balance.amount / 1e6;
 }
 // osmo  1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477
@@ -122,7 +124,7 @@ export const getAccount = async () => {
 }
 
 export const signAndBroadcast = async (msgs, memo) => {
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
     const offlineSigner = window.getOfflineSigner(chainId);
 
     const fee = {
@@ -135,17 +137,18 @@ export const signAndBroadcast = async (msgs, memo) => {
     console.log('start');
 
     const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
-    try{
+    try {
       const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
       if (res.code === 0) {
         resolve(res.transactionHash)
       }
       console.log(645, res);
-    }catch (e) {
-      if (e === 'Error: Request rejected'){
+    } catch (e) {
+      if (e === 'Error: Request rejected') {
         console.log('23525');
       }
-      console.log('esg', e);  // Error: Request rejected
+
+      console.log('esg', e); // Error: Request rejected
       reject(errCode.USER_CANCEL_SIGNING)
     }
 
