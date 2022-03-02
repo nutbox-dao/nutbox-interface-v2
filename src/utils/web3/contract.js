@@ -39,7 +39,6 @@ export const contractAddress = {
   "ERC20StakingFactory": "0x05fBf334590a5eDc4f1B06f6aC120CEA5FA76E1f",
   "CosmosStakingFactory": "0x458984BA39b694b21F006E1892c432Cd14f483b1",
   "Gauge": "0xb6EC9647338Cb094A6dB172E21058F7642d8E743"
-
 }
 
 export const getPoolFactory = (type) => {
@@ -49,6 +48,16 @@ export const getPoolFactory = (type) => {
     return contractAddress.SPStakingFactory
   } else if (type === 'cosmos') {
     return contractAddress.CosmosStakingFactory
+  }
+}
+
+export const getPoolTypeName = (type) => {
+  if (type === 'erc20staking') {
+    return 'ERC20StakingFactory'
+  } else if (type === 'steem' || type === 'hive') {
+    return 'SPStakingFactory'
+  } else if (type === 'cosmos') {
+    return 'CosmosStakingFactory'
   }
 }
 

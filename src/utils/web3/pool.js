@@ -1,7 +1,8 @@
 import {
   getContract,
   contractAddress,
-  getPoolFactory
+  getPoolFactory,
+  getPoolTypeName
 } from './contract'
 import store from '@/store'
 import {
@@ -144,7 +145,7 @@ export const addPool = async (form) => {
     let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
-      factory = await getContract(form.type === 'erc20staking' ? 'ERC20StakingFactory' : 'SPStakingFactory', getPoolFactory(form.type))
+      factory = await getContract(getPoolTypeName(form.type))
     } catch (e) {
       reject(e);
       return
@@ -168,7 +169,7 @@ export const addPool = async (form) => {
             factory.removeAllListeners('ERC20StakingCreated')
           }
         })
-      } else {
+      } else if(form.type === 'steem' || form.type === 'hive') {
         factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
@@ -176,7 +177,7 @@ export const addPool = async (form) => {
               id: ethers.utils.getAddress(pool),
               status: 'OPENED',
               name,
-              asset: form.asset,
+              asset: '0x' + form.asset.substring(4),
               poolFactory: getPoolFactory(form.type),
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId,
@@ -184,6 +185,24 @@ export const addPool = async (form) => {
               totalAmount: 0
             })
             factory.removeAllListeners('SPStakingCreated')
+          }
+        })
+      } else if(form.type === 'cosmos') {
+        factory.on('CosmosStakingCreated', (pool, community, name, chainId, delegatee) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: '0x' + form.asset.substring(4),
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId,
+              stakersCount: 0,
+              totalAmount: 0
+            })
+            factory.removeAllListeners('CosmosStakingCreated')
           }
         })
       }
