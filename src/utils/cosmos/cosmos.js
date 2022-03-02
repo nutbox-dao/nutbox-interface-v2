@@ -133,11 +133,15 @@ export const signAndBroadcast = async (msgs, memo) => {
     console.log('start');
 
     const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
-    const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
-    if (res.code === 0) {
-      resolve(res.transactionHash)
+    try{
+      const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
+      if (res.code === 0) {
+        resolve(res.transactionHash)
+      }
+      console.log(645, res);
+    }catch (e) {
+      console.log('esg', e);
     }
-    console.log(645, res);
 
     // const tx = await offlineSigner.signAmino(
     //   store.state.cosmos.account, 
