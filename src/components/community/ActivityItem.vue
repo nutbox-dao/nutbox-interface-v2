@@ -137,6 +137,7 @@ export default {
     let decimals = 18;
     let ctokenSymbol;
     let delegatee;
+    const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
 
     if (
       this.operation.asset &&
@@ -240,7 +241,6 @@ export default {
       case "VOTE":
         this.opType = 'Vote pool';
         this.isAdmin = false;
-        const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
          this.description =
             (this.showName ? " vote" : "Vote") +
             ` ${np} NP to ${this.operation.pool.name}`;
@@ -248,7 +248,6 @@ export default {
       case "UNVOTE":
         this.opType = 'Unvote pool';
         this.isAdmin = false;
-        const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
         this.description =
           (this.showName ? " unvote" : "Unvote") +
           ` ${np} NP to ${this.operation.pool.name}`;
