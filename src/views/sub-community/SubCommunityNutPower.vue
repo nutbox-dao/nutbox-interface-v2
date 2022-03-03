@@ -15,7 +15,8 @@
                 <div class="font20 line-height20">12000 NP</div>
                 <div class="font12 line-height12">= 1000 Nut</div>
               </div>
-              <button class="primary-btn px-4 mx-0" @click="assetModalVisible=true">Detail</button>
+              <button class="primary-btn px-4 mx-0"
+                      @click="modalContentType='detail',assetModalVisible=true">Detail</button>
             </div>
           </div>
           <div class="chart-box position-relative">
@@ -31,40 +32,91 @@
       </div>
       <div class="c-loading my-5" v-if="loading"></div>
       <template v-else>
-<!--        <div v-if="stakingCards.length > 0"></div>-->
-<!--        <div class="empty-bg" v-else>-->
-<!--          <img src="~@/static/images/empty-data.png" alt="" />-->
-<!--          <p> {{ $t('tip.noProject') }} </p>-->
-<!--        </div>-->
-<!--        <div class="cards-container">-->
-<!--          <div class="cards-box cards-box-col3" :class="'col3-items-'+stakingCards.length">-->
-<!--            <div class="card-item" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">-->
-<!--              <CommunityStakingCard :card="cardInfo"/>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="empty-bg" v-if="npCards.length === 0">
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p> {{ $t('tip.noProject') }} </p>
+        </div>
+        <div v-else class="cards-container">
+          <div class="cards-box cards-box-col3" :class="'col3-items-'+npCards.length">
+            <div class="card-item" v-for="(cardInfo) of npCards" :key="cardInfo.id">
+              <CommunityNPCard :card="cardInfo"/>
+            </div>
+          </div>
+        </div>
       </template>
     </div>
+    <b-modal
+      v-model="assetModalVisible"
+      modal-class="custom-modal body-p0 sub-modal"
+      :size="(modalContentType==='detail' || modalContentType==='up-step1')?'xl':''"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop>
+      <NPAssetDetail v-show="modalContentType==='detail'"
+                     @powerUp="modalContentType='up-step1'"
+                     @powerDown="modalContentType='power-down'"
+                     @close="assetModalVisible=false"/>
+      <NPAssetPowerUpOptions v-if="modalContentType==='up-step1'"
+                             @setData="setData"
+                             @back="modalContentType='detail'"
+                             @close="assetModalVisible=false"/>
+      <NPAssetPowerUp v-if="modalContentType==='power-up'"
+                      :np-data="selectData"
+                      @back="modalContentType='up-step1'"
+                      @close="assetModalVisible=false"/>
+      <NPAssetPowerDown v-if="modalContentType==='power-down'"
+                      :np-data="selectData"
+                      @back="modalContentType='detail'"
+                      @close="assetModalVisible=false"/>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import PoolRatio from '@/components/community/PoolRatio'
-
+import CommunityNPCard from '@/components/community/CommunityNPCard'
+import NPAssetDetail from '@/components/community/NPAssetDetail'
+import NPAssetPowerUpOptions from '@/components/community/NPAssetPowerUpOptions'
+import NPAssetPowerUp from '@/components/community/NPAssetPowerUp'
+import NPAssetPowerDown from '@/components/community/NPAssetPowerDown'
 export default {
   name: 'SubCommunityStaking',
-  components: { PoolRatio },
+  components: { PoolRatio, CommunityNPCard, NPAssetDetail, NPAssetPowerUpOptions, NPAssetPowerUp, NPAssetPowerDown },
   data () {
     return {
       activeTab: 0,
       tabOptions: ['Acitive Pools', 'Inacitive Pools'],
       loading: false,
       assetModalVisible: false,
+      modalContentType: 'detail',
       chartToken: [
         { ratio: 100, name: 'AAA' },
         { ratio: 10, name: 'BBB' }
       ],
-      loadingBalance: false
+      loadingBalance: false,
+      npCards: [
+        {
+          asset: '0x232c5c39120140b76e3466ee8303465cf4b9c04d',
+          chainId: 0,
+          community: { id: '0x72701a017a9e0677b9401bf7473da36b1bbb888e' },
+          id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4',
+          name: 'Stake PNUT-WBNB',
+          poolFactory: '0xf870724476912057c807056b29c1161f5fe0199a',
+          ratio: 10000,
+          stakers: [{ id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }],
+          stakersCount: 17,
+          status: 'OPENED',
+          totalAmount: '5890865817022064098000'
+        }
+      ],
+      selectData: {}
+    }
+  },
+  methods: {
+    setData (data) {
+      this.modalContentType = 'power-up'
+      this.selectData = data
     }
   }
 }
@@ -74,10 +126,15 @@ export default {
 .sub-staking-page {
   overflow: auto;
 }
+.card-item {
+  width: 354px;
+  height: 434px;
+}
 .top-card {
   @include card();
   height: fit-content;
   display: flex;
+  margin-bottom: 1rem;
   .v-line {
     width: 2px;
     height: 8rem;

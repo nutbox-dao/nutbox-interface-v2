@@ -16,12 +16,11 @@
       </div>
       <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>
       <template v-else>
-        <div v-if="stakingCards.length > 0"></div>
-        <div class="empty-bg" v-else>
+        <div class="empty-bg" v-if="stakingCards.length === 0">
           <img src="~@/static/images/empty-data.png" alt="" />
           <p> {{ $t('tip.noProject') }} </p>
         </div>
-        <div class="cards-container">
+        <div v-else class="cards-container">
           <div class="cards-box cards-box-col3" :class="'col3-items-'+stakingCards.length">
             <div class="card-item" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
               <CommunityStakingCard :card="cardInfo"/>

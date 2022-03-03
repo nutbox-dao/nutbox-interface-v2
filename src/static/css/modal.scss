@@ -9,6 +9,9 @@
   .modal-body {
     padding: 12px 24px 24px;
   }
+  &.body-p0 .modal-body {
+    padding: 0;
+  }
   .modal-title {
     height: 48px;
     display: flex;
@@ -55,6 +58,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
+    &-no-bg {
+      background-color: transparent;
+      &::after {
+        background-image: url("~@/static/images/moda-back-icon.svg");
+      }
     }
   }
   .h-line {
