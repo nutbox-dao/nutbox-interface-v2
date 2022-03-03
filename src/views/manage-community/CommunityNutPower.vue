@@ -74,6 +74,9 @@
 <script>
 import ManageNPCard from '@/components/community/ManageNPCard'
 import AddNPPool from '@/components/community/AddNPPool'
+import { mapState } from 'vuex';
+import { getGaugeVoteInfo } from '@/utils/nutbox/gauge'
+
 export default {
   name: 'CommunityNutPower',
   components: { ManageNPCard, AddNPPool },
@@ -81,6 +84,7 @@ export default {
     return {
       claimModal: false,
       addPoolModal: false,
+      gauges: []
     }
   },
   computed: {
@@ -92,12 +96,38 @@ export default {
     activePool() {
       return this.pools.filter(p => p.status === 'OPENED')
     },
-    gauges: () => {
-      
-    },
+  },
+  watch: {
+    activePool(newValue, oldValue) {
+      if (newValue.length === 0) return []
+      getGaugeVoteInfo(newValue.map(p => p.id)).then(res => {
+        this.gauges = newValue.map(p => {
+          const id = p.id
+          const created = res['hasCreated-'+id]
+          const locked = res['loced-'+id]
+        })
+        let created = {}
+        let locked = {}
+        let total = {}
+        let pending = {}
+        for (let d in res) {
+            const [type, pid] = d.split('-')
+            if (type === 'hasCreated') {
+                created[pid] = res[d]
+            }else if(type === 'userLocked'){
+                locked[pid] = res[d]
+            }else if(type === 'totalLocked') {
+                total[pid] = res[d]
+            }else if (type === 'userReward') {
+                pending[pid] = res[d]
+            }
+        }
+
+      }).catch()
+    }
   },
   async mounted () {
-    
+
   },
   methods: {
   }

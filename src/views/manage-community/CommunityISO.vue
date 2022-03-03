@@ -10,6 +10,7 @@
           <div class="c-btn-group m-2">
             <button class="primary-btn primary-btn-outline w-auto mx-0 px-3"
                     style="height: 2rem"
+                    v-show="activeISOPool.length > 0 && activePool.length > 1"
                     @click="configPoolModal=true">
               Configure Delegate Pool
             </button>

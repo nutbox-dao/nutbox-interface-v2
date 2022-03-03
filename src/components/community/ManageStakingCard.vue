@@ -16,7 +16,6 @@
       </div>
     </div>
     <div class="c-card text-grey-7 font14 font-bold">
-      <div class="font20 line-height24 text-white">Stake Nut <br> Earn Monns</div>
       <div class="project-info-container">
         <span class="name">{{ $t("pool.userCount") }}</span>
         <div class="info">{{ pool.stakersCount || 0 }}</div>
