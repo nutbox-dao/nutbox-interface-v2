@@ -85,8 +85,8 @@ export default {
       url("~@/static/images/m-bg-icon-hive.svg");
   }
   &-cosmos {
-    background-image: url("~@/static/images/m-bg-hive.png"),
-      url("~@/static/images/m-bg-icon-hive.svg");
+    background-image: url("~@/static/images/m-bg-cosmos.png"),
+      url("~@/static/images/m-bg-icon-cosmos.svg");
   }
   button {
     border: none;
@@ -112,7 +112,7 @@ export default {
     background-image: linear-gradient(to bottom, #f32b68, #e31337);
   }
   .cosmos-btn {
-    background-image: linear-gradient(to bottom, #2bf33c, #13e347);
+    background-image: linear-gradient(to bottom, #555a83, #363a5a);
   }
 }
 @media (max-width: 991px) {

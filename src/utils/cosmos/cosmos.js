@@ -100,10 +100,10 @@ export const getDelegateFromCosmos = async (account, targetAccount) => {
 // cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const getAccount = async () => {
-  if (store.state.cosmos.account) return store.state.cosmos.account
+  // if (store.state.cosmos.account) return store.state.cosmos.account
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
-  store.commit('cosmos/saveAccount', accounts[0].address)
+  // store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
 

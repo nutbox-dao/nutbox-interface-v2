@@ -174,9 +174,13 @@ export default {
         try {
           this.stakeAsset = "0x03" + valBech32ToAddress(tokenData).substring(2);
         } catch (err) {
-          handleApiErrCode(err, (tip, params) => {
-            this.$bvToast.toast(tip, params);
-          });
+          this.$bvToast.toast('Plear input a right validator address', {
+            title: this.$t('error.error'),
+            variant: 'info'
+          })
+          // handleApiErrCode(err, (tip, params) => {
+          //   this.$bvToast.toast(tip, params);
+          // });
           return;
         }
       }
