@@ -62,6 +62,11 @@
 <script>
 export default {
   name: 'ManageNPCard',
+  props: {
+    gauge: {
+      type: Object
+    },
+  },
   data () {
     return {
       card: { id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4', stakersCount: 1 },

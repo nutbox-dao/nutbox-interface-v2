@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div v-if="pools && pools.length===0"
+    <div v-if="gauges && gauges.length===0"
          class="empty-card mb-5 d-flex flex-column justify-content-center">
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
@@ -34,8 +34,8 @@
     </div>
     <template v-else>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="pool of pools" :key="pool">
-          <ManageNPCard :pool="pool"/>
+        <div class="col-xl-4 col-md-6 mb-4" v-for="gauge of gauges" :key="gauge">
+          <ManageNPCard :gauge="guge"/>
         </div>
       </div>
     </template>
@@ -81,12 +81,23 @@ export default {
     return {
       claimModal: false,
       addPoolModal: false,
-      pools: [1]
     }
   },
   computed: {
+    ...mapState('community', ['communityData']),
+    pools() {
+      console.log(this.communityData);
+      return this.communityData ? this.communityData.pools : []
+    },
+    activePool() {
+      return this.pools.filter(p => p.status === 'OPENED')
+    },
+    gauges: () => {
+      
+    },
   },
   async mounted () {
+    
   },
   methods: {
   }
