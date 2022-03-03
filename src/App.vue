@@ -350,9 +350,7 @@ export default {
           console.log("No created token by current user");
         });
 
-        await connectKeplr(() => {
-          this.$router.go(0);
-        });
+        await connectKeplr();
         /*   getCosAcc()
           .then(async (res) => {
             const ddd = await delegate(

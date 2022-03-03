@@ -68,11 +68,12 @@ const getKeplr = async () => {
 }
 
 export const connectWallet = async (callback) => {
-  // const keplr = await getKeplr()
+  const keplr = await getKeplr()
   // await keplr.enable(chainId)
-  window.addEventListener('keplr_keystorechange', () => {
-    console.log('keplr account changed');
-    callback && callback();
+  window.addEventListener('keplr_keystorechange', async () => {
+    //console.log('keplr account changed');
+    //callback && callback();
+    await getAccount();
   })
 }
 
@@ -103,7 +104,6 @@ export const getAccount = async () => {
   // if (store.state.cosmos.account) return store.state.cosmos.account
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
-  // store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
 
