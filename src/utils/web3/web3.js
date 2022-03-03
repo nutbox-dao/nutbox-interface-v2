@@ -19,7 +19,9 @@ import { getMyCommunityInfo } from './community'
  * @returns 
  */
 export const setupNetwork = async () => {
+  console.log(1);
   await connectMetamask();
+  console.log(2);
   const eth = await getEthWeb()
   const chainId = parseInt(BSC_CHAIN_ID)
   try {

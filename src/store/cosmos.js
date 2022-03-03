@@ -5,6 +5,7 @@ export default {
     state: {
         account: Cookie.get('cosmosAccount'),
         keplrConnected: false,
+        balance: 0
     },
     mutations: {
         saveAccount: (state, account) => {
@@ -13,6 +14,9 @@ export default {
         },
         saveKeplrConnected: (state, keplrConnected) => {
             state.keplrConnected = keplrConnected
+        },
+        saveBalance: (state, balance) => {
+            state.balance = balance
         }
     }
 }

@@ -19,13 +19,15 @@ import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
+// const cosmosAuthApiUrl = 'https://api.cosmos.network'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
+// 'https://api.cosmos.network/cosmos/bank/v1beta1/balances/cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv/uatom'
 
 
 
 export const addressAccToAccBech32 = (address) => {
-
+  if (address == ethers.constants.AddressZero) return ''
   let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
   account = new AccAddress(account, 'cosmos');
   account = account.toBech32()
@@ -33,7 +35,7 @@ export const addressAccToAccBech32 = (address) => {
 }
 
 export const addressAccToValBech32 = (address) => {
-
+  if(address == ethers.constants.AddressZero) return ''
   let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
   account = new ValAddress(account, 'cosmosvaloper');
   account = account.toBech32()
@@ -53,23 +55,21 @@ export const valBech32ToAddress = (address) => {
 
 const getKeplr = async () => {
   return new Promise(async (resolve, reject) => {
-    window.onload = async () => {
-      if (!window.getOfflineSigner || !window.keplr) {
-        resolve(false)
-        return;
-      }
-      const keplr = window.keplr;
-      resolve(keplr);
-      store.commit(
-        'cosmos/saveKeplrConnected', true
-      )
+    if (!window.getOfflineSigner || !window.keplr) {
+      resolve(false)
+      return;
     }
+    const keplr = window.keplr;
+    resolve(keplr);
+    store.commit(
+      'cosmos/saveKeplrConnected', true
+    )
   })
 }
 
 export const connectWallet = async (callback) => {
-  const keplr = await getKeplr()
-  await keplr.enable(chainId)
+  // const keplr = await getKeplr()
+  // await keplr.enable(chainId)
   window.addEventListener('keplr_keystorechange', () => {
     console.log('keplr account changed');
     callback && callback();
@@ -85,7 +85,9 @@ const getAccountAuth = async () => {
 export const getAccountBalance = async () => {
   const account = await getAccount()
   const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
-  return auth.data.balance.amount / 1e6;
+  const balance = auth.data.balance.amount / 1e6;
+  store.commit('cosmos/saveBalance', balance)
+  return balance
 }
 
 export const getDelegateFromCosmos = async (account, targetAccount) => {
@@ -101,28 +103,27 @@ export const getAccount = async () => {
   if (store.state.cosmos.account) return store.state.cosmos.account
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
-  const accAddress = new AccAddress.fromBech32(accounts[0].address, 'cosmos')
-  const ii = ethers.utils.hexlify(accAddress.toBytes())
-
   store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
 
 export const signAndBroadcast = async (msgs, memo) => {
   return new Promise(async (resolve, reject) => {
-    const offlineSigner = window.getOfflineSigner(chainId);
-
-    const fee = {
-      amount: [{
-        denom: 'uatom',
-        amount: '2000'
-      }],
-      gas: "260000"
-    }
-    console.log('start');
-
-    const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
     try {
+      const keplr = await getKeplr()
+      await keplr.enable(chainId)
+      const offlineSigner = window.getOfflineSigner(chainId);
+
+      const fee = {
+        amount: [{
+          denom: 'uatom',
+          amount: '2000'
+        }],
+        gas: "260000"
+      }
+      console.log('start');
+
+      const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
       const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
       if (res.code === 0) {
         resolve(res.transactionHash)

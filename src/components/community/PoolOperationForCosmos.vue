@@ -14,7 +14,7 @@
       <template v-else>
         <div
           class="d-flex justify-content-between align-items-center"
-          v-if="approved && (!takeFee || approvedCommunity) && !needLogin"
+          v-if="!needLogin"
         >
           <span class="value flex-fill">
             {{ staked | amountForm }}
@@ -40,65 +40,14 @@
             </button>
           </div>
         </div>
-        <template v-else>
-          <!-- steem hive login -->
-          <button class="primary-btn" v-if="needLogin" @click="connectKeplr()">
-            {{ $t("wallet.connectCosmos") }}
-          </button>
-          <template v-else>
-            <!-- approve community -->
-            <button
-              v-if="takeFee && (loadingApproveCommunity || !approvedCommunity)"
-              class="primary-btn"
-              @click="approveCommunity"
-              :disabled="
-                loadingApproveCommunity ||
-                isApprovingCommunity ||
-                card.status === 'CLOSED'
-              "
-            >
-              <b-spinner
-                small
-                type="grow"
-                v-show="isApprovingCommunity || loadingApproveCommunity"
-              ></b-spinner>
-              {{ $t("operation.approve") + " Community" }}
-            </button>
-            <!-- approve pool -->
-            <button
-              v-else
-              class="primary-btn"
-              @click="approve"
-              :disabled="isApproving || card.status === 'CLOSED'"
-            >
-              <b-spinner
-                small
-                type="grow"
-                v-show="isApproving || loadingApprovements"
-              ></b-spinner>
-              {{ $t("operation.approve") + " Pool" }}
-            </button>
-          </template>
-        </template>
+        <!-- cosmos login -->
+        <button class="primary-btn" v-if="needLogin" @click="connectKeplr()">
+          {{ $t("wallet.connectCosmos") }}
+        </button>
       </template>
     </template>
-    <!-- main chain stake -->
-    <b-modal
-      v-model="updateStaking"
-      modal-class="custom-modal sub-modal"
-      centered
-      hide-header
-      hide-footer
-      no-close-on-backdrop
-    >
-      <StakingHomeChainAssetModal
-        :operate="operate"
-        :card="card"
-        @hideStakeMask="updateStaking = false"
-      />
-    </b-modal>
 
-    <!-- hp stake  -->
+    <!-- cosmos stake  -->
     <b-modal
       v-model="showCosmosStake"
       modal-class="custom-modal sub-modal"
@@ -114,7 +63,7 @@
       />
     </b-modal>
 
-    <!-- wrong steem account -->
+    <!-- wrong cosmos account -->
     <b-modal
       v-model="showWrongCosmos"
       modal-class="custom-modal sub-modal"
@@ -126,15 +75,15 @@
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
         <div class="modal-title">
-          Please change {{ type.toUpperCase() }} Account
+          Please change COSMOS Account
         </div>
         <div class="text-center font20 line-height24 mt-3">
-          Your {{ type.toUpperCase() }} account haven't binding with current
+          Your COSMOS account haven't binding with current
           {{ chainName }} address, please change
-          {{ type.toUpperCase() }} account in your wallet first.
+          COSMOS account in your wallet first.
         </div>
         <div class="mt-3 mb-1 text-center font20 line-height24">
-          Your binding {{ type.toUpperCase() }} account is:
+          Your binding COSMOS account is:
         </div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input class="text-center" disabled type="text" :value="bindCosmos" />
@@ -169,7 +118,7 @@
         <div class="modal-title">Please change {{ chainName }} address</div>
         <div class="font20 line-height24 mt-3">
           Your {{ chainName }} address haven't binding with current
-          {{ type.toUpperCase() }} account, please change
+          COSMOS account, please change
           {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -193,7 +142,7 @@
           class="primary-btn mx-3"
           @click="(showWrongAccount = false), (showLogin = true)"
         >
-          Change {{ type.toUpperCase() }}
+          Change COSMOS
         </button>
       </div>
     </b-modal>
@@ -204,18 +153,14 @@
 import { mapState, mapGetters } from "vuex";
 import { CHAIN_NAME, NutAddress } from "@/config";
 import {
-  getPoolType,
-  approvePool,
   getBindCosmosAccount,
 } from "@/utils/web3/pool";
 import Login from "@/components/common/Login";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { handleApiErrCode } from "@/utils/helper";
-import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
-
+import { ethers } from 'ethers'
 import CosmostakingModal from "@/components/common/CosmostakingModal";
-import { approveUseERC20 } from "@/utils/web3/community";
-import { getAccount } from "@/utils/cosmos/cosmos";
+import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
 import store from "@/store";
 export default {
   name: "PoolOperation",
@@ -227,14 +172,12 @@ export default {
   components: {
     Login,
     ConnectMetaMask,
-    StakingHomeChainAssetModal,
     CosmostakingModal,
   },
   data() {
     return {
       isApproving: false,
       isApprovingCommunity: false,
-      updateStaking: false,
       operate: "add",
       showLogin: false,
       showWrongCosmos: false,
@@ -271,18 +214,11 @@ export default {
       }
       return false;
     },
-    type() {
-      return getPoolType(this.card.poolFactory, this.card.chainId);
-    },
     needLogin() {
       if (!store.state.cosmos.account) {
         return true;
       }
       return false;
-    },
-    approved() {
-      if (this.type !== "erc20staking" || !this.approvements) return true;
-      return this.approvements[this.card.id];
     },
     staked() {
       if (!this.userStaked) return 0;
@@ -301,18 +237,16 @@ export default {
   methods: {
     async increase() {
       this.operate = "add";
-      if (this.type === "cosmos") {
-        if (await this.checkAccount()) {
-          this.showCosmosStake = true;
-        }
+      getAccountBalance()
+      if (await this.checkAccount()) {
+        this.showCosmosStake = true;
       }
     },
     async decrease() {
       this.operate = "minus";
-      if (this.type === "cosmos") {
-        if (await this.checkAccount()) {
-          this.showCosmosStake = true;
-        }
+      getAccountBalance()
+      if (await this.checkAccount()) {
+        this.showCosmosStake = true;
       }
     },
     async checkAccount() {
@@ -323,13 +257,10 @@ export default {
 
         if (bindInfo.account[1] === cosmosAcc) return true;
         if (
-          bindInfo.account[1] === "" ||
-          bindInfo.account[1] ===
-            "cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnrql8a"
+          bindInfo.account[1] === ""
         ) {
           if (
-            bindInfo.bindAccount[1] ===
-            "0x0000000000000000000000000000000000000000"
+            bindInfo.bindAccount[1] === ethers.constants.AddressZero
           )
             return true;
           if (
@@ -352,41 +283,6 @@ export default {
         });
       } finally {
         this.isCheckingAccount = false;
-      }
-    },
-    // Approve pool
-    async approve() {
-      try {
-        this.isApproving = true;
-        const hash = await approvePool(this.card);
-        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param);
-        });
-      } finally {
-        this.isApproving = false;
-      }
-    },
-    // approve community
-    async approveCommunity() {
-      try {
-        this.isApprovingCommunity = true;
-        const hash = await approveUseERC20(NutAddress, this.card.community.id);
-        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-        this.$store.commit("community/saveApprovedCommunity", true);
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param);
-        });
-      } finally {
-        this.isApprovingCommunity = false;
       }
     },
     async connectKeplr() {

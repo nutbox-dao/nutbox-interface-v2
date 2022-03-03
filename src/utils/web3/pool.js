@@ -382,7 +382,9 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
-// get user's bind account
+// get user's bind account of steem / hive
+// account: EVM
+// bindAccount: POS chain account
 export const getBindSteemAccount = async (pool) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -402,7 +404,9 @@ export const getBindSteemAccount = async (pool) => {
   })
 }
 
-
+// get user's bind account of cosmos
+// account: EVM
+// bindAccount: POS chain account
 export const getBindCosmosAccount = async (pool) => {
   return new Promise(async (resolve, reject) => {
     try {

@@ -87,13 +87,13 @@ export default {
       stakingValue: "",
       loading: false,
       fee: COSMOS_STAKE_FEE,
-      balance: 0,
     };
   },
   computed: {
     ...mapState("pool", ["userStaked"]),
     ...mapState("currentCommunity", ["communityId"]),
     ...mapState("user", ["userGraphInfo"]),
+    ...mapState('cosmos', ['balance']),
     staked() {
       if (!this.userStaked) return 0;
       return this.userStaked[this.pool.id] ?? 0;
@@ -192,6 +192,7 @@ export default {
             getAllCommunities(true);
             getMyJoinedCommunity();
           }
+          getAccountBalance()
 
           this.$bvToast.toast(
             "Delegate success! The data will be update after 1 or 2 mins later, please wait",
@@ -206,7 +207,7 @@ export default {
           }, 4000);
         }
       } catch (e) {
-        console.log("Delegate sp fail5", e);
+        console.log("Delegate atom fail", e);
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param);
         });
@@ -216,8 +217,6 @@ export default {
     },
   },
   async mounted() {
-    // get user's balance
-    this.balance = await getAccountBalance();
   },
 };
 </script>
