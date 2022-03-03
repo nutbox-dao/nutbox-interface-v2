@@ -27,7 +27,7 @@ export const lockNp = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
             const gauge = await getGauge()
-            const tx = await gauge.deposit(pid, amount)
+            const tx = await gauge.vote(pid, amount)
             await waitForTx(tx.hash) 
             resolve(tx.hash)
         }catch (e) {
@@ -41,7 +41,7 @@ export const unlockNp = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
             const gauge = await getGauge()
-            const tx = await gauge.withdraw(pid, amount)
+            const tx = await gauge.unvote(pid, amount)
             await waitForTx(tx.hash) 
             resolve(tx.hash)
         }catch (e) {
