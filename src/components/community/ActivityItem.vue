@@ -64,6 +64,7 @@ import { ethers } from "ethers";
 import { mapState, mapGetters } from "vuex";
 import { contractAddress } from "@/utils/web3/contract";
 import { BLOCK_CHAIN_BROWER } from "@/config";
+import { addressAccToValBech32 } from '@/utils/cosmos/cosmos'
 
 export default {
   name: "ActivityItem",
@@ -150,16 +151,10 @@ export default {
         const token = this.tokenByKey(this.operation.asset);
         symbol = token && token.symbol;
         decimals = token && token.decimal;
-        if (!token) {
-          delegatee = ethers.utils.parseBytes32String(this.operation.asset);
-        }
       } catch (e) {
-        delegatee = ethers.utils.parseBytes32String(this.operation.asset);
       }
     }
-    const amount = (this.operation.amount?.toString() / 10 ** decimals).toFixed(
-      2
-    );
+    const amount = (this.operation.amount?.toString() / 10 ** decimals).toFixed(2);
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":
@@ -176,6 +171,7 @@ export default {
           this.operation.poolFactory.toLowerCase() ==
           contractAddress.SPStakingFactory.toLowerCase()
         ) {
+          delegatee = ethers.utils.parseBytes32String(this.operation.asset);
           const sp = this.operation.amount?.toString() / 1e6;
           if (parseInt(this.operation.chainId) === 1) {
             this.description =
@@ -195,7 +191,7 @@ export default {
           contractAddress.CosmosStakingFactory.toLowerCase()
         ) {
           const atom = this.operation.amount?.toString() / 1e6;
-
+          delegatee = addressAccToValBech32(this.operation.asset);
           this.description =
             (this.showName ? " add" : "Add") +
             ` ${atom} atom to ${delegatee} from ${this.operation.pool.name}`;
@@ -216,6 +212,7 @@ export default {
           contractAddress.SPStakingFactory.toLowerCase()
         ) {
           const sp = this.operation.amount?.toString() / 1e6;
+          delegatee = ethers.utils.parseBytes32String(this.operation.asset);
           if (parseInt(this.operation.chainId) === 1) {
             this.description =
               (this.showName ? " minus" : "Minus") +
@@ -234,11 +231,55 @@ export default {
           contractAddress.CosmosStakingFactory.toLowerCase()
         ) {
           const atom = this.operation.amount?.toString() / 1e6;
-
+          delegatee = addressAccToValBech32(this.operation.asset);
           this.description =
             (this.showName ? " minus" : "Minus") +
             ` ${atom} atom to ${delegatee} from ${this.operation.pool.name}`;
         }
+        break;
+      case "VOTE":
+        this.opType = 'Vote pool';
+        this.isAdmin = false;
+        const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
+         this.description =
+            (this.showName ? " vote" : "Vote") +
+            ` ${np} NP to ${this.operation.pool.name}`;
+        break;
+      case "UNVOTE":
+        this.opType = 'Unvote pool';
+        this.isAdmin = false;
+        const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
+        this.description =
+          (this.showName ? " unvote" : "Unvote") +
+          ` ${np} NP to ${this.operation.pool.name}`;
+        break;
+      case "WITHDRAWGAUGECTOKEN":
+        this.opType = "Harvest C-Token by NP vote";
+        this.isAdmin = false;
+        this.description =  (this.showName ? " harvest" : "Harvest") +
+          ` ${amount} C-Token from ${this.operation.pool.name}`;
+        break;
+      case 'WITHDRAWGAUGENUT':
+        this.opType = "Harvest NUT by NP vote";
+        this.isAdmin = false;
+        const nutAmount = this.operation.amount.toString() / 1e18
+        this.description =  (this.showName ? " harvest" : "Harvest") +
+          ` ${nutAmount.toFixed(2)} NUT from ${this.operation.pool.name}`;
+        break;
+      case 'ADMINCREATENEWGAUGE':
+        this.opType = 'Create Pool Vote';
+        this.isAdmin = true
+        this.username = 'Admin'
+        this.description =
+          (this.showName ? " creat" : "Create") +
+          ` a new pool vote for ${this.operation.pool.name}`;
+        break;
+      case 'ADMINWITHDRAWGAUGENUT':
+        this.opType = 'Harvest NUT by NP vote';
+        this.isAdmin = true;
+        this.username = 'Admin';
+        this.description =  (this.showName ? " harvest" : "Harvest") +
+          ` ${(this.operation.amount.toString() / 1e18).toFixed(2)} NUT`;
         break;
       case "HARVEST":
         this.opType = "Harvest";
