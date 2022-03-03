@@ -70,6 +70,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import { handleApiErrCode } from "../../utils/helper";
 import { getMyJoinedCommunity } from "@/utils/graphql/user";
 import { getAllCommunities } from "@/utils/web3/community";
+import { strReplace } from "@/utils/commen/util";
 import { COSMOS_STAKE_FEE } from "@/config";
 import store from "@/store";
 import {
@@ -92,7 +93,6 @@ export default {
   computed: {
     ...mapState("pool", ["userStaked"]),
     ...mapState("currentCommunity", ["communityId"]),
-    ...mapState("web3", ["userStakings", "account"]),
     ...mapState("user", ["userGraphInfo"]),
     staked() {
       if (!this.userStaked) return 0;
@@ -106,7 +106,7 @@ export default {
       return (staked.toString() / 1e6) * this.vestsToSteem;
     },
     account() {
-      return store.state.cosmos.account;
+      return strReplace(store.state.cosmos.account, 13, 6, "*", 5);
     },
   },
   props: {
@@ -141,7 +141,7 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.balance >= (this.fee + parseFloat(this.stakingValue))) {
+      if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
         return true;
       }
       this.$bvToast.toast(this.$t("error.delegateerror"), {
