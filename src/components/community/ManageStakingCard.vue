@@ -93,7 +93,7 @@
           </button>
           <button
             class="primary-btn"
-            @click="showAttention = false"
+            @click="confirmInfo = '';showAttention = false"
             :disabled="updating"
           >
             <b-spinner small type="grow" v-show="updating" />
@@ -285,6 +285,7 @@ export default {
           this.$bvToast.toast(tip, param);
         });
       } finally {
+        this.confirmInfo = ''
         this.updating = false;
       }
     },
