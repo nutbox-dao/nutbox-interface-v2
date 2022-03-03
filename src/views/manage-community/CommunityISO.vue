@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
           <div class="font24 line-height28 font-bold mb-2">ISO：Initial Staking Offerings</div>
-          <div class="font16 line-height24 font-bold mb-4">ISO enable community cold boot by offering new tokens.Just create POS chain token staking pool.</div>
+          <div class="font16 line-height24 font-bold mb-4">ISO enable community cold boot by offering new tokens. Just create POS chain token staking pool.</div>
         </div>
         <div class="col-xl-5">
           <div class="c-btn-group m-2">
@@ -30,17 +30,23 @@
         </div>
       </div>
     </div>
-    <div v-if="stakingPools && stakingPools.length===0"
-         class="empty-card mb-5 d-flex flex-column justify-content-center">
+    <div
+      v-if="stakingPools && stakingPools.length === 0"
+      class="empty-card mb-5 d-flex flex-column justify-content-center"
+    >
       <div class="empty-bg">
         <img src="~@/static/images/empty-data.png" alt="" />
-        <p>{{ $t('pool.noPools') }}</p>
+        <p>{{ $t("pool.noPools") }}</p>
       </div>
     </div>
     <template v-else>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">
-          <ManageStakingCard :pool="pool"/>
+        <div
+          class="col-xl-4 col-md-6 mb-4"
+          v-for="pool of stakingPools"
+          :key="pool.id"
+        >
+          <ManageStakingCard :pool="pool" />
         </div>
       </div>
     </template>
@@ -76,151 +82,174 @@
       centered
       hide-header
       hide-footer
-      no-close-on-backdrop>
-      <StakingPoolConfig :enable-back="false"
-                         type="config"
-                         :my-pools="[]"
-                         :enable-op="!updating"
-                         @update='update'
-                         @close="configPoolModal=false"/>
+      no-close-on-backdrop
+    >
+      <StakingPoolConfig
+        :enable-back="false"
+        type="config"
+        :my-pools="[]"
+        :enable-op="!updating"
+        @update="update"
+        @close="configPoolModal = false"
+      />
     </b-modal>
   </div>
 </template>
 
 <script>
-import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
-import { handleApiErrCode, sleep } from '@/utils/helper'
-import StakingPoolType from '@/components/community/StakingPoolType'
-import StakingBSCPool from '@/components/community/StakingBSCPool'
-import StakingDelegatePool from '@/components/community/StakingDelegatePool'
-import StakingPoolConfig from '@/components/community/StakingPoolConfig'
-import { mapState } from 'vuex'
-import { ethers } from 'ethers'
+import ManageStakingCard from "@/components/community/ManageStakingCard";
+import { addPool, updatePoolsRatio, getPoolFactoryAddress } from "@/utils/web3/pool";
+import { handleApiErrCode, sleep } from "@/utils/helper";
+import StakingPoolType from "@/components/community/StakingPoolType";
+import StakingBSCPool from "@/components/community/StakingBSCPool";
+import StakingDelegatePool from "@/components/community/StakingDelegatePool";
+import StakingPoolConfig from "@/components/community/StakingPoolConfig";
+import { mapState } from "vuex";
+import { ethers } from "ethers";
+import { valBech32ToAddress } from "@/utils/cosmos/cosmos";
 
 export default {
   name: 'CommunityISO',
   components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
   data () {
     return {
-      tabOptions: ['Active', 'Inactive'],
+      tabOptions: ["Active", "Inactive"],
       activeTab: 0,
       poolTypeModal: false,
       createPoolStep: 1,
-      poolType: '',
+      poolType: "",
       configPoolModal: false,
-      stakeAsset: '',
+      stakeAsset: "",
       creating: false,
       updating: false,
       needIcon: false,
-      selectToken: {}
-    }
+      selectToken: {},
+    };
   },
   computed: {
-    ...mapState('community', ['communityData']),
+    ...mapState("community", ["communityData"]),
     pools() {
-      console.log(this.communityData);
-      return this.communityData ? this.communityData.pools : []
+      return this.communityData ? this.communityData.pools : [];
     },
     activePool() {
-      return this.pools.filter(p => p.status === 'OPENED')
+      return this.pools.filter((p) => p.status === "OPENED");
+    },
+    activeISOPool() {
+      return this.activePool.filter(p => p.poolFactory.toLowerCase() !=
+              getPoolFactoryAddress("erc20staking"))
     },
     stakingPools() {
-      switch(this.activeTab) {
+      switch (this.activeTab) {
         case 0:
-          return this.activePool
+          return this.activeISOPool;
         case 1:
-          return this.pools.filter(p => p.status === 'CLOSED')
+          return this.pools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() !=
+              getPoolFactoryAddress("erc20staking"));
       }
-    }
-  },
-  async mounted () {
-  },
-  methods: {
-    selectPoolType (type) {
-      this.poolType = type
-      this.createPoolStep = 2
     },
-    selectPoolToken (tokenData) {
-      if (this.poolType === 'erc20staking') {
-        this.stakeAsset = tokenData.address
+  },
+  async mounted() {},
+  methods: {
+    selectPoolType(type) {
+      this.poolType = type;
+      this.createPoolStep = 2;
+    },
+    selectPoolToken(tokenData) {
+      if (this.poolType === "erc20staking") {
+        this.stakeAsset = tokenData.address;
         if (tokenData.icon) {
-          this.needIcon =false
-        }else {
+          this.needIcon = false;
+        } else {
           // need to upload token icon
           this.needIcon = true;
           this.selectToken = tokenData;
         }
-      }else if (this.poolType === 'steem') {
-        this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }else if (this.poolType === 'hive') {
-        this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
+      } else if (this.poolType === "steem") {
+        this.stakeAsset =
+          "0x01" + ethers.utils.formatBytes32String(tokenData).substring(2);
+      } else if (this.poolType === "hive") {
+        this.stakeAsset =
+          "0x02" + ethers.utils.formatBytes32String(tokenData).substring(2);
+      } else if (this.poolType === "cosmos") {
+        try {
+          this.stakeAsset = "0x03" + valBech32ToAddress(tokenData).substring(2);
+        } catch (err) {
+          this.$bvToast.toast('Plear input a right validator address', {
+            title: this.$t('error.error'),
+            variant: 'info'
+          })
+          // handleApiErrCode(err, (tip, params) => {
+          //   this.$bvToast.toast(tip, params);
+          // });
+          return;
+        }
       }
-      this.createPoolStep = 3
+
+      this.createPoolStep = 3;
     },
     // create new pool
-    async create (pool) {
+    async create(pool) {
       let form = {
         type: this.poolType,
-        ratios: pool.map(p => parseFloat(p.ratio)),
+        ratios: pool.map((p) => parseFloat(p.ratio)),
         name: pool[pool.length - 1].name,
-        asset: this.stakeAsset
-      }
+        asset: this.stakeAsset,
+      };
       try {
-        this.creating  = true
-        const newPool = await addPool(form)
+        this.creating = true;
+        const newPool = await addPool(form);
         newPool.poolIndex = form.ratios.length - 1;
-        this.$bvToast.toast(this.$t('tip.createPoolSuccess'), {
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
-        this.communityData.pools.push(newPool)
-        let index = 0
-        this.communityData.pools.map(pool => {
-          if (pool.status === 'OPENED'){
-            pool.ratio = parseFloat(form.ratios[index++]) * 100
+        this.$bvToast.toast(this.$t("tip.createPoolSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
+        this.communityData.pools.push(newPool);
+        let index = 0;
+        this.communityData.pools.map((pool) => {
+          if (pool.status === "OPENED") {
+            pool.ratio = parseFloat(form.ratios[index++]) * 100;
           }
-        })
+        });
+
         await sleep(2);
-        this.poolTypeModal = false
-      }catch (err) {
+        this.poolTypeModal = false;
+      } catch (err) {
         handleApiErrCode(err, (tip, params) => {
-          this.$bvToast.toast(tip, params)
-        })
-      }finally{
-        this.creating = false
+          this.$bvToast.toast(tip, params);
+        });
+      } finally {
+        this.creating = false;
       }
     },
     // update pool ratios
     async update(ratios) {
       try {
-        this.updating  = true
-        const res = await updatePoolsRatio(ratios)
-        this.$bvToast.toast(this.$t('tip.updatePoolSuccess'), {
-          title:this.$t('tip.success'),
-          variant: 'success'
-        })
+        this.updating = true;
+        const res = await updatePoolsRatio(ratios);
+        this.$bvToast.toast(this.$t("tip.updatePoolSuccess"), {
+          title: this.$t("tip.success"),
+          variant: "success",
+        });
         await sleep(2);
         // update pool ratios
-        let index = 0
-        this.communityData.pools.map(pool => {
-          if (pool.status === 'OPENED') {
-            pool.ratio = ratios[index++] * 100
+        let index = 0;
+        this.communityData.pools.map((pool) => {
+          if (pool.status === "OPENED") {
+            pool.ratio = ratios[index++] * 100;
           }
-        })
-        this.configPoolModal = false
-      }catch (err) {
+        });
+        this.configPoolModal = false;
+      } catch (err) {
         handleApiErrCode(err, (tip, params) => {
-          this.$bvToast.toast(tip, params)
-        })
-      }finally{
-        this.updating = false
+          this.$bvToast.toast(tip, params);
+        });
+      } finally {
+        this.updating = false;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

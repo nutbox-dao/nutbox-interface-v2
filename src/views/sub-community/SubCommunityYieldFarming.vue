@@ -16,14 +16,22 @@
       </div>
       <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>
       <template v-else>
-        <div class="empty-bg" v-if="stakingCards.length === 0">
+        <div v-if="stakingCards.length > 0"></div>
+        <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
-          <p> {{ $t('tip.noProject') }} </p>
+          <p>{{ $t("tip.noProject") }}</p>
         </div>
-        <div v-else class="cards-container">
-          <div class="cards-box cards-box-col3" :class="'col3-items-'+stakingCards.length">
-            <div class="card-item" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
-              <CommunityStakingCard :card="cardInfo"/>
+        <div class="cards-container">
+          <div
+            class="cards-box cards-box-col3"
+            :class="'col3-items-' + stakingCards.length"
+          >
+            <div
+              class="card-item"
+              v-for="cardInfo of stakingCards"
+              :key="cardInfo.id"
+            >
+              <CommunityStakingCard :card="cardInfo" />
             </div>
           </div>
         </div>
@@ -33,66 +41,78 @@
 </template>
 
 <script>
-import { CHAIN_NAME } from '@/config'
-import CommunityStakingCard from '@/components/community/CommunityStakingCard'
-import  { mapState, mapGetters } from 'vuex'
-import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
-import { sleep, rollingFunction } from '@/utils/helper'
-import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
+import { CHAIN_NAME } from "@/config";
+import CommunityStakingCard from "@/components/community/CommunityStakingCard";
+import { mapState, mapGetters } from "vuex";
+import { getPoolFactoryAddress, updatePoolsByPolling } from "@/utils/web3/pool";
+import { sleep, rollingFunction } from "@/utils/helper";
+import { getPools as getPoolsFromGraph } from "@/utils/graphql/pool";
 
 export default {
-  name: 'SubCommunityStaking',
+  name: "SubCommunityStaking",
   components: { CommunityStakingCard },
-  data () {
+  data() {
     return {
       activeTab: 0,
       tabOptions: ['Acitive Pools', 'Inacitive Pools'],
     }
   },
   computed: {
-    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
-    ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapState("currentCommunity", [
+      "communityId",
+      "communityInfo",
+      "loadingCommunityInfo",
+      "allPools",
+      "feeRatio",
+      "cToken",
+      "specifyDistributionEras",
+      "operationHistory",
+    ]),
+    ...mapGetters("community", ["getCommunityInfoById"]),
     stakingCards() {
-      switch(this.activeTab) {
-        case -1:
+      switch (this.activeTab) {
+        case 1:
           return this.inActivedPools;
         case 0:
-          return this.activedPools;
-        case 1:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
-        case 2:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
-        case 3:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive')) && parseInt(p.chainId) == 2)
+          return this.activedPools.filter(
+            (p) =>
+              p.poolFactory.toLowerCase() ===
+              getPoolFactoryAddress("erc20staking")
+          );
       }
     },
     activedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'OPENED')
+      return this.allPools.filter((p) => p.status === "OPENED");
     },
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'CLOSED')
-    }
+      return this.allPools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() ===
+              getPoolFactoryAddress("erc20staking"));
+    },
   },
   async mounted() {
-    while(true) {
+    while (true) {
       if (this.communityInfo && this.allPools) {
         break;
       }
-      await sleep(0.3)
+      await sleep(0.3);
     }
-    const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 4)
+    const updatePoolsFromGraph = rollingFunction(
+      getPoolsFromGraph,
+      this.allPools.map((p) => p.id),
+      4
+    );
     updatePoolsFromGraph.start();
 
-    const polling = updatePoolsByPolling(this.allPools)
+    const polling = updatePoolsByPolling(this.allPools);
 
-    this.$once('hook:beforeDestroy', () => {
-        polling.stop();
-        updatePoolsFromGraph.stop();
-    })
-  }
-}
+    this.$once("hook:beforeDestroy", () => {
+      polling.stop();
+      updatePoolsFromGraph.stop();
+    });
+  },
+};
 </script>
 
 <style scoped lang="scss">
