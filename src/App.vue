@@ -224,11 +224,7 @@ import { getMyJoinedCommunity } from "@/utils/graphql/user";
 import showToastMixin from "./mixins/copyToast";
 import { ethers } from "ethers";
 import { getCommon } from "@/apis/api";
-import {
-  getAccount as getCosAcc,
-  connectWallet as connectKeplr,
-  delegate,
-} from "@/utils/cosmos/cosmos";
+import { connectWallet as connectKeplr } from "@/utils/cosmos/cosmos";
 
 export default {
   computed: {
@@ -366,9 +362,7 @@ export default {
           console.log("No created token by current user");
         });
 
-        await connectKeplr(() => {
-          this.$router.go(0);
-        });
+        await connectKeplr();
         /*   getCosAcc()
           .then(async (res) => {
             const ddd = await delegate(

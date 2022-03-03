@@ -81,10 +81,11 @@ const getKeplr = async () => {
 
 export const connectWallet = async (callback) => {
   const keplr = await getKeplr()
-  await keplr.enable(chainId)
-  window.addEventListener('keplr_keystorechange', () => {
-    console.log('keplr account changed');
-    callback && callback();
+  // await keplr.enable(chainId)
+  window.addEventListener('keplr_keystorechange', async () => {
+    //console.log('keplr account changed');
+    //callback && callback();
+    await getAccount();
   })
 }
 
@@ -115,9 +116,9 @@ export const getAccount = async () => {
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
   const accAddress = new AccAddress.fromBech32(accounts[0].address, 'cosmos')
-  console.log(45, accAddress, accAddress.toBech32(), accAddress.toBytes());
+  //console.log(45, accAddress, accAddress.toBech32(), accAddress.toBytes());
   const ii = ethers.utils.hexlify(accAddress.toBytes())
-  console.log(11, ii);
+  //console.log(11, ii);
 
   store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;

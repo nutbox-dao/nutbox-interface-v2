@@ -7,9 +7,14 @@
     />
     <template v-else>
       <template v-if="notInstallKeplr">
-        <button class="primary-btn">
+        <a
+          class="primary-btn"
+          style="text-decoration: none"
+          href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?utm_source=chrome-ntp-icon"
+          target="_blank"
+        >
           {{ $t("wallet.intallKeplr") }}
-        </button>
+        </a>
       </template>
       <template v-else>
         <div
@@ -275,7 +280,7 @@ export default {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
     needLogin() {
-      if (!store.state.cosmos.account) {
+      if (!store.state.cosmos.account || store.state.cosmos.account == "null") {
         return true;
       }
       return false;
@@ -394,7 +399,7 @@ export default {
     },
   },
   async mounted() {
-    await getAccount();
+    //await getAccount();
   },
 };
 </script>
