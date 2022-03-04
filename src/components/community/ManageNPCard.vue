@@ -11,7 +11,7 @@
             <span>{{ gauge.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
-            <span>Earn Monns & Nut</span>
+            <span>Earn {{ cToken.name }} & Nut</span>
           </div>
         </div>
       </div>
@@ -39,10 +39,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { NutAddress } from '@/config'
-import { getPoolFactory } from '@/utils/web3/contract'
-import { getERC20Info } from '@/utils/web3/asset'
-import { ASSET_LOGO_URL } from '@/constant'
+import { getCToken } from '@/utils/web3/asset'
 
 export default {
   name: 'ManageNPCard',
@@ -61,6 +58,7 @@ export default {
     ...mapState(['prices']),
     ...mapState('gauge', ['communityPendingRewardNut']),
     ...mapState('np', ['npPrice']),
+     ...mapState('community', ['communityData']),
     totalVoted() {
       return this.gauge.votedAmount.toString() / 1e18
     },
@@ -70,25 +68,17 @@ export default {
     pendingRewardNut() {
       if (this.totalVotedNP == 0) return 0;
       return this.communityPendingRewardNut.toString() / 1e18 * this.totalVoted / this.totalVotedNP
-    }
+    },
   },
   data () {
     return {
-      assetIcon:''
+      assetIcon:'',
+      cToken: {}
     }
   },
   async mounted () {
-    switch (this.gauge.poolFactory.toLowerCase()) {
-        case getPoolFactory("erc20staking").toLowerCase():
-          const stakedERC20 = await getERC20Info(this.gauge.asset);
-          this.assetIcon = stakedERC20.icon;
-          break;
-        case getPoolFactory('steem').toLowerCase():
-          this.assetIcon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
-          break;
-        case getPoolFactory('cosmos').toLowerCase():
-          this.assetIcon = ASSET_LOGO_URL['cosmos']
-      }
+    this.cToken = await getCToken(this.communityData.id)
+    this.assetIcon = this.cToken.icon
   },
 }
 </script>
