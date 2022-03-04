@@ -2,9 +2,9 @@
   <div class="profile-page">
     <div class="scroll-content">
       <div class="container">
-        <div class="row">
+        <div class="user-info-box d-flex">
           <!-- header -->
-          <div class="col-md-5 mb-3 mb-md-0 text-left d-flex flex-column justify-content-center">
+          <div class="user-base-info-box text-left d-flex flex-column justify-content-center">
             <img v-if="user.avatar" @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
                  :src="user.avatar" alt="">
             <img v-else @click="avatarModalVisible=true" class="user-avatar hover rounded-circle"
@@ -20,26 +20,32 @@
             </div>
           </div>
           <!-- token list -->
-          <div class="col-md-7">
-            <div class="asset-card">
-              <div class="row h-100">
-                <div class="col-sm-6 d-flex user-asset justify-content-between">
-                  <div class="mb-3 font20 line-height28 font-bold">
-                    <div class="">Total Asset Value</div>
-                    <div class="mt-2">{{ totalValue | formatPrice }}</div>
+          <div class="user-asset-info-box">
+            <div class="asset-tabs">
+              <div class="tab tab0" :class="assetTab===0?'active':''" @click="assetTab=0">Token</div>
+              <div class="tab tab1" :class="assetTab===1?'active':''" @click="assetTab=1">NP</div>
+            </div>
+            <div v-show="assetTab===0" class="asset-card">
+              <div class="d-flex user-asset justify-content-between">
+                <div class="font20 line-height28 font-bold">Total Asset Value</div>
+                <div class="value-box">
+                  <div class="value-info">
+                    <div class="font20 line-height20 font-bold">{{ totalValue | formatPrice }}</div>
                   </div>
-                  <button class="primary-btn mb-2 px-4 mx-0" @click="assetModalVisible=true">Detail</button>
+                  <button class="primary-btn px-4 mx-0" @click="assetModalVisible=true">Detail</button>
                 </div>
-                <div class="col-sm-6 position-relative">
-                  <PoolRatio class="asset-chart"
-                             :pools-data="chartToken"
-                             :animation="false"
-                             :show-data-label="true"
-                             :show-legend-info="false"/>
-                </div>
+              </div>
+              <div class="chart-box position-relative">
+                <PoolRatio class="asset-chart"
+                           :chart-style="{width: '15rem'}"
+                           :pools-data="chartToken"
+                           :animation="false"
+                           :show-data-label="true"
+                           :show-legend-info="false"/>
               </div>
               <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingBalance"></div>
             </div>
+            <NPAssetCard v-show="assetTab===1"/>
           </div>
         </div>
         <!-- community -->
@@ -98,10 +104,11 @@ import AssetDetailModal from '@/components/profile/AssetDetailModal'
 import AvatarOptionsModal from '@/components/profile/AvatarOptionsModal';
 import { getCtokenBalance } from '@/utils/web3/asset'
 import { rollingFunction } from '@/utils/helper'
+import NPAssetCard from '@/components/community/NPAssetCard'
 
 export default {
   name: 'Profile',
-  components: { PoolRatio, StakedPools, CommunityCard, AssetDetailModal, AvatarOptionsModal },
+  components: { PoolRatio, StakedPools, CommunityCard, AssetDetailModal, AvatarOptionsModal, NPAssetCard },
   data () {
     return {
       user:{},
@@ -112,7 +119,8 @@ export default {
       loadingBalance: true,
       loadingCommunity: true,
       balances: [],
-      chartToken: []
+      chartToken: [],
+      assetTab: 0
     }
   },
   computed: {
@@ -226,6 +234,32 @@ export default {
   overflow: hidden;
   height: 100%;
 }
+.user-info-box {
+  justify-content: space-between;
+  align-items: center;
+  .user-asset-info-box {
+    width: 600px;
+    display: flex;
+  }
+  .asset-tabs {
+    display: flex;
+    flex-direction: column;
+    .tab {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80px;
+      background-color: #181819;
+      border-radius: .8rem 0 0 .8rem;
+      font-weight: bold;
+      &.active {
+        background-color: var(--card-bg-primary);
+        color: var(--primary-custom);
+      }
+    }
+  }
+}
 .user-avatar {
   width: 6rem;
   height: 6rem;
@@ -248,13 +282,20 @@ export default {
 }
 .asset-card {
   @include card();
-  height: 12rem;
+  border-radius: 0 .8rem .8rem 0;
+  height: 200px;
+  display: flex;
+  .chart-box {
+    position: relative;
+    flex: 1;
+  }
   .asset-chart {
     position: absolute;
     width: 100%;
     max-width: 14rem;
-    top: -2rem;
-    right: 1.2rem;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
   }
   .user-asset {
     flex-direction: column;
@@ -262,10 +303,45 @@ export default {
       width: fit-content;
     }
   }
+  .value-info {
+    margin-bottom: 1.5rem;
+  }
+}
+@media (max-width: 960px) {
+  .user-asset-info-box {
+    flex-direction: column;
+    .asset-tabs {
+      flex-direction: row;
+      .tab {
+        border-radius: .8rem .8rem 0 0;
+        height: 40px;
+      }
+    }
+  }
+  .asset-card {
+    border-radius: 0 0 .8rem .8rem;
+  }
+}
+@media (max-width: 880px) {
+  .user-info-box {
+    flex-direction: column;
+    .user-base-info-box {
+      align-items: center;
+    }
+    .user-asset-info-box {
+      margin-top: 1rem;
+      width: 100%;
+    }
+  }
+  .asset-card {
+    height: fit-content;
+  }
 }
 @media (max-width: 576px) {
   .asset-card {
-    height: 24rem;
+    //height: 24rem;
+    display: flex;
+    flex-direction: column;
     .asset-chart {
       position: relative;
       margin: auto;
@@ -273,16 +349,20 @@ export default {
       right: 0;
       width: 16rem;
     }
-    .user-asset {
+    .value-box {
+      display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
     }
+    .value-info {
+      margin-bottom: 0;
+    }
   }
 }
-@media (min-width: 577px) and (max-width: 991px) {
-  .asset-card {
-    height: 11rem;
+@media (max-width: 576px) {
+  .asset-card .asset-chart {
+    transform: translateY(0);
   }
 }
 </style>

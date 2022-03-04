@@ -535,15 +535,21 @@ input::-webkit-input-placeholder {
   background-color: var(--primary-custom);
   border-color: var(--primary-custom);
 }
-.bs-popover-top {
+.bs-popover-top, .bs-popover-bottom, .bs-popover-right, .bs-popover-left {
   background-color: var(--primary-custom);
   border-radius: 8px;
 }
-.bs-popover-top> .popover-body {
-  color: white;
-}
 .bs-popover-top> .arrow::after {
   border-top-color: var(--primary-custom);
+}
+.bs-popover-bottom> .arrow::after {
+  border-bottom-color: var(--primary-custom);
+}
+.bs-popover-right> .arrow::after {
+  border-right-color: var(--primary-custom);
+}
+.bs-popover-left> .arrow::after {
+  border-left-color: var(--primary-custom);
 }
 .sub-popover.bs-popover-top {
   background-color: var(--sub-primary);
@@ -561,7 +567,6 @@ input::-webkit-input-placeholder {
   background-color: var(--card-bg-primary);
   border: 1px solid var(--sub-primary);
 }
-
 .sub-popover-outline .popover-body {
   color: white;
 }
