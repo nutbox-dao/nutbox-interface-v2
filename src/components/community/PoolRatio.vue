@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex ratio-container">
     <div :style="{width:'100%', maxWidth: '20rem', ...chartStyle}">
-      <canvas id="pie"></canvas>
+      <canvas :id="canvasId"></canvas>
     </div>
     <div v-if="showLegendInfo" class="legend-box flex-fill">
       <div
@@ -87,7 +87,7 @@ export default {
             key: 'ratio'
           },
           layout: {
-            padding: 30
+            padding: 70
           },
           plugins: {
             tooltip: {
@@ -155,6 +155,10 @@ export default {
     aspectRatio: {
       type: Number,
       default: 1
+    },
+    canvasId: {
+      type: String,
+      default: 'pie'
     }
   },
   watch: {
@@ -172,7 +176,7 @@ export default {
   mounted () {
     if (!this.animation) this.chartData.options.animation = false
     this.chartData.options.aspectRatio = this.aspectRatio
-    const ctx = document.getElementById('pie')
+    const ctx = document.getElementById(this.canvasId)
     this.chartData.data.datasets = [{
       data: this.poolsData,
       backgroundColor: this.colorList
