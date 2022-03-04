@@ -17,6 +17,7 @@ import {
 } from '@makerdao/multicall'
 import { ethers } from 'ethers'
 import { rollingFunction } from '../helper'
+import { getMyCommunityContract } from '@/utils/web3/community'
 
 export const getGauge = async () => {
     return await getContract('Gauge', ethers.constants.AddressZero, false)
@@ -240,5 +241,28 @@ export const getGaugeVoteInfo = async (pools) => {
             reject(e)
         }
     })
-        
+}
+
+export const getCommunityPendingRewardNut = async () => {
+    return new Promise(async (resolve, reject) => {
+        let stakingFactoryId = null
+        try {
+            stakingFactoryId = await getMyCommunityContract()
+            if (!stakingFactoryId) {
+                reject(errCode.NO_STAKING_FACTORY)
+                return;
+            }
+        } catch (e) {
+            reject(e)
+            return
+        }
+        try{
+            const gauge = await getGauge()
+            const pending = await gauge.getCommunityPendingRewardNut(stakingFactoryId)
+            store.commit('gauge/saveCommunityPendingRewardNut', pending)
+            resolve(pending)
+        }catch(e) {
+            reject(e)
+        }
+    })
 }

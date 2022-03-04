@@ -34,8 +34,8 @@
     </div>
     <template v-else>
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="gauge of gauges" :key="gauge">
-          <ManageNPCard :gauge="guge"/>
+        <div class="col-xl-4 col-md-6 mb-4" v-for="gauge of gauges" :key="gauge.id">
+          <ManageNPCard :gauge="gauge"/>
         </div>
       </div>
     </template>
@@ -47,7 +47,7 @@
       hide-footer
       no-close-on-backdrop>
       <div class="custom-form text-center">
-        <div class="font20 line-height24 mt-2 mb-4">5,172,283.54 Nut is avable to claim.</div>
+        <div class="font20 line-height24 mt-2 mb-4">{{ communityPendingNut | amountForm }} Nut is avable to claim.</div>
         <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
           <button class="dark-btn primary-btn-outline mx-3" @click="claimModal = false">
             Cancel
@@ -66,7 +66,7 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <AddNPPool @close="addPoolModal=false"/>
+      <AddNPPool :pendingPool="waitingForGauge" @close="addPoolModal=false"/>
     </b-modal>
   </div>
 </template>
@@ -75,7 +75,7 @@
 import ManageNPCard from '@/components/community/ManageNPCard'
 import AddNPPool from '@/components/community/AddNPPool'
 import { mapState } from 'vuex';
-import { getGaugeVoteInfo } from '@/utils/nutbox/gauge'
+import { getGaugeVoteInfo, getGaugeParams, getCommunityPendingRewardNut } from '@/utils/nutbox/gauge'
 
 export default {
   name: 'CommunityNutPower',
@@ -83,51 +83,29 @@ export default {
   data () {
     return {
       claimModal: false,
-      addPoolModal: false,
-      gauges: []
+      addPoolModal: false
     }
   },
   computed: {
     ...mapState('community', ['communityData']),
-    pools() {
+    ...mapState('gauge', ['communityPendingRewardNut']),
+    waitingForGauge() {
+      return this.communityData ? this.communityData.pools.filter(p => !p.hasCreateGauge) : []
+    },
+    gauges() {
       console.log(this.communityData);
-      return this.communityData ? this.communityData.pools : []
+      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge) : []
     },
-    activePool() {
-      return this.pools.filter(p => p.status === 'OPENED')
-    },
-  },
-  watch: {
-    activePool(newValue, oldValue) {
-      if (newValue.length === 0) return []
-      getGaugeVoteInfo(newValue.map(p => p.id)).then(res => {
-        this.gauges = newValue.map(p => {
-          const id = p.id
-          const created = res['hasCreated-'+id]
-          const locked = res['loced-'+id]
-        })
-        let created = {}
-        let locked = {}
-        let total = {}
-        let pending = {}
-        for (let d in res) {
-            const [type, pid] = d.split('-')
-            if (type === 'hasCreated') {
-                created[pid] = res[d]
-            }else if(type === 'userLocked'){
-                locked[pid] = res[d]
-            }else if(type === 'totalLocked') {
-                total[pid] = res[d]
-            }else if (type === 'userReward') {
-                pending[pid] = res[d]
-            }
-        }
-
-      }).catch()
+    communityPendingNut() {
+      if (this.communityPendingRewardNut){
+        return this.communityPendingRewardNut.toString() / 1e18;
+      }
+      return 0
     }
   },
   async mounted () {
-
+    getGaugeParams()
+    getCommunityPendingRewardNut()
   },
   methods: {
   }

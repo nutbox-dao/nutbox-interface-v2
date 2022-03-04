@@ -14,45 +14,67 @@
     </div>
     <div class="modal-card-box">
       <div class="row">
-        <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, index) of 10" :key="pool">
-          <div class="pool-item" :class="activePoolId===index?'active':''"
-               @click="activePoolId=index">
-            <ManageStakingCard :pool="mockData"/>
+        <div class="col-xl-4 col-md-6 mb-4" v-for="(pool, index) of pendingPool" :key="pool.id">
+          <div class="pool-item" :class="selectIndex===index?'active':''"
+               @click="selectIndex=index">
+            <ManageStakingCard :pool="pool" :isCreateGauge="true"/>
           </div>
         </div>
       </div>
     </div>
     <div class="d-flex mt-3 justify-content-center">
-      <button class="dark-btn mx-2 w-25" @click="$emit('close')">Cancel</button>
-      <button class="primary-btn mx-2 w-25" @click="$emit('close')">OK</button>
+      <button class="dark-btn mx-2 w-25" :disabled="creatingGauge" @click="$emit('close')">Cancel</button>
+      <button class="primary-btn mx-2 w-25" :disabled="creatingGauge" @click="createGauge">
+         <b-spinner small type="grow" v-show="creatingGauge"></b-spinner>
+        OK
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
+import { addNewGauge } from '@/utils/nutbox/gauge'
+import { sleep } from '@/utils/helper'
+import { handleApiErrCode } from '../../utils/helper'
+
 export default {
   name: 'AddNPPool',
   components: { ManageStakingCard },
+  props: {
+    pendingPool: {
+      type: Array,
+      default: []
+    },
+  },
   data () {
     return {
-      activePoolId: '',
-      mockData: {
-        asset: '0x232c5c39120140b76e3466ee8303465cf4b9c04d',
-        chainId: 0,
-        community: { id: '0x72701a017a9e0677b9401bf7473da36b1bbb888e' },
-        id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4',
-        name: 'Stake PNUT-WBNB',
-        poolFactory: '0xf870724476912057c807056b29c1161f5fe0199a',
-        ratio: 10000,
-        stakers: [{ id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }],
-        stakersCount: 17,
-        status: 'OPENED',
-        totalAmount: '5890865817022064098000'
-      }
-
+      selectIndex: 0,
+      creatingGauge: false
     }
-  }
+  },
+  methods: {
+    async createGauge() {
+      console.log('select', this.selectIndex);
+      const pool = this.pendingPool[this.selectIndex]
+      try {
+        this.creatingGauge = true
+        const hash = await addNewGauge(pool.id)
+        pool.hasCreateGauge = true;
+        this.$bvToast.toast("Create a new vote for pool", {
+          title: this.$t('tip.success'),
+          variant: "success"
+        })
+      }catch(e) {
+        console.log('Creage new gauge fail:', e);
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.creatingGauge = false
+      }
+    }
+  },
 }
 </script>
 

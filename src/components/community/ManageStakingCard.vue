@@ -33,7 +33,7 @@
         <div class="info">{{ pool.ratio / 100 }}%</div>
       </div>
 
-      <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">
+      <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && !isCreateGauge" @click="showAttention=true">
         <b-spinner small type="grow" v-show="updating" />
         {{ $t("pool.closePool") }}
       </button>
@@ -196,6 +196,10 @@ export default {
     pool: {
       type: Object,
     },
+    isCreateGauge: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     async approve() {

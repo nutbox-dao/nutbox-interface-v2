@@ -37,6 +37,20 @@ export async function getMyJoinedCommunity() {
                     stakersCount
                     totalAmount
                 }
+                inGauges {
+                    id
+                    name
+                    status
+                    community{
+                        id
+                        cToken
+                        feeRatio
+                    }
+                    ratio,
+                    asset,
+                    votersCount,
+                    votedAmount
+                }
             }
         }
     `
@@ -81,7 +95,11 @@ export async function getMyJoinedCommunity() {
                         ratio
                         chainId
                         stakersCount,
-                        totalAmount
+                        totalAmount,
+                        hasCreateGauge,
+                        voters,
+                        votersCount,
+                        votedAmount
                     }
                 }
             }

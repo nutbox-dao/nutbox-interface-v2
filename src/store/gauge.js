@@ -12,6 +12,7 @@
         distributionRatio: {},
         totalLocked:{},
         hasCreated: {},
+        saveCommunityPendingRewardNut: 0,
 
         // user's info
         userLocked: {},
@@ -29,6 +30,9 @@
         },
         saveHasCreated: (state, hasCreated) => {
             state.hasCreated = hasCreated
+        },
+        saveCommunityPendingRewardNut: (state, communityPendingRewardNut) => {
+            state.communityPendingRewardNut = communityPendingRewardNut
         },
         saveUserLockeed: (state, userLocked) => {
             state.userLocked = userLocked
