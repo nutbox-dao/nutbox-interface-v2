@@ -5,11 +5,16 @@
       <div class="value-box">
         <div class="font20 line-height24">Total NP</div>
         <div class="font32 line-height36 d-flex align-items-center">
-          <span>12000 NP</span>
+          <span>{{totalNp | amountForm}} NP</span>
           <i class="help-icon ml-2" id="total-np-tip"></i>
           <b-popover custom-class="sub-popover-outline" target="total-np-tip" triggers="hover" placement="right">
             <div class="font12 line-height12" style="width: 130px">
-              Total NP.ALL NP you power up.Available NP.NP you can power down to Nut any time.
+            <p>
+              Total NP: ALL NP you power up.
+            </p>
+            <p style="margin-bottom:0">
+              Available NP: NP you can power down to Nut any time.
+            </p>
             </div>
           </b-popover>
         </div>
@@ -26,7 +31,7 @@
           <i class="help-icon ml-2" id="available-np-help"></i>
           <b-popover custom-class="sub-popover-outline" target="available-np-help" triggers="hover" placement="top">
             <div class="font12 line-height12" style="width: 130px">
-              Available NP.NP could be used to vote or unlocking
+              Available NP: NP could be used to vote or unlocking.
             </div>
           </b-popover>
         </div>
@@ -50,7 +55,7 @@
           <i class="help-icon ml-2" id="voted-np-tip"></i>
           <b-popover custom-class="sub-popover-outline" target="voted-np-tip" triggers="hover" placement="top">
             <div class="font12 line-height12" style="width: 130px">
-              Voted NP.NP you voted into pools of entire Nutbox
+              Voted NP: NP you voted into pools of entire Nutbox.
             </div>
           </b-popover>
         </div>
@@ -77,7 +82,7 @@
             <i class="help-icon ml-2" id="unlocking-np-tip"></i>
             <b-popover custom-class="sub-popover-outline" target="unlocking-np-tip" triggers="hover" placement="top">
               <div class="font12 line-height12" style="width: 130px">
-                Unlocking NP.NP you powered down，in the unlocking process.
+                Unlocking NP: NP you powered down，in the unlocking process.
               </div>
             </b-popover>
           </div>
@@ -115,8 +120,34 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'NPAssetDetail'
+  name: 'NPAssetDetail',
+  computed: {
+    ...mapState('np', ['balance', 'userLockedNut']),
+    freeNp() {
+      if (this.balance && this.balance.freeNp){
+        return this.balance.freeNp.toString() / 1e18
+      }
+      return 0
+    },
+    lockedNp() {
+      if (this.balance && this.balance.lockedNp) {
+        return this.balance.lockedNp.toString() / 1e18
+      }
+      return 0
+    },
+    totalNp() {
+      if (this.freeNp && this.lockedNp) {
+        return this.freeNp + this.lockedNp
+      }
+      return 0
+    },
+    totalLockedNut() {
+      return this.userLockedNut.reduce((s, n) => s + n, 0)
+    },
+  },
 }
 </script>
 
