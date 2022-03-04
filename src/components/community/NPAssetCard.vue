@@ -30,10 +30,13 @@
       hide-footer
       no-close-on-backdrop>
       <NPAssetDetail v-show="modalContentType==='detail'"
-                     @powerUp="modalContentType='up-step1'"
+                     @powerUp="onPowerUp"
                      @powerDown="modalContentType='power-down'"
+                     @upgrade="setUpgradeData"
                      @close="assetModalVisible=false"/>
       <NPAssetPowerUpOptions v-if="modalContentType==='up-step1'"
+                             :is-upgrade="isUpgrade"
+                             :upgrade-data="upgradeData"
                              @setData="setData"
                              @back="modalContentType='detail'"
                              @close="assetModalVisible=false"/>
@@ -56,7 +59,7 @@ import NPAssetDetail from '@/components/community/NPAssetDetail'
 import NPAssetPowerUpOptions from '@/components/community/NPAssetPowerUpOptions'
 import NPAssetPowerUp from '@/components/community/NPAssetPowerUp'
 import NPAssetPowerDown from '@/components/community/NPAssetPowerDown'
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   name: 'NPAssetCard',
@@ -66,46 +69,59 @@ export default {
       assetModalVisible: false,
       modalContentType: 'detail',
       loadingBalance: false,
-      selectData: {}
+      selectData: {},
+      isUpgrade: false,
+      upgradeData: {}
     }
   },
   computed: {
     ...mapState('np', ['balance', 'userLockedNut']),
-    freeNp() {
-      if (this.balance && this.balance.freeNp){
+    freeNp () {
+      if (this.balance && this.balance.freeNp) {
         return this.balance.freeNp.toString() / 1e18
       }
       return 0
     },
-    lockedNp() {
+    lockedNp () {
       if (this.balance && this.balance.lockedNp) {
         return this.balance.lockedNp.toString() / 1e18
       }
       return 0
     },
-    totalNp() {
+    totalNp () {
       if (this.freeNp && this.lockedNp) {
         return this.freeNp + this.lockedNp
       }
       return 0
     },
-    totalLockedNut() {
+    totalLockedNut () {
       return this.userLockedNut.reduce((s, n) => s + n, 0)
     },
-    chartNp() {
+    chartNp () {
       if (this.totalNp == 0) {
         return []
       }
       return [
-        {ratio: this.freeNp / this.totalNp, name: 'Free'},
-        {ratio: this.lockedNp / this.totalNp, name: 'Available'}
+        { ratio: this.freeNp / this.totalNp, name: 'Free' },
+        { ratio: this.lockedNp / this.totalNp, name: 'Available' }
       ]
     }
   },
   methods: {
+    onPowerUp() {
+      this.isUpgrade = false
+      this.modalContentType='up-step1'
+    },
     setData (data) {
+      if (this.isUpgrade && data.unlockTime <= this.upgradeData.unlockTime) return
       this.modalContentType = 'power-up'
       this.selectData = data
+    },
+    setUpgradeData (data) {
+      this.modalContentType = 'up-step1'
+      this.isUpgrade = true
+      this.upgradeData = data
+      console.log(this.upgradeData)
     }
   }
 }

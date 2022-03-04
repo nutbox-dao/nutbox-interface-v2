@@ -8,7 +8,7 @@
     <div class="options-box">
       <div class="options-grid">
         <div class="options-item" v-for="(item, index) of options" :key="index"
-             :class="'item'+(index)"
+             :class="['item'+(index), (isUpgrade && item.unlockTime<=upgradeData.unlockTime)?'disable-item':'active-item']"
              :data-hover-content="`unlock time: ${item.unlockTime}week`"
              @click="$emit('setData', item)">1 Nut to {{item.ratio}} NP</div>
       </div>
@@ -19,6 +19,18 @@
 <script>
 export default {
   name: 'NPAssetPowerUp',
+  props: {
+    isUpgrade: {
+      type: Boolean,
+      default: false
+    },
+    upgradeData: {
+      type: Object,
+      default: () => {
+        return { unlockTime: 0, ratio: 0 }
+      }
+    }
+  },
   data () {
     return {
       options: [
@@ -82,6 +94,23 @@ export default {
     position: relative;
     box-sizing: border-box;
     cursor: pointer;
+    &.disable-item {
+      border: none;
+      background-color: var(--text-74);
+      cursor: not-allowed;
+      &:hover{
+        //border: 1px solid transparent;
+        border: none;
+        &::after{
+          content: '';
+          background-image: none;
+        }
+      }
+    }
+    //&.active-item {
+    //  background-color: var(--primary-custom);
+    //  border: 1px solid var(--primary-custom);
+    //}
     &:hover {
       border: none;
       &::after {

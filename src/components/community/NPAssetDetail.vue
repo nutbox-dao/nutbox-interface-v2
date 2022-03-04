@@ -44,38 +44,38 @@
                 <div class="font14 line-height14">300 NP</div>
                 <div class="font12 line-height12 text-grey-7">Unlock time:1 week</div>
               </div>
-              <button class="primary-btn-outline font12">Upgrade</button>
+              <button class="primary-btn-outline font12" @click="$emit('upgrade', { unlockTime: 2, ratio: 2 })">Upgrade</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="d-flex align-items-center item-card-title">
-          <span class="font20 line-height24">Voted NP</span>
-          <i class="help-icon ml-2" id="voted-np-tip"></i>
-          <b-popover custom-class="sub-popover-outline" target="voted-np-tip" triggers="hover" placement="top">
-            <div class="font12 line-height12" style="width: 130px">
-              Voted NP: NP you voted into pools of entire Nutbox.
-            </div>
-          </b-popover>
-        </div>
-        <div class="c-card">
-          <div class="c-card-header font16 line-height16">Total voted:3300 NP</div>
-          <div class="c-card-content">
-            <div class="voted-item" v-for="i of 3" :key="i">
-              <div class="d-flex align-items-center mb-1">
-                <img class="info-icon" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">
-                <span class="font12 line-height12 text-grey-7 ml-1">Peanut</span>
-              </div>
-              <div class="font14 line-height14 d-flex justify-content-between align-items-center">
-                <span>This is Pools name</span>
-                <span>300NP</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
+<!--      <div class="col-lg-4">-->
+<!--        <div class="d-flex align-items-center item-card-title">-->
+<!--          <span class="font20 line-height24">Voted NP</span>-->
+<!--          <i class="help-icon ml-2" id="voted-np-tip"></i>-->
+<!--          <b-popover custom-class="sub-popover-outline" target="voted-np-tip" triggers="hover" placement="top">-->
+<!--            <div class="font12 line-height12" style="width: 130px">-->
+<!--              Voted NP: NP you voted into pools of entire Nutbox.-->
+<!--            </div>-->
+<!--          </b-popover>-->
+<!--        </div>-->
+<!--        <div class="c-card">-->
+<!--          <div class="c-card-header font16 line-height16">Total voted:3300 NP</div>-->
+<!--          <div class="c-card-content">-->
+<!--            <div class="voted-item" v-for="i of 3" :key="i">-->
+<!--              <div class="d-flex align-items-center mb-1">-->
+<!--                <img class="info-icon" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">-->
+<!--                <span class="font12 line-height12 text-grey-7 ml-1">Peanut</span>-->
+<!--              </div>-->
+<!--              <div class="font14 line-height14 d-flex justify-content-between align-items-center">-->
+<!--                <span>This is Pools name</span>-->
+<!--                <span>300NP</span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div class="col-lg-8">
         <div class="d-flex justify-content-between align-items-center item-card-title">
           <div class="d-flex align-items-center">
             <span class="font20 line-height24">Unlocking NP</span>
