@@ -3,6 +3,7 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
+export const BLOCK_SECOND = 15;
 // nutbox backend server
 // export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
 export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";

@@ -119,8 +119,8 @@ export default {
     getCommunityPendingRewardNut()
     const polling = getNPInfoByPolling()
     this.$once('hook:beforeDestroy', () => {
-      polling.stop()
-    })
+        polling.stop();
+    });
   },
   methods: {
     async harvest() {

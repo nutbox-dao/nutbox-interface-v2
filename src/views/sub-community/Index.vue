@@ -156,7 +156,7 @@ export default {
       this.loading = true;
       this.clearData();
       this.$store.commit('community/saveLoadingApproveCommunity', true)
-        this.$store.commit('community/saveApprovedCommunity', false)
+      this.$store.commit('community/saveApprovedCommunity', false)
       getApprovement(NutAddress, this.communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
       }).finally(() => {

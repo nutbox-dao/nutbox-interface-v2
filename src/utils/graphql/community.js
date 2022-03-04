@@ -36,6 +36,12 @@ export async function getSpecifyCommunityInfo(community) {
                     community{
                         id
                     }
+                    hasCreateGauge
+                    votedAmount
+                    voters(first: 10){
+                        id
+                    }
+                    votersCount
                 }
                 users {
                     id

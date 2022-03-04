@@ -8,7 +8,7 @@
         </div>
         <div class="card-link-title-text font-bold">
           <div class="link-title font20 line-height24">
-            <span>Peanut</span>
+            <span>{{ card.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
             <span>Earn Monns & Nut</span>
@@ -94,27 +94,24 @@
 
 <script>
 import PoolOperation from '@/components/community/PoolOperation'
+import { mapState } from 'vuex'
+
 export default {
   name: 'CommunityNPCard',
   components: { PoolOperation },
+  props: {
+    card: {
+      type: Object
+    },
+  },
+  computed: {
+    ...mapState('np', ['npApr']),
+    stakers() {
+      return this.card.voters 
+    }
+  },
   data () {
     return {
-      card: {
-        asset: '0x232c5c39120140b76e3466ee8303465cf4b9c04d',
-        chainId: 0,
-        community: { id: '0x72701a017a9e0677b9401bf7473da36b1bbb888e' },
-        id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4',
-        name: 'Stake PNUT-WBNB',
-        poolFactory: '0xf870724476912057c807056b29c1161f5fe0199a',
-        ratio: 10000,
-        stakers: [{ id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }],
-        stakersCount: 17,
-        status: 'OPENED',
-        totalAmount: '5890865817022064098000'
-      },
-      stakers: [
-        { id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }
-      ]
     }
   }
 }

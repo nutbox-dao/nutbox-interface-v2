@@ -88,7 +88,7 @@ export const getAbi = async function (contractName) {
 // Get contract
 export const getContract = async function (contractName, address, onlyRead = true) {
   return new Promise(async (resolve, reject) => {
-    await connectMetamask()
+    // await connectMetamask()
     // wheather metamask is locked
     if (await !isUnlocked() && !onlyRead) {
       console.log('metamask locked');

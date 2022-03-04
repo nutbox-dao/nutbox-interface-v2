@@ -1,4 +1,7 @@
-export const BLOCK_SECOND = 15
+import { BLOCK_SECOND as sec } from '@/config'
+export const BLOCK_SECOND = sec
+
+export const YEAR_BLOCKS = 31536000 / BLOCK_SECOND
 
 export const SP_DELEGATE_DECIMAL = 6
 

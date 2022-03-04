@@ -11,14 +11,14 @@
       </div>
       <div class="c-loading my-5" v-if="loading"></div>
       <template v-else>
-        <div class="empty-bg" v-if="npCards.length === 0">
+        <div class="empty-bg" v-if="gauges.length === 0">
           <img src="~@/static/images/empty-data.png" alt="" />
           <p> {{ $t('tip.noProject') }} </p>
         </div>
         <div v-else class="cards-container">
-          <div class="cards-box cards-box-col3" :class="'col3-items-'+npCards.length">
-            <div class="card-item" v-for="(cardInfo) of npCards" :key="cardInfo.id">
-              <CommunityNPCard :card="cardInfo"/>
+          <div class="cards-box cards-box-col3" :class="'col3-items-'+gauges.length">
+            <div class="card-item" v-for="(gauge) of gauges" :key="gauge.id">
+              <CommunityNPCard :card="gauge"/>
             </div>
           </div>
         </div>
@@ -31,31 +31,34 @@
 <script>
 import CommunityNPCard from '@/components/community/CommunityNPCard'
 import NPAssetCard from '@/components/community/NPAssetCard'
+import { mapState, mapGetters } from 'vuex';
+import { updateBalanceByPolling } from '@/utils/nutbox/nutpower'
+
 export default {
   name: 'SubCommunityStaking',
   components: { CommunityNPCard, NPAssetCard },
+  computed: {
+    ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory']),
+    ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapState('np', ['balance']),
+    gauges() {
+      if(this.allPools && this.allPools.length > 0){
+        return this.allPools.filter(p => p.hasCreateGauge == 1)
+      }
+      return []
+    }
+  },
   data () {
     return {
-      activeTab: 0,
-      tabOptions: ['Acitive Pools', 'Inacitive Pools'],
       loading: false,
-      npCards: [
-        {
-          asset: '0x232c5c39120140b76e3466ee8303465cf4b9c04d',
-          chainId: 0,
-          community: { id: '0x72701a017a9e0677b9401bf7473da36b1bbb888e' },
-          id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4',
-          name: 'Stake PNUT-WBNB',
-          poolFactory: '0xf870724476912057c807056b29c1161f5fe0199a',
-          ratio: 10000,
-          stakers: [{ id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }],
-          stakersCount: 17,
-          status: 'OPENED',
-          totalAmount: '5890865817022064098000'
-        }
-      ]
     }
-  }
+  },
+  mounted () {
+    const polling = updateBalanceByPolling()
+    this.$once('hook:beforeDestroy', () => {
+        polling.stop();
+    });
+  },
 }
 </script>
 

@@ -4,8 +4,8 @@
       <div class="font20 line-height28 font-bold">Nut Power</div>
       <div class="value-box">
         <div class="value-info">
-          <div class="font20 line-height20">12000 NP</div>
-          <div class="font12 line-height12">= 1000 Nut</div>
+          <div class="font20 line-height20">{{ (freeNp + lockedNp) | amountForm }} NP</div>
+          <div class="font12 line-height12">= {{totalLockedNut | amountForm}} Nut</div>
         </div>
         <button class="primary-btn px-4 mx-0"
                 @click="modalContentType='detail',assetModalVisible=true">Detail</button>
@@ -14,7 +14,7 @@
     <div class="chart-box position-relative">
       <PoolRatio class="asset-chart"
                  canvas-id="np-pie"
-                 :pools-data="chartToken"
+                 :pools-data="chartNp"
                  :chart-style="{width: '15rem'}"
                  :animation="false"
                  :show-data-label="true"
@@ -56,6 +56,8 @@ import NPAssetDetail from '@/components/community/NPAssetDetail'
 import NPAssetPowerUpOptions from '@/components/community/NPAssetPowerUpOptions'
 import NPAssetPowerUp from '@/components/community/NPAssetPowerUp'
 import NPAssetPowerDown from '@/components/community/NPAssetPowerDown'
+import { mapState } from 'vuex';
+
 export default {
   name: 'NPAssetCard',
   components: { PoolRatio, NPAssetDetail, NPAssetPowerUpOptions, NPAssetPowerUp, NPAssetPowerDown },
@@ -63,12 +65,41 @@ export default {
     return {
       assetModalVisible: false,
       modalContentType: 'detail',
-      chartToken: [
-        { ratio: 100, name: 'AAA' },
-        { ratio: 10, name: 'BBB' }
-      ],
       loadingBalance: false,
       selectData: {}
+    }
+  },
+  computed: {
+    ...mapState('np', ['balance', 'userLockedNut']),
+    freeNp() {
+      if (this.balance && this.balance.freeNp){
+        return this.balance.freeNp.toString() / 1e18
+      }
+      return 0
+    },
+    lockedNp() {
+      if (this.balance && this.balance.lockedNp) {
+        return this.balance.lockedNp.toString() / 1e18
+      }
+      return 0
+    },
+    totalNp() {
+      if (this.freeNp && this.lockedNp) {
+        return this.freeNp + this.lockedNp
+      }
+      return 0
+    },
+    totalLockedNut() {
+      return this.userLockedNut.reduce((s, n) => s + n, 0)
+    },
+    chartNp() {
+      if (this.totalNp == 0) {
+        return []
+      }
+      return [
+        {ratio: this.freeNp / this.totalNp, name: 'Free'},
+        {ratio: this.lockedNp / this.totalNp, name: 'Available'}
+      ]
     }
   },
   methods: {
