@@ -3,12 +3,12 @@
     <div class="card-link-top-box">
       <div class="d-flex align-items-center">
         <div class="card-link-icons card-link-icons-lg">
-          <img class="icon1" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">
-          <img class="icon2-lg" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">
+          <img class="icon1" :src="assetIcon" alt="">
+          <img class="icon2-lg" src="https://cdn.wherein.mobi/nutbox/v2/1633769085901" alt="">
         </div>
         <div class="card-link-title-text font-bold">
           <div class="link-title font20 line-height24">
-            <span>Peanut</span>
+            <span>{{ gauge.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
             <span>Earn Monns & Nut</span>
@@ -17,64 +17,81 @@
       </div>
     </div>
     <div class="c-card text-grey-7 font14 font-bold">
-      <div class="font20 line-height24 text-white">Stake Nut <br> Earn Monns</div>
       <div class="project-info-container">
-        <span class="name">APR</span>
-        <div class="info d-flex align-items-center">
-          <i class="help-icon mr-1" v-b-popover.hover.top="'Nut50%+Moon45.113%'"></i>
-          <span>95.113%</span>
-        </div>
+        <span class="name">{{ $t("gauge.voterCount") }}</span>
+        <div class="info">{{ gauge.votersCount || 0 }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">Total Staking</span>
-        <div class="info">12.323.420</div>
+        <span class="name">{{ $t("gauge.totalVoted") }}</span>
+        <div class="info">{{ totalVoted | amountForm }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">TVL</span>
-        <div class="info">$23.413</div>
+        <span class="name">{{ $t("pool.tvl") }}</span>
+        <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">Stakers</span>
-        <div class="info d-flex align-items-center">
-          <div :id="user.id + card.id" v-for="(user, index) of stakers" :key="user.id"
-               :style="{zIndex: stakers.length-index}">
-            <img class="info-icon" v-if="user.avatar && user.avatar.length > 0" :src="user.avatar" alt="">
-            <img v-else class="info-icon" src="~@/static/images/avatars/default.png" alt="">
-            <b-popover class="primary-bg" :target="user.id + card.id" triggers="hover focus" placement="top">
-              {{ user.name ? user.name : (user.id.slice(0, 6) + '...' + user.id.slice(36, 42)) }}
-            </b-popover>
-          </div>
-          <span class="ml-1" style="line-height: 28px">{{ card.stakersCount }}</span>
-        </div>
+        <span class="name">Claimble Nut</span>
+        <div class="info">{{ pendingRewardNut }}</div>
       </div>
-      <div class="project-info-container">
-        <span class="name">Nut Claim Available</span>
-        <div class="info">55455</div>
-      </div>
-<!--      <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED'" @click="showAttention=true">-->
-<!--        <b-spinner small type="grow" v-show="updating" />-->
-<!--        {{ $t('pool.closePool')}}-->
-<!--      </button>-->
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
+import { NutAddress } from '@/config'
+import { getPoolFactory } from '@/utils/web3/contract'
+import { getERC20Info } from '@/utils/web3/asset'
+import { ASSET_LOGO_URL } from '@/constant'
+
 export default {
   name: 'ManageNPCard',
   props: {
     gauge: {
       type: Object
     },
+    // all voted np of this community
+    totalVotedNP: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    ...mapGetters("web3", ["tokenByKey"]),
+    ...mapState(['prices']),
+    ...mapState('gauge', ['communityPendingRewardNut']),
+    totalVoted() {
+      console.log('4235', this.gauge);
+      return this.gauge.votedAmount.toString() / 1e18
+    },
+    tvl() {
+      const nutPrice = this.prices[NutAddress];
+      if (!nutPrice || nutPrice == 0) return 0;
+      return this.totalVoted * nutPrice
+    },
+    pendingRewardNut() {
+      if (this.totalVotedNP == 0) return 0;
+      return this.communityPendingRewardNut.toString() / 1e18 * this.totalVoted / this.totalVotedNP
+    }
   },
   data () {
     return {
-      card: { id: '0x3fb7e48eab43fc427360fea8547a78966495b8d4', stakersCount: 1 },
-      stakers: [
-        { id: '0x092146598ae9be2ca420c0f3503612ed946d1139' }
-      ]
+      assetIcon:''
     }
-  }
+  },
+  async mounted () {
+    switch (this.gauge.poolFactory.toLowerCase()) {
+        case getPoolFactory("erc20staking").toLowerCase():
+          const stakedERC20 = await getERC20Info(this.gauge.asset);
+          this.assetIcon = stakedERC20.icon;
+          break;
+        case getPoolFactory('steem').toLowerCase():
+          this.assetIcon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
+          break;
+        case getPoolFactory('cosmos').toLowerCase():
+          this.assetIcon = ASSET_LOGO_URL['cosmos']
+      }
+  },
 }
 </script>
 

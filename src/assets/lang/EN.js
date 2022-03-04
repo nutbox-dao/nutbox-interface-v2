@@ -392,6 +392,10 @@ module.exports = {
     opened: 'Active',
     closed: 'Closed'
   },
+  gauge: {
+    voterCount: 'Voters',
+    totalVoted: 'Total Voted',
+  },
   asset: {
     tokenName: "Name",
     tokenSymbol: "Symbol",

@@ -35,7 +35,7 @@
     <template v-else>
       <div class="row">
         <div class="col-xl-4 col-md-6 mb-4" v-for="gauge of gauges" :key="gauge.id">
-          <ManageNPCard :gauge="gauge"/>
+          <ManageNPCard :gauge="gauge" :totalVotedNP="totalVotedNP"/>
         </div>
       </div>
     </template>
@@ -90,15 +90,21 @@ export default {
     ...mapState('community', ['communityData']),
     ...mapState('gauge', ['communityPendingRewardNut']),
     waitingForGauge() {
-      return this.communityData ? this.communityData.pools.filter(p => !p.hasCreateGauge) : []
+      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 0) : []
     },
     gauges() {
       console.log(this.communityData);
-      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge) : []
+      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 1) : []
     },
     communityPendingNut() {
       if (this.communityPendingRewardNut){
         return this.communityPendingRewardNut.toString() / 1e18;
+      }
+      return 0
+    },
+    totalVotedNP() {
+      if (this.gauges.length > 0) {
+        return this.gauges.reduce((a,b) => a + (b.votedAmount.toString() /1e18), 0)
       }
       return 0
     }
