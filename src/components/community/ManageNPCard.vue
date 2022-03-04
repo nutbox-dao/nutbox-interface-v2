@@ -60,14 +60,12 @@ export default {
     ...mapGetters("web3", ["tokenByKey"]),
     ...mapState(['prices']),
     ...mapState('gauge', ['communityPendingRewardNut']),
+    ...mapState('np', ['npPrice']),
     totalVoted() {
-      console.log('4235', this.gauge);
       return this.gauge.votedAmount.toString() / 1e18
     },
     tvl() {
-      const nutPrice = this.prices[NutAddress];
-      if (!nutPrice || nutPrice == 0) return 0;
-      return this.totalVoted * nutPrice
+      return this.totalVoted * this.npPrice
     },
     pendingRewardNut() {
       if (this.totalVotedNP == 0) return 0;

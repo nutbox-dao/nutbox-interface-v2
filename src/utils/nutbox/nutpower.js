@@ -7,7 +7,8 @@ import store from '@/store'
 import { getAccounts } from '@/utils/web3/account'
 import {
     errCode,
-    Multi_Config
+    Multi_Config,
+    NutAddress
 } from '@/config'
 import {
     waitForTx
@@ -97,6 +98,50 @@ export const getUserRedeemRequestsOfPeriod = async () => {
             console.log(redeemInfo);
         }catch(e) {
             console.log('Get user redeem requests fail:', e);
+            reject(e)
+        }
+    })
+}
+
+export const getNPInfoByPolling = () => {
+    const polling = rollingFunction(getNPInfo, null, 6, res => {
+        const totalSupply = res['totalSupply']
+        const totalLockedNut = res['totalLockedNut']
+        store.commit('np/saveTotalSupply', totalSupply)
+        store.commit('np/saveTotalLockedNut', totalLockedNut)
+        const prices = store.state.prices
+        const npPrice = prices[NutAddress] * totalLockedNut / totalSupply
+        store.commit('np/saveNpPrice', npPrice)
+    })
+    polling.start;
+    return polling;
+}
+
+export const getNPInfo = async () => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            const res = await aggregate([
+                {
+                    target: contractAddress['NutPower'],
+                    call: [
+                        'totalLockedNut()(uint256)'
+                    ],
+                    returns:[
+                        ['totalLockedNut', val => val.toString() / 1e18]
+                    ]
+                },
+                {
+                    target: contractAddress['NutPower'],
+                    call: [
+                        'totalSupply()(uint256)'
+                    ],
+                    returns:[
+                        ['totalSupply', val => val.toString() / 1e18]
+                    ]
+                }
+            ])
+            resolve(res.results.transformed)
+        }catch(e){
             reject(e)
         }
     })

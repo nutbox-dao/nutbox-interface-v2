@@ -47,12 +47,13 @@
       hide-footer
       no-close-on-backdrop>
       <div class="custom-form text-center">
-        <div class="font20 line-height24 mt-2 mb-4">{{ communityPendingNut | amountForm }} Nut is avable to claim.</div>
+        <div class="font20 line-height24 mt-2 mb-4">{{ communityPendingNut | amountForm }} Nut is available to claim.</div>
         <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
-          <button class="dark-btn primary-btn-outline mx-3" @click="claimModal = false">
+          <button class="dark-btn primary-btn-outline mx-3" :disabled="harvestingNut" @click="claimModal = false">
             Cancel
           </button>
-          <button class="primary-btn mx-3">
+          <button class="primary-btn mx-3" :disabled="harvestingNut" @click="harvest">
+            <b-spinner small type="grow" v-show="harvestingNut"/>
             OK
           </button>
         </div>
@@ -76,6 +77,9 @@ import ManageNPCard from '@/components/community/ManageNPCard'
 import AddNPPool from '@/components/community/AddNPPool'
 import { mapState } from 'vuex';
 import { getGaugeVoteInfo, getGaugeParams, getCommunityPendingRewardNut } from '@/utils/nutbox/gauge'
+import { getNPInfoByPolling } from '@/utils/nutbox/nutpower'
+import { sleep } from '@/utils/helper'
+import { handleApiErrCode } from '../../utils/helper';
 
 export default {
   name: 'CommunityNutPower',
@@ -83,7 +87,8 @@ export default {
   data () {
     return {
       claimModal: false,
-      addPoolModal: false
+      addPoolModal: false,
+      harvestingNut: false
     }
   },
   computed: {
@@ -112,8 +117,37 @@ export default {
   async mounted () {
     getGaugeParams()
     getCommunityPendingRewardNut()
+    const polling = getNPInfoByPolling()
+    this.$once('hook:beforeDestroy', () => {
+      polling.stop()
+    })
   },
   methods: {
+    async harvest() {
+      try{
+        if(this.communityPendingNut <= 0){
+          this.$bvToast.toast('No more NUT to claim', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        this.harvestingNut = true
+        await communityWithdrawNut()
+        this.$bvToast.toast(this.$t('tip.harvestSuccess'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+        await sleep(3)
+        this.claimModal = false
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally{
+        this.harvestingNut = false
+      }
+    }
   }
 }
 </script>

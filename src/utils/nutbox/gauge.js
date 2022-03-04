@@ -151,7 +151,7 @@ export const hasGaugeEnabled = async (pools) => {
 // update user's gauge info by polling
 // called when check in gauge page
 // include userStaked/totalStaked/userPendingRewards(nut,ctoken)
-export const updateGaugesByPolling = async (pools) => {
+export const updateGaugesByPolling = (pools) => {
     const polling = rollingFunction(getGaugeVoteInfo, pools, 6, res => {
         console.log('gauge info', res);
         let created = {}
