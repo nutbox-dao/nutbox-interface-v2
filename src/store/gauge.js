@@ -16,7 +16,8 @@
 
         // user's info
         userLocked: {},
-        userReward: {}
+        userRewardNut: {},
+        userRewardCtoken: {}
     },
     mutations: {
         saveGaugeRatio: (state, gaugeRatio) => {
@@ -34,14 +35,17 @@
         saveCommunityPendingRewardNut: (state, communityPendingRewardNut) => {
             state.communityPendingRewardNut = communityPendingRewardNut
         },
-        saveUserLockeed: (state, userLocked) => {
+        saveUserLocked: (state, userLocked) => {
             state.userLocked = userLocked
         },
         saveTotalLocked: (state, totalLocked) => {
             state.totalLocked = totalLocked
         },
-        saveUserReward: (state, userReward) => {
-            state.userReward = userReward
+        saveUserRewardNut: (state, userRewardNut) => {
+            state.userRewardNut = userRewardNut
+        },
+        saveUserRewardCtoken: (state, userRewardCtoken) => {
+            state.userRewardCtoken = userRewardCtoken
         }
     }
 }

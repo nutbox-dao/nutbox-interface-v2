@@ -123,6 +123,7 @@ import { getApprovement, getCommunityBalance } from '@/utils/web3/community'
 import { handleApiErrCode, rollingFunction } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
 import { NutAddress } from '@/config'
+import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 
 export default {
   name: 'Index',
@@ -157,6 +158,7 @@ export default {
       this.clearData();
       this.$store.commit('community/saveLoadingApproveCommunity', true)
       this.$store.commit('community/saveApprovedCommunity', false)
+      getCommunityRewardPerBlock(this.communityId)
       getApprovement(NutAddress, this.communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
       }).finally(() => {

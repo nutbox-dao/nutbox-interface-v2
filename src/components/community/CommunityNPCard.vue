@@ -3,8 +3,8 @@
     <div class="card-link-top-box">
       <div class="d-flex align-items-center">
         <div class="card-link-icons card-link-icons-lg">
-          <img class="icon1" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">
-          <img class="icon2-lg" src="https://cdn.wherein.mobi/nutbox/v2/1645831114472" alt="">
+          <img class="icon1" :src="ctokenIcon" alt="">
+          <img class="icon2-lg" :src="nutIcon" alt="">
         </div>
         <div class="card-link-title-text font-bold">
           <div class="link-title font20 line-height24">
@@ -23,22 +23,22 @@
           <div class="flex-1">
             <div class="d-flex align-items-center">
               <div class="d-flex justify-content-between align-items-center font-bold flex-1">
-                <span class="font18 line-height18">Moon</span>
-                <span class="font24 line-height24">0.0001</span>
+                <span class="font18 line-height18">{{ cToken ? cToken.name : '' }}</span>
+                <span class="font24 line-height24">{{ pendingCtoken | amountForm }}</span>
               </div>
               <div class="d-flex align-items-center icons-group">
-                <i class="copy-icon copy-icon-gray mr-1"></i>
-                <i class="link-icon link-icon-gray"></i>
+                <i class="copy-icon copy-icon-gray mr-1" @click="copy(cToken ? cToken.address : '')"></i>
+                <i class="link-icon link-icon-gray" @click="gotoToken(cToken ? cToken.address : '')"></i>
               </div>
             </div>
             <div class="d-flex align-items-center">
               <div class="d-flex justify-content-between align-items-center font-bold flex-1">
                 <span class="font18 line-height18">Nut</span>
-                <span class="font24 line-height24">0.0001</span>
+                <span class="font24 line-height24">{{ userRewardNut[card.id] | amountForm }}</span>
               </div>
               <div class="d-flex align-items-center icons-group">
-                <i class="copy-icon copy-icon-gray mr-1"></i>
-                <i class="link-icon link-icon-gray"></i>
+                <i class="copy-icon copy-icon-gray mr-1" @click="copy(nutAddress)"></i>
+                <i class="link-icon link-icon-gray" @click="gotoToken(nutAddress)"></i>
               </div>
             </div>
           </div>
@@ -53,25 +53,49 @@
             <span class="font-bold text-grey-47">NP</span>
             VOTED
           </div>
-          <div class="text-grey-47 font-bold">Available：4000</div>
+          <div class="text-grey-47 font-bold">Available：{{ freeNp | amountForm }}</div>
         </div>
-        <PoolOperation :card="card"/>
+        <!-- operate area -->
+        <div
+          class="d-flex justify-content-between align-items-center "
+        >
+          <span class="value flex-fill">
+            {{ userLocked[card.id] | amountForm }}
+          </span>
+          <div class="d-flex">
+            <!-- decrease -->
+            <button
+              class="symbol-btn symbol-btn-outline hover mr-2"
+              @click="operate = 'minus'; updateVoing = true"
+            >
+              <i class="sub-icon sub-icon-primary"></i>
+            </button>
+            <!-- increase -->
+            <button
+              class="symbol-btn symbol-btn-outline hover"
+              :disabled="card.status === 'CLOSED'"
+              @click="operate = 'add'; updateVoing = true"
+            >
+              <i class="add-icon add-icon-primary"></i>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
           <span class="name">APR</span>
           <div class="info d-flex align-items-center">
-            <i class="help-icon mr-1" v-b-popover.hover.top="'Nut50%+Moon45.113%'"></i>
-            <span>95.113%</span>
+            <i class="help-icon mr-1" v-b-popover.hover.top="detailApr"></i>
+            <span>{{ (npApr + ctokenApr).toFixed(2) }}%</span>
           </div>
         </div>
         <div class="project-info-container">
           <span class="name">Total Staking</span>
-          <div class="info">12.323.420</div>
+          <div class="info">{{ totalLockedNp | amountForm }}</div>
         </div>
         <div class="project-info-container">
           <span class="name">TVL</span>
-          <div class="info">$23.413</div>
+          <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
           <span class="name">Stakers</span>
@@ -89,31 +113,110 @@
         </div>
       </div>
     </div>
+        <!-- main chain stake -->
+    <b-modal
+      v-model="updateVoing"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <VotingGaugeByNpModal
+        :operate="operate"
+        :card="card"
+        @hideStakeMask="updateVoing = false"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
-import PoolOperation from '@/components/community/PoolOperation'
+import VotingGaugeByNpModal from '@/components/common/VotingGaugeByNpModal'
 import { mapState } from 'vuex'
+import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
+import showToastMixin from "@/mixins/copyToast";
+import { NutAddress, BLOCK_CHAIN_BROWER } from '@/config'
+import { formatUserAddress, handleApiErrCode } from "@/utils/helper";
 
 export default {
   name: 'CommunityNPCard',
-  components: { PoolOperation },
+  components: { VotingGaugeByNpModal },
   props: {
     card: {
       type: Object
     },
   },
   computed: {
-    ...mapState('np', ['npApr']),
+    ...mapState('np', ['npApr', 'npPrice', 'freeNp']),
+    ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio']),
+    ...mapState("currentCommunity", ["cToken", 'feeRatio']),
+    ...mapState('community', ['rewardPerBlock']),
+    ...mapState(['prices']),
     stakers() {
       return this.card.voters 
+    },
+    ctokenIcon() {
+      if (this.cToken) {
+        return this.cToken.icon
+      }
+    },
+    pendingCtoken() {
+      if (this.userRewardCtoken[this.card.id]){
+        return this.userRewardCtoken[this.card.id].toString() / this.ctokenDecimals
+      }
+      return 0
+    },
+    totalLockedNp() {
+      return this.totalLocked ? this.totalLocked[this.card.id] : 0
+    },
+    tvl() {
+      if (this.totalLocked && this.npPrice) {
+        return totalLockedNp * this.npPrice
+      }
+      return 0
+    },
+    ctokenDecimals() {
+      if (this.cToken) {
+        return 10 ** this.cToken.decimal
+      }
+      return 1e18
+    },
+    ctokenApr() {
+      if (!this.rewardPerBlock[this.card.community.id] || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0) {
+        return 0
+      }
+      const ctokenPrice = this.cToken.price
+      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
+      return apr;
+    },
+    detailApr() {
+      return 'Nut: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr + '%'
     }
   },
+  mixins: [showToastMixin],
   data () {
     return {
+      nutIcon: ASSET_LOGO_URL['nut'],
+      nutAddress: NutAddress,
+      updateVoing: false,
+      operate: 'add'
     }
-  }
+  },
+  methods: {
+    copy(address) {
+      this.onCopy(
+        this.$t("tip.copyAddress", {
+          address: formatUserAddress(address),
+        }),
+        { title: this.$t("tip.clipboard") },
+        address
+      );
+    },
+    gotoToken(address) {
+      window.open(BLOCK_CHAIN_BROWER + "token/" + address, "_blank");
+    },
+  },
 }
 </script>
 

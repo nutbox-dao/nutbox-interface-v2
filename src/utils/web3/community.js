@@ -215,7 +215,11 @@ export const getCommunityRewardPerBlock = async (communityId) => {
       const contract = await getContract('LinearCalculator')
       const amount = await contract.getCurrentRewardPerBlock(communityId)
       const ctoken = await getCToken(communityId)
-      resolve(amount.toString() / (10 ** ctoken.decimal))
+      const reward = amount.toString() / (10 ** ctoken.decimal)
+      let rewardPerBlock = store.community.rewardPerBlock;
+      rewardPerBlock[communityId] = reward;
+      store.commit('community/saveRewardPerBlock', rewardPerBlock)
+      resolve(reward)
     }catch(e) {
 
     }

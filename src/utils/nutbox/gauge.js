@@ -151,29 +151,35 @@ export const hasGaugeEnabled = async (pools) => {
 // update user's gauge info by polling
 // called when check in gauge page
 // include userStaked/totalStaked/userPendingRewards(nut,ctoken)
-export const updateGaugesByPolling = (pools) => {
-    const polling = rollingFunction(getGaugeVoteInfo, pools, 6, res => {
-        console.log('gauge info', res);
-        let created = {}
+/**
+ * update user's gauge info by polling
+ * called when check in gauge page
+ * include userStaked/totalStaked/userPendingRewards(nut,ctoken)
+ * @param {*} poolsId only gauges id
+ * @returns 
+ */
+export const updateGaugesByPolling = (poolsId) => {
+    const polling = rollingFunction(getGaugeVoteInfo, poolsId, 7, res => {
         let locked = {}
         let total = {}
-        let pending = {}
+        let pendingNut = {}
+        let pendingCtoken = {}
         for (let d in res) {
             const [type, pid] = d.split('-')
-            if (type === 'hasCreated') {
-                created[pid] = res[d]
-            }else if(type === 'userLocked'){
+            if(type === 'userLocked'){
                 locked[pid] = res[d]
             }else if(type === 'totalLocked') {
                 total[pid] = res[d]
-            }else if (type === 'userReward') {
-                pending[pid] = res[d]
+            }else if (type === 'userRewardNut') {
+                pendingNut[pid] = res[d]
+            }else if (type === 'userRewardCtoken') {
+                pendingCtoken[pid] = res[d]
             }
         }
-        store.commit('gauge/saveHasCreated', hasCreated || {})
-        store.commit('gauge/saveUserLockeed', staked || {})
+        store.commit('gauge/saveUserLocked', locked || {})
         store.commit('gauge/saveTotalLocked', total || {})
-        store.commit('gauge/saveUserReward', pending || {})
+        store.commit('gauge/saveUserRewardNut', pendingNut || {})
+        store.commit('gauge/saveUserRewardCtoken', pendingCtoken || {})
     })
     polling.start()
     return polling
@@ -193,23 +199,13 @@ export const getGaugeVoteInfo = async (pools) => {
                 const pool = pools[i]
                 calls.push({
                     target: gaugeContract,
-                    call:[
-                        'hasGaugeEnabled(address)(bool)',
-                        pool
-                    ],
-                    returns:[
-                        ['hasCreated-'+pool]
-                    ]
-                })
-                calls.push({
-                    target: gaugeContract,
                     call: [
                         'getUserLocked(address,address)(uint256)',
                         pool,
                         account
                     ],
                     returns: [
-                        [`userLocked-` + pool]
+                        [`userLocked-` + pool, val => val.toString() / 1e18]
                     ]
                 })
                 calls.push({
@@ -219,7 +215,7 @@ export const getGaugeVoteInfo = async (pools) => {
                         pool
                     ],
                     returns: [
-                        [`totalLocked-` + pool]
+                        [`totalLocked-` + pool, val => val.toString() / 1e18]
                     ]
                 })
                 calls.push({
@@ -230,7 +226,8 @@ export const getGaugeVoteInfo = async (pools) => {
                         account
                     ],
                     returns: [
-                        [`userReward-` + pool]
+                        [`userRewardNut-` + pool, val => val.toString() / 1e18],
+                        [`userRewardCtoken-` + pool]   // need to known the ctoken decimals
                     ]
                 })
             }

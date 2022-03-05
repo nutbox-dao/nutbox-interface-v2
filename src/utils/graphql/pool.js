@@ -28,6 +28,12 @@ export async function getPools(poolIds) {
                     feeRatio
                     cToken
                 }
+                hasCreateGauge
+                votedAmount
+                voters(first: 10){
+                    id
+                }
+                votersCount
             }
         }
     `

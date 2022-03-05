@@ -48,6 +48,7 @@ import { getPoolFactoryAddress, updatePoolsByPolling } from "@/utils/web3/pool";
 import { sleep, rollingFunction } from "@/utils/helper";
 import { getPools as getPoolsFromGraph } from "@/utils/graphql/pool";
 
+
 export default {
   name: "SubCommunityStaking",
   components: { CommunityStakingCard },
@@ -98,6 +99,7 @@ export default {
       }
       await sleep(0.3);
     }
+
     const updatePoolsFromGraph = rollingFunction(
       getPoolsFromGraph,
       this.allPools.map((p) => p.id),

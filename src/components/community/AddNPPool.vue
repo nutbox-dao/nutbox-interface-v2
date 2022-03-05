@@ -60,7 +60,7 @@ export default {
       try {
         this.creatingGauge = true
         const hash = await addNewGauge(pool.id)
-        pool.hasCreateGauge = true;
+        pool.hasCreateGauge = 1;
         this.$bvToast.toast("Create a new vote for pool", {
           title: this.$t('tip.success'),
           variant: "success"

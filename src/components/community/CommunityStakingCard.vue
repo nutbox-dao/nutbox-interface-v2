@@ -129,9 +129,8 @@ import { BLOCK_CHAIN_BROWER } from "@/config";
 import PoolOperation from "@/components/community/PoolOperation";
 import PoolOperationForCosmos from "@/components/community/PoolOperationForCosmos";
 
-import { BLOCK_SECOND } from "@/constant";
+import { BLOCK_SECOND, YEAR_BLOCKS } from "@/constant";
 import { getUserBaseInfo } from "@/utils/web3/account";
-import { getCommunityRewardPerBlock } from "@/utils/web3/community";
 
 export default {
   name: "CommunityStakingCard",
@@ -148,6 +147,7 @@ export default {
   },
   computed: {
     ...mapState("currentCommunity", ["allPools", "cToken", "communityBalance"]),
+    ...mapState('community', ['rewardPerBlock']),
     ...mapState("web3", ["allTokens"]),
     ...mapState(["prices"]),
     ...mapState("pool", [
@@ -215,11 +215,12 @@ export default {
       const cTokenPrice = this.cToken.price;
       const stakePrice = this.stakePrice;
       if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return "--";
-      const blocksPerYear = (365 * 24 * 60 * 60) / BLOCK_SECOND;
+      const blocksPerYear = YEAR_BLOCKS;
       const fundRatio = this.card.community.feeRatio;
       const poolRatio = this.card.ratio;
+      const _rewardPerBlock = this.rewardPerBlock[this.card.community.id]
       const reward =
-        this.rewardPerBlock *
+        (_rewardPerBlock ?? 0) *
         blocksPerYear *
         (10000 - fundRatio) *
         poolRatio *
@@ -235,7 +236,6 @@ export default {
     return {
       isWithdrawing: false,
       stakers: [],
-      rewardPerBlock: 0,
       showAttention: false,
     };
   },
@@ -293,13 +293,6 @@ export default {
     const len = Math.min(7, this.card.stakers.length);
     const ids = this.card.stakers.slice(0, len).map((a) => a.id);
     this.stakers = await Promise.all(ids.map((id) => getUserBaseInfo(id)));
-    getCommunityRewardPerBlock(this.card.community.id)
-      .then((res) => {
-        this.rewardPerBlock = res;
-      })
-      .catch((e) => {
-        console.log("Get community reward fail", e);
-      });
   },
 };
 </script>

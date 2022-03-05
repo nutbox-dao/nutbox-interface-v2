@@ -77,6 +77,7 @@ export default {
       }
       await sleep(0.3)
     }
+    
     const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 4)
     updatePoolsFromGraph.start();
 

@@ -33,6 +33,9 @@ import CommunityNPCard from '@/components/community/CommunityNPCard'
 import NPAssetCard from '@/components/community/NPAssetCard'
 import { mapState, mapGetters } from 'vuex';
 import { updateBalanceByPolling } from '@/utils/nutbox/nutpower'
+import { rollingFunction, sleep } from '@/utils/helper'
+import { getPools as getPoolsFromGraph } from "@/utils/graphql/pool";
+import { updateGaugesByPolling } from '@/utils/nutbox/gauge'
 
 export default {
   name: 'SubCommunityStaking',
@@ -53,10 +56,26 @@ export default {
       loading: false,
     }
   },
-  mounted () {
+  async mounted () {
+    while (true) {
+      if (this.communityInfo && this.allPools) {
+        break;
+      }
+      await sleep(0.3);
+    }
+
+    const updatePoolsFromGraph = rollingFunction(
+      getPoolsFromGraph,
+      this.allPools.map((p) => p.id),
+      4
+    );
+
+    updatePoolsFromGraph.start();
+    const pollingGauge = updateGaugesByPolling(this.gauges.map(p => p.id))
     const polling = updateBalanceByPolling()
     this.$once('hook:beforeDestroy', () => {
         polling.stop();
+        pollingGauge.stop();
     });
   },
 }

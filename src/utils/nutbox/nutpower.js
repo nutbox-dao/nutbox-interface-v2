@@ -141,7 +141,7 @@ export const getUserRedeemRequestsOfPeriod = async () => {
 }
 
 export const getNPInfoByPolling = () => {
-    const polling = rollingFunction(getNPInfo, null, 8, res => {
+    const polling = rollingFunction(getNPAndGaugeInfo, null, 8, res => {
         const totalSupply = res['totalSupply']
         // poweruped nut
         const totalLockedNut = res['totalLockedNut']
@@ -164,7 +164,7 @@ export const getNPInfoByPolling = () => {
         store.commit('np/saveNpPrice', npPrice)
 
         // Np apr in gauge for user
-        let userNutApr = YEAR_BLOCKS * rewardNutPerBlock / (totalNPLocked * totalLockedNut / totalSupply)
+        let userNutApr = YEAR_BLOCKS * rewardNutPerBlock * 100 / (totalNPLocked * totalLockedNut / totalSupply)
         store.commit('np/saveNpApr', userNutApr)
     })
     polling.start;

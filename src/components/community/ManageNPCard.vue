@@ -4,7 +4,7 @@
       <div class="d-flex align-items-center">
         <div class="card-link-icons card-link-icons-lg">
           <img class="icon1" :src="assetIcon" alt="">
-          <img class="icon2-lg" src="https://cdn.wherein.mobi/nutbox/v2/1633769085901" alt="">
+          <img class="icon2-lg" :src="nutIcon" alt="">
         </div>
         <div class="card-link-title-text font-bold">
           <div class="link-title font20 line-height24">
@@ -40,6 +40,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { getCToken } from '@/utils/web3/asset'
+import { ASSET_LOGO_URL } from '@/constant'
 
 export default {
   name: 'ManageNPCard',
@@ -55,6 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters("web3", ["tokenByKey"]),
+    ...mapState('currentCommunity', ['feeRatio']),
     ...mapState(['prices']),
     ...mapState('gauge', ['communityPendingRewardNut']),
     ...mapState('np', ['npPrice']),
@@ -73,7 +75,8 @@ export default {
   data () {
     return {
       assetIcon:'',
-      cToken: {}
+      cToken: {},
+      nutIcon: ASSET_LOGO_URL['nut']
     }
   },
   async mounted () {
