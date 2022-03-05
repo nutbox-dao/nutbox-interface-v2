@@ -68,7 +68,7 @@
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
           <div class="title mb-3">Pools</div>
-          <PoolRatio :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
+          <PoolRatio :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />

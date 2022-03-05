@@ -3,14 +3,18 @@
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="options-tip">
-      According to unlock time you choose,you can power up 1 Nut to1-64 NP.
+      <span v-show="!isUpgrade">According to unlock time you choose,you can power up 1 Nut to1-64 NP.</span>
+      <span v-show="isUpgrade">You used to power up {{ upgradeData.nut | amountForm }} Nut to {{ (upgradeData.nut * upgradeData.period) | amountForm }} NP. Now you can upgrade them to get more NP. Just chose one of the block below. Be attension, the unlocking period will grow simultaneously.</span>
     </div>
     <div class="options-box">
       <div class="options-grid">
         <div class="options-item" v-for="(item, index) of options" :key="index"
-             :class="['item'+(index), (isUpgrade && item.unlockTime<=upgradeData.unlockTime)?'disable-item':'active-item']"
+             :class="['item'+(index), (isUpgrade && item.unlockTime<=upgradeData.period)?'disable-item':'active-item']"
              :data-hover-content="`unlock time: ${item.unlockTime}week`"
-             @click="$emit('setData', item)">1 Nut to {{item.ratio}} NP</div>
+             @click="$emit('setData', ({isUpgrade, srcPeriod: upgradeData.period, distPeriod: item.ratio}))">
+              <span v-if="!isUpgrade">1 Nut to {{item.ratio}} NP</span>
+              <span v-else>{{ upgradeData.period + 'NP to ' + item.ratio + 'NP'}}</span>
+            </div>
       </div>
     </div>
   </div>
@@ -27,7 +31,8 @@ export default {
     upgradeData: {
       type: Object,
       default: () => {
-        return { unlockTime: 0, ratio: 0 }
+        // 
+        return { nut: 0, period: 1 }
       }
     }
   },

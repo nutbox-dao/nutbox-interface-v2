@@ -60,6 +60,7 @@ import NPAssetPowerUpOptions from '@/components/community/NPAssetPowerUpOptions'
 import NPAssetPowerUp from '@/components/community/NPAssetPowerUp'
 import NPAssetPowerDown from '@/components/community/NPAssetPowerDown'
 import { mapState } from 'vuex'
+import { pollingNutBalance } from '@/utils/nutbox/nutpower'
 
 export default {
   name: 'NPAssetCard',
@@ -113,8 +114,9 @@ export default {
       this.modalContentType='up-step1'
     },
     setData (data) {
-      if (this.isUpgrade && data.unlockTime <= this.upgradeData.unlockTime) return
+      // if (this.isUpgrade && data.unlockTime <= this.upgradeData.unlockTime) return
       this.modalContentType = 'power-up'
+      console.log('235', data);
       this.selectData = data
     },
     setUpgradeData (data) {
@@ -123,7 +125,13 @@ export default {
       this.upgradeData = data
       console.log(this.upgradeData)
     }
-  }
+  },
+  async mounted () {
+    const polling = await pollingNutBalance();
+    this.$once('hook:beforeDestroy', () => {
+      polling.stop()
+    })
+  },
 }
 </script>
 
