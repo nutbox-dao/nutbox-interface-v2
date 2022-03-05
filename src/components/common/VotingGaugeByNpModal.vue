@@ -4,14 +4,14 @@
     <div class="modal-title font20 font-bold" >
       {{
         operate === "add"
-          ? $t("stake.stake")
-          : $t("stake.unStake")
+          ? $t("gauge.vote")
+          : $t("gauge.unvote")
       }}
     </div>
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
         <div class="label text-right font20">
-          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
+          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? freeNp : userLocked[this.card.id]) | amountForm }}</span>
         </div>
         <div class="c-input-group c-input-group-border c-input-group-bg-dark d-flex">
           <input style="flex: 1"
@@ -42,9 +42,8 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { deposit, withdraw } from '@/utils/web3/pool'
+import { vote, unvote } from '@/utils/nutbox/gauge'
 import { handleApiErrCode } from '../../utils/helper';
-import { getERC20Balance } from '@/utils/web3/asset'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { getAllCommunities } from '@/utils/web3/community'
 
@@ -53,29 +52,16 @@ export default {
     return {
       stakingValue: '',
       loading: false,
-      balance: 0,
-      stakedDecimal: 18,
-      ctokenDecimal: 18
     }
   },
   computed: {
     ...mapState('pool', ['userStaked']),
     ...mapState('user', ['userGraphInfo']),
     ...mapState('currentCommunity', ['communityId']),
+    ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio']),
+    ...mapState('np', ['npApr', 'npPrice', 'freeNp']),
     ...mapState('web3', ['fees']),
     ...mapGetters('web3', ['tokenDecimals']),
-    staked(){
-      if (!this.userStaked) return 0;
-      return this.userStaked[this.card.id] ?? 0
-    },
-    formBalance(){
-      const balance = this.balance;
-      return parseFloat(balance.toString() / (10 ** this.ctokenDecimal));
-    },
-    formStaked(){
-      const staked = this.staked;
-      return parseFloat(staked.toString() / (10 ** this.stakedDecimal))
-    }, 
     fee() {
       if (this.fees){
         return this.fees['USER'].toFixed(2)
@@ -105,7 +91,7 @@ export default {
     },
     fillMax(){
         this.stakingValue =
-        this.operate === "add" ? this.formBalance : this.formStaked;
+        this.operate === "add" ? this.freeNp : this.userLocked[this.card.id];
     },
     checkInputValue() {
       const reg = /^\d+(\.\d+)?$/;
@@ -125,10 +111,10 @@ export default {
       try{
         let message;
         if (this.operate === 'add'){
-          await deposit(this.card.id, this.stakingValue)
+          await vote(this.card.id, this.stakingValue)
           message = this.$t('transaction.depositOk')
         }else{
-          await withdraw(this.card.id, this.stakingValue)
+          await unvote(this.card.id, this.stakingValue)
           message = this.$t('transaction.withdrawOk')
         }
         this.$bvToast.toast(message, {
@@ -153,10 +139,6 @@ export default {
     },
   },
   async mounted () {
-    // get user's balance
-    this.ctokenDecimal = this.tokenDecimals(this.card.community.cToken)
-    this.stakedDecimal = this.tokenDecimals(this.card.asset)
-    this.balance = await getERC20Balance(this.card.asset)
   },
 }
 </script>

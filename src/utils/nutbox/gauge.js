@@ -24,7 +24,7 @@ export const getGauge = async () => {
 }
 
 // vote a pool
-export const lockNp = async (pid, amount) => {
+export const vote = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
             const gauge = await getGauge()
@@ -38,7 +38,7 @@ export const lockNp = async (pid, amount) => {
 }
 
 // down vote a pool
-export const unlockNp = async (pid, amount) => {
+export const unvote = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
             const gauge = await getGauge()

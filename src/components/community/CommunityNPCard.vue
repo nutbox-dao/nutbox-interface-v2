@@ -42,7 +42,8 @@
               </div>
             </div>
           </div>
-          <button class="primary-btn m-0 w-auto d-flex align-items-center">
+          <button class="primary-btn m-0 w-auto d-flex align-items-center" :disabled="harvesting || userRewardNut[card.id]==0" @click="harvest">
+            <b-spinner small type='grow' v-show="harvesting"></b-spinner>
             {{ $t("operation.harvest") }}
           </button>
         </div>
@@ -137,7 +138,7 @@ import { mapState } from 'vuex'
 import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 import showToastMixin from "@/mixins/copyToast";
 import { NutAddress, BLOCK_CHAIN_BROWER } from '@/config'
-import { formatUserAddress, handleApiErrCode } from "@/utils/helper";
+import { formatUserAddress, handleApiErrCode, sleep } from "@/utils/helper";
 
 export default {
   name: 'CommunityNPCard',
@@ -200,7 +201,8 @@ export default {
       nutIcon: ASSET_LOGO_URL['nut'],
       nutAddress: NutAddress,
       updateVoing: false,
-      operate: 'add'
+      operate: 'add',
+      harvesting: false
     }
   },
   methods: {
@@ -216,6 +218,19 @@ export default {
     gotoToken(address) {
       window.open(BLOCK_CHAIN_BROWER + "token/" + address, "_blank");
     },
+    async harvest() {
+      try {
+        this.harvesting = true
+        await userWithdrawReward(this.card.id)
+        await sleep(2)
+      } catch(e) {
+        handleApiErrCode(e, (tip, params) => {
+          this.$bvToast.toast(tip, params)
+        })
+      } finally{
+        this.harvesting = false
+      }
+    }
   },
 }
 </script>

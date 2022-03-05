@@ -395,6 +395,8 @@ module.exports = {
   gauge: {
     voterCount: 'Voters',
     totalVoted: 'Total Voted',
+    vote: "Vote",
+    unvote: "Unvote"
   },
   asset: {
     tokenName: "Name",
