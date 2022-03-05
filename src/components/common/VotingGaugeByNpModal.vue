@@ -112,10 +112,10 @@ export default {
         let message;
         if (this.operate === 'add'){
           await vote(this.card.id, this.stakingValue)
-          message = this.$t('transaction.depositOk')
+          message = this.$t('transaction.voteOk')
         }else{
           await unvote(this.card.id, this.stakingValue)
-          message = this.$t('transaction.withdrawOk')
+          message = this.$t('transaction.unvoteOk')
         }
         this.$bvToast.toast(message, {
           title: this.$t('tip.success'),

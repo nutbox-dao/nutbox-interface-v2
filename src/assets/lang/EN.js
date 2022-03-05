@@ -102,6 +102,9 @@ module.exports = {
     transactionOk: "Transaction Success!",
     depositOk: "Deposit Success",
     withdrawOk: "Decrease Deposit Success!",
+    voteOk: 'Vote Success',
+    unvoteOk: "Unvote Success",
+    
   },
   stake: {
     stake: "Staking Mining",

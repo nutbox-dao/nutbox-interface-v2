@@ -222,7 +222,8 @@ export default {
       try {
         this.harvesting = true
         await userWithdrawReward(this.card.id)
-        await sleep(2)
+        await sleep(3)
+        this.updateVoing = false
       } catch(e) {
         handleApiErrCode(e, (tip, params) => {
           this.$bvToast.toast(tip, params)
