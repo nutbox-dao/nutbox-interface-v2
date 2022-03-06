@@ -99,17 +99,17 @@
           <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name">Stakers</span>
+          <span class="name">Voters</span>
           <div class="info d-flex align-items-center">
-            <div :id="user.id + card.id" v-for="(user, index) of stakers" :key="user.id"
-                 :style="{zIndex: stakers.length-index}">
+            <div :id="user.id + card.id" v-for="(user, index) of voters" :key="user.id"
+                 :style="{zIndex: voters.length-index}">
               <img class="info-icon" v-if="user.avatar && user.avatar.length > 0" :src="user.avatar" alt="">
               <img v-else class="info-icon" src="~@/static/images/avatars/default.png" alt="">
               <b-popover class="primary-bg" :target="user.id + card.id" triggers="hover focus" placement="top">
                 {{ user.name ? user.name : (user.id.slice(0, 6) + '...' + user.id.slice(36, 42)) }}
               </b-popover>
             </div>
-            <span class="ml-1" style="line-height: 28px">{{ card.stakersCount }}</span>
+            <span class="ml-1" style="line-height: 28px">{{ card.votersCount }}</span>
           </div>
         </div>
       </div>
@@ -139,6 +139,7 @@ import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 import showToastMixin from "@/mixins/copyToast";
 import { NutAddress, BLOCK_CHAIN_BROWER } from '@/config'
 import { formatUserAddress, handleApiErrCode, sleep } from "@/utils/helper";
+import { getUserBaseInfo } from "@/utils/web3/account";
 
 export default {
   name: 'CommunityNPCard',
@@ -202,7 +203,8 @@ export default {
       nutAddress: NutAddress,
       updateVoing: false,
       operate: 'add',
-      harvesting: false
+      harvesting: false,
+      voters:[]
     }
   },
   methods: {
@@ -232,6 +234,11 @@ export default {
         this.harvesting = false
       }
     }
+  },
+  async mounted () {
+    const len = Math.min(7, this.card.voters.length);
+    const ids = this.card.voters.slice(0, len).map((a) => a.id);
+    this.voters = await Promise.all(ids.map((id) => getUserBaseInfo(id)));
   },
 }
 </script>
