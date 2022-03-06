@@ -114,7 +114,7 @@ export default {
       this.modalContentType='up-step1'
     },
     setData (data) {
-      // if (this.isUpgrade && data.unlockTime <= this.upgradeData.unlockTime) return
+      if (this.isUpgrade && data.srcPeriod >= data.distPeriod) return
       this.modalContentType = 'power-up'
       console.log('235', data);
       this.selectData = data

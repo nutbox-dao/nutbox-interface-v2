@@ -3,7 +3,7 @@
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="modal-title">
-      <span v-if="isUpgrade">Upgrade every {{ srcPeriod }} NP to {{ distPeriod }} NP</span>
+      <span style="width: 80%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
       <span v-else>Power up 1 Nut to {{ distPeriod }} NP</span>
     </div>
     <div class="mt-4">
@@ -30,6 +30,7 @@
                  style="flex: 1"
                  type="number"
                  v-model="value2"
+                 disabled
                  placeholder="0"/>
           <div class="c-append">
             <div class="symbol-type px-2" style="height: 1.6rem">NP</div>
@@ -38,15 +39,15 @@
       </div>
       <button class="primary-btn my-4">Confilm</button>
       <div class="tip my-4">
-        When you want to convert back your NP to Nut，you should do the power down operation，which will take
-        <strong class="text-primary-1">{{npData.ratio}}weeks</strong>
-        to get all your Nut back gradually.
+        When you want to convert back your NP to NUT, you should do the power down operatio, which will take
+        <strong class="text-primary-1">{{npData.distPeriod}} weeks</strong>
+        to get all your NUT back gradually.
       </div>
-      <div class="text-right">
+      <!-- <div class="text-right">
         <a class="text-primary-1 link" href="https://pancakeswap.finance/swap" target="_blank">
           Not enough Nut？Buy Nut at here.
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -82,12 +83,17 @@ export default {
       }else{
         return this.balance.freeNp + this.balance.lockedNp
       }
+    },
+    convertRatio() {
+      return this.npData.distPeriod / this.npData.srcPeriod
+    },
+    value2() {
+      return this.value1 * this.convertRatio
     }
   },
   data () {
     return {
       value1: 0,
-      value2: 0,
       periodToIdx: {
         1:0,
         2:1,
