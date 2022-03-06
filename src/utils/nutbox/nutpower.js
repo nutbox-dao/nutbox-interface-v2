@@ -171,6 +171,20 @@ export const getNPInfoByPolling = () => {
     return polling;
 }
 
+// get user's nut balance by polling
+export const pollingNutBalance = async () => {
+    const account = await getAccounts()
+    const nut = await getContract('ERC20', NutAddress)
+    const polling = rollingFunction(async () => {
+        try {
+            const balance = await nut.balanceOf(account)
+            store.commit('user/saveNutBalance', balance.toString() / 1e18)
+        }catch(e){}
+    }, null, 10 ,res => {})
+    polling.start()
+    return polling;
+}
+
 // get nutpower and gauge common data
 export const getNPAndGaugeInfo = async () => {
     return new Promise(async (resolve, reject) => {

@@ -5,7 +5,7 @@
       <div class="value-box">
         <div class="font20 line-height24">Total NP</div>
         <div class="font32 line-height36 d-flex align-items-center">
-          <span>{{totalNp | amountForm}} NP</span>
+          <span>{{ totalNp | amountForm }} NP</span>
           <i class="help-icon ml-2" id="total-np-tip"></i>
           <b-popover custom-class="sub-popover-outline" target="total-np-tip" triggers="hover" placement="right">
             <div class="font12 line-height12" style="width: 130px">
@@ -36,15 +36,17 @@
           </b-popover>
         </div>
         <div class="c-card">
-          <div class="c-card-header font16 line-height16">Total available:400 NP</div>
+          <div class="c-card-header font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
           <div class="c-card-content">
             <div class="available-items d-flex justify-content-between align-items-center"
-                 v-for="i of 5" :key="i">
-              <div>
-                <div class="font14 line-height14">300 NP</div>
-                <div class="font12 line-height12 text-grey-7">Unlock time:1 week</div>
-              </div>
-              <button class="primary-btn-outline font12" @click="$emit('upgrade', { unlockTime: 2, ratio: 2 })">Upgrade</button>
+                 v-for="(amount, idx) of userLockedNut" :key="'lockedNut' + idx">
+              <template v-if="amount >= 0">
+                <div>
+                  <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
+                  <div class="font12 line-height12 text-grey-7">Unlock period:{{ releasePeriod[idx] }} week</div>
+                </div>
+                <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">Upgrade</button>
+              </template>
             </div>
           </div>
         </div>
@@ -124,26 +126,35 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'NPAssetDetail',
+  data() {
+    return {
+      releasePeriod: [1,2,4,8,16,32,64]
+    }
+  },
   computed: {
     ...mapState('np', ['balance', 'userLockedNut']),
+    // user free np
     freeNp() {
       if (this.balance && this.balance.freeNp){
         return this.balance.freeNp.toString() / 1e18
       }
       return 0
     },
+    // user locked np
     lockedNp() {
       if (this.balance && this.balance.lockedNp) {
         return this.balance.lockedNp.toString() / 1e18
       }
       return 0
     },
+    // user total np
     totalNp() {
       if (this.freeNp && this.lockedNp) {
         return this.freeNp + this.lockedNp
       }
       return 0
     },
+    // user total locked nut
     totalLockedNut() {
       return this.userLockedNut.reduce((s, n) => s + n, 0)
     },

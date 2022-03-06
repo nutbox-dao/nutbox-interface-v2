@@ -2,10 +2,13 @@
   <div class="np-asset-up-modal position-relative">
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
-    <div class="modal-title">Power up 1 Nut to {{npData.ratio}} NP</div>
+    <div class="modal-title">
+      <span v-if="isUpgrade">Upgrade every {{ srcPeriod }} NP to {{ distPeriod }} NP</span>
+      <span v-else>Power up 1 Nut to {{ distPeriod }} NP</span>
+    </div>
     <div class="mt-4">
       <div class="c-input-group c-input-group-bg-dark c-input-group-border flex-column align-items-start px-3 py-2">
-        <div class="mt-2 mb-3 font14 line-height14">Balance:18,994,940,0000</div>
+        <div class="mt-2 mb-3 font14 line-height14">Balance: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
         <div class="c-input-group d-flex w-100 p-1">
           <input class="flex-1 font24 line-height24"
                  style="flex: 1"
@@ -13,7 +16,7 @@
                  v-model="value1"
                  placeholder="0"/>
           <div class="c-append">
-            <div class="symbol-type px-2" style="height: 1.6rem">Nut</div>
+            <div class="symbol-type px-2" style="height: 1.6rem">{{ isUpgrade ? "NP" : "NUT"}}</div>
           </div>
         </div>
       </div>
@@ -21,7 +24,7 @@
         <img src="~@/static/images/transfer-icon-primary.svg" alt="">
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border flex-column align-items-start px-3 py-2">
-        <div class="mt-2 mb-3 font14 line-height14">Balance:18,994,940,0000</div>
+        <div class="mt-2 mb-3 font14 line-height14">Balance: {{ distBalance | amountForm }}</div>
         <div class="c-input-group d-flex w-100">
           <input class="flex-1 font24 line-height24"
                  style="flex: 1"
@@ -49,6 +52,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'NPAssetPowerUp',
   props: {
@@ -56,10 +61,42 @@ export default {
       type: Object
     }
   },
+  computed: {
+    ...mapState('np', ['userLockedNut', 'balance']),
+    ...mapState('user', ['nutBalance']),
+    isUpgrade() {
+      return this.npData.isUpgrade 
+    },
+    srcPeriod() {
+      return this.npData.srcPeriod
+    },
+    distPeriod() {
+      return this.npData.distPeriod
+    },
+    srcBalance() {
+      return this.userLockedNut[this.periodToIdx[this.srcPeriod]] * this.srcPeriod
+    },
+    distBalance() {
+      if(this.isUpgrade) {
+       return  this.userLockedNut[this.periodToIdx[this.distPeriod]] * this.distPeriod
+      }else{
+        return this.balance.freeNp + this.balance.lockedNp
+      }
+    }
+  },
   data () {
     return {
       value1: 0,
-      value2: 0
+      value2: 0,
+      periodToIdx: {
+        1:0,
+        2:1,
+        4:2,
+        8:3,
+        16:4,
+        32:5,
+        64:6
+      }
     }
   }
 }
