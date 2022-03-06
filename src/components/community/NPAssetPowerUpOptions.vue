@@ -99,6 +99,8 @@ export default {
     position: relative;
     box-sizing: border-box;
     cursor: pointer;
+    text-align: center;
+    min-height: 40px;
     &.disable-item {
       border: none;
       background-color: var(--text-74);
@@ -131,7 +133,6 @@ export default {
         align-items: center;
         justify-content: center;
         text-align: center;
-        line-height: 12px;
       }
     }
   }
