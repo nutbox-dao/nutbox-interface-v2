@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/normal/Blog</title>
+<svg width="21px" height="20px" viewBox="0 0 21 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>menu-social-active</title>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-新-1218" transform="translate(-240.000000, -72.000000)">
-            <g id="社区一级导航备份-2" transform="translate(220.000000, 0.000000)">
-                <g id="编组-2备份" transform="translate(0.000000, 60.000000)">
-                    <g id="menuicon_home" transform="translate(20.000000, 12.000000)">
-                        <g id="social" transform="translate(2.000000, 2.000000)">
-                            <rect id="矩形" fill="#747576" transform="translate(15.000000, 7.000000) rotate(-15.000000) translate(-15.000000, -7.000000) " x="14" y="4" width="2" height="6" rx="1"></rect>
-                            <circle id="椭圆形" fill="#FFDB1B" cx="13" cy="4" r="4"></circle>
-                            <circle id="椭圆形备份-3" fill="#FFDB1B" cx="16.5" cy="14.5" r="3.5"></circle>
-                            <circle id="椭圆形备份-4" fill="#FFDB1B" cx="5" cy="15" r="5"></circle>
-                            <rect id="矩形备份-8" fill="#747576" transform="translate(9.250000, 9.299038) rotate(35.000000) translate(-9.250000, -9.299038) " x="8.25" y="4.79903811" width="2" height="9" rx="1"></rect>
-                        </g>
-                    </g>
-                </g>
-            </g>
+        <g id="menu-social-active" transform="translate(0.082806, 0.000000)" fill="#FFDB1B" fill-rule="nonzero">
+            <path d="M13,0 C15.209139,0 17,1.790861 17,4 C17,5.03884749 16.6039779,5.98519907 15.954667,6.69632159 L16.4835639,8.67303261 C16.6265057,9.20649871 16.3099232,9.75483567 15.7764571,9.89777748 C15.242991,10.0407193 14.6946541,9.7241368 14.5517123,9.1906707 L14.1845064,7.82171055 C13.8101991,7.93759397 13.4123874,8 13,8 C12.4947081,8 12.0112991,7.90630846 11.5661976,7.73535004 L8.77462252,11.7208264 C9.5379033,12.5986807 10,13.7453761 10,15 C10,17.7614237 7.76142375,20 5,20 C2.23857625,20 0,17.7614237 0,15 C0,12.2385763 2.23857625,10 5,10 C5.78404009,10 6.52593135,10.1804606 7.18640348,10.5021114 L9.93741714,6.57319185 C9.35241163,5.87764988 9,4.97998001 9,4 C9,1.790861 10.790861,0 13,0 Z M16.5,11 C18.4329966,11 20,12.5670034 20,14.5 C20,16.4329966 18.4329966,18 16.5,18 C14.5670034,18 13,16.4329966 13,14.5 C13,12.5670034 14.5670034,11 16.5,11 Z" id="形状结合"></path>
         </g>
     </g>
 </svg>

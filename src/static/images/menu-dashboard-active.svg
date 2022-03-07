@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="19px" viewBox="0 0 20 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>menu-dashboard-active</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="menu-dashboard-active" transform="translate(0.082806, 0.000000)" fill="#FFDB1B" fill-rule="nonzero">
+            <path d="M8.0003032,1.05489527 L8,10 C8,10.5128358 8.3860402,10.9355072 8.8833789,10.9932723 L9,11 L17.9449943,11.0006955 C17.4472338,15.5003111 13.632315,19 9,19 C4.02943725,19 0,14.9705627 0,10 C0,5.3673423 3.50020676,1.5522017 8.0003032,1.05489527 Z M10,0 C14.8818027,0 18.8557914,3.88681368 18.9961629,8.7346377 L19,9 L11,9 C10.4477153,9 10,8.5522847 10,8 L10,0 Z" id="形状结合"></path>
+        </g>
+    </g>
+</svg>
