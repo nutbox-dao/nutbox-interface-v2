@@ -144,8 +144,8 @@ export default {
       if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
         return true;
       }
-      this.$bvToast.toast(this.$t("error.delegateerror"), {
-        title: this.$t("error.notEnoughFee"),
+      this.$bvToast.toast(this.$t("error.notEnoughFee"), {
+        title: this.$t("error.delegateerror"),
         variant: "info",
       });
       return false;
