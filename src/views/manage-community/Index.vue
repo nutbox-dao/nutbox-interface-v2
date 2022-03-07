@@ -13,15 +13,15 @@
               <span>{{ $t('router.asset') }}</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/staking">
-              <i class="menu-icon stake-icon" />
+              <i class="menu-icon farming-icon" />
               <span>Yield Farming</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/iso">
-              <i class="menu-icon stake-icon" />
+              <i class="menu-icon iso-icon" />
               <span>ISO</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
-              <i class="menu-icon stake-icon" />
+              <i class="menu-icon nut-power-icon" />
               <span>Nut Power</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/vote">
@@ -191,19 +191,25 @@ export default {
   margin-right: .4rem;
 }
 .home-icon {
-  background-image: url("~@/static/images/m-menu-home.svg");
+  background-image: url("~@/static/images/menu-home.svg");
 }
 .asset-icon {
   background-image: url("~@/static/images/m-menu-asset.svg");
 }
-.stake-icon {
-  background-image: url("~@/static/images/m-menu-stake.svg");
+.farming-icon {
+  background-image: url("~@/static/images/menu-farming.svg");
+}
+.iso-icon {
+  background-image: url("~@/static/images/menu-stake.svg");
+}
+.nut-power-icon {
+  background-image: url("~@/static/images/menu-nut-power.svg");
 }
 .governance-icon {
-  background-image: url("~@/static/images/m-menu-governance.svg");
+  background-image: url("~@/static/images/menu-governance.svg");
 }
 .social-icon {
-  background-image: url("~@/static/images/m-menu-social.svg");
+  background-image: url("~@/static/images/menu-social.svg");
 }
 .active {
   .home-icon {
@@ -212,8 +218,14 @@ export default {
   .asset-icon {
     background-image: url("~@/static/images/m-menu-asset-active.svg");
   }
-  .stake-icon {
+  .farming-icon {
+    background-image: url("~@/static/images/m-menu-farming-active.svg");
+  }
+  .iso-icon {
     background-image: url("~@/static/images/m-menu-stake-active.svg");
+  }
+  .nut-power-icon {
+    background-image: url("~@/static/images/m-menu-nut-power-active.svg");
   }
   .governance-icon {
     background-image: url("~@/static/images/m-menu-governance-active.svg");

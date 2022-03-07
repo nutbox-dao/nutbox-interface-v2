@@ -10,15 +10,15 @@
                 <span>Home</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
-                <i class="menu-icon stake-icon" />
+                <i class="menu-icon farming-icon" />
                 <span>Yield Farming</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/iso">
-                <i class="menu-icon stake-icon" />
+                <i class="menu-icon iso-icon" />
                 <span>ISO</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
-                <i class="menu-icon stake-icon" />
+                <i class="menu-icon nut-power-icon" />
                 <span>Nut Power</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
@@ -68,8 +68,16 @@
                     <span>Home</span>
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/staking">
-                    <i class="menu-icon stake-icon" />
+                    <i class="menu-icon farming-icon" />
                     <span>Yield Farming</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/iso">
+                    <i class="menu-icon iso-icon" />
+                    <span>ISO</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/nut-power">
+                    <i class="menu-icon nut-power-icon" />
+                    <span>Nut Power</span>
                   </b-dropdown-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
@@ -320,8 +328,14 @@ export default {
 .blog-icon {
   background-image: url("~@/static/images/menu-social.svg");
 }
-.stake-icon {
+.farming-icon {
+  background-image: url("~@/static/images/menu-farming.svg");
+}
+.iso-icon {
   background-image: url("~@/static/images/menu-stake.svg");
+}
+.nut-power-icon {
+  background-image: url("~@/static/images/menu-nut-power.svg");
 }
 .dapp-icon {
   background-image: url("~@/static/images/menu-dapp.svg");
@@ -332,6 +346,9 @@ export default {
 .member-icon {
   background-image: url("~@/static/images/menu-member.svg");
 }
+.dashboard-icon {
+  background-image: url("~@/static/images/menu-dashboard.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/menu-home-active.svg");
@@ -339,8 +356,14 @@ export default {
   .blog-icon {
     background-image: url("~@/static/images/menu-social-active.svg");
   }
-  .stake-icon {
+  .farming-icon {
+    background-image: url("~@/static/images/menu-farming-active.svg");
+  }
+  .iso-icon {
     background-image: url("~@/static/images/menu-stake-active.svg");
+  }
+  .nut-power-icon {
+    background-image: url("~@/static/images/menu-nut-power-active.svg");
   }
   .dapp-icon {
     background-image: url("~@/static/images/menu-dapp-active.svg");
@@ -350,6 +373,9 @@ export default {
   }
   .member-icon {
     background-image: url("~@/static/images/menu-member-active.svg");
+  }
+  .dashboard-icon {
+    background-image: url("~@/static/images/menu-dashboard-active.svg");
   }
 }
 </style>
