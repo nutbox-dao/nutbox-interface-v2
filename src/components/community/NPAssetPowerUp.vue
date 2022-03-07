@@ -4,11 +4,11 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="modal-title">
       <span style="width: 80%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
-      <span v-else>Power up 1 Nut to {{ distPeriod }} NP</span>
+      <span v-else>Power up every 1 Nut to {{ distPeriod }} NP</span>
     </div>
     <div class="mt-4">
+      <div class="mt-2 mb-3 font14 line-height14" style="margin-left: 1rem">Balance: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border flex-column align-items-start px-3 py-2">
-        <div class="mt-2 mb-3 font14 line-height14">Balance: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
         <div class="c-input-group d-flex w-100 p-1">
           <input class="flex-1 font24 line-height24"
                  style="flex: 1"
@@ -24,7 +24,7 @@
         <img src="~@/static/images/transfer-icon-primary.svg" alt="">
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border flex-column align-items-start px-3 py-2">
-        <div class="mt-2 mb-3 font14 line-height14">Balance: {{ distBalance | amountForm }}</div>
+        <!-- <div class="mt-2 mb-3 font14 line-height14">Balance: {{ distBalance | amountForm }}</div> -->
         <div class="c-input-group d-flex w-100">
           <input class="flex-1 font24 line-height24"
                  style="flex: 1"
@@ -37,9 +37,19 @@
           </div>
         </div>
       </div>
-      <button class="primary-btn my-4">Confilm</button>
+      <button class="primary-btn my-4"
+         v-if="!isUpgrade && (loadingApproveToNutPower || !approveToNutPower)"
+         :disabled="isApproving || loadingApproveToNutPower"
+         @click="approveNutPower">
+        <b-spinner small type="grow" v-show="isApproving || loadingApproveToNutPower"></b-spinner>
+        {{ $t('operation.approve') }}
+      </button>
+      <button v-else class="primary-btn my-4" :disabled="executing" @click="isUpgrade ? upgrade() : powerUp()">
+        <b-spinner small type="grow" v-show="executing"></b-spinner>
+        {{ $t('operation.confirm') }}
+      </button>
       <div class="tip my-4">
-        When you want to convert back your NP to NUT, you should do the power down operatio, which will take
+        When you want to convert back your NP to NUT, you should do the power down operate, which will take
         <strong class="text-primary-1">{{npData.distPeriod}} weeks</strong>
         to get all your NUT back gradually.
       </div>
@@ -54,6 +64,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import { handleApiErrCode } from '../../utils/helper'
+import { powerUp, upgrade } from '@/utils/nutbox/nutpower'
+import { NutAddress, PeriodToIdx } from '@/config'
+import { contractAddress } from '@/utils/web3/contract'
+import { approveUseERC20 } from '@/utils/web3/community'
 
 export default {
   name: 'NPAssetPowerUp',
@@ -64,7 +79,7 @@ export default {
   },
   computed: {
     ...mapState('np', ['userLockedNut', 'balance']),
-    ...mapState('user', ['nutBalance']),
+    ...mapState('user', ['nutBalance', 'loadingApproveToNutPower', 'approveToNutPower']),
     isUpgrade() {
       return this.npData.isUpgrade 
     },
@@ -75,11 +90,11 @@ export default {
       return this.npData.distPeriod
     },
     srcBalance() {
-      return this.userLockedNut[this.periodToIdx[this.srcPeriod]] * this.srcPeriod
+      return this.userLockedNut[PeriodToIdx[this.srcPeriod]] * this.srcPeriod
     },
     distBalance() {
       if(this.isUpgrade) {
-       return  this.userLockedNut[this.periodToIdx[this.distPeriod]] * this.distPeriod
+       return  this.userLockedNut[PeriodToIdx[this.distPeriod]] * this.distPeriod
       }else{
         return this.balance.freeNp + this.balance.lockedNp
       }
@@ -93,18 +108,71 @@ export default {
   },
   data () {
     return {
-      value1: 0,
-      periodToIdx: {
-        1:0,
-        2:1,
-        4:2,
-        8:3,
-        16:4,
-        32:5,
-        64:6
+      value1: '',
+      executing: false,
+      isApproving: false
+    }
+  },
+  methods: {
+    async approveNutPower() {
+      try {
+        this.isApproving = true
+        await approveUseERC20(NutAddress, contractAddress['NutPower']);
+        this.bvToast.toast(this.$t('tip.success'), {
+          title: this.$t('tip.approveSuccess'),
+          variant: 'success'
+        })
+        // update the approvement result immediately
+        this.$store.commit('user/saveApproveToNutPower', true);
+      }catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$t(tip, param)
+        })
+      }finally{
+        this.isApproving = false
+      }
+    },
+    async powerUp() {
+      const amount = parseFloat(this.value1)
+      if (amount > this.nutBalance) {
+        this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
+      try {
+        this.executing = true
+        await powerUp(amount, PeriodToIdx[this.distPeriod])
+      }catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally {
+        this.executing = false
+      }
+    },
+    async upgrade() {
+      const amount = parseFloat(this.value1)
+      if (amount > this.srcBalance) {
+        this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }
+      try {
+        this.executing = true
+        await upgrade(amount, PeriodToIdx[this.srcPeriod], PeriodToIdx[this.distPeriod])
+      }catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      }finally {
+        this.executing = false
       }
     }
-  }
+  },
 }
 </script>
 

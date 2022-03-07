@@ -9,6 +9,8 @@ export default {
         loadingUserGraph: true,
         userGraphInfo: {},
         nutBalance: 0,
+        approveToNutPower: false,
+        loadingApproveToNutPower: true
     },
     getters: {
         getUserByAddress: state => (address) => {
@@ -31,6 +33,12 @@ export default {
         },
         saveNutBalance(state, nutBalance) {
             state.nutBalance = nutBalance
+        },
+        saveApproveToNutPower(state, approveToNutPower) {
+            state.approveToNutPower = approveToNutPower
+        },
+        saveLoadingApproveToNutPower(state, loadingApproveToNutPower) {
+            state.loadingApproveToNutPower = loadingApproveToNutPower
         }
     }
 }

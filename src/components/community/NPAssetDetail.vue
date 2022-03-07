@@ -38,9 +38,13 @@
         <div class="c-card">
           <div class="c-card-header font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
           <div class="c-card-content">
-            <div class="available-items d-flex justify-content-between align-items-center"
+            <div class="empty-bg" v-if="totalLockedNut == 0">
+              <img src="~@/static/images/empty-data.png" alt="" />
+              <p> {{ $t('tip.noPowerupNut') }} </p>
+            </div>
+            <div v-else class="available-items d-flex justify-content-between align-items-center"
                  v-for="(amount, idx) of userLockedNut" :key="'lockedNut' + idx">
-              <template v-if="amount >= 0">
+              <template v-if="amount > 0">
                 <div>
                   <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
                   <div class="font12 line-height12 text-grey-7">Unlock period:{{ releasePeriod[idx] }} week</div>
@@ -156,7 +160,8 @@ export default {
     },
     // user total locked nut
     totalLockedNut() {
-      return this.userLockedNut.reduce((s, n) => s + n, 0)
+      const t = this.userLockedNut.reduce((s, n) => s + n, 0)
+      return t;
     },
   },
 }

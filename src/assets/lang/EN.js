@@ -201,7 +201,8 @@ module.exports = {
     stakeTokenLogoTip: "This logo is set to the stake token {token} which you selected.",
     updateSocialSuccess: 'Update successful!',
     startHeightOut: 'The first start block must bigger than current block.',
-    wrongSocialInfo: "Please fill right {type} link!"
+    wrongSocialInfo: "Please fill right {type} link!",
+    noPowerupNut: "Haven't power up NUT",
   },
   nps: {
     nps: "Governance",

@@ -71,7 +71,10 @@ async function getNpContract() {
 export const powerUp = async (amount, period) => {
     return new Promise(async (resolve, reject) => {
         try{
+            amount = ethers.utils.parseUnits(amount.toString(), 18)
             const np = await getNpContract();
+            console.log('235', amount, period);
+            
             const tx = await np.powerUp(amount, period)
             await waitForTx(tx.hash)
             resolve(tx.hash)
@@ -85,6 +88,7 @@ export const powerUp = async (amount, period) => {
 export const powerDown = async (amount, period) => {
     return new Promise(async (resolve, reject) => {
         try{
+            amount = ethers.utils.parseUnits(amount.toString(), 18)
             const np = await getNpContract();
             const tx = await np.powerDown(amount, period)
             await waitForTx(tx.hash)
@@ -99,6 +103,7 @@ export const powerDown = async (amount, period) => {
 export const upgrade = async (amount, src, dest) => {
     return new Promise(async (resolve, reject) => {
         try{
+            amount = ethers.utils.parseUnits(amount.toString(), 18)
             const np = await getNpContract();
             const tx = await np.upgrade(amount, src, dest)
             await waitForTx(tx.hash)
@@ -171,20 +176,6 @@ export const getNPInfoByPolling = () => {
     return polling;
 }
 
-// get user's nut balance by polling
-export const pollingNutBalance = async () => {
-    const account = await getAccounts()
-    const nut = await getContract('ERC20', NutAddress)
-    const polling = rollingFunction(async () => {
-        try {
-            const balance = await nut.balanceOf(account)
-            store.commit('user/saveNutBalance', balance.toString() / 1e18)
-        }catch(e){}
-    }, null, 10 ,res => {})
-    polling.start()
-    return polling;
-}
-
 // get nutpower and gauge common data
 export const getNPAndGaugeInfo = async () => {
     return new Promise(async (resolve, reject) => {
@@ -252,4 +243,21 @@ export const getNPAndGaugeInfo = async () => {
             reject(e)
         }
     })
+}
+
+// get user's nut balance by polling and aprovement to NutPower
+export const pollingNutBalance = async () => {
+    const account = await getAccounts()
+    const nut = await getContract('ERC20', NutAddress)
+    const polling = rollingFunction(async () => {
+        try {
+            const balance = await nut.balanceOf(account)
+            store.commit('user/saveNutBalance', balance.toString() / 1e18)
+            const allowance = await nut.allowance(account, contractAddress['NutPower'])
+            store.commit('user/saveApproveToNutPower', allowance.toString() / 1e18 > 1e12)
+            store.commit('user/saveLoadingApproveToNutPower', false)
+        }catch(e){}
+    }, null, 10 ,res => {})
+    polling.start()
+    return polling;
 }

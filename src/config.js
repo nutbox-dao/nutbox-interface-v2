@@ -11,6 +11,17 @@ export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 
 export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 
+// np power period to channel
+export const PeriodToIdx = {
+  1:0,
+  2:1,
+  4:2,
+  8:3,
+  16:4,
+  32:5,
+  64:6
+}
+
 /**
  * ERROR CODE DEFINE
  */
