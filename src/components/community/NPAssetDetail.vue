@@ -42,15 +42,16 @@
               <img src="~@/static/images/empty-data.png" alt="" />
               <p> {{ $t('tip.noPowerupNut') }} </p>
             </div>
-            <div v-else class="available-items d-flex justify-content-between align-items-center"
-                 v-for="(amount, idx) of userLockedNut" :key="'lockedNut' + idx">
-              <template v-if="amount > 0">
-                <div>
-                  <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
-                  <div class="font12 line-height12 text-grey-7">Unlock period:{{ releasePeriod[idx] }} week</div>
+            <div v-else>
+              <div v-for="(amount, idx) of userLockedNut" :key="'lockedNut' + idx">
+                <div v-if="amount > 0"  class="available-items d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
+                    <div class="font12 line-height12 text-grey-7">Unlock period:{{ releasePeriod[idx] }} week</div>
+                  </div>
+                  <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">Upgrade</button>
                 </div>
-                <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">Upgrade</button>
-              </template>
+              </div>
             </div>
           </div>
         </div>
