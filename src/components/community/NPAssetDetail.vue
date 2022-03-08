@@ -37,7 +37,10 @@
         </div>
         <div class="c-card">
           <div class="c-card-header c-card-header-available d-flex">
-            <div class="font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
+            <div class="font16 line-height16 header-left">
+              <span>Total available:</span>
+              <span>{{ freeNp | amountForm }} NP</span>
+            </div>
             <div class="font12 line-height12 text-grey-7 d-flex header-right">
               <span>NP Available: 4000</span>
               <span>NP Voted: 3000</span>
@@ -227,6 +230,7 @@ export default {
   .header-right {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     :first-child {
       margin-bottom: 4px;
     }
@@ -271,17 +275,13 @@ export default {
 @media (max-width: 1200px) {
   .c-card {
     .c-card-header-available {
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-    .header-right {
-      width: 100%;
-      flex-direction: row;
-      margin-top: 4px;
       justify-content: space-between;
-      :first-child {
-        margin-bottom: 0;
-      }
+      align-items: flex-end;
+      padding-bottom: 1rem;
+    }
+    .header-left {
+      display: flex;
+      flex-direction: column;
     }
   }
 }
@@ -309,6 +309,13 @@ export default {
 @media (max-width: 375px) {
   .c-card .c-card-header {
     height: fit-content;
+  }
+  .c-card .c-card-header-available {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .c-card .header-left {
+    flex-direction: row;
   }
   .c-card .header-right {
     flex-direction: column;
