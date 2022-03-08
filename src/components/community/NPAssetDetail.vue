@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="row pt-4 bottom-box">
-      <div class="col-lg-4">
+      <div class="col-lg-5">
         <div class="d-flex align-items-center item-card-title">
           <span class="font20 line-height24">Available NP</span>
           <i class="help-icon ml-2" id="available-np-help"></i>
@@ -36,7 +36,13 @@
           </b-popover>
         </div>
         <div class="c-card">
-          <div class="c-card-header font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
+          <div class="c-card-header c-card-header-available d-flex">
+            <div class="font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
+            <div class="font12 line-height12 text-grey-7 d-flex header-right">
+              <span>NP Available: 4000</span>
+              <span>NP Voted: 3000</span>
+            </div>
+          </div>
           <div class="c-card-content">
             <div class="empty-bg p-0" v-if="totalLockedNut == 0">
               <img src="~@/static/images/empty-data.png" alt="" />
@@ -82,7 +88,7 @@
 <!--          </div>-->
 <!--        </div>-->
 <!--      </div>-->
-      <div class="col-lg-8">
+      <div class="col-lg-7">
         <div class="d-flex justify-content-between align-items-center item-card-title">
           <div class="d-flex align-items-center">
             <span class="font20 line-height24">Unlocking NP</span>
@@ -213,6 +219,17 @@ export default {
     height: 70px;
     padding-top: 1.5rem;
     padding-left: 1rem;
+    padding-right: 1rem;
+    &-available {
+      justify-content: space-between;
+    }
+  }
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    :first-child {
+      margin-bottom: 4px;
+    }
   }
   .c-card-content {
     flex: 1;
@@ -251,7 +268,23 @@ export default {
   border-radius: 10px;
   background-color: #50BF00;
 }
-
+@media (max-width: 1200px) {
+  .c-card {
+    .c-card-header-available {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .header-right {
+      width: 100%;
+      flex-direction: row;
+      margin-top: 4px;
+      justify-content: space-between;
+      :first-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 @media (max-width: 991px) {
   .c-card {
     margin-bottom: 15px;
@@ -271,6 +304,17 @@ export default {
     width: 100%;
     justify-content: space-between;
     margin-top: .8rem;
+  }
+}
+@media (max-width: 375px) {
+  .c-card .c-card-header {
+    height: fit-content;
+  }
+  .c-card .header-right {
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 16px;
+    margin-top: 4px;
   }
 }
 </style>
