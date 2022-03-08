@@ -103,7 +103,7 @@ export default {
     },
     formStaked() {
       const staked = this.staked;
-      return (staked.toString() / 1e6) * this.vestsToSteem;
+      return staked.toString() / 1e6;
     },
     account() {
       return strReplace(store.state.cosmos.account, 13, 6, "*", 5);
