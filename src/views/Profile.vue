@@ -105,6 +105,7 @@ import AvatarOptionsModal from '@/components/profile/AvatarOptionsModal';
 import { getCtokenBalance } from '@/utils/web3/asset'
 import { rollingFunction } from '@/utils/helper'
 import NPAssetCard from '@/components/community/NPAssetCard'
+import { updateBalanceByPolling, getNPInfoByPolling } from '@/utils/nutbox/nutpower'
 
 export default {
   name: 'Profile',
@@ -188,7 +189,7 @@ export default {
       console.log('get my user info fail:', err)
     })
     getMyJoinedCommunity().then(res => this.loadingCommunity = false);
-    const interval = rollingFunction(getCtokenBalance, null, 3, res => {
+    const interval = rollingFunction(getCtokenBalance, null, 15, res => {
       if(!this.allTokens) return;
       let ctokens = []
       Object.keys(res).forEach(address => {
@@ -222,9 +223,14 @@ export default {
       this.loadingBalance = false
     })
     interval.start();
+
+    const pollingNpInfo = getNPInfoByPolling()
+    const pollingNpBalance = updateBalanceByPolling()
     this.$once('hook:beforeDestroy', () => {
-      interval.stop();
-    })
+        pollingNpBalance.stop();
+        pollingNpInfo.stop();
+        interval.stop();
+    });
   },
 }
 </script>

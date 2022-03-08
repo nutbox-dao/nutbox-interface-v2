@@ -113,28 +113,32 @@
             <div class="font12 line-height12 text-grey-7 mt-1">Claim available：{{claimableNut | amountForm}} NUT</div>
           </div>
           <div class="c-card-content">
-            <div class="empty-bg p-0" v-if="redeemList.length == 0">
-              <img src="~@/static/images/empty-data.png" alt="" />
-              <p> {{ $t('tip.npRedeemProcess') }} </p>
+            <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingRedeemInfo">
             </div>
-            <div v-else class="unlock-items" v-for="(unlockedItem, idx) of redeemList" :key="idx">
-              <div class="font12 line-height16">Unlock in {{unlockedItem.period}} weeks：<br>{{unlockedItem.npAmount | amountForm}} NP to {{unlockedItem.nutAmount | amountForm}} NUT</div>
-              <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + idx"
-                         triggers="hover" placement="top">
-                <div class="font12">
-                  Claimed NUT: {{unlockedItem.claimed | amountForm}}
-                </div>
-              </b-popover>
-              <b-progress :max="100">
-                <b-progress-bar class="green-progress-bar"
-                                :id="'progress-tip' + idx"
-                                :value="unlockedItem.ratio"></b-progress-bar>
-              </b-progress>
-              <div class="d-flex justify-content-between align-items-center font12 text-grey-7">
-                <span>Claim available: {{unlockedItem.claimble | amountForm}} Nut</span>
-                <span>{{ unlockedItem.timeLeft }}</span>
+            <template v-else>
+              <div class="empty-bg p-0" v-if="redeemList.length == 0">
+                <img src="~@/static/images/empty-data.png" alt="" />
+                <p> {{ $t('tip.npRedeemProcess') }} </p>
               </div>
-            </div>
+              <div v-else class="unlock-items" v-for="(unlockedItem, idx) of redeemList" :key="idx">
+                <div class="font12 line-height16">Unlock in {{unlockedItem.period}} weeks：<br>{{unlockedItem.npAmount | amountForm}} NP to {{unlockedItem.nutAmount | amountForm}} NUT</div>
+                <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + idx"
+                          triggers="hover" placement="top">
+                  <div class="font12">
+                    Claimed NUT: {{unlockedItem.claimed | amountForm}}
+                  </div>
+                </b-popover>
+                <b-progress :max="100">
+                  <b-progress-bar class="green-progress-bar"
+                                  :id="'progress-tip' + idx"
+                                  :value="unlockedItem.ratio"></b-progress-bar>
+                </b-progress>
+                <div class="d-flex justify-content-between align-items-center font12 text-grey-7">
+                  <span>Claim available: {{unlockedItem.claimble | amountForm}} Nut</span>
+                  <span>{{ unlockedItem.timeLeft }}</span>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -159,7 +163,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('np', ['balance', 'userLockedNut', 'userRedeemInfo']),
+    ...mapState('np', ['balance', 'userLockedNut', 'userRedeemInfo', 'loadingRedeemInfo']),
     // user free np
     freeNp() {
       if (this.balance && this.balance.freeNp){

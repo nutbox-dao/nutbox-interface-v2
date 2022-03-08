@@ -14,7 +14,8 @@
         balance: {},
         // 0-6 array
         userLockedNut: [],
-        userRedeemInfo:[]
+        userRedeemInfo:[],
+        loadingRedeemInfo: true
     },
     mutations: {
         // common
@@ -40,6 +41,9 @@
         },
         saveUserRedeemInfo: (state, userRedeemInfo) => {
             state.userRedeemInfo = userRedeemInfo
+        },
+        saveLoadingRedeemInfo: (state, loadingRedeemInfo) => {
+            state.loadingRedeemInfo = loadingRedeemInfo
         }
     }
 }

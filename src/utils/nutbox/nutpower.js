@@ -19,6 +19,7 @@ import {
 import { ethers } from 'ethers'
 import { rollingFunction } from '../helper'
 
+// update user's np balance
 export const updateBalanceByPolling = () => {
     const polling = rollingFunction(getBalance, null, 10, res => {
         const freeNp = res.freeNp;
@@ -139,6 +140,7 @@ export const getUserRedeemRequestsOfPeriod = async () => {
                 np.redeemRequestsOfPeriod(account, idx)
             ))
             store.commit('np/saveUserRedeemInfo', redeemInfo)
+            store.commit('np/saveLoadingRedeemInfo', false)
             resolve(redeemInfo)
         }catch(e) {
             console.log('Get user redeem requests fail:', e);
