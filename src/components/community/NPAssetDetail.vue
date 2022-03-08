@@ -38,7 +38,7 @@
         <div class="c-card">
           <div class="c-card-header font16 line-height16">Total available:{{ freeNp | amountForm }} NP</div>
           <div class="c-card-content">
-            <div class="empty-bg" v-if="totalLockedNut == 0">
+            <div class="empty-bg p-0" v-if="totalLockedNut == 0">
               <img src="~@/static/images/empty-data.png" alt="" />
               <p> {{ $t('tip.noPowerupNut') }} </p>
             </div>
@@ -220,6 +220,13 @@ export default {
     flex: 1;
     padding: 1rem 1.2rem;
     overflow: auto;
+    position: relative;
+  }
+  .empty-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .available-items, .voted-item {
     padding: 10px 0;
