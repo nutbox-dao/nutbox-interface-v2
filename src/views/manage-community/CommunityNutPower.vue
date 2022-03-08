@@ -3,9 +3,9 @@
     <div class="view-top-header view-top-header-sticky">
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
-          <div class="font24 line-height28 font-bold mb-2">Nut Power（NP）</div>
+          <div class="font24 line-height28 font-bold mb-2">NUT Power（NP）</div>
           <div class="font16 line-height24 font-bold mb-4">
-            Nut Power introduction...
+            NUT Power introduction...
           </div>
         </div>
         <div class="col-xl-5">
@@ -13,7 +13,7 @@
             <button class="primary-btn primary-btn-outline w-auto mx-0 px-3"
                     style="height: 2rem"
                     @click="claimModal=true">
-              Claim Nut
+              Claim NUT
             </button>
             <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"

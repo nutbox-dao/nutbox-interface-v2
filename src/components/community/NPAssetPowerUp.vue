@@ -4,7 +4,7 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="modal-title">
       <span style="width: 80%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
-      <span v-else>Power up every 1 Nut to {{ distPeriod }} NP</span>
+      <span v-else>Power up every 1 NUT to {{ distPeriod }} NP</span>
     </div>
     <div class="mt-4">
       <div class="mt-2 mb-3 font14 line-height14" style="margin-left: 1rem">Balance: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
@@ -55,7 +55,7 @@
       </div>
       <!-- <div class="text-right">
         <a class="text-primary-1 link" href="https://pancakeswap.finance/swap" target="_blank">
-          Not enough Nut？Buy Nut at here.
+          Not enough NUT？Buy NUT at here.
         </a>
       </div> -->
     </div>
@@ -167,7 +167,7 @@ export default {
       try {
         this.executing = true
         await upgrade(amount, PeriodToIdx[this.srcPeriod], PeriodToIdx[this.distPeriod])
-        
+
         this.$emit('finish');
       }catch (e) {
         handleApiErrCode(e, (tip, param) => {

@@ -22,7 +22,7 @@
             </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />
-              <span>Nut Power</span>
+              <span>NUT Power</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />

@@ -9,41 +9,41 @@
           <i class="help-icon ml-2" id="total-np-tip"></i>
           <b-popover custom-class="sub-popover-outline" target="total-np-tip" triggers="hover" placement="right">
             <div class="font12 line-height12" style="width: 130px">
-            <p>
-              Total NP: ALL NP you power up.
-            </p>
-            <p style="margin-bottom:0">
-              Available NP: NP you can power down to Nut any time.
-            </p>
+              Total NP: All NP you owned.
             </div>
           </b-popover>
         </div>
       </div>
       <div class="d-flex justify-content-center np-btn-group mr-1">
         <button class="primary-btn mr-2" @click="$emit('powerUp')">Power up</button>
-        <button class="primary-btn" @click="$emit('powerDown')">Power down</button>
+        <button class="primary-btn" :disabled="freeNp==0" @click="$emit('powerDown')">Power down</button>
       </div>
     </div>
     <div class="row pt-4 bottom-box">
       <div class="col-lg-5">
         <div class="d-flex align-items-center item-card-title">
-          <span class="font20 line-height24">Available NP</span>
+          <span class="font20 line-height24">Summary</span>
           <i class="help-icon ml-2" id="available-np-help"></i>
           <b-popover custom-class="sub-popover-outline" target="available-np-help" triggers="hover" placement="top">
             <div class="font12 line-height12" style="width: 130px">
-              Available NP: NP could be used to vote or unlocking.
+              <p>
+                Available NP: NP could be used to vote or unlocking.
+              </p>
+              <p>
+                Voted NP: NP you voted into pools of entire Walnut.
+              </p>
             </div>
           </b-popover>
         </div>
         <div class="c-card">
           <div class="c-card-header c-card-header-available d-flex">
             <div class="font16 line-height16 header-left">
-              <span>Total available:</span>
-              <span>{{ freeNp | amountForm }} NP</span>
+              <span>NUT Staked:</span>
+              <span>{{ totalLockedNut | amountForm }} NUT</span>
             </div>
             <div class="font12 line-height12 text-grey-7 d-flex header-right">
-              <span>NP Available: 4000</span>
-              <span>NP Voted: 3000</span>
+              <span>NP Available: {{ freeNp | amountForm }}</span>
+              <span>NP Voted: {{ lockedNp | amountForm }}</span>
             </div>
           </div>
           <div class="c-card-content">
@@ -102,20 +102,20 @@
               </div>
             </b-popover>
           </div>
-          <button class="primary-btn-outline claim-btn font12">Claim Nut</button>
+          <button class="primary-btn-outline claim-btn font12">Claim NUT</button>
         </div>
         <div class="c-card">
           <div class="c-card-header">
-            <div class="font16 line-height16">3300 NP to 200 Nut</div>
-            <div class="font12 line-height12 text-grey-7 mt-1">Claim available：150 Nut</div>
+            <div class="font16 line-height16">3300 NP to 200 NUT</div>
+            <div class="font12 line-height12 text-grey-7 mt-1">Claim available：150 NUT</div>
           </div>
           <div class="c-card-content">
             <div class="unlock-items" v-for="unlockedItem of 2" :key="unlockedItem">
-              <div class="font12 line-height16">Unlock in 32 weeks：<br>100 NP to 100 Nut</div>
+              <div class="font12 line-height16">Unlock in 32 weeks：<br>100 NP to 100 NUT</div>
               <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + unlockedItem"
                          triggers="hover" placement="top">
                 <div class="font12">
-                  Unlocked NP: 50 <br> Claimed Nut: 0
+                  Unlocked NP: 50 <br> Claimed NUT: 0
                 </div>
               </b-popover>
               <b-progress :max="100">

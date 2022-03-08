@@ -11,7 +11,7 @@
             <span>{{ gauge.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
-            <span>Earn {{ cToken.name }} & Nut</span>
+            <span>Earn {{ cToken.name }} & NUT</span>
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 <template>
   <div class="asset-card">
     <div class="d-flex user-asset justify-content-between">
-      <div class="font20 line-height28 font-bold">Nut Power</div>
+      <div class="font20 line-height28 font-bold">NUT Power</div>
       <div class="value-box">
         <div class="value-info">
           <div class="font20 line-height20">{{ totalNp | amountForm }} NP</div>
-          <div class="font12 line-height12">= {{totalLockedNut | amountForm}} Nut</div>
+          <div class="font12 line-height12">= {{totalLockedNut | amountForm}} NUT</div>
         </div>
         <button class="primary-btn px-4 mx-0"
                 @click="modalContentType='detail',assetModalVisible=true">Detail</button>

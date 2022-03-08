@@ -4,12 +4,12 @@
     <div class="pool-type-modal-content d-flex flex-column">
       <div class="modal-title mt-4">Add a NP vote pool</div>
       <div>
-        In order to add a Nut Power vote pool,
+        In order to add a NUT Power vote pool,
         you need choose an existing staking pool.
-        Users can earn Nut and c-token from NP vote pool.
+        Users can earn NUT and c-token from NP vote pool.
       </div>
       <div class="my-3">
-        *Nut is  issued by Nutbox contract, c-token is from staking pool's commission.
+        *NUT is  issued by Nutbox contract, c-token is from staking pool's commission.
       </div>
     </div>
     <div class="modal-card-box">

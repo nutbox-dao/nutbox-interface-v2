@@ -3,8 +3,8 @@
     <div class="scroll-content position-relative">
       <div class="top-card">
         <div class="desc-info font20 line-height32 font-bold">
-          Nut Power introduction Nut Power introduction
-          Nut Power introduction Nut Power introduction Nut Power introduction
+          NUT Power introduction NUT Power introduction
+          NUT Power introduction NUT Power introduction NUT Power introduction
         </div>
         <div class="v-line"></div>
         <NPAssetCard/>

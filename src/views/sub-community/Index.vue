@@ -19,7 +19,7 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
-                <span>Nut Power</span>
+                <span>NUT Power</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
@@ -77,7 +77,7 @@
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />
-                    <span>Nut Power</span>
+                    <span>NUT Power</span>
                   </b-dropdown-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />

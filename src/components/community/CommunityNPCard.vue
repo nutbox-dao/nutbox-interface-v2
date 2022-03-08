@@ -11,7 +11,7 @@
             <span>{{ card.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
-            <span>Earn Monns & Nut</span>
+            <span>Earn Monns & NUT</span>
           </div>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default {
   },
   computed: {
     ...mapState('np', ['npApr', 'npPrice', 'balance']),
-    ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio']),
+    ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio', 'distributionRatio']),
     ...mapState("currentCommunity", ["cToken", 'feeRatio']),
     ...mapState('community', ['rewardPerBlock']),
     ...mapState(['prices']),
@@ -185,15 +185,15 @@ export default {
       return 1e18
     },
     ctokenApr() {
-      if (!this.rewardPerBlock || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0) {
+      if (!this.rewardPerBlock || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0 || !this.cToken) {
         return 0
       }
       const ctokenPrice = this.cToken.price
-      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
+      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e14
       return apr;
     },
     detailApr() {
-      return 'Nut: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr.toFixed(2) + '%'
+      return 'NUT: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr.toFixed(2) + '%'
     }
   },
   mixins: [showToastMixin],
