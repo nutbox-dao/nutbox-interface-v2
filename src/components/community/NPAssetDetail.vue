@@ -102,8 +102,8 @@
               </div>
             </b-popover>
           </div>
-          <button class="primary-btn-outline claim-btn font12" @click="claim" :disabled="claiming">
-            <b-spinner small type="grow" v-show="claiming"></b-spinner>
+          <button class="primary-btn-outline claim-btn font12 d-flex align-items-center" @click="claim" :disabled="claiming">
+            <b-spinner class="mb-0" style="width: 14px; height: 14px" type="grow" v-show="claiming"></b-spinner>
             Claim NUT
           </button>
         </div>
@@ -299,6 +299,9 @@ export default {
 }
 .primary-btn-outline {
   border-radius: 8px;
+}
+.claim-btn {
+  height: 28px;
 }
 .item-card-title {
   height: 36px;
