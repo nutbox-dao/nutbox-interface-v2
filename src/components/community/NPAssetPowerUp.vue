@@ -144,6 +144,9 @@ export default {
       try {
         this.executing = true
         await powerUp(amount, PeriodToIdx[this.distPeriod])
+        // update user locked Nut immediately
+        this.userLockedNut[PeriodToIdx[this.distPeriod]] += amount
+        this.$emit('finish');
       }catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -164,6 +167,8 @@ export default {
       try {
         this.executing = true
         await upgrade(amount, PeriodToIdx[this.srcPeriod], PeriodToIdx[this.distPeriod])
+        
+        this.$emit('finish');
       }catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)

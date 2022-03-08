@@ -27,6 +27,7 @@ export const getGauge = async () => {
 export const vote = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
+            amount = ethers.utils.parseUnits(amount.toString(), 18)
             const gauge = await getGauge()
             const tx = await gauge.vote(pid, amount)
             await waitForTx(tx.hash) 
@@ -41,6 +42,7 @@ export const vote = async (pid, amount) => {
 export const unvote = async (pid, amount) => {
     return new Promise(async (resolve, reject) => {
         try {
+            amount = ethers.utils.parseUnits(amount.toString(), 18)
             const gauge = await getGauge()
             const tx = await gauge.unvote(pid, amount)
             await waitForTx(tx.hash) 

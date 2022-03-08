@@ -11,7 +11,7 @@
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
         <div class="label text-right font20">
-          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? freeNp : userLocked[this.card.id]) | amountForm }}</span>
+          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? balance.freeNp : userLocked[this.card.id]) | amountForm }}</span>
         </div>
         <div class="c-input-group c-input-group-border c-input-group-bg-dark d-flex">
           <input style="flex: 1"
@@ -59,7 +59,7 @@ export default {
     ...mapState('user', ['userGraphInfo']),
     ...mapState('currentCommunity', ['communityId']),
     ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio']),
-    ...mapState('np', ['npApr', 'npPrice', 'freeNp']),
+    ...mapState('np', ['npApr', 'npPrice', 'balance']),
     ...mapState('web3', ['fees']),
     ...mapGetters('web3', ['tokenDecimals']),
     fee() {
@@ -91,7 +91,7 @@ export default {
     },
     fillMax(){
         this.stakingValue =
-        this.operate === "add" ? this.freeNp : this.userLocked[this.card.id];
+        this.operate === "add" ? this.balance.freeNp : this.userLocked[this.card.id];
     },
     checkInputValue() {
       const reg = /^\d+(\.\d+)?$/;

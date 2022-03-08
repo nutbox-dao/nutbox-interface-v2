@@ -60,6 +60,7 @@ export const getBalance = async () => {
         ]
     })))
     const res = await aggregate(calls, Multi_Config)
+    
     // lockedNutOfPeriod
     return res.results.transformed;
 }

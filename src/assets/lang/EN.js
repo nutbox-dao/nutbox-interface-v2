@@ -203,6 +203,7 @@ module.exports = {
     startHeightOut: 'The first start block must bigger than current block.',
     wrongSocialInfo: "Please fill right {type} link!",
     noPowerupNut: "Haven't power up NUT",
+    needAscii: 'You can only input simple characters.'
   },
   nps: {
     nps: "Governance",

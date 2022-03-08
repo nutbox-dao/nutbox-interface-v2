@@ -140,23 +140,20 @@ export default {
     // user free np
     freeNp() {
       if (this.balance && this.balance.freeNp){
-        return this.balance.freeNp.toString() / 1e18
+        return this.balance.freeNp
       }
       return 0
     },
     // user locked np
     lockedNp() {
       if (this.balance && this.balance.lockedNp) {
-        return this.balance.lockedNp.toString() / 1e18
+        return this.balance.lockedNp
       }
       return 0
     },
     // user total np
     totalNp() {
-      if (this.freeNp && this.lockedNp) {
         return this.freeNp + this.lockedNp
-      }
-      return 0
     },
     // user total locked nut
     totalLockedNut() {

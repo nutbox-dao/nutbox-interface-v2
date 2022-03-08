@@ -211,6 +211,8 @@ export default {
       return price ? parseFloat(price) : 0;
     },
     apr() {
+      const _rewardPerBlock = this.rewardPerBlock[this.card.community.id]
+      console.log('66', _rewardPerBlock);
       if (!this.prices || !this.cToken || !this.tvl) return "--";
       const cTokenPrice = this.cToken.price;
       const stakePrice = this.stakePrice;
@@ -218,7 +220,9 @@ export default {
       const blocksPerYear = YEAR_BLOCKS;
       const fundRatio = this.card.community.feeRatio;
       const poolRatio = this.card.ratio;
-      const _rewardPerBlock = this.rewardPerBlock[this.card.community.id]
+      // const _rewardPerBlock = this.rewardPerBlock[this.card.community.id]
+      // console.log('66', _rewardPerBlock);
+      
       const reward =
         (_rewardPerBlock ?? 0) *
         blocksPerYear *

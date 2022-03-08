@@ -4,7 +4,7 @@
       <div class="font20 line-height28 font-bold">Nut Power</div>
       <div class="value-box">
         <div class="value-info">
-          <div class="font20 line-height20">{{ (freeNp + lockedNp) | amountForm }} NP</div>
+          <div class="font20 line-height20">{{ totalNp | amountForm }} NP</div>
           <div class="font12 line-height12">= {{totalLockedNut | amountForm}} Nut</div>
         </div>
         <button class="primary-btn px-4 mx-0"
@@ -43,6 +43,7 @@
       <NPAssetPowerUp v-if="modalContentType==='power-up'"
                       :np-data="selectData"
                       @back="modalContentType='up-step1'"
+                      @finish="modalContentType='detail'"
                       @close="assetModalVisible=false"/>
       <NPAssetPowerDown v-if="modalContentType==='power-down'"
                         :np-data="selectData"
@@ -60,7 +61,7 @@ import NPAssetPowerUpOptions from '@/components/community/NPAssetPowerUpOptions'
 import NPAssetPowerUp from '@/components/community/NPAssetPowerUp'
 import NPAssetPowerDown from '@/components/community/NPAssetPowerDown'
 import { mapState } from 'vuex'
-import { pollingNutBalance } from '@/utils/nutbox/nutpower'
+import { pollingNutBalance, powerUp } from '@/utils/nutbox/nutpower';
 
 export default {
   name: 'NPAssetCard',
@@ -79,21 +80,18 @@ export default {
     ...mapState('np', ['balance', 'userLockedNut']),
     freeNp () {
       if (this.balance && this.balance.freeNp) {
-        return this.balance.freeNp.toString() / 1e18
+        return this.balance.freeNp
       }
       return 0
     },
     lockedNp () {
       if (this.balance && this.balance.lockedNp) {
-        return this.balance.lockedNp.toString() / 1e18
+        return this.balance.lockedNp
       }
       return 0
     },
     totalNp () {
-      if (this.freeNp && this.lockedNp) {
-        return this.freeNp + this.lockedNp
-      }
-      return 0
+      return this.freeNp + this.lockedNp
     },
     totalLockedNut () {
       return this.userLockedNut.reduce((s, n) => s + n, 0)
@@ -103,8 +101,8 @@ export default {
         return []
       }
       return [
-        { ratio: this.freeNp / this.totalNp, name: 'Free' },
-        { ratio: this.lockedNp / this.totalNp, name: 'Available' }
+        { ratio: this.freeNp, name: 'Free' },
+        { ratio: this.lockedNp, name: 'Locked' }
       ]
     }
   },
@@ -116,14 +114,12 @@ export default {
     setData (data) {
       if (this.isUpgrade && data.srcPeriod >= data.distPeriod) return
       this.modalContentType = 'power-up'
-      console.log('235', data);
       this.selectData = data
     },
     setUpgradeData (data) {
       this.modalContentType = 'up-step1'
       this.isUpgrade = true
       this.upgradeData = data
-      console.log(this.upgradeData)
     }
   },
   async mounted () {

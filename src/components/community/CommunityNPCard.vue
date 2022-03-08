@@ -54,7 +54,7 @@
             <span class="font-bold text-grey-47">NP</span>
             VOTED
           </div>
-          <div class="text-grey-47 font-bold">Available：{{ freeNp | amountForm }}</div>
+          <div class="text-grey-47 font-bold">Available：{{ balance.freeNp | amountForm }}</div>
         </div>
         <!-- operate area -->
         <div
@@ -150,7 +150,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('np', ['npApr', 'npPrice', 'freeNp']),
+    ...mapState('np', ['npApr', 'npPrice', 'balance']),
     ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio']),
     ...mapState("currentCommunity", ["cToken", 'feeRatio']),
     ...mapState('community', ['rewardPerBlock']),
@@ -185,7 +185,9 @@ export default {
       return 1e18
     },
     ctokenApr() {
-      if (!this.rewardPerBlock[this.card.community.id] || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0) {
+      console.log('12', this.rewardPerBlock[this.card.community.id], this.npPrice, this.totalLocked[this.card.id], this.totalLockedNp, this.gaugeRatio);
+      
+      if (!this.rewardPerBlock || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0) {
         return 0
       }
       const ctokenPrice = this.cToken.price
