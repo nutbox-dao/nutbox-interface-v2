@@ -14,13 +14,14 @@
             </div>
             <div class="info-sub flex-1">Unlocking period:{{item.unlockTime}} weeks</div>
           </div>
-          <button class="primary-btn item-btn" @click="selectChannel(item)">Power down</button>
+          <button class="primary-btn item-btn" @click="selectChannel(item, i)">Power down</button>
         </div>
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex w-100 py-2">
         <input class="flex-1 font24 line-height24 px-3"
                style="flex: 1"
                type="number"
+               :disabled='selectRatio==0'
                v-model="value1"
                placeholder="0"/>
         <div class="c-append">
@@ -29,12 +30,13 @@
       </div>
       <div class="transfer-icon text-center my-3">
         <img src="~@/static/images/transfer-icon-primary.svg" alt="">
-        <div class="font14 line-height14 mt-1 text-grey-7">8 weeks | 8NP to 1 NUT</div>
+        <div class="font14 line-height14 mt-1 text-grey-7">{{ selectRatio }} weeks | every {{selectRatio}}NP to 1 NUT</div>
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex w-100 py-2">
         <input class="flex-1 font24 line-height24 px-3"
                style="flex: 1"
                type="number"
+               disabled
                v-model="value2"
                placeholder="0"/>
         <div class="c-append">
@@ -42,13 +44,19 @@
         </div>
       </div>
 
-      <button class="primary-btn my-4">Confilm</button>
+      <button class="primary-btn my-4" :disabled="powerdowning" @click="powerDown">
+        <b-spinner small type="grow" v-show="powerdowning"></b-spinner>
+        Confilm
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { powerDown, getUserRedeemRequestsOfPeriod } from '@/utils/nutbox/nutpower'
+import { PeriodToIdx } from '@/config'
+import { handleApiErrCode } from '@/utils/helper'
 
 export default {
   name: 'NPAssetPowerDown',
@@ -77,18 +85,55 @@ export default {
         freeNp -= q;
       }
       return list;
+    },
+    value2() {
+      return this.value1 / this.selectRatio
     }
   },
   data () {
     return {
-      value1: 0,
-      value2: 0
+      value1: '',
+      selectRatio: 0,
+      selectIdx: -1,
+      powerdowning: false
     }
   },
   methods: {
-    selectChannel(item) {
+    selectChannel(item, idx) {
       console.log('item', item);
-      
+      this.selectRatio = item.unlockTime
+      this.selectIdx = idx
+      this.value1 = ''
+    },
+    async powerDown(){
+      const amount = parseFloat(this.value1)
+      if (amount > this.powerDownList[this.selectIdx].from){
+        this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+          title: this.$t('tip.tips'),
+          variant: 'info'
+        })
+        return;
+      }else {
+        try {
+          this.powerdowning = true
+          const channel = PeriodToIdx[this.selectRatio]
+          await powerDown(amount, channel)  
+          this.$bvToast.toast(this.$t('np.powerDownSuccess'), {
+            title: this.$t('tip.success'),
+            variant: 'success'
+          })
+          // update data immediately
+          this.userLockedNut[channel] = this.userLockedNut[channel] - amount / this.selectRatio
+          await getUserRedeemRequestsOfPeriod()
+          this.$emit('back')
+        } catch(e) {
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param)
+          });
+        } finally {
+          this.powerdowning = false
+        }
+      }
     }
   },
 }

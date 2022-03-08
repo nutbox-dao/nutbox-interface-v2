@@ -135,10 +135,11 @@ export const getUserRedeemRequestsOfPeriod = async () => {
         try {
             const np = await getNpContract();
             const account = await getAccounts()
-            const redeemInfo = await Promise.all([0,1,2,3,4,5,6].map(idx => 
+            let redeemInfo = await Promise.all([0,1,2,3,4,5,6].map(idx => 
                 np.redeemRequestsOfPeriod(account, idx)
             ))
-            console.log(redeemInfo);
+            store.commit('np/saveUserRedeemInfo', redeemInfo)
+            resolve(redeemInfo)
         }catch(e) {
             console.log('Get user redeem requests fail:', e);
             reject(e)

@@ -13,7 +13,8 @@
         // user
         balance: {},
         // 0-6 array
-        userLockedNut: []
+        userLockedNut: [],
+        userRedeemInfo:[]
     },
     mutations: {
         // common
@@ -36,6 +37,9 @@
         },
         saveUserLockedNut: (state, userLockedNut) => {
             state.userLockedNut = userLockedNut
+        },
+        saveUserRedeemInfo: (state, userRedeemInfo) => {
+            state.userRedeemInfo = userRedeemInfo
         }
     }
 }

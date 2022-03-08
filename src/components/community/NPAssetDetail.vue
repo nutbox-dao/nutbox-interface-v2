@@ -98,34 +98,41 @@
             <i class="help-icon ml-2" id="unlocking-np-tip"></i>
             <b-popover custom-class="sub-popover-outline" target="unlocking-np-tip" triggers="hover" placement="top">
               <div class="font12 line-height12" style="width: 130px">
-                Unlocking NP: NP you powered down，in the unlocking process.
+                Unlocking NP: NP you powered down, in the unlocking process.
               </div>
             </b-popover>
           </div>
-          <button class="primary-btn-outline claim-btn font12">Claim NUT</button>
+          <button class="primary-btn-outline claim-btn font12" @click="claim" :disabled="claiming">
+            <b-spinner small type="grow" v-show="claiming"></b-spinner>
+            Claim NUT
+          </button>
         </div>
         <div class="c-card">
           <div class="c-card-header">
-            <div class="font16 line-height16">3300 NP to 200 NUT</div>
-            <div class="font12 line-height12 text-grey-7 mt-1">Claim available：150 NUT</div>
+            <div class="font16 line-height16">{{totalUnlockingNp | amountForm}} NP to {{totalUnlockingNut | amountForm}} NUT</div>
+            <div class="font12 line-height12 text-grey-7 mt-1">Claim available：{{claimableNut | amountForm}} NUT</div>
           </div>
           <div class="c-card-content">
-            <div class="unlock-items" v-for="unlockedItem of 2" :key="unlockedItem">
-              <div class="font12 line-height16">Unlock in 32 weeks：<br>100 NP to 100 NUT</div>
-              <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + unlockedItem"
+            <div class="empty-bg p-0" v-if="redeemList.length == 0">
+              <img src="~@/static/images/empty-data.png" alt="" />
+              <p> {{ $t('tip.npRedeemProcess') }} </p>
+            </div>
+            <div v-else class="unlock-items" v-for="(unlockedItem, idx) of redeemList" :key="idx">
+              <div class="font12 line-height16">Unlock in {{unlockedItem.period}} weeks：<br>{{unlockedItem.npAmount | amountForm}} NP to {{unlockedItem.nutAmount | amountForm}} NUT</div>
+              <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + idx"
                          triggers="hover" placement="top">
                 <div class="font12">
-                  Unlocked NP: 50 <br> Claimed NUT: 0
+                  Claimed NUT: {{unlockedItem.claimed | amountForm}}
                 </div>
               </b-popover>
               <b-progress :max="100">
                 <b-progress-bar class="green-progress-bar"
-                                :id="'progress-tip' + unlockedItem"
-                                :value="80"></b-progress-bar>
+                                :id="'progress-tip' + idx"
+                                :value="unlockedItem.ratio"></b-progress-bar>
               </b-progress>
               <div class="d-flex justify-content-between align-items-center font12 text-grey-7">
-                <span>Claim available: 50 Nut</span>
-                <span>5 days left</span>
+                <span>Claim available: {{unlockedItem.claimble | amountForm}} Nut</span>
+                <span>{{ unlockedItem.timeLeft }}</span>
               </div>
             </div>
           </div>
@@ -137,16 +144,22 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getUserRedeemRequestsOfPeriod, redeem } from '@/utils/nutbox/nutpower'
 
 export default {
   name: 'NPAssetDetail',
   data() {
     return {
-      releasePeriod: [1,2,4,8,16,32,64]
+      releasePeriod: [1,2,4,8,16,32,64],
+      totalUnlockingNut:0,
+      totalUnlockingNp:0,
+      claimableNut:0,
+      redeemList: [],
+      claiming: false
     }
   },
   computed: {
-    ...mapState('np', ['balance', 'userLockedNut']),
+    ...mapState('np', ['balance', 'userLockedNut', 'userRedeemInfo']),
     // user free np
     freeNp() {
       if (this.balance && this.balance.freeNp){
@@ -170,6 +183,83 @@ export default {
       const t = this.userLockedNut.reduce((s, n) => s + n, 0)
       return t;
     },
+  },
+  methods: {
+    calculateLeftTime(sec) {
+      if (sec > 86400) {
+        return parseInt(sec / 86400) + ' days left'
+      }
+      if (sec > 3600) {
+        return parseInt(sec / 3600) + ' hours left'
+      }
+      if (sec > 60) {
+        return parseInt(sec / 60) + ' minutes left'
+      }
+      return sec + ' seconds left'
+    },
+    updateRedeemData() {
+      // update datas
+      let totalUnlockingNp = 0
+      let totalUnlockingNut = 0
+      let claimableNut = 0
+      let timestamp = parseInt(new Date().getTime() / 1e3)
+      let redeemList = []
+      for (let i = 0; i < this.userRedeemInfo.length; i++) {
+        for (let j = 0; j < this.userRedeemInfo[i].length; j++) {
+          const d = this.userRedeemInfo[i][j]
+          const startTime = d.startTime.toString() / 1
+          const endTime = d.endTime.toString() / 1
+          const nutAmount = d.amount.toString() / 1e18
+          const period = this.releasePeriod[i]
+          const npAmount = nutAmount * period
+          const ratio = (timestamp - startTime) / (endTime - startTime) * 100
+          const claimed = d.claimed.toString() / 1e18
+          const claimble = nutAmount * ratio - claimed
+          const leftSecond = endTime - timestamp
+          const timeLeft = this.calculateLeftTime(leftSecond)
+          totalUnlockingNut += nutAmount
+          totalUnlockingNp += npAmount
+          claimableNut += claimble
+          redeemList.push({
+            nutAmount,
+            npAmount,
+            period,
+            claimed,
+            claimble,
+            ratio,
+            timeLeft
+          })
+        }
+      }
+      this.totalUnlockingNut = totalUnlockingNut
+      this.totalUnlockingNp = totalUnlockingNp;
+      this.claimableNut = claimableNut
+      this.redeemList = redeemList
+    },
+    async claim() {
+      try {
+        this.claiming = true
+        await redeem()
+        await getUserRedeemRequestsOfPeriod()
+        this.$bvToast.toast(this.$t('tip.tryWithdrawOk'), {
+          title: this.$t('success.success'),
+          variant: 'success'
+        })
+      } catch(e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        });
+      } finally {
+        this.claiming = false
+      }
+    }
+  },
+  mounted () {
+    getUserRedeemRequestsOfPeriod().then(this.updateRedeemData)
+    const interval = setInterval(this.updateRedeemData, 2000);
+    this.$once('hook:beforeDestroy', () => {
+      clearInterval(interval)
+    })
   },
 }
 </script>
