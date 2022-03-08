@@ -204,7 +204,8 @@ module.exports = {
     wrongSocialInfo: "Please fill right {type} link!",
     noPowerupNut: "Haven't power up NUT",
     needAscii: 'You can only input simple characters.',
-    npRedeemProcess: 'No redeem process.'
+    npRedeemProcess: 'No redeem process.',
+    powerDownSuccess: 'Power down success'
   },
   nps: {
     nps: "Governance",

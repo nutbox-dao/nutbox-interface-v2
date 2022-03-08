@@ -118,7 +118,7 @@ export default {
           this.powerdowning = true
           const channel = PeriodToIdx[this.selectRatio]
           await powerDown(amount, channel)  
-          this.$bvToast.toast(this.$t('np.powerDownSuccess'), {
+          this.$bvToast.toast(this.$t('tip.powerDownSuccess'), {
             title: this.$t('tip.success'),
             variant: 'success'
           })

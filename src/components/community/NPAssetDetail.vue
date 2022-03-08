@@ -212,7 +212,7 @@ export default {
           const nutAmount = d.amount.toString() / 1e18
           const period = this.releasePeriod[i]
           const npAmount = nutAmount * period
-          const ratio = (timestamp - startTime) / (endTime - startTime) * 100
+          const ratio = (timestamp - startTime) / (endTime - startTime)
           const claimed = d.claimed.toString() / 1e18
           const claimble = nutAmount * ratio - claimed
           const leftSecond = endTime - timestamp
@@ -226,7 +226,7 @@ export default {
             period,
             claimed,
             claimble,
-            ratio,
+            ratio: ratio * 100,
             timeLeft
           })
         }
