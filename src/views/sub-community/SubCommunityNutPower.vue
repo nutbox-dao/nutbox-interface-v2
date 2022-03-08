@@ -32,7 +32,7 @@
 import CommunityNPCard from '@/components/community/CommunityNPCard'
 import NPAssetCard from '@/components/community/NPAssetCard'
 import { mapState, mapGetters } from 'vuex';
-import { updateBalanceByPolling } from '@/utils/nutbox/nutpower'
+import { updateBalanceByPolling, getNPInfoByPolling } from '@/utils/nutbox/nutpower'
 import { rollingFunction, sleep } from '@/utils/helper'
 import { getPools as getPoolsFromGraph } from "@/utils/graphql/pool";
 import { updateGaugesByPolling } from '@/utils/nutbox/gauge'
@@ -69,13 +69,14 @@ export default {
       this.allPools.map((p) => p.id),
       4
     );
-
+    const pollingNpInfo = getNPInfoByPolling()
     updatePoolsFromGraph.start();
     const pollingGauge = updateGaugesByPolling(this.gauges.map(p => p.id))
     const polling = updateBalanceByPolling()
     this.$once('hook:beforeDestroy', () => {
         polling.stop();
         pollingGauge.stop();
+        pollingNpInfo.stop();
     });
   },
 }

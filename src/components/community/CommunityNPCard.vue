@@ -174,7 +174,7 @@ export default {
     },
     tvl() {
       if (this.totalLocked && this.npPrice) {
-        return totalLockedNp * this.npPrice
+        return this.totalLockedNp * this.npPrice
       }
       return 0
     },
@@ -185,8 +185,6 @@ export default {
       return 1e18
     },
     ctokenApr() {
-      console.log('12', this.rewardPerBlock[this.card.community.id], this.npPrice, this.totalLocked[this.card.id], this.totalLockedNp, this.gaugeRatio);
-      
       if (!this.rewardPerBlock || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0) {
         return 0
       }
@@ -195,7 +193,7 @@ export default {
       return apr;
     },
     detailApr() {
-      return 'Nut: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr + '%'
+      return 'Nut: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr.toFixed(2) + '%'
     }
   },
   mixins: [showToastMixin],

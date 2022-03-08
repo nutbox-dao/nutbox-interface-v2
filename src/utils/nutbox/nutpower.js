@@ -165,15 +165,16 @@ export const getNPInfoByPolling = () => {
 
         store.commit('np/saveTotalSupply', totalSupply)
         store.commit('np/saveTotalLockedNut', totalLockedNut)
-        const prices = store.state.prices
-        const npPrice = prices[NutAddress] * totalLockedNut / totalSupply
+        const nutPrice = store.state.web3.tokenByKey[NutAddress.toLowerCase()]?.price
+        const npPrice = nutPrice * totalLockedNut / totalSupply
+        
         store.commit('np/saveNpPrice', npPrice)
 
         // Np apr in gauge for user
         let userNutApr = YEAR_BLOCKS * rewardNutPerBlock * 100 / (totalNPLocked * totalLockedNut / totalSupply)
         store.commit('np/saveNpApr', userNutApr)
     })
-    polling.start;
+    polling.start();
     return polling;
 }
 
