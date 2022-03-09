@@ -17,6 +17,7 @@
                  :pools-data="chartNp"
                  :chart-style="{width: '15rem'}"
                  :animation="false"
+                 :tooltip-label-formatter="(ctx)=> {return `${ctx.raw.name}: ${(Number(ctx.raw.ratio)).toFixed(2)}`}"
                  :show-data-label="true"
                  :show-legend-info="false"/>
     </div>

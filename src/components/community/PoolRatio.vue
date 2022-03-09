@@ -159,6 +159,12 @@ export default {
     canvasId: {
       type: String,
       default: 'pie'
+    },
+    tooltipLabelFormatter: {
+      type: Function,
+      default: function (ctx) {
+        return `${ctx.raw.name}: ${(Number(ctx.raw.ratio)).toFixed(2)}%`
+      }
     }
   },
   watch: {
@@ -176,6 +182,7 @@ export default {
   mounted () {
     if (!this.animation) this.chartData.options.animation = false
     this.chartData.options.aspectRatio = this.aspectRatio
+    this.chartData.options.plugins.tooltip.callbacks.label = this.tooltipLabelFormatter
     const ctx = document.getElementById(this.canvasId)
     this.chartData.data.datasets = [{
       data: this.poolsData,
