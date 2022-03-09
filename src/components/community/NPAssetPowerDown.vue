@@ -14,7 +14,8 @@
             </div>
             <div class="info-sub flex-1">Unlocking period:{{item.unlockTime}} weeks</div>
           </div>
-          <button class="primary-btn item-btn" @click="selectChannel(item, i)">Power down</button>
+<!--          <button class="primary-btn item-btn" @click="selectChannel(item, i)">Power down</button>-->
+          <b-form-radio class="sub-radio" v-model="selectIdx" :value="i" @change="selectChannel(item, i)"></b-form-radio>
         </div>
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex w-100 py-2">
@@ -116,7 +117,7 @@ export default {
         try {
           this.powerdowning = true
           const channel = PeriodToIdx[this.selectRatio]
-          await powerDown(amount, channel)  
+          await powerDown(amount, channel)
           this.$bvToast.toast(this.$t('tip.powerDownSuccess'), {
             title: this.$t('tip.success'),
             variant: 'success'

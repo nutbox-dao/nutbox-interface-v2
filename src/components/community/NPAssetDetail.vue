@@ -14,7 +14,7 @@
           </b-popover>
         </div>
       </div>
-      <div class="d-flex justify-content-center np-btn-group mr-1">
+      <div class="d-flex justify-content-center np-btn-group">
         <button class="primary-btn mr-2" @click="$emit('powerUp')">Power up</button>
         <button class="primary-btn" :disabled="freeNp==0" @click="$emit('powerDown')">Power down</button>
       </div>
@@ -286,6 +286,7 @@ export default {
 }
 .top-box {
   margin-top: 4rem;
+  padding: 0 1.4rem;
 }
 .bottom-box {
   flex: 1;
@@ -305,6 +306,7 @@ export default {
 }
 .item-card-title {
   height: 36px;
+  padding: 0 1.4rem;
 }
 .c-card {
   @include card(0);
@@ -318,8 +320,8 @@ export default {
     border-bottom: 1px solid rgba(white, 0.05);
     height: 70px;
     padding-top: 1.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
     &-available {
       justify-content: space-between;
     }
@@ -334,7 +336,7 @@ export default {
   }
   .c-card-content {
     flex: 1;
-    padding: 1rem 1.2rem;
+    padding: 1rem 1.4rem;
     overflow: auto;
     position: relative;
   }
@@ -348,7 +350,10 @@ export default {
     padding: 10px 0;
   }
   .unlock-items {
-    padding: 14px 0;
+    padding: .6rem;
+    background-color: #1F1F1F;
+    border-radius: .6rem;
+    margin: 0 -.7rem 8px;
   }
   .info-icon {
     width: 14px;

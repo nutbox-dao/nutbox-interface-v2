@@ -531,9 +531,16 @@ input::-webkit-input-placeholder {
     margin: 8px;
   }
 }
+.custom-radio .custom-control-label::before {
+  border-color: transparent;
+}
 .custom-control-input:checked ~ .custom-control-label::before {
   background-color: var(--primary-custom);
   border-color: var(--primary-custom);
+}
+.sub-radio .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: var(--sub-primary);
+  border-color: var(--sub-primary);
 }
 .bs-popover-top, .bs-popover-bottom, .bs-popover-right, .bs-popover-left {
   background-color: var(--primary-custom);

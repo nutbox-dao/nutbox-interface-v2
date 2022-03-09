@@ -2,8 +2,8 @@
   <div class="np-asset-up-modal position-relative">
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
-    <div class="modal-title">
-      <span style="width: 80%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
+    <div class="modal-title text-center">
+      <span style="width: 70%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
       <span v-else>Power up every 1 NUT to {{ distPeriod }} NP</span>
     </div>
     <div class="mt-4">
@@ -81,7 +81,7 @@ export default {
     ...mapState('np', ['userLockedNut', 'balance']),
     ...mapState('user', ['nutBalance', 'loadingApproveToNutPower', 'approveToNutPower']),
     isUpgrade() {
-      return this.npData.isUpgrade 
+      return this.npData.isUpgrade
     },
     srcPeriod() {
       return this.npData.srcPeriod
