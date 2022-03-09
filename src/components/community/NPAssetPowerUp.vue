@@ -46,9 +46,9 @@
       </button>
       <button v-else class="primary-btn my-4" :disabled="executing" @click="isUpgrade ? upgrade() : powerUp()">
         <b-spinner small type="grow" v-show="executing"></b-spinner>
-        {{ $t('operation.confirm') }}
+        {{ isUpgrage ? 'Upgrade' : $t('operation.confirm') }}
       </button>
-      <div class="tip my-4">
+      <div v-if="!isUpgrade" class="tip my-4">
         When you want to convert back your NP to NUT, you should do the power down operate, which will take
         <strong class="text-primary-1">{{npData.distPeriod}} weeks</strong>
         to get all your NUT back gradually.
