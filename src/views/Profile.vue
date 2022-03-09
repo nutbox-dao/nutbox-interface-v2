@@ -181,7 +181,6 @@ export default {
   },
   async mounted () {
     getUserBaseInfo(this.account).then(user => {
-      console.log('get my user info', user);
       if (user) {
         this.user = user
       }

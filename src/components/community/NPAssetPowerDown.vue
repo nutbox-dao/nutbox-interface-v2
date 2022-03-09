@@ -100,7 +100,6 @@ export default {
   },
   methods: {
     selectChannel(item, idx) {
-      console.log('item', item);
       this.selectRatio = item.unlockTime
       this.selectIdx = idx
       this.value1 = ''

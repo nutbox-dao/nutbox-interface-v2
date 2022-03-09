@@ -31,7 +31,7 @@
       </div>
       <div class="project-info-container">
         <span class="name">Claimble Nut</span>
-        <div class="info">{{ pendingRewardNut }}</div>
+        <div class="info">{{ pendingRewardNut | amountForm }}</div>
       </div>
     </div>
   </div>

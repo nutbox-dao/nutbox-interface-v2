@@ -60,26 +60,32 @@
         <div
           class="d-flex justify-content-between align-items-center "
         >
-          <span class="value flex-fill">
-            {{ userLocked[card.id] | amountForm }}
-          </span>
-          <div class="d-flex">
-            <!-- decrease -->
-            <button
-              class="symbol-btn symbol-btn-outline hover mr-2"
-              @click="operate = 'minus'; updateVoing = true"
-            >
-              <i class="sub-icon sub-icon-primary"></i>
-            </button>
-            <!-- increase -->
-            <button
-              class="symbol-btn symbol-btn-outline hover"
-              :disabled="card.status === 'CLOSED'"
-              @click="operate = 'add'; updateVoing = true"
-            >
-              <i class="add-icon add-icon-primary"></i>
-            </button>
-          </div>
+        <ConnectMetaMask
+            class="primary-btn-40 w-100"
+            v-if="!metamaskConnected"
+          />
+          <template v-else>
+            <span class="value flex-fill">
+              {{ userLocked[card.id] | amountForm }}
+            </span>
+            <div class="d-flex">
+              <!-- decrease -->
+              <button
+                class="symbol-btn symbol-btn-outline hover mr-2"
+                @click="operate = 'minus'; updateVoing = true"
+              >
+                <i class="sub-icon sub-icon-primary"></i>
+              </button>
+              <!-- increase -->
+              <button
+                class="symbol-btn symbol-btn-outline hover"
+                :disabled="card.status === 'CLOSED'"
+                @click="operate = 'add'; updateVoing = true"
+              >
+                <i class="add-icon add-icon-primary"></i>
+              </button>
+            </div>
+          </template>
         </div>
       </div>
       <div class="detail-info-box text-grey-7 font14 font-bold">
@@ -114,7 +120,7 @@
         </div>
       </div>
     </div>
-        <!-- main chain stake -->
+    <!-- vote modal -->
     <b-modal
       v-model="updateVoing"
       modal-class="custom-modal sub-modal"
@@ -154,7 +160,7 @@ export default {
     ...mapState('gauge', ['userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio', 'distributionRatio']),
     ...mapState("currentCommunity", ["cToken", 'feeRatio']),
     ...mapState('community', ['rewardPerBlock']),
-    ...mapState(['prices']),
+    ...mapState(['metamaskConnected']),
     stakers() {
       return this.card.voters 
     },
@@ -185,7 +191,7 @@ export default {
       return 1e18
     },
     ctokenApr() {
-      if (!this.rewardPerBlock || !this.npPrice || !this.prices || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0 || !this.cToken) {
+      if (!this.rewardPerBlock || !this.npPrice || this.tvl === 0  || this.totalLockedNp === 0 || this.gaugeRatio === 0 || !this.cToken) {
         return 0
       }
       const ctokenPrice = this.cToken.price
