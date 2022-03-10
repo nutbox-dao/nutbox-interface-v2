@@ -7,9 +7,9 @@
           <div class="link-title font20 line-height24">
             <span>{{ card.name }}</span>
           </div>
-          <div class="link-title font16 line-height20">
+          <!-- <div class="link-title font16 line-height20">
             <span>Earn Monns & NUT</span>
-          </div>
+          </div> -->
         </div>
         <div class="card-link-icons">
           <img class="icon1" :src="ctokenIcon" alt="">

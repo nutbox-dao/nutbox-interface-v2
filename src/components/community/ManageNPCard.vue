@@ -7,13 +7,13 @@
           <div class="link-title font20 line-height24">
             <span>{{ gauge.name }}</span>
           </div>
-          <div class="link-title font16 line-height20">
+          <!-- <div class="link-title font16 line-height20">
             <span>Earn {{ cToken.name }} & NUT</span>
-          </div>
+          </div> -->
         </div>
         <div class="card-link-icons">
           <img class="icon1" :src="assetIcon" alt="">
-          <img class="icon2-lg" :src="nutIcon" alt="">
+          <img class="icon2" :src="nutIcon" alt="">
         </div>
       </div>
     </div>
@@ -31,6 +31,13 @@
         <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
+        <span class="name">APR</span>
+        <div class="info d-flex align-items-center">
+            <i class="help-icon mr-1" v-b-popover.hover.top="detailApr"></i>
+            <span>{{ (npApr + ctokenApr).toFixed(2) }}%</span>
+          </div>
+      </div>
+      <div class="project-info-container">
         <span class="name">Claimble Nut</span>
         <div class="info">{{ pendingRewardNut | amountForm }}</div>
       </div>
@@ -41,7 +48,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { getCToken } from '@/utils/web3/asset'
-import { ASSET_LOGO_URL } from '@/constant'
+import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 
 export default {
   name: 'ManageNPCard',
@@ -57,11 +64,11 @@ export default {
   },
   computed: {
     ...mapGetters("web3", ["tokenByKey"]),
-    ...mapState('currentCommunity', ['feeRatio']),
+    ...mapState("web3", ["stakingFactoryId", "allTokens", "fees"]),
     ...mapState(['prices']),
-    ...mapState('gauge', ['communityPendingRewardNut']),
-    ...mapState('np', ['npPrice']),
-     ...mapState('community', ['communityData']),
+    ...mapState('gauge', ['communityPendingRewardNut', 'userLocked', 'totalLocked', 'userRewardNut', 'userRewardCtoken', 'gaugeRatio', 'distributionRatio']),
+    ...mapState('np', ['npPrice', 'npApr']),
+    ...mapState('community', ['communityData', 'rewardPerBlock']),
     totalVoted() {
       return this.gauge.votedAmount.toString() / 1e18
     },
@@ -72,6 +79,18 @@ export default {
       if (this.totalVotedNP == 0 || !this.communityPendingRewardNut) return 0;
       return this.communityPendingRewardNut.toString() / 1e18 * this.totalVoted / this.totalVotedNP
     },
+    ctokenApr() {
+      if (!this.rewardPerBlock || !this.npPrice || this.tvl === 0  || this.totalVoted === 0 || this.gaugeRatio === 0 || !this.cToken) {
+        return 0
+      }
+      const ctokenPrice = this.cToken.price
+      
+      const apr = this.rewardPerBlock[this.communityData.id] * (10000 - this.communityData.feeRatio) * this.gauge.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e14
+      return apr ?? 0;
+    },
+    detailApr() {
+      return 'NUT: ' + this.npApr.toFixed(2) + '% + ' + this.cToken?.name + ': ' + this.ctokenApr.toFixed(2) + '%'
+    }
   },
   data () {
     return {
