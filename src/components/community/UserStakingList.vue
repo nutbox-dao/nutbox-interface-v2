@@ -148,7 +148,8 @@
                       ? stakeToken.symbol + " Staked"
                       : type === "steem"
                       ? "SP Delegated"
-                      : "HP Delegated"
+                      : type === 'hive' 
+                      ? "HP Delegated" : 'ATOM Delegated'
                   }}
                 </div>
                 <div class="font12 text-grey-7">{{ staked | amountForm }}</div>
@@ -483,6 +484,8 @@ export default {
         return ASSET_LOGO_URL["steem"];
       } else if (this.type === "hive") {
         return ASSET_LOGO_URL["hive"];
+      } else if (this.type === 'cosmos') {
+        return ASSET_LOGO_URL['cosmos']
       }
     },
     approved() {

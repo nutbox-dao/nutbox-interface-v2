@@ -46,7 +46,7 @@
       </button>
       <button v-else class="primary-btn my-4" :disabled="executing" @click="isUpgrade ? upgrade() : powerUp()">
         <b-spinner small type="grow" v-show="executing"></b-spinner>
-        {{ isUpgrage ? 'Upgrade' : $t('operation.confirm') }}
+        {{ isUpgrade ? 'Upgrade' : $t('operation.confirm') }}
       </button>
       <div v-if="!isUpgrade" class="tip my-4">
         When you want to convert back your NP to NUT, you should do the power down operate, which will take

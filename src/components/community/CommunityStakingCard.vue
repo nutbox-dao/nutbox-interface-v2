@@ -36,8 +36,8 @@
           type === "erc20staking"
             ? stakeToken.symbol
             : type === "steem"
-            ? "SP"
-            : "HP"
+            ? "SP" : type === 'hive'
+            ? "HP" : 'ATOM'
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">

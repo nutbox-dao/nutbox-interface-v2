@@ -75,8 +75,6 @@ export const powerUp = async (amount, period) => {
         try{
             amount = ethers.utils.parseUnits(amount.toString(), 18)
             const np = await getNpContract();
-            console.log('235', amount, period);
-            
             const tx = await np.powerUp(amount, period)
             await waitForTx(tx.hash)
             resolve(tx.hash)

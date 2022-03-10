@@ -27,7 +27,10 @@
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
           <div class="mb-2">APR</div>
-          <div class="font-bold">{{ (npApr + ctokenApr).toFixed(2) }}%</div>
+          <div class="font-bold d-flex align-items-center">
+            <span class="mr-1">{{ (npApr + ctokenApr).toFixed(2) }}%</span>
+             <i class="help-icon" v-b-popover.hover.top="detailApr"></i>
+          </div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
           <div class="mb-2">NP Voted</div>

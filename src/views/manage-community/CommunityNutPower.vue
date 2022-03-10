@@ -102,6 +102,8 @@ export default {
       return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 1) : []
     },
     communityPendingNut() {
+      console.log('nut', this.communityPendingRewardNut);
+      
       if (this.communityPendingRewardNut){
         return this.communityPendingRewardNut.toString() / 1e18;
       }

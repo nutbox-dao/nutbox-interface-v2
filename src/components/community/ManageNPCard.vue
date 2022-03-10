@@ -68,7 +68,7 @@ export default {
       return this.totalVoted * this.npPrice
     },
     pendingRewardNut() {
-      if (this.totalVotedNP == 0) return 0;
+      if (this.totalVotedNP == 0 || !this.communityPendingRewardNut) return 0;
       return this.communityPendingRewardNut.toString() / 1e18 * this.totalVoted / this.totalVotedNP
     },
   },

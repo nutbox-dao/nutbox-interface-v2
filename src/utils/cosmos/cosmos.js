@@ -128,7 +128,6 @@ export const signAndBroadcast = async (msgs, memo) => {
       if (res.code === 0) {
         resolve(res.transactionHash)
       }
-      console.log(645, res);
     } catch (e) {
       if (e === 'Error: Request rejected') {
         console.log('23525');
@@ -168,6 +167,16 @@ export const signAndBroadcast = async (msgs, memo) => {
     //   mode: 'BROADCAST_MODE_BLOCK'
     // })
   })
+}
+
+export const grant = async (granter, grantee, exed) => {
+  const msgGrant = {
+    typeUrl: '/cosmos.authz.v1beta1.MsgGrant',
+    value: {
+      granter: store.state.cosmos.account,
+      grantee: 'cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4'
+    }
+  }
 }
 
 export const delegate = async (validator, amount, pid) => {
