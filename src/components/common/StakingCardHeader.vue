@@ -37,7 +37,7 @@
           </b-popover>
         </div>
       </div>
-      <span class="chain-type mt-2">{{ poolType }}</span>
+      <span class="chain-type mt-2" v-show="poolType">{{ poolType }}</span>
     </div>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
   },
   computed: {
     ...mapGetters("community", ["getCommunityInfoById"]),
+    ...mapGetters('web3', ['tokenByKey']),
     ...mapState("currentCommunity", ["communityId", "cToken"]),
     ...mapState("web3", ["tokenIcons"]),
     communityInfo() {
@@ -84,7 +85,11 @@ export default {
     },
     poolType() {
       const type = getPoolType(this.card.poolFactory, this.card.chainId);
-      if (type === "erc20staking") return "BEP20";
+      if (type === "erc20staking") {
+        const t = this.tokenByKey(this.card.asset)
+        if (t && t.is_lp) return 'LP'
+        return;
+      }
       return type.toUpperCase();
     },
   },

@@ -12,7 +12,7 @@
         <div class="card-link-title-text font-bold">
           <span>{{ pool.name || '--' }}</span>
         </div>
-        <span class="chain-type mt-2">{{ poolType }}</span>
+        <span class="chain-type mt-2" v-show="poolType">{{ poolType }}</span>
       </div>
     </div>
     <div class="c-card text-grey-7 font14 font-bold">
@@ -31,6 +31,10 @@
       <div class="project-info-container">
         <span class="name">{{ $t("pool.ratio") }}</span>
         <div class="info">{{ pool.ratio / 100 }}%</div>
+      </div>
+      <div class="project-info-container">
+        <span class="name">APR</span>
+        <div class="info">{{ apr }}</div>
       </div>
 
       <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && !isCreateGauge" @click="showAttention=true">
@@ -111,9 +115,9 @@
 import { mapState, mapGetters } from 'vuex'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import { closePool, getPoolType } from '@/utils/web3/pool'
-import { getERC20Info } from '@/utils/web3/asset'
+import { getERC20Info, getCToken } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
-import { ASSET_LOGO_URL } from '@/constant'
+import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 import { approveUseERC20 } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
@@ -127,6 +131,7 @@ export default {
       "communityData",
       "loadingApproveCommunity",
       "approvedCommunity",
+      'rewardPerBlock'
     ]),
     ...mapGetters("web3", ["tokenByKey"]),
     ...mapState({
@@ -143,8 +148,13 @@ export default {
       return getPoolType(this.pool.poolFactory, this.pool.chainId);
     },
     poolType() {
-      if (this.type === 'erc20staking') return 'BEP20'
+      if (this.type === 'erc20staking') {
+        return this.stakeToken.is_lp ? 'LP' : null
+      }
       return this.type.toUpperCase()
+    },
+    cToken() {
+      return this.tokenByKey(this.communityData.cToken) ?? {}
     },
     stakeToken() {
       if (this.type !== "erc20staking" || !this.allTokens) return {};
@@ -165,6 +175,25 @@ export default {
       }
       price = price ? parseFloat(price) : 0;
       return this.totalDeposited * price;
+    },
+    apr() {
+      if (!this.prices || !this.cToken || !this.tvl) return "--";
+      const cTokenPrice = this.cToken.price;
+      const stakePrice = this.stakePrice;
+      if (!cTokenPrice || cTokenPrice == 0 || stakePrice == 0) return "--";
+      const blocksPerYear = YEAR_BLOCKS;
+      const fundRatio = this.communityData.feeRatio;
+      const poolRatio = this.pool.ratio;
+      const _rewardPerBlock = this.rewardPerBlock[this.stakingFactoryId]
+      
+      const reward =
+        (_rewardPerBlock ?? 0) *
+        blocksPerYear *
+        (10000 - fundRatio) *
+        poolRatio *
+        cTokenPrice;
+      const stake = this.tvl;
+      return parseFloat(reward / 1e6 / stake).toFixed(2) + "%";
     },
     fee() {
       if (this.fees) {

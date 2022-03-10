@@ -487,7 +487,7 @@ export default {
           this.communityData.retainedRevenue = ethers.constants.Zero
           this.$store.commit('community/saveCommunityData', this.communityData)
         }else{
-          let retained = (this.communityData.retainedRevenue.toString() / (10 ** cToken.decimal))
+          let retained = (this.communityData.retainedRevenue.toString() / (10 ** this.cToken.decimal))
           const temBalacne = this.communityBalance
           this.communityBalance = this.communityBalance > retained ?  this.communityBalance - retained : 0;
           retained = this.communityBalance > retained ? 0 : (retained - temBalacne)

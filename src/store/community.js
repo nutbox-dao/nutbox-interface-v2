@@ -1,3 +1,7 @@
+/**
+ * My own community data
+ */
+
 import { ethers } from "ethers"
 
 export default {
