@@ -2,17 +2,18 @@
   <div class="multi-card">
     <div class="card-link-top-box">
       <div class="d-flex align-items-center">
-        <div class="card-link-icons card-link-icons-lg">
-          <img class="icon1" :src="assetIcon" alt="">
-          <img class="icon2-lg" :src="nutIcon" alt="">
-        </div>
         <div class="card-link-title-text font-bold">
+          <div class="text-grey-7 font14 line-height14 mb-1">Vote for</div>
           <div class="link-title font20 line-height24">
             <span>{{ gauge.name }}</span>
           </div>
           <div class="link-title font16 line-height20">
             <span>Earn {{ cToken.name }} & NUT</span>
           </div>
+        </div>
+        <div class="card-link-icons">
+          <img class="icon1" :src="assetIcon" alt="">
+          <img class="icon2-lg" :src="nutIcon" alt="">
         </div>
       </div>
     </div>

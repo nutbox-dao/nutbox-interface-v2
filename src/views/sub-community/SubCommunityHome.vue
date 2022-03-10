@@ -367,6 +367,8 @@ export default {
   }
   .r-item .value {
     margin-top: .5rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
   }
   .v-middle {
     position: relative;

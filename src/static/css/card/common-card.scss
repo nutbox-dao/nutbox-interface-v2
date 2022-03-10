@@ -63,6 +63,9 @@
   align-items: flex-end;
   width: 74px;
   margin-right: .5rem;
+  &-m0 {
+    margin-right: 0;
+  }
   &-lg {
     width: 96px;
   }
@@ -74,11 +77,11 @@
     @include card-icon(56px, 56px);
   }
   .icon2 {
-    margin-left: -1rem;
+    margin-left: -14px;
     @include card-icon(32px, 32px);
   }
   .icon2-lg {
-    margin-left: -1rem;
+    margin-left: -14px;
     @include card-icon(56px, 56px);
   }
 }
