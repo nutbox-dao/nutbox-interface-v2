@@ -370,4 +370,10 @@ export default {
   align-items: center;
   box-sizing: border-box;
 }
+.c-card {
+  margin-top: -30px;
+}
+.project-info-container {
+  margin: 10px 0;
+}
 </style>
