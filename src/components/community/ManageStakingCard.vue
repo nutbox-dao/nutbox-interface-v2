@@ -185,7 +185,7 @@ export default {
       const fundRatio = this.communityData.feeRatio;
       const poolRatio = this.pool.ratio;
       const _rewardPerBlock = this.rewardPerBlock[this.stakingFactoryId]
-      
+
       const reward =
         (_rewardPerBlock ?? 0) *
         blocksPerYear *
@@ -369,6 +369,9 @@ export default {
   display: flex;
   align-items: center;
   box-sizing: border-box;
+}
+.card-link-top-box {
+  min-height: 128px;
 }
 .c-card {
   margin-top: -30px;
