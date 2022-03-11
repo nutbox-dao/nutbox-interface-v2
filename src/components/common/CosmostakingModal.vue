@@ -106,7 +106,7 @@ export default {
       return (staked.toString() / 1e6) * this.vestsToSteem;
     },
     account() {
-      return strReplace(store.state.cosmos.account, 13, 6, "*", 5);
+      return strReplace(store.state.cosmos.cosmosAccount, 13, 6, "*", 5);
     },
   },
   props: {
@@ -217,6 +217,7 @@ export default {
     },
   },
   async mounted() {
+    getAccountBalance()
   },
 };
 </script>

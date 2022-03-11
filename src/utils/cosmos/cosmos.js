@@ -101,7 +101,7 @@ export const getDelegateFromCosmos = async (account, targetAccount) => {
 // cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const getAccount = async () => {
-  // if (store.state.cosmos.account) return store.state.cosmos.account
+  // if (store.state.cosmos.cosmosAccount) return store.state.cosmos.cosmosAccount
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
   store.commit('cosmos/saveAccount', accounts[0].address)
@@ -125,7 +125,7 @@ export const signAndBroadcast = async (msgs, memo) => {
       console.log('start');
 
       const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
-      const res = await client.signAndBroadcast(store.state.cosmos.account, msgs, fee, memo)
+      const res = await client.signAndBroadcast(store.state.cosmos.cosmosAccount, msgs, fee, memo)
       if (res.code === 0) {
         resolve(res.transactionHash)
       }
@@ -139,7 +139,7 @@ export const signAndBroadcast = async (msgs, memo) => {
     }
 
     // const tx = await offlineSigner.signAmino(
-    //   store.state.cosmos.account, 
+    //   store.state.cosmos.cosmosAccount, 
     //   {
     //     chain_id: chainId,
     //     account_number: auth.account_number,
@@ -174,7 +174,7 @@ export const grant = async (granter, grantee, exed) => {
   const msgGrant = {
     typeUrl: '/cosmos.authz.v1beta1.MsgGrant',
     value: {
-      granter: store.state.cosmos.account,
+      granter: store.state.cosmos.cosmosAccount,
       grantee: 'cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4'
     }
   }
@@ -184,7 +184,7 @@ export const delegate = async (validator, amount, pid) => {
   const msgDelegate = {
     typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
     value: {
-      delegatorAddress: store.state.cosmos.account,
+      delegatorAddress: store.state.cosmos.cosmosAccount,
       validatorAddress: validator,
       amount: {
         denom: 'uatom',
@@ -195,7 +195,7 @@ export const delegate = async (validator, amount, pid) => {
   const msgSend = {
     typeUrl: '/cosmos.bank.v1beta1.MsgSend',
     value: {
-      fromAddress: store.state.cosmos.account,
+      fromAddress: store.state.cosmos.cosmosAccount,
       toAddress: COSMOS_GAS_ACCOUNT,
       amount: [{
         denom: 'uatom',
@@ -215,7 +215,7 @@ export const unDelegate = async (validator, amount, pid, address) => {
   const msgUndelegate = {
     typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
     value: {
-      delegatorAddress: store.state.cosmos.account,
+      delegatorAddress: store.state.cosmos.cosmosAccount,
       validatorAddress: validator,
       amount: {
         denom: 'uatom',
@@ -226,7 +226,7 @@ export const unDelegate = async (validator, amount, pid, address) => {
   const msgSend = {
     typeUrl: '/cosmos.bank.v1beta1.MsgSend',
     value: {
-      fromAddress: store.state.cosmos.account,
+      fromAddress: store.state.cosmos.cosmosAccount,
       toAddress: COSMOS_GAS_ACCOUNT,
       amount: [{
         denom: 'uatom',

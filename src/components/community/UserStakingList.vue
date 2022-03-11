@@ -256,6 +256,22 @@
       />
     </b-modal>
 
+    <!-- cosmos stake  -->
+    <b-modal
+      v-model="showCosmosStake"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <CosmostakingModal
+        :operate="operate"
+        :pool="pool"
+        @hideStakeMask="showCosmosStake = false"
+      />
+    </b-modal>
+
     <!-- wrong steem account -->
     <b-modal
       v-model="showWrongSteem"
@@ -380,6 +396,89 @@
         </button>
       </div>
     </b-modal>
+    <!-- wrong cosmos account -->
+    <b-modal
+      v-model="showWrongCosmos"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form position-relative">
+        <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
+        <div class="modal-title">
+          Please change COSMOS Account
+        </div>
+        <div class="text-center font20 line-height24 mt-3">
+          Your COSMOS account haven't binding with current
+          {{ chainName }} address, please change
+          COSMOS account in your wallet first.
+        </div>
+        <div class="mt-3 mb-1 text-center font20 line-height24">
+          Your binding COSMOS account is:
+        </div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+          <input class="text-center" disabled type="text" :value="bindCosmos" />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button
+          class="dark-btn primary-btn-outline mx-3"
+          @click="showWrongCosmos = false"
+        >
+          Cancel
+        </button>
+        <button
+          class="primary-btn mx-3"
+          @click="(showWrongCosmos = false)"
+        >
+          OK
+        </button>
+      </div>
+    </b-modal>
+    <!-- wrong main chain account for cosmos -->
+    <b-modal
+      v-model="showWrongAccountForCosmos"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form text-center position-relative">
+        <i class="modal-close-icon-right" @click="showWrongAccountForCosmos = false"></i>
+        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="font20 line-height24 mt-3">
+          Your {{ chainName }} address haven't binding with current
+          COSMOS account, please change
+          {{ chainName }} address in your wallet first.
+        </div>
+        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            :value="bindAddress"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button
+          class="primary-btn primary-btn-outline mx-3"
+          @click="showWrongAccountForCosmos = false"
+        >
+          Cancel
+        </button>
+        <button
+          class="primary-btn mx-3"
+          @click="(showWrongAccountForCosmos = false)"
+        >
+          OK
+        </button>
+      </div>
+    </b-modal>
     <!-- Login -->
     <b-modal
       v-model="showLogin"
@@ -401,6 +500,7 @@ import {
   withdrawReward,
   getPoolType,
   getBindSteemAccount,
+  getBindCosmosAccount
 } from "@/utils/web3/pool";
 import { getCommunityRewardPerBlock } from "@/utils/web3/community";
 import { CHAIN_NAME } from "@/config";
@@ -412,6 +512,7 @@ import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
 import HPStakingModal from "@/components/common/HPStakingModal";
+import CosmostakingModal from "@/components/common/CosmostakingModal";
 
 export default {
   name: "",
@@ -429,6 +530,7 @@ export default {
     StakingHomeChainAssetModal,
     SPStakingModal,
     HPStakingModal,
+    CosmostakingModal,
   },
   data() {
     return {
@@ -440,10 +542,15 @@ export default {
       showLogin: false,
       showWrongSteem: false,
       showWrongAccount: false,
+      showWrongAccountForCosmos: false,
+      showWrongCosmos: false,
       showSpStake: false,
       showHpStake: false,
+      showCosmosStake: false,
+      showCosmosStake: false,
       isCheckingAccount: false,
       bindSteem: "",
+      bindCosmos: "",
       bindAddress: "",
       chainName: CHAIN_NAME,
     };
@@ -456,6 +563,7 @@ export default {
     ...mapState("web3", ["tokenIcons", "allTokens"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
+    ...mapState("cosmos", ['cosmosAccount']),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -474,6 +582,8 @@ export default {
         return !this.steemAccount;
       } else if (this.type === "hive") {
         return !this.hiveAccount;
+      } else if (this.type === 'cosmos') {
+        return !this.cosmosAccount
       }
       return false;
     },
@@ -512,6 +622,8 @@ export default {
         return (stakedBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
+      } else if (this.type === 'cosmos') {
+        return stakedBn.toString() / 1e6
       }
     },
     pendingReward() {
@@ -533,6 +645,8 @@ export default {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
+      } else if (this.type === 'cosmos') {
+        return total.toString() / 1e6
       }
       return 0;
     },
@@ -641,6 +755,44 @@ export default {
         this.isCheckingAccount = false;
       }
     },
+    async checkCosmosAccount() {
+      this.isCheckingAccount = true;
+      try {
+        console.log(1, this.pool);
+        const bindInfo = await getBindCosmosAccount(this.pool);
+        console.log(2);
+        const cosmosAcc = this.cosmosAccount;
+
+        if (bindInfo.account[1] === cosmosAcc) return true;
+        if (
+          bindInfo.account[1] === ""
+        ) {
+          if (
+            bindInfo.bindAccount[1] === ethers.constants.AddressZero
+          )
+            return true;
+          if (
+            bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()
+          ) {
+            this.bindAddress = bindInfo.bindAccount[1];
+            this.showWrongAccount = true;
+            return;
+          }
+        }
+        if (bindInfo.account[1] !== cosmosAcc) {
+          this.bindCosmos = bindInfo.account[1];
+          this.showWrongCosmos = true;
+          return;
+        }
+        return true;
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isCheckingAccount = false;
+      }
+    },
     async increase() {
       this.operate = "add";
       if (this.type === "erc20staking") {
@@ -653,6 +805,10 @@ export default {
       } else if (this.type === "hive") {
         if (await this.checkAccount()) {
           this.showHpStake = true;
+        }
+      } else if (this.type === 'cosmos') {
+        if (await this.checkCosmosAccount()) {
+          this.showCosmosStake = true
         }
       }
     },
@@ -668,6 +824,10 @@ export default {
       } else if (this.type === "hive") {
         if (await this.checkAccount()) {
           this.showHpStake = true;
+        }
+      } else if (this.type === 'cosmos') {
+        if (await this.checkCosmosAccount()) {
+          this.showCosmosStake = true
         }
       }
     },

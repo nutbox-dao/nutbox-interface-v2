@@ -103,7 +103,7 @@
         </button>
         <button
           class="primary-btn mx-3"
-          @click="(showWrongCosmos = false), (showLogin = true)"
+          @click="(showWrongCosmos = false)"
         >
           OK
         </button>
@@ -141,13 +141,13 @@
           class="primary-btn primary-btn-outline mx-3"
           @click="showWrongAccount = false"
         >
-          OK
+          Cancel
         </button>
         <button
           class="primary-btn mx-3"
-          @click="(showWrongAccount = false), (showLogin = true)"
+          @click="(showWrongAccount = false)"
         >
-          Change COSMOS
+          OK
         </button>
       </div>
     </b-modal>
@@ -184,7 +184,6 @@ export default {
       isApproving: false,
       isApprovingCommunity: false,
       operate: "add",
-      showLogin: false,
       showWrongCosmos: false,
       showWrongAccount: false,
       showCosmosStake: false,
@@ -220,7 +219,7 @@ export default {
       return false;
     },
     needLogin() {
-      if (!store.state.cosmos.account || store.state.cosmos.account == "null") {
+      if (!store.state.cosmos.cosmosAccount || store.state.cosmos.cosmosAccount == "null") {
         return true;
       }
       return false;
@@ -258,7 +257,7 @@ export default {
       this.isCheckingAccount = true;
       try {
         const bindInfo = await getBindCosmosAccount(this.card);
-        const cosmosAcc = store.state.cosmos.account;
+        const cosmosAcc = store.state.cosmos.cosmosAccount;
 
         if (bindInfo.account[1] === cosmosAcc) return true;
         if (
