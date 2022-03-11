@@ -320,8 +320,11 @@ export default {
 .p-card {
   height: fit-content;
   .poster {
-    @include card-poster-bg(12rem);
-    background-color: var(--primary-custom);
+    width: 100%;
+    min-height: 0;
+    height: fit-content;
+    max-height: fit-content;
+    object-fit: cover;
   }
 
   .v-line {
