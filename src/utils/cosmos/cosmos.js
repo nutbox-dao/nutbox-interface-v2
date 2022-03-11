@@ -104,6 +104,7 @@ export const getAccount = async () => {
   // if (store.state.cosmos.account) return store.state.cosmos.account
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
+  store.commit('cosmos/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
 
