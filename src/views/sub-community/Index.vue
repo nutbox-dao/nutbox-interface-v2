@@ -9,13 +9,13 @@
                 <i class="menu-icon home-icon" />
                 <span>Home</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/staking">
-                <i class="menu-icon farming-icon" />
-                <span>Yield Farming</span>
-              </b-nav-item>
               <b-nav-item to="/sub-community/iso">
                 <i class="menu-icon iso-icon" />
                 <span>ISO</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/staking">
+                <i class="menu-icon farming-icon" />
+                <span>Yield Farming</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
@@ -67,13 +67,13 @@
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
                   </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/staking">
-                    <i class="menu-icon farming-icon" />
-                    <span>Yield Farming</span>
-                  </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/iso">
                     <i class="menu-icon iso-icon" />
                     <span>ISO</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/staking">
+                    <i class="menu-icon farming-icon" />
+                    <span>Yield Farming</span>
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />
