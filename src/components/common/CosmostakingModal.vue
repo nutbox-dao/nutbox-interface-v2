@@ -103,7 +103,7 @@ export default {
     },
     formStaked() {
       const staked = this.staked;
-      return (staked.toString() / 1e6) * this.vestsToSteem;
+      return (staked.toString() / 1e6);
     },
     account() {
       return strReplace(store.state.cosmos.cosmosAccount, 13, 6, "*", 5);
@@ -141,8 +141,14 @@ export default {
       return res;
     },
     checkDelegateFee() {
-      if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
-        return true;
+      if (this.operate === "add") {
+        if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
+          return true;
+        }
+      }else {
+        if (this.balance > this.fee) {
+          return true;
+        }
       }
       this.$bvToast.toast(this.$t("error.notEnoughFee"), {
         title: this.$t("error.delegateerror"),

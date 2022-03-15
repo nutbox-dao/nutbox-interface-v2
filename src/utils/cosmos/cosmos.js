@@ -118,7 +118,7 @@ export const signAndBroadcast = async (msgs, memo) => {
       const fee = {
         amount: [{
           denom: 'uatom',
-          amount: '2000'
+          amount: '7000'
         }],
         gas: "260000"
       }
@@ -230,7 +230,7 @@ export const unDelegate = async (validator, amount, pid, address) => {
       toAddress: COSMOS_GAS_ACCOUNT,
       amount: [{
         denom: 'uatom',
-        amount: COSMOS_STAKE_FEE * 1e6
+        amount: (COSMOS_STAKE_FEE * 1e6).toString()
       }]
     }
   }
