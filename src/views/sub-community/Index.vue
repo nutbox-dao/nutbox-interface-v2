@@ -15,7 +15,7 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon farming-icon" />
-                <span>Yield Farming</span>
+                <span>Farming</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
@@ -73,7 +73,7 @@
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/staking">
                     <i class="menu-icon farming-icon" />
-                    <span>Yield Farming</span>
+                    <span>Farming</span>
                   </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />

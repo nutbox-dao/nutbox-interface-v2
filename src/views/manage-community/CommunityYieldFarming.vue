@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-content">
     <div class="view-top-header view-top-header-sticky">
-      <div class="font24 line-height28 font-bold mb-2">Yield Farming</div>
+      <div class="font24 line-height28 font-bold mb-2">Farming</div>
       <div class="font16 line-height24 font-bold mb-4">Just stake some tokens to earn.</div>
       <div class="row">
         <div class="col-md-6 d-flex flex-column justify-content-center">

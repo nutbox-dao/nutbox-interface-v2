@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Yield Farming', "ISO", 'NUT Power', 'Inactive'],
+      tabOptions: ['Farming', "ISO", 'NUT Power', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,

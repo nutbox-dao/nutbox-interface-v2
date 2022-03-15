@@ -18,7 +18,7 @@
             </b-nav-item>
             <b-nav-item to="/manage-community/staking">
               <i class="menu-icon farming-icon" />
-              <span>Yield Farming</span>
+              <span>Farming</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />

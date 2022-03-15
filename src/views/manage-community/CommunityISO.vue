@@ -3,8 +3,8 @@
     <div class="view-top-header view-top-header-sticky">
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
-          <div class="font24 line-height28 font-bold mb-2">ISO：Initial Staking Offerings</div>
-          <div class="font16 line-height24 font-bold mb-4">ISO enable community cold boot by offering new tokens. Just create POS chain token staking pool.</div>
+          <div class="font24 line-height28 font-bold mb-2">ISO: Initial Staking Offering</div>
+          <div class="font16 line-height24 font-bold mb-4">Stake PoS Token mint community Token. High APR, No risk.</div>
         </div>
         <div class="col-xl-5">
           <div class="c-btn-group m-2">
