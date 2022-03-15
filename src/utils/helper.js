@@ -72,6 +72,32 @@ export const formatBalance = function (value, digit = 4) {
   return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
 };
 
+export const formatAmount = function (value) {
+  if (!value) return "--";
+  let unit = ''
+  let digit = 3
+  if(Number(value) < 1) {
+    digit = 4
+  }
+  value = Number(value)
+  if (value < 1e6) {
+  }else if (value < 1e9){
+    value = value / 1e6
+    unit = 'M'
+  }else if(value < 1e12) {
+    value = value / 1e9
+    unit = 'B'
+  }
+  const str = Number(value).toFixed(digit).toString();
+  let integer = str;
+  let fraction = "";
+  if (str.includes(".")) {
+    integer = str.split(".")[0];
+    fraction = "." + str.split(".")[1];
+  }
+  return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction + unit;
+}
+
 /**
  * 
  * @param {*} value 
