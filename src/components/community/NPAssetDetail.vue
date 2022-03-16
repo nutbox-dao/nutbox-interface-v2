@@ -198,8 +198,10 @@ export default {
       }
       if (sec > 60) {
         return parseInt(sec / 60) + ' minutes left'
+      } if (sec > 0) {
+        return sec + ' seconds left'
       }
-      return sec + ' seconds left'
+      return '0 secondes left'
     },
     updateRedeemData() {
       // update datas
@@ -216,7 +218,8 @@ export default {
           const nutAmount = d.amount.toString() / 1e18
           const period = this.releasePeriod[i]
           const npAmount = nutAmount * period
-          const ratio = (timestamp - startTime) / (endTime - startTime)
+          let ratio = (timestamp - startTime) / (endTime - startTime)
+          ratio = ratio > 1 ? 1 : ratio
           const claimed = d.claimed.toString() / 1e18
           const claimble = nutAmount * ratio - claimed
           const leftSecond = endTime - timestamp
