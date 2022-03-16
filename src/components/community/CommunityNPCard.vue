@@ -147,6 +147,7 @@ import showToastMixin from "@/mixins/copyToast";
 import { NutAddress, BLOCK_CHAIN_BROWER } from '@/config'
 import { formatUserAddress, handleApiErrCode, sleep } from "@/utils/helper";
 import { getUserBaseInfo } from "@/utils/web3/account";
+import { userWithdrawReward } from '@/utils/nutbox/gauge'
 
 export default {
   name: 'CommunityNPCard',

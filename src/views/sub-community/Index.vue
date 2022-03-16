@@ -63,7 +63,7 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item :to="'/sub-community/home' + (communityId ? communityId.substring(0,10): '')">
+                  <b-dropdown-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
                   </b-dropdown-item>

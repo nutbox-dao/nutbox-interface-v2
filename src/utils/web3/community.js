@@ -212,6 +212,7 @@ export const getOperationFee = async () => {
 export const getCommunityRewardPerBlock = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try{
+      communityId = communityId.toLowerCase();
       const contract = await getContract('LinearCalculator')
       const amount = await contract.getCurrentRewardPerBlock(communityId)
       const ctoken = await getCToken(communityId)
