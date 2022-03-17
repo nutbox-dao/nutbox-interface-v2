@@ -80,6 +80,10 @@
                 <i class="dropdown-item-icon twitter-icon"></i>
                 <span>Twitter</span>
               </b-dropdown-item>
+              <b-dropdown-item href="https://www.certik.com/projects/walnut" target="_blank">
+                <i class="dropdown-item-icon docs-icon"></i>
+                <span>Audit Report</span>
+              </b-dropdown-item>
               <!-- <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.auditReport") }}</span>
