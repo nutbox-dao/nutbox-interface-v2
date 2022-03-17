@@ -855,7 +855,7 @@ export const approveUseERC20 = async (token, target) => {
     try{
       const contract = await getContract('ERC20', token, false)
       const tx = await contract.approve(target, ethers.constants.MaxUint256, {
-        gasLimit: 75402
+        gasLimit: 854020
       })
       await waitForTx(tx.hash)
       resolve()
