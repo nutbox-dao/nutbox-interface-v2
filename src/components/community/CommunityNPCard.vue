@@ -34,7 +34,7 @@
             </div>
             <div class="d-flex align-items-center">
               <div class="d-flex justify-content-between align-items-center font-bold flex-1">
-                <span class="font18 line-height18">Nut</span>
+                <span class="font18 line-height18">NUT</span>
                 <span class="font24 line-height24">{{ userRewardNut[card.id] | amountForm }}</span>
               </div>
               <div class="d-flex align-items-center icons-group">

@@ -70,6 +70,12 @@ async function getNpContract() {
     return getContract('NutPower', ethers.constants.AddressZero, false)
 }
 
+/**
+ * 
+ * @param {*} amount nut amount
+ * @param {*} period [0-6]
+ * @returns 
+ */
 export const powerUp = async (amount, period) => {
     return new Promise(async (resolve, reject) => {
         try{
@@ -85,6 +91,12 @@ export const powerUp = async (amount, period) => {
     })
 }
 
+/**
+ * 
+ * @param {*} amount np amount 
+ * @param {*} period [0-6]
+ * @returns 
+ */
 export const powerDown = async (amount, period) => {
     return new Promise(async (resolve, reject) => {
         try{
@@ -100,9 +112,17 @@ export const powerDown = async (amount, period) => {
     })
 }
 
+/**
+ * 
+ * @param {*} amount np amount 
+ * @param {*} src src index [0-6]
+ * @param {*} dest 
+ * @returns 
+ */
 export const upgrade = async (amount, src, dest) => {
     return new Promise(async (resolve, reject) => {
         try{
+            amount = parseFloat(amount) / (2 ** src);
             amount = ethers.utils.parseUnits(amount.toString(), 18)
             const np = await getNpContract();
             const tx = await np.upgrade(amount, src, dest)

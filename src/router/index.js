@@ -23,6 +23,7 @@ import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
 import CommunityISO from '@/views/manage-community/CommunityISO'
 import CommunityNutPower from '@/views/manage-community/CommunityNutPower'
+import Faucet from '@/views/Faucet'
 Vue.use(VueRouter)
 
 const routes = [
@@ -35,6 +36,10 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: Profile
+  },
+  {
+    path: '/faucet',
+    component: Faucet
   },
   {
     path: '/community',

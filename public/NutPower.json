@@ -133,19 +133,6 @@
     },
     {
       "inputs": [],
-      "name": "gauge",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "nut",
       "outputs": [
         {
@@ -244,19 +231,6 @@
         }
       ],
       "name": "adminSetNut",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_gauge",
-          "type": "address"
-        }
-      ],
-      "name": "adminSetGauge",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -494,7 +468,7 @@
           "components": [
             {
               "internalType": "uint256",
-              "name": "amount",
+              "name": "nutAmount",
               "type": "uint256"
             },
             {
@@ -540,7 +514,7 @@
           "components": [
             {
               "internalType": "uint256",
-              "name": "amount",
+              "name": "nutAmount",
               "type": "uint256"
             },
             {
@@ -586,7 +560,7 @@
           "components": [
             {
               "internalType": "uint256",
-              "name": "amount",
+              "name": "nutAmount",
               "type": "uint256"
             },
             {
