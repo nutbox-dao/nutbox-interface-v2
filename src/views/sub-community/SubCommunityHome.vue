@@ -43,7 +43,7 @@
               </div>
               <div class="r-item">
                 <div class="label font12 text-grey-7">{{ $t('asset.totalSupply') }}</div>
-                <div class="value font-bold">{{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal)) : 0) | amountForm }}</div>
+                <div class="value font-bold">{{ formatTotalSupply }}</div>
               </div>
               <div class="r-item">
                 <div class="label font12 text-grey-7">{{ $t('asset.cap') }}</div>
@@ -183,7 +183,7 @@ import { mapGetters, mapState } from 'vuex'
 import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getCToken } from '@/utils/web3/asset'
-import { sleep, formatBalance, rollingFunction } from '@/utils/helper'
+import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
@@ -231,6 +231,10 @@ export default {
     communityBalanceValue () {
       if (!this.cToken) return 0;
       return this.communityBalance.toString() / (10 ** this.cToken.decimal)
+    },
+    formatTotalSupply() {
+      let amount = (this.cToken ? (this.cToken.totalSupply / (10 ** this.cToken.decimal)) : 0)
+      return formatAmount(amount)
     }
   },
   methods: {
@@ -367,6 +371,8 @@ export default {
   }
   .r-item .value {
     margin-top: .5rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
   }
   .v-middle {
     position: relative;
