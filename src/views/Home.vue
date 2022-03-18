@@ -70,8 +70,9 @@
           <div class="c-card">
             <div class="row">
               <div class="col-lg-4 col-md-5">
-                <div class="data-card d-flex justify-content-center align-items-center">
-                  <LineChart style="max-height: 220px"/>
+                <div class="data-card d-flex flex-column justify-content-center align-items-center">
+                  <div class="chart-title font16 font-bold text-left w-100">Total Locked</div>
+                  <LineChart style="max-height: 200px"/>
                 </div>
               </div>
               <div class="col-lg-8 col-md-7">
@@ -324,6 +325,12 @@ $home-primary-color: #F8B62A;
     &:last-child {
       background-image: linear-gradient(to right, #141414, #1D1E1F);
     }
+  }
+  .chart-title {
+    border-left: 4px solid var(--primary-custom);
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
   }
   .data-card {
     @include card();
