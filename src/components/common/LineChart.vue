@@ -74,6 +74,7 @@ export default {
   },
   data () {
     return {
+      chart: null,
       options: {
         responsive: true,
         scales: {
@@ -163,13 +164,18 @@ export default {
           options: this.options
         }
       }
-      
-    const ctx = document.getElementById(this.canvasId)
-    this.chart = new Chart(ctx, chartData)
+
+    // const ctx = document.getElementById(this.canvasId)
+    // this.chart = new Chart(ctx, chartData)
+      this.chart.data = this.chartData.data
+      this.chart.update()
     }
   },
   mounted () {
+    const ctx = document.getElementById(this.canvasId)
+    this.chart = new Chart(ctx, this.chartData)
     this.updateChart(this.commonData)
+    console.log(this.commonData)
   }
 }
 </script>
