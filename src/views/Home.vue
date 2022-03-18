@@ -66,6 +66,45 @@
             </div>
           </div>
         </section>
+        <section class="section-chart">
+          <div class="c-card">
+            <div class="row">
+              <div class="col-lg-4 col-md-5">
+                <div class="data-card d-flex justify-content-center align-items-center">
+                  <LineChart style="max-height: 220px"/>
+                </div>
+              </div>
+              <div class="col-lg-8 col-md-7">
+                <div class="data-desc">
+                  <div class="font28 font-bold mb-4">NUT</div>
+                  <div class="font18 line-height32 font-bold">NUT is the utility token of Nutbox ecosystem, providing members and communities with benefits and services, and dictates Nutbox’s governance.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="c-card">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="data-desc">
+                  <div class="font28 font-bold mb-4">Nut Power</div>
+                  <div class="font18 line-height32 font-bold">Nutbox Power is the Governance Power of Nutbox DAO. The Nutbox governance reward of a user is charged by the user governance activity.</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="data-card d-flex flex-column justify-content-around align-items-center">
+                  <div class="text-center">
+                    <div class="font20 text-primary-0 font-bold">Total Supply</div>
+                    <div class="font24 font-bold">382,742,342,432</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font20 text-primary-0 font-bold">Average unlock time</div>
+                    <div class="font24 font-bold">383 Days</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
@@ -95,10 +134,11 @@ import { mapState } from 'vuex'
 import { getWalnutData } from '@/utils/graphql/committee'
 import CommunityCard from '@/components/community/CommunityCard'
 import { getAllCommunities } from '@/utils/web3/community'
+import LineChart from '@/components/common/LineChart'
 
 export default {
   name: 'Home',
-  components: { CommunityCard },
+  components: { CommunityCard, LineChart },
   data () {
     return {
       loadingAllCommunity: true,
@@ -273,6 +313,32 @@ $home-primary-color: #F8B62A;
   -webkit-text-fill-color:transparent;
   width: fit-content;
 }
+.section-chart {
+  .c-card {
+    border-radius: .8rem;
+    border: none;
+    margin-top: 10px;
+    &:first-child {
+      background-image: linear-gradient(to left, #141414, #1D1E1F);
+    }
+    &:last-child {
+      background-image: linear-gradient(to right, #141414, #1D1E1F);
+    }
+  }
+  .data-card {
+    @include card();
+    border: none;
+    height: 240px;
+    min-height: 200px;
+  }
+  .data-desc {
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
 @media (max-width: 1200px) {
   .section1 {
     .home-img1 {
@@ -297,6 +363,16 @@ $home-primary-color: #F8B62A;
   }
   .text-dot {
     display: none;
+  }
+  .section-chart {
+    .c-card {
+      &:first-child {
+        background-image: linear-gradient(to top, #141414, #1D1E1F);
+      }
+      &:last-child {
+        background-image: linear-gradient(to bottom, #141414, #1D1E1F);
+      }
+    }
   }
 }
 @media (max-width: 767px) {
