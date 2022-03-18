@@ -81,7 +81,7 @@
                 <span>Twitter</span>
               </b-dropdown-item>
               <b-dropdown-item href="https://www.certik.com/projects/walnut" target="_blank">
-                <i class="dropdown-item-icon docs-icon"></i>
+                <i class="dropdown-item-icon audit-icon"></i>
                 <span>Audit Report</span>
               </b-dropdown-item>
               <!-- <b-dropdown-item href="https://cdn.wherein.mobi/nutbox/v2/docs/REP-Nutbox-Walnut-Network-2021-10-29.pdf" target="_blank">
@@ -460,5 +460,8 @@ body {
 }
 .back-icon {
   background-image: url("~@/static/images/back.svg");
+}
+.audit-icon {
+  background-image: url("~@/static/images/h-audit.svg");
 }
 </style>
