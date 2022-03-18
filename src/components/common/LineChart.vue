@@ -21,45 +21,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('np', ['commonData']),
-    chartData() {
-      if (this.commonData && this.commonData.length > 0) {
-        const dayData = this.getDate()
-        const labels = Object.values(dayData)
-        let npData = {}
-        for (let d of this.commonData) {
-          npData[d.id] = d.nutStaked
-        }
-        let data = []
-        for (let d of Object.keys(dayData).sort((a, b) => a > b)) {
-          data.push(npData[d] ?? 0)
-        }
-        return {
-          type: 'line',
-          data: {
-            labels,
-            datasets: [
-              {
-                label: '',
-                data,
-                backgroundColor: 'rgba(white,0)',
-                borderColor: 'rgba(253,152,0,0.53)',
-                borderWidth: 3,
-                tension: 0.5
-              }
-            ]
-          },
-          options: this.options
-        }
-      }else {
-        return {
+    ...mapState('np', ['commonData'])
+  },
+  data () {
+    return {
+      chart: null,
+      chartData: {
           type: 'line',
           data: {
             labels: [],
             datasets: [
               {
-                label: "",
-                data: [0,0,0,0,0,0,0],
+                label: '',
+                data: [],
                 backgroundColor: 'rgba(white,0)',
                 borderColor: 'rgba(253,152,0,0.53)',
                 borderWidth: 3,
@@ -67,36 +41,30 @@ export default {
               }
             ]
           },
-          options: this.options
-        }
-      }
-    }
-  },
-  data () {
-    return {
-      chart: null,
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            grid: {
-              borderColor: '#474849',
-              display: false
+          options: {
+          responsive: true,
+          scales: {
+            x: {
+              grid: {
+                borderColor: '#474849',
+                display: false
+              }
+            },
+            y: {
+              grid: {
+                borderColor: '#474849',
+                display: false
+              }
             }
           },
-          y: {
-            grid: {
-              borderColor: '#474849',
+          plugins: {
+            legend: {
               display: false
             }
           }
-        },
-        plugins: {
-          legend: {
-            display: false
-          }
         }
-      }
+        },
+      
     }
   },
   watch: {
@@ -128,9 +96,7 @@ export default {
         for (let d of Object.keys(dayData).sort((a, b) => a > b)) {
           data.push(npData[d] ?? 0)
         }
-        chartData = {
-          type: 'line',
-          data: {
+          chartData = {
             labels,
             datasets: [
               {
@@ -142,13 +108,9 @@ export default {
                 tension: 0.5
               }
             ]
-          },
-          options: this.options
-        }
+          }
       }else {
-        chartData = {
-          type: 'line',
-          data: {
+          chartData = {
             labels: [],
             datasets: [
               {
@@ -160,14 +122,12 @@ export default {
                 tension: 0.5
               }
             ]
-          },
-          options: this.options
-        }
+          }
       }
 
     // const ctx = document.getElementById(this.canvasId)
     // this.chart = new Chart(ctx, chartData)
-      this.chart.data = this.chartData.data
+      this.chart.data = chartData
       this.chart.update()
     }
   },
@@ -175,7 +135,6 @@ export default {
     const ctx = document.getElementById(this.canvasId)
     this.chart = new Chart(ctx, this.chartData)
     this.updateChart(this.commonData)
-    console.log(this.commonData)
   }
 }
 </script>
