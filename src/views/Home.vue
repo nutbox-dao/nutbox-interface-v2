@@ -95,11 +95,11 @@
                 <div class="data-card d-flex flex-column justify-content-around align-items-center">
                   <div class="text-center">
                     <div class="font20 text-primary-0 font-bold">Total Supply</div>
-                    <div class="font24 font-bold">382,742,342,432</div>
+                    <div class="font24 font-bold">{{ npSupply | amountForm }}</div>
                   </div>
                   <div class="text-center">
                     <div class="font20 text-primary-0 font-bold">Average unlock time</div>
-                    <div class="font24 font-bold">383 Days</div>
+                    <div class="font24 font-bold">{{ unlockingPeriod }}</div>
                   </div>
                 </div>
               </div>
@@ -144,11 +144,13 @@ export default {
     return {
       loadingAllCommunity: true,
       loading: true,
-      loadingTvl:false
+      loadingTvl:false,
+      unlockingPeriod: '0 Days'
     }
   },
   computed: {
     ...mapState(['prices', 'tvl']),
+    ...mapState('np',['commonData']),
     ...mapState('web3', ['walnutInfo']),
     ...mapState('community', ['allCommunityInfo']),
     ...mapState('steem', ['vestsToSteem']),
@@ -167,6 +169,14 @@ export default {
       }
       this.loadingAllCommunity = false
       return rcs;
+    },
+    npSupply () {
+      if (this.commonData && this.commonData.length > 0) {
+        const newData = this.commonData.sort((a,b) => a.id > b.id)[0]
+        this.unlockingPeriod = (newData.npSupply / newData.nutStaked * 7).toFixed(0) + ' Days'
+        return newData.npSupply
+      }
+      return 0
     }
   },
   methods: {
