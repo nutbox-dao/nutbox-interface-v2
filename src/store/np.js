@@ -10,12 +10,13 @@
         totalLockedNut:0,
         npPrice: 0,
         npApr: 0,
+        commonData: [],
         // user
         balance: {},
         // 0-6 array
         userLockedNut: [],
         userRedeemInfo:[],
-        loadingRedeemInfo: true
+        loadingRedeemInfo: true,
     },
     mutations: {
         // common
@@ -30,6 +31,9 @@
         },
         saveNpApr: (state, npApr) => {
             state.npApr = npApr
+        },
+        saveCommonData(state, commonData){
+            state.commonData = commonData
         },
 
         // user

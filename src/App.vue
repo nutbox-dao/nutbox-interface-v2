@@ -379,6 +379,7 @@ export default {
       this.$store.commit("savePrices", res.prices);
       this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);
       this.$store.commit("hive/saveVestsToHive", res.vestsToHive);
+      this.$store.commit("np/saveCommonData", res.npDatas);
     });
     setInterval(() => {
       getCommon().then((res) => {
