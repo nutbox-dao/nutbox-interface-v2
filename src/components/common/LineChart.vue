@@ -100,12 +100,27 @@ export default {
   },
   watch: {
     commonData(newValue, oldValue) {
+      this.updateChart(newValue)
+    }
+  },
+  methods: {
+    getDate() {
+      let day = new Date()
+      const id = Math.ceil(day.getTime() / 86400000)
+      let days = {}
+      for (let i = 0; i < 7; i++){
+        days[id - i] = day.getMonth() + '/' + day.getDate()
+        day.setDate(day.getDate() - 1)
+      }
+      return days;
+    },
+    updateChart(value) {
       let chartData = {}
-      if (newValue && newValue.length > 0) {
+      if (value && value.length > 0) {
         const dayData = this.getDate()
         const labels = Object.values(dayData)
         let npData = {}
-        for (let d of newValue) {
+        for (let d of value) {
           npData[d.id] = d.nutStaked
         }
         let data = []
@@ -153,19 +168,8 @@ export default {
     this.chart = new Chart(ctx, chartData)
     }
   },
-  methods: {
-    getDate() {
-      let day = new Date()
-      const id = Math.ceil(day.getTime() / 86400000)
-      let days = {}
-      for (let i = 0; i < 7; i++){
-        days[id - i] = day.getMonth() + '/' + day.getDate()
-        day.setDate(day.getDate() - 1)
-      }
-      return days;
-    }
-  },
   mounted () {
+    this.updateChart(this.commonData)
   }
 }
 </script>
