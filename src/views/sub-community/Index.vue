@@ -199,7 +199,9 @@ export default {
           getPoolsFromGraph,
           community.pools.map((p) => p.id),
           10, (pools) => {
-            this.$store.commit('currentCommunity/saveAllPools', pools)
+            if (pools && pools.length > 0){
+              this.$store.commit('currentCommunity/saveAllPools', pools)
+            }
           }
         );
         updatePoolsFromGraph.start();

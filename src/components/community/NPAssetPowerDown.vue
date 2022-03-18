@@ -8,9 +8,9 @@
         <div class="down-item-info d-flex justify-content-between" v-for="(item, i) of powerDownList" :key="i">
           <div class="info d-flex font14 line-height14 flex-1">
             <div class="d-flex align-items-center flex-1">
-              <span>{{item.from}} NP</span>
+              <span>{{item.from | amountForm}} NP</span>
               <i class="arrow-right-icon mx-2"></i>
-              <span>{{item.to}} NUT</span>
+              <span>{{item.to | amountForm}} NUT</span>
             </div>
             <div class="info-sub flex-1">Unlocking period:{{item.unlockTime}} weeks</div>
           </div>
@@ -95,7 +95,7 @@ export default {
     return {
       value1: '',
       selectRatio: 0,
-      selectIdx: -1,
+      selectIdx: 0,
       powerdowning: false
     }
   },
@@ -135,6 +135,9 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    this.selectChannel(this.powerDownList[0], 0);
   },
 }
 </script>

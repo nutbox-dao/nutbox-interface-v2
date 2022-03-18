@@ -56,7 +56,7 @@
                 <div v-if="amount > 0"  class="available-items d-flex justify-content-between align-items-center">
                   <div>
                     <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
-                    <div class="font12 line-height12 text-grey-7">Unlock period:{{ releasePeriod[idx] }} week</div>
+                    <div class="font12 line-height12 text-grey-7">Unlock period: {{ releasePeriod[idx] }} week</div>
                   </div>
                   <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">Upgrade</button>
                 </div>
@@ -215,7 +215,7 @@ export default {
           const d = this.userRedeemInfo[i][j]
           const startTime = d.startTime.toString() / 1
           const endTime = d.endTime.toString() / 1
-          const nutAmount = d.amount.toString() / 1e18
+          const nutAmount = d.nutAmount.toString() / 1e18
           const period = this.releasePeriod[i]
           const npAmount = nutAmount * period
           let ratio = (timestamp - startTime) / (endTime - startTime)
