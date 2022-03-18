@@ -132,6 +132,7 @@ import { handleApiErrCode, rollingFunction } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
 import { NutAddress } from '@/config'
 import { getCommunityRewardPerBlock } from '@/utils/web3/community'
+import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 
 export default {
   name: 'Index',
@@ -194,6 +195,17 @@ export default {
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
         this.saveAllUsers(community.users)
+        const updatePoolsFromGraph = rollingFunction(
+          getPoolsFromGraph,
+          community.pools.map((p) => p.id),
+          10, (pools) => {
+            this.$store.commit('currentCommunity/saveAllPools', pools)
+          }
+        );
+        updatePoolsFromGraph.start();
+        this.$once('hook:beforeDestroy', () => {
+          updatePoolsFromGraph.stop();
+        })
         this.loading = false
       }).catch(e => {
         console.log(42643, e)

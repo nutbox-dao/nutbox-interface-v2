@@ -223,7 +223,16 @@ export default {
     },
   },
   async mounted() {
-    getAccountBalance()
+    const interval = setInterval(() => {
+      try{
+        getAccountBalance()
+      }catch (e) {
+
+      }
+    }, 3000)
+    this.$once('hook:beforeDestroy', () => {
+      window.clearInterval(interval);
+    })
   },
 };
 </script>

@@ -210,12 +210,11 @@ import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/we
 import { subBlockNum } from '@/utils/web3/block'
 import { getMyCommunityInfo, updateAllCommunitiesFromBackend, getOperationFee } from '@/utils/web3/community'
 import { updateAllTokensFromBackend } from '@/utils/web3/asset'
-import { handleApiErrCode, formatUserAddress } from '@/utils/helper'
+import { formatUserAddress } from '@/utils/helper'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
-import { getGaugeParams, hasGaugeEnabled, updateGaugesByPolling } from '@/utils/nutbox/gauge'
 import { connectWallet as connectKeplr } from '@/utils/cosmos/cosmos'
 
 export default {
@@ -324,7 +323,7 @@ export default {
       setupNetwork();
     },
   },
-  mounted() {
+  async mounted() {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || "en");
   },
   async created() {
@@ -356,7 +355,6 @@ export default {
         getMyCommunityInfo().catch((e) => {
           console.log("No created token by current user");
         });
-
         await connectKeplr();
         /*   getCosAcc()
           .then(async (res) => {

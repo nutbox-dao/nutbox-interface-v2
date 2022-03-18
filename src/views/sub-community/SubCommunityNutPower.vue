@@ -64,13 +64,13 @@ export default {
       await sleep(0.3);
     }
 
-    const updatePoolsFromGraph = rollingFunction(
-      getPoolsFromGraph,
-      this.allPools.map((p) => p.id),
-      4
-    );
+    // const updatePoolsFromGraph = rollingFunction(
+    //   getPoolsFromGraph,
+    //   this.allPools.map((p) => p.id),
+    //   4
+    // );
+    // updatePoolsFromGraph.start();
     const pollingNpInfo = getNPInfoByPolling()
-    updatePoolsFromGraph.start();
     const pollingGauge = updateGaugesByPolling(this.gauges.map(p => p.id))
     const polling = updateBalanceByPolling()
     this.$once('hook:beforeDestroy', () => {

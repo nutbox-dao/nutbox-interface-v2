@@ -100,18 +100,18 @@ export default {
       await sleep(0.3);
     }
 
-    const updatePoolsFromGraph = rollingFunction(
-      getPoolsFromGraph,
-      this.allPools.map((p) => p.id),
-      4
-    );
-    updatePoolsFromGraph.start();
+    // const updatePoolsFromGraph = rollingFunction(
+    //   getPoolsFromGraph,
+    //   this.allPools.map((p) => p.id),
+    //   4
+    // );
+    // updatePoolsFromGraph.start();
 
     const polling = updatePoolsByPolling(this.allPools);
 
     this.$once("hook:beforeDestroy", () => {
       polling.stop();
-      updatePoolsFromGraph.stop();
+      // updatePoolsFromGraph.stop();
     });
   },
 };

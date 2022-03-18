@@ -41,7 +41,6 @@ export async function getPools(poolIds) {
         const data = await client.request(query, {ids: poolIds})
         if (data && data.pools) {
             const pools = data.pools
-            store.commit('currentCommunity/saveAllPools', pools)
             return pools
         }
     }catch(e) {
