@@ -42,27 +42,28 @@ export default {
             ]
           },
           options: {
-          responsive: true,
-          scales: {
-            x: {
-              grid: {
-                borderColor: '#474849',
-                display: false
+            responsive: true,
+            animation: true,
+            scales: {
+              x: {
+                grid: {
+                  borderColor: '#474849',
+                  display: false
+                }
+              },
+              y: {
+                grid: {
+                  borderColor: '#474849',
+                  display: false
+                }
               }
             },
-            y: {
-              grid: {
-                borderColor: '#474849',
+            plugins: {
+              legend: {
                 display: false
               }
             }
-          },
-          plugins: {
-            legend: {
-              display: false
-            }
           }
-        }
         },
       
     }
@@ -125,10 +126,11 @@ export default {
           }
       }
 
-    // const ctx = document.getElementById(this.canvasId)
-    // this.chart = new Chart(ctx, chartData)
+      // const ctx = document.getElementById(this.canvasId)
+      // this.chart = new Chart(ctx, chartData)
       this.chart.data = chartData
       this.chart.update()
+      this.chartData.options.animation = false
     }
   },
   mounted () {
