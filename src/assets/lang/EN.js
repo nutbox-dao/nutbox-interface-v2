@@ -123,7 +123,7 @@ module.exports = {
     noCrowdloan: "No ongoing Crowdloan",
     noStakingProject: "No validators",
     picTip:
-    "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
+    "The recommended size is {size} ，smaller than 300K, support jpg、png、jpeg formats",
     tokenSafeTip:
       "Your asset would be locked into {symbol} official crowdloan pallet directly, not any accounts of Nutobx.",
     belowMinContribution:

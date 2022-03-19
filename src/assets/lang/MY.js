@@ -396,7 +396,7 @@ module.exports = {
     inputApy: " Ingrese Apr ",
     uploadLogo:" Cargar logotipo ",
     picTip:
-      " El tamaño recomendado es {tamaño}, menor que 2M, admite formatos jpg, png, jpeg ",
+      " El tamaño recomendado es {tamaño}, menor que 300K, admite formatos jpg, png, jpeg ",
     uploadPoster:" Cargar póster ",
     poster:" Póster ",
     noCommunity : "Aún no tienes una comunidad",

@@ -398,7 +398,7 @@ module.exports = {
     inputApy: "APR를 입력해 주세요",
     uploadLogo: "로고를 업로드 해주세요",
     picTip:
-      "권장하는 사이즈는 {}입니다. 2M 보다 작아야 하며, jpg, png, jpeg 형태로 업로드 해주세요 ",
+      "권장하는 사이즈는 {}입니다. 300K 보다 작아야 하며, jpg, png, jpeg 형태로 업로드 해주세요 ",
     uploadPoster: "포스터 업로드",
     poster: "포스터",
     noCommunity: "당신은 아직 커뮤니티가 없습니다",
