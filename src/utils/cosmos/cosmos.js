@@ -18,7 +18,7 @@ import {
 import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
-const cosmosAuthApiUrl = 'https://rpc-cosmoshub.blockapsis.com'
+const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
@@ -127,6 +127,7 @@ export const signAndBroadcast = async (msgs, memo) => {
       const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
       const res = await client.signAndBroadcast(store.state.cosmos.cosmosAccount, msgs, fee, memo)
       if (res.code === 0) {
+        console.log('Transaction hash:', res.transactionHash);
         resolve(res.transactionHash)
       }
     } catch (e) {
