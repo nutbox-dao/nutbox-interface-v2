@@ -213,7 +213,7 @@ export const getGaugeVoteInfo = async (pools) => {
                 calls.push({
                     target: gaugeContract,
                     call: [
-                        'getGaugeTotalLocked(address)(uint256)',
+                        'getLockedNpInGauge(address)(uint256)',
                         pool
                     ],
                     returns: [

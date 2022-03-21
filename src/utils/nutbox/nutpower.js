@@ -178,7 +178,7 @@ export const getNPInfoByPolling = () => {
         const userRatio = res['userRatio']
         const rewardNutPerBlock = res['rewardNutPerBlock']
         // locked nut in gauge
-        const totalNPLocked = res['totalNPLocked']
+        const totalLockedNP = res['totalLockedNP']
 
         store.commit('gauge/saveGaugeRatio', gaugeRatio)
         store.commit('gauge/saveDistributionRatio', {communityRatio, poolFactoryRatio, userRatio})
@@ -193,7 +193,7 @@ export const getNPInfoByPolling = () => {
 
         // Np apr in gauge for user
         
-        let userNutApr = YEAR_BLOCKS * rewardNutPerBlock * userRatio / 100 / (totalNPLocked * totalLockedNut / totalSupply)
+        let userNutApr = YEAR_BLOCKS * rewardNutPerBlock * userRatio / 100 / (totalLockedNP * totalLockedNut / totalSupply)
         store.commit('np/saveNpApr', userNutApr)
     })
     polling.start();
@@ -255,10 +255,10 @@ export const getNPAndGaugeInfo = async () => {
                 {
                     target: contractAddress['Gauge'],
                     call: [
-                        'totalNPLocked()(uint256)'
+                        'totalLockedNP()(uint256)'
                     ],
                     returns: [
-                        ['totalNPLocked', val => val.toString() / 1e18]
+                        ['totalLockedNP', val => val.toString() / 1e18]
                     ]
                 }
             ], Multi_Config)

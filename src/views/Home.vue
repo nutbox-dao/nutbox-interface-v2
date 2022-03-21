@@ -173,7 +173,8 @@ export default {
     npSupply () {
       if (this.commonData && this.commonData.length > 0) {
         const newData = this.commonData.sort((a,b) => a.id > b.id)[0]
-        this.unlockingPeriod = (newData.npSupply / newData.nutStaked * 7).toFixed(0) + ' Days'
+        const aveDays = (newData.npSupply / newData.nutStaked * 7).toFixed(0)
+        this.unlockingPeriod = (aveDays ?? 0) + ' Days'
         return newData.npSupply
       }
       return 0
