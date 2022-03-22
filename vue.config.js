@@ -2,12 +2,20 @@ module.exports = {
   lintOnSave: false,
   devServer: {
     proxy: {
-      '/cosmos': {
-        target: 'https://api.cosmos.network/',
+      '/cosmos-api': {
+        target: 'https://api.cosmos.network',
         changeOrigin: true,
         secure: false,
         pathRewrite: {
-          '^/cosmos': ''
+          '^/cosmos-api': ''
+        }
+      },
+      '/cosmos-rpc': {
+        target: 'https://rpc.cosmos.network',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/cosmos-rpc': ''
         }
       }
     }

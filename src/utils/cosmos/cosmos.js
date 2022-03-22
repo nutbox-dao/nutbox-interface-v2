@@ -19,6 +19,7 @@ import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
 const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
+// const cosmosAuthApiUrl = 'https://rpc.cosmos.network'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
@@ -84,7 +85,7 @@ const getAccountAuth = async () => {
 
 export const getAccountBalance = async () => {
   const account = await getAccount()
-  const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
+  const auth = await axios.get('/cosmos-api' + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
   const balance = auth.data.balance.amount / 1e6;
   store.commit('cosmos/saveBalance', balance)
   return balance
