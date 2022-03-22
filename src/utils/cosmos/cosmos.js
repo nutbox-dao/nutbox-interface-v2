@@ -129,6 +129,8 @@ export const signAndBroadcast = async (msgs, memo) => {
       if (res.code === 0) {
         console.log('Transaction hash:', res.transactionHash);
         resolve(res.transactionHash)
+      }else {
+        reject(errCode.TRANSACTION_FAIL)
       }
     } catch (e) {
       if (e === 'Error: Request rejected') {
@@ -209,7 +211,7 @@ export const delegate = async (validator, amount, pid) => {
     delegator_address: store.state.web3.account
   }
 
-  return signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
+  return await signAndBroadcast([msgDelegate, msgSend], JSON.stringify(memo))
 }
 
 export const unDelegate = async (validator, amount, pid, address) => {
@@ -240,7 +242,7 @@ export const unDelegate = async (validator, amount, pid, address) => {
     delegator_address: store.state.web3.account
   }
 
-  return signAndBroadcast([msgUndelegate, msgSend], JSON.stringify(memo))
+  return await signAndBroadcast([msgUndelegate, msgSend], JSON.stringify(memo))
 }
 
 

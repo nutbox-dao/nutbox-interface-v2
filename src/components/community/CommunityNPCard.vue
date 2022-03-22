@@ -197,7 +197,7 @@ export default {
         return 0
       }
       const ctokenPrice = this.cToken.price
-      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e14
+      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
       return apr;
     },
     detailApr() {

@@ -187,7 +187,7 @@ export default {
             this.pool.id
           );
         }
-        if (res.success === true) {
+        if (res) {
           if (
             !this.userGraphInfo.inCommunities ||
             this.userGraphInfo.inCommunities
