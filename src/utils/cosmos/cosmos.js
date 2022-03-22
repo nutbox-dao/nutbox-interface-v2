@@ -18,8 +18,7 @@ import {
 import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
-// const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
-const cosmosAuthApiUrl = 'https://cosmoshub-4--rpc--full.datahub.figment.io/apikey/9ddf2fabfd6d78c8867ca8fb09ebe7df/'
+const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
