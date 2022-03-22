@@ -64,7 +64,7 @@
                 <i class="dropdown-item-icon github-icon"></i>
                 <span>Github</span>
               </b-dropdown-item>
-              <b-dropdown-item href="https://nutbox-io.gitbook.io/nutbox/" target="_blank">
+              <b-dropdown-item href="https://nutbox-io.gitbook.io/walnut" target="_blank">
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.docs") }}</span>
               </b-dropdown-item>
