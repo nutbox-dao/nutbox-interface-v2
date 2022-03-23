@@ -95,7 +95,8 @@ export default {
     ...mapState('community', ['communityData']),
     ...mapState('gauge', ['communityPendingRewardNut']),
     waitingForGauge() {
-      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 0) : []
+      console.log(2345, this.communityData.pools);
+      return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 0 && p.status === 'OPENED') : []
     },
     gauges() {
       return this.communityData ? this.communityData.pools.filter(p => p.hasCreateGauge === 1) : []
