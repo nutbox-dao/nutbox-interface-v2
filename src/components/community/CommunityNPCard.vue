@@ -141,6 +141,7 @@
 
 <script>
 import VotingGaugeByNpModal from '@/components/common/VotingGaugeByNpModal'
+import ConnectMetaMask from '@/components/common/ConnectMetaMask'
 import { mapState } from 'vuex'
 import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 import showToastMixin from "@/mixins/copyToast";
@@ -151,7 +152,7 @@ import { userWithdrawReward } from '@/utils/nutbox/gauge'
 
 export default {
   name: 'CommunityNPCard',
-  components: { VotingGaugeByNpModal },
+  components: { VotingGaugeByNpModal, ConnectMetaMask },
   props: {
     card: {
       type: Object
