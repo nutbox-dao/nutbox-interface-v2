@@ -78,7 +78,7 @@
               <div class="col-lg-8 col-md-7">
                 <div class="data-desc">
                   <div class="font28 font-bold mb-4">NUT</div>
-                  <div class="font16 line-height32 font-bold">NUT is the native token of Nutbox. First, it is the value intermedium in the Nutbox token economy system, accumulating, storing, transiting, and guaranteeing value among DAOs participating in Nutbox. Second, it is also a currency to purchase Value-added services in Nutbox. Third, it represents the fundamental resource to generate the governance right of Nutbox DAO as well.</div>
+                  <div class="font16 line-height32 font-bold">NUT is the native utility and governance token of Nutbox. Not only it undertakes the value intermedium in Nutbox, but also can generate Nut Power, which represent the governance right and the benefit right of Nutbox.</div>
                 </div>
               </div>
             </div>
