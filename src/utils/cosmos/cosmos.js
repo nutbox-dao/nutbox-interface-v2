@@ -26,29 +26,29 @@ const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
 // 'https://api.cosmos.network/cosmos/bank/v1beta1/balances/cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv/uatom'
 
 
-export const addressAccToAccBech32 = (address) => {
+export const addressAccToAccBech32 = (address, type = 'cosmos') => {
   if (address == ethers.constants.AddressZero) return ''
   let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
-  account = new AccAddress(account, 'cosmos');
+  account = new AccAddress(account, type);
   account = account.toBech32()
   return account;
 }
 
-export const addressAccToValBech32 = (address) => {
+export const addressAccToValBech32 = (address, type = 'cosmosvaloper') => {
   if(address == ethers.constants.AddressZero) return ''
   let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
-  account = new ValAddress(account, 'cosmosvaloper');
+  account = new ValAddress(account, type);
   account = account.toBech32()
   return account;
 }
 
-export const accBech32ToAddress = (address) => {
-  let account = new AccAddress.fromBech32(address, 'cosmos');
+export const accBech32ToAddress = (address, type = 'cosmos') => {
+  let account = new AccAddress.fromBech32(address, type);
   return ethers.utils.hexlify(account.toBytes());
 }
 
-export const valBech32ToAddress = (address) => {
-  let account = new ValAddress.fromBech32(address, 'cosmosvaloper');
+export const valBech32ToAddress = (address, type = 'cosmosvaloper') => {
+  let account = new ValAddress.fromBech32(address, type);
   return ethers.utils.hexlify(account.toBytes());
 }
 

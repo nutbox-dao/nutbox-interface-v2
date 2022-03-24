@@ -171,17 +171,27 @@ export default {
       } else if (this.poolType === "hive") {
         this.stakeAsset =
           "0x02" + ethers.utils.formatBytes32String(tokenData).substring(2);
-      } else if (this.poolType === "cosmos") {
+      } else if (this.poolType === "atom") {
         try {
           this.stakeAsset = "0x03" + valBech32ToAddress(tokenData).substring(2);
         } catch (err) {
-          this.$bvToast.toast('Plear input a right validator address', {
+          this.$bvToast.toast('Please input a right validator address', {
             title: this.$t('error.error'),
             variant: 'info'
           })
           // handleApiErrCode(err, (tip, params) => {
           //   this.$bvToast.toast(tip, params);
           // });
+          return;
+        }
+      } else if (this.poolType === 'osmo') {
+        try {
+          this.stakeAsset = "0x04" + valBech32ToAddress(tokenData, 'osmovaloper').substring(2);
+        } catch (err) {
+          this.$bvToast.toast('Please input a right validator address', {
+            title: this.$t('error.error'),
+            variant: 'info'
+          })
           return;
         }
       }
@@ -198,7 +208,9 @@ export default {
       };
       try {
         this.creating = true;
+        console.log(1);
         const newPool = await addPool(form);
+        console.log(2);
         newPool.poolIndex = form.ratios.length - 1;
         this.$bvToast.toast(this.$t("tip.createPoolSuccess"), {
           title: this.$t("tip.success"),

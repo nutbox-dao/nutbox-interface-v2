@@ -17,20 +17,22 @@
       >
         <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem')">
-            Steem <br />
-            Staking
+            Steem
           </button>
         </div>
         <div class="type-box type-box-hive">
           <button class="hive-btn" @click="$emit('onType', 'hive')">
-            Hive <br />
-            Staking
+            Hive
           </button>
         </div>
         <div class="type-box type-box-cosmos">
-          <button class="cosmos-btn" @click="$emit('onType', 'cosmos')">
-            Cosmos <br />
-            Staking
+          <button class="cosmos-btn" @click="$emit('onType', 'atom')">
+            Atom
+          </button>
+        </div>
+        <div class="type-box type-box-cosmos">
+          <button class="cosmos-btn" @click="$emit('onType', 'osmo')">
+            Osmo
           </button>
         </div>
       </div>

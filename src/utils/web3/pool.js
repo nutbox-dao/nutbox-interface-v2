@@ -187,8 +187,10 @@ export const addPool = async (form) => {
             factory.removeAllListeners('SPStakingCreated')
           }
         })
-      } else if(form.type === 'cosmos') {
+      } else if(form.type === 'atom' || form.type === 'osmo') {
+        console.log('evnet', factory);
         factory.on('CosmosStakingCreated', (pool, community, name, chainId, delegatee) => {
+          console.log(5342, pool, community, stakingFactoryId, chainId);
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
             resolve({
@@ -214,7 +216,7 @@ export const addPool = async (form) => {
         factory.removeAllListeners('ERC20StakingCreated')
       } else if(form.type === 'steem' || form.type === 'hive') {
         factory.removeAllListeners('SPStakingCreated')
-      } else if(form.type === 'cosmos') {
+      } else if(form.type === 'atom' || form.type === 'osmo') {
         factory.removeAllListeners('CosmosStakingCreated')
       }
       reject(errCode.BLOCK_CHAIN_ERR)
