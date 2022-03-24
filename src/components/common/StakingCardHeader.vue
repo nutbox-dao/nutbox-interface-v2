@@ -77,9 +77,9 @@ export default {
           const chainId = this.card.chainId;
           return ASSET_LOGO_URL[chainId === 1 ? "steem" : "hive"];
         }
-        case getPoolFactory("cosmos").toLowerCase(): {
+        case getPoolFactory("atom").toLowerCase(): {
           const chainId = this.card.chainId;
-          return ASSET_LOGO_URL[chainId === 3 ? "cosmos" : "hive"];
+          return ASSET_LOGO_URL[chainId === 3 ? "cosmos" : "osmo"];
         }
       }
     },

@@ -73,6 +73,8 @@ export const getPoolType = (factory, chainId) => {
     case contractAddress['CosmosStakingFactory']: {
       if (parseInt(chainId) === 3) {
         return 'cosmos'
+      }else if(parseInt(chainId) === 4) {
+        return 'osmo'
       }
     }
   }

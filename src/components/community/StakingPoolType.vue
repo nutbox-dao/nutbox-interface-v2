@@ -30,8 +30,8 @@
             Atom
           </button>
         </div>
-        <div class="type-box type-box-cosmos">
-          <button class="cosmos-btn" @click="$emit('onType', 'osmo')">
+        <div class="type-box type-box-osmo">
+          <button class="osmo-btn" @click="$emit('onType', 'osmo')">
             Osmo
           </button>
         </div>
@@ -90,6 +90,10 @@ export default {
     background-image: url("~@/static/images/m-bg-cosmos.png"),
       url("~@/static/images/m-bg-icon-cosmos.svg");
   }
+  &-osmo {
+    background-image: url("~@/static/images/m-bg-osmo.png"),
+      url("~@/static/images/m-bg-icon-osmo.svg");
+  }
   button {
     border: none;
     font-size: 1rem;
@@ -115,6 +119,9 @@ export default {
   }
   .cosmos-btn {
     background-image: linear-gradient(to bottom, #555a83, #363a5a);
+  }
+  .osmo-btn {
+     background-image: linear-gradient(to bottom, #8100b6, #4e02a8);
   }
 }
 @media (max-width: 991px) {
