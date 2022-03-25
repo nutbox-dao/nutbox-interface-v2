@@ -268,6 +268,7 @@
       <CosmostakingModal
         :operate="operate"
         :pool="pool"
+        :type="type"
         @hideStakeMask="showCosmosStake = false"
       />
     </b-modal>
@@ -408,15 +409,15 @@
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
         <div class="modal-title">
-          Please change COSMOS Account
+          Please change {{ cosmosChainName[type] }} Account
         </div>
         <div class="text-center font20 line-height24 mt-3">
-          Your COSMOS account haven't binding with current
+          Your {{ cosmosChainName[type] }} account haven't binding with current
           {{ chainName }} address, please change
-          COSMOS account in your wallet first.
+          {{ cosmosChainName[type] }} account in your wallet first.
         </div>
         <div class="mt-3 mb-1 text-center font20 line-height24">
-          Your binding COSMOS account is:
+          Your binding {{ cosmosChainName[type] }} account is:
         </div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input class="text-center" disabled type="text" :value="bindCosmos" />
@@ -451,7 +452,7 @@
         <div class="modal-title">Please change {{ chainName }} address</div>
         <div class="font20 line-height24 mt-3">
           Your {{ chainName }} address haven't binding with current
-          COSMOS account, please change
+          {{ cosmosChainName[type] }} account, please change
           {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -513,6 +514,8 @@ import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAsse
 import SPStakingModal from "@/components/common/SPStakingModal";
 import HPStakingModal from "@/components/common/HPStakingModal";
 import CosmostakingModal from "@/components/common/CosmostakingModal";
+import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
+import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
 
 export default {
   name: "",
@@ -553,6 +556,18 @@ export default {
       bindCosmos: "",
       bindAddress: "",
       chainName: CHAIN_NAME,
+      cosmosChainName: {
+        'atom': 'Cosmos',
+        'osmo': 'Osmosis'
+      },
+      getBalanceMethod: {
+        'atom': getAccountBalance,
+        'osmo': getOsmoBalance
+      },
+      getAccountMethod: {
+        'atom': getAccount,
+        'osmo': getOsmosisAccount
+      }
     };
   },
   mixins: [showToastMixin],
@@ -564,6 +579,7 @@ export default {
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("cosmos", ['cosmosAccount']),
+    ...mapState('osmosis', ['osmosisAccount']),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -577,13 +593,22 @@ export default {
     type() {
       return getPoolType(this.pool.poolFactory, this.pool.chainId);
     },
+    cosmAccount() {
+      if (this.type === 'atom') {
+        return this.cosmosAccount;
+      }else if (this.type === 'osmo') {
+        return this.osmosisAccount
+      }
+    },
     needLogin() {
       if (this.type === "steem") {
         return !this.steemAccount;
       } else if (this.type === "hive") {
         return !this.hiveAccount;
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom') {
         return !this.cosmosAccount
+      } else if (this.type === 'osmo') {
+        return !this.osmosisAccount
       }
       return false;
     },
@@ -594,8 +619,10 @@ export default {
         return ASSET_LOGO_URL["steem"];
       } else if (this.type === "hive") {
         return ASSET_LOGO_URL["hive"];
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom') {
         return ASSET_LOGO_URL['cosmos']
+      } else if (this.type === 'osmo') {
+        return ASSET_LOGO_URL['osmo']
       }
     },
     approved() {
@@ -622,7 +649,9 @@ export default {
         return (stakedBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom') {
+        return stakedBn.toString() / 1e6
+      } else if (this.type === 'osmo') {
         return stakedBn.toString() / 1e6
       }
     },
@@ -645,7 +674,9 @@ export default {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom') {
+        return total.toString() / 1e6
+      } else if (this.type === 'osmo') {
         return total.toString() / 1e6
       }
       return 0;
@@ -659,8 +690,10 @@ export default {
         price = this.prices["steem"];
       } else if (this.type === "hive") {
         price = this.prices["hive"];
-      } else if (this.type === "cosmos") {
+      } else if (this.type === "atom") {
         price = this.prices["atom"];
+      } else if (this.type === 'osmo') {
+        price = this.prices['osmo']
       }
       return price ? price : 0;
     },
@@ -758,10 +791,9 @@ export default {
     async checkCosmosAccount() {
       this.isCheckingAccount = true;
       try {
-        console.log(1, this.pool);
-        const bindInfo = await getBindCosmosAccount(this.pool);
-        console.log(2);
-        const cosmosAcc = this.cosmosAccount;
+        await this.getAccountMethod[this.type]()
+        const bindInfo = await getBindCosmosAccount(this.pool, this.type);
+        const cosmosAcc = this.cosmAccount;
 
         if (bindInfo.account[1] === cosmosAcc) return true;
         if (
@@ -806,7 +838,8 @@ export default {
         if (await this.checkAccount()) {
           this.showHpStake = true;
         }
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom' || this.type === 'osmo') {
+        this.getBalanceMethod[this.type]()
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
@@ -825,7 +858,8 @@ export default {
         if (await this.checkAccount()) {
           this.showHpStake = true;
         }
-      } else if (this.type === 'cosmos') {
+      } else if (this.type === 'atom' || this.type === 'osmo') {
+        this.getBalanceMethod[this.type]()
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
