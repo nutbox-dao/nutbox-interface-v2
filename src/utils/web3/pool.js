@@ -418,7 +418,13 @@ export const getBindCosmosAccount = async (pool, type) => {
     try {
       const contract = await getContract('CosmosStaking', pool.id)
       const account = await getAccounts();
-      const bindAccount = store.state.cosmos.cosmosAccount;
+      let bindAccount;
+      if (type === 'atom') {
+        bindAccount = store.state.cosmos.cosmosAccount;
+      }else if(type === 'osmo') {
+        bindAccount = store.state.osmosis.osmosisAccount;
+      }
+      
       const bindAccountBytes = accBech32ToAddress(bindAccount, type);
       const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccountBytes)])
       const _bindAccount = addressAccToAccBech32(accountInfo.bindAccount, type);

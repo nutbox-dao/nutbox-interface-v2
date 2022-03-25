@@ -278,9 +278,10 @@ export default {
     },
     async checkAccount() {
       this.isCheckingAccount = true;
+      await this.getAccountMethod[this.type]()
       try {
-        const bindInfo = await getBindCosmosAccount(this.card);
-        const cosmosAcc = this.cosmosAcc;
+        const bindInfo = await getBindCosmosAccount(this.card, this.type);
+        const cosmosAcc = this.cosmAccount;
 
         if (bindInfo.account[1] === cosmosAcc) return true;
         if (
@@ -299,6 +300,7 @@ export default {
           }
         }
         if (bindInfo.account[1] !== cosmosAcc) {
+          
           this.bindCosmos = bindInfo.account[1];
           this.showWrongCosmos = true;
           return;

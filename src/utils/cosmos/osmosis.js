@@ -57,7 +57,6 @@ export const getAccount = async () => {
   // if (store.state.cosmos.cosmosAccount) return store.state.cosmos.cosmosAccount
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
-  console.log(4, accounts);
   store.commit('osmosis/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
