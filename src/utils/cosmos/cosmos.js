@@ -30,7 +30,7 @@ const accTypes = {
 }
 
 const valTypes = {
-  atom: 'comosvaloper',
+  atom: 'cosmosvaloper',
   osmo: 'osmovaloper'
 }
 
