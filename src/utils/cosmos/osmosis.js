@@ -1,65 +1,22 @@
 import store from '@/store'
 import {
-  COSMOS_STAKE_FEE,
-  COSMOS_GAS_ACCOUNT,
-  COSMOS_API_URLS
+  OSMOSIS_STAKE_FEE,
+  OSMOSIS_GAS_ACCOUNT
 } from '@/config'
 import axios from 'axios'
 import {
   SigningStargateClient
 } from '@cosmjs/stargate'
-import {
-  AccAddress,
-  ValAddress
-} from '@chainapsis/cosmosjs/common/address'
-import {
-  ethers
-} from 'ethers'
 import { errCode } from '@/config'
 
-const chainId = "cosmoshub-4"
-const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
+const chainId = "osmosis-1"
+const ApiUrl = 'https://cosmoshub.validator.network/'
+const RpcUrl = 'https://osmosis.validator.network/'
 // const cosmosAuthApiUrl = 'https://rpc.cosmos.network'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
 // 'https://api.cosmos.network/cosmos/bank/v1beta1/balances/cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv/uatom'
-const accTypes = {
-  atom: 'cosmos',
-  osmo: 'osmo'
-}
-
-const valTypes = {
-  atom: 'comosvaloper',
-  osmo: 'osmovaloper'
-}
-
-export const addressAccToAccBech32 = (address, type = 'atom') => {
-  if (address == ethers.constants.AddressZero) return ''
-  let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
-  account = new AccAddress(account, accTypes[type]);
-  account = account.toBech32()
-  return account;
-}
-
-export const addressAccToValBech32 = (address, type = 'atom') => {
-  if(address == ethers.constants.AddressZero) return ''
-  let account = new Uint8Array(Buffer.from(address.substring(2), 'hex'));
-  account = new ValAddress(account, valTypes[type]);
-  account = account.toBech32()
-  return account;
-}
-
-export const accBech32ToAddress = (address, type = 'atom') => {
-  let account = new AccAddress.fromBech32(address, accTypes[type]);
-  return ethers.utils.hexlify(account.toBytes());
-}
-
-export const valBech32ToAddress = (address, type = 'atom') => {
-  let account = new ValAddress.fromBech32(address, valTypes[type]);
-  return ethers.utils.hexlify(account.toBytes());
-}
-
 
 const getKeplr = async () => {
   return new Promise(async (resolve, reject) => {
@@ -85,34 +42,23 @@ export const connectWallet = async (callback) => {
   })
 }
 
-const getAccountAuth = async () => {
-  const account = await getAccount()
-  const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/cosmos/auth/v1beta1/accounts/' + account)
-  return auth.data.account;
-}
-
 export const getAccountBalance = async () => {
-  const account = await getAccount()
-  const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
-  const balance = auth.data.balance.amount / 1e6;
-  store.commit('cosmos/saveBalance', balance)
+  const balance = 1;
+  store.commit('osmosis/saveBalance', balance)
   return balance
+  // const account = await getAccount()
+  // const auth = await axios.get(ApiUrl + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
+  // const balance = auth.data.balance.amount / 1e6;
+  // store.commit('cosmos/saveBalance', balance)
+  // return balance
 }
-
-export const getDelegateFromCosmos = async (account, targetAccount) => {
-
-  const auth = await axios.get(COSMOS_API_URLS[1] + '/cosmos/staking/v1beta1/validators/' + targetAccount + '/delegations/' + account)
-
-  return auth.data.balance.amount / 1e6;
-}
-// osmo  1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477
-// cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const getAccount = async () => {
   // if (store.state.cosmos.cosmosAccount) return store.state.cosmos.cosmosAccount
   const offlineSigner = window.getOfflineSigner(chainId);
   const accounts = await offlineSigner.getAccounts();
-  store.commit('cosmos/saveAccount', accounts[0].address)
+  console.log(4, accounts);
+  store.commit('osmosis/saveAccount', accounts[0].address)
   return accounts[0].address;
 }
 
@@ -125,15 +71,15 @@ export const signAndBroadcast = async (msgs, memo) => {
 
       const fee = {
         amount: [{
-          denom: 'uatom',
-          amount: '7000'
+          denom: 'uosmo',
+          amount: '6000'
         }],
         gas: "260000"
       }
       console.log('start');
 
-      const client = await SigningStargateClient.connectWithSigner(cosmosAuthApiUrl, offlineSigner)
-      const res = await client.signAndBroadcast(store.state.cosmos.cosmosAccount, msgs, fee, memo)
+      const client = await SigningStargateClient.connectWithSigner(RpcUrl, offlineSigner)
+      const res = await client.signAndBroadcast(store.state.osmosis.osmosisAccount, msgs, fee, memo)
       if (res.code === 0) {
         console.log('Transaction hash:', res.transactionHash);
         resolve(res.transactionHash)
@@ -144,61 +90,20 @@ export const signAndBroadcast = async (msgs, memo) => {
       if (e === 'Error: Request rejected') {
         console.log('23525');
       }
-
       console.log('esg', e); // Error: Request rejected
       reject(errCode.USER_CANCEL_SIGNING)
     }
-
-    // const tx = await offlineSigner.signAmino(
-    //   store.state.cosmos.cosmosAccount, 
-    //   {
-    //     chain_id: chainId,
-    //     account_number: auth.account_number,
-    //     sequence: auth.sequence,
-    //     fee, 
-    //     memo: memo,
-    //     msgs
-    //   }
-    // )
-    // console.log(4326, tx);
-    // const signature = tx.signature.signature;
-    // const { signed, signature } = tx
-    // const stdTx = {
-    //   type: 'auth/StdTx',
-    //   value: {
-    //     msg: signed.msgs,
-    //     fee: signed.fee,
-    //     memo,
-    //     signatures: Array.isArray(signature) ? signature : [signature]
-    //   }
-    // }
-    // const txs = JSON.parse(JSON.stringify(stdTx))
-
-    // const res  = await axios.post('https://api.cosmos.network/cosmos/tx/v1beta1/txs', {
-    //   tx_bytes: marshalStdTx(txs),
-    //   mode: 'BROADCAST_MODE_BLOCK'
-    // })
   })
-}
-
-export const grant = async (granter, grantee, exed) => {
-  const msgGrant = {
-    typeUrl: '/cosmos.authz.v1beta1.MsgGrant',
-    value: {
-      granter: store.state.cosmos.cosmosAccount,
-      grantee: 'cosmos1tg30qk7vwlddcwlr447xlf9dzmgcevslvnfqu4'
-    }
-  }
 }
 
 export const delegate = async (validator, amount, pid) => {
   const msgDelegate = {
     typeUrl: '/cosmos.staking.v1beta1.MsgDelegate',
     value: {
-      delegatorAddress: store.state.cosmos.cosmosAccount,
+      delegatorAddress: store.state.osmosis.osmosisAccount,
       validatorAddress: validator,
       amount: {
-        denom: 'uatom',
+        denom: 'uosmo',
         amount: amount.toString()
       }
     }
@@ -206,11 +111,11 @@ export const delegate = async (validator, amount, pid) => {
   const msgSend = {
     typeUrl: '/cosmos.bank.v1beta1.MsgSend',
     value: {
-      fromAddress: store.state.cosmos.cosmosAccount,
-      toAddress: COSMOS_GAS_ACCOUNT,
+      fromAddress: store.state.osmosis.osmosisAccount,
+      toAddress: OSMOSIS_GAS_ACCOUNT,
       amount: [{
-        denom: 'uatom',
-        amount: (COSMOS_STAKE_FEE * 1e6).toString()
+        denom: 'uosmo',
+        amount: (OSMOSIS_STAKE_FEE * 1e6).toString()
       }]
     }
   }
@@ -226,10 +131,10 @@ export const unDelegate = async (validator, amount, pid, address) => {
   const msgUndelegate = {
     typeUrl: '/cosmos.staking.v1beta1.MsgUndelegate',
     value: {
-      delegatorAddress: store.state.cosmos.cosmosAccount,
+      delegatorAddress: store.state.osmosis.osmosisAccount,
       validatorAddress: validator,
       amount: {
-        denom: 'uatom',
+        denom: 'uosmo',
         amount: amount.toString()
       }
     }
@@ -237,11 +142,11 @@ export const unDelegate = async (validator, amount, pid, address) => {
   const msgSend = {
     typeUrl: '/cosmos.bank.v1beta1.MsgSend',
     value: {
-      fromAddress: store.state.cosmos.cosmosAccount,
-      toAddress: COSMOS_GAS_ACCOUNT,
+      fromAddress: store.state.osmosis.osmosisAccount,
+      toAddress: OSMOSIS_GAS_ACCOUNT,
       amount: [{
-        denom: 'uatom',
-        amount: (COSMOS_STAKE_FEE * 1e6).toString()
+        denom: 'uosmo',
+        amount: (OSMOSIS_STAKE_FEE * 1e6).toString()
       }]
     }
   }

@@ -54,6 +54,8 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['SPStakingFactory'].toLowerCase()
     case 'cosmos':
       return contractAddress['CosmosStakingFactory'].toLowerCase()
+    case 'atom':
+      return contractAddress['CosmosStakingFactory'].toLowerCase()
   }
 }
 
@@ -72,7 +74,7 @@ export const getPoolType = (factory, chainId) => {
     }
     case contractAddress['CosmosStakingFactory']: {
       if (parseInt(chainId) === 3) {
-        return 'cosmos'
+        return 'atom'
       }else if(parseInt(chainId) === 4) {
         return 'osmo'
       }
@@ -411,16 +413,15 @@ export const getBindSteemAccount = async (pool) => {
 // get user's bind account of cosmos
 // account: EVM
 // bindAccount: POS chain account
-export const getBindCosmosAccount = async (pool) => {
+export const getBindCosmosAccount = async (pool, type) => {
   return new Promise(async (resolve, reject) => {
     try {
-
       const contract = await getContract('CosmosStaking', pool.id)
       const account = await getAccounts();
       const bindAccount = store.state.cosmos.cosmosAccount;
-      const bindAccountBytes = accBech32ToAddress(bindAccount);
+      const bindAccountBytes = accBech32ToAddress(bindAccount, type);
       const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccountBytes)])
-      const _bindAccount = addressAccToAccBech32(accountInfo.bindAccount);
+      const _bindAccount = addressAccToAccBech32(accountInfo.bindAccount, type);
       resolve({
         account: [account, _bindAccount],
         bindAccount: [bindAccount, _account]

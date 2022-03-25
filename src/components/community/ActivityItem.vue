@@ -65,6 +65,7 @@ import { mapState, mapGetters } from "vuex";
 import { contractAddress } from "@/utils/web3/contract";
 import { BLOCK_CHAIN_BROWER } from "@/config";
 import { addressAccToValBech32 } from '@/utils/cosmos/cosmos'
+import { getPoolType } from "@/utils/web3/pool";
 
 export default {
   name: "ActivityItem",
@@ -138,6 +139,7 @@ export default {
     let ctokenSymbol;
     let delegatee;
     const np = (this.operation.amount?.toString() / 1e18).toFixed(2);
+    const poolType = getPoolType(this.operation.poolFactory, this.operation.chainId)
 
     if (
       this.operation.asset &&
@@ -188,14 +190,19 @@ export default {
               }`;
           }
         } else if (
-          this.operation.poolFactory.toLowerCase() ==
-          contractAddress.CosmosStakingFactory.toLowerCase()
+          poolType === 'atom'
         ) {
           const atom = this.operation.amount?.toString() / 1e6;
-          delegatee = addressAccToValBech32(this.operation.asset);
+          delegatee = addressAccToValBech32(this.operation.asset, poolType);
           this.description =
             (this.showName ? " add" : "Add") +
             ` ${atom} atom to ${delegatee} from ${this.operation.pool.name}`;
+        } else if (poolType === 'osmo') {
+          const osmo = this.operation.amount?.toString() / 1e6;
+          delegatee = addressAccToValBech32(this.operation.asset, poolType);
+          this.description =
+            (this.showName ? " add" : "Add") +
+            ` ${osmo} osmo to ${delegatee} from ${this.operation.pool.name}`;
         }
         break;
       case "WITHDRAW":
@@ -228,14 +235,19 @@ export default {
               }`;
           }
         } else if (
-          this.operation.poolFactory.toLowerCase() ==
-          contractAddress.CosmosStakingFactory.toLowerCase()
+          poolType === 'atom'
         ) {
           const atom = this.operation.amount?.toString() / 1e6;
-          delegatee = addressAccToValBech32(this.operation.asset);
+          delegatee = addressAccToValBech32(this.operation.asset, 'atom');
           this.description =
             (this.showName ? " minus" : "Minus") +
             ` ${atom} atom to ${delegatee} from ${this.operation.pool.name}`;
+        } else if (poolType === 'osmo') {
+          const osmo = this.operation.amount?.toString() / 1e6;
+          delegatee = addressAccToValBech32(this.operation.asset, 'osmo');
+          this.description =
+            (this.showName ? " minus" : "Minus") +
+            ` ${osmo} osmo to ${delegatee} from ${this.operation.pool.name}`;
         }
         break;
       case "VOTE":

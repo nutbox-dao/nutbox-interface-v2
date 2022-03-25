@@ -12,7 +12,7 @@
       style="color: red"
       class="font20 line-height28 font-bold text-center mt-2"
     >
-      You're using cosmos account: {{ account }} to delegate
+      You're using {{ cosmosChainName }} account: {{ account }} to delegate
     </div>
     <div class="custom-form">
       <div class="input-group-box mb-3">
@@ -59,7 +59,7 @@
       </button>
     </div>
     <div class="text-center text-grey-light font14 mt-2">
-      {{ $t("commen.delegateFee") }}： {{ fee }} ATOM
+      {{ $t("commen.delegateFee") }}： {{ fee }} {{ type.toUpperCase() }}
     </div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
@@ -75,11 +75,15 @@ import { COSMOS_STAKE_FEE } from "@/config";
 import store from "@/store";
 import {
   getAccountBalance,
-  getDelegateFromCosmos,
   delegate,
   unDelegate,
   addressAccToValBech32,
 } from "@/utils/cosmos/cosmos";
+import {
+  getAccountBalance as getOsmoBalance,
+  delegate as delegateOsmo,
+  unDelegate as undelegateOsom
+} from "@/utils/cosmos/osmosis";
 export default {
   name: "CosmosStakingModal",
   data() {
@@ -87,6 +91,19 @@ export default {
       stakingValue: "",
       loading: false,
       fee: COSMOS_STAKE_FEE,
+      cosmosChainName: '',
+      delegateMethod: {
+        'atom': delegate,
+        'osmo': delegateOsmo
+      },
+      unDelegateMethod: {
+        'atom': unDelegate,
+        'osmo': undelegateOsom
+      },
+      getBalanceMethod: {
+        'atom': getAccountBalance,
+        'osmo': getOsmoBalance
+      },
     };
   },
   computed: {
@@ -99,14 +116,20 @@ export default {
       return this.userStaked[this.pool.id] ?? 0;
     },
     formBalance() {
-      return this.balance;
+      let balance;
+      if (this.type === 'atom') balance = store.state.cosmos.balance;
+      else if(this.type === 'osmo') balance = store.state.osmosis.balance;
+      return balance;
     },
     formStaked() {
       const staked = this.staked;
       return (staked.toString() / 1e6);
     },
     account() {
-      return strReplace(store.state.cosmos.cosmosAccount, 13, 6, "*", 5);
+      let account;
+      if (this.type === 'atom') account = store.state.cosmos.cosmosAccount;
+      else if(this.type === 'osmo') account = store.state.osmosis.osmosisAccount;
+      return strReplace(account, 13, 6, "*", 5);
     },
   },
   props: {
@@ -117,6 +140,9 @@ export default {
     pool: {
       type: Object,
     },
+    type: {
+      type: String,
+    }
   },
   methods: {
     hide() {
@@ -174,15 +200,17 @@ export default {
         const amount = parseInt(atom * 1e6);
         let res;
 
+        const valAccount = addressAccToValBech32(this.pool.asset, this.type)
+
         if (this.operate === "add") {
-          res = await delegate(
-            addressAccToValBech32(this.pool.asset),
+          res = await this.delegateMethod[this.type](
+            valAccount,
             amount,
             this.pool.id
           );
         } else {
-          res = await unDelegate(
-            addressAccToValBech32(this.pool.asset),
+          res = await this.unDelegateMethod[this.type](
+            valAccount,
             amount,
             this.pool.id
           );
@@ -223,6 +251,11 @@ export default {
     },
   },
   async mounted() {
+    if (this.type === 'atom') {
+      this.cosmosChainName = 'Cosmos'
+    }else if (this.type === 'osmo') {
+      this.cosmosChainName = 'Osmosis'
+    }
     const interval = setInterval(() => {
       try{
         getAccountBalance()

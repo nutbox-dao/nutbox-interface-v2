@@ -15,6 +15,7 @@ import pool from './pool'
 import gauge from './gauge'
 import np from './np'
 import cosmos from './cosmos'
+import osmosis from './osmosis'
 
 Vue.use(Vuex)
 
@@ -60,6 +61,7 @@ export default new Vuex.Store({
     pool,
     gauge,
     np,
-    cosmos
+    cosmos,
+    osmosis
   }
 })

@@ -173,7 +173,7 @@ export default {
           "0x02" + ethers.utils.formatBytes32String(tokenData).substring(2);
       } else if (this.poolType === "atom") {
         try {
-          this.stakeAsset = "0x03" + valBech32ToAddress(tokenData).substring(2);
+          this.stakeAsset = "0x03" + valBech32ToAddress(tokenData, 'atom').substring(2);
         } catch (err) {
           this.$bvToast.toast('Please input a right validator address', {
             title: this.$t('error.error'),
@@ -186,7 +186,7 @@ export default {
         }
       } else if (this.poolType === 'osmo') {
         try {
-          this.stakeAsset = "0x04" + valBech32ToAddress(tokenData, 'osmovaloper').substring(2);
+          this.stakeAsset = "0x04" + valBech32ToAddress(tokenData, 'osmo').substring(2);
         } catch (err) {
           this.$bvToast.toast('Please input a right validator address', {
             title: this.$t('error.error'),

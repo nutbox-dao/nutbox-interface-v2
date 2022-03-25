@@ -37,7 +37,7 @@
             ? stakeToken.symbol
             : type === "steem"
             ? "SP" : type === 'hive'
-            ? "HP" : 'ATOM'
+            ? "HP" : type.toUpperCase()
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
@@ -55,9 +55,8 @@
           </template>
         </div>
       </div>
-
-      <PoolOperation :card="card" v-if="type != 'cosmos'" />
-      <PoolOperationForCosmos :card="card" v-else />
+      <PoolOperation :card="card" v-if="type != 'atom' && type != 'osmo'" />
+      <PoolOperationForCosmos :card="card" :type="type" v-else />
 
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
@@ -191,7 +190,7 @@ export default {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === "cosmos") {
+      } else if (this.type === "atom" || this.type === 'osmo') {
         return total.toString() / 1e6;
       }
       return 0;
@@ -205,8 +204,10 @@ export default {
         price = this.prices["steem"];
       } else if (this.type === "hive") {
         price = this.prices["hive"];
-      } else if (this.type === "cosmos") {
+      } else if (this.type === "atom") {
         price = this.prices["atom"];
+      } else if (this.type === 'osmo') {
+        price = this.prices['osmo']
       }
       return price ? parseFloat(price) : 0;
     },

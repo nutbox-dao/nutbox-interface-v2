@@ -64,6 +64,7 @@
       <CosmostakingModal
         :operate="operate"
         :pool="card"
+        :type="type"
         @hideStakeMask="showCosmosStake = false"
       />
     </b-modal>
@@ -80,15 +81,15 @@
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
         <div class="modal-title">
-          Please change COSMOS Account
+          Please change {{ cosmosChainName[type] }} Account
         </div>
         <div class="text-center font20 line-height24 mt-3">
-          Your COSMOS account haven't binding with current
+          Your {{ cosmosChainName[type] }} account haven't binding with current
           {{ chainName }} address, please change
-          COSMOS account in your wallet first.
+          {{ cosmosChainName[type] }} account in your wallet first.
         </div>
         <div class="mt-3 mb-1 text-center font20 line-height24">
-          Your binding COSMOS account is:
+          Your binding {{ cosmosChainName[type] }} account is:
         </div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input class="text-center" disabled type="text" :value="bindCosmos" />
@@ -123,7 +124,7 @@
         <div class="modal-title">Please change {{ chainName }} address</div>
         <div class="font20 line-height24 mt-3">
           Your {{ chainName }} address haven't binding with current
-          COSMOS account, please change
+          {{ cosmosChainName[type] }} account, please change
           {{ chainName }} address in your wallet first.
         </div>
         <div class="mt-3 mb-1">Your binding address is:</div>
@@ -155,8 +156,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import { CHAIN_NAME, NutAddress } from "@/config";
+import { mapState } from "vuex";
+import { CHAIN_NAME } from "@/config";
 import {
   getBindCosmosAccount,
 } from "@/utils/web3/pool";
@@ -166,6 +167,7 @@ import { handleApiErrCode } from "@/utils/helper";
 import { ethers } from 'ethers'
 import CosmostakingModal from "@/components/common/CosmostakingModal";
 import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
+import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
 import store from "@/store";
 export default {
   name: "PoolOperation",
@@ -173,6 +175,9 @@ export default {
     card: {
       type: Object,
     },
+    type: {
+      type: String,
+    }
   },
   components: {
     Login,
@@ -191,6 +196,18 @@ export default {
       bindCosmos: "",
       bindAddress: "",
       chainName: CHAIN_NAME,
+      cosmosChainName: {
+        'atom': 'Cosmos',
+        'osmo': 'Osmosis'
+      },
+      getBalanceMethod: {
+        'atom': getAccountBalance,
+        'osmo': getOsmoBalance
+      },
+      getAccountMethod: {
+        'atom': getAccount,
+        'osmo': getOsmosisAccount
+      }
     };
   },
   computed: {
@@ -205,7 +222,6 @@ export default {
       "userReward",
       "loadingApprovements",
     ]),
-    ...mapGetters("web3", ["tokenDecimals"]),
     fee() {
       if (this.fees) {
         return this.fees["USER"].toFixed(2);
@@ -218,8 +234,15 @@ export default {
       }
       return false;
     },
+    cosmAccount() {
+      if (this.type === 'atom') {
+        return store.state.cosmos.cosmosAccount;
+      }else if (this.type === 'osmo') {
+        return store.state.osmosis.osmosisAccount
+      }
+    },
     needLogin() {
-      if (!store.state.cosmos.cosmosAccount || store.state.cosmos.cosmosAccount == "null") {
+      if (!this.cosmAccount || this.cosmAccount == "null") {
         return true;
       }
       return false;
@@ -241,14 +264,14 @@ export default {
   methods: {
     async increase() {
       this.operate = "add";
-      getAccountBalance()
+      this.getBalanceMethod[this.type]()
       if (await this.checkAccount()) {
         this.showCosmosStake = true;
       }
     },
     async decrease() {
       this.operate = "minus";
-      getAccountBalance()
+      this.getBalanceMethod[this.type]()
       if (await this.checkAccount()) {
         this.showCosmosStake = true;
       }
@@ -257,7 +280,7 @@ export default {
       this.isCheckingAccount = true;
       try {
         const bindInfo = await getBindCosmosAccount(this.card);
-        const cosmosAcc = store.state.cosmos.cosmosAccount;
+        const cosmosAcc = this.cosmosAcc;
 
         if (bindInfo.account[1] === cosmosAcc) return true;
         if (
@@ -290,7 +313,7 @@ export default {
       }
     },
     async connectKeplr() {
-      await getAccount();
+      await this.getAccountMethod[this.type]()
     },
   },
   async mounted() {
