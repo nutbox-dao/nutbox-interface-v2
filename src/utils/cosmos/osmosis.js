@@ -10,7 +10,7 @@ import {
 import { errCode } from '@/config'
 
 const chainId = "osmosis-1"
-const ApiUrl = 'https://cosmoshub.validator.network/'
+const ApiUrl = 'https://anyplace-cors.herokuapp.com/https://lcd-osmosis.keplr.app/bank/balances/'
 const RpcUrl = 'https://osmosis.validator.network/'
 // const cosmosAuthApiUrl = 'https://rpc.cosmos.network'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
@@ -43,14 +43,14 @@ export const connectWallet = async (callback) => {
 }
 
 export const getAccountBalance = async () => {
-  const balance = 1;
+  // const balance = 1;
+  // store.commit('osmosis/saveBalance', balance)
+  // return balance
+  const account = await getAccount()
+  const auth = await axios.get(ApiUrl + account)
+  const balance = auth.data.result[0].amount / 1e6;
   store.commit('osmosis/saveBalance', balance)
   return balance
-  // const account = await getAccount()
-  // const auth = await axios.get(ApiUrl + '/cosmos/bank/v1beta1/balances/' + account + '/uatom')
-  // const balance = auth.data.balance.amount / 1e6;
-  // store.commit('cosmos/saveBalance', balance)
-  // return balance
 }
 
 export const getAccount = async () => {
