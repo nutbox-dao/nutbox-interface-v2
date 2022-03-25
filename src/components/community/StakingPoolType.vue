@@ -8,7 +8,6 @@
           col-lg-10
           mx-auto
           flex-fill
-          d-flex
           my-4
           align-items-center
           h-100
@@ -54,10 +53,17 @@ export default {
 <style scoped lang="scss">
 .pool-type-modal-content {
   min-height: 50vh;
+  max-height: 85vh;
+  overflow: hidden;
+}
+.types {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: auto;
 }
 .type-box {
   flex: 1;
-  margin: 0 0.5rem;
+  margin: 0.5rem;
   text-align: center;
   font-size: 1.4rem;
   display: flex;
@@ -126,17 +132,18 @@ export default {
 }
 @media (max-width: 991px) {
   .type-box {
-    width: 9rem;
+    width: 90%;
     height: 13rem;
   }
 }
 @media (max-width: 577px) {
   .types {
-    flex-direction: column;
+    grid-template-columns: repeat(1, 1fr);
   }
   .type-box {
     width: 100%;
     height: auto;
+    min-height: 100px;
     background-size: 120%, auto 50%;
     background-position: center, 2rem center;
     border: 2px solid var(--text-74);
