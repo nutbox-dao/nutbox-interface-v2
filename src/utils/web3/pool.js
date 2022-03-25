@@ -60,7 +60,7 @@ export const getPoolFactoryAddress = (type) => {
 }
 
 export const getPoolType = (factory, chainId) => {
-
+  if (!factory) return '';
   factory = ethers.utils.getAddress(factory)
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
