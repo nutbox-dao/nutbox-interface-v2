@@ -18,10 +18,10 @@ import {
 import { errCode } from '@/config'
 
 const chainId = "cosmoshub-4"
-const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
+// const cosmosAuthApiUrl = 'https://cosmoshub.validator.network/'
 // const cosmosAuthApiUrl = 'https://rpc.cosmos.network'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
-// const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmos.api.ping.pub/'
+const cosmosAuthApiUrl = 'https://rpc.cosmos.directory/cosmoshub/'
 // const cosmosAuthApiUrl = 'https://anyplace-cors.herokuapp.com/https://cosmoshub.stakesystems.io'
 // 'https://api.cosmos.network/cosmos/bank/v1beta1/balances/cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv/uatom'
 const accTypes = {

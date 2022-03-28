@@ -50,9 +50,14 @@ export const getAccountBalance = async () => {
   try {
     const account = await getAccount()
     const auth = await axios.get(ApiUrl + account)
-    const balance = auth.data.result[0].amount / 1e6;
-    store.commit('osmosis/saveBalance', balance)
-    return balance
+    for (let r of auth.data.result) {
+      if (r.denom === 'uosmo') {
+        const balance = r.amount / 1e6;
+        store.commit('osmosis/saveBalance', balance)
+        return balance
+      }
+    }
+    return 0;
   }catch(e) {
     console.log('Get osmo balance fail:', e);
     
