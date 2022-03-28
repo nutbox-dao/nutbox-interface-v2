@@ -8,3 +8,6 @@ export  const client = new GraphQLClient('https://api.thegraph.com/subgraphs/nam
 // export  const client = new GraphQLClient('https://api.thegraph.com/subgraphs/name/terryyyyyy/walnutinmbase');
 // export  const client = new GraphQLClient('https://walnut-graph.nutbox.app/subgraphs/name/terryyyyyyy/walnutingoerli');
 // export  const client = new GraphQLClient('https://walnut-graph.nutbox.app/subgraphs/name/terryyyyyyy/walnutingoerli');
+
+// rest-ful from our service
+export const restClient = new GraphQLClient('/rest-graph')

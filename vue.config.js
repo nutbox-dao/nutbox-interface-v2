@@ -17,6 +17,14 @@ module.exports = {
         pathRewrite: {
           '^/cosmos-rpc': ''
         }
+      },
+      '/rest-graph': {
+        target: 'https://center-rest.nutbox.app/v1/common/search',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/rest-graph': ''
+        }
       }
     }
   },
