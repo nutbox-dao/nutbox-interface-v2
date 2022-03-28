@@ -10,7 +10,8 @@ import {
 import { errCode } from '@/config'
 
 const chainId = "osmosis-1"
-const ApiUrl = 'https://anyplace-cors.herokuapp.com/https://lcd-osmosis.keplr.app/bank/balances/'
+// const ApiUrl = 'https://anyplace-cors.herokuapp.com/https://lcd-osmosis.keplr.app/bank/balances/'
+const ApiUrl = 'https://rest.cosmos.directory/osmosis/bank/balances/'
 const RpcUrl = 'https://osmosis.validator.network/'
 // const cosmosAuthApiUrl = 'https://rpc.cosmos.network'
 // const cosmosAuthApiUrl = 'https://api.cosmos.network'
