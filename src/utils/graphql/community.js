@@ -88,6 +88,7 @@ async function getSpecifyCommunityInfoFromTheGraph(community) {
                 }
                 operationCount
                 operationHistory(first: 60, orderBy: timestamp, orderDirection: desc) {
+                  id
                     type
                     timestamp
                     poolFactory
@@ -201,6 +202,7 @@ async function getNewCommunityOPHistoryFromTheGraph(community) {
         query getOperationHistory($id: String!) {
             userOperationHistories(where: {community: $id}, first: 100, orderBy: timestamp, orderDirection: desc){
                 type
+                id
                 community{
                     id
                 }

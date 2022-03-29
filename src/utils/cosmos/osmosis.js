@@ -84,7 +84,7 @@ export const signAndBroadcast = async (msgs, memo) => {
           denom: 'uosmo',
           amount: '6000'
         }],
-        gas: "260000"
+        gas: "280000"
       }
       console.log('start');
 

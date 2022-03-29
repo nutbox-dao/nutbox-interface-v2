@@ -14,7 +14,7 @@ export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 // wheather use the graph sevice or our service
 // because of the graph service for BSC network is udpate so slowly, so we build our
 // own index service, but we retain the graph service for backup.
-export const USE_THE_GRAPH = false;
+export const USE_THE_GRAPH = true;
 
 // np power period to channel
 export const PeriodToIdx = {
