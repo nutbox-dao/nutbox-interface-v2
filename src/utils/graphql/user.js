@@ -1,10 +1,20 @@
-import { client } from './index';
+import { client, restClient } from './index';
+import { USE_THE_GRAPH } from '@/config';
 import store from '@/store'
 import { getAccounts } from '../web3/account';
 import { gql } from 'graphql-request'
 
 // get user summary: include all joined communities and pools
 export async function getMyJoinedCommunity() {
+    const useTheGraph = USE_THE_GRAPH;
+    if (useTheGraph) {
+        return await getMyJoinedCommunityFromGraph()
+    }else {
+        return await getMyJoinedCommunityFromService()
+    }
+}
+
+async function getMyJoinedCommunityFromGraph() {
     const account = await getAccounts();
     const query = gql`
         query getUser($id: String!) {
@@ -64,6 +74,10 @@ export async function getMyJoinedCommunity() {
     }catch(err) {
         console.log('Get my joined community fail', err);
     }
+}
+
+async function getMyJoinedCommunityFromService() {
+    
 }
 
 

@@ -169,9 +169,9 @@
         <div class="c-loading c-loading-absolute c-loading-bg" v-if="!operationHistory || (operationHistory.length === 0)"></div>
         <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
-                        v-for="operation of operationHistory" :key="operation.tx + operation.type"
+                        v-for="operation of operationHistory" :key="operation.id + operation.type"
                         v-show="!isAdmin || (isAdmin && operation.type.indexOf('ADMIN') !== -1)"
-                        :operation="operation"/>
+                        :operation="operation"></ActivityItem>
         </transition-group>
       </div>
     </div>

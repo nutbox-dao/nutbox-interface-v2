@@ -10,14 +10,33 @@ import {
   USE_THE_GRAPH
 } from '@/config';
 import { ethers } from 'ethers';
+import { parseOperationStructure } from './utils'
 
 export async function getSpecifyCommunityInfo(community) {
-  const useTheGraph = false
+  const useTheGraph = USE_THE_GRAPH
   if (useTheGraph) {
     return await getSpecifyCommunityInfoFromTheGraph(community)
   } else {
     return await getSpecifyCommunityInfoFromOurService(community)
   }
+}
+
+export async function getNewCommunityOPHistory(community) {
+    const useTheGraph = USE_THE_GRAPH
+    if (useTheGraph) {
+        return await getNewCommunityOPHistoryFromTheGraph(community)
+    } else {
+        return await getNewCommunityOPHistoryFromOurService(community)
+    }
+}
+
+export async function getUpdateCommunityOPHistory(community) {
+    const useTheGraph = USE_THE_GRAPH
+    if (useTheGraph) {
+        return await getUpdateCommunityOPHistoryFromTheGraph(community)
+    } else {
+        return await getUpdateCommunityOPHistoryFromOurService(community)
+    }
 }
 
 /**
@@ -158,7 +177,7 @@ async function getSpecifyCommunityInfoFromOurService(community) {
     }
   `
     store.commit('currentCommunity/saveLoadingCommunityInfo', true)
-    let data = await restClient.request(query)
+    let [data, history] = await Promise.all([restClient.request(query), getNewCommunityOPHistoryFromOurService(community)])
     data = JSON.parse(data.value).community
     data.pools = data.pools.edges.map(p => {
         let pool = p.node
@@ -166,17 +185,18 @@ async function getSpecifyCommunityInfoFromOurService(community) {
         pool.voters = pool.voters.edges.map(v => v.node)
         return pool
     })
+    data.operationHistory = history
     store.commit('currentCommunity/saveCommunityInfo', data)
     return data
   } catch (e) {
-    console.log('Get community from graph fail:', e);
+    console.log('Get community from our service fail:', e);
   } finally {
     store.commit('currentCommunity/saveLoadingCommunityInfo', false)
   }
 }
 
 // get specify community's op history
-export async function getNewCommunityOPHistory(community) {
+async function getNewCommunityOPHistoryFromTheGraph(community) {
   const query = gql `
         query getOperationHistory($id: String!) {
             userOperationHistories(where: {community: $id}, first: 100, orderBy: timestamp, orderDirection: desc){
@@ -213,10 +233,52 @@ export async function getNewCommunityOPHistory(community) {
   }
 }
 
-export async function getUpdateCommunityOPHistory(community) {
+async function getNewCommunityOPHistoryFromOurService(community) {
+    try{
+        community = ethers.utils.getAddress(community)
+        const query = `
+            {
+                userOperationHistories(community:"${community}", first: 100,orderBy:"timestamp", orderDirection: "desc"){
+                    edges {
+                        cursor
+                        node {
+                        id
+                        type
+                        community {
+                            id
+                        }
+                        pool{
+                            id
+                            name
+                        }
+                        poolFactory
+                        chainId
+                        asset
+                        amount
+                        tx
+                        user{
+                            id
+                        }
+                        timestamp
+                        }
+                    }
+                }
+            }
+        `
+        let data = await restClient.request(query)
+        data = parseOperationStructure(data)
+        store.commit('currentCommunity/saveOperationHistory', data)
+        return data;
+    }catch (err) {
+        console.log('Get new community history fail:', err);
+    }
+}
+
+async function getUpdateCommunityOPHistoryFromTheGraph(community) {
   const query = gql `
         query getOperationHistory($id: String!, $timestamp: Int!) {
             userOperationHistories(where: {community: $id, timestamp_gt: $timestamp}, first: 20, orderBy: timestamp, orderDirection: desc){
+                id
                 type
                 community{
                     id
@@ -254,8 +316,57 @@ export async function getUpdateCommunityOPHistory(community) {
       // console.log('no update');
     }
   } catch (err) {
-    console.log('Get op history fail', err);
+    console.log('Get op history from the graph fail', err);
   }
+}
+
+async function getUpdateCommunityOPHistoryFromOurService(community) {
+    try{
+        community = ethers.utils.getAddress(community)
+        const existHistory = store.state.currentCommunity.operationHistory
+        let data;
+        if (!existHistory || existHistory.length === 0) {
+            data = await getNewCommunityOPHistory(community);
+            return data;
+        }
+        const timestamp = existHistory[0].timestamp;
+        const query = `{
+            userOperationHistories(community:"${community}",first: 20,
+            orderBy:"timestamp", orderDirection: "desc", 
+            timestamp_Gt:${timestamp}){
+                edges{
+                    cursor
+                    node{
+                        id
+                        type
+                        community{
+                            id
+                        }
+                        pool{
+                            id
+                            name
+                        }
+                        poolFactory
+                        chainId
+                        asset
+                        amount
+                        tx
+                        user{
+                            id
+                        }
+                        timestamp
+                    }
+                }
+            }
+        }`
+        data = await restClient.request(query)
+        data = parseOperationStructure(data);
+        if (data.length > 0 && data[0].community.id.toLowerCase() === store.state.currentCommunity.communityId.toLowerCase()) {
+            store.commit('currentCommunity/saveOperationHistory', data.concat(existHistory));
+        }
+    }catch(err) {
+        console.log('Get new history from service fail', err);
+    }
 }
 
 export async function getMoreCommunityOPHistory(community) {

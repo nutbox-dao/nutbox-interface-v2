@@ -3,7 +3,7 @@
     <div class="title font14 font-bold">{{ opType }}</div>
     <div
       class="content hover font14 line-height18 font-bold"
-      :id="operation.tx + operation.type"
+      :id="operation.id + operation.type"
       @click="gotoTransaction()"
     >
       <span v-show="showName" :class="isAdmin ? 'admin' : ''">{{
@@ -12,7 +12,7 @@
       {{ description }}
     </div>
     <b-popover
-      :target="operation.tx + operation.type"
+      :target="operation.id + operation.type"
       :delay="{ show: 800 }"
       triggers="hover focus"
       placement="top"
@@ -23,31 +23,31 @@
       <img
         class="rounded-circle hover avatar"
         v-if="userAvatar && userAvatar.length > 0"
-        :id="operation.tx + operation.type + operation.user"
+        :id="operation.id + operation.type + operation.user"
         :src="userAvatar"
         alt=""
       />
       <img
         v-else
         class="user-avatar rounded-circle avatar"
-        :id="operation.tx + operation.type + operation.user"
+        :id="operation.id + operation.type + operation.user"
         src="~@/static/images/avatars/default.png"
         alt=""
       />
       <b-popover
-        :target="operation.tx + operation.type + operation.user"
+        :target="operation.id + operation.type + operation.user"
         triggers="hover focus"
         placement="top"
       >
         {{ username }}
       </b-popover>
       <span
-        :id="operation.tx + operation.type + operation.timestamp"
+        :id="operation.id + operation.type + operation.timestamp"
         class="hover text-grey-7 font14 line-height14"
         >{{ time }}</span
       >
       <b-popover
-        :target="operation.tx + operation.type + operation.timestamp"
+        :target="operation.id + operation.type + operation.timestamp"
         triggers="hover focus"
         placement="top"
         :delay="{ show: 500 }"
