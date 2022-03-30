@@ -118,7 +118,7 @@ export default {
       try {
         this.isApproving = true
         await approveUseERC20(NutAddress, contractAddress['NutPower']);
-        this.bvToast.toast(this.$t('tip.success'), {
+        this.$bvToast.toast(this.$t('tip.success'), {
           title: this.$t('tip.approveSuccess'),
           variant: 'success'
         })
@@ -126,7 +126,7 @@ export default {
         this.$store.commit('user/saveApproveToNutPower', true);
       }catch(e) {
         handleApiErrCode(e, (tip, param) => {
-          this.$t(tip, param)
+          this.$bvToast.toast(tip, param)
         })
       }finally{
         this.isApproving = false
