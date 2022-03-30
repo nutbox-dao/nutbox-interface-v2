@@ -55,7 +55,7 @@
           </template>
         </div>
       </div>
-      <PoolOperation :card="card" v-if="type != 'atom' && type != 'osmo'" />
+      <PoolOperation :card="card" v-if="type != 'atom' && type != 'osmo' && type != 'juno'" />
       <PoolOperationForCosmos :card="card" :type="type" v-else />
 
       <div class="detail-info-box text-grey-7 font14 font-bold">
@@ -190,7 +190,7 @@ export default {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === "atom" || this.type === 'osmo') {
+      } else if (this.type === "atom" || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6;
       }
       return 0;
@@ -200,14 +200,8 @@ export default {
       let price;
       if (this.type === "erc20staking") {
         price = this.stakeToken.price;
-      } else if (this.type === "steem") {
-        price = this.prices["steem"];
-      } else if (this.type === "hive") {
-        price = this.prices["hive"];
-      } else if (this.type === "atom") {
-        price = this.prices["atom"];
-      } else if (this.type === 'osmo') {
-        price = this.prices['osmo']
+      } else {
+        price = this.prices[this.type];
       }
       return price ? parseFloat(price) : 0;
     },

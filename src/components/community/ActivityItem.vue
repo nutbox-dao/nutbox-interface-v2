@@ -203,6 +203,12 @@ export default {
           this.description =
             (this.showName ? " add" : "Add") +
             ` ${osmo} osmo to ${delegatee} from ${this.operation.pool.name}`;
+        } else if (poolType === 'juno') {
+          const juno = this.operation.amount?.toString() / 1e6;
+          delegatee = addressAccToValBech32(this.operation.asset, poolType);
+          this.description =
+            (this.showName ? " add" : "Add") +
+            ` ${juno} juno to ${delegatee} from ${this.operation.pool.name}`;
         }
         break;
       case "WITHDRAW":
@@ -248,6 +254,12 @@ export default {
           this.description =
             (this.showName ? " minus" : "Minus") +
             ` ${osmo} osmo to ${delegatee} from ${this.operation.pool.name}`;
+        } else if (poolType === 'juno') {
+          const juno = this.operation.amount?.toString() / 1e6;
+          delegatee = addressAccToValBech32(this.operation.asset, poolType);
+          this.description =
+            (this.showName ? " minus" : "Minus") +
+            ` ${juno} juno to ${delegatee} from ${this.operation.pool.name}`;
         }
         break;
       case "VOTE":

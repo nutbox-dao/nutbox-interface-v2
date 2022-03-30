@@ -166,14 +166,8 @@ export default {
       let price;
       if (this.type === "erc20staking") {
         price = this.stakeToken.price;
-      } else if (this.type === "steem") {
-        price = this.prices["steem"];
-      } else if (this.type === "hive") {
-        price = this.prices["hive"];
-      } else if (this.type === "atom") {
-        price = this.prices["atom"];
-      } else if (this.type === 'osmo') {
-        price = this.prices['osmo']
+      } else  {
+        price = this.prices[this.type];
       }
       price = price ? parseFloat(price) : 0;
       return this.totalDeposited * price;
@@ -334,15 +328,11 @@ export default {
         this.vert = 10 ** this.stakedERC20.decimal;
         break;
       case getPoolFactory('steem').toLowerCase():
-        this.icon = ASSET_LOGO_URL[chainId === 1 ? 'steem' : 'hive']
+        this.icon = ASSET_LOGO_URL[this.type]
         this.vert = this.pool.chainId === 1 ? 1e6 / this.steemVests : 1e6 / this.hiveVests
         break;
       case getPoolFactory('cosmos').toLowerCase():
-        if (chainId === 3) {
-          this.icon = ASSET_LOGO_URL['cosmos']
-        }else if(chainId === 4) {
-          this.icon = ASSET_LOGO_URL['osmo']
-        }
+        this.icon = ASSET_LOGO_URL[this.type]
         this.vert = 1e6
     }
   },

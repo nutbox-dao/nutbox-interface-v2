@@ -59,7 +59,7 @@
       </button>
     </div>
     <div class="text-center text-grey-light font14 mt-2">
-      {{ $t("commen.delegateFee") }}： {{ fee }} {{ type.toUpperCase() }}
+      {{ $t("commen.delegateFee") }}： {{ fee[type] }} {{ type.toUpperCase() }}
     </div>
     <!-- <div class="text-center mb-2 mt-4 hover-blue" @click="getSp">{{ $t("stake.getSp") }}</div> -->
   </div>
@@ -71,7 +71,7 @@ import { handleApiErrCode } from "../../utils/helper";
 import { getMyJoinedCommunity } from "@/utils/graphql/user";
 import { getAllCommunities } from "@/utils/web3/community";
 import { strReplace } from "@/utils/commen/util";
-import { COSMOS_STAKE_FEE } from "@/config";
+import { COSMOS_STAKE_FEE, OSMOSIS_STAKE_FEE, JUNO_STAKE_FEE } from "@/config";
 import store from "@/store";
 import {
   getAccountBalance,
@@ -82,27 +82,39 @@ import {
 import {
   getAccountBalance as getOsmoBalance,
   delegate as delegateOsmo,
-  unDelegate as undelegateOsom
+  unDelegate as unDelegateOsom
 } from "@/utils/cosmos/osmosis";
+import {
+  getAccountBalance as getJunoBalance,
+  delegate as delegateJuno,
+  unDelegate as unDelegateJuno
+} from "@/utils/cosmos/juno";
 export default {
   name: "CosmosStakingModal",
   data() {
     return {
       stakingValue: "",
       loading: false,
-      fee: COSMOS_STAKE_FEE,
+      fee: {
+        atom: COSMOS_STAKE_FEE,
+        osmo: OSMOSIS_STAKE_FEE,
+        juno: JUNO_STAKE_FEE
+      },
       cosmosChainName: '',
       delegateMethod: {
         'atom': delegate,
-        'osmo': delegateOsmo
+        'osmo': delegateOsmo,
+        'juno': delegateJuno
       },
       unDelegateMethod: {
         'atom': unDelegate,
-        'osmo': undelegateOsom
+        'osmo': unDelegateOsom,
+        'juno': unDelegateJuno
       },
       getBalanceMethod: {
         'atom': getAccountBalance,
-        'osmo': getOsmoBalance
+        'osmo': getOsmoBalance,
+        'juno': getJunoBalance
       },
     };
   },
@@ -119,6 +131,7 @@ export default {
       let balance;
       if (this.type === 'atom') balance = store.state.cosmos.balance;
       else if(this.type === 'osmo') balance = store.state.osmosis.balance;
+      else if(this.type === 'juno') balance = store.state.juno.balance;
       return balance;
     },
     formStaked() {
@@ -129,6 +142,7 @@ export default {
       let account;
       if (this.type === 'atom') account = store.state.cosmos.cosmosAccount;
       else if(this.type === 'osmo') account = store.state.osmosis.osmosisAccount;
+      else if(this.type === 'juno') account = store.state.juno.junoAccount
       return strReplace(account, 13, 6, "*", 5);
     },
   },
@@ -168,11 +182,11 @@ export default {
     },
     checkDelegateFee() {
       if (this.operate === "add") {
-        if (this.balance >= this.fee + parseFloat(this.stakingValue)) {
+        if (this.formBalance >= this.fee[this.type] + parseFloat(this.stakingValue)) {
           return true;
         }
       }else {
-        if (this.balance > this.fee) {
+        if (this.formBalance > this.fee[this.type]) {
           return true;
         }
       }
@@ -185,19 +199,19 @@ export default {
     async confirm() {
       if (!this.checkInputValue()) return;
       if (!this.checkDelegateFee()) return;
-      let atom = 0;
+      let amount = 0;
       this.loading = true;
 
-      atom = parseFloat(this.stakingValue);
+      amount = parseFloat(this.stakingValue);
 
-      atom = atom < 0 ? 0 : atom;
+      amount = amount < 0 ? 0 : amount;
 
-      this.delegateAtom(atom);
+      this.delegate(amount);
     },
 
-    async delegateAtom(atom) {
+    async delegate(amount) {
       try {
-        const amount = parseInt(atom * 1e6);
+        const uamount = parseInt(amount * 1e6);
         let res;
 
         const valAccount = addressAccToValBech32(this.pool.asset, this.type)
@@ -205,13 +219,13 @@ export default {
         if (this.operate === "add") {
           res = await this.delegateMethod[this.type](
             valAccount,
-            amount,
+            uamount,
             this.pool.id
           );
         } else {
           res = await this.unDelegateMethod[this.type](
             valAccount,
-            amount,
+            uamount,
             this.pool.id
           );
         }
@@ -226,7 +240,7 @@ export default {
             getAllCommunities(true);
             getMyJoinedCommunity();
           }
-          getAccountBalance()
+          this.getBalanceMethod[this.type]()
 
           this.$bvToast.toast(
             "Delegate success! The data will be update after 1 or 2 mins later, please wait",
@@ -255,14 +269,17 @@ export default {
       this.cosmosChainName = 'Cosmos'
     }else if (this.type === 'osmo') {
       this.cosmosChainName = 'Osmosis'
+    } else if (this.type === 'juno') {
+      this.cosmosChainName = 'Juno'
     }
     const interval = setInterval(() => {
       try{
-        getAccountBalance()
+        this.getBalanceMethod[this.type]()
+        window.clearInterval(interval);
       }catch (e) {
 
       }
-    }, 3000)
+    }, 2000)
     this.$once('hook:beforeDestroy', () => {
       window.clearInterval(interval);
     })

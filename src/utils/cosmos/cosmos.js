@@ -26,12 +26,14 @@ const cosmosAuthApiUrl = 'https://rpc.cosmos.directory/cosmoshub/'
 // 'https://api.cosmos.network/cosmos/bank/v1beta1/balances/cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv/uatom'
 const accTypes = {
   atom: 'cosmos',
-  osmo: 'osmo'
+  osmo: 'osmo',
+  juno: 'juno'
 }
 
 const valTypes = {
   atom: 'cosmosvaloper',
-  osmo: 'osmovaloper'
+  osmo: 'osmovaloper',
+  juno: 'junovaloper'
 }
 
 export const addressAccToAccBech32 = (address, type = 'atom') => {
@@ -57,6 +59,7 @@ export const accBech32ToAddress = (address, type = 'atom') => {
 
 export const valBech32ToAddress = (address, type = 'atom') => {
   let account = new ValAddress.fromBech32(address, valTypes[type]);
+  console.log(35, account, type, valTypes[type]);
   return ethers.utils.hexlify(account.toBytes());
 }
 

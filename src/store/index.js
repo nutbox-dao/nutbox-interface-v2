@@ -16,6 +16,7 @@ import gauge from './gauge'
 import np from './np'
 import cosmos from './cosmos'
 import osmosis from './osmosis'
+import juno from './juno'
 
 Vue.use(Vuex)
 
@@ -62,6 +63,7 @@ export default new Vuex.Store({
     gauge,
     np,
     cosmos,
-    osmosis
+    osmosis,
+    juno
   }
 })

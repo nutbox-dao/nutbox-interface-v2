@@ -77,20 +77,22 @@ export default {
           const chainId = this.card.chainId;
           return ASSET_LOGO_URL[chainId === 1 ? "steem" : "hive"];
         }
-        case getPoolFactory("atom").toLowerCase(): {
+        case getPoolFactory("cosmos").toLowerCase(): {
           const chainId = this.card.chainId;
-          return ASSET_LOGO_URL[chainId === 3 ? "cosmos" : "osmo"];
+          return ASSET_LOGO_URL[this.type];
         }
       }
     },
+    type () {
+      return getPoolType(this.card.poolFactory, this.card.chainId);
+    },
     poolType() {
-      const type = getPoolType(this.card.poolFactory, this.card.chainId);
-      if (type === "erc20staking") {
+      if (this.type === "erc20staking") {
         const t = this.tokenByKey(this.card.asset)
         if (t && t.is_lp) return 'LP'
         return;
       }
-      return type.toUpperCase();
+      return this.type.toUpperCase();
     },
   },
   methods: {

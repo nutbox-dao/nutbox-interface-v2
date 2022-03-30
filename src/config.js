@@ -90,6 +90,9 @@ export const COSMOS_GAS_ACCOUNT = "cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv
 
 export const OSMOSIS_STAKE_FEE = 0.0001;
 export const OSMOSIS_GAS_ACCOUNT = 'osmo1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477';
+
+export const JUNO_STAKE_FEE = 0.0001;
+export const JUNO_GAS_ACCOUNT = 'juno1khkaslmkk0htu0ug2j7h3geclyxfcfrsdu070s';
 // gas address
 // export const COSMOS_GAS_ACCOUNT = 'cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u';
 export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network", "https://api.cosmos.network"];

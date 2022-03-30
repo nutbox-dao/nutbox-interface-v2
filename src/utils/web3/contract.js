@@ -36,7 +36,7 @@ export const getPoolFactory = (type) => {
     return contractAddress.ERC20StakingFactory
   } else if (type === 'steem' || type === 'hive') {
     return contractAddress.SPStakingFactory
-  } else if (type === 'cosmos' || type === 'atom' || type === 'osmo') {
+  } else if (type === 'cosmos' || type === 'atom' || type === 'osmo' || type === 'juno') {
     return contractAddress.CosmosStakingFactory
   }
 }
@@ -46,7 +46,7 @@ export const getPoolTypeName = (type) => {
     return 'ERC20StakingFactory'
   } else if (type === 'steem' || type === 'hive') {
     return 'SPStakingFactory'
-  } else if (type === 'atom' || type === 'osmo' || type === 'cosmos') {
+  } else if (type === 'atom' || type === 'osmo' || type === 'cosmos' || type === 'juno') {
     return 'CosmosStakingFactory'
   }
 }

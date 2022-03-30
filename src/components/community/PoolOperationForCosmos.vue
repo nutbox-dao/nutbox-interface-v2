@@ -168,6 +168,7 @@ import { ethers } from 'ethers'
 import CosmostakingModal from "@/components/common/CosmostakingModal";
 import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
 import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
+import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
 import store from "@/store";
 export default {
   name: "PoolOperation",
@@ -198,21 +199,23 @@ export default {
       chainName: CHAIN_NAME,
       cosmosChainName: {
         'atom': 'Cosmos',
-        'osmo': 'Osmosis'
+        'osmo': 'Osmosis',
+        'juno': 'Juno'
       },
       getBalanceMethod: {
         'atom': getAccountBalance,
-        'osmo': getOsmoBalance
+        'osmo': getOsmoBalance,
+        'juno': getJunoBalance
       },
       getAccountMethod: {
         'atom': getAccount,
-        'osmo': getOsmosisAccount
+        'osmo': getOsmosisAccount,
+        'juno': getJunoAccount
       }
     };
   },
   computed: {
     ...mapState(["metamaskConnected"]),
-
     ...mapState("web3", ["account", "fees"]),
     ...mapState("community", ["loadingApproveCommunity", "approvedCommunity"]),
     ...mapState("pool", [
@@ -239,6 +242,8 @@ export default {
         return store.state.cosmos.cosmosAccount;
       }else if (this.type === 'osmo') {
         return store.state.osmosis.osmosisAccount
+      }else if (this.type === 'juno') {
+        return store.state.juno.junoAccount
       }
     },
     needLogin() {

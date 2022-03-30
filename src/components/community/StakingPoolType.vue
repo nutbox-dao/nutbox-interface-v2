@@ -24,6 +24,11 @@
             Osmo
           </button>
         </div>
+        <div class="type-box type-box-juno">
+          <button class="juno-btn" @click="$emit('onType', 'juno')">
+            Juno
+          </button>
+        </div>
         <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem')">
             Steem
@@ -100,6 +105,10 @@ export default {
     background-image: url("~@/static/images/m-bg-osmo.png"),
       url("~@/static/images/m-bg-icon-osmo.svg");
   }
+  &-juno {
+    background-image: url("~@/static/images/m-bg-juno.png"),
+      url("~@/static/images/m-bg-icon-juno.svg");
+  }
   button {
     border: none;
     font-size: 1rem;
@@ -128,6 +137,9 @@ export default {
   }
   .osmo-btn {
      background-image: linear-gradient(to bottom, #8100b6, #4e02a8);
+  }
+  .juno-btn {
+    background-image: linear-gradient(to bottom, #f89f9b, #f0827d);
   }
 }
 @media (max-width: 991px) {

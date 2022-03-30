@@ -179,9 +179,6 @@ export default {
             title: this.$t('error.error'),
             variant: 'info'
           })
-          // handleApiErrCode(err, (tip, params) => {
-          //   this.$bvToast.toast(tip, params);
-          // });
           return;
         }
       } else if (this.poolType === 'osmo') {
@@ -194,8 +191,17 @@ export default {
           })
           return;
         }
+      } else if (this.poolType === 'juno') {
+        try {
+          this.stakeAsset = "0x05" + valBech32ToAddress(tokenData, 'juno').substring(2);
+        }catch (err) {
+          this.$bvToast.toast('Please input a right validator address', {
+            title: this.$t('error.error'),
+            variant: 'info'
+          })
+          return;
+        }
       }
-
       this.createPoolStep = 3;
     },
     // create new pool
@@ -208,9 +214,7 @@ export default {
       };
       try {
         this.creating = true;
-        console.log(1);
         const newPool = await addPool(form);
-        console.log(2);
         newPool.poolIndex = form.ratios.length - 1;
         this.$bvToast.toast(this.$t("tip.createPoolSuccess"), {
           title: this.$t("tip.success"),

@@ -56,6 +56,8 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['CosmosStakingFactory'].toLowerCase()
     case 'atom':
       return contractAddress['CosmosStakingFactory'].toLowerCase()
+    case 'juno':
+      return contractAddress['CosmosStakingFactory'].toLowerCase()
   }
 }
 
@@ -77,6 +79,8 @@ export const getPoolType = (factory, chainId) => {
         return 'atom'
       }else if(parseInt(chainId) === 4) {
         return 'osmo'
+      }else if(parseInt(chainId) === 5) {
+        return 'juno'
       }
     }
   }
@@ -191,10 +195,8 @@ export const addPool = async (form) => {
             factory.removeAllListeners('SPStakingCreated')
           }
         })
-      } else if(form.type === 'atom' || form.type === 'osmo') {
-        console.log('evnet', factory);
+      } else if(form.type === 'atom' || form.type === 'osmo' || form.type === 'juno') {
         factory.on('CosmosStakingCreated', (pool, community, name, chainId, delegatee) => {
-          console.log(5342, pool, community, stakingFactoryId, chainId);
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
             resolve({
@@ -220,7 +222,7 @@ export const addPool = async (form) => {
         factory.removeAllListeners('ERC20StakingCreated')
       } else if(form.type === 'steem' || form.type === 'hive') {
         factory.removeAllListeners('SPStakingCreated')
-      } else if(form.type === 'atom' || form.type === 'osmo') {
+      } else if(form.type === 'atom' || form.type === 'osmo' || form.type === 'juno') {
         factory.removeAllListeners('CosmosStakingCreated')
       }
       reject(errCode.BLOCK_CHAIN_ERR)
@@ -423,6 +425,8 @@ export const getBindCosmosAccount = async (pool, type) => {
         bindAccount = store.state.cosmos.cosmosAccount;
       }else if(type === 'osmo') {
         bindAccount = store.state.osmosis.osmosisAccount;
+      }else if (type === 'juno') {
+        bindAccount = store.state.juno.junoAccount;
       }
       
       const bindAccountBytes = accBech32ToAddress(bindAccount, type);

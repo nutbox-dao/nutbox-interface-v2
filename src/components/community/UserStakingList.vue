@@ -516,6 +516,7 @@ import HPStakingModal from "@/components/common/HPStakingModal";
 import CosmostakingModal from "@/components/common/CosmostakingModal";
 import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
 import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
+import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
 
 export default {
   name: "",
@@ -558,15 +559,18 @@ export default {
       chainName: CHAIN_NAME,
       cosmosChainName: {
         'atom': 'Cosmos',
-        'osmo': 'Osmosis'
+        'osmo': 'Osmosis',
+        'juno': 'Juno'
       },
       getBalanceMethod: {
         'atom': getAccountBalance,
-        'osmo': getOsmoBalance
+        'osmo': getOsmoBalance,
+        'juno': getJunoBalance
       },
       getAccountMethod: {
         'atom': getAccount,
-        'osmo': getOsmosisAccount
+        'osmo': getOsmosisAccount,
+        'juno': getJunoAccount
       }
     };
   },
@@ -580,6 +584,7 @@ export default {
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("cosmos", ['cosmosAccount']),
     ...mapState('osmosis', ['osmosisAccount']),
+    ...mapState('juno', ['junoAccount']),
     ...mapState("pool", [
       "totalStaked",
       "userStaked",
@@ -598,6 +603,8 @@ export default {
         return this.cosmosAccount;
       }else if (this.type === 'osmo') {
         return this.osmosisAccount
+      }else if (this.type === 'juno') {
+        return this.junoAccount
       }
     },
     needLogin() {
@@ -605,24 +612,16 @@ export default {
         return !this.steemAccount;
       } else if (this.type === "hive") {
         return !this.hiveAccount;
-      } else if (this.type === 'atom') {
-        return !this.cosmosAccount
-      } else if (this.type === 'osmo') {
-        return !this.osmosisAccount
-      }
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type == 'juno') {
+        return !this.cosmAccount
+      } 
       return false;
     },
     stakeIcon() {
       if (this.type === "erc20staking") {
         return this.stakeToken.icon;
-      } else if (this.type === "steem") {
-        return ASSET_LOGO_URL["steem"];
-      } else if (this.type === "hive") {
-        return ASSET_LOGO_URL["hive"];
-      } else if (this.type === 'atom') {
-        return ASSET_LOGO_URL['cosmos']
-      } else if (this.type === 'osmo') {
-        return ASSET_LOGO_URL['osmo']
+      } else {
+        return ASSET_LOGO_URL[this.type];
       }
     },
     approved() {
@@ -649,9 +648,7 @@ export default {
         return (stakedBn.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === 'atom') {
-        return stakedBn.toString() / 1e6
-      } else if (this.type === 'osmo') {
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return stakedBn.toString() / 1e6
       }
     },
@@ -674,9 +671,7 @@ export default {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
         return (total.toString() / 1e6) * this.vestsToHive;
-      } else if (this.type === 'atom') {
-        return total.toString() / 1e6
-      } else if (this.type === 'osmo') {
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6
       }
       return 0;
@@ -686,15 +681,9 @@ export default {
       let price;
       if (this.type === "erc20staking") {
         price = this.stakeToken.price;
-      } else if (this.type === "steem") {
-        price = this.prices["steem"];
-      } else if (this.type === "hive") {
-        price = this.prices["hive"];
-      } else if (this.type === "atom") {
-        price = this.prices["atom"];
-      } else if (this.type === 'osmo') {
-        price = this.prices['osmo']
-      }
+      } else {
+        price = this.prices[this.type];
+      } 
       return price ? price : 0;
     },
     apr() {
@@ -838,7 +827,7 @@ export default {
         if (await this.checkAccount()) {
           this.showHpStake = true;
         }
-      } else if (this.type === 'atom' || this.type === 'osmo') {
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         this.getBalanceMethod[this.type]()
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
@@ -858,7 +847,7 @@ export default {
         if (await this.checkAccount()) {
           this.showHpStake = true;
         }
-      } else if (this.type === 'atom' || this.type === 'osmo') {
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         this.getBalanceMethod[this.type]()
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
