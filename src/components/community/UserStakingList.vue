@@ -149,7 +149,7 @@
                       : type === "steem"
                       ? "SP Delegated"
                       : type === 'hive' 
-                      ? "HP Delegated" : 'ATOM Delegated'
+                      ? "HP Delegated" : (type.toUpperCase() + ' Delegated')
                   }}
                 </div>
                 <div class="font12 text-grey-7">{{ staked | amountForm }}</div>
@@ -509,6 +509,7 @@ import { handleApiErrCode, formatBalance } from "@/utils/helper";
 import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { BLOCK_SECOND, ASSET_LOGO_URL } from "@/constant";
+import { BLOCK_CHAIN_BROWER } from '@/config';
 import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
@@ -738,7 +739,7 @@ export default {
       this.$router.push("/sub-community/home/?id=" + this.pool.community.id);
     },
     gotoContract(address) {
-      window.open("https://goerli.etherscan.io/address/" + address, "_blank");
+      window.open(BLOCK_CHAIN_BROWER + "address/" + address, "_blank");
     },
     async checkAccount() {
       this.isCheckingAccount = true;

@@ -206,6 +206,7 @@ import { handleApiErrCode, formatBalance } from '@/utils/helper'
 import showToastMixin from '@/mixins/copyToast'
 import ConnectMetaMask from '@/components/common/ConnectMetaMask'
 import { BLOCK_SECOND, ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
+import { BLOCK_CHAIN_BROWER } from '@/config'
 
 export default {
   name: '',
@@ -324,7 +325,7 @@ export default {
       this.$router.push('/sub-community/home/?id=' + this.gauge.community.id)
     },
     gotoContract (address) {
-      window.open('https://goerli.etherscan.io/address/' + address, '_blank')
+      window.open(BLOCK_CHAIN_BROWER + 'address/' + address, '_blank')
     },
     async increase () {
       this.operate = 'add'
