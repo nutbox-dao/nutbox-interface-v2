@@ -116,7 +116,8 @@ export default {
         case "POOL":
         break;
       }
-      return communities
+      console.log(3, communities);
+      return communities.sort((a,b) => b.total_voted_np - a.total_voted_np)
     },
     settingStep () {
       const c = this.communityInfo
