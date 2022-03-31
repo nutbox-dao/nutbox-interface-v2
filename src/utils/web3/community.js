@@ -61,7 +61,7 @@ export const getMyCommunityContract = async (update = false) => {
     }
     let stakingFactoryId = null;
     for (let i = 0; i < joinedCommunity.length; i++){
-      if (joinedCommunity[i].owner.id === account.toLowerCase()){
+      if (joinedCommunity[i].owner.id.toLowerCase() === account.toLowerCase()){
         stakingFactoryId = joinedCommunity[i].id;
         store.commit("web3/saveLoadingCommunity", false);
         store.commit("web3/saveStakingFactoryId", stakingFactoryId);

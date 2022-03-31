@@ -135,10 +135,11 @@ export default {
       let communities = []
       for (let i = 0; i < this.userGraphInfo.inCommunities.length; i++) {
         const community = this.userGraphInfo.inCommunities[i]
-        if (this.allCommunityInfo[community.id]){
+        const communityId = community.id.toLowerCase()
+        if (this.allCommunityInfo[communityId]){
           communities.push({
             ...community,
-            ...this.allCommunityInfo[community.id]
+            ...this.allCommunityInfo[communityId]
           })
         }
       }
