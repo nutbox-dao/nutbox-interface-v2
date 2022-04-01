@@ -146,7 +146,7 @@ async function getMyJoinedCommunityFromService() {
         store.commit('user/saveUserGraphInfo', data);
         store.commit('user/saveLoadingUserGraph', false)
     }catch(e) {
-        console.log('Get my joined community from service fail', err);
+        console.log('Get my joined community from service fail', e);
     }
 }
 
