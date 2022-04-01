@@ -140,10 +140,12 @@ async function getMyJoinedCommunityFromService() {
         }`
         let data = await restClient.request(query)
         data = JSON.parse(data.value).user
-        data.inCommunities = data.inCommunities.edges.map(c => c.node)
-        data.inGauges = data.inGauges.edges.map(c => c.node)
-        data.inPools = data.inPools.edges.map(c => c.node)
-        store.commit('user/saveUserGraphInfo', data);
+        if (data){
+            data.inCommunities = data.inCommunities.edges.map(c => c.node)
+            data.inGauges = data.inGauges.edges.map(c => c.node)
+            data.inPools = data.inPools.edges.map(c => c.node)
+            store.commit('user/saveUserGraphInfo', data);
+        }
         store.commit('user/saveLoadingUserGraph', false)
     }catch(e) {
         console.log('Get my joined community from service fail', e);
