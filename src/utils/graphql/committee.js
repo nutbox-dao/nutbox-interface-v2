@@ -2,10 +2,9 @@ import { client, restClient } from './index';
 import store from '@/store'
 import { gql } from 'graphql-request';
 import { USE_THE_GRAPH } from '@/config'
-import { request } from 'graphql-request'
 
 export async function getWalnutData() {
-    const useTheGraph = USE_THE_GRAPH
+    const useTheGraph = true
     if (useTheGraph) {
         return await getWalnutDataFromTheGraph()
     }else {
