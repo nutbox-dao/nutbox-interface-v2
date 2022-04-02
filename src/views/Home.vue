@@ -8,7 +8,7 @@
               <div class="col-md-8 text-left d-flex flex-column justify-content-between">
                 <!-- <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt=""> -->
                 <div class="mt-1">
-                  <div class="s1-title s-title">Link Community to Web3.0</div>
+                  <div class="s1-title s-title">Create Your Staking Economy In Minutes</div>
                 </div>
                 <div class="mt-3">
                   <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
@@ -27,7 +27,7 @@
           <img class="home-img1" src="~@/static/images/home-s1-img1.png" alt="">
         </section>
         <section class="section2 mt-4">
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-md-6 mb-md-0 mb-3">
               <div class="s2-card s2-card-1 font20 line-height28 font-bold">
                 <div class="text-left">Create a DAO in minutes, and everyone can build it without coding.</div>
@@ -38,7 +38,7 @@
                 <div class="text-left">It's easy to bring DeFi, social media and Governance to the community.</div>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="row" style="margin-top: 1.6rem">
             <div class="col-md-4 mb-md-0 mb-3">
               <div class="s2-card2 s2-card2-1">
