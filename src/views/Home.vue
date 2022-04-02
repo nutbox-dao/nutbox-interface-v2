@@ -66,7 +66,7 @@
             </div>
           </div>
         </section>
-        <section class="section-chart">
+        <!-- <section class="section-chart">
           <div class="c-card">
             <div class="row">
               <div class="col-lg-4 col-md-5">
@@ -105,7 +105,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
         <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
             <div class="font-bold">Featured Communities</div>
