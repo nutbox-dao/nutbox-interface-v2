@@ -164,7 +164,7 @@ export const addPool = async (form) => {
         factory.on('ERC20StakingCreated', (pool, community, name, token) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
-            resolve({
+            const newPool = {
               id: ethers.utils.getAddress(pool),
               status: 'OPENED',
               name,
@@ -173,7 +173,8 @@ export const addPool = async (form) => {
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId: 0,
               stakersCount: 0
-            })
+            }
+            resolve(newPool)
             factory.removeAllListeners('ERC20StakingCreated')
           }
         })
@@ -181,7 +182,7 @@ export const addPool = async (form) => {
         factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
-            resolve({
+            const newPool = {
               id: ethers.utils.getAddress(pool),
               status: 'OPENED',
               name,
@@ -191,7 +192,8 @@ export const addPool = async (form) => {
               chainId,
               stakersCount: 0,
               totalAmount: 0
-            })
+            }
+            resolve(newPool)
             factory.removeAllListeners('SPStakingCreated')
           }
         })
@@ -199,7 +201,7 @@ export const addPool = async (form) => {
         factory.on('CosmosStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
-            resolve({
+            const newPool = {
               id: ethers.utils.getAddress(pool),
               status: 'OPENED',
               name,
@@ -209,7 +211,8 @@ export const addPool = async (form) => {
               chainId,
               stakersCount: 0,
               totalAmount: 0
-            })
+            }
+            resolve(newPool)
             factory.removeAllListeners('CosmosStakingCreated')
           }
         })

@@ -17,6 +17,7 @@ import np from './np'
 import cosmos from './cosmos'
 import osmosis from './osmosis'
 import juno from './juno'
+import cache from './cache'
 
 Vue.use(Vuex)
 
@@ -64,6 +65,7 @@ export default new Vuex.Store({
     np,
     cosmos,
     osmosis,
-    juno
+    juno,
+    cache
   }
 })

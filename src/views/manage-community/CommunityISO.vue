@@ -227,7 +227,8 @@ export default {
             pool.ratio = parseFloat(form.ratios[index++]) * 100;
           }
         });
-
+        // cache pools
+        this.$store.commit('cache/saveMyCreatedPools', this.communityData.pools);
         await sleep(2);
         this.poolTypeModal = false;
       } catch (err) {
@@ -255,6 +256,8 @@ export default {
             pool.ratio = ratios[index++] * 100;
           }
         });
+        // cache pools
+        this.$store.commit('cache/saveMyCreatedPools', this.communityData.pools);
         this.configPoolModal = false;
       } catch (err) {
         handleApiErrCode(err, (tip, params) => {

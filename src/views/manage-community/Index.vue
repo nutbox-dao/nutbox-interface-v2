@@ -102,6 +102,8 @@ export default {
       const communityId = await getMyCommunityContract()
       this.communityId = communityId;
       getMyCommunityData().then(async (res) => {
+        // if ctoken is a mintable token and the token is custom has community hasn't token's mint role
+        // we need to remind user to grant the token's mint role to this community
         const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
         this.showGrantRole = isMintable && !hasRole
       });
