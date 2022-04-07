@@ -199,11 +199,35 @@ async function getMyCommunityDataFromGraph() {
         `
         try{
             const data = await client.request(query, {id: store.state.web3.stakingFactoryId.toLowerCase()})
+            // read cache data
+            // if cache data exsit, use it
+            let cacheCommunity = store.state.cache.myCreatedCommunityInfo;
+            try{
+                cacheCommunity = cacheCommunity && JSON.parse(cacheCommunity)
+            }catch(e) {
+                cacheCommunity = null
+            }
+            let cachePools = store.state.cache.myCreatedPools;
+            try{
+                cachePools = cachePools && JSON.parse(cachePools)
+            }catch(e) {
+                cachePools = null
+            }
             if (data && data.community) {
-                const community = data.community
+                let community = data.community
+                if (cachePools && community.pools.length !== cachePools.length) {
+                    community.pools = cachePools;
+                }
                 store.commit('community/saveCommunityData', community)
                 console.log('my community data', community);
                 return community
+            }else if (cacheCommunity) {
+                if (cachePools) {
+                    cacheCommunity.pools = cachePools;
+                }
+                store.commit('community/saveCommunityData', cacheCommunity)
+                console.log('my community data', cacheCommunity);
+                return cacheCommunity;
             }
         }catch(e) {
             console.log('Get my community data from graph fail:', e);
@@ -252,8 +276,35 @@ async function getMyCommunityDataFromService() {
             let data = await restClient.request(query)
             data = JSON.parse(data.value).community;
             data.pools = data.pools.edges.map(c => c.node).sort((a,b) => a.poolIndex - b.poolIndex)
-            store.commit('community/saveCommunityData', data)
-            return data;
+            // read cache data
+            // if cache data exsit, use it
+            let cacheCommunity = store.state.cache.myCreatedCommunityInfo;
+            try{
+                cacheCommunity = cacheCommunity && JSON.parse(cacheCommunity)
+            }catch(e) {
+                cacheCommunity = null
+            }
+            let cachePools = store.state.cache.myCreatedPools;
+            try{
+                cachePools = cachePools && JSON.parse(cachePools)
+            }catch(e) {
+                cachePools = null
+            }
+            if (data) {
+                if (cachePools && data.pools.length !== cachePools.length) {
+                    data.pools = cachePools
+                }
+                store.commit('community/saveCommunityData', data);
+                console.log('my community data', data);
+                return data;
+            }else if (cacheCommunity) {
+                if (cachePools) {
+                    cacheCommunity.pools = cachePools;
+                }
+                store.commit('community/saveCommunityData', cacheCommunity)
+                console.log('my community data', cacheCommunity);
+                return cacheCommunity;
+            }
         }catch(e) {
             console.log('Get my community data from graph fail:', e);
         }

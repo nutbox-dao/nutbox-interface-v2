@@ -71,6 +71,7 @@ async function getPoolsFromService(poolIds) {
                         poolFactory
                         totalAmount
                         ratio
+                        name
                         chainId
                         stakers(first:10) {
                             edges{

@@ -54,7 +54,12 @@ export const getMyCommunityContract = async (update = false) => {
 
     let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
     // The newly created community info
-    const cachedCommunity = store.state.cache.myCreatedCommunityInfo;
+    let cachedCommunity = store.state.cache.myCreatedCommunityInfo;
+    try{
+      cachedCommunity = JSON.parse(cachedCommunity)
+    }catch(e) {
+      cachedCommunity = null
+    }
     if (!joinedCommunity || joinedCommunity.length === 0) {
       if (cachedCommunity) {
         stakingFactoryId = cachedCommunity.id;
@@ -316,7 +321,14 @@ export const createCommunity = async (cToken, distribution) => {
           const communityInfo = {
             id: ethers.utils.getAddress(community),
             cToken: {...cToken, address: ethers.utils.getAddress(token)},
-            firstBlock: distribution[0].startHeight
+            firstBlock: distribution[0].startHeight,
+            daofund: user,
+            retainedRevenue: 0,
+            feeRatio: 0,
+            owner: {
+              id: user
+            },
+            pools:[]
           }
           // Created a new community
           store.commit('community/saveCommunityInfo', communityInfo);

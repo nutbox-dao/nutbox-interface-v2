@@ -172,7 +172,11 @@ export const addPool = async (form) => {
               poolFactory: getPoolFactory(form.type),
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId: 0,
-              stakersCount: 0
+              stakersCount: 0,
+              totalAmount: 0,
+              hasCreateGauge: 0,
+              votersCount: 0,
+              votedAmount:0
             }
             resolve(newPool)
             factory.removeAllListeners('ERC20StakingCreated')
@@ -191,7 +195,10 @@ export const addPool = async (form) => {
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId,
               stakersCount: 0,
-              totalAmount: 0
+              totalAmount: 0,
+              hasCreateGauge: 0,
+              votersCount: 0,
+              votedAmount:0
             }
             resolve(newPool)
             factory.removeAllListeners('SPStakingCreated')
@@ -210,7 +217,10 @@ export const addPool = async (form) => {
               ratio: form.ratios[form.ratios.length - 1] * 100,
               chainId,
               stakersCount: 0,
-              totalAmount: 0
+              totalAmount: 0,
+              hasCreateGauge: 0,
+              votersCount: 0,
+              votedAmount:0
             }
             resolve(newPool)
             factory.removeAllListeners('CosmosStakingCreated')

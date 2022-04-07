@@ -196,6 +196,9 @@ export const hasMintAdmminRole = async (token) => {
 
 // judge whether the community has the token's mint role
 export const hasMintRole = async (token, community) => {
+  if (!token || !community) {
+    return
+  }
   return new Promise(async (resolve) => {
     try{
     const abi = [
