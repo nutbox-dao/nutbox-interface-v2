@@ -9,7 +9,7 @@
         <div class="card-single-icon">
           <img class="icon1" :src="icon || './default.png'" alt="" />
         </div>
-        <div class="card-link-title-text font-bold">
+        <div class="card-link-title-text font-bold hover" @click="copyContract">
           <span>{{ pool.name || '--' }}</span>
         </div>
         <span class="chain-type mt-2" v-show="poolType">{{ poolType }}</span>
@@ -113,7 +113,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { handleApiErrCode, sleep } from '@/utils/helper'
+import { handleApiErrCode, sleep, formatUserAddress } from '@/utils/helper'
 import { closePool, getPoolType } from '@/utils/web3/pool'
 import { getERC20Info, getCToken } from '@/utils/web3/asset'
 import { getPoolFactory } from '@/utils/web3/contract'
@@ -121,6 +121,7 @@ import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
 import { approveUseERC20 } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
+import {ethers} from 'ethers'
 
 export default {
   name: 'ManageStakingCard',
@@ -254,7 +255,23 @@ export default {
       }
       this.closePool();
     },
-
+    copyContract(){
+      const address = ethers.utils.getAddress(this.pool.id)
+      navigator.clipboard.writeText(address).then(() => {
+        this.$bvToast.toast(
+          this.$t('tip.copyAddress', {
+            address: formatUserAddress(address)
+          }),
+          {
+            title: this.$t('tip.clipboard'),
+            autoHideDelay: 5000,
+            variant: 'info' // info success danger
+          }
+        )
+      }, (e) => {
+        console.log(e)
+      })
+    },
     async closePool() {
       try {
         this.updating = true;

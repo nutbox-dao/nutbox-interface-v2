@@ -31,7 +31,12 @@
         </div>
         <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem')">
-            Steem
+            Steem(SP delegation)
+          </button>
+        </div>
+        <div class="type-box type-box-steem">
+          <button class="steem-btn" @click="$emit('onType', 'steem-witness')">
+            Steem(Witness proxy)
           </button>
         </div>
         <div class="type-box type-box-hive">
