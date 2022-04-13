@@ -48,7 +48,7 @@ export const getPoolFactoryAddress = (type) => {
   switch (type) {
     case 'erc20staking':
       return contractAddress['ERC20StakingFactory'].toLowerCase()
-    case 'steem':
+    case 'steem', 'steem-witness':
       return contractAddress['SPStakingFactory'].toLowerCase()
     case 'hive':
       return contractAddress['SPStakingFactory'].toLowerCase()
@@ -72,6 +72,8 @@ export const getPoolType = (factory, chainId) => {
         return 'steem'
       } else if (parseInt(chainId) === 2) {
         return 'hive'
+      } else if (parseInt(chainId) === 6) {
+        return 'steem-witness'
       }
     }
     case contractAddress['CosmosStakingFactory']: {
@@ -182,7 +184,7 @@ export const addPool = async (form) => {
             factory.removeAllListeners('ERC20StakingCreated')
           }
         })
-      } else if(form.type === 'steem' || form.type === 'hive') {
+      } else if(form.type === 'steem' || form.type === 'hive' || from.type === 'steem-witness') {
         factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
@@ -233,7 +235,7 @@ export const addPool = async (form) => {
       console.log('Create pool fail', e);
       if (form.type === 'erc20staking') {
         factory.removeAllListeners('ERC20StakingCreated')
-      } else if(form.type === 'steem' || form.type === 'hive') {
+      } else if(form.type === 'steem' || form.type === 'hive' || form.type === 'steem-witness') {
         factory.removeAllListeners('SPStakingCreated')
       } else if(form.type === 'atom' || form.type === 'osmo' || form.type === 'juno') {
         factory.removeAllListeners('CosmosStakingCreated')

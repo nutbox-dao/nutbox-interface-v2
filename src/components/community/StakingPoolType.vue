@@ -24,21 +24,21 @@
             Osmo
           </button>
         </div>
-        <div class="type-box type-box-juno">
+        <!-- <div class="type-box type-box-juno">
           <button class="juno-btn" @click="$emit('onType', 'juno')">
             Juno
           </button>
-        </div>
+        </div> -->
         <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem')">
-            Steem(SP delegation)
+            Steem
           </button>
         </div>
-        <div class="type-box type-box-steem">
+        <!-- <div class="type-box type-box-steem">
           <button class="steem-btn" @click="$emit('onType', 'steem-witness')">
             Steem(Witness proxy)
           </button>
-        </div>
+        </div> -->
         <div class="type-box type-box-hive">
           <button class="hive-btn" @click="$emit('onType', 'hive')">
             Hive

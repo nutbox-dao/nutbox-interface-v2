@@ -168,6 +168,8 @@ export default {
       } else if (this.poolType === "steem") {
         this.stakeAsset =
           "0x01" + ethers.utils.formatBytes32String(tokenData).substring(2);
+      } else if (this.poolType === 'steem-witness') {
+        this.stakeAsset = "0x06" + ethers.utils.formatBytes32String(tokenData).substring(2);
       } else if (this.poolType === "hive") {
         this.stakeAsset =
           "0x02" + ethers.utils.formatBytes32String(tokenData).substring(2);

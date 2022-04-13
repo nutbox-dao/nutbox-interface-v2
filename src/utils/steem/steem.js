@@ -64,6 +64,18 @@ export async function steemDelegation (delegator, delegatee, amount, pid, addres
   ])
 }
 
+// delegate power to proxy for vote witness
+export async function steemProxy (delegator, delegatee, pid, address) {
+  const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
+  return await requestBroadcastWithFee(delegator, pid, address, fee, 'STEEM', [
+    'account_witness_proxy',
+    {
+      account: delegator,
+      proxy: delegatee
+    }
+  ])
+}
+
 export async function steemTransferVest (from, to, amount, address, fee) {
   fee = parseFloat(fee).toFixed(3)
   const steemGas = STEEM_GAS_ACCOUNT
