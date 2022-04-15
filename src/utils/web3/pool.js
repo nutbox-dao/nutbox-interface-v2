@@ -58,6 +58,8 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['CosmosStakingFactory'].toLowerCase()
     case 'juno':
       return contractAddress['CosmosStakingFactory'].toLowerCase()
+    case 'erc1155staking':
+      return contractAddress['ERC1155StakingFacory'].toLowerCase()
   }
 }
 
@@ -67,6 +69,8 @@ export const getPoolType = (factory, chainId) => {
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
       return 'erc20staking'
+    case contractAddress['ERC1155StakingFacory']:
+      return 'erc1155staking'
     case contractAddress['SPStakingFactory']: {
       if (parseInt(chainId) === 1) {
         return 'steem'
@@ -116,7 +120,30 @@ export const approvePool = async (pool) => {
       }
       console.log('Approve pool Fail', e);
     }
+  })
+}
 
+export const approvePoolERC1155 = async (pool) => {
+  return new Promise(async (resolve, reject) => {
+    let contract;
+    try {
+      contract = await getContract('ERC1155', pool.asset.substring(42), false)
+    }catch(e) {
+      reject(e);
+      return;
+    }
+
+    try {
+      const tx = await contract.setApprovalForAll(pool.is, true);
+      resolve(tx.hash);
+    }catch(e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Approve pool erc1155 fail', e);
+    }
   })
 }
 
@@ -184,6 +211,28 @@ export const addPool = async (form) => {
             factory.removeAllListeners('ERC20StakingCreated')
           }
         })
+      } else if (form.type === 'erc1155staking') {
+        factory.on('ERC1155StakingCreated', (pool, community, name, erc1155Token, id) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            const newPool = {
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0,
+              totalAmount: 0,
+              hasCreateGauge: 0,
+              votersCount: 0,
+              votedAmount:0
+            }
+            resolve(newPool)
+            factory.removeAllListeners('ERC1155StakingCreated')
+          }
+        })
       } else if(form.type === 'steem' || form.type === 'hive' || from.type === 'steem-witness') {
         factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
@@ -235,6 +284,8 @@ export const addPool = async (form) => {
       console.log('Create pool fail', e);
       if (form.type === 'erc20staking') {
         factory.removeAllListeners('ERC20StakingCreated')
+      } else if(form.type === 'erc1155staking') {
+        factory.removeAllListeners('ERC1155StakingCreated')
       } else if(form.type === 'steem' || form.type === 'hive' || form.type === 'steem-witness') {
         factory.removeAllListeners('SPStakingCreated')
       } else if(form.type === 'atom' || form.type === 'osmo' || form.type === 'juno') {
@@ -562,6 +613,18 @@ const getPoolStakingInfo = async (pools) => {
               ['approve-' + p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset)) > 1e12]
             ]
           })
+        } else if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155staking')) {
+          calls.push({
+            target: p.asset,
+            call: [
+              'isApprovedForAll(address,address)(bool)',
+              account,
+              p.id
+            ],
+            returns: [
+              ['approveERC1155-' + p.id]
+            ]
+          })
         }
       }
       const result = await aggregate(calls, Multi_Config)
@@ -667,13 +730,13 @@ export const getPendingRewards = async (pools) => {
 export const getApprovements = async (pools) => {
   return new Promise(async (resolve, reject) => {
     try {
-      pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
+      const erc20pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
       const account = await getAccounts();
       if (!account) {
         resolve();
         return
       }
-      let calls = pools.map(pool => ({
+      let calls = erc20pools.map(pool => ({
         target: pool.asset,
         call: [
           'allowance(address,address)(uint256)',
@@ -684,6 +747,19 @@ export const getApprovements = async (pools) => {
           [pool.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](pool.asset)) > 1e12]
         ]
       }))
+
+      const erc1155pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolsFacotryAddress('erc1155staking')) 
+      calls = calls.concat(erc1155pools.map(pool => ({
+        target: pool.asset.substring(42),
+        call: [
+          'isApprovedForAll(address,address)(bool)',
+          account,
+          pool.id
+        ],
+        returns: [
+          [pool.id]
+        ]
+      })))
       const result = await aggregate(calls, Multi_Config)
       resolve(result.results.transformed)
     } catch (e) {

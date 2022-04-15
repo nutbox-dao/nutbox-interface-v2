@@ -19,6 +19,7 @@ import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
 import CommunityStaking from '@/views/manage-community/CommunityYieldFarming'
+import CommunityNFTStaking from '@/views/manage-community/CommunityNFTStaking'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
 import CommunityISO from '@/views/manage-community/CommunityISO'
@@ -134,6 +135,11 @@ const routes = [
         path: 'staking',
         name: 'CommunityStaking',
         component: CommunityStaking
+      },
+      {
+        path: 'nft-staking',
+        name: 'CommunityNFTStaking',
+        component: CommunityNFTStaking
       },
       {
         path: 'social',

@@ -20,6 +20,10 @@
               <i class="menu-icon farming-icon" />
               <span>Farming</span>
             </b-nav-item>
+            <b-nav-item to="/manage-community/nft-staking">
+              <i class="menu-icon farming-icon" />
+              <span>NFT Stake</span>
+            </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />
               <span>NUT Power</span>
