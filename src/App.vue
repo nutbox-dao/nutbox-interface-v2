@@ -353,7 +353,7 @@ export default {
       if (account) {
         getMyJoinedCommunity();
         getMyCommunityInfo().catch((e) => {
-          console.log("No created token by current user");
+          console.log("No created community by current user");
         });
         await connectKeplr();
         /*   getCosAcc()

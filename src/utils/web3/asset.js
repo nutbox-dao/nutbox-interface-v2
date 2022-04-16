@@ -20,7 +20,8 @@ import {
 } from './ethers'
 import {
   getAllTokens,
-  updateTokenIcon as uti
+  updateTokenIcon as uti,
+  getAllErc1155
 } from '@/apis/api'
 import { 
   errCode,
@@ -315,10 +316,27 @@ export const getAllTokenFromBackend = async (update = false) => {
   })
 }
 
+export const getAllErc1155FromBackend = async (update = false) => {
+  return new Promise(async (resolve, reject) => {
+    const erc1155s = store.state.web3.allErc1155s
+    if (!update && erc1155s) {
+      resolve(erc1155s)
+    }
+    try {
+      const allErc1155s = await getAllErc1155()
+      store.commit('web3/saveAllErc1155s', allErc1155s)
+      resolve(allErc1155s)
+    } catch (e) {
+      reject(500)
+    }
+  })
+}
+
 /**update tokens info from db */
 export const updateAllTokensFromBackend = async () => {
   while(true){
     await getAllTokenFromBackend(true)
+    await getAllErc1155FromBackend(true)
     await sleep(10)
   }
 }

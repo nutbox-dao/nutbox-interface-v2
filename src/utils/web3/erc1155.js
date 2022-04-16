@@ -1,4 +1,5 @@
 import { getContract } from '@/utils/web3/contract'
+import { insertErc1155 } from '@/apis/api'
 
 export const isErc1155 = async (address) => {
     return new Promise(async (resolve, reject) => {
@@ -38,4 +39,15 @@ export const getBalance = async (address, id) => {
             reject(e);
         }
     })
+}
+
+export const updateIcon = async (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await insertErc1155(params)
+      resolve(res)
+    } catch (e) {
+      reject(e)
+    }
+  })
 }

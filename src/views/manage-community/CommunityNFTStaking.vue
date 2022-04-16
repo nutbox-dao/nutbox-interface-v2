@@ -91,7 +91,8 @@ import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
 import StakingNFTPool from '@/components/community/StakingNFTPool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { ethers } from 'ethers'
 
 export default {
   name: 'CommunityYieldFarming',
@@ -113,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState('community', ['communityData']),
+    ...mapGetters('web3', ['erc1155ByKey']),
     pools() {
       console.log(this.communityData);
       return this.communityData ? this.communityData.pools : []
@@ -141,15 +143,11 @@ export default {
       this.poolType = type
       this.createPoolStep = 2
     },
-    selectPoolToken (tokenData) {
-        this.stakeAsset = tokenData.address
-        if (tokenData.icon) {
-          this.needIcon =false
-        }else {
-          // need to upload token icon
-          this.needIcon = true;
-          this.selectToken = tokenData;
-        }
+    selectPoolToken (tokenAddress, tokenId) {
+      this.stakeAsset = tokenAddress + ethers.utils.hexZeroPad(ethers.utils.hexlify(tokenId), 32).substring(2);
+        // need to upload token icon
+      this.needIcon = true;
+      this.selectToken = {address: tokenAddress, tokenid: tokenId};
       this.createPoolStep = 3
     },
     // create new pool
@@ -160,6 +158,7 @@ export default {
         name: pool[pool.length - 1].name,
         asset: this.stakeAsset
       }
+      console.log(235, form, pool);
       try {
         this.creating  = true
         const newPool = await addPool(form)

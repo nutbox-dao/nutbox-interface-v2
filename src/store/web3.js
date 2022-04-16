@@ -15,6 +15,8 @@ export default {
     stakingFactoryId: null,
     allAssetsOfUser: null,
     allTokens: null,
+    allErc1155s: null,
+    erc1155ByKey: {},
     tokenByKey: {},
     tokenDecimals: {},
     tokenIcons: {},
@@ -101,6 +103,9 @@ export default {
       state.tokenByKey = tokenByKey;
       state.tokenIcons = icons;
       state.tokenDecimals = decimals;
+    },
+    saveAllErc1155s: (state, allErc1155s) => {
+      state.allErc1155s = allErc1155s
     },
     saveBlockNum: (state, blockNum) => {
       state.blockNum = blockNum;
@@ -224,6 +229,10 @@ export default {
     tokenByKey: (state) => (address) => {
       if (!ethers.utils.isAddress(address)) return;
       return state.tokenByKey[address.toLowerCase()];
+    },
+    erc1155ByKey: (state) => (address, tokenid) => {
+      if (!ethers.utils.isAddress(address)) return;
+      return state.allErc1155s.filter(e => e.address === address && e.tokenid === tokenid)
     }
   },
 };

@@ -409,9 +409,12 @@ module.exports = {
     tokenName: "Name",
     tokenSymbol: "Symbol",
     tokenAddress: "Token address",
+    tokenId: "Token ID",
+    wrongTokenId: "Token ID must be a integer number.",
     price: "Price",
     totalSupply: 'Supply',
     cap: 'Mkt Cap',
-    distributionAmount: "Premine amount"
+    distributionAmount: "Premine amount",
+    notErc1155: "Token is not a ERC1155 token."
   }
 };
