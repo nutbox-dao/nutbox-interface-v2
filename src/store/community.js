@@ -1,3 +1,7 @@
+/**
+ * My own community data
+ */
+
 import { ethers } from "ethers"
 
 export default {
@@ -17,6 +21,11 @@ export default {
     approvedCommunity: false,
     // all i joined community from graph
     joinedCommunityData: null,
+
+    // all fetched community reward per block
+    // communityId => int
+    rewardPerBlock: {},
+
 
     // all community from backend
     allCommunityInfo: null,
@@ -41,6 +50,9 @@ export default {
     },
     saveLoadingAllCommunityInfo (state, loadingAllCommunityInfo) {
       state.loadingAllCommunityInfo = loadingAllCommunityInfo
+    },
+    saveRewardPerBlock (state, rewardPerBlock) {
+      state.rewardPerBlock = rewardPerBlock
     },
     saveAllCommunityInfo (state, allCommunityInfo) {
       state.allCommunityInfo = allCommunityInfo

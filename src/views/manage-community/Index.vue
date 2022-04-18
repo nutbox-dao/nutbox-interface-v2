@@ -12,9 +12,21 @@
               <i class="menu-icon asset-icon" />
               <span>{{ $t('router.asset') }}</span>
             </b-nav-item>
+            <b-nav-item to="/manage-community/iso">
+              <i class="menu-icon iso-icon" />
+              <span>ISO</span>
+            </b-nav-item>
             <b-nav-item to="/manage-community/staking">
-              <i class="menu-icon stake-icon" />
-              <span>{{ $t('router.pool') }}</span>
+              <i class="menu-icon farming-icon" />
+              <span>Farming</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/nft-staking">
+              <i class="menu-icon farming-icon" />
+              <span>NFT Stake</span>
+            </b-nav-item>
+            <b-nav-item to="/manage-community/nut-power">
+              <i class="menu-icon nut-power-icon" />
+              <span>NUT Power</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />
@@ -78,6 +90,7 @@ import { getMyCommunityData } from '@/utils/graphql/user'
 import { getMyCommunityContract, getApprovement } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
 import { hasMintRole, getCToken, grantMintRole } from '@/utils/web3/asset'
+import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 
 export default {
   name: 'Index',
@@ -93,11 +106,14 @@ export default {
       const communityId = await getMyCommunityContract()
       this.communityId = communityId;
       getMyCommunityData().then(async (res) => {
+        // if ctoken is a mintable token and the token is custom has community hasn't token's mint role
+        // we need to remind user to grant the token's mint role to this community
         const [hasRole, {isMintable}] = await Promise.all([hasMintRole(res.cToken, res.id), getCToken(res.id)])
-        console.log(235, hasRole, res);
         this.showGrantRole = isMintable && !hasRole
       });
       this.$store.commit('community/saveLoadingApproveCommunity', true)
+
+      getCommunityRewardPerBlock(communityId)
 
       getApprovement(NutAddress, communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
@@ -161,13 +177,16 @@ export default {
   .nav-item {
     width: 100%;
   }
+  .nav-item span {
+    white-space: nowrap;
+  }
   .nav-item a{
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--text-74);
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    padding: 12px 19px;
     user-select: none;
     &.active {
       color: var(--primary-custom);
@@ -180,19 +199,25 @@ export default {
   margin-right: .4rem;
 }
 .home-icon {
-  background-image: url("~@/static/images/m-menu-home.svg");
+  background-image: url("~@/static/images/menu-home.svg");
 }
 .asset-icon {
   background-image: url("~@/static/images/m-menu-asset.svg");
 }
-.stake-icon {
-  background-image: url("~@/static/images/m-menu-stake.svg");
+.farming-icon {
+  background-image: url("~@/static/images/menu-farming.svg");
+}
+.iso-icon {
+  background-image: url("~@/static/images/menu-stake.svg");
+}
+.nut-power-icon {
+  background-image: url("~@/static/images/menu-nut-power.svg");
 }
 .governance-icon {
-  background-image: url("~@/static/images/m-menu-governance.svg");
+  background-image: url("~@/static/images/menu-governance.svg");
 }
 .social-icon {
-  background-image: url("~@/static/images/m-menu-social.svg");
+  background-image: url("~@/static/images/menu-social.svg");
 }
 .active {
   .home-icon {
@@ -201,8 +226,14 @@ export default {
   .asset-icon {
     background-image: url("~@/static/images/m-menu-asset-active.svg");
   }
-  .stake-icon {
+  .farming-icon {
+    background-image: url("~@/static/images/m-menu-farming-active.svg");
+  }
+  .iso-icon {
     background-image: url("~@/static/images/m-menu-stake-active.svg");
+  }
+  .nut-power-icon {
+    background-image: url("~@/static/images/m-menu-nut-power-active.svg");
   }
   .governance-icon {
     background-image: url("~@/static/images/m-menu-governance-active.svg");

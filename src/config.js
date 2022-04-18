@@ -3,12 +3,29 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
+export const BLOCK_SECOND = 15;
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-// export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "http://localhost:3000";
 
-export const QN_UPLOAD_URL = BACKEND_API_URL + "/qiNiu/upload";
+export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
+
+// wheather use the graph sevice or our service
+// because of the graph service for BSC network is udpate so slowly, so we build our
+// own index service, but we retain the graph service for backup.
+export const USE_THE_GRAPH = false;
+
+// np power period to channel
+export const PeriodToIdx = {
+  1:0,
+  2:1,
+  4:2,
+  8:3,
+  16:4,
+  32:5,
+  64:6
+}
 
 /**
  * ERROR CODE DEFINE
@@ -42,7 +59,7 @@ export const errCode = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 3;
+export const STEEM_STAKE_FEE = 0.001;
 // official fee account
 export const STEEM_GAS_ACCOUNT = "walnut.gas";
 
@@ -65,6 +82,20 @@ export const HIVE_GAS_ACCOUNT = "walnut.gas";
 
 // Hive Config
 export const HIVE_API_URLS = ["https://api.hive.blog"];
+
+/**===================================== cosmos  =======================================*/
+export const COSMOS_STAKE_FEE = 0.0001;
+// gas address for test
+export const COSMOS_GAS_ACCOUNT = "cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv";
+
+export const OSMOSIS_STAKE_FEE = 0.0001;
+export const OSMOSIS_GAS_ACCOUNT = 'osmo1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477';
+
+export const JUNO_STAKE_FEE = 0.0001;
+export const JUNO_GAS_ACCOUNT = 'juno1khkaslmkk0htu0ug2j7h3geclyxfcfrsdu070s';
+// gas address
+// export const COSMOS_GAS_ACCOUNT = 'cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u';
+export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network", "https://api.cosmos.network"];
 
 /** ==================================Main chain============================================*/
 
@@ -93,29 +124,43 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 // }
 
 // goerli
-// export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-// export const BSC_CHAIN_ID = 5;
-// export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
-// export const CHAIN_NAME = 'Goerli';
+export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+export const BSC_CHAIN_ID = 5;
+export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
+export const CHAIN_NAME = 'Goerli';
+
+export const BSC_CHAIN_NAME = CHAIN_NAME;
+export const NATIVE_CURRENCY = {
+  name: 'ETH',
+  symbol: 'ETH',
+  decimals: 18
+}
+
+// bsc
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
 // export const BSC_CHAIN_NAME = CHAIN_NAME;
 // export const NATIVE_CURRENCY = {
-//   name: 'ETH',
-//   symbol: 'ETH',
+//   name: 'BNB',
+//   symbol: 'BNB',
 //   decimals: 18
 // }
 
 // bsc
-export const RPC_NODE = 'https://bsc-dataseed.binance.org';
-// export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
-export const BSC_CHAIN_ID = 56;
-export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-export const CHAIN_NAME = 'BSC-Mainnet';
-export const BSC_CHAIN_NAME = CHAIN_NAME;
-export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
-  decimals: 18
-}
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
 
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
@@ -145,8 +190,8 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
 // goerli network
-// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-// export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
+export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
+export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
 
 // bsc test
 // export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
@@ -156,13 +201,12 @@ export const GasTimes = 1.5;
 // export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
-// bsc net
-export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
-export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+// // bsc net
+// export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+// export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 // Register by nutbox
-export const OfficialAssets = [
-  {
+export const OfficialAssets = [{
     name: "Nutbox",
     address: NutAddress,
     symbol: "NUT",
@@ -192,38 +236,6 @@ export const OfficialAssets = [
     symbol: 'BTCB',
     icon: 'https://cdn.wherein.mobi/nutbox/v2/btc.png'
   }
-  // {
-  //   name: 'Mint Club',
-  //   address: '0x1f3Af095CDa17d63cad238358837321e95FC5915',
-  //   symbol: 'MINT',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
-  // },
-  // {
-  //   name: 'Mint Club Grant',
-  //   address: '0x58764cE77f0140F9678bA6dED9D9697c979F4E0f',
-  //   symbol: 'GRANT',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-grant.png'
-  // },
-  // {
-  //   name: 'Mint Club DAO',
-  //   address: '0x558810B46101DE82b579DD1950E9C717dCc28338',
-  //   symbol: 'MINTDAO',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: 'HomeChainAssetRegistry',
-  //   asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-dao.png'
-  // },
-  // {
-  //   name: 'Mint Club Creator',
-  //   address: '0x9f3C60dC06f66b3e0ea1Eb05866F9c1A74d43D67',
-  //   symbol: 'CREATOR',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: 'HomeChainAssetRegistry',
-  //   asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
-  // }
 ];
 
 export const Multi_Config = {

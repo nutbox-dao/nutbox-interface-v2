@@ -1,8 +1,10 @@
 <template>
   <div class="scroll-content">
     <div class="view-top-header view-top-header-sticky">
+      <div class="font24 line-height28 font-bold mb-2">NFT Staking</div>
+      <div class="font16 line-height24 font-bold mb-4">Just stake some NFT to earn.</div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex flex-column justify-content-center">
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
             <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
@@ -12,17 +14,18 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="c-btn-group" >
+          <div class="c-btn-group mx-2" >
             <button class="primary-btn primary-btn-outline w-auto mr-2 px-3"
                     style="height: 2rem"
-                    v-show="activePool.length > 1"
+                    v-show="activePool.length > 1 && activeErc1155Pool.length > 0"
                     @click="configPoolModal=true">
               {{ $t('pool.updatePoolRatios') }}</button>
             <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
                     @click="poolTypeModal=true, createPoolStep=1">
               <i class="add-icon add-icon-white mr-2"></i>
-              <span>{{ $t('pool.addPool') }}</span>
+<!--              <span>{{ $t('pool.addPool') }}</span>-->
+              <span>Add Staking Pool</span>
             </button>
           </div>
         </div>
@@ -50,22 +53,14 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <StakingPoolType v-show="createPoolStep===1"
-                            @close="poolTypeModal=false"
-                            @onType="selectPoolType"/>
-      <div v-show="createPoolStep===2">
-        <StakingBSCPool v-if="poolType==='erc20staking'"
-                        @confirm="selectPoolToken"
-                        @back="createPoolStep=1"/>
-        <StakingDelegatePool v-else :delegate-type="poolType"
-                             @confirm="selectPoolToken"
-                             @back="createPoolStep=1"/>
-      </div>
+      <StakingNFTPool v-if="createPoolStep===1"
+                      @confirm="selectPoolToken"
+                      @close="poolTypeModal=false"/>
       <StakingPoolConfig v-if="createPoolStep===3"
                          type="create"
                          :needIcon="needIcon"
                          :token="selectToken"
-                         @back="createPoolStep=2"
+                         @back="createPoolStep=1"
                          @close="poolTypeModal=false"
                          :enable-op="!creating"
                          :enable-back="!creating"
@@ -91,18 +86,17 @@
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
+import { addPool, updatePoolsRatio, getPoolFactoryAddress } from '@/utils/web3/pool'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
-import StakingBSCPool from '@/components/community/StakingBSCPool'
-import StakingDelegatePool from '@/components/community/StakingDelegatePool'
+import StakingNFTPool from '@/components/community/StakingNFTPool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { ethers } from 'ethers'
 
 export default {
-  name: 'CommunitySetting',
-  components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
+  name: 'CommunityYieldFarming',
+  components: { ManageStakingCard, StakingPoolType, StakingNFTPool, StakingPoolConfig },
   data () {
     return {
       tabOptions: ['Active', 'Inactive'],
@@ -120,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState('community', ['communityData']),
+    ...mapGetters('web3', ['erc1155ByKey']),
     pools() {
       console.log(this.communityData);
       return this.communityData ? this.communityData.pools : []
@@ -127,12 +122,17 @@ export default {
     activePool() {
       return this.pools.filter(p => p.status === 'OPENED')
     },
+    activeErc1155Pool() {
+      return this.activePool.filter(p => p.poolFactory.toLowerCase() ===
+              getPoolFactoryAddress("erc1155staking"))
+    },
     stakingPools() {
       switch(this.activeTab) {
         case 0:
-          return this.activePool
+          return this.activeErc1155Pool
         case 1:
-          return this.pools.filter(p => p.status === 'CLOSED')
+          return this.pools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() ===
+              getPoolFactoryAddress("erc1155staking"))
       }
     }
   },
@@ -143,31 +143,22 @@ export default {
       this.poolType = type
       this.createPoolStep = 2
     },
-    selectPoolToken (tokenData) {
-      if (this.poolType === 'erc20staking') {
-        this.stakeAsset = tokenData.address
-        if (tokenData.icon) {
-          this.needIcon =false
-        }else {
-          // need to upload token icon
-          this.needIcon = true;
-          this.selectToken = tokenData;
-        }
-      }else if (this.poolType === 'steem') {
-        this.stakeAsset = '0x01' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }else if (this.poolType === 'hive') {
-        this.stakeAsset = '0x02' + ethers.utils.formatBytes32String(tokenData).substring(2)
-      }
+    selectPoolToken (tokenAddress, tokenId) {
+      this.stakeAsset = tokenAddress + ethers.utils.hexZeroPad(ethers.utils.hexlify(tokenId), 32).substring(2);
+        // need to upload token icon
+      this.needIcon = true;
+      this.selectToken = {address: tokenAddress, tokenid: tokenId};
       this.createPoolStep = 3
     },
     // create new pool
     async create (pool) {
       let form = {
-        type: this.poolType,
+        type: 'erc1155staking',
         ratios: pool.map(p => parseFloat(p.ratio)),
         name: pool[pool.length - 1].name,
         asset: this.stakeAsset
       }
+      console.log(235, form, pool);
       try {
         this.creating  = true
         const newPool = await addPool(form)
@@ -183,9 +174,12 @@ export default {
             pool.ratio = parseFloat(form.ratios[index++]) * 100
           }
         })
+        // cache pools
+        this.$store.commit('cache/saveMyCreatedPools', this.communityData.pools);
         await sleep(2);
         this.poolTypeModal = false
       }catch (err) {
+        console.log('333', err);
         handleApiErrCode(err, (tip, params) => {
           this.$bvToast.toast(tip, params)
         })
@@ -210,6 +204,8 @@ export default {
             pool.ratio = ratios[index++] * 100
           }
         })
+        // cache pools
+        this.$store.commit('cache/saveMyCreatedPools', this.communityData.pools);
         this.configPoolModal = false
       }catch (err) {
         handleApiErrCode(err, (tip, params) => {

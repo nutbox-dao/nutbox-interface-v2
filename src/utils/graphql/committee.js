@@ -1,13 +1,21 @@
-import { client } from './index';
+import { client, restClient } from './index';
 import store from '@/store'
 import { gql } from 'graphql-request';
+import { USE_THE_GRAPH } from '@/config'
 
 export async function getWalnutData() {
+    const useTheGraph = true
+    if (useTheGraph) {
+        return await getWalnutDataFromTheGraph()
+    }else {
+        return await getWalnutDataFromOurService()
+    }
+}
+
+async function getWalnutDataFromTheGraph() {
     const query = gql`
     {
         walnuts(first: 1) {
-            stakeAssets
-            cTokens
             totalUsers
             totalPools
             totalCommunities
@@ -20,6 +28,30 @@ export async function getWalnutData() {
             store.commit('web3/saveWalnutInfo', walnut.walnuts[0])
         }
         return;
+    }catch(err) {
+        console.log('Get walnut info fail', err)
+    }
+}
+
+async function getWalnutDataFromOurService() {
+    const query = gql`
+        {
+           walnuts(first: 1) {
+               edges{
+                   node{
+                    totalUsers
+                    totalPools
+                    totalCommunities
+                   }
+               }
+           }
+        }
+    `
+    try {
+        let walnut = await restClient.request(query);
+        walnut = JSON.parse(walnut.value)
+        walnut = walnut.walnuts.edges[0].node
+        store.commit('web3/saveWalnutInfo', walnut)
     }catch(err) {
         console.log('Get walnut info fail', err)
     }

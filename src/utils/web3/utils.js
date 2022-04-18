@@ -16,7 +16,6 @@ export const signMessage = async (message) => {
     return signature
 }
 
-
 /**
  * Check if string is HEX, requires a 0x in front
  *

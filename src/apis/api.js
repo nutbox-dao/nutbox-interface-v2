@@ -35,6 +35,8 @@ export const updateCommunity = async (params) =>
 
 export const getAllTokens = async () => get(BACKEND_API_URL + "/token/get");
 
+export const getAllErc1155 = async () => get(BACKEND_API_URL + "/erc1155/get")
+
 export const insertProposal = async (params) =>
   post(BACKEND_API_URL + "/proposal/insert", params);
 
@@ -58,6 +60,9 @@ export const updateSocial = async (params) =>
 
 export const insertToken = async (params) =>
   post(BACKEND_API_URL + "/token/insert", params);
+
+  export const insertErc1155 = async (params) =>
+    post(BACKEND_API_URL + "/erc1155/insert", params);
 
 export const updateTokenIcon = async (params) =>
   put(BACKEND_API_URL + "/token/update", params);

@@ -73,11 +73,14 @@ export const formatBalance = function (value, digit = 4) {
 };
 
 export const formatAmount = function (value) {
-  if (!value) return "--";
+  if (!value) return "0.00";
   let unit = ''
   let digit = 3
   if(Number(value) < 1) {
     digit = 4
+  }
+  if (Number(value) > 1000) {
+    digit = 2
   }
   value = Number(value)
   if (value < 1e6) {

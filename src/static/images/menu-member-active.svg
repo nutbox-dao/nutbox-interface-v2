@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/normal/Blog</title>
+<svg width="20px" height="18px" viewBox="0 0 20 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>menu-member-active</title>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-新-1218" transform="translate(-240.000000, -264.000000)">
-            <g id="社区一级导航备份-2" transform="translate(220.000000, 0.000000)">
-                <g id="编组-2备份-5" transform="translate(0.000000, 252.000000)">
-                    <g id="menuicon_home" transform="translate(20.000000, 12.000000)">
-                        <rect id="矩形" fill="#747576" x="7.5" y="3" width="9" height="9" rx="4"></rect>
-                        <path d="M16.9797585,20.9911918 L7.02024148,20.9911918 C4.65807528,20.9911918 2.75,21.2701289 2.75,18.6843928 C2.75,16.0986568 8.77695313,14 11.1388565,14 L12.7909801,14 C15.141321,14 21.25,16.0994522 21.25,18.6849231 C21.25,21.270394 19.3419247,20.9911918 16.9797585,20.9911918 L16.9797585,20.9911918 Z" id="路径" fill="#FFDB1B"></path>
-                    </g>
-                </g>
-            </g>
+        <g id="menu-member-active" transform="translate(0.832806, 0.000000)" fill="#FFDB1B" fill-rule="nonzero">
+            <path d="M10.0409801,11 C12.391321,11 18.5,13.0994522 18.5,15.6849231 C18.5,18.2005165 16.6936701,18.0041913 14.4202617,17.9917416 L4.27024148,17.9911918 C1.90807528,17.9911918 0,18.2701289 0,15.6843928 C0,13.0986568 6.02695313,11 8.3888565,11 L10.0409801,11 Z M9.75,0 C11.959139,0 13.75,1.790861 13.75,4 L13.75,5 C13.75,7.209139 11.959139,9 9.75,9 L8.75,9 C6.540861,9 4.75,7.209139 4.75,5 L4.75,4 C4.75,1.790861 6.540861,0 8.75,0 L9.75,0 Z" id="形状结合"></path>
         </g>
     </g>
 </svg>

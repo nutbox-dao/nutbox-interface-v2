@@ -1,10 +1,21 @@
-import { client } from './index';
+import { client, restClient } from './index';
+import { USE_THE_GRAPH } from '@/config';
 import store from '@/store'
 import { getAccounts } from '../web3/account';
 import { gql } from 'graphql-request'
+import { ethers } from 'ethers';
 
 // get user summary: include all joined communities and pools
 export async function getMyJoinedCommunity() {
+    const useTheGraph = USE_THE_GRAPH;
+    if (useTheGraph) {
+        return await getMyJoinedCommunityFromGraph()
+    }else {
+        return await getMyJoinedCommunityFromService()
+    }
+}
+
+async function getMyJoinedCommunityFromGraph() {
     const account = await getAccounts();
     const query = gql`
         query getUser($id: String!) {
@@ -37,6 +48,20 @@ export async function getMyJoinedCommunity() {
                     stakersCount
                     totalAmount
                 }
+                inGauges {
+                    id
+                    name
+                    status
+                    community{
+                        id
+                        cToken
+                        feeRatio
+                    }
+                    ratio,
+                    asset,
+                    votersCount,
+                    votedAmount
+                }
             }
         }
     `
@@ -48,10 +73,84 @@ export async function getMyJoinedCommunity() {
         store.commit('user/saveLoadingUserGraph', false)
         return;
     }catch(err) {
-        console.log('Get my joined community fail', err);
+        console.log('Get my joined community from graph fail', err);
     }
 }
 
+async function getMyJoinedCommunityFromService() {
+    const account = await getAccounts();
+    try {
+        const query = `{
+            user(id:"${account}") {
+                createdAt
+                inCommunities {
+                    edges{
+                        node{
+                            id
+                            owner{
+                                id
+                            }
+                            feeRatio
+                            cToken
+                            usersCount
+                            poolsCount
+                            activedPoolCount
+                        }
+                    }
+                }
+                inPools {
+                    edges{
+                        node{
+                            id
+                            name
+                            status
+                            poolFactory
+                            community{
+                                id
+                                cToken
+                                feeRatio
+                            }
+                            ratio
+                            asset
+                            chainId
+                            stakersCount
+                            totalAmount
+                        }
+                    }
+                }
+                inGauges {
+                    edges{
+                        node{
+                            id
+                            name
+                            status
+                            community{
+                                id
+                                cToken
+                                feeRatio
+                            }
+                            ratio,
+                            asset,
+                            votersCount,
+                            votedAmount
+                        }
+                    }
+                }
+            }
+        }`
+        let data = await restClient.request(query)
+        data = JSON.parse(data.value).user
+        if (data){
+            data.inCommunities = data.inCommunities.edges.map(c => c.node)
+            data.inGauges = data.inGauges.edges.map(c => c.node)
+            data.inPools = data.inPools.edges.map(c => c.node)
+            store.commit('user/saveUserGraphInfo', data);
+        }
+        store.commit('user/saveLoadingUserGraph', false)
+    }catch(e) {
+        console.log('Get my joined community from service fail', e);
+    }
+}
 
 /**
  * get current user's community
@@ -59,6 +158,15 @@ export async function getMyJoinedCommunity() {
  * @returns 
  */
  export async function getMyCommunityData() {
+    const useTheGraph = USE_THE_GRAPH;
+    if (useTheGraph) {
+        return await getMyCommunityDataFromGraph()
+    }else {
+        return await getMyCommunityDataFromService()
+    }
+}
+
+async function getMyCommunityDataFromGraph() {
     if (store.state.web3.stakingFactoryId) {
         const query = gql`
             query Community($id: String!) {
@@ -81,18 +189,121 @@ export async function getMyJoinedCommunity() {
                         ratio
                         chainId
                         stakersCount,
-                        totalAmount
+                        totalAmount,
+                        hasCreateGauge,
+                        votersCount,
+                        votedAmount
                     }
                 }
             }
         `
         try{
             const data = await client.request(query, {id: store.state.web3.stakingFactoryId.toLowerCase()})
+            // read cache data
+            // if cache data exsit, use it
+            let cacheCommunity = store.state.cache.myCreatedCommunityInfo;
+            try{
+                cacheCommunity = cacheCommunity && JSON.parse(cacheCommunity)
+            }catch(e) {
+                cacheCommunity = null
+            }
+            let cachePools = store.state.cache.myCreatedPools;
+            try{
+                cachePools = cachePools && JSON.parse(cachePools)
+            }catch(e) {
+                cachePools = null
+            }
             if (data && data.community) {
-                const community = data.community
+                let community = data.community
+                if (cachePools && community.pools.length !== cachePools.length) {
+                    community.pools = cachePools;
+                }
                 store.commit('community/saveCommunityData', community)
                 console.log('my community data', community);
                 return community
+            }else if (cacheCommunity) {
+                if (cachePools) {
+                    cacheCommunity.pools = cachePools;
+                }
+                store.commit('community/saveCommunityData', cacheCommunity)
+                console.log('my community data', cacheCommunity);
+                return cacheCommunity;
+            }
+        }catch(e) {
+            console.log('Get my community data from graph fail:', e);
+        }
+    }
+    return {}
+}
+
+async function getMyCommunityDataFromService() {
+    if (store.state.web3.stakingFactoryId) {
+        try{
+            const communityId = ethers.utils.getAddress(store.state.web3.stakingFactoryId)
+            const query = `
+                {
+                    community(id: "${communityId}") {
+                        id
+                        feeRatio
+                        daoFund
+                        retainedRevenue
+                        owner{
+                            id
+                        }
+                        cToken
+                        pools {
+                            edges{
+                                node{
+                                    id
+                                    status
+                                    name
+                                    asset
+                                    poolFactory
+                                    poolIndex
+                                    ratio
+                                    chainId
+                                    stakersCount,
+                                    totalAmount,
+                                    hasCreateGauge,
+                                    votersCount,
+                                    votedAmount
+                                }
+                            }
+                        }
+                    }
+                }
+            `
+            let data = await restClient.request(query)
+            data = JSON.parse(data.value).community;
+            data.pools = data.pools.edges.map(c => c.node).sort((a,b) => a.poolIndex - b.poolIndex)
+            // read cache data
+            // if cache data exsit, use it
+            let cacheCommunity = store.state.cache.myCreatedCommunityInfo;
+            try{
+                cacheCommunity = cacheCommunity && JSON.parse(cacheCommunity)
+            }catch(e) {
+                cacheCommunity = null
+            }
+            let cachePools = store.state.cache.myCreatedPools;
+            try{
+                cachePools = cachePools && JSON.parse(cachePools)
+            }catch(e) {
+                cachePools = null
+            }
+            if (data) {
+                if (cachePools && data.pools.length !== cachePools.length) {
+                    data.pools = cachePools
+                }
+                store.commit('community/saveCommunityData', data);
+                console.log('my community data', data);
+                return data;
+            }else if (cacheCommunity) {
+                if (cachePools) {
+                    cacheCommunity.pools = cachePools;
+                }
+                store.commit('community/saveCommunityData', cacheCommunity)
+                console.log('my community data', cacheCommunity);
+                return cacheCommunity;
             }
         }catch(e) {
             console.log('Get my community data from graph fail:', e);

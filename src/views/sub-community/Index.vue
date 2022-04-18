@@ -9,9 +9,17 @@
                 <i class="menu-icon home-icon" />
                 <span>Home</span>
               </b-nav-item>
+              <b-nav-item to="/sub-community/iso">
+                <i class="menu-icon iso-icon" />
+                <span>ISO</span>
+              </b-nav-item>
               <b-nav-item to="/sub-community/staking">
-                <i class="menu-icon stake-icon" />
-                <span>{{ $t("router.staking") }}</span>
+                <i class="menu-icon farming-icon" />
+                <span>Farming</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/nut-power">
+                <i class="menu-icon nut-power-icon" />
+                <span>NUT Power</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
@@ -55,13 +63,21 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item :to="'/sub-community/home' + (communityId ? communityId.substring(0,10): '')">
+                  <b-dropdown-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
                   </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/iso">
+                    <i class="menu-icon iso-icon" />
+                    <span>ISO</span>
+                  </b-dropdown-item>
                   <b-dropdown-item to="/sub-community/staking">
-                    <i class="menu-icon stake-icon" />
-                    <span>{{ $t("router.staking") }}</span>
+                    <i class="menu-icon farming-icon" />
+                    <span>Farming</span>
+                  </b-dropdown-item>
+                  <b-dropdown-item to="/sub-community/nut-power">
+                    <i class="menu-icon nut-power-icon" />
+                    <span>NUT Power</span>
                   </b-dropdown-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
@@ -115,6 +131,8 @@ import { getApprovement, getCommunityBalance } from '@/utils/web3/community'
 import { handleApiErrCode, rollingFunction } from '@/utils/helper';
 import { getCToken } from '@/utils/web3/asset';
 import { NutAddress } from '@/config'
+import { getCommunityRewardPerBlock } from '@/utils/web3/community'
+import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 
 export default {
   name: 'Index',
@@ -148,7 +166,8 @@ export default {
       this.loading = true;
       this.clearData();
       this.$store.commit('community/saveLoadingApproveCommunity', true)
-        this.$store.commit('community/saveApprovedCommunity', false)
+      this.$store.commit('community/saveApprovedCommunity', false)
+      getCommunityRewardPerBlock(this.communityId)
       getApprovement(NutAddress, this.communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
       }).finally(() => {
@@ -173,9 +192,23 @@ export default {
 
         this.saveFeeRatio(community.feeRatio)
         this.saveOperationCount(community.operationCount)
+        console.log(66, community.pools);
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
         this.saveAllUsers(community.users)
+        const updatePoolsFromGraph = rollingFunction(
+          getPoolsFromGraph,
+          community.pools.map((p) => p.id),
+          10, (pools) => {
+            if (pools && pools.length > 0){
+              this.$store.commit('currentCommunity/saveAllPools', pools)
+            }
+          }
+        );
+        updatePoolsFromGraph.start();
+        this.$once('hook:beforeDestroy', () => {
+          updatePoolsFromGraph.stop();
+        })
         this.loading = false
       }).catch(e => {
         console.log(42643, e)
@@ -256,6 +289,7 @@ export default {
       font-size: 16px;
       line-height: 16px;
       color: var(--text-74);
+      white-space: nowrap;
     }
     .active span {
       color: var(--sub-primary);
@@ -309,8 +343,14 @@ export default {
 .blog-icon {
   background-image: url("~@/static/images/menu-social.svg");
 }
-.stake-icon {
+.farming-icon {
+  background-image: url("~@/static/images/menu-farming.svg");
+}
+.iso-icon {
   background-image: url("~@/static/images/menu-stake.svg");
+}
+.nut-power-icon {
+  background-image: url("~@/static/images/menu-nut-power.svg");
 }
 .dapp-icon {
   background-image: url("~@/static/images/menu-dapp.svg");
@@ -321,6 +361,9 @@ export default {
 .member-icon {
   background-image: url("~@/static/images/menu-member.svg");
 }
+.dashboard-icon {
+  background-image: url("~@/static/images/menu-dashboard.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/menu-home-active.svg");
@@ -328,8 +371,14 @@ export default {
   .blog-icon {
     background-image: url("~@/static/images/menu-social-active.svg");
   }
-  .stake-icon {
+  .farming-icon {
+    background-image: url("~@/static/images/menu-farming-active.svg");
+  }
+  .iso-icon {
     background-image: url("~@/static/images/menu-stake-active.svg");
+  }
+  .nut-power-icon {
+    background-image: url("~@/static/images/menu-nut-power-active.svg");
   }
   .dapp-icon {
     background-image: url("~@/static/images/menu-dapp-active.svg");
@@ -339,6 +388,9 @@ export default {
   }
   .member-icon {
     background-image: url("~@/static/images/menu-member-active.svg");
+  }
+  .dashboard-icon {
+    background-image: url("~@/static/images/menu-dashboard-active.svg");
   }
 }
 </style>

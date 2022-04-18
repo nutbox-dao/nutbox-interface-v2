@@ -471,6 +471,10 @@ export default {
       }else if(!this.form.symbol) {
         tipStr = this.$t('tip.needTokenSymbol')
       }
+      const asciiCheck = /^[\x00-\x7F]+$/.test(this.form.name) && /^[\x00-\x7F]+$/.test(this.form.symbol)
+      if (!asciiCheck){
+        tipStr = this.$t('tip.needAscii')
+      }
       if (tipStr){
         this.$bvToast.toast(tipStr, {
           title: this.$t('tip.tips'),

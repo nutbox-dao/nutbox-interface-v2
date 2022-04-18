@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex ratio-container">
     <div :style="{width:'100%', maxWidth: '20rem', ...chartStyle}">
-      <canvas id="pie"></canvas>
+      <canvas :id="canvasId"></canvas>
     </div>
     <div v-if="showLegendInfo" class="legend-box flex-fill">
       <div
@@ -110,6 +110,9 @@ export default {
               formatter: (value, ctx) => {
                 if (this.showDataLabel) return value.name
                 return Number(value.ratio).toFixed(2) + '%'
+              },
+              display: (ctx) => {
+                return ctx.dataset.data[ctx.dataIndex].ratio > 1
               }
             }
           }
@@ -148,6 +151,20 @@ export default {
       default: () => {
         return {}
       }
+    },
+    aspectRatio: {
+      type: Number,
+      default: 1
+    },
+    canvasId: {
+      type: String,
+      default: 'pie'
+    },
+    tooltipLabelFormatter: {
+      type: Function,
+      default: function (ctx) {
+        return `${ctx.raw.name}: ${(Number(ctx.raw.ratio)).toFixed(2)}%`
+      }
     }
   },
   watch: {
@@ -164,7 +181,9 @@ export default {
   },
   mounted () {
     if (!this.animation) this.chartData.options.animation = false
-    const ctx = document.getElementById('pie')
+    this.chartData.options.aspectRatio = this.aspectRatio
+    this.chartData.options.plugins.tooltip.callbacks.label = this.tooltipLabelFormatter
+    const ctx = document.getElementById(this.canvasId)
     this.chartData.data.datasets = [{
       data: this.poolsData,
       backgroundColor: this.colorList

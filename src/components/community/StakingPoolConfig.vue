@@ -138,6 +138,7 @@ import { sleep, uploadImage } from '@/utils/helper'
 import UploadLoading from '@/components/common/UploadLoading'
 import { VueCropper } from 'vue-cropper'
 import { updateTokenIcon } from '@/utils/web3/asset'
+import { updateIcon } from '@/utils/web3/erc1155'
 import {
   approveUseERC20
    } from '@/utils/web3/community'
@@ -315,7 +316,11 @@ export default {
             });
             return;
           }else {
-            updateTokenIcon({address: this.token.address, icon: this.propsIcon})
+            if (parseInt(this.token.tokenid) > 0){ // erc1155
+              updateIcon({address: this.token.address, tokenid: this.token.tokenid, icon: this.propsIcon}).catch()
+            }else{ // erc20
+              updateTokenIcon({address: this.token.address, icon: this.propsIcon}).catch()
+            }
           }
         }
         this.$emit('create', this.activePools)

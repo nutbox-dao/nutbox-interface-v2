@@ -26,7 +26,10 @@
     <div class="c-loading my-5" v-if="loadingUserGraph"></div>
     <div class="c-card mt-3" v-else-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
-        <UserStakingList v-if="getCommunityInfoById(pool.community.id)" :pool="pool" :is-fold="isFold" />
+        <template v-if="getCommunityInfoById(pool.community.id)">
+          <UserStakingList v-if="activeTab !== 2" :pool="pool" :is-fold="isFold" />
+          <UserNutPowerList v-else :gauge="pool" :is-fold="isFold"/>
+        </template>
       </div>
     </div>
     <div class="empty-bg" v-else>
@@ -37,19 +40,20 @@
 </template>
 
 <script>
-import { CHAIN_NAME } from '@/config'
 import { mapGetters, mapState } from 'vuex'
 import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
 import UserStakingList from '@/components/community/UserStakingList'
+import UserNutPowerList from '@/components/profile/UserNutPowerList'
 import { sleep } from '@/utils/helper'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
+import { updateGaugesByPolling } from '@/utils/nutbox/gauge'
 
 export default {
   name: 'StakedPools',
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', CHAIN_NAME, 'Steem', 'Hive', 'Inactive'],
+      tabOptions: ['Farming', "ISO", 'NUT Power', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,
@@ -58,6 +62,7 @@ export default {
   },
   components: {
     UserStakingList,
+    UserNutPowerList,
     ToggleSwitch
   },
   computed: {
@@ -67,16 +72,14 @@ export default {
     ...mapState('user', ['userGraphInfo', 'loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
-        case 4:
+        case 3:
           return this.inActivedPools;
         case 0:
-          return this.activedPools;
-        case 1:
           return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
+        case 1:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
         case 2:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('steem')) && parseInt(p.chainId) == 1)
-        case 3:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('hive')) && parseInt(p.chainId) == 2)
+          return this.joinedGauge
       }
     },
     activedPools() {
@@ -86,6 +89,10 @@ export default {
     inActivedPools() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools || this.userGraphInfo.inPools.length === 0) return [];
       return this.userGraphInfo.inPools.filter(p => p.status === 'CLOSED')
+    },
+    joinedGauge() {
+      if (!this.userGraphInfo || !this.userGraphInfo.inGauges || this.userGraphInfo.inGauges.length == 0) return [];
+      return this.userGraphInfo.inGauges
     }
   },
   async mounted () {
@@ -95,11 +102,21 @@ export default {
       }
       await sleep(0.3)
     }
+
+    // const updatePoolsFromGraph = rollingFunction(
+    //   getPoolsFromGraph,
+    //   this.allPools.map((p) => p.id),
+    //   8
+    // );
+    // updatePoolsFromGraph.start();
+
     // update pools data
     if (this.userGraphInfo && this.userGraphInfo.inPools){
-      const polling = updatePoolsByPolling(this.userGraphInfo.inPools)
+      const pollingPools = updatePoolsByPolling(this.userGraphInfo.inPools)
+      const pollingGauge = updateGaugesByPolling(this.joinedGauge.map(p => p.id))
       this.$once('hook:beforeDestroy', () => {
-          polling.stop();
+        pollingPools.stop();
+        pollingGauge.stop();
       });
     }
   },

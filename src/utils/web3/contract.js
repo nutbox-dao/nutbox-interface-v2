@@ -15,24 +15,47 @@ import {
 import {
   getAccounts
 } from './account'
-import { errCode } from '../../config'
+import {
+  errCode
+} from '../../config'
 
 export const contractAddress = {
-  "Committee": "0xd10e4C1e301A13A9B874bd1757c135Eda075769D",
-  "MintableERC20Factory": "0xa183D96a7e84BF77Fb7825026fA8b9BF6894cfa8",
-  "CommunityFactory": "0x1A4EeE210Bc54a75D25989546F648474EdF1C0A3",
-  "LinearCalculator": "0x6ab448C1C6e1870602d3FB867F167029bbFb3181",
-  "SPStakingFactory": "0xF7Fa41BF814eDC767691DDB1864a334D83f4acf7",
-  "ERC20StakingFactory": "0xf870724476912057C807056b29c1161f5Fe0199a"
+  "Committee": "0x5288DA783695DAb739ab5e1d7BF0d4920667809B",
+  "MintableERC20Factory": "0x95a3119660ed199d36cCfdE29E07af1afDDa1B7c",
+  "NutPower": "0x9C5493ea3a6414f83A0d867329A67f7741071669",
+  "CommunityFactory": "0x6c999d6C30B2016611eBBbFA53793d2522A66250",
+  "LinearCalculator": "0x604a7CADDFf6Cc87cf3cB74Adb0580c53E91B6d8",
+  "SPStakingFactory": "0x6383b535e7EC5f24aC1e9cf32fca6cbFa8fD251B",
+  "ERC20StakingFactory": "0x1AC355145e523C1295D5AB8cC6f37087E286B94E",
+  "ERC1155StakingFacory": "0xaCe6Fb48F11fb8F43Db37Ae471fE0a4cD6a0e267",
+  "CosmosStakingFactory": "0x1E2f12267D587c571ba147193DB94ED64C7e269f",
+  "Gauge": "0x306fb5447FCE4960E74cD28C22a1A7627cae678F"
 }
 
 export const getPoolFactory = (type) => {
   if (type === 'erc20staking') {
     return contractAddress.ERC20StakingFactory
-  }else if (type === 'steem' || type === 'hive') {
+  } else if (type === 'steem' || type === 'hive' || type === 'steem-witness') {
     return contractAddress.SPStakingFactory
+  } else if (type === 'cosmos' || type === 'atom' || type === 'osmo' || type === 'juno') {
+    return contractAddress.CosmosStakingFactory
+  } else if (type === 'erc1155staking') {
+    return contractAddress.ERC1155StakingFacory
   }
 }
+
+export const getPoolTypeName = (type) => {
+  if (type === 'erc20staking') {
+    return 'ERC20StakingFactory'
+  } else if (type === 'steem' || type === 'hive' || type === 'steem-witness') {
+    return 'SPStakingFactory'
+  } else if (type === 'atom' || type === 'osmo' || type === 'cosmos' || type === 'juno') {
+    return 'CosmosStakingFactory'
+  } else if (type === 'erc1155staking') {
+    return 'ERC1155StakingFacory'
+  }
+}
+
 
 // contract file name
 const CONTRACT_ABI_FILE_NAME_LIST = {
@@ -44,7 +67,12 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "ERC20StakingFactory": "ERC20StakingFactory.json",
   "ERC20Staking": "ERC20Staking.json",
   "SPStaking":"SPStaking.json",
-  "ERC20": "ERC20.json"
+  "ERC20": "ERC20.json",
+  "ERC1155": "ERC1155.json",
+  "NutPower": "NutPower.json",
+  "Gauge": "Gauge.json",
+  "CosmosStaking": "CosmosStaking.json",
+  "CosmosStakingFactory": "CosmosStakingFactory.json",
 }
 
 // Get contract Abi
@@ -64,15 +92,15 @@ export const getAbi = async function (contractName) {
 }
 
 // Get contract
-export const getContract = async function (contractName, address, onlyRead=true) {
+export const getContract = async function (contractName, address, onlyRead = true) {
   return new Promise(async (resolve, reject) => {
-    await connectMetamask()
-      // wheather metamask is locked
+    // await connectMetamask()
+    // wheather metamask is locked
     if (await !isUnlocked() && !onlyRead) {
       console.log('metamask locked');
-      try{
+      try {
         await connectMetamask()
-      }catch(e){
+      } catch (e) {
         reject(errCode.NOT_CONNECT_METAMASK);
         return;
       }
@@ -94,9 +122,9 @@ export const getContract = async function (contractName, address, onlyRead=true)
         // return;
       }
     }
-    
+
     const abi = await getAbi(contractName)
-    if (!onlyRead){
+    if (!onlyRead) {
       const provider = await getProvider()
       if (!provider || !abi) {
         reject(500);
@@ -106,7 +134,7 @@ export const getContract = async function (contractName, address, onlyRead=true)
       const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
       // inject metamask
       resolve(contract.connect(provider.getSigner()))
-    }else{
+    } else {
       const provider = getReadonlyProvider()
       const contract = new ethers.Contract(contractAddress[contractName] || address, abi.abi, provider)
       resolve(contract)
@@ -120,10 +148,11 @@ export const getContract = async function (contractName, address, onlyRead=true)
  */
 export const isContractAddress = async (address) => {
   const provider = await getProvider()
-  try{
+  try {
     const res = await provider.getCode(address)
+    console.log(643, res);
     return res
-  }catch(e){
+  } catch (e) {
     return false
   }
 }

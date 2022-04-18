@@ -8,17 +8,23 @@ import DeployCommunityToken from '@/views/community/DeployCommunityToken'
 import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
-import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
+import SubCommunityStaking from '@/views/sub-community/SubCommunityYieldFarming'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
 import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
 import SubGovernanceDetail from '@/views/sub-community/SubGovernanceDetail'
+import SubCommunityISO from '@/views/sub-community/SubCommunityISO'
+import SubCommunityNutPower from '@/views/sub-community/SubCommunityNutPower'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
-import CommunityStaking from '@/views/manage-community/CommunityStaking'
+import CommunityStaking from '@/views/manage-community/CommunityYieldFarming'
+import CommunityNFTStaking from '@/views/manage-community/CommunityNFTStaking'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
+import CommunityISO from '@/views/manage-community/CommunityISO'
+import CommunityNutPower from '@/views/manage-community/CommunityNutPower'
+import Faucet from '@/views/Faucet'
 Vue.use(VueRouter)
 
 const routes = [
@@ -31,6 +37,10 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: Profile
+  },
+  {
+    path: '/faucet',
+    component: Faucet
   },
   {
     path: '/community',
@@ -92,6 +102,16 @@ const routes = [
       {
         path: 'governance/detail/:id',
         component: SubGovernanceDetail
+      },
+      {
+        path: 'iso',
+        name: 'SubCommunityISO',
+        component: SubCommunityISO
+      },
+      {
+        path: 'nut-power',
+        name: 'SubCommunityNutPower',
+        component: SubCommunityNutPower
       }
     ]
   },
@@ -117,6 +137,11 @@ const routes = [
         component: CommunityStaking
       },
       {
+        path: 'nft-staking',
+        name: 'CommunityNFTStaking',
+        component: CommunityNFTStaking
+      },
+      {
         path: 'social',
         name: 'CommunitySocial',
         component: CommunitySocial
@@ -125,6 +150,16 @@ const routes = [
         path: 'vote',
         name: 'CommunityVote',
         component: CommunityVote
+      },
+      {
+        path: 'iso',
+        name: 'CommunityISO',
+        component: CommunityISO
+      },
+      {
+        path: 'nut-power',
+        name: 'CommunityNutPower',
+        component: CommunityNutPower
       }
     ]
   },

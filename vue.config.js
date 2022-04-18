@@ -2,13 +2,28 @@ module.exports = {
   lintOnSave: false,
   devServer: {
     proxy: {
-      '/api': {
-        // target: 'http://1.15.101.110:3000/nps',
-        target: 'https://api.crowdstaking.nutbox.io',
+      '/cosmos-api': {
+        target: 'https://api.cosmos.network',
         changeOrigin: true,
-        ws: true,
+        secure: false,
         pathRewrite: {
-          '^/api': ''
+          '^/cosmos-api': ''
+        }
+      },
+      '/cosmos-rpc': {
+        target: 'https://rpc.cosmos.network',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/cosmos-rpc': ''
+        }
+      },
+      '/rest-graph': {
+        target: 'https://center-rest.nutbox.app/v1/common/search',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/rest-graph': ''
         }
       }
     }

@@ -68,7 +68,7 @@
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
           <div class="title mb-3">Pools</div>
-          <PoolRatio :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
+          <PoolRatio :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
@@ -169,9 +169,9 @@
         <div class="c-loading c-loading-absolute c-loading-bg" v-if="!operationHistory || (operationHistory.length === 0)"></div>
         <transition-group v-else name="list-complete">
           <ActivityItem class="mt-3 list-complete-item"
-                        v-for="operation of operationHistory" :key="operation.tx + operation.type"
+                        v-for="operation of operationHistory" :key="operation.id + operation.type"
                         v-show="!isAdmin || (isAdmin && operation.type.indexOf('ADMIN') !== -1)"
-                        :operation="operation"/>
+                        :operation="operation"></ActivityItem>
         </transition-group>
       </div>
     </div>
@@ -324,8 +324,11 @@ export default {
 .p-card {
   height: fit-content;
   .poster {
-    @include card-poster-bg(12rem);
-    background-color: var(--primary-custom);
+    width: 100%;
+    min-height: 0;
+    height: fit-content;
+    max-height: fit-content;
+    object-fit: cover;
   }
 
   .v-line {

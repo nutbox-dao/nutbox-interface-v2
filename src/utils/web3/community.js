@@ -53,21 +53,44 @@ export const getMyCommunityContract = async (update = false) => {
     }
 
     let joinedCommunity = store.state.user.userGraphInfo.inCommunities;
+    // The newly created community info
+    let cachedCommunity = store.state.cache.myCreatedCommunityInfo;
+    try{
+      cachedCommunity = JSON.parse(cachedCommunity)
+    }catch(e) {
+      cachedCommunity = null
+    }
     if (!joinedCommunity || joinedCommunity.length === 0) {
+      if (cachedCommunity) {
+        stakingFactoryId = cachedCommunity.id;
+        store.commit("web3/saveLoadingCommunity", false);
+        store.commit("web3/saveStakingFactoryId", stakingFactoryId);
+        resolve(stakingFactoryId);
+        return;
+      }
       store.commit("web3/saveStakingFactoryId", null);
       store.commit("web3/saveLoadingCommunity", false);
       reject(errCode.NO_STAKING_FACTORY)
       return;
     }
     let stakingFactoryId = null;
+    // search if the new created community are in this list first
     for (let i = 0; i < joinedCommunity.length; i++){
-      if (joinedCommunity[i].owner.id === account.toLowerCase()){
+      if (joinedCommunity[i].owner.id.toLowerCase() === account.toLowerCase()){
         stakingFactoryId = joinedCommunity[i].id;
         store.commit("web3/saveLoadingCommunity", false);
         store.commit("web3/saveStakingFactoryId", stakingFactoryId);
         resolve(stakingFactoryId);
         return;
       }
+    }
+    // if not found, use the local cached community
+    if (cachedCommunity) {
+      stakingFactoryId = cachedCommunity.id;
+      store.commit("web3/saveLoadingCommunity", false);
+      store.commit("web3/saveStakingFactoryId", stakingFactoryId);
+      resolve(stakingFactoryId);
+      return;
     }
     store.commit("web3/saveStakingFactoryId", null);
     store.commit("web3/saveLoadingCommunity", false);
@@ -212,12 +235,18 @@ export const getOperationFee = async () => {
 export const getCommunityRewardPerBlock = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try{
+      communityId = communityId.toLowerCase();
       const contract = await getContract('LinearCalculator')
       const amount = await contract.getCurrentRewardPerBlock(communityId)
       const ctoken = await getCToken(communityId)
-      resolve(amount.toString() / (10 ** ctoken.decimal))
+      const reward = amount.toString() / (10 ** ctoken.decimal)
+      let rewardPerBlock = store.state.community.rewardPerBlock;
+      rewardPerBlock[communityId] = reward;
+      
+      store.commit('community/saveRewardPerBlock', rewardPerBlock)
+      resolve(reward)
     }catch(e) {
-
+      
     }
   })
 }
@@ -292,12 +321,22 @@ export const createCommunity = async (cToken, distribution) => {
           const communityInfo = {
             id: ethers.utils.getAddress(community),
             cToken: {...cToken, address: ethers.utils.getAddress(token)},
-            firstBlock: distribution[0].startHeight
+            firstBlock: distribution[0].startHeight,
+            daofund: user,
+            retainedRevenue: 0,
+            feeRatio: 0,
+            owner: {
+              id: user
+            },
+            pools:[]
           }
           // Created a new community
-          store.commit('community/saveCommunityInfo', communityInfo)
+          store.commit('community/saveCommunityInfo', communityInfo);
           store.commit("community/saveDistributions", distribution);
           store.commit("web3/saveStakingFactoryId", community);
+          // add cache
+          store.commit('cache/saveMyCreatedCommunityInfo', communityInfo);
+          store.commit('cache/saveMyCommunityDistribution', distribution);
           resolve(communityInfo);
         }
       })
@@ -848,9 +887,8 @@ export const approveUseERC20 = async (token, target) => {
   return new Promise(async (resolve, reject) => {
     try{
       const contract = await getContract('ERC20', token, false)
-      const account = await getAccounts() 
       const tx = await contract.approve(target, ethers.constants.MaxUint256, {
-        gasLimit: 75402
+        gasLimit: 854020
       })
       await waitForTx(tx.hash)
       resolve()

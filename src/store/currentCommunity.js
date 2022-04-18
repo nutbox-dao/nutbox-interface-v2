@@ -1,3 +1,8 @@
+/**
+ * Custom community info eara
+ * will be clear data when check out the community
+ */
+
 
 import Cookie from 'vue-cookies'
 

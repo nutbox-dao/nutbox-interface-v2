@@ -7,7 +7,10 @@ export default {
         // loading all users from backend
         loadingUsers: false,
         loadingUserGraph: true,
-        userGraphInfo: {}
+        userGraphInfo: {},
+        nutBalance: 0,
+        approveToNutPower: false,
+        loadingApproveToNutPower: true
     },
     getters: {
         getUserByAddress: state => (address) => {
@@ -28,5 +31,14 @@ export default {
         saveUserGraphInfo: (state, userGraphInfo) => {
           state.userGraphInfo = userGraphInfo;
         },
+        saveNutBalance(state, nutBalance) {
+            state.nutBalance = nutBalance
+        },
+        saveApproveToNutPower(state, approveToNutPower) {
+            state.approveToNutPower = approveToNutPower
+        },
+        saveLoadingApproveToNutPower(state, loadingApproveToNutPower) {
+            state.loadingApproveToNutPower = loadingApproveToNutPower
+        }
     }
 }

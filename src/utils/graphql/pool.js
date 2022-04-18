@@ -1,6 +1,8 @@
-import { client } from './index';
+import { client, restClient } from './index';
+import { USE_THE_GRAPH } from '@/config'
 import store from '@/store'
 import { gql } from 'graphql-request'
+import { ethers } from 'ethers'
 
 /**
  * Get a specify community info 
@@ -8,6 +10,14 @@ import { gql } from 'graphql-request'
  * @returns 
  */
 export async function getPools(poolIds) {
+    const useTheGraph = USE_THE_GRAPH
+    if (useTheGraph) {
+        return await getPoolsFromGraph(poolIds)
+    }else {
+        return await getPoolsFromService(poolIds)
+    }
+}
+async function getPoolsFromGraph(poolIds) {
     const query = gql`
         query Pools($ids: [String]) {
             pools (where: {id_in: $ids}) {
@@ -28,6 +38,12 @@ export async function getPools(poolIds) {
                     feeRatio
                     cToken
                 }
+                hasCreateGauge
+                votedAmount
+                voters(first: 10){
+                    id
+                }
+                votersCount
             }
         }
     `
@@ -35,11 +51,66 @@ export async function getPools(poolIds) {
         const data = await client.request(query, {ids: poolIds})
         if (data && data.pools) {
             const pools = data.pools
-            store.commit('currentCommunity/saveAllPools', pools)
             return pools
         }
     }catch(e) {
         console.log('Get community from graph fail:', e);
+    }
+}
+
+async function getPoolsFromService(poolIds) {
+    try{
+        poolIds = '[' + poolIds.reduce((s, p) => s += ('"' + ethers.utils.getAddress(p) + '",'), '') + ']'
+        const query = `{
+            pools (id_In:${poolIds}) {
+                edges{
+                    node{
+                        id
+                        status
+                        asset
+                        poolFactory
+                        totalAmount
+                        ratio
+                        name
+                        chainId
+                        stakers(first:10) {
+                            edges{
+                                node{
+                                    id
+                                }
+                            }
+                        }
+                        stakersCount
+                        community{
+                            id
+                            feeRatio
+                            cToken
+                        }
+                        hasCreateGauge
+                        votedAmount
+                        voters(first: 10) {
+                            edges{
+                                node{
+                                    id
+                                }
+                            }
+                        }
+                        votersCount
+                    }
+                }
+            }
+        }`
+        let data = await restClient.request(query)
+        data = JSON.parse(data.value).pools.edges
+        data = data.map(p => {
+            let pool = p.node;
+            pool.stakers = pool.stakers.edges.map(s => s.node)
+            pool.voters = pool.voters.edges.map(v => v.node)
+            return pool
+        })
+        return data
+    }catch(e) {
+        console.log(235, e);
     }
 }
 

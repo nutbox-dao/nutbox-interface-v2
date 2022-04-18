@@ -6,12 +6,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import i18n from './i18n'
-import { formatBalance, formatUserAddress, formatPrice } from './utils/helper'
+import { formatBalance, formatUserAddress, formatPrice, formatAmount } from './utils/helper'
 import EmptyImg from '@/components/common/EmptyImg'
 
 Vue.config.productionTip = false
 
-Vue.filter('amountForm', formatBalance)
+Vue.filter('amountForm', formatAmount)
 Vue.filter('formatPrice', formatPrice)
 Vue.filter('formatUserAddress', formatUserAddress)
 Vue.component('empty-img', EmptyImg)
