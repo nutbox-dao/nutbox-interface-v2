@@ -80,7 +80,7 @@
       no-close-on-backdrop>
       <AssetDetailModal :tokens="balances" :totalValue="totalValue" @close="assetModalVisible=false"/>
     </b-modal>
-    <!-- avatat modal -->
+    <!-- avatar modal -->
     <b-modal
       v-model="avatarModalVisible"
       modal-class="custom-modal"

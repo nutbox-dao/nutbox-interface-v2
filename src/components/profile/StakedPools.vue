@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Farming', "ISO", 'NUT Power', 'Inactive'],
+      tabOptions: ['Farming', "ISO", 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,
@@ -72,14 +72,14 @@ export default {
     ...mapState('user', ['userGraphInfo', 'loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
-        case 3:
+        case 2:
           return this.inActivedPools;
         case 0:
           return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
         case 1:
           return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
-        case 2:
-          return this.joinedGauge
+        // case 2:
+        //   return this.joinedGauge
       }
     },
     activedPools() {
@@ -113,10 +113,10 @@ export default {
     // update pools data
     if (this.userGraphInfo && this.userGraphInfo.inPools){
       const pollingPools = updatePoolsByPolling(this.userGraphInfo.inPools)
-      const pollingGauge = updateGaugesByPolling(this.joinedGauge.map(p => p.id))
+      // const pollingGauge = updateGaugesByPolling(this.joinedGauge.map(p => p.id))
       this.$once('hook:beforeDestroy', () => {
         pollingPools.stop();
-        pollingGauge.stop();
+        // pollingGauge.stop();
       });
     }
   },

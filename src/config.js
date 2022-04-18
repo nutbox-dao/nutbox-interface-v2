@@ -3,11 +3,11 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 15;
+export const BLOCK_SECOND = 3;
 // nutbox backend server
-// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 
@@ -59,7 +59,7 @@ export const errCode = {
 // steem node storage
 export const STEEM_CONF_KEY = "steemNodeKey";
 // delegate fee
-export const STEEM_STAKE_FEE = 0.001;
+export const STEEM_STAKE_FEE = 3;
 // official fee account
 export const STEEM_GAS_ACCOUNT = "walnut.gas";
 
@@ -84,11 +84,11 @@ export const HIVE_GAS_ACCOUNT = "walnut.gas";
 export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 /**===================================== cosmos  =======================================*/
-export const COSMOS_STAKE_FEE = 0.0001;
+export const COSMOS_STAKE_FEE = 0.02;
 // gas address for test
-export const COSMOS_GAS_ACCOUNT = "cosmos1khkaslmkk0htu0ug2j7h3geclyxfcfrsmwv9gv";
+export const COSMOS_GAS_ACCOUNT = "cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u";
 
-export const OSMOSIS_STAKE_FEE = 0.0001;
+export const OSMOSIS_STAKE_FEE = 0.1;
 export const OSMOSIS_GAS_ACCOUNT = 'osmo1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477';
 
 export const JUNO_STAKE_FEE = 0.0001;
@@ -124,43 +124,29 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 // }
 
 // goerli
-export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-export const BSC_CHAIN_ID = 5;
-export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
-export const CHAIN_NAME = 'Goerli';
+// export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+// export const BSC_CHAIN_ID = 5;
+// export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
+// export const CHAIN_NAME = 'Goerli';
 
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'ETH',
+//   symbol: 'ETH',
+//   decimals: 18
+// }
+
+// bsc
+export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+export const BSC_CHAIN_ID = 56;
+export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+export const CHAIN_NAME = 'BSC-Mainnet';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'ETH',
-  symbol: 'ETH',
+  name: 'BNB',
+  symbol: 'BNB',
   decimals: 18
 }
-
-// bsc
-// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
-// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
-// export const BSC_CHAIN_ID = 56;
-// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-// export const CHAIN_NAME = 'BSC-Mainnet';
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'BNB',
-//   symbol: 'BNB',
-//   decimals: 18
-// }
-
-// bsc
-// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
-// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
-// export const BSC_CHAIN_ID = 56;
-// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-// export const CHAIN_NAME = 'BSC-Mainnet';
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'BNB',
-//   symbol: 'BNB',
-//   decimals: 18
-// }
 
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
