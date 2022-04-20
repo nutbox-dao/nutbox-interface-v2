@@ -128,6 +128,7 @@ export const getERC20Info = async (address) => {
         icon
       })
     }catch(e){
+      console.log(235, address);
       console.log('Wrong BEP20 address', e);
       reject(e)
     }
@@ -336,7 +337,7 @@ export const getAllErc1155FromBackend = async (update = false) => {
 export const updateAllTokensFromBackend = async () => {
   while(true){
     await getAllTokenFromBackend(true)
-    await getAllErc1155FromBackend(true)
+    // await getAllErc1155FromBackend(true)
     await sleep(10)
   }
 }

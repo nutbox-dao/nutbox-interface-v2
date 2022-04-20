@@ -21,10 +21,10 @@
           </div>
           <!-- token list -->
           <div class="user-asset-info-box">
-            <div class="asset-tabs">
+            <!-- <div class="asset-tabs">
               <div class="tab tab0" :class="assetTab===0?'active':''" @click="assetTab=0">Token</div>
               <div class="tab tab1" :class="assetTab===1?'active':''" @click="assetTab=1">NP</div>
-            </div>
+            </div> -->
             <div v-show="assetTab===0" class="asset-card">
               <div class="d-flex user-asset justify-content-between">
                 <div class="font20 line-height28 font-bold">Total Asset Value</div>
@@ -45,7 +45,7 @@
               </div>
               <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingBalance"></div>
             </div>
-            <NPAssetCard v-show="assetTab===1"/>
+            <!-- <NPAssetCard v-show="assetTab===1"/> -->
           </div>
         </div>
         <!-- community -->

@@ -630,7 +630,7 @@ const getPoolStakingInfo = async (pools) => {
       const result = await aggregate(calls, Multi_Config)
       resolve(result.results.transformed)
     } catch (e) {
-      console.log("Get user's staking info fail");
+      console.log("Get user's staking info fail", e);
       reject(e)
     }
   })
