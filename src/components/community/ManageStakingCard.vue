@@ -181,7 +181,7 @@ export default {
       const blocksPerYear = YEAR_BLOCKS;
       const fundRatio = this.communityData.feeRatio;
       const poolRatio = this.pool.ratio;
-      const _rewardPerBlock = this.rewardPerBlock[this.stakingFactoryId]
+      const _rewardPerBlock = this.rewardPerBlock[this.stakingFactoryId.toLowerCase()]
 
       const reward =
         (_rewardPerBlock ?? 0) *

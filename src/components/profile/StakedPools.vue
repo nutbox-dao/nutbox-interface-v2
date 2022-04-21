@@ -27,7 +27,7 @@
     <div class="c-card mt-3" v-else-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
         <template v-if="getCommunityInfoById(pool.community.id)">
-          <UserStakingList v-if="activeTab !== 2" :pool="pool" :is-fold="isFold" />
+          <UserStakingList v-if="activeTab !== 3" :pool="pool" :is-fold="isFold" />
           <UserNutPowerList v-else :gauge="pool" :is-fold="isFold"/>
         </template>
       </div>
