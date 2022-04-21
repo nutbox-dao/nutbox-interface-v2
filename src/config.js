@@ -85,7 +85,6 @@ export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 /**===================================== cosmos  =======================================*/
 export const COSMOS_STAKE_FEE = 0.02;
-// gas address for test
 export const COSMOS_GAS_ACCOUNT = "cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u";
 
 export const OSMOSIS_STAKE_FEE = 0.1;
@@ -190,39 +189,6 @@ export const GasTimes = 1.5;
 // // bsc net
 export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
 export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
-
-// Register by nutbox
-export const OfficialAssets = [{
-    name: "Nutbox",
-    address: NutAddress,
-    symbol: "NUT",
-    icon: "https://cdn.wherein.mobi/nutbox/v2/1633769085901",
-  },
-  {
-    name: 'Wrapped BNB',
-    address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    symbol: 'WBNB',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/bnb.png'
-  },
-  {
-    name: 'Ethereum Token',
-    address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-    symbol: 'ETH',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/eth.png'
-  },
-  {
-    name: 'PancakeSwap Token',
-    address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-    symbol: 'CAKE',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/cake.png'
-  },
-  {
-    name: 'BTCB Token',
-    address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
-    symbol: 'BTCB',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/btc.png'
-  }
-];
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
