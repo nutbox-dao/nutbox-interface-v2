@@ -4,6 +4,7 @@ export const parseOperationStructure = (data) => {
         let op = o.node;
         op.cursor = o.cursor;
         op.user = op.user.id;
+        op.asset = op.asset.substring(0, 2) !== "0x" ? '0x' + op.asset : op.asst
         return op;
     })
     return data;
