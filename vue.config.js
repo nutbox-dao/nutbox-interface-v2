@@ -25,7 +25,10 @@ module.exports = {
   configureWebpack: {
     resolve: {
       // .mjs needed for https://github.com/graphql/graphql-js/issues/1272
-      extensions: ['*', '.mjs', '.js', '.vue', '.json', '.gql', '.graphql']
+      extensions: ['*', '.mjs', '.js', '.vue', '.json', '.gql', '.graphql'],
+      fallback: {
+        crypto: false
+      }
     },
     module: {
       rules: [ // fixes https://github.com/graphql/graphql-js/issues/1272
