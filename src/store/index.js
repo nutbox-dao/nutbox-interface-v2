@@ -10,6 +10,8 @@ import community from '@/store/community'
 import currentCommunity from './currentCommunity'
 import user from './user'
 import pool from './pool'
+import kusama from './kusama'
+import polkadot from './polkadot'
 
 Vue.use(Vuex)
 
@@ -50,6 +52,8 @@ export default new Vuex.Store({
     community,
     currentCommunity,
     user,
-    pool
+    pool,
+    kusama,
+    polkadot
   }
 })

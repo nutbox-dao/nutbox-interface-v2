@@ -37,6 +37,50 @@ export const errCode = {
   SERVER_ERR: 500,
 };
 
+/** ================================== Polkadot ============================================*/
+export const POLKADOT_WEB_SOCKET = "wss://rpc.polkadot.io";
+export const KUSAMA_WEB_SOCKET = "wss://kusama-rpc.polkadot.io";
+export const ROCOCO_WEB_SOCKET = "wss://crowdloan-test.nutbox.io/relaychain/ws";
+
+export const PARA_STATUS = {
+  ACTIVE: "Active",
+  RETIRED: "Retired",
+  COMPLETED: "Completed",
+  WINNER: "Winner",
+  OTHER: "Other",
+};
+
+export const POLKADTO_ADDRESS_FORMAT_CODE = {
+  polkadot: 0,
+  kusama: 2,
+  substrate: 42,
+};
+
+// 添加到交易batch的remark结构
+export const NUTBOX_REMARK_TYPE = {
+  magic: "Text", // 默认为nutbox
+  msgType: 'Text',  // crowdloan
+  source: 'u8',  // 2: polkadot, 3: kusama
+  dest: 'u8',
+  sequence: 'u64',
+  paraId: 'u32',
+  trieIndex: 'u32',
+  communityAccount: 'Text',
+  recipient: 'Text',
+  amount: 'u128',
+  bindAccount: 'Text',
+  stakingFeast: 'Text',
+  pid: 'u8'
+};
+
+// Phala推荐机制 remark
+export const PhalaCrowdloanReferrerRemark = {
+  magic: "Bytes",
+  paraId: "ParaId",
+  referrer: "AccountId",
+  referrerHash: "Bytes",
+};
+
 /** ==================================Main chain============================================*/
 
 //  moonbase alpha
@@ -141,71 +185,6 @@ export const GasTimes = 1.5;
 export const MultiAddress = '0x79D106b1af3C3cb712B49e405825905e4ee0Db32'
 export const NutAddress = "0xd10e4C1e301A13A9B874bd1757c135Eda075769D"
 
-// Register by nutbox
-export const OfficialAssets = [
-  {
-    name: "Nutbox",
-    address: NutAddress,
-    symbol: "NUT",
-    icon: "https://cdn.wherein.mobi/nutbox/v2/1633769085901",
-  },
-  {
-    name: 'Wrapped BNB',
-    address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    symbol: 'WBNB',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/bnb.png'
-  },
-  {
-    name: 'Ethereum Token',
-    address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-    symbol: 'ETH',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/eth.png'
-  },
-  {
-    name: 'PancakeSwap Token',
-    address: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-    symbol: 'CAKE',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/cake.png'
-  },
-  {
-    name: 'BTCB Token',
-    address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
-    symbol: 'BTCB',
-    icon: 'https://cdn.wherein.mobi/nutbox/v2/btc.png'
-  }
-  // {
-  //   name: 'Mint Club',
-  //   address: '0x1f3Af095CDa17d63cad238358837321e95FC5915',
-  //   symbol: 'MINT',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-logo.png'
-  // },
-  // {
-  //   name: 'Mint Club Grant',
-  //   address: '0x58764cE77f0140F9678bA6dED9D9697c979F4E0f',
-  //   symbol: 'GRANT',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-grant.png'
-  // },
-  // {
-  //   name: 'Mint Club DAO',
-  //   address: '0x558810B46101DE82b579DD1950E9C717dCc28338',
-  //   symbol: 'MINTDAO',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: 'HomeChainAssetRegistry',
-  //   asset: '0x57fb04387de5155f968d37e9574b0ffb2dc47865f17fa71d31cc1296e8fd24e2',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-dao.png'
-  // },
-  // {
-  //   name: 'Mint Club Creator',
-  //   address: '0x9f3C60dC06f66b3e0ea1Eb05866F9c1A74d43D67',
-  //   symbol: 'CREATOR',
-  //   contract: contractAddress['HomeChainAssetRegistry'],
-  //   decimal: 18,
-  //   type: 'HomeChainAssetRegistry',
-  //   asset: '0xc10a83b0bf2cd12664afd0a3a884a571e5df17b12b41a9d2c9f3bf1ad5fe47a5',
-  //   icon: 'https://cdn.wherein.mobi/nutbox/v2/mint-creator.png'
-  // }
-];
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
