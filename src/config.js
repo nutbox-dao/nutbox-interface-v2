@@ -4,9 +4,9 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-astar.nutbox.app"
+// export const BACKEND_API_URL = "https://api-astar.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-// export const BACKEND_API_URL = "http://localhost:3000";
+export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = 'https://api-walnut.nutbox.app' + "/qiNiu/upload";
 
@@ -107,17 +107,17 @@ export const PhalaCrowdloanReferrerRemark = {
 //   decimals: 18
 // }
 
-// goerli
-// export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-// export const BSC_CHAIN_ID = 5;
-// export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
-// export const CHAIN_NAME = 'Goerli';
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'ETH',
-//   symbol: 'ETH',
-//   decimals: 18
-// }
+// shibuya
+export const RPC_NODE = 'https://rpc.shibuya.astar.network:8545';
+export const BSC_CHAIN_ID = 81;
+export const BLOCK_CHAIN_BROWER = 'https://shibuya.subscan.io';
+export const CHAIN_NAME = 'Shibuya';
+export const BSC_CHAIN_NAME = CHAIN_NAME;
+export const NATIVE_CURRENCY = {
+  name: 'SBY',
+  symbol: 'SBY',
+  decimals: 18
+}
 
 // bsc
 // export const RPC_NODE = 'https://bsc-dataseed.binance.org';
@@ -133,17 +133,17 @@ export const PhalaCrowdloanReferrerRemark = {
 // }
 
 // Astar
-export const RPC_NODE = 'https://rpc.astar.network:8545';
-// export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
-export const BSC_CHAIN_ID = 592;
-export const BLOCK_CHAIN_BROWER = 'https://blockscout.com/astar/';
-export const CHAIN_NAME = 'Astar Network';
-export const BSC_CHAIN_NAME = CHAIN_NAME;
-export const NATIVE_CURRENCY = {
-  name: 'ASTR',
-  symbol: 'ASTR',
-  decimals: 18
-}
+// export const RPC_NODE = 'https://rpc.astar.network:8545';
+// // export const RPC_NODE = 'https://still-red-snowflake.bsc.quiknode.pro/da03ce3f2590abcd5e1dbde82f87db93065c0237/';
+// export const BSC_CHAIN_ID = 592;
+// export const BLOCK_CHAIN_BROWER = 'https://blockscout.com/astar/';
+// export const CHAIN_NAME = 'Astar Network';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'ASTR',
+//   symbol: 'ASTR',
+//   decimals: 18
+// }
 
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
@@ -165,9 +165,9 @@ export const GasTimes = 1.5;
 // export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
 // export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
 
-// goerli network
-// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-// export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
+// shibuya network
+export const MultiAddress = "0xc56342456c26fa5553c1A308A7B96fC23713a0C8";
+export const NutAddress = "0xDb761E1506dCEedA6A0F5130d33BE7fB8d671c24";
 
 // bsc test
 // export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
@@ -182,8 +182,8 @@ export const GasTimes = 1.5;
 // export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 // astar
-export const MultiAddress = '0x79D106b1af3C3cb712B49e405825905e4ee0Db32'
-export const NutAddress = "0xd10e4C1e301A13A9B874bd1757c135Eda075769D"
+// export const MultiAddress = '0x79D106b1af3C3cb712B49e405825905e4ee0Db32'
+// export const NutAddress = "0xd10e4C1e301A13A9B874bd1757c135Eda075769D"
 
 
 export const Multi_Config = {

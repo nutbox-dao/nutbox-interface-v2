@@ -136,7 +136,6 @@ import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
-import { initApis } from '@/utils/polkadot/api'
 
 export default {
   computed: {
@@ -231,7 +230,6 @@ export default {
     },
   },
   mounted () {
-    initApis('polkadot')
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || 'en')
   },
   async created () {

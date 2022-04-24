@@ -23,7 +23,7 @@
     "graphql": "^16.3.0",
     "graphql-request": "^4.2.0",
     "@polkadot/api": "^8.1.1",
-    "@polkadot/apps-config": "^0.112.1 ",
+    "@polkadot/apps-config": "0.112.2-50",
     "@polkadot/extension-dapp": "^0.43.1",
     "@polkadot/ui-keyring": "2.0.1",
     "@polkadot/ui-settings": "^2.0.1",

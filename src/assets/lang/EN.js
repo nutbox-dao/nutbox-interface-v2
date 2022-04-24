@@ -111,6 +111,10 @@ module.exports = {
     unStake: "Undeposit",
     staked: "Staked ",
   },
+  crowdloan: {
+    network: "Relaychain",
+    parachain: "Parachain"
+  },
   tip: {
     approveSuccess: "Approval Success",
     loading: "Loading, Please wait",
@@ -336,6 +340,7 @@ module.exports = {
     profile: "Profile",
     asset: "Asset",
     pool: "Pool",
+    crowdloan: "Crowdloan",
     social: "Social Info",
     governance: "Governance",
     staking: "Staking",

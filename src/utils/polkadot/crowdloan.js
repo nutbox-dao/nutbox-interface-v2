@@ -43,12 +43,24 @@ export const subscribeAllFundInfo = async (relaychain) => {
     store.commit(relaychain + '/saveLoadingFunds', false)
     return;
   }
+
+  // const a = Array.from({length: 60}, (item, index) => index + 2000)
+  // const isThread = await api.query.paras.paraLifecycles.multi(a)
+  // let paraThread = []
+  // for (let i = 0; i < isThread.length; i++) {
+  //   if (isThread[i].toString() === 'Parathread') {
+  //     paraThread.push(a[i])
+  //   }
+  // }
+  // console.log(43, paraThread);
+  
   let endpoints = createWsEndpoints((key, value) => value || key);
   const genesisHash = api.genesisHash.toHex()
   endpoints = endpoints.filter(({ genesisHashRelay }) => genesisHash === genesisHashRelay)
   let paraIds = []
   let tmp = []
   // extract endpoints
+  console.log(64, endpoints);
   for (let e of endpoints) {
     if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
       paraIds.push(e.paraId)
