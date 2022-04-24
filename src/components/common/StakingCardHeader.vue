@@ -72,7 +72,7 @@ export default {
     icon() {
       switch (this.card.poolFactory.toLowerCase()) {
         case getPoolFactory("erc20staking").toLowerCase():
-          return this.tokenIcons[this.card.asset];
+          return this.tokenIcons[this.card.asset.toLowerCase()];
         case getPoolFactory("steem").toLowerCase(): {
           const chainId = this.card.chainId;
           return ASSET_LOGO_URL[chainId === 1 ? "steem" : "hive"];
@@ -98,7 +98,8 @@ export default {
   methods: {
     openNewTab(id) {},
   },
-  async mounted() {},
+  async mounted() {
+  },
 };
 </script>
 

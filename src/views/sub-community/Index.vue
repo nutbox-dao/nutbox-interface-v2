@@ -189,10 +189,8 @@ export default {
           console.log('get ctoken fail:', e);
         })
 
-
         this.saveFeeRatio(community.feeRatio)
         this.saveOperationCount(community.operationCount)
-        console.log(66, community.pools);
         this.saveAllPools(community.pools)
         this.saveOperationHistory(community.operationHistory)
         this.saveAllUsers(community.users)

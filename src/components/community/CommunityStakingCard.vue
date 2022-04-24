@@ -162,12 +162,10 @@ export default {
     type() {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
-    ...mapState("currentCommunity", ["cToken"]),
-    ...mapState(["prices"]),
     stakeToken() {
       if (this.type !== "erc20staking" || !this.allTokens) return {};
       const token = this.tokenByKey(this.card.asset);
-      return token;
+      return token ?? {};
     },
     pendingReward() {
       if (!this.userReward) return 0;

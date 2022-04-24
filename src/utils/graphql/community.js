@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 import { parseOperationStructure } from './utils'
 
 export async function getSpecifyCommunityInfo(community) {
-  const useTheGraph = true
+  const useTheGraph = USE_THE_GRAPH
   if (useTheGraph) {
     return await getSpecifyCommunityInfoFromTheGraph(community)
   } else {
@@ -89,19 +89,19 @@ async function getSpecifyCommunityInfoFromTheGraph(community) {
                 operationCount
                 operationHistory(first: 60, orderBy: timestamp, orderDirection: desc) {
                   id
-                    type
-                    timestamp
-                    poolFactory
-                    pool{
-                        id
-                        name
-                    }
-                    user
-                    chainId
-                    asset
-                    amount
-                    timestamp
-                    tx
+                  type
+                  timestamp
+                  poolFactory
+                  pool{
+                      id
+                      name
+                  }
+                  user
+                  chainId
+                  asset
+                  amount
+                  timestamp
+                  tx
                 }
             }
         }
@@ -173,6 +173,16 @@ async function getSpecifyCommunityInfoFromOurService(community) {
                 }
             }
         }
+        users {
+          edges{
+            node{
+              id
+              createdAt
+              address
+              operationCount
+            }
+          }
+        }
         operationCount
       }
     }
@@ -180,11 +190,12 @@ async function getSpecifyCommunityInfoFromOurService(community) {
     store.commit('currentCommunity/saveLoadingCommunityInfo', true)
     let [data, history] = await Promise.all([restClient.request(query), getNewCommunityOPHistoryFromOurService(community)])
     data = JSON.parse(data.value).community
+    data.users = data.users.edges.map(u => u.node)
     data.pools = data.pools.edges.map(p => {
         let pool = p.node
         pool.stakers = pool.stakers.edges.map(s => s.node)
         pool.voters = pool.voters.edges.map(v => v.node)
-        pool.asset = pool.asset.substring(0, 2) !== "0x" ? '0x' + pool.asset : pool.asst
+        pool.asset = pool.asset.substring(0, 2) !== "0x" ? '0x' + pool.asset : pool.asset
         return pool
     })
     data.operationHistory = history
