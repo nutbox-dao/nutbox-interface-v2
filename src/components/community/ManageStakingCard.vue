@@ -97,6 +97,7 @@ import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
 import { approveUseERC20 } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
+import { getParaIcon } from '@/utils/polkadot/util'
 
 export default {
   name: 'ManageStakingCard',
@@ -114,16 +115,26 @@ export default {
       return getPoolType(this.pool.poolFactory, this.pool.chainId)
     },
     stakeToken() {
+      console.log(12354, this.type, this.pool);
       if (this.type !== 'erc20staking' || !this.allTokens) return {}
       const token = this.tokenByKey(this.pool.asset)
       return token
     },
     tvl () {
-      if(!this.prices || !this.stakeToken) return 0
-      let price
-      price = this.stakeToken.price
-      price = price ? parseFloat(price) : 0
-      return this.totalDeposited * price
+      if (!this.prices) return 0;
+      if (this.type === 'erc20staking'){
+        if(!this.stakeToken) return 0
+        let price
+        price = this.stakeToken.price
+        price = price ? parseFloat(price) : 0
+        return this.totalDeposited * price
+      } else if (this.type === 'crowdloan') {
+        if ((this.pool.chainId) === 0){
+          return this.totalDeposited * this.prices['dot']
+        }else if((this.pool.chainId) === 2) {
+          return this.totalDeposited * this.prices['ksm']
+        }
+      }
     },
     fee() {
       if (this.fees){
@@ -238,9 +249,14 @@ export default {
   },
 
   async mounted () {
-    this.stakedERC20 = await getERC20Info(this.pool.asset)
-    this.icon = this.stakedERC20.icon
-    this.vert = (10 ** this.stakedERC20.decimal)
+    if (this.type === 'erc20staking') {
+      this.stakedERC20 = await getERC20Info(this.pool.asset)
+      this.icon = this.stakedERC20.icon
+      this.vert = (10 ** this.stakedERC20.decimal)
+    } else if (this.type === 'crowdloan') {
+      this.icon = getParaIcon(this.pool.paraId);
+      this.vert = parseInt(this.pool.chainId) === 0 ? 10 : 12
+    }
   }
 }
 </script>

@@ -60,7 +60,6 @@ export const subscribeAllFundInfo = async (relaychain) => {
   let paraIds = []
   let tmp = []
   // extract endpoints
-  console.log(64, endpoints);
   for (let e of endpoints) {
     if (e.paraId && paraIds.indexOf(e.paraId) === -1) {
       paraIds.push(e.paraId)
@@ -68,7 +67,6 @@ export const subscribeAllFundInfo = async (relaychain) => {
     }
   }
   endpoints = tmp
-  console.log(721, paraIds);
   store.commit(relaychain + '/saveLoadingFunds', true)
   try {
     const unsubFund = (await api.query.crowdloan.funds.multi(paraIds, async (unwrapedFunds) => {

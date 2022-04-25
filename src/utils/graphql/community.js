@@ -29,6 +29,8 @@ export async function getSpecifyCommunityInfo(community) {
                     totalAmount
                     ratio
                     chainId
+                    paraId
+                    fundIndex
                     stakers(first: 10){
                         id
                     }

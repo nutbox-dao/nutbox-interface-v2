@@ -1,7 +1,8 @@
 import {
   getContract,
   contractAddress,
-  getPoolFactory
+  getPoolFactory,
+  getPoolTypeName
 } from './contract'
 import store from '@/store'
 import { getAccounts } from '@/utils/web3/account'
@@ -29,8 +30,12 @@ import { NutAddress, CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
 import { rollingFunction } from '@/utils/helper'
 
-export const getPoolFactoryAddress = () => {
-  return contractAddress['ERC20StakingFactory'].toLowerCase()
+export const getPoolFactoryAddress = (type) => {
+  if (type === 'erc20staking'){
+    return contractAddress['ERC20StakingFactory'].toLowerCase()
+  } else if (type === 'crowdloan') {
+    return contractAddress['CrowdloanFactory'].toLowerCase()
+  }
 }
 
 export const getPoolType = (factory, chainId) => {
@@ -38,6 +43,8 @@ export const getPoolType = (factory, chainId) => {
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
       return 'erc20staking'
+    case contractAddress['CrowdloanFactory']:
+      return 'crowdloan'
   }
 }
 
@@ -108,34 +115,62 @@ export const addPool = async (form) => {
     let factory;
     try {
       contract = await getContract('Community', stakingFactoryId, false)
-      factory = await getContract('ERC20StakingFactory')
+      factory = await getContract(getPoolTypeName(form.type))
     } catch (e) {
       reject(e);
       return
     }
 
     try {
-      factory.on('ERC20StakingCreated', (pool, community, name, token) => {
-        if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
-          console.log('Create a new pool:', pool);
-          resolve({
-            id: ethers.utils.getAddress(pool),
-            status: 'OPENED',
-            name,
-            asset: form.asset,
-            poolFactory: getPoolFactory(),
-            ratio: form.ratios[form.ratios.length - 1] * 100,
-            chainId: 0,
-            stakersCount: 0
-          })
-          factory.removeAllListeners('ERC20StakingCreated')
-        }
-      })
-      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(), form.asset)
+      if (form.type === 'erc20staking'){
+        factory.on('ERC20StakingCreated', (pool, community, name, token) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('ERC20StakingCreated')
+          }
+        })
+      } else if(form.type === 'crowdloan') {
+        factory.on('CrowdloanCreated', (pool, community, name, chainId, paraId, fundIndex) => {
+          const asset = ethers.utils.hexZeroPad(ethers.utils.hexlify(chainId), 1)
+          + ethers.utils.hexZeroPad(ethers.utils.hexlify(paraId.toNumber()), 32).substring(2) 
+          + ethers.utils.hexZeroPad(ethers.utils.hexlify(fundIndex.toNumber()), 32).substring(2)
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name && asset === form.asset){
+            console.log('Create a new crowdloan pool:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              paraId,
+              fundIndex,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('CrowdloanCreated')
+          }
+        })
+      }
+      const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
       await waitForTx(tx.hash)
     } catch (e) {
       console.log('Create pool fail', e);
-      factory.removeAllListeners('ERC20StakingCreated')
+      if (form.type === 'erc20staking') {
+        factory.removeAllListeners('ERC20StakingCreated')
+      } else if(form.type === 'crowdloan') {
+        factory.removeAllListeners('CrowdloanCreated')
+      }
       reject(errCode.BLOCK_CHAIN_ERR)
     }
   })
@@ -376,7 +411,7 @@ const getPoolStakingInfo = async (pools) => {
             ['pending-'+p.id]
           ]
         });
-        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress()){
+        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking')){
           calls.push({
             target: p.asset,
             call: [

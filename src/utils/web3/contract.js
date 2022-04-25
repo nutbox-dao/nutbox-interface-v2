@@ -27,7 +27,19 @@ export const contractAddress = {
 }
 
 export const getPoolFactory = (type) => {
-  return contractAddress.ERC20StakingFactory
+  if (type === 'erc20staking') {
+    return contractAddress.ERC20StakingFactory
+  } else if (type === 'crowdloan') {
+    return contractAddress.CrowdloanFactory
+  }
+}
+
+export const getPoolTypeName = (type) => {
+  if (type === 'erc20staking') {
+    return 'ERC20StakingFactory'
+  } else if (type === 'crowdloan') {
+    return 'CrowdloanFactory'
+  }
 }
 
 // contract file name
@@ -37,6 +49,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "Community": "Community.json",
   "LinearCalculator": "LinearCalculator.json",
   "SPStakingFactory": "SPStakingFactory.json",
+  "CrowdloanFactory": "CrowdloanFactory.json",
+  "Crowdloan": "Crowdloan.json",
   "ERC20StakingFactory": "ERC20StakingFactory.json",
   "ERC20Staking": "ERC20Staking.json",
   "SPStaking":"SPStaking.json",

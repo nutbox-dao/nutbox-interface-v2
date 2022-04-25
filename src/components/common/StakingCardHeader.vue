@@ -48,6 +48,7 @@ import { getPoolType } from '@/utils/web3/pool'
 import { getPoolFactory } from '@/utils/web3/contract'
 import { ASSET_LOGO_URL } from '@/constant'
 import { CHAIN_NAME } from '@/config'
+import { getParaIcon } from '@/utils/polkadot/util'
 
 export default {
   name: "StakingCardHeader",
@@ -69,12 +70,18 @@ export default {
       return this.getCommunityInfoById(this.communityId)
     },
     icon() {
-      return this.tokenIcons[this.card.asset]
+      if (this.type === 'erc20staking') {
+        return this.tokenIcons[this.card.asset]
+      } else if (this.type === 'crowdloan') {
+        return getParaIcon(this.card.paraId)
+      }
+    },
+    type() {
+      return getPoolType(this.card.poolFactory, this.card.chainId)
     },
     poolType() {
-      const type = getPoolType(this.card.poolFactory, this.card.chainId)
-      if (type === 'erc20staking') return 'ERC20'
-      return type.toUpperCase()
+      if (this.type === 'erc20staking') return 'ERC20'
+      return this.type.toUpperCase()
     },
   },
   methods: {

@@ -67,7 +67,7 @@
             </b-dropdown>
           </b-form-group>
           
-          <button class="primary-btn" @click="$emit('confirm', token)">
+          <button class="primary-btn mt-5" @click="$emit('confirm', networkIndex, selectParachain)">
             {{ $t("operation.confirm") }}
           </button>
         </div>
@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import TokenItem from '@/components/community/TokenItem'
 import { mapState } from 'vuex'
 import { BSC_CHAIN_NAME } from '@/config'
 import { ethers } from 'ethers'
@@ -88,7 +87,6 @@ import { namedLogos } from '@polkadot/apps-config';
 
 export default {
   name: 'StakingCrowdloanPool',
-  components: { TokenItem },
   data() {
     return {
       searchResult: null,
@@ -143,7 +141,14 @@ export default {
           return {...f, logo}
         })
       } else {
-        return this.kusamaFund.filter(f => f.statusIndex === 0)
+        return this.kusamaFund.filter(f => f.statusIndex === 0).map(f => {
+          let logo = namedLogos[f.info]
+          if (logo.indexOf('data:image') === -1) {
+            logo = logo.replaceAll('/img', 'https://polkadot.js.org/apps/static')
+            logo = logo.slice(0, -4) + '.' + logo.slice(-4)
+          }
+          return {...f, logo}
+        })
       }
     },
     loading() {

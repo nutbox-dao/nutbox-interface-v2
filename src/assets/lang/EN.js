@@ -62,7 +62,8 @@ module.exports = {
     charge: 'Charge',
     enter: 'Enter',
     approve: 'Approve',
-    grant: 'Grant'
+    grant: 'Grant',
+    contribute: "Contribute"
   },
   wallet: {
     wallet: "Wallet",
@@ -340,6 +341,7 @@ module.exports = {
     profile: "Profile",
     asset: "Asset",
     pool: "Pool",
+    farming: "Farming",
     crowdloan: "Crowdloan",
     social: "Social Info",
     governance: "Governance",

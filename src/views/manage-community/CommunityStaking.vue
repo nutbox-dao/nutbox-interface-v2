@@ -96,6 +96,7 @@ import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
+import { getPoolFactoryAddress } from '../../utils/web3/pool'
 
 export default {
   name: 'CommunitySetting',
@@ -122,18 +123,21 @@ export default {
       return this.communityData ? this.communityData.pools : []
     },
     activePool() {
-      return this.pools.filter(p => p.status === 'OPENED')
+      return this.pools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase() ===
+        getPoolFactoryAddress('erc20staking'))
     },
     stakingPools() {
       switch(this.activeTab) {
         case 0:
           return this.activePool
         case 1:
-          return this.pools.filter(p => p.status === 'CLOSED')
+          return this.pools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() ===
+                getPoolFactoryAddress('erc20staking'))
       }
     }
   },
   async mounted () {
+    this.poolType = 'erc20staking'
   },
   methods: {
     selectPoolType (type) {

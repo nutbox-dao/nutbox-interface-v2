@@ -19,6 +19,8 @@ export async function getPools(poolIds) {
                 totalAmount
                 ratio
                 chainId
+                paraId
+                fundIndex
                 stakers(first: 10){
                     id
                 }

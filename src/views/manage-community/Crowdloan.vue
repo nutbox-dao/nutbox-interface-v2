@@ -89,7 +89,7 @@
 
 <script>
 import ManageStakingCard from '@/components/community/ManageStakingCard'
-import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
+import { addPool, updatePoolsRatio, getPoolFactoryAddress } from '@/utils/web3/pool'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
 import StakingCrowdloanPool from '@/components/community/StakingCrowdloanPool'
@@ -114,7 +114,11 @@ export default {
       creating: false,
       updating: false,
       needIcon: false,
-      selectToken: {}
+      selectToken: {},
+      relaychainIndexToChainId: {
+        0: 0,
+        1: 2
+      }
     }
   },
   computed: {
@@ -124,7 +128,8 @@ export default {
       return this.communityData ? this.communityData.pools : []
     },
     activePool() {
-      return this.pools.filter(p => p.status === 'OPENED')
+      return this.pools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase()
+             === getPoolFactoryAddress('crowdloan'))
     },
     stakingPools() {
       switch(this.activeTab) {
@@ -133,33 +138,31 @@ export default {
         case 1: 
           return this.activePool.filter(p => p.chainId === 2)
         case 2:
-          return this.pools.filter(p => p.status === 'CLOSED')
+          return this.pools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase()
+             === getPoolFactoryAddress('crowdloan'))
       }
     }
   },
   async mounted () {
     initApis('polkadot')
+    initApis('kusama')
   },
   methods: {
     selectPoolType (type) {
       this.poolType = type
       this.createPoolStep = 1
     },
-    selectPoolToken (tokenData) {
-      this.stakeAsset = tokenData.address
-      if (tokenData.icon) {
-        this.needIcon =false
-      }else {
-        // need to upload token icon
-        this.needIcon = true;
-        this.selectToken = tokenData;
-      }
+    selectPoolToken (relaychainIndex, paraInfo) {
+      this.stakeAsset = '0x' + ethers.utils.hexZeroPad(ethers.utils.hexlify(this.relaychainIndexToChainId[relaychainIndex]), 1).substring(2) 
+        + ethers.utils.hexZeroPad(ethers.utils.hexlify(paraInfo.pId), 32).substring(2) 
+        + ethers.utils.hexZeroPad(ethers.utils.hexlify(paraInfo.fundIndex.toNumber()), 32).substring(2)
+      this.needIcon = false
       this.createPoolStep = 3
     },
     // create new pool
     async create (pool) {
       let form = {
-        type: this.poolType,
+        type: 'crowdloan',
         ratios: pool.map(p => parseFloat(p.ratio)),
         name: pool[pool.length - 1].name,
         asset: this.stakeAsset

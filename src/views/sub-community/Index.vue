@@ -11,7 +11,11 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon stake-icon" />
-                <span>{{ $t("router.staking") }}</span>
+                <span>{{ $t("router.farming") }}</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/crowdloan">
+                <i class="menu-icon stake-icon" />
+                <span>{{ $t("router.crowdloan") }}</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />

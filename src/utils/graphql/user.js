@@ -34,6 +34,8 @@ export async function getMyJoinedCommunity() {
                     ratio
                     asset
                     chainId
+                    paraId
+                    fundIndex
                     stakersCount
                     totalAmount
                 }
@@ -80,6 +82,8 @@ export async function getMyJoinedCommunity() {
                         poolIndex
                         ratio
                         chainId
+                        paraId
+                        fundIndex
                         stakersCount,
                         totalAmount
                     }

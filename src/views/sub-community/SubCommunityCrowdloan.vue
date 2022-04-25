@@ -23,7 +23,7 @@
         <div class="cards-container">
           <div class="cards-box cards-box-col3" :class="'col3-items-'+stakingCards.length">
             <div class="card-item" v-for="(cardInfo) of stakingCards" :key="cardInfo.id">
-              <CommunityStakingCard :card="cardInfo"/>
+              <CommunityCrowdloanCard :card="cardInfo"/>
             </div>
           </div>
         </div>
@@ -34,19 +34,20 @@
 
 <script>
 import { CHAIN_NAME } from '@/config'
-import CommunityStakingCard from '@/components/community/CommunityStakingCard'
+import CommunityCrowdloanCard from '@/components/community/CommunityCrowdloanCard'
 import  { mapState, mapGetters } from 'vuex'
 import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
 import { sleep, rollingFunction } from '@/utils/helper'
 import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
+import { initApis } from '@/utils/polkadot/api'
 
 export default {
-  name: 'SubCommunityStaking',
-  components: { CommunityStakingCard },
+  name: 'SubCommunityCrowdloan',
+  components: { CommunityCrowdloanCard },
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All'],
+      tabOptions: ['Polkadot', 'Kusama'],
     }
   },
   computed: {
@@ -57,28 +58,38 @@ export default {
         case -1:
           return this.inActivedPools;
         case 0:
-          return this.activedPools;
+          return this.polkadotPools;
+        case 1:
+          return this.kusamaPools
       }
     },
     activedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase()
-      === getPoolFactoryAddress('erc20staking'))
+      return this.allPools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase() ===
+      getPoolFactoryAddress('crowdloan'))
+    },
+    polkadotPools() {
+      return this.activedPools.filter(p => p.chainId === 0)
+    },
+    kusamaPools() {
+      return this.activedPools.filter(p => p.chainId === 2)
     },
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase()
-      === getPoolFactoryAddress('erc20staking'))
+      return this.allPools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() ===
+      getPoolFactoryAddress('crowdloan'))
     }
   },
   async mounted() {
+    initApis('polkadot');
+    initApis('kusama');
     while(true) {
       if (this.communityInfo && this.allPools) {
         break;
       }
       await sleep(0.3)
     }
-    const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 4)
+    const updatePoolsFromGraph = rollingFunction(getPoolsFromGraph ,this.allPools.map(p => p.id), 12)
     updatePoolsFromGraph.start();
 
     const polling = updatePoolsByPolling(this.allPools)
