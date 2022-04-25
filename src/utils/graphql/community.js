@@ -195,7 +195,6 @@ async function getSpecifyCommunityInfoFromOurService(community) {
         let pool = p.node
         pool.stakers = pool.stakers.edges.map(s => s.node)
         pool.voters = pool.voters.edges.map(v => v.node)
-        pool.asset = pool.asset.substring(0, 2) !== "0x" ? '0x' + pool.asset : pool.asset
         return pool
     })
     data.operationHistory = history
