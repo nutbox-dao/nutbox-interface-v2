@@ -37,7 +37,7 @@
           </b-popover>
         </div>
       </div>
-      <span class="chain-type mt-2">{{ poolType }}</span>
+      <!-- <span class="chain-type mt-2">{{ poolType }}</span> -->
     </div>
   </div>
 </template>
@@ -65,6 +65,12 @@ export default {
     ...mapGetters('community', ['getCommunityInfoById']),
     ...mapState('currentCommunity', ['communityId', 'cToken']),
     ...mapState('web3', ['tokenIcons']),
+    ...mapState({
+      polkadotFund: state => state.polkadot.clProjectFundInfos,
+      kusamaFund: state => state.kusama.clProjectFundInfos,
+      polkadotLoading: state => state.polkadot.loadingFunds,
+      kusamaLoading: state => state.kusama.loadingFunds
+    }),
     communityInfo() {
       if (!this.communityId || !this.getCommunityInfoById(this.communityId)) return {};
       return this.getCommunityInfoById(this.communityId)
@@ -80,7 +86,26 @@ export default {
       return getPoolType(this.card.poolFactory, this.card.chainId)
     },
     poolType() {
-      if (this.type === 'erc20staking') return 'ERC20'
+      if (this.type === 'erc20staking') {return 'ERC20'}
+      else if (this.type === 'crowdloan') {
+        if (this.card.chainId === 0) {
+          if (this.polkadotLoading) {
+            return 'Loading'
+          }
+          const fund = this.polkadotFund.filter(f => f.pId === parseInt(this.card.paraId))
+          if (fund.length > 0) {
+            return fund[0].status
+          }
+        }else {
+          if (this.kusamaLoading) {
+            return 'Loading'
+          }
+          const fund = this.kusamaFund.filter(f => f.pId === parseInt(this.card.paraId))
+          if (fund.length > 0) {
+            return fund[0].status
+          }
+        }
+      }
       return this.type.toUpperCase()
     },
   },

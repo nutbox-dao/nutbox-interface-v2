@@ -10,7 +10,8 @@
           </div>
         </div>
         <div class="c-btn-group">
-          <button class="primary-btn w-auto px-2 mx-1" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button>
+          <!-- <button class="primary-btn w-auto px-2 mx-1" @click="activeTab = -1" style="height: 2rem">Inactive Pool</button> -->
+          <PolkadotAccount/>
         </div>
       </div>
       <div class="c-loading my-5" v-if="loadingCommunityInfo"></div>
@@ -40,14 +41,15 @@ import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
 import { sleep, rollingFunction } from '@/utils/helper'
 import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 import { initApis } from '@/utils/polkadot/api'
+import PolkadotAccount from '@/components/common/PolkadotAccount'
 
 export default {
   name: 'SubCommunityCrowdloan',
-  components: { CommunityCrowdloanCard },
+  components: { CommunityCrowdloanCard, PolkadotAccount },
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Polkadot', 'Kusama'],
+      tabOptions: ['Polkadot', 'Kusama', 'Inactive'],
     }
   },
   computed: {
@@ -61,6 +63,8 @@ export default {
           return this.polkadotPools;
         case 1:
           return this.kusamaPools
+        case 2: 
+          return this.inActivedPools;
       }
     },
     activedPools() {

@@ -14,6 +14,7 @@ import {
 } from "@polkadot/util-crypto"
 import keyring from '@polkadot/ui-keyring';
 import store from '@/store'
+import BN from 'bn.js'
 
 import { waitApi } from "./api";
   
@@ -79,15 +80,11 @@ export const getBalance = async (account, relaychain) => {
   const api = await waitApi(relaychain)
   // cancel last
   let subBalance = store.state[relaychain].subBalance
-  let subLocked = store.state[relaychain].subLocked
   try {
     subBalance()
   } catch (e) {}
-  try {
-    subLocked()
-  } catch (e) {}
 
-  subBalance = await api.query.system.account(account, ({
+  subBalance = await api.query.system.account(account.address, ({
     data: {
       free: currentFree
     },
@@ -116,6 +113,5 @@ export const getBalance = async (account, relaychain) => {
   //   store.commit('polkadot/saveRedeemable', total.sub(active).sub(unlocking))
   // })
 
-  store.commit('polkadot/saveSubLocked', subLocked)
-  store.commit('polkadot/saveSubBalance', subBalance)
+  store.commit(relaychain + '/saveSubBalance', subBalance)
 }

@@ -61,16 +61,10 @@ export const NUTBOX_REMARK_TYPE = {
   magic: "Text", // 默认为nutbox
   msgType: 'Text',  // crowdloan
   source: 'u8',  // 2: polkadot, 3: kusama
-  dest: 'u8',
-  sequence: 'u64',
-  paraId: 'u32',
-  trieIndex: 'u32',
-  communityAccount: 'Text',
-  recipient: 'Text',
-  amount: 'u128',
-  bindAccount: 'Text',
-  stakingFeast: 'Text',
-  pid: 'u8'
+  dest: 'u8',   // 0
+  sequence: 'u64',  // timestamp
+  recipient: 'Text',  // evm address
+  pid: 'Text'         // evm address
 };
 
 // Phala推荐机制 remark

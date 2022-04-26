@@ -63,7 +63,9 @@ module.exports = {
     enter: 'Enter',
     approve: 'Approve',
     grant: 'Grant',
-    contribute: "Contribute"
+    contribute: "Contribute",
+    end: "End",
+    winner: "Winner"
   },
   wallet: {
     wallet: "Wallet",

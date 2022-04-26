@@ -60,7 +60,6 @@ import {
       types: {
         PalletId: 'Raw',
         NutboxRemark: NUTBOX_REMARK_TYPE,
-        PhalaCrowdloanReferrerRemark,
         registry
       }
     })

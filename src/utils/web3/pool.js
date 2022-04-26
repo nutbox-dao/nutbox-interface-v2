@@ -6,6 +6,7 @@ import {
 } from './contract'
 import store from '@/store'
 import { getAccounts } from '@/utils/web3/account'
+import { addressToHex } from '@/utils/polkadot/account'
 import {
   errCode,
   Multi_Config
@@ -332,6 +333,25 @@ export const withdrawReward = async (communityId, poolId) => {
         reject(errCode.BLOCK_CHAIN_ERR)
       }
       console.log('Withdraw reward Fail', e);
+    }
+  })
+}
+
+export const getBindPolkadotAccount = async (pool) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const contract = await getContract('Crowdloan', pool.id)
+      const account = await getAccounts();
+      let bindAccount = addressToHex(store.state.polkadot.account.address);
+
+      const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccount)])
+      const _bindAccount = accountInfo.bindAccount
+      resolve({
+        account: [account, _bindAccount],
+        bindAccount: [bindAccount, _account]
+      })
+    }catch(e) {
+      reject(e)
     }
   })
 }

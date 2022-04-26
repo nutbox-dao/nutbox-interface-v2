@@ -16,10 +16,11 @@
           <!-- contribute -->
           <button
             class="primary-btn hover"
-            @click="decrease"
-            :disabled="isCheckingAccount"
+            @click="contribute"
+            :disabled="isCheckingAccount || !enableContribute"
           >
-            {{ $t('operation.contribute') }}
+            <b-spinner small v-show="isCheckingAccount" type="grow"></b-spinner>
+            {{ operationText }}
           </button>
         </div>
       </div>
@@ -42,20 +43,106 @@
         </template>
       </template>
     </template>
-    <!-- main chain stake -->
+
+    <!-- contribute -->
     <b-modal
-      v-model="updateStaking"
+      v-model="showContribute"
       modal-class="custom-modal sub-modal"
       centered
       hide-header
       hide-footer
       no-close-on-backdrop
     >
-      <StakingHomeChainAssetModal
+      <CrowdloanContributeModal
         :operate="operate"
         :card="card"
         @hideStakeMask="updateStaking = false"
       />
+    </b-modal>
+
+    <!-- wrong polkadot account -->
+    <b-modal
+      v-model="showWrongPolkadot"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form position-relative">
+        <i class="modal-close-icon-right" @click="showWrongPolkadot = false"></i>
+        <div class="modal-title">
+          Please change {{ relaychain }} Account
+        </div>
+        <div class="text-center font20 line-height24 mt-3">
+          Your {{ relaychain }} account haven't binding with current
+          {{ chainName }} address, please change
+          {{ relaychain }} account in your wallet first.
+        </div>
+        <div class="mt-3 mb-1 text-center font20 line-height24">
+          Your binding {{ relaychain }} account is:
+        </div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+          <input class="text-center" disabled type="text" :value="bindPolkadot" />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button
+          class="dark-btn primary-btn-outline mx-3"
+          @click="showWrongCosmos = false"
+        >
+          Cancel
+        </button>
+        <button
+          class="primary-btn mx-3"
+          @click="(showWrongCosmos = false)"
+        >
+          OK
+        </button>
+      </div>
+    </b-modal>
+
+    <!-- wrong main chain account -->
+    <b-modal
+      v-model="showWrongAccount"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form text-center position-relative">
+        <i class="modal-close-icon-right" @click="showWrongAccount = false"></i>
+        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="font20 line-height24 mt-3">
+          Your {{ chainName }} address haven't binding with current
+          {{ relaychain }} account, please change
+          {{ chainName }} address in your wallet first.
+        </div>
+        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+          <input
+            class="text-center"
+            disabled
+            type="text"
+            :value="bindAddress"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
+        <button
+          class="primary-btn primary-btn-outline mx-3"
+          @click="showWrongAccount = false"
+        >
+          Cancel
+        </button>
+        <button
+          class="primary-btn mx-3"
+          @click="(showWrongAccount = false)"
+        >
+          OK
+        </button>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -64,13 +151,15 @@
 import { mapState, mapGetters } from "vuex";
 import { CHAIN_NAME, NutAddress } from "@/config";
 import {
-  approvePool
+  approvePool,
+  getBindPolkadotAccount
 } from "@/utils/web3/pool";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { handleApiErrCode } from "@/utils/helper";
-import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
+import CrowdloanContributeModal from "@/components/common/CrowdloanContributeModal";
 import { approveUseERC20 } from '@/utils/web3/community'
 import { stanfiAddress } from "@/utils/polkadot/account";
+import { ethers } from 'ethers'
 
 export default {
   name: "PoolOperationCrowdloan",
@@ -81,16 +170,21 @@ export default {
   },
   components: {
     ConnectMetaMask,
-    StakingHomeChainAssetModal
+    CrowdloanContributeModal
   },
   data() {
     return {
       isApproving: false,
       isApprovingCommunity: false,
-      updateStaking: false,
+      showContribute: false,
       operate: "add",
       isCheckingAccount: false,
-      chainName: CHAIN_NAME
+      chainName: CHAIN_NAME,
+      operationText: 'Loading',
+      bindPolkadot: '',
+      bindAddress: '',
+      showWrongPolkadot: false,
+      showWrongAccount: false
     };
   },
   computed: {
@@ -124,6 +218,37 @@ export default {
       }
       return false
     },
+    fund() {
+      if (parseInt(this.card.chainId) === 0){
+        const funds = this.polkadotFund.filter(f => f.pId == parseInt(this.card.paraId))
+        if (funds.length > 0){
+          return funds[0]
+        }
+        return {}
+      }else if (parseInt(this.card.chainId) === 2) {
+        const funds = this.kusamaFund.filter(f => f.pId == parseInt(this.card.paraId))
+        if (funds.length > 0) {
+          return funds[0]
+        }
+        return {}
+      }
+    },
+    enableContribute() {
+      if (parseInt(this.fund.fundIndex || 0) !== parseInt(this.card.fundIndex)) {
+        this.operationText = this.$t('operation.end')
+        return false
+      }
+      if (this.fund.statusIndex === 0) {
+        this.operationText = this.$t('operation.contribute')
+        return true
+      }else if (this.fund.statusIndex === 2){
+        this.operationText = this.$t('operation.winner')
+        return false
+      } else {
+        this.operationText = this.$t('operation.end')
+        return false
+      }
+    },
     type() {
       return 'crowdloan';
     },
@@ -132,7 +257,7 @@ export default {
     },
     formatPolkadotAccount() {
       if (this.polkadotAccount) {
-        return stanfiAddress(this.polkadotFund, this.card.chainId)
+        return stanfiAddress(this.polkadotAccount, this.card.chainId)
       }
     },
     staked() {
@@ -144,6 +269,36 @@ export default {
     },
   },
   methods: {
+    async contribute() {
+      try{
+        this.isCheckingAccount = true
+        const bindInfo = await getBindPolkadotAccount(this.card);
+        console.log(325, bindInfo);
+        if (bindInfo.account[1] === bindInfo.bindAccount[0]) return true;
+        if (bindInfo.account[1] === ethers.constants.HashZero) {
+          if (bindInfo.bindAccount[1] === ethers.constants.AddressZero) {
+            return true;
+          }
+          if (bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()) {
+            this.bindAddress = bindInfo.bindAccount[1];
+            this.showWrongAccount = true;
+            return;
+          }
+        }
+        if (bindInfo.account[1] !== bindInfo.bindAccount[0]) {
+          this.bindPolkadot = bindInfo.account[1];
+          this.showWrongPolkadot = true;
+          return
+        }
+        return true;
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isCheckingAccount = false
+      }
+    },
     async increase() {
       this.operate = "add";
       this.updateStaking = true;

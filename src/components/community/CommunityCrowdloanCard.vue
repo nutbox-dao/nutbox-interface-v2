@@ -19,7 +19,7 @@
         </button>
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
-        <span class="text-grey-47 font-bold mr-2 font14">{{ stakeToken.symbol }}</span>
+        <span class="text-grey-47 font-bold mr-2 font14">{{ type === 'erc20staking' ? stakeToken.symbol : crowdloanSymbol }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">STAKED</span>
           <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
@@ -135,6 +135,10 @@ export default {
         if (this.type !== 'erc20staking' || !this.allTokens) return {}
         const token = this.tokenByKey(this.card.asset)
         return token
+    },
+    crowdloanSymbol() {
+      if (parseInt(this.card.chainId) === 0) return 'DOT';
+      else return 'KSM'
     },
     pendingReward () {
       if (!this.userReward) return 0;
