@@ -19,11 +19,11 @@
         </button>
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
-        <span class="text-grey-47 font-bold mr-2 font14">{{ type === 'erc20staking' ? stakeToken.symbol : crowdloanSymbol }}</span>
+        <span class="text-grey-47 font-bold mr-2 font14">{{ crowdloanSymbol }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">STAKED</span>
-          <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
-          <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
+          <!-- <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
+          <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i> -->
         </div>
       </div>
 
@@ -126,16 +126,8 @@ export default {
       polkadotLoading: state => state.polkadot.loadingFunds,
       kusamaLoading: state => state.kusama.loadingFunds
     }),
-    type() {
-      return getPoolType(this.card.poolFactory, this.card.chainId)
-    },
     ...mapState('currentCommunity', ['cToken']),
     ...mapState(['prices']),
-    stakeToken() {
-        if (this.type !== 'erc20staking' || !this.allTokens) return {}
-        const token = this.tokenByKey(this.card.asset)
-        return token
-    },
     crowdloanSymbol() {
       if (parseInt(this.card.chainId) === 0) return 'DOT';
       else return 'KSM'
@@ -152,13 +144,19 @@ export default {
       const total =
         this.totalStaked[this.card.id]
       if (!total) return 0
-      return total.toString() / (10 ** (this.stakeToken ? this.stakeToken.decimal : 18))
+      if (this.card.chainId === 0) {
+        return total.toString() / 1e10
+      } else{
+        return total.toString() / 1e12
+      }
     },
     stakePrice(){
       if(!this.prices) return 0
-      let price
-      price = this.stakeToken.price
-      return price ? parseFloat(price) : 0
+      if (this.card.chainId === 0) {
+        return this.prices['dot']
+      }else {
+        return this.prices['ksm']
+      }
     },
     apr() {
       if(!this.prices || !this.cToken || !this.tvl) return '--';

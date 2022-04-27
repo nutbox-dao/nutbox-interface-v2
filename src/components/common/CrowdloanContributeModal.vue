@@ -3,15 +3,16 @@
     <i class="modal-close-icon-right" @click="hide"></i>
     <div class="modal-title font20 font-bold" >
       {{
-        operate === "add"
-          ? $t("stake.stake")
-          : $t("stake.unStake")
+        $t('operation.contribute')
       }}
+    </div>
+    <div style="color: red;" class="font20 line-height28 font-bold text-center mt-2">
+      You're using {{ type.toUpperCase() }} account: {{ account }} to contribute to {{ fund.text }}({{fund.firstPeriod.toNumber() + '-' + fund.lastPeriod.toNumber()}})
     </div>
     <div class="custom-form my-3">
       <div class="input-group-box mb-4">
         <div class="label text-right font20">
-          <span class="text-right">{{ $t('wallet.balance') }}: {{ (operate === 'add' ? formBalance : formStaked) | amountForm }}</span>
+          <span class="text-right">{{ $t('wallet.balance') }}: {{ formBalance | amountForm }}</span>
         </div>
         <div class="c-input-group c-input-group-border c-input-group-bg-dark d-flex">
           <input style="flex: 1"
@@ -44,17 +45,16 @@
 import { mapState, mapGetters } from "vuex";
 import { deposit, withdraw } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
-import { getERC20Balance } from '@/utils/web3/asset'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { getAllCommunities } from '@/utils/web3/community'
+import { stanfiAddress } from "@/utils/polkadot/account";
+import { contribute } from '@/utils/polkadot/crowdloan'
 
 export default {
   data () {
     return {
       stakingValue: '',
       loading: false,
-      balance: 0,
-      stakedDecimal: 18,
       ctokenDecimal: 18
     }
   },
@@ -68,14 +68,27 @@ export default {
       if (!this.userStaked) return 0;
       return this.userStaked[this.card.id] ?? 0
     },
-    formBalance(){
-      const balance = this.balance;
-      return parseFloat(balance.toString() / (10 ** this.stakedDecimal));
+    type() {
+      if (parseInt(this.card.chainId) === 0) {
+        return 'polkadot'
+      }else {
+        return 'kusama'
+      }
     },
-    formStaked(){
-      const staked = this.staked;
-      return parseFloat(staked.toString() / (10 ** this.stakedDecimal))
-    }, 
+    account() {
+      let acc = stanfiAddress(this.$store.state.polkadot.account.address, this.card.chainId)
+      acc = acc.substring(0, 8) + '...' + acc.substring(acc.length - 8, acc.length)
+      return acc
+    },
+    formBalance(){
+      let balance = 0
+      if (this.type === 'polkadot') {
+        balance = this.$store.state.polkadot.balance.toString() / 1e10
+      }else {
+        balance = this.$store.state.kusama.balance.toString() / 1e12
+      }
+      return parseFloat(balance)
+    },
     fee() {
       if (this.fees){
         return this.fees['USER'].toFixed(2)
@@ -90,11 +103,10 @@ export default {
     }
   },
   props: {
-    operate: {
-      type: String,
-      default: "add",
-    },
     card: {
+      type: Object
+    },
+    fund: {
       type: Object
     }
   },
@@ -105,7 +117,7 @@ export default {
     },
     fillMax(){
         this.stakingValue =
-        this.operate === "add" ? this.formBalance : this.formStaked;
+        this.formBalance
     },
     checkInputValue() {
       const reg = /^\d+(\.\d+)?$/;
@@ -123,26 +135,18 @@ export default {
       if (!this.checkInputValue()) return;
       this.loading = true;
       try{
-        let message;
-        if (this.operate === 'add'){
-          await deposit(this.card.id, this.stakingValue, this.stakedDecimal)
-          message = this.$t('transaction.depositOk')
-        }else{
-          await withdraw(this.card.id, this.stakingValue, this.stakedDecimal)
-          message = this.$t('transaction.withdrawOk')
-        }
-        this.$bvToast.toast(message, {
-          title: this.$t('tip.success'),
-          variant: 'success'
+        await contribute(this.type, this.card.paraId, this.stakingValue, this.card.id, (title, info) => {
+          this.$bvToast.toast(title, info)
+        }, () => {
+          setTimeout(() => {
+            if (!this.userGraphInfo.inCommunities || this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
+              // first join
+              getAllCommunities(true)
+              getMyJoinedCommunity()
+            }
+            this.$emit("hideStakeMask");
+          }, 3000);
         })
-        setTimeout(() => {
-          if (!this.userGraphInfo.inCommunities || this.userGraphInfo.inCommunities.map(c => c.id).indexOf(this.communityId.toLowerCase()) === -1){
-            // first join
-            getAllCommunities(true)
-            getMyJoinedCommunity()
-          }
-          this.$emit("hideStakeMask");
-        }, 3000);
       }catch(e){
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -155,8 +159,10 @@ export default {
   async mounted () {
     // get user's balance
     this.ctokenDecimal = this.tokenDecimals(this.card.community.cToken)
-    this.stakedDecimal = this.tokenDecimals(this.card.asset)
-    this.balance = await getERC20Balance(this.card.asset)
+    // this.stakedDecimal = this.tokenDecimals(this.card.asset)
+    // this.balance = await getERC20Balance(this.card.asset)
+
+    console.log(325, this.fund);
   },
 }
 </script>

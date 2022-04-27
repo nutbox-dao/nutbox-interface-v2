@@ -68,7 +68,6 @@ export const loadAccounts = async () => {
     store.commit('polkadot/saveAllAccounts', allAccounts)
     let account = store.state.polkadot.account !== 'undefined' && store.state.polkadot.account ? store.state.polkadot.account : allAccounts[0]
     store.commit('polkadot/saveAccount', account)
-    console.log(35, account,allAccounts);
     getBalance(account, 'polkadot')
     getBalance(account, 'kusama')
   } catch (e) {

@@ -59,14 +59,18 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item :to="'/sub-community/home' + (communityId ? communityId.substring(0,10): '')">
+                  <b-nav-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/staking">
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/staking">
                     <i class="menu-icon stake-icon" />
-                    <span>{{ $t("router.staking") }}</span>
-                  </b-dropdown-item>
+                    <span>{{ $t("router.farming") }}</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/crowdloan">
+                    <i class="menu-icon stake-icon" />
+                    <span>{{ $t("router.crowdloan") }}</span>
+                  </b-nav-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
                     <span>{{ $t("router.governance") }}</span>

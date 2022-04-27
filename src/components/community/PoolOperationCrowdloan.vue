@@ -19,7 +19,7 @@
             @click="contribute"
             :disabled="isCheckingAccount || !enableContribute"
           >
-            <b-spinner small v-show="isCheckingAccount" type="grow"></b-spinner>
+            <b-spinner small v-show="isCheckingAccount || loadingFund" type="grow"></b-spinner>
             {{ operationText }}
           </button>
         </div>
@@ -54,9 +54,9 @@
       no-close-on-backdrop
     >
       <CrowdloanContributeModal
-        :operate="operate"
+        :fund="fund"
         :card="card"
-        @hideStakeMask="updateStaking = false"
+        @hideStakeMask="showContribute = false"
       />
     </b-modal>
 
@@ -89,13 +89,13 @@
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
         <button
           class="dark-btn primary-btn-outline mx-3"
-          @click="showWrongCosmos = false"
+          @click="showWrongPolkadot = false"
         >
           Cancel
         </button>
         <button
           class="primary-btn mx-3"
-          @click="(showWrongCosmos = false)"
+          @click="(showWrongPolkadot = false)"
         >
           OK
         </button>
@@ -177,7 +177,6 @@ export default {
       isApproving: false,
       isApprovingCommunity: false,
       showContribute: false,
-      operate: "add",
       isCheckingAccount: false,
       chainName: CHAIN_NAME,
       operationText: 'Loading',
@@ -211,6 +210,13 @@ export default {
         return this.fees['USER'].toFixed(2)
       }
       return 0
+    },
+    loadingFund() {
+      if (this.relaychain === 'polkadot') {
+        return this.polkadotLoading
+      }else {
+        return this.kusamaLoading
+      }
     },
     takeFee() {
       if (this.fees) {
@@ -264,16 +270,23 @@ export default {
       if (!this.userStaked) return 0;
       const userStakingBn = this.userStaked[this.card.id];
       if (!userStakingBn) return 0;
-      return userStakingBn.toString() / (10 ** this.tokenDecimals(this.card.asset));
-      return 0;
+      if (this.card.chainId === 0) {
+        return userStakingBn.toString() / 1e10
+      }else {
+        return userStakingBn.toString() / 1e12
+      }
     },
   },
   methods: {
     async contribute() {
-      try{
+      if (await this.checkAccount()) {
+        this.showContribute = true
+      }
+    },
+    async checkAccount() {
+       try{
         this.isCheckingAccount = true
         const bindInfo = await getBindPolkadotAccount(this.card);
-        console.log(325, bindInfo);
         if (bindInfo.account[1] === bindInfo.bindAccount[0]) return true;
         if (bindInfo.account[1] === ethers.constants.HashZero) {
           if (bindInfo.bindAccount[1] === ethers.constants.AddressZero) {
@@ -286,7 +299,7 @@ export default {
           }
         }
         if (bindInfo.account[1] !== bindInfo.bindAccount[0]) {
-          this.bindPolkadot = bindInfo.account[1];
+          this.bindPolkadot = stanfiAddress(bindInfo.account[1], this.card.chainId);
           this.showWrongPolkadot = true;
           return
         }
@@ -297,31 +310,6 @@ export default {
         });
       } finally {
         this.isCheckingAccount = false
-      }
-    },
-    async increase() {
-      this.operate = "add";
-      this.updateStaking = true;
-    },
-    async decrease() {
-      this.operate = "minus";
-      this.updateStaking = true;
-    },
-    // Approve pool
-    async approve() {
-      try {
-        this.isApproving = true;
-        const hash = await approvePool(this.card);
-        this.$bvToast.toast(this.$t("tip.approveSuccess"), {
-          title: this.$t("tip.success"),
-          variant: "success",
-        });
-      } catch (e) {
-        handleApiErrCode(e, (tip, param) => {
-          this.$bvToast.toast(tip, param);
-        });
-      } finally {
-        this.isApproving = false;
       }
     },
     // approve community

@@ -117,16 +117,29 @@ export default {
           delegatee = ethers.utils.parseBytes32String(this.operation.asset)
         }
       }catch(e){
-        delegatee = ethers.utils.parseBytes32String(this.operation.asset)
+        // delegatee = ethers.utils.parseBytes32String(this.operation.asset)
       }
     }
-    const amount = (this.operation.amount?.toString() / (10 ** decimals)).toFixed(2)
+    let amount = (this.operation.amount?.toString() / (10 ** decimals)).toFixed(2)
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":
-        this.opType = "Deposit"
-        this.isAdmin =false;
-        this.description = (this.showName ? ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
+        if (this.operation.poolFactory.toLowerCase() === contractAddress.CrowdloanFactory.toLowerCase()){
+          this.opType = 'Contribute'
+          this.isAdmin = false
+          if (this.operation.chainId === 0) {
+            symbol = 'DOT'
+            amount = this.operation.amount?.toString() / 1e10
+          }else {
+            symbol = 'KSM'
+            amount = this.operation.amount?.toString() / 1e12
+          }
+          this.description = (this.showName ? ' contribute' : 'Contribute') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
+        }else {
+          this.opType = "Deposit"
+          this.isAdmin =false;
+          this.description = (this.showName ? ' deposit' : 'Deposit') + ` ${amount} ${symbol} to ${this.operation.pool.name}`
+        }
         break;
       case "WITHDRAW":
         this.opType = "Withdraw"

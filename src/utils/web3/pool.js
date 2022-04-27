@@ -343,6 +343,7 @@ export const getBindPolkadotAccount = async (pool) => {
       const contract = await getContract('Crowdloan', pool.id)
       const account = await getAccounts();
       let bindAccount = addressToHex(store.state.polkadot.account.address);
+      console.log(63, bindAccount);
 
       const [accountInfo, _account] = await Promise.all([contract.getUserDepositInfo(account), contract.accountBindMap(bindAccount)])
       const _bindAccount = accountInfo.bindAccount

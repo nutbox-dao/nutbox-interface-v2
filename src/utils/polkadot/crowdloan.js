@@ -201,10 +201,9 @@ export const withdraw = async (relaychain, paraId, toast, callback) => {
 }
 
 
-export const contribute = async (relaychain, paraId, amount, communityId, trieIndex, stakingFeast, pid, toast, callback) => {
+export const contribute = async (relaychain, paraId, amount, pid, toast, callback) => {
   const api = await waitApi(relaychain)
   const from = store.state.polkadot.account && store.state.polkadot.account.address
-  communityId = stanfiAddress(communityId)
   if (!from) {
     return false
   }
@@ -214,62 +213,23 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
   const nonce = (await api.query.system.account(from)).nonce.toNumber()
   const contributeTx = api.tx.crowdloan.contribute(paraId, amount, null)
   const recipient = store.state.web3.account;
-  if (communityId) {
-    let trans = []
-    // api, 
-    // paraId, 
-    // trieIndex, 
-    // communityAccount, 
-    // recipient,
-    // amount,
-    // bindAccount,
-    // stakingFeast, 
-    // pid
-    const remark = createCrowdloanRemark(api, 
-      relaychain === 'polkadot' ? 2 : 3,
-      paraId, 
-      trieIndex, 
-      stanfiAddress(communityId, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
-      recipient,
-      amount,
-      stanfiAddress(from, POLKADTO_ADDRESS_FORMAT_CODE[relaychain]),
-      stakingFeast,
-      pid)
-    const remarkTx = api.tx.system.remarkWithEvent(remark)
-    trans.push(contributeTx)
-    trans.push(remarkTx)
+  let trans = []
+  const remark = createCrowdloanRemark(api, 
+    recipient,
+    pid)
+  const remarkTx = api.tx.system.remarkWithEvent(remark)
+  trans.push(contributeTx)
+  trans.push(remarkTx)
 
-    // if (parseInt(paraId) === 2004){
-    //   // 添加phala的remark
-    //   const referrer = api.createType('AccountId', communityId)
-    //   const pid = api.createType('ParaId', 2004)
-    //   const khalaTx = api.tx.system.remarkWithEvent(createKhalaReferrerRemark(api, pid, referrer))
-    //   trans.push(khalaTx)
-    // }
-    const unsub = await api.tx.utility
-      .batch(trans).signAndSend(from, {
-        nonce
-      }, ({
-        status,
-        dispatchError
-      }) => {
-        try {
-          handelBlockState(api, status, dispatchError, toast, callback, unsub)
-        } catch (e) {
-          toast(e.message, {
-            title: $t('tip.error'),
-            variant: 'danger'
-          })
-        }
-      }).catch(err => {
-        toast(err.message, {
-          title: $t('tip.error'),
-          variant: 'danger'
-        })
-        return false
-      })
-  }else{ // 没有社区id， 就是官方直接投票，不加remark
-    const unsub = await contributeTx.signAndSend(from, {
+  // if (parseInt(paraId) === 2004){
+  //   // 添加phala的remark
+  //   const referrer = api.createType('AccountId', communityId)
+  //   const pid = api.createType('ParaId', 2004)
+  //   const khalaTx = api.tx.system.remarkWithEvent(createKhalaReferrerRemark(api, pid, referrer))
+  //   trans.push(khalaTx)
+  // }
+  const unsub = await api.tx.utility
+    .batch(trans).signAndSend(from, {
       nonce
     }, ({
       status,
@@ -290,7 +250,6 @@ export const contribute = async (relaychain, paraId, amount, communityId, trieIn
       })
       return false
     })
-  }
 }
 
 
