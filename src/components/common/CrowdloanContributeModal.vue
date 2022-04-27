@@ -161,8 +161,6 @@ export default {
     this.ctokenDecimal = this.tokenDecimals(this.card.community.cToken)
     // this.stakedDecimal = this.tokenDecimals(this.card.asset)
     // this.balance = await getERC20Balance(this.card.asset)
-
-    console.log(325, this.fund);
   },
 }
 </script>

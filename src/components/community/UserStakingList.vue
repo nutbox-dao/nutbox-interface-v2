@@ -27,7 +27,7 @@
           <div class="font-bold">{{ apr }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
-          <div class="mb-2">Total {{ type === 'erc20staking' ? 'Staked' : 'Delegated' }}</div>
+          <div class="mb-2">Total {{ type === 'erc20staking' ? 'Staked' : 'Contributed' }}</div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
@@ -39,7 +39,7 @@
         class="d-flex align-items-center action-box"
         style="grid-area: action"
       >
-       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'ERC20' : type.toUpperCase() }}</span>
+       <span class="text-primary-0 font12 line-height16 font-bold type">{{ type === 'erc20staking' ? 'ERC20' : relaychain.toUpperCase() }}</span>
         <div
           v-b-toggle="'accordion' + pool.id"
           class="toggle-btn font14" style="color: #408fff"
@@ -99,11 +99,11 @@
             <template v-if="approved">
               <div>
                 <div class="font-bold text-grey-7">
-                  {{stakeToken.symbol + " Staked"}}
+                  {{ symbol + " Staked" }}
                 </div>
                 <div class="font12 text-grey-7">{{ staked | amountForm }}</div>
               </div>
-              <div class="content-btn-group d-flex">
+              <div class="content-btn-group d-flex" v-if="type === 'erc20staking'">
                 <button
                   class="symbol-btn symbol-btn-40 symbol-btn-bg hover mr-2"
                   @click="decrease"
@@ -119,6 +119,16 @@
                 >
                   <i v-if="isCheckingAccount" class="loading-icon-gray"></i>
                   <i v-else class="add-icon add-icon-white"></i>
+                </button>
+              </div>
+              <div v-else>
+                <button
+                  class="primary-btn hover"
+                  @click="contribute"
+                  :disabled="isCheckingAccount || !enableContribute"
+                >
+                  <b-spinner small v-show="isCheckingAccount || loadingFund" type="grow"></b-spinner>
+                  {{ operationText }}
                 </button>
               </div>
             </template>
@@ -161,12 +171,28 @@
         @hideStakeMask="updateStaking = false"
       />
     </b-modal>
+
+        <!-- contribute -->
+    <b-modal
+      v-model="showContribute"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <CrowdloanContributeModal
+        :fund="fund"
+        :card="pool"
+        @hideStakeMask="showContribute = false"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { approvePool, withdrawReward } from "@/utils/web3/pool";
+import { approvePool, withdrawReward, getPoolType, getBindPolkadotAccount } from "@/utils/web3/pool";
 import { getCommunityRewardPerBlock } from '@/utils/web3/community'
 import { CHAIN_NAME } from "@/config";
 import { handleApiErrCode } from "@/utils/helper";
@@ -174,6 +200,10 @@ import showToastMixin from "@/mixins/copyToast";
 import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { BLOCK_SECOND } from '@/constant'
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
+import { getParaIcon } from "@/utils/polkadot/util"
+import CrowdloanContributeModal from '@/components/common/CrowdloanContributeModal'
+import { stanfiAddress } from "@/utils/polkadot/account";
+import { ethers } from 'ethers'
 
 export default {
   name: "",
@@ -188,6 +218,7 @@ export default {
   components: {
     ConnectMetaMask,
     StakingHomeChainAssetModal,
+    CrowdloanContributeModal
   },
   data() {
     return {
@@ -197,7 +228,13 @@ export default {
       updateStaking: false,
       rewardPerBlock: 0,
       isCheckingAccount: false,
-      chainName: CHAIN_NAME
+      chainName: CHAIN_NAME,
+      showContribute: false,
+      operationText: '',
+      bindPolkadot: '',
+      bindAddress: '',
+      showWrongPolkadot: false,
+      showWrongAccount: false
     };
   },
   mixins: [showToastMixin],
@@ -213,14 +250,72 @@ export default {
       "userReward",
       "loadingApprovements",
     ]),
+    ...mapState({
+      polkadotFund: state => state.polkadot.clProjectFundInfos,
+      kusamaFund: state => state.kusama.clProjectFundInfos,
+      polkadotLoading: state => state.polkadot.loadingFunds,
+      kusamaLoading: state => state.kusama.loadingFunds,
+      polkadotAccount: state => state.polkadot.account
+    }),
     poolStatus() {
       return this.pool.status === "OPENED" ? "active" : "";
     },
     type() {
-      return 'erc20staking';
+      return getPoolType(this.pool.poolFactory)
+    },
+    loadingFund() {
+      if (this.relaychain === 'polkadot') {
+        return this.polkadotLoading
+      }else {
+        return this.kusamaLoading
+      }
+    },
+    fund() {
+      if (parseInt(this.pool.chainId) === 0){
+        const funds = this.polkadotFund.filter(f => f.pId == parseInt(this.pool.paraId))
+        if (funds.length > 0){
+          return funds[0]
+        }
+        return {}
+      }else if (parseInt(this.pool.chainId) === 2) {
+        const funds = this.kusamaFund.filter(f => f.pId == parseInt(this.pool.paraId))
+        if (funds.length > 0) {
+          return funds[0]
+        }
+        return {}
+      }
     },
     stakeIcon() {
-      return this.stakeToken.icon
+      if (this.type === 'erc20staking') {
+        return this.stakeToken.icon
+      } else if (this.type === 'crowdloan') {
+        return getParaIcon(this.pool.paraId)
+      }
+    },
+    relaychain() {
+      if (this.type === 'crowdloan') {
+        if (this.pool.chainId === 0) {
+          return 'polkadot'
+        }else {
+          return 'kusama'
+        }
+      }
+    },
+    enableContribute() {
+      if (parseInt(this.fund.fundIndex || 0) !== parseInt(this.pool.fundIndex)) {
+        this.operationText = this.$t('operation.end')
+        return false
+      }
+      if (this.fund.statusIndex === 0) {
+        this.operationText = this.$t('operation.contribute')
+        return true
+      }else if (this.fund.statusIndex === 2){
+        this.operationText = this.$t('operation.winner')
+        return false
+      } else {
+        this.operationText = this.$t('operation.end')
+        return false
+      }
     },
     approved() {
       if (this.type !== 'erc20staking') return true;
@@ -236,11 +331,24 @@ export default {
       const token = this.tokenByKey(this.pool.asset)
       return token;
     },
+    symbol() {
+      if (this.stakeToken.symbol) return this.stakeToken.symbol
+      if (this.pool.chainId === 0) return 'DOT'
+      else return 'KSM'
+    },
     staked() {
       if (!this.userStaked) return 0;
       const stakedBn = this.userStaked[this.pool.id];
       if (!stakedBn) return 0;
-      return stakedBn.toString() / (10 ** this.tokenDecimals(this.pool.asset));
+      if (this.type === 'erc20staking') {
+        return stakedBn.toString() / (10 ** this.tokenDecimals(this.pool.asset));
+      } else {
+        if (this.pool.chainId === 0) {
+          return stakedBn.toString() / 1e10
+        }else {
+          return stakedBn.toString() / 1e12
+        }
+      }
     },
     pendingReward() {
       if (!this.userReward) return 0;
@@ -252,13 +360,28 @@ export default {
       if (!this.totalStaked) return 0;
       const total = this.totalStaked[this.pool.id];
       if (!total) return 0;
-      return total.toString() / (10 ** this.tokenDecimals(this.pool.asset));
-      return 0;
+      if (this.type === 'erc20staking') {
+        return total.toString() / (10 ** this.tokenDecimals(this.pool.asset));
+      } else {
+        if (this.pool.chainId === 0) {
+          return total.toString() / 1e10
+        }else {
+          return total.toString() / 1e12
+        }
+      }
     },
     stakePrice(){
       if(!this.prices) return 0
-      let price = this.stakeToken.price
-      return price ? price : 0
+      if (this.type == 'erc20staking') {
+        let price = this.stakeToken.price
+        return price ? price : 0
+      } else {
+        if (this.pool.chainId === 0) {
+          return this.prices['dot']
+        }else {
+          return this.prices['ksm']
+        }
+      }
     },
     apr() {
       if(!this.prices || !this.tvl) return '--';
@@ -305,6 +428,40 @@ export default {
     },
     gotoContract(address) {
       window.open("https://goerli.etherscan.io/address/" + address, "_blank");
+    },
+    async contribute() {
+      if (await this.checkAccount()) {
+        this.showContribute = true
+      }
+    },
+    async checkAccount() {
+       try{
+        this.isCheckingAccount = true
+        const bindInfo = await getBindPolkadotAccount(this.pool);
+        if (bindInfo.account[1] === bindInfo.bindAccount[0]) return true;
+        if (bindInfo.account[1] === ethers.constants.HashZero) {
+          if (bindInfo.bindAccount[1] === ethers.constants.AddressZero) {
+            return true;
+          }
+          if (bindInfo.bindAccount[1].toLowerCase() !== this.account.toLowerCase()) {
+            this.bindAddress = bindInfo.bindAccount[1];
+            this.showWrongAccount = true;
+            return;
+          }
+        }
+        if (bindInfo.account[1] !== bindInfo.bindAccount[0]) {
+          this.bindPolkadot = stanfiAddress(bindInfo.account[1], this.pool.chainId);
+          this.showWrongPolkadot = true;
+          return
+        }
+        return true;
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param);
+        });
+      } finally {
+        this.isCheckingAccount = false
+      }
     },
     async increase() {
       this.operate = "add";

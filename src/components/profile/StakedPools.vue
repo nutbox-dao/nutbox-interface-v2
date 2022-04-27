@@ -43,13 +43,14 @@ import { getPoolFactoryAddress, updatePoolsByPolling } from '@/utils/web3/pool'
 import UserStakingList from '@/components/community/UserStakingList'
 import { sleep } from '@/utils/helper'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
+import { initApis } from '../../utils/polkadot/api'
 
 export default {
   name: 'StakedPools',
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['All', 'Inactive'],
+      tabOptions: ['Farming', 'Crowdloan', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,
@@ -67,19 +68,35 @@ export default {
     ...mapState('user', ['userGraphInfo', 'loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
-        case 1:
+        case 2:
           return this.inActivedPools;
         case 0:
-          return this.activedPools;
+          return this.farmingPools;
+        case 1: 
+          return this.crowdloanPools
       }
     },
     activedPools() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools || this.userGraphInfo.inPools.length === 0) return [];
       return this.userGraphInfo.inPools.filter(p => p.status === 'OPENED')
     },
+    farmingPools() {
+      return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking').toLowerCase())
+    },
+    crowdloanPools() {
+      return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('crowdloan').toLowerCase())
+    },
     inActivedPools() {
       if (!this.userGraphInfo || !this.userGraphInfo.inPools || this.userGraphInfo.inPools.length === 0) return [];
       return this.userGraphInfo.inPools.filter(p => p.status === 'CLOSED')
+    }
+  },
+  watch: {
+    activeTab(newValue, oldValue) {
+      if (newValue > 0) {
+        initApis('polkadot')
+        initApis('kusama')
+      }
     }
   },
   async mounted () {
