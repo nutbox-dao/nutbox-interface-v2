@@ -14,6 +14,7 @@ import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance
 import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
 import SubGovernanceDetail from '@/views/sub-community/SubGovernanceDetail'
 import SubCommunityISO from '@/views/sub-community/SubCommunityISO'
+import SubCommunityNFTStaking from '@/views/sub-community/SubCommunityNFTStaking'
 import SubCommunityNutPower from '@/views/sub-community/SubCommunityNutPower'
 import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
@@ -86,6 +87,10 @@ const routes = [
       {
         path: 'staking',
         component: SubCommunityStaking
+      },
+      {
+        path: 'erc1155',
+        component: SubCommunityNFTStaking
       },
       {
         path: 'member',

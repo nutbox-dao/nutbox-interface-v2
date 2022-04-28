@@ -17,6 +17,7 @@
           <input style="flex: 1"
                  type="number"
                  v-model="stakingValue"
+                 :step="1"
                  placeholder="0"
           />
           <div class="c-append">
@@ -42,11 +43,11 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { deposit, withdraw } from '@/utils/web3/pool'
+import { depositErc1155, withdrawErc1155 } from '@/utils/web3/pool'
 import { handleApiErrCode } from '../../utils/helper';
-import { getERC20Balance } from '@/utils/web3/asset'
 import { getMyJoinedCommunity } from '@/utils/graphql/user'
 import { getAllCommunities } from '@/utils/web3/community'
+import { getBalance } from "@/utils/web3/erc1155";
 
 export default {
   data () {
@@ -108,7 +109,7 @@ export default {
         this.operate === "add" ? this.formBalance : this.formStaked;
     },
     checkInputValue() {
-      const reg = /^\d+(\.\d+)?$/;
+      const reg = /^\d+$/;
       const res =
         reg.test(this.stakingValue) && parseFloat(this.stakingValue) > 0;
       if (!res) {
@@ -124,11 +125,12 @@ export default {
       this.loading = true;
       try{
         let message;
+        this.stakingValue = parseInt(this.stakingValue)
         if (this.operate === 'add'){
-          await deposit(this.card.id, this.stakingValue)
+          await depositErc1155(this.card.id, this.stakingValue)
           message = this.$t('transaction.depositOk')
         }else{
-          await withdraw(this.card.id, this.stakingValue)
+          await withdrawErc1155(this.card.id, this.stakingValue)
           message = this.$t('transaction.withdrawOk')
         }
         this.$bvToast.toast(message, {
@@ -155,8 +157,8 @@ export default {
   async mounted () {
     // get user's balance
     this.ctokenDecimal = this.tokenDecimals(this.card.community.cToken)
-    this.stakedDecimal = this.tokenDecimals(this.card.asset)
-    this.balance = await getERC20Balance(this.card.asset)
+    this.stakedDecimal = 0
+    this.balance = await getBalance(this.card.asset)
   },
 }
 </script>

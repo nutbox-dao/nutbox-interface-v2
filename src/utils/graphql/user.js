@@ -215,7 +215,7 @@ async function getMyCommunityDataFromGraph() {
             }
             if (data && data.community) {
                 let community = data.community
-                if (cachePools && community.pools.length !== cachePools.length) {
+                if (cachePools && community.pools.length < cachePools.length) {
                     community.pools = cachePools;
                 }
                 store.commit('community/saveCommunityData', community)
@@ -291,7 +291,7 @@ async function getMyCommunityDataFromService() {
                 cachePools = null
             }
             if (data) {
-                if (cachePools && data.pools.length !== cachePools.length) {
+                if (cachePools && data.pools.length < cachePools.length) {
                     data.pools = cachePools
                 }
                 store.commit('community/saveCommunityData', data);

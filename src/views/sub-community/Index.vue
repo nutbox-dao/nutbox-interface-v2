@@ -17,6 +17,10 @@
                 <i class="menu-icon farming-icon" />
                 <span>Farming</span>
               </b-nav-item>
+              <b-nav-item to="/sub-community/erc1155">
+                <i class="menu-icon farming-icon" />
+                <span>NFT Stake</span>
+              </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
                 <span>NUT Power</span>
@@ -63,22 +67,26 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item :to="'/sub-community/home'">
+                  <b-nav-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
                     <span>Home</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/iso">
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/iso">
                     <i class="menu-icon iso-icon" />
                     <span>ISO</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/staking">
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/staking">
                     <i class="menu-icon farming-icon" />
                     <span>Farming</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/nut-power">
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/erc1155">
+                    <i class="menu-icon farming-icon" />
+                    <span>NFT Stake</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />
                     <span>NUT Power</span>
-                  </b-dropdown-item>
+                  </b-nav-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
                     <span>{{ $t("router.governance") }}</span>

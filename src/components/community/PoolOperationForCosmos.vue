@@ -171,7 +171,7 @@ import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } 
 import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
 import store from "@/store";
 export default {
-  name: "PoolOperation",
+  name: "PoolOperationForCosmos",
   props: {
     card: {
       type: Object,

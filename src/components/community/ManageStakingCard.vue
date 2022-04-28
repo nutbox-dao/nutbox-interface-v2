@@ -127,7 +127,7 @@ export default {
   name: 'ManageStakingCard',
   components: { StakingCardHeader },
   computed: {
-    ...mapState("web3", ["stakingFactoryId", "allTokens", "fees"]),
+    ...mapState("web3", ["stakingFactoryId", "allTokens", "fees", "allErc1155s"]),
     ...mapState("community", [
       "communityData",
       "loadingApproveCommunity",
@@ -277,7 +277,7 @@ export default {
         this.updating = true;
         if (
           this.pool.ratio === 10000 &&
-          this.communityData.pools.length === 1
+          this.communityData.pools.filter(p => p.status === 'OPENED').length === 1
         ) {
           // remove only one pool
           const res = await closePool({
@@ -351,6 +351,14 @@ export default {
       case getPoolFactory('cosmos').toLowerCase():
         this.icon = ASSET_LOGO_URL[this.type]
         this.vert = 1e6
+      case getPoolFactory('erc1155').toLowerCase():
+        try {
+          const contract = ethers.utils.getAddress(this.pool.asset.substring(0, 42))
+          const id = this.pool.asset.substring(42)
+          this.icon = this.allErc1155s.filter(e => e.address === contract && parseInt(id) === e.tokenid)[0].icon
+        }catch (e) {
+        }
+        this.vert = 1
     }
   },
 };
