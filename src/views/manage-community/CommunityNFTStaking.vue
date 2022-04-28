@@ -157,7 +157,6 @@ export default {
         name: pool[pool.length - 1].name,
         asset: this.stakeAsset
       }
-      console.log(235, form, pool);
       try {
         this.creating  = true
         const newPool = await addPool(form)
