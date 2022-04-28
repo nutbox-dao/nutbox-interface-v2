@@ -255,8 +255,8 @@ export function formatCountdown(end, currentBlockNum, blockInterval) {
  */
 export const uploadImage = async (img) => {
   return new Promise((resolve, reject) => {
-    // resolve('https://cdn.wherein.mobi/nutbox/v2/1636516942582');
-    // return;
+    resolve('https://cdn.wherein.mobi/nutbox/v2/1636516942582');
+    return;
     let param = new FormData();
     param.append("file", img);
     const config = {

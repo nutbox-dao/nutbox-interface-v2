@@ -194,7 +194,7 @@ export const getNPInfoByPolling = () => {
         // Np apr in gauge for user
         
         let userNutApr = YEAR_BLOCKS * rewardNutPerBlock * userRatio / 100 / (totalLockedNP * totalLockedNut / totalSupply)
-        store.commit('np/saveNpApr', userNutApr)
+        store.commit('np/saveNpApr', userNutApr > 0 ? userNutApr : 0)
     })
     polling.start();
     return polling;

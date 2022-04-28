@@ -170,6 +170,12 @@ export default {
           this.description =
             (this.showName ? " deposit" : "Deposit") +
             ` ${amount} ${symbol} to ${this.operation.pool.name}`;
+        }else if (this.operation.poolFactory.toLowerCase() ===
+          contractAddress.ERC1155StakingFactory.toLowerCase()
+        ) {
+          this.description =
+          (this.showName ? " deposit" : "Deposit") +
+          ` ${this.operation.amount?.toString()} ERC1155 to ${this.operation.pool.name}`;
         } else if (
           this.operation.poolFactory.toLowerCase() ==
           contractAddress.SPStakingFactory.toLowerCase()
@@ -221,7 +227,13 @@ export default {
           this.description =
             (this.showName ? " withdraw" : "Withdraw") +
             ` ${amount} ${symbol} from ${this.operation.pool.name}`;
-        } else if (
+        } else if (this.operation.poolFactory.toLowerCase() ===
+          contractAddress.ERC1155StakingFactory.toLowerCase()
+        ) {
+          this.description =
+          (this.showName ? " withdraw" : "Withdraw") +
+          ` ${this.operation.amount?.toString()} ERC1155 from ${this.operation.pool.name}`;
+        }else if (
           this.operation.poolFactory.toLowerCase() ==
           contractAddress.SPStakingFactory.toLowerCase()
         ) {

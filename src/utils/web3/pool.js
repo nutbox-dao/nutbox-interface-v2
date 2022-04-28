@@ -135,6 +135,7 @@ export const approvePoolERC1155 = async (pool) => {
 
     try {
       const tx = await contract.setApprovalForAll(pool.id, true);
+      await waitForTx(tx.hash)
       resolve(tx.hash);
     }catch(e) {
       if (e.code === 4001) {

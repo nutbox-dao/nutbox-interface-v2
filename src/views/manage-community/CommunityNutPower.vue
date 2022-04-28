@@ -5,7 +5,7 @@
         <div class="col-xl-7 d-flex flex-column justify-content-center">
           <div class="font24 line-height28 font-bold mb-2">NUT Power（NP）</div>
           <div class="font16 line-height24 font-bold mb-4">
-            NUT Power introduction...
+            Nutbox Voting Power(NUT Power for short) is the Governance Power of Nutbox DAO. The Nutbox governance reward of a user is charged by the user's governance activity.
           </div>
         </div>
         <div class="col-xl-5">
