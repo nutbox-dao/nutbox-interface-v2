@@ -39,8 +39,8 @@ export const getPoolFactory = (type) => {
     return contractAddress.SPStakingFactory
   } else if (type === 'cosmos' || type === 'atom' || type === 'osmo' || type === 'juno') {
     return contractAddress.CosmosStakingFactory
-  } else if (type === 'erc1155staking') {
-    return contractAddress.ERC1155StakingFacory
+  } else if (type === 'erc1155') {
+    return contractAddress.ERC1155StakingFactory
   }
 }
 
@@ -51,8 +51,8 @@ export const getPoolTypeName = (type) => {
     return 'SPStakingFactory'
   } else if (type === 'atom' || type === 'osmo' || type === 'cosmos' || type === 'juno') {
     return 'CosmosStakingFactory'
-  } else if (type === 'erc1155staking') {
-    return 'ERC1155StakingFacory'
+  } else if (type === 'erc1155') {
+    return 'ERC1155StakingFactory'
   }
 }
 
@@ -69,6 +69,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "SPStaking":"SPStaking.json",
   "ERC20": "ERC20.json",
   "ERC1155": "ERC1155.json",
+  "ERC1155Staking": "ERC1155Staking.json",
+  "ERC1155StakingFactory": "ERC1155StakingFactory.json",
   "NutPower": "NutPower.json",
   "Gauge": "Gauge.json",
   "CosmosStaking": "CosmosStaking.json",

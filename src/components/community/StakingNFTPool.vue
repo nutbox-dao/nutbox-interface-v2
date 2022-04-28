@@ -28,10 +28,10 @@
             </b-input-group>
           </div>
         </div>
-        <div class="col-lg-8 mx-auto mt-3" v-show="showIllegalToken">
+        <div class="col-lg-8 mx-auto mt-3 red font14" style="color: red" v-show="showIllegalToken">
           {{ $t('asset.notErc1155') }}
         </div>
-        <div class="col-lg-8 mx-auto mt-3" v-show="showIllegalTokenId">
+        <div class="col-lg-8 mx-auto mt-3 red font14" style="color: red" v-show="showIllegalTokenId">
           {{ $t('asset.wrongTokenId') }}
         </div>
       </div>

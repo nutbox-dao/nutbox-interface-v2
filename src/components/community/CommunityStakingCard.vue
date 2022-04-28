@@ -41,7 +41,7 @@
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
-            {{ type === "erc20staking" ? "STAKED" : "DELEGATED" }}</span
+            {{ type === "erc20staking" || type === 'erc1155' ? "STAKED" : "DELEGATED" }}</span
           >
           <template v-if="type !== 'erc1155'">
             <i
@@ -56,8 +56,10 @@
           </template>
         </div>
       </div>
-      <PoolOperation :card="card" v-if="type != 'atom' && type != 'osmo' && type != 'juno'" />
-      <PoolOperationForCosmos :card="card" :type="type" v-else />
+      <PoolOperationForCosmos :card="card" :type="type" v-if="type === 'atom' || type === 'osmo' || type === 'juno'" />
+      <PoolOperationForERC1155 :card="card" :type="type" v-else-if="type === 'erc1155'"/>
+      <PoolOperation :card="card" v-else />
+
 
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
@@ -127,6 +129,7 @@ import StakingCardHeader from "@/components/common/StakingCardHeader";
 import showToastMixin from "@/mixins/copyToast";
 import { BLOCK_CHAIN_BROWER } from "@/config";
 import PoolOperation from "@/components/community/PoolOperation";
+import PoolOperationForERC1155 from "@/components/community/PoolOperationForERC1155";
 import PoolOperationForCosmos from "@/components/community/PoolOperationForCosmos";
 
 import { BLOCK_SECOND, YEAR_BLOCKS } from "@/constant";
@@ -144,6 +147,7 @@ export default {
     StakingCardHeader,
     PoolOperation,
     PoolOperationForCosmos,
+    PoolOperationForERC1155
   },
   props: {
     card: {
@@ -205,6 +209,8 @@ export default {
         return (total.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === "atom" || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6;
+      } else if (this.type === 'erc1155') {
+        return total.toNumber()
       }
       return 0;
     },
