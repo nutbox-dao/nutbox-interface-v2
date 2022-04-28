@@ -96,7 +96,8 @@ const getAccountAuth = async () => {
 
 export const getAccountBalance = async () => {
   const account = await getAccount()
-  const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account)
+  // const auth = await axios.get(COSMOS_API_URLS[0] + '/cosmos/bank/v1beta1/balances/' + account)
+  const auth = await axios.get('https://api.cosmoshub.pupmos.network/cosmos/bank/v1beta1/balances/' + account)
   const balance = auth.data.balances.filter(b => b.denom === 'uatom')[0].amount / 1e6;
   store.commit('cosmos/saveBalance', balance)
   return balance
