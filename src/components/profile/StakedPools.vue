@@ -27,7 +27,7 @@
     <div class="c-card mt-3" v-else-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
         <template v-if="getCommunityInfoById(pool.community.id)">
-          <UserStakingList v-if="activeTab !== 2" :pool="pool" :is-fold="isFold" />
+          <UserStakingList v-if="activeTab !== 3" :pool="pool" :is-fold="isFold" />
           <UserNutPowerList v-else :gauge="pool" :is-fold="isFold"/>
         </template>
       </div>
@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Farming', "ISO", 'NUT Power', 'Inactive'],
+      tabOptions: ["ISO", 'Farming', 'NFT', 'NUT Power', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,
@@ -72,13 +72,15 @@ export default {
     ...mapState('user', ['userGraphInfo', 'loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
-        case 3:
+        case 4:
           return this.inActivedPools;
-        case 0:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
         case 1:
-          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
+        case 0:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking') && (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc1155'))))
         case 2:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155')))
+        case 3:
           return this.joinedGauge
       }
     },

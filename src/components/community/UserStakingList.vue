@@ -31,7 +31,7 @@
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
           <div class="mb-2">
-            Total {{ type === "erc20staking" ? "Staked" : "Delegated" }}
+            Total {{ (type === "erc20staking" || type === "erc1155") ? "Staked" : "Delegated" }}
           </div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
@@ -146,6 +146,7 @@
                   {{
                     type === "erc20staking"
                       ? stakeToken.symbol + " Staked"
+                      : type === "erc1155" ? "ERC1155 Staked"
                       : type === "steem"
                       ? "SP Delegated"
                       : type === 'hive' 
@@ -253,6 +254,22 @@
         :operate="operate"
         :pool="pool"
         @hideStakeMask="showHpStake = false"
+      />
+    </b-modal>
+
+    <!-- nft stake -->
+    <b-modal
+      v-model="showNFTStake"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <StakingERC1155Modal
+        :operate="operate"
+        :card="pool"
+        @hideStakeMask="showNFTStake = false"
       />
     </b-modal>
 
@@ -514,10 +531,12 @@ import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
 import HPStakingModal from "@/components/common/HPStakingModal";
+import StakingERC1155Modal from "@/components/common/StakingERC1155Modal";
 import CosmostakingModal from "@/components/common/CosmostakingModal";
 import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
 import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
 import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
+import { ethers } from 'ethers'
 
 export default {
   name: "",
@@ -533,6 +552,7 @@ export default {
     ConnectMetaMask,
     Login,
     StakingHomeChainAssetModal,
+    StakingERC1155Modal,
     SPStakingModal,
     HPStakingModal,
     CosmostakingModal,
@@ -553,6 +573,7 @@ export default {
       showHpStake: false,
       showCosmosStake: false,
       showCosmosStake: false,
+      showNFTStake: false,
       isCheckingAccount: false,
       bindSteem: "",
       bindCosmos: "",
@@ -580,7 +601,7 @@ export default {
     ...mapGetters("community", ["getCommunityInfoById"]),
     ...mapGetters("web3", ["tokenDecimals", "tokenByKey"]),
     ...mapState(["prices", "metamaskConnected"]),
-    ...mapState("web3", ["tokenIcons", "allTokens"]),
+    ...mapState("web3", ["tokenIcons", "allTokens", "allErc1155s"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("cosmos", ['cosmosAccount']),
@@ -621,12 +642,20 @@ export default {
     stakeIcon() {
       if (this.type === "erc20staking") {
         return this.stakeToken.icon;
+      } else if (this.type === 'erc1155') {
+        try {
+          const address = ethers.utils.getAddress(this.pool.asset.substring(0, 42))
+          const id = parseInt(this.pool.asset.substring(42))
+          return this.allErc1155s.filter(e => e.address === address && e.tokenid === id)[0].icon
+        }catch(e) {
+          console.log(118, e);
+        }
       } else {
         return ASSET_LOGO_URL[this.type];
       }
     },
     approved() {
-      if (this.type !== "erc20staking") return true;
+      if (this.type !== "erc20staking" || this.type !== 'erc1155') return true;
       if (!this.approvements) return false;
       return this.approvements[this.pool.id];
     },
@@ -651,6 +680,8 @@ export default {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return stakedBn.toString() / 1e6
+      } else if (this.type === 'erc1155') {
+        return stakedBn.toString() / 1;
       }
     },
     pendingReward() {
@@ -674,6 +705,8 @@ export default {
         return (total.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6
+      } else if (this.type === 'erc1155') {
+        return total.toString() / 1
       }
       return 0;
     },
@@ -833,6 +866,8 @@ export default {
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
+      } else if(this.type === 'erc1155') {
+        this.showNFTStake = true
       }
     },
     async decrease() {
@@ -853,6 +888,8 @@ export default {
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
+      } else if(this.type === 'erc1155') {
+        this.showNFTStake = true
       }
     },
     // Approve contract
