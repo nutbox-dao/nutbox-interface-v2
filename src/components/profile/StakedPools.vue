@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       activeTab: 0,
-      tabOptions: ['Farming', "ISO", 'Inactive'],
+      tabOptions: ["ISO", 'Farming', 'NFT', 'NUT Power', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
       isApprove: false,
@@ -72,14 +72,17 @@ export default {
     ...mapState('user', ['userGraphInfo', 'loadingUserGraph']),
     joinedPool() {
       switch(this.activeTab) {
-        case 2:
+        case 4:
           return this.inActivedPools;
-        case 0:
-          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
         case 1:
           return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
-        // case 2:
-        //   return this.joinedGauge
+          return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
+        case 0:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking') && (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc1155'))))
+        case 2:
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155')))
+        case 3:
+          return this.joinedGauge
       }
     },
     activedPools() {
