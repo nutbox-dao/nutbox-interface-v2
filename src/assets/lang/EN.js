@@ -419,6 +419,8 @@ module.exports = {
   },
   treasury: {
     treasuryAddress: "Treasury Address",
+    daoTreasury: "DAO Treasury",
+    treasuryAsset: "Treasury Asset",
     noCreatedTip: "You can create your community treasury.",
     createNote: "NOTE: once you config the treasury, anyone can redeem assets from DAO treasury use cToken as a share of treasury asset."
   }

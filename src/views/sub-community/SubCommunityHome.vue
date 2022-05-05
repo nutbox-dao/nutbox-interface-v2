@@ -155,6 +155,36 @@
           </div>
         </div>
       </div>
+      <div class="c-card">
+        <div class="content3">
+           <div class="title mb-3">{{ $t('treasury.daoTreasury') }}</div>
+           <div class="custom-form form-row-align-center">
+            <!-- community dev address -->
+              <b-form-group label-cols-md="3" content-cols-md="8"
+                            label-class="font14"
+                            label-align="left"
+                            :label="$t('treasury.treasuryAddress')">
+                <div class="d-flex v-middle">
+                  <div class="c-input-group c-input-group-bg">
+                    <b-form-input
+                      :disabled="true"
+                      :placeholder="treasuryAddress"
+                      v-model="treasuryAddress"
+                    >
+                    </b-form-input>
+                    <span></span>
+                  </div>
+                </div>
+              </b-form-group>
+              <b-form-group label-cols-md="3" content-cols-md="8"
+                            label-class="font14"
+                            label-align="left"
+                            :label="$t('treasury.treasuryAsset')">
+
+              </b-form-group>
+            </div>
+        </div>
+      </div>
     </div>
   <!-- history -->
     <div class="activity-banner">
@@ -188,6 +218,7 @@ import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/co
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
+import { getTreasury } from '@/utils/web3/treasury'
 
 export default {
   name: 'Home',
@@ -203,7 +234,8 @@ export default {
       loadingPool: true,
       laodingHistory: false,
       fund:'',
-      isAdmin: false
+      isAdmin: false,
+      treasuryAddress: ''
     }
   },
   computed: {
@@ -282,6 +314,7 @@ export default {
       console.log('dis', res);
     })
     this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
+    getTreasury(this.communityId).then(treasury => this.treasuryAddress = treasury)
     // start watch history
     while (!this.operationHistory || this.operationHistory.length === 0) {
       await sleep(0.3)
