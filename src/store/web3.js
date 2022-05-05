@@ -31,6 +31,7 @@ export default {
     allPools: null,
     tokenDeploying: false,
     fees: {},
+    treasuryTokens: null,
     // user deposit data
     depositDatas: {},
     // multicall get data
@@ -103,6 +104,9 @@ export default {
       state.tokenByKey = tokenByKey;
       state.tokenIcons = icons;
       state.tokenDecimals = decimals;
+    },
+    saveTreasuryTokens: (state, treasuryTokens) => {
+      state.treasuryTokens = treasuryTokens
     },
     saveAllErc1155s: (state, allErc1155s) => {
       state.allErc1155s = allErc1155s
