@@ -75,6 +75,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "Gauge": "Gauge.json",
   "CosmosStaking": "CosmosStaking.json",
   "CosmosStakingFactory": "CosmosStakingFactory.json",
+  "TreasuryFactory": "TreasuryFactory.json",
+  "Treasury": "Treasury.json"
 }
 
 // Get contract Abi

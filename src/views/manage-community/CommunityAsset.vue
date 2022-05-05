@@ -37,7 +37,7 @@
       <Progress :progress-data="distributions"></Progress>
     </div>
     <!-- fund info -->
-    <div class="c-card mt-3 mb-5">
+    <div class="c-card mt-3">
       <div class="font20 font-bold">Dao Fund Info</div>
       <div class="custom-form mt-5">
         <!-- community balance -->
@@ -86,7 +86,7 @@
                       :label="$t('community.fundAddress')"
         >
           <div class="d-flex">
-            <div class="c-input-group c-input-group-bg">
+            <div class="c-input-group c-input-group-bg" @click="copyFundAddress">
               <b-form-input
                 :disabled="true"
                 :placeholder="communityData && communityData.daoFund"
@@ -118,6 +118,40 @@
               <b-spinner small type="grow" v-show="!communityData" />
               {{ this.$t("operation.update") }}
             </button>
+          </div>
+        </b-form-group>
+      </div>
+    </div>
+    <div class="c-card mt-3 mb-5">
+      <div class="font20 font-bold">Dao Treasury Info</div>
+      <div class="custom-from" v-if="isLoadingTreasury">
+        <div class="c-loading"></div>
+      </div>
+      <div class="custom-form mt-5" v-else-if="!isCreatedTreasury">
+        <p>
+          {{ $t('treasury.noCreatedTip') }}
+        </p>
+        <p>
+          {{ $t('treasury.createNote') }}
+        </p>
+        <button class="primary-btn" style="width: 50%" @click="createTreasury" :disabled="isCreatingTreasury">
+          <b-spinner small type="grow" v-show="isCreatingTreasury"></b-spinner>
+          {{ $t('operation.confirm') }}
+        </button>
+      </div>
+      <div class="custom-form mt-5" v-else>
+        <b-form-group label-cols-md="2" content-cols-md="8"
+                      label-class="font14 font-bold line-height14 d-flex align-items-center"
+                      :label="$t('treasury.treasuryAddress')">
+          <div class="d-flex">
+            <div class="c-input-group c-input-group-bg" @click="copyTreasury">
+              <b-form-input
+                :disabled="true"
+                :placeholder="treasuryAddress"
+                @click="copyTreasury"
+              >
+              </b-form-input>
+            </div>
           </div>
         </b-form-group>
       </div>
@@ -316,6 +350,7 @@ import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
+import { getMyTreasury, createTreasury } from '@/utils/web3/treasury'
 
 export default {
   name: 'CommunityAsset',
@@ -340,7 +375,12 @@ export default {
       cToken: {},
       isMintable: true,
       communityBalance: 0,
-      adminBalance: 0
+      adminBalance: 0,
+
+      isCreatedTreasury: false,
+      isCreatingTreasury: false,
+      treasuryAddress: '',
+      isLoadingTreasury: true
     }
   },
   computed: {
@@ -388,20 +428,33 @@ export default {
     },
     copyAddress () {
       const address = this.cToken.address
-      navigator.clipboard.writeText(address).then(() => {
-        this.$bvToast.toast(
-          this.$t('tip.copyAddress', {
-            address: address
-          }),
-          {
-            title: this.$t('tip.clipboard'),
-            autoHideDelay: 5000,
-            variant: 'info' // info success danger
-          }
-        )
-      }, (e) => {
-        console.log(e)
-      })
+      this.copy(address)
+    },
+    copyTreasury () {
+      const address = this.treasuryAddress
+      this.copy(address)
+    },
+    copyFundAddress () {
+      const address = this.communityData.daoFund
+      this.copy(address)
+    },
+    copy(address) {
+      if (ethers.utils.isAddress(address)) {
+        navigator.clipboard.writeText(address).then(() => {
+          this.$bvToast.toast(
+            this.$t('tip.copyAddress', {
+              address: address
+            }),
+            {
+              title: this.$t('tip.clipboard'),
+              autoHideDelay: 5000,
+              variant: 'info' // info success danger
+            }
+          )
+        }, (e) => {
+          console.log(e)
+        })
+      }
     },
     async charge () {
       try {
@@ -555,6 +608,19 @@ export default {
       }finally{
         this.updatingDevAddress = false
       }
+    },
+    async createTreasury() {
+      try{
+        this.isCreatingTreasury = true
+        await createTreasury();
+        this.isCreatedTreasury = true;
+      } catch (e) {
+        handleApiErrCode(e, (tip, param) => {
+          this.$bvToast.toast(tip, param)
+        })
+      } finally {
+        this.isCreatingTreasury = false
+      }
     }
   },
   async mounted () {
@@ -566,6 +632,11 @@ export default {
     }
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
+    getMyTreasury().then(t => {
+      this.treasuryAddress = t
+      this.isCreatedTreasury = t !== ethers.constants.AddressZero
+      this.isLoadingTreasury = false
+    })
     if (!this.isMintable) {
         // updating balances of admin and community
         const interval = setInterval(() => {

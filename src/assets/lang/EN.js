@@ -368,8 +368,8 @@ module.exports = {
     communityPoster: "Poster",
     communityBalance: "Community Balance",
     communityAsset: "Community Token",
-    fundAddress: "Fund address",
-    fundRatio: "Fund ratio",
+    fundAddress: "Fund Address",
+    fundRatio: "Fund Ratio",
     totalDeposit: 'Total amount',
     currentBlock: 'Current block',
     noJoinedCommunity: 'No joined communities',
@@ -416,5 +416,10 @@ module.exports = {
     cap: 'Mkt Cap',
     distributionAmount: "Premine amount",
     notErc1155: "Token is not a ERC1155 token."
+  },
+  treasury: {
+    treasuryAddress: "Treasury Address",
+    noCreatedTip: "You can create your community treasury.",
+    createNote: "NOTE: once you config the treasury, anyone can redeem assets from DAO treasury use cToken as a share of treasury asset."
   }
 };
