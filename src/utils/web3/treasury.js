@@ -90,9 +90,17 @@ export const getTreasuryBalance = async (treasury) => {
                         treasury
                     ],
                     returns: [
-                        [t]
+                        [t + '-balance']
                     ]
-                })), Multi_Config)
+                }).concat(treasuryTokens.map(t => ({
+                    target: t,
+                    call: [
+                        'symbol()(string)'
+                    ],
+                    returns: [
+                        [t + '-symbol']
+                    ]
+                })))), Multi_Config)
                 resolve(balances.results.transformed);
             }else{
                 resolve({})
