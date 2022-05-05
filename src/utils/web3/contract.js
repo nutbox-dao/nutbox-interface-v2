@@ -29,7 +29,8 @@ export const contractAddress = {
   "ERC20StakingFactory": "0xF897E61D2bd4002B5dE45026f6a9F5b4704Cb8Be",
   "ERC1155StakingFactory": "0x54301D1dc7751B1824cF3020a3f479112caD738c",
   "CosmosStakingFactory": "0xbe1709B3D175aaecA132BEA8630063E99f090D68",
-  "Gauge": "0x56c44B51eaCcd283024523dF1268A8E01887C218"
+  "Gauge": "0x56c44B51eaCcd283024523dF1268A8E01887C218",
+  "TreasuryFactory": "0xF4F07B25d28F963dc3FadE4e75Cfaa3F607770F1"
 }
 
 export const getPoolFactory = (type) => {
@@ -75,6 +76,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "Gauge": "Gauge.json",
   "CosmosStaking": "CosmosStaking.json",
   "CosmosStakingFactory": "CosmosStakingFactory.json",
+  "TreasuryFactory": "TreasuryFactory.json",
+  "Treasury": "Treasury.json"
 }
 
 // Get contract Abi
