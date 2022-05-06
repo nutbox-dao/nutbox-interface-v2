@@ -18,7 +18,7 @@
                 <span>Farming</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/erc1155">
-                <i class="menu-icon farming-icon" />
+                <i class="menu-icon nft-icon" />
                 <span>NFT Stake</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
@@ -80,7 +80,7 @@
                     <span>Farming</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/erc1155">
-                    <i class="menu-icon farming-icon" />
+                    <i class="menu-icon nft-icon" />
                     <span>NFT Stake</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/nut-power">
@@ -372,6 +372,9 @@ export default {
 .dashboard-icon {
   background-image: url("~@/static/images/menu-dashboard.svg");
 }
+.nft-icon {
+  background-image: url("~@/static/images/menu-nft.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/menu-home-active.svg");
@@ -399,6 +402,9 @@ export default {
   }
   .dashboard-icon {
     background-image: url("~@/static/images/menu-dashboard-active.svg");
+  }
+  .nft-icon {
+    background-image: url("~@/static/images/menu-nft-active.svg")
   }
 }
 </style>

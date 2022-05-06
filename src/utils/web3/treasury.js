@@ -140,13 +140,3 @@ export const redeem = async (treasury, amount) => {
     }
   })
 }
-
-export const getApprovement = async (treasury, ctoken) => {
-  return new Promise(async (resolve, reject) => {
-    try{
-      
-    }catch(e) {
-
-    }
-  })
-}

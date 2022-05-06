@@ -21,7 +21,7 @@
               <span>Farming</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/nft-staking">
-              <i class="menu-icon farming-icon" />
+              <i class="menu-icon nft-icon" />
               <span>NFT Stake</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
@@ -219,6 +219,9 @@ export default {
 .social-icon {
   background-image: url("~@/static/images/menu-social.svg");
 }
+.nft-icon {
+  background-image: url("~@/static/images/menu-nft.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/m-menu-home-active.svg");
@@ -240,6 +243,9 @@ export default {
   }
   .social-icon {
     background-image: url("~@/static/images/m-menu-social-active.svg");
+  }
+  .nft-icon {
+    background-image: url("~@/static/images/m-menu-nft-active.svg");
   }
 }
 </style>

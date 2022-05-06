@@ -281,7 +281,7 @@ import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getSingleCtokenBalance } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
-import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
+import { getSpecifyDistributionEras, getCommunityBalance, getApprovement } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
@@ -300,7 +300,8 @@ export default {
     return {
       retainedRevenue: 0,
       loadingPool: true,
-      laodingHistory: false,
+      loadingHistory: false,
+      loadingApprovement: true,
       fund:'',
       isAdmin: false,
       treasuryBalances: {},
@@ -417,6 +418,10 @@ export default {
     })
     getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
     getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
+    
+    getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
+      this.loadingApprovement = false
+    })
     this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
     // start watch history
     while (!this.operationHistory || this.operationHistory.length === 0) {
