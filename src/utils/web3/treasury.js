@@ -1,13 +1,7 @@
 import {
-  getContract,
-  contractAddress,
-  getPoolFactory,
-  getPoolTypeName
+  getContract
 } from './contract'
 import store from '@/store'
-import {
-  getAccounts
-} from '@/utils/web3/account'
 import {
   errCode,
   Multi_Config
@@ -16,16 +10,11 @@ import {
   waitForTx
 } from './ethers'
 import {
-  aggregate,
-  createWatcher
+  aggregate
 } from '@makerdao/multicall'
 import {
   getMyCommunityContract
 } from './community'
-import {
-  NutAddress,
-  CHAIN_NAME
-} from '@/config'
 import {
   ethers
 } from 'ethers'
@@ -92,16 +81,16 @@ export const getTreasuryBalance = async (treasury) => {
                     returns: [
                         [t + '-balance']
                     ]
-                }).concat(treasuryTokens.map(t => ({
-                    target: t,
-                    call: [
-                        'symbol()(string)'
-                    ],
-                    returns: [
-                        [t + '-symbol']
-                    ]
-                })))), Multi_Config)
-                resolve(balances.results.transformed);
+                })).concat(treasuryTokens.map(t => ({
+                  target: t,
+                  call: [
+                      'symbol()(string)'
+                  ],
+                  returns: [
+                      [t + '-symbol']
+                  ]
+              }))), Multi_Config)
+              resolve(balances.results.transformed);
             }else{
                 resolve({})
             }
@@ -127,11 +116,37 @@ export const createTreasury = async () => {
     let contract;
     try {
       contract = await getContract("TreasuryFactory", null, false);
-      const tx = await contract.createTreasury(communityId)
-      await waitForTx(tx.hash)
-      resolve(tx.hash)
+      contract.on('NewTreasuryCreated', (community, treasury) => {
+        if (community.toLowerCase() === communityId.toLowerCase()) {
+          resolve(treasury)
+        }
+      })
+      await contract.createTreasury(communityId)
     } catch (e) {
       reject(e)
+    }
+  })
+}
+
+export const redeem = async (treasury, amount) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('Treasury', treasury, false)
+      const tx = await contract.redeem(ethers.utils.parseUnits(amount.toString(), 18))
+      await waitForTx(tx.hash)
+      resolve();
+    }catch(e) {
+      reject(e)
+    }
+  })
+}
+
+export const getApprovement = async (treasury, ctoken) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      
+    }catch(e) {
+
     }
   })
 }

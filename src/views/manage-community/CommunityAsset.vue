@@ -136,7 +136,7 @@
         </p>
         <button class="primary-btn" style="width: 50%" @click="createTreasury" :disabled="isCreatingTreasury">
           <b-spinner small type="grow" v-show="isCreatingTreasury"></b-spinner>
-          {{ $t('operation.confirm') }}
+          {{ $t('operation.create') }}
         </button>
       </div>
       <div class="custom-form mt-5" v-else>
@@ -350,7 +350,7 @@ import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
-import { getMyTreasury, createTreasury } from '@/utils/web3/treasury'
+import { createTreasury } from '@/utils/web3/treasury'
 
 export default {
   name: 'CommunityAsset',
@@ -612,8 +612,9 @@ export default {
     async createTreasury() {
       try{
         this.isCreatingTreasury = true
-        await createTreasury();
+        const treasury = await createTreasury();
         this.isCreatedTreasury = true;
+        this.treasuryAddress = treasury;
       } catch (e) {
         handleApiErrCode(e, (tip, param) => {
           this.$bvToast.toast(tip, param)
@@ -632,11 +633,9 @@ export default {
     }
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
-    getMyTreasury().then(t => {
-      this.treasuryAddress = t
-      this.isCreatedTreasury = t !== ethers.constants.AddressZero
-      this.isLoadingTreasury = false
-    })
+    this.treasuryAddress = this.communityData.treasury
+    this.isCreatedTreasury = this.treasuryAddress !== ethers.constants.AddressZero
+    this.isLoadingTreasury = false
     if (!this.isMintable) {
         // updating balances of admin and community
         const interval = setInterval(() => {
