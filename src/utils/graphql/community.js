@@ -53,6 +53,7 @@ async function getSpecifyCommunityInfoFromTheGraph(community) {
                 feeRatio
                 cToken
                 daoFund
+                treasury
                 retainedRevenue
                 owner{
                     id
@@ -135,6 +136,7 @@ async function getSpecifyCommunityInfoFromOurService(community) {
         cToken
         daoFund
         retainedRevenue
+        treasury
         owner{
             id
         }

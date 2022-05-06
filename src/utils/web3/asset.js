@@ -368,6 +368,27 @@ export const getCtokenBalance = async () => {
   })
 }
 
+export const getSingleCtokenBalance = async (ctoken) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const account = await getAccounts();
+      const balance = await aggregate([{
+        target: ctoken,
+        call: [
+          'balanceOf(address)(uint256)',
+          account
+        ],
+        returns: [
+          [ctoken, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](ctoken))]
+        ]
+      }], Multi_Config)
+      resolve(balance.results.transformed[ctoken])
+    } catch (e) {
+      reject(e);
+    }
+  })
+}
+
 /**
  * get home chain balance
  * @returns 

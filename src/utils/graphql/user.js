@@ -28,6 +28,7 @@ async function getMyJoinedCommunityFromGraph() {
                     }
                     feeRatio
                     cToken
+                    treasury
                     usersCount
                     poolsCount
                     activedPoolCount
@@ -92,6 +93,7 @@ async function getMyJoinedCommunityFromService() {
                             }
                             feeRatio
                             cToken
+                            treasury
                             usersCount
                             poolsCount
                             activedPoolCount
@@ -174,6 +176,7 @@ async function getMyCommunityDataFromGraph() {
                     id
                     feeRatio
                     daoFund
+                    treasury
                     retainedRevenue
                     owner{
                         id
@@ -246,6 +249,7 @@ async function getMyCommunityDataFromService() {
                         id
                         feeRatio
                         daoFund
+                        treasury
                         retainedRevenue
                         owner{
                             id

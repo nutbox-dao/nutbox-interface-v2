@@ -48,7 +48,7 @@
               <div class="r-item">
                 <div class="label font12 text-grey-7">{{ $t('asset.cap') }}</div>
                 <div class="value font-bold">
-                  {{ (cToken ? (cToken.totalSupply / (10 ** cToken.decimal) * cToken.price) : 0) | formatPrice }}
+                  {{ (cToken ? (totalSupply * cToken.price) : 0) | formatPrice }}
                 </div>
               </div>
             </div>
@@ -155,11 +155,11 @@
           </div>
         </div>
       </div>
-      <div class="c-card">
+      <div class="c-card" v-if="communityInfo && (communityInfo.treasury !== '0x0000000000000000000000000000000000000000')">
         <div class="content3">
            <div class="title mb-3">{{ $t('treasury.daoTreasury') }}</div>
            <div class="custom-form form-row-align-center">
-            <!-- community dev address -->
+            <!-- community treasury address -->
               <b-form-group label-cols-md="3" content-cols-md="8"
                             label-class="font14"
                             label-align="left"
@@ -168,8 +168,8 @@
                   <div class="c-input-group c-input-group-bg">
                     <b-form-input
                       :disabled="true"
-                      :placeholder="treasuryAddress"
-                      v-model="treasuryAddress"
+                      :placeholder="communityInfo.treasury"
+                      v-model="communityInfo.treasury"
                     >
                     </b-form-input>
                     <span></span>
@@ -179,9 +179,23 @@
               <b-form-group label-cols-md="3" content-cols-md="8"
                             label-class="font14"
                             label-align="left"
+                            v-if="Object.keys(treasuryBalances).length > 0"
                             :label="$t('treasury.treasuryAsset')">
-
+                <div class="d-flex" v-for="(b, idx) in treasuryTokens" :key="idx">
+                  <div class="token-address col-md-4 font14" style="text-align:center" @click="copyAddress(b)">
+                    {{ treasuryBalances[b + '-symbol'] }}
+                  </div>
+                  <div class="col-md-3 font14" style="text-align:center">
+                    -
+                  </div>
+                  <div class="col-md-4 font14" style="text-align:center">
+                    {{ (treasuryBalances[b + '-balance'].toString() / 1e18) | amountForm }}
+                  </div>
+                </div>
               </b-form-group>
+              <button class="primary-btn" v-if="treasuryTokens && treasuryTokens.length > 0" style="width: 50%" @click="showRedeem = true">
+                {{ $t('operation.redeem') }}
+              </button>
             </div>
         </div>
       </div>
@@ -205,6 +219,59 @@
         </transition-group>
       </div>
     </div>
+    <!-- redeem tip -->
+    <b-modal
+      v-model="showRedeem"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
+          {{ $t("operation.redeem") }}
+        </div>
+        <div class="mb-4">
+          <div class="label mb-2 d-flex justify-content-between">
+            <span></span>&nbsp;
+            <span class="text-right">{{ $t("wallet.balance") }}:{{ ctokenBalance | amountForm }}</span>
+          </div>
+          <div class="c-input-group c-input-group-bg">
+            <input type="number" v-model="redeemValue" placeholder="0"/>
+          </div>
+          <div class="font14 mt-2 d-flex" v-if="parseFloat(redeemValue) > 0">
+            <span>
+              You will receive: 
+            </span>
+            <div class="flex-1">
+              <div class="d-flex" v-for="t of treasuryTokens" :key="t" v-show="parseFloat(redeemAssetsAmount[t]) > 1e-6">
+                <div class="flex-1 text-center">
+                  {{ treasuryBalances[t + '-symbol'] }}
+                </div>
+                <div class="flex-1 text-center">
+                  --
+                </div>
+                <div class="flex-1 text-center">
+                  {{ redeemAssetsAmount[t] | amountForm }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button class="dark-btn mx-3" @click="showRedeem = false" :disabled="redeeming">
+            <b-spinner small type="grow" v-show="redeeming" />
+            {{ $t("operation.cancel") }}
+          </button>
+          <button class="primary-btn mx-3" @click="redeem" :disabled="redeeming">
+            <b-spinner small type="grow" v-show="redeeming" />
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -212,13 +279,14 @@
 import { mapGetters, mapState } from 'vuex'
 import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
-import { getCToken } from '@/utils/web3/asset'
+import { getSingleCtokenBalance } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
-import { getTreasury } from '@/utils/web3/treasury'
+import { getTreasuryBalance, redeem } from '@/utils/web3/treasury'
+import { handleApiErrCode } from '../../utils/helper'
 
 export default {
   name: 'Home',
@@ -235,11 +303,16 @@ export default {
       laodingHistory: false,
       fund:'',
       isAdmin: false,
-      treasuryAddress: ''
+      treasuryBalances: {},
+      showRedeem: false,
+      redeemValue: '',
+      redeeming: false,
+      ctokenBalance: 0,
     }
   },
   computed: {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
+    ...mapState('web3', ['treasuryTokens']),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
@@ -248,6 +321,16 @@ export default {
         name: pool.name,
         ratio: parseFloat(pool.ratio) / 100
       }))
+    },
+    redeemAssetsAmount() {
+      if (Object.keys(this.treasuryTokens).length === 0 || Object.keys(this.treasuryBalances).length === 0) return {}
+      let inputAmount = parseFloat(this.redeemValue)
+      let amounts = {}
+      const rate = inputAmount / this.totalSupply
+      for (let t of this.treasuryTokens) {
+        amounts[t] = rate * (this.treasuryBalances[t + '-balance'].toString() / 1e18)
+      }
+      return amounts
     },
     baseInfo () {
       if (this.communityId) {
@@ -264,9 +347,11 @@ export default {
       if (!this.cToken) return 0;
       return this.communityBalance.toString() / (10 ** this.cToken.decimal)
     },
+    totalSupply () {
+      return (this.cToken ? (this.cToken.totalSupply / (10 ** this.cToken.decimal)) : 0)
+    },
     formatTotalSupply() {
-      let amount = (this.cToken ? (this.cToken.totalSupply / (10 ** this.cToken.decimal)) : 0)
-      return formatAmount(amount)
+      return formatAmount(this.totalSupply)
     }
   },
   methods: {
@@ -302,6 +387,23 @@ export default {
       }, (e) => {
         console.log(e)
       })
+    },
+    async redeem() {
+      try{
+        if (parseFloat(this.redeemValue) >= this.ctokenBalance)
+        this.redeeming = true
+        await redeem(this.communityInfo.treasury, this.redeemValue)
+        getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
+        this.$bvToast.toast(this.$t(tip.redeemSuccess), {
+
+        })
+      } catch (e) {
+        handleApiErrCode(e, (title, info) => {
+          this.$bvToast.toast(title, info)
+        })
+      } finally {
+        this.redeeming = false
+      }
     }
   },
   async mounted () {
@@ -313,8 +415,9 @@ export default {
     getSpecifyDistributionEras(this.communityId).then(res => {
       console.log('dis', res);
     })
+    getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
+    getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
     this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
-    getTreasury(this.communityId).then(treasury => this.treasuryAddress = treasury)
     // start watch history
     while (!this.operationHistory || this.operationHistory.length === 0) {
       await sleep(0.3)

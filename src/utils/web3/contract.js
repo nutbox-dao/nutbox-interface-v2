@@ -30,7 +30,7 @@ export const contractAddress = {
   "ERC1155StakingFactory": "0x54301D1dc7751B1824cF3020a3f479112caD738c",
   "CosmosStakingFactory": "0xbe1709B3D175aaecA132BEA8630063E99f090D68",
   "Gauge": "0x56c44B51eaCcd283024523dF1268A8E01887C218",
-  "TreasuryFactory": "0xF4F07B25d28F963dc3FadE4e75Cfaa3F607770F1"
+  "TreasuryFactory": "0x8428aD36744a9917112c2A9a40C4f48FCF80e39E"
 }
 
 export const getPoolFactory = (type) => {

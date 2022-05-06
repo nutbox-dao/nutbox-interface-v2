@@ -51,6 +51,7 @@ module.exports = {
     commit: "Commit",
     complete: "Complete",
     confirm: "Confirm",
+    create: "Create",
     add: "Add",
     update: "Update",
     delegatecharge: "Delegate Charge",
@@ -60,6 +61,7 @@ module.exports = {
     copy: "Copy",
     edit: "Edit",
     charge: 'Charge',
+    redeem: "Redeem",
     enter: 'Enter',
     approve: 'Approve',
     grant: 'Grant'
@@ -205,7 +207,8 @@ module.exports = {
     noPowerupNut: "Haven't power up NUT",
     needAscii: 'You can only input simple characters.',
     npRedeemProcess: 'No redeem process.',
-    powerDownSuccess: 'Power down success'
+    powerDownSuccess: 'Power down success',
+    redeemSuccess: "Redeem Successfull"
   },
   nps: {
     nps: "Governance",
@@ -422,6 +425,6 @@ module.exports = {
     daoTreasury: "DAO Treasury",
     treasuryAsset: "Treasury Asset",
     noCreatedTip: "You can create your community treasury.",
-    createNote: "NOTE: once you config the treasury, anyone can redeem assets from DAO treasury use cToken as a share of treasury asset."
+    createNote: "NOTE: once you create the treasury, anyone can redeem assets from DAO treasury use cToken as a share of treasury asset."
   }
 };
