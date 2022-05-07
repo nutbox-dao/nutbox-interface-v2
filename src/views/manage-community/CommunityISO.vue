@@ -137,7 +137,7 @@ export default {
     },
     activeISOPool() {
       return this.activePool.filter(p => p.poolFactory.toLowerCase() !=
-              getPoolFactoryAddress("erc20staking"))
+              getPoolFactoryAddress("erc20staking") && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155'))
     },
     stakingPools() {
       switch (this.activeTab) {
@@ -145,7 +145,7 @@ export default {
           return this.activeISOPool;
         case 1:
           return this.pools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() !=
-              getPoolFactoryAddress("erc20staking"));
+              getPoolFactoryAddress("erc20staking") && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155'));
       }
     },
   },
