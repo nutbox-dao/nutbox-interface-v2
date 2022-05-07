@@ -341,6 +341,18 @@ export default {
           (this.showName ? " harvest" : "Harvest") +
           ` harvest all ${ctokenSymbol}`;
         break;
+      case "REDEEMFROMTREASURY":
+        this.opType = "Redeem From Treasury";
+        this.isAdmin = false;
+        console.log(235, this.cToken);
+        ctokenSymbol = this.cToken.symbol
+        this.description =
+          (this.showName ? " redeem" : "Redeem") +
+          ` from treasury by burning ${(
+            this.operation.amount.toString() /
+            10 ** this.tokenDecimals(this.cToken.decimal)
+          ).toFixed(2)} ${ctokenSymbol}`
+          break;
       case "ADMINCREATE":
         this.isAdmin = true;
         this.username = "Admin";
@@ -383,20 +395,27 @@ export default {
         break;
       case "ADMINSETDAOFUND":
         this.isAdmin = true;
-        this.username = "admin";
+        this.username = "Admin";
         this.opType = "Reset DAO fund";
         this.description =
           (this.showName ? " reset" : "Reset") +
           ` DAO fund address:${ethers.utils.getAddress(this.operation.asset)}.`;
-        return;
+        break;
       case "ADMINWITHDRAWNREVENUE":
         this.isAdmin = true;
-        this.username = "admin";
+        this.username = "Admin";
         this.opType = "Withdraw revenue";
         this.description =
           (this.showName ? " withdraw" : "Withdraw") +
           ` revenue to:${ethers.utils.getAddress(this.operation.asset)}.`;
-        return;
+        break;
+      case "ADMINCREATETREASURY":
+        this.isAdmin = true;
+        this.username = "Admin";
+        this.opType = "Create Treasury";
+        this.description = (this.showName ? " create" : "Create") +
+        ` treasury: ${ethers.utils.getAddress(this.operation.asset)}`;
+        break;
     }
   },
 };
