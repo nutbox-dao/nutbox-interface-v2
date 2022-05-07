@@ -415,13 +415,23 @@ export default {
     },
     async redeem() {
       try{
-        if (parseFloat(this.redeemValue) >= this.ctokenBalance)
+        if (parseFloat(this.redeemValue) >= this.ctokenBalance){
+          this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
         this.redeeming = true
         await redeem(this.communityInfo.treasury, this.redeemValue)
         getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
-        this.$bvToast.toast(this.$t(tip.redeemSuccess), {
-
+        this.$bvToast.toast(this.$t('tip.redeemSuccess'), {
+          title: this.$t('tip.success'),
+          variant: 'success'
         })
+        getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
+        await sleep(5);
+        this.showRedeem = false;
       } catch (e) {
         handleApiErrCode(e, (title, info) => {
           this.$bvToast.toast(title, info)
