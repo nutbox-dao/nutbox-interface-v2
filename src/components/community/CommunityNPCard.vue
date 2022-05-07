@@ -24,7 +24,7 @@
           <div class="flex-1">
             <div class="d-flex align-items-center">
               <div class="d-flex justify-content-between align-items-center font-bold flex-1">
-                <span class="font18 line-height18">{{ cToken ? cToken.name : '' }}</span>
+                <span class="font18 line-height18">{{ cToken ? cToken.symbol : '' }}</span>
                 <span class="font24 line-height24">{{ pendingCtoken | amountForm }}</span>
               </div>
               <div class="d-flex align-items-center icons-group">
@@ -198,7 +198,7 @@ export default {
         return 0
       }
       const ctokenPrice = this.cToken.price
-      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
+      const apr = this.rewardPerBlock[this.card.community.id.toLowerCase()] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
       return apr;
     },
     detailApr() {
