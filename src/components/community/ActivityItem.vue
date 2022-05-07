@@ -344,7 +344,9 @@ export default {
       case "REDEEMFROMTREASURY":
         this.opType = "Redeem From Treasury";
         this.isAdmin = false;
-        console.log(235, this.cToken);
+        while (!this.cToken) {
+          await sleep(0.2);
+        }
         ctokenSymbol = this.cToken.symbol
         this.description =
           (this.showName ? " redeem" : "Redeem") +
