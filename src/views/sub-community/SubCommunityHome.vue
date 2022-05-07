@@ -193,8 +193,9 @@
                   </div>
                 </div>
               </b-form-group>
-              <button class="primary-btn" v-if="treasuryTokens && treasuryTokens.length > 0" style="width: 50%" @click="showRedeem = true">
-                {{ $t('operation.redeem') }}
+              <button class="primary-btn" v-if="treasuryTokens && treasuryTokens.length > 0" style="width: 50%" @click="treasuryBtnClick" :disabled="loadingApprovement || isApprovingTreasury">
+                  <b-spinner small type="grow" v-show="loadingApprovement || isApprovingTreasury"></b-spinner>
+                {{ (loadingApprovement || !isApprovedTreasury) ? $t('operation.approveContract') : $t('operation.redeem') }}
               </button>
             </div>
         </div>
@@ -281,12 +282,13 @@ import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
 import { getSingleCtokenBalance } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
-import { getSpecifyDistributionEras, getCommunityBalance, getApprovement } from '@/utils/web3/community'
+import { getSpecifyDistributionEras, getCommunityBalance, getApprovement, approveUseERC20 } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
 import { getTreasuryBalance, redeem } from '@/utils/web3/treasury'
 import { handleApiErrCode } from '../../utils/helper'
+import { ethers } from 'ethers'
 
 export default {
   name: 'Home',
@@ -302,6 +304,8 @@ export default {
       loadingPool: true,
       loadingHistory: false,
       loadingApprovement: true,
+      isApprovedTreasury: false,
+      isApprovingTreasury: false,
       fund:'',
       isAdmin: false,
       treasuryBalances: {},
@@ -389,6 +393,26 @@ export default {
         console.log(e)
       })
     },
+    treasuryBtnClick() {
+      if (this.isApprovedTreasury) {
+        this.showRedeem = true
+      }else {
+        this.approve()
+      }
+    },
+    async approve() {
+      try{
+        this.isApprovingTreasury = true
+        await approveUseERC20(this.communityInfo.cToken, this.communityInfo.treasury)
+        this.isApprovedTreasury = true;
+      } catch (e) {
+        handleApiErrCode(e, (title, info) => {
+          this.bvToast.toast(title, info)
+        });
+      } finally {
+        this.isApprovingTreasury = false
+      }
+    },
     async redeem() {
       try{
         if (parseFloat(this.redeemValue) >= this.ctokenBalance)
@@ -417,11 +441,14 @@ export default {
       console.log('dis', res);
     })
     getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
-    getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
+    if (this.communityInfo.treasury !== ethers.constants.AddressZero) {
+      getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
+      getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
+        this.loadingApprovement = false
+        this.isApprovedTreasury = a
+      })
+    }
     
-    getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
-      this.loadingApprovement = false
-    })
     this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
     // start watch history
     while (!this.operationHistory || this.operationHistory.length === 0) {
