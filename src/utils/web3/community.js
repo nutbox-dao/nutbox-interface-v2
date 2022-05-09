@@ -877,7 +877,7 @@ export const getApprovement = async (token, target) => {
       const [decimals, allowrance] = await Promise.all([contract.decimals(), contract.allowance(account, target)]) 
       resolve(allowrance.toString() / (10 ** decimals) > 1e12)
     }catch(e) {
-      // console.log('get approvement fail', e);
+      console.log('get approvement fail', e);
       reject(e)
     }
   })

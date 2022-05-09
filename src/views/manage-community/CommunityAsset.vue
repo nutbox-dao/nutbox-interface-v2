@@ -634,7 +634,7 @@ export default {
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
     this.treasuryAddress = this.communityData.treasury
-    this.isCreatedTreasury = this.treasuryAddress !== ethers.constants.AddressZero
+    this.isCreatedTreasury = Number(this.treasuryAddress) !== 0
     this.isLoadingTreasury = false
     if (!this.isMintable) {
         // updating balances of admin and community
