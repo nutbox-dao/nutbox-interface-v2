@@ -41,7 +41,7 @@
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
-            {{ type === "erc20staking" || type === 'erc1155' ? "STAKED" : "DELEGATED" }}</span
+            {{ (type === "erc20staking" || type === 'erc1155') ? "STAKED" : "DELEGATED" }}</span
           >
           <template v-if="type !== 'erc1155'">
             <i
@@ -52,6 +52,16 @@
               v-if="type === 'erc20staking'"
               class="link-icon link-icon-gray"
               @click="gotoToken(stakeToken.address)"
+            ></i>
+          </template>
+          <template v-if="type === 'erc1155'">
+            <i
+              class="copy-icon copy-icon-gray mx-1"
+              @click="copy(card.asset.substring(0, 42))"
+            ></i>
+            <i
+              class="link-icon link-icon-gray"
+              @click="gotoToken(card.asset.substring(0, 42))"
             ></i>
           </template>
         </div>

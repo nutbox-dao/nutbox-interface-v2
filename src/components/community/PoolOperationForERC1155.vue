@@ -190,6 +190,7 @@ export default {
       try {
         this.isApproving = true;
         const hash = await approvePoolERC1155(this.card);
+        this.approvements[this.card.id] = true
         this.$bvToast.toast(this.$t("tip.approveSuccess"), {
           title: this.$t("tip.success"),
           variant: "success",
