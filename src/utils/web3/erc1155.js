@@ -15,7 +15,7 @@ export const isErc1155 = async (address) => {
   
       try{
         const res = await contract.supportsInterface(0xd9b67a26);
-        resolve(true);
+        resolve(res);
       }catch(e){
         resolve(false);
       }
