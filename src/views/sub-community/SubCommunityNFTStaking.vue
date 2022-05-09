@@ -106,7 +106,7 @@ export default {
     //   4
     // );
     // updatePoolsFromGraph.start();
-
+    
     const polling = updatePoolsByPolling(this.allPools);
 
     this.$once("hook:beforeDestroy", () => {

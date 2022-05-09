@@ -581,7 +581,7 @@ export const updatePoolsByPolling = (pools) => {
     let pending = {}
     let approve = {}
     for (let d in res) {
-      const [type, pid] = d.split('-')
+      let [type, pid] = d.split('-')
       if (type === 'staked') {
         staked[pid] = res[d]
       } else if (type === 'total') {
@@ -629,6 +629,7 @@ const getPoolStakingInfo = async (pools) => {
         resolve();
         return;
       }
+      const ignoreList = ['0x94Cd64e037A14F9816C7b79A08C00299Fe4604A0']
       let calls = []
       for (let i = 0; i < pools.length; i++) {
         const p = pools[i]
@@ -675,6 +676,9 @@ const getPoolStakingInfo = async (pools) => {
             ]
           })
         } else if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155')) {
+          if (ignoreList.indexOf(ethers.utils.getAddress(p.asset.substring(0, 42))) !== -1) {
+            continue;
+          }
           calls.push({
             target: p.asset.substring(0, 42),
             call: [

@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 import { parseOperationStructure } from './utils'
 
 export async function getSpecifyCommunityInfo(community) {
-  const useTheGraph = true
+  const useTheGraph = USE_THE_GRAPH
   if (useTheGraph) {
     return await getSpecifyCommunityInfoFromTheGraph(community)
   } else {
