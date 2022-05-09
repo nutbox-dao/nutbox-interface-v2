@@ -22,6 +22,9 @@ export const getCommon = async () =>
 export const faucet = async (account) => 
   post(BACKEND_API_URL + '/faucet', {account})
 
+export const getTestNFT = async (params) =>
+  post(BACKEND_API_URL + '/faucet/getnft', params)
+
 // ============================================ backend v2 ============================================
 
 export const getMyCommunityInfo = async (communityId) =>

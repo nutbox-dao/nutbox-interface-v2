@@ -633,7 +633,7 @@ export default {
     }
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
-    this.treasuryAddress = this.communityData.treasury
+    this.treasuryAddress = communityInfo.treasury
     this.isCreatedTreasury = !this.treasuryAddress && Number(this.treasuryAddress) !== 0
     this.isLoadingTreasury = false
     if (!this.isMintable) {
