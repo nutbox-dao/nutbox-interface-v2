@@ -155,7 +155,7 @@
           </div>
         </div>
       </div>
-      <div class="c-card" v-if="communityInfo && (communityInfo.treasury !== '0x0000000000000000000000000000000000000000')">
+      <div class="c-card" v-if="communityInfo && (Number(communityInfo.treasury) !== 0)">
         <div class="content3">
            <div class="title mb-3">{{ $t('treasury.daoTreasury') }}</div>
            <div class="custom-form form-row-align-center">
@@ -193,7 +193,10 @@
                   </div>
                 </div>
               </b-form-group>
-              <button class="primary-btn" v-if="treasuryTokens && treasuryTokens.length > 0" style="width: 50%" @click="treasuryBtnClick" :disabled="loadingApprovement || isApprovingTreasury">
+              <ConnectMetaMask class="w-50"
+                v-if="!metamaskConnected"
+              />
+              <button class="primary-btn w-50" v-if="metamaskConnected && treasuryTokens && treasuryTokens.length > 0" @click="treasuryBtnClick" :disabled="loadingApprovement || isApprovingTreasury">
                   <b-spinner small type="grow" v-show="loadingApprovement || isApprovingTreasury"></b-spinner>
                 {{ (loadingApprovement || !isApprovedTreasury) ? $t('operation.approveContract') : $t('operation.redeem') }}
               </button>
@@ -280,6 +283,7 @@
 import { mapGetters, mapState } from 'vuex'
 import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
+import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { getSingleCtokenBalance } from '@/utils/web3/asset'
 import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance, getApprovement, approveUseERC20 } from '@/utils/web3/community'
@@ -296,7 +300,8 @@ export default {
     Progress,
     PoolRatio,
     ActivityItem,
-    ToggleSwitch
+    ToggleSwitch,
+    ConnectMetaMask
   },
   data () {
     return {
@@ -318,6 +323,7 @@ export default {
   computed: {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
     ...mapState('web3', ['treasuryTokens']),
+    ...mapState(["metamaskConnected"]),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
@@ -451,11 +457,13 @@ export default {
       console.log('dis', res);
     })
     getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
-    if (this.communityInfo.treasury !== ethers.constants.AddressZero) {
+    if (Number(this.communityInfo.treasury) !== 0) {
       getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
       getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
         this.loadingApprovement = false
         this.isApprovedTreasury = a
+      }).catch(res => {
+        console.log(2, res);
       })
     }
     
