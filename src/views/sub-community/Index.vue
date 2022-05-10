@@ -231,9 +231,9 @@ export default {
     }
   },
   beforeDestroy() {
+    this.desdroyed = true
     this.clearData()
     this.clear();
-    this.desdroyed = true
   },
   methods: {
     ...mapMutations('currentCommunity', [
