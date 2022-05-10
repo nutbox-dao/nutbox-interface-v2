@@ -153,7 +153,8 @@ export default {
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      desdroyed: false
     }
   },
   mounted () {
@@ -174,7 +175,9 @@ export default {
         this.$store.commit('community/saveLoadingApproveCommunity', false)
       })
       getSpecifyCommunityInfo(this.communityId).then(community => {
+        if (this.desdroyed) return;
         getCToken(community.id).then(ctoken => {
+          if (this.desdroyed) return
           this.saveCtoken(ctoken)
           if (!ctoken.isMintable) {
             const interval = rollingFunction(getCommunityBalance, { communityId: this.communityId, ctokenAddress: ctoken.address }, 10, (balance) => {
@@ -221,6 +224,7 @@ export default {
   beforeDestroy() {
     this.clearData()
     this.clear();
+    this.desdroyed = true
   },
   methods: {
     ...mapMutations('currentCommunity', [
