@@ -43,12 +43,13 @@
           <span class="font14 text-grey-7">
             {{ type === "erc20staking" ? "STAKED" : "DELEGATED" }}</span
           >
-          <template v-if="type === 'erc20staking'">
+          <template v-if="type !== 'erc1155'">
             <i
               class="copy-icon copy-icon-gray mx-1"
-              @click="copy(stakeToken.address)"
+              @click="copy(assetToken)"
             ></i>
             <i
+              v-if="type === 'erc20staking'"
               class="link-icon link-icon-gray"
               @click="gotoToken(stakeToken.address)"
             ></i>
@@ -130,6 +131,11 @@ import PoolOperationForCosmos from "@/components/community/PoolOperationForCosmo
 
 import { BLOCK_SECOND, YEAR_BLOCKS } from "@/constant";
 import { getUserBaseInfo } from "@/utils/web3/account";
+import { ethers } from 'ethers'
+import {
+  accBech32ToAddress,
+  addressAccToAccBech32
+} from "@/utils/cosmos/cosmos";
 
 export default {
   name: "CommunityStakingCard",
@@ -166,6 +172,15 @@ export default {
       if (this.type !== "erc20staking" || !this.allTokens) return {};
       const token = this.tokenByKey(this.card.asset);
       return token ?? {};
+    },
+    assetToken() {
+      if (this.type === 'steem' || this.type === 'hive') {
+        return ethers.utils.parseBytes32String(this.card.asset)
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
+        return addressAccToAccBech32(this.card.asset, this.type)
+      } else if (this.type === 'erc20staking') {
+        return this.card.asset
+      }
     },
     pendingReward() {
       if (!this.userReward) return 0;
