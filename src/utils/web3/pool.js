@@ -234,7 +234,7 @@ export const addPool = async (form) => {
             factory.removeAllListeners('ERC1155StakingCreated')
           }
         })
-      } else if(form.type === 'steem' || form.type === 'hive' || from.type === 'steem-witness') {
+      } else if(form.type === 'steem' || form.type === 'hive' || form.type === 'steem-witness') {
         factory.on('SPStakingCreated', (pool, community, name, chainId, delegatee) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
