@@ -19,7 +19,7 @@
             <div
               class="community-logo-box"
               :class="
-                inSubCommunityView && community.id === communityId.toLowerCase()
+                inSubCommunityView && community.id.toLowerCase() === communityId.toLowerCase()
                   ? 'active'
                   : ''
               "
