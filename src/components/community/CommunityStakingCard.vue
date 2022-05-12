@@ -196,6 +196,15 @@ export default {
         return this.card.asset
       }
     },
+    assetToken() {
+      if (this.type === 'steem' || this.type === 'hive') {
+        return ethers.utils.parseBytes32String(this.card.asset)
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
+        return addressAccToAccBech32(this.card.asset, this.type)
+      } else if (this.type === 'erc20staking') {
+        return this.card.asset
+      }
+    },
     pendingReward() {
       if (!this.userReward) return 0;
       const pendingBn = this.userReward[this.card.id];
