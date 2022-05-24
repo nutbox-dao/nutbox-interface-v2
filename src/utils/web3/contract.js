@@ -18,12 +18,13 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0x6FDC6807e92e495e779d1881B2Fc5Ae63B56D207",
-  "MintableERC20Factory": "0x5E72d43eD29daaeF81CEF6d36bD732eEf1950726",
-  "CommunityFactory": "0xcf7B7536bc5E26455a8De6830774572001157104",
-  "LinearCalculator": "0xCE2A9D135e3F4C3e4107079D1A969A7c4F8Ccfa9",
-  "ERC20StakingFactory": "0x2422551A4a179D3632855614371A1f2207a17Cb7",
-  "CrowdloanFactory": "0xB513A1858e9A1443bd28495ba3338BFaa6Fe7B36"
+  "Committee": "0x1c5765912e5288d956d8cF004a8002ACD1bbA649",
+  "MintableERC20Factory": "0x681954b06Abc7e5176cd0d8F177aacC6188B1cF9",
+  "CommunityFactory": "0xF48d7654eA2ADB8b14857F069f1bF0143465280a",
+  "LinearCalculator": "0x8De4be3bA10520A28aA95Ccfe16FdF438b709a9d",
+  "ERC20StakingFactory": "0x8ad7cb0b962d0C8d6044E1Ed7Ea491f6b0f5F965",
+  "CrowdloanFactory": "0x52E78f8e68f4a5ab0aeB057F0a9be40A18dA7d3d",
+  "AstarDappStakingFactory": "0xF3f8a37E517A3c2378Cf99A3C43e06f011393B2b"
 }
 
 export const getPoolFactory = (type) => {
@@ -54,7 +55,9 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "ERC20StakingFactory": "ERC20StakingFactory.json",
   "ERC20Staking": "ERC20Staking.json",
   "SPStaking":"SPStaking.json",
-  "ERC20": "ERC20.json"
+  "ERC20": "ERC20.json",
+  "AstarDappStakingFactory": "AstarDappStakingFactory.json",
+  "AstarDappStaking": 'AstarDappStaking.json'
 }
 
 // Get contract Abi

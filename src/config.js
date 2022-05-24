@@ -4,9 +4,9 @@ export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
 // nutbox backend server
-// export const BACKEND_API_URL = "https://api-astar.nutbox.app"
+export const BACKEND_API_URL = "https://v2-api-shibuya.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-export const BACKEND_API_URL = "http://localhost:3000";
+// export const BACKEND_API_URL = "http://localhost:3000";
 
 export const QN_UPLOAD_URL = 'https://api-walnut.nutbox.app' + "/qiNiu/upload";
 
@@ -101,7 +101,7 @@ export const PhalaCrowdloanReferrerRemark = {
 // }
 
 // shibuya
-export const RPC_NODE = 'https://rpc.shibuya.astar.network:8545';
+export const RPC_NODE = 'https://evm.shibuya.astar.network';
 export const BSC_CHAIN_ID = 81;
 export const BLOCK_CHAIN_BROWER = 'https://shibuya.subscan.io';
 export const CHAIN_NAME = 'Shibuya';
