@@ -99,7 +99,7 @@ import { ethers } from 'ethers'
 import { getPoolFactoryAddress } from '../../utils/web3/pool'
 
 export default {
-  name: 'CommunityStaking',
+  name: 'DappStaking',
   components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
   data () {
     return {
@@ -124,7 +124,7 @@ export default {
     },
     activePool() {
       return this.pools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase() ===
-        getPoolFactoryAddress('erc20staking'))
+        getPoolFactoryAddress('dappstaking'))
     },
     stakingPools() {
       switch(this.activeTab) {
@@ -132,12 +132,12 @@ export default {
           return this.activePool
         case 1:
           return this.pools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() ===
-                getPoolFactoryAddress('erc20staking'))
+                getPoolFactoryAddress('dappstaking'))
       }
     }
   },
   async mounted () {
-    this.poolType = 'erc20staking'
+    this.poolType = 'dappstaking'
   },
   methods: {
     selectPoolType (type) {

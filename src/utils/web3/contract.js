@@ -32,6 +32,8 @@ export const getPoolFactory = (type) => {
     return contractAddress.ERC20StakingFactory
   } else if (type === 'crowdloan') {
     return contractAddress.CrowdloanFactory
+  } else if (type === 'dappstaking') {
+    return contractAddress.AstarDappStakingFactory
   }
 }
 
@@ -40,6 +42,8 @@ export const getPoolTypeName = (type) => {
     return 'ERC20StakingFactory'
   } else if (type === 'crowdloan') {
     return 'CrowdloanFactory'
+  } else if (type === 'dappstaking') {
+    return 'AstarDappStakingFactory'
   }
 }
 

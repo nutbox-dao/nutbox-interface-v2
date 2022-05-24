@@ -349,7 +349,8 @@ module.exports = {
     governance: "Governance",
     staking: "Staking",
     blog: "Blog",
-    member: "Member"
+    member: "Member",
+    dappStaking: "Dapp Staking"
   },
   // placeHolder tip
   placeHolder: {

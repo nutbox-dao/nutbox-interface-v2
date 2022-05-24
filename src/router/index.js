@@ -19,6 +19,7 @@ import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
 import CommunityStaking from '@/views/manage-community/CommunityStaking'
 import Crowdloan from '@/views/manage-community/Crowdloan'
+import DappStaking from '@/views/manage-community/DappStaking'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
 import CommunityVote from '@/views/manage-community/CommunityVote'
 Vue.use(VueRouter)
@@ -126,6 +127,11 @@ const routes = [
         path: 'crowdloan',
         name: 'Crowdloan',
         component: Crowdloan
+      },
+      {
+        path: 'dapp-staking',
+        name: 'DappStaking',
+        component: DappStaking
       },
       {
         path: 'social',

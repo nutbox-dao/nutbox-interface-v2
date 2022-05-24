@@ -36,6 +36,8 @@ export const getPoolFactoryAddress = (type) => {
     return contractAddress['ERC20StakingFactory'].toLowerCase()
   } else if (type === 'crowdloan') {
     return contractAddress['CrowdloanFactory'].toLowerCase()
+  } else if (type === 'dappstaking') {
+    return contractAddress['AstarDappStakingFactory'].toLowerCase()
   }
 }
 
@@ -46,6 +48,8 @@ export const getPoolType = (factory, chainId) => {
       return 'erc20staking'
     case contractAddress['CrowdloanFactory']:
       return 'crowdloan'
+    case contractAddress['AstarDappStakingFactory']:
+      return 'dappstaking'
   }
 }
 
