@@ -10,6 +10,7 @@ import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 import SubCommunityStaking from '@/views/sub-community/SubCommunityStaking'
 import SubCommunityCrowdloan from '@/views/sub-community/SubCommunityCrowdloan'
+import SubCommunityDappStaking from '@/views/sub-community/SubCommunityDappStaking'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
 import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
@@ -83,6 +84,10 @@ const routes = [
       {
         path: 'crowdloan',
         component: SubCommunityCrowdloan
+      },
+      {
+        path: 'dappstaking',
+        component: SubCommunityDappStaking
       },
       {
         path: 'member',

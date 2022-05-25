@@ -13,6 +13,10 @@
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.farming") }}</span>
               </b-nav-item>
+              <b-nav-item to="/sub-community/dappstaking">
+                <i class="menu-icon stake-icon" />
+                <span>{{ $t("router.dappStaking") }}</span>
+              </b-nav-item>
               <b-nav-item to="/sub-community/crowdloan">
                 <i class="menu-icon stake-icon" />
                 <span>{{ $t("router.crowdloan") }}</span>

@@ -63,6 +63,7 @@ export default {
   },
   computed: {
     ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapGetters('dappstaking', ['dappByAddress']),
     ...mapState('currentCommunity', ['communityId', 'cToken']),
     ...mapState('web3', ['tokenIcons']),
     ...mapState({
@@ -80,6 +81,9 @@ export default {
         return this.tokenIcons[this.card.asset]
       } else if (this.type === 'crowdloan') {
         return getParaIcon(this.card.paraId)
+      } else if (this.type === 'dappstaking') {
+        const dapp = this.dappByAddress(this.card.asset)
+        return dapp.icon
       }
     },
     type() {
@@ -105,6 +109,8 @@ export default {
             return fund[0].status
           }
         }
+      } else if (this.type === 'dappstaking') {
+        return 'Dapp'
       }
       return this.type.toUpperCase()
     },

@@ -1,4 +1,7 @@
 import store from '@/store'
+import { getContract } from './contract'
+import { errCode } from '@/config'
+import { waitForTx } from './ethers'
 
 export const getAllDapps = async () => {
     return new Promise(async (resolve, reject) => {
@@ -22,4 +25,60 @@ export const getAllDapps = async () => {
         store.commit('dappstaking/saveDappsInfo', dapps)
         resolve(dapps)
     })
+}
+
+/**
+ * stake asset
+ * @param {*} poolId
+ * @param {*} amount
+ */
+ export const stake = async (poolId, amount, decimals = 18) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try{
+      contract = await getContract('AstarDappStaking', poolId, false)
+    }catch(e){
+      reject(e)
+      return;
+    }
+
+    try{
+      const tx = await contract.stake({value: ethers.utils.parseUnits(amount.toString(), decimals)})
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e){
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
+}
+
+// unstake asset
+export const unStake = async (poolId, amount) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try{
+      contract = await getContract('AstarDappStaking', poolId, false)
+    }catch(e){
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.unstake(ethers.utils.parseUnits(amount.toString(), 18))
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    }catch(e) {
+      if (e.code === 4001){
+        reject(errCode.USER_CANCEL_SIGNING)
+      }else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
 }
