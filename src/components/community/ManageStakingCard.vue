@@ -105,6 +105,7 @@ export default {
     ...mapState('web3', ['stakingFactoryId', 'allTokens', 'fees']),
     ...mapState('community', ['communityData', 'loadingApproveCommunity', 'approvedCommunity']),
     ...mapGetters('web3', ['tokenByKey']),
+    ...mapGetters('dappstaking', ['dappByAddress']),
     ...mapState({
       prices: state => state.prices
     }),
@@ -115,7 +116,6 @@ export default {
       return getPoolType(this.pool.poolFactory, this.pool.chainId)
     },
     stakeToken() {
-      console.log(12354, this.type, this.pool);
       if (this.type !== 'erc20staking' || !this.allTokens) return {}
       const token = this.tokenByKey(this.pool.asset)
       return token
@@ -134,6 +134,8 @@ export default {
         }else if((this.pool.chainId) === 2) {
           return this.totalDeposited * this.prices['ksm']
         }
+      } else if (this.type === 'dappstaking') {
+        return this.totalDeposited * this.prices['sby']
       }
     },
     fee() {
@@ -255,7 +257,11 @@ export default {
       this.vert = (10 ** this.stakedERC20.decimal)
     } else if (this.type === 'crowdloan') {
       this.icon = getParaIcon(this.pool.paraId);
-      this.vert = parseInt(this.pool.chainId) === 0 ? 10 : 12
+      this.vert = parseInt(this.pool.chainId) === 0 ? 1e10 : 1e12
+    } else if (this.type === 'dappstaking') {
+      const dapp = this.dappByAddress(this.pool.asset);
+      this.icon = dapp.icon
+      this.vert = 1e18
     }
   }
 }

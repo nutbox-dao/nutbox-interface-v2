@@ -12,6 +12,7 @@ import user from './user'
 import pool from './pool'
 import kusama from './kusama'
 import polkadot from './polkadot'
+import dappstaking from './dappstaking'
 
 Vue.use(Vuex)
 
@@ -54,6 +55,7 @@ export default new Vuex.Store({
     user,
     pool,
     kusama,
-    polkadot
+    polkadot,
+    dappstaking
   }
 })

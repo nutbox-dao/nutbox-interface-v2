@@ -166,6 +166,22 @@ export const addPool = async (form) => {
             factory.removeAllListeners('CrowdloanCreated')
           }
         })
+      } else if (form.type === 'dappstaking') {
+        factory.on('AStarDappStakingCreated', (pool, community, name, dapp) => {
+          if (community.toLowerCase() === stakingFactoryId.toLowerCase() && name === form.name && dapp.toLowerCase() === form.asset.toLowerCase()) {
+            console.log('Crete a new dapp staking:', pool);
+            resolve({
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              stakersCount: 0
+            })
+            factory.removeAllListeners('AStarDappStakingCreated')
+          }
+        })
       }
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
       await waitForTx(tx.hash)

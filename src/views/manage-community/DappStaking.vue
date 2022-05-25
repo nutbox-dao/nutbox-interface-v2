@@ -54,8 +54,8 @@
                             @close="poolTypeModal=false"
                             @onType="selectPoolType"/>
       <div v-show="createPoolStep===2">
-        <StakingBSCPool
-                        @confirm="selectPoolToken"
+        <StakingDappPool
+                        @confirm="selectDapp"
                         @back="poolTypeModal=false"/>
       </div>
       <StakingPoolConfig v-if="createPoolStep===3"
@@ -91,16 +91,17 @@ import ManageStakingCard from '@/components/community/ManageStakingCard'
 import { addPool, updatePoolsRatio } from '@/utils/web3/pool'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import StakingPoolType from '@/components/community/StakingPoolType'
-import StakingBSCPool from '@/components/community/StakingBSCPool'
+import StakingDappPool from '@/components/community/StakingDappPool'
 import StakingDelegatePool from '@/components/community/StakingDelegatePool'
 import StakingPoolConfig from '@/components/community/StakingPoolConfig'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
 import { getPoolFactoryAddress } from '../../utils/web3/pool'
+import { getAllDapps } from '@/utils/web3/dappstaking'
 
 export default {
   name: 'DappStaking',
-  components: { ManageStakingCard, StakingPoolType, StakingBSCPool, StakingDelegatePool, StakingPoolConfig },
+  components: { ManageStakingCard, StakingPoolType, StakingDappPool, StakingDelegatePool, StakingPoolConfig },
   data () {
     return {
       tabOptions: ['Active', 'Inactive'],
@@ -118,6 +119,7 @@ export default {
   },
   computed: {
     ...mapState('community', ['communityData']),
+    ...mapState('dappstaking', ['dappsInfo']),
     pools() {
       console.log(this.communityData);
       return this.communityData ? this.communityData.pools : []
@@ -138,13 +140,14 @@ export default {
   },
   async mounted () {
     this.poolType = 'dappstaking'
+    getAllDapps()
   },
   methods: {
     selectPoolType (type) {
-      this.poolType = type
+      this.poolType = 'dappstaking'
       this.createPoolStep = 2
     },
-    selectPoolToken (tokenData) {
+    selectDapp (tokenData) {
       this.stakeAsset = tokenData.address
       if (tokenData.icon) {
         this.needIcon =false
@@ -158,7 +161,7 @@ export default {
     // create new pool
     async create (pool) {
       let form = {
-        type: this.poolType,
+        type: 'dappstaking',
         ratios: pool.map(p => parseFloat(p.ratio)),
         name: pool[pool.length - 1].name,
         asset: this.stakeAsset
