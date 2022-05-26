@@ -199,6 +199,7 @@ async function getSpecifyCommunityInfoFromOurService(community) {
         pool.voters = pool.voters.edges.map(v => v.node)
         return pool
     })
+    data.users = data.users.edges.map(u => u.node)
     data.operationHistory = history
     store.commit('currentCommunity/saveCommunityInfo', data)
     return data

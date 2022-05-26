@@ -737,7 +737,7 @@ export const watchMemberBalance = (callback) => {
           u.address
         ],
         returns: [
-          [u.address, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](ctoken))]
+          [u.address.toLowerCase(), val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](ctoken))]
         ]
       })), Multi_Config)
       callback(res.results.transformed)

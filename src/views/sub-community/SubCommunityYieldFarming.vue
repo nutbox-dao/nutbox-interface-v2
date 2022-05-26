@@ -3,8 +3,8 @@
     <div class="scroll-content position-relative">
       <div class="view-top-header view-top-header-m0">
         <div class="mx-2">
-          <div class="font24 line-height28 font-bold mb-2">Farming</div>
-          <div class="font16 line-height24 font-bold mb-4">Just stake some tokens to earn.</div>
+          <div class="font24 line-height28 font-bold mb-2">{{ $t('router.farming') }}</div>
+          <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.farming') }}</div>
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
             <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
@@ -93,6 +93,10 @@ export default {
     },
   },
   async mounted() {
+    this.tabOptions = [
+      this.$t('pool.activePools'),
+      this.$t('pool.inactivePools')
+    ]
     while (true) {
       if (this.communityInfo && this.allPools) {
         break;

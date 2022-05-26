@@ -24,7 +24,7 @@
       <!-- c token -->
       <div class="c-card">
         <div class="content1">
-          <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
+          <div class="title mb-3">{{ $t('community.communityToken') }}</div>
           <div class="row">
             <div class="col-md-5 d-flex token-base-info">
               <img class="token-logo mr-3" :src="cToken && cToken.icon" alt=""/>
@@ -59,7 +59,7 @@
       <!-- distribution -->
       <div class="c-card">
         <div class="content2 mb-5">
-          <div class="title mb-3">Distribution Strategy</div>
+          <div class="title mb-3">{{ $t('desc.disStrategy') }}</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>
@@ -67,7 +67,7 @@
       <!-- pools -->
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
-          <div class="title mb-3">Pools</div>
+          <div class="title mb-3">{{ $t('pool.pools') }}</div>
           <PoolRatio :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
@@ -79,7 +79,7 @@
       <!-- Dao fund -->
       <div class="c-card">
         <div class="content3">
-          <div class="title mb-3">Community Asset</div>
+          <div class="title mb-3">{{ $t('community.communityAsset') }}</div>
           <div class="custom-form form-row-align-center">
             <!-- community balance -->
             <b-form-group v-if="isMintable" label-cols-md="3" content-cols-md="8"
@@ -208,9 +208,9 @@
     <div class="activity-banner">
       <div class="a-banner-card">
         <div class="mt-2 mb-4 font-bold font14 justify-content-between d-flex  flex-column">
-          <div class="font24 line-height24 mb-4">{{ communityInfo ? communityInfo.operationCount : '' }} Activities</div>
+          <div class="font24 line-height24 mb-4">{{ communityInfo ? communityInfo.operationCount : '' }} {{ $t('commen.activities') }}</div>
           <div class="d-flex align-items-center">
-            <span class="mr-2 font14 text-grey-7">Admin only</span>
+            <span class="mr-2 font14 text-grey-7">{{ $t('desc.adminOnly') }}</span>
             <ToggleSwitch v-model="isAdmin"/>
           </div>
         </div>
@@ -247,7 +247,7 @@
           </div>
           <div class="font14 mt-2 d-flex" v-if="parseFloat(redeemValue) > 0">
             <span>
-              You will receive: 
+              {{ $t('desc.youWillReceive') }}
             </span>
             <div class="flex-1">
               <div class="d-flex" v-for="t of treasuryTokens" :key="t" v-show="parseFloat(redeemAssetsAmount[t]) > 1e-6">

@@ -184,7 +184,7 @@
           </button>
           <button class="primary-btn" @click="onConfirm" :disabled="uploading">
             <b-spinner small type="grow" v-show="uploading" />
-            Sign and upload
+            {{ $t('operation.sign') }}
           </button>
         </div>
       </div>

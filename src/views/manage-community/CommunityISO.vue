@@ -3,8 +3,8 @@
     <div class="view-top-header view-top-header-sticky">
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
-          <div class="font24 line-height28 font-bold mb-2">ISO: Initial Staking Offering</div>
-          <div class="font16 line-height24 font-bold mb-4">Stake PoS Token mint community Token. High APR, No risk.</div>
+          <div class="font24 line-height28 font-bold mb-2">{{ $t('desc.iso') }}</div>
+          <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.isoDetail') }}</div>
         </div>
         <div class="col-xl-5">
           <div class="c-btn-group m-2">
@@ -12,13 +12,13 @@
                     style="height: 2rem"
                     v-show="activeISOPool.length > 0 && activePool.length > 1"
                     @click="configPoolModal=true">
-              Configure Delegate Pool
+              {{ $t('operation.configurePoolRatio') }}
             </button>
             <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
                     @click="poolTypeModal=true, createPoolStep=1">
               <i class="add-icon add-icon-white mr-2"></i>
-              <span>Add Delegate Pool</span>
+              <span>{{ $t('operation.addDelegatePool') }}</span>
             </button>
           </div>
         </div>
@@ -149,7 +149,12 @@ export default {
       }
     },
   },
-  async mounted() {},
+  async mounted() {
+    this.tabOptions = [
+      this.$t('pool.opened'),
+      this.$t('pool.closed')
+    ]
+  },
   methods: {
     selectPoolType(type) {
       this.poolType = type;

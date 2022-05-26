@@ -3,9 +3,9 @@
     <div class="view-top-header view-top-header-sticky">
       <div class="row">
         <div class="col-xl-7 d-flex flex-column justify-content-center">
-          <div class="font24 line-height28 font-bold mb-2">NUT Power（NP）</div>
+          <div class="font24 line-height28 font-bold mb-2">{{ $t('np.nutPower') }}</div>
           <div class="font16 line-height24 font-bold mb-4">
-            Nutbox Voting Power(NUT Power for short) is the Governance Power of Nutbox DAO. The Nutbox governance reward of a user is charged by the user's governance activity.
+            {{ $t('np.npDesc') }}
           </div>
         </div>
         <div class="col-xl-5">
@@ -13,13 +13,13 @@
             <button class="primary-btn primary-btn-outline w-auto mx-0 px-3"
                     style="height: 2rem"
                     @click="claimModal=true">
-              Claim NUT
+              {{ $t('np.claimNut') }}
             </button>
             <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
                     @click="addPoolModal=true">
               <i class="add-icon add-icon-white mr-2"></i>
-              <span>Add NP Vote Pool</span>
+              <span>{{ $t('operation.addPool') }}</span>
             </button>
           </div>
         </div>
@@ -47,14 +47,14 @@
       hide-footer
       no-close-on-backdrop>
       <div class="custom-form text-center">
-        <div class="font20 line-height24 mt-2 mb-4">{{ communityPendingNut | amountForm }} Nut is available to claim.</div>
+        <div class="font20 line-height24 mt-2 mb-4">{{ $t('np.availabeClaimNut', {amount: formAmount(communityPendingNut)}) }}</div>
         <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
           <button class="dark-btn primary-btn-outline mx-3" :disabled="harvestingNut" @click="claimModal = false">
-            Cancel
+            {{ $t('operation.cancel') }}
           </button>
           <button class="primary-btn mx-3" :disabled="harvestingNut" @click="harvest">
             <b-spinner small type="grow" v-show="harvestingNut"/>
-            Claim
+            {{ $t('operation.claim') }}
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@ import { mapState } from 'vuex';
 import { getGaugeVoteInfo, getGaugeParams, getCommunityPendingRewardNut } from '@/utils/nutbox/gauge'
 import { getNPInfoByPolling } from '@/utils/nutbox/nutpower'
 import { sleep } from '@/utils/helper'
-import { handleApiErrCode } from '../../utils/helper';
+import { handleApiErrCode, formatAmount } from '../../utils/helper';
 
 export default {
   name: 'CommunityNutPower',
@@ -122,6 +122,9 @@ export default {
     });
   },
   methods: {
+    formAmount(a) {
+      return formatAmount(a)
+    },
     async harvest() {
       try{
         if(this.communityPendingNut <= 0){
