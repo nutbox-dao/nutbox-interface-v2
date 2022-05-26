@@ -7,7 +7,7 @@
             <b-nav vertical align="center" class="top">
               <b-nav-item to="/sub-community/home/">
                 <i class="menu-icon home-icon" />
-                <span>Home</span>
+                <span>{{ $t('router.home') }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/iso">
                 <i class="menu-icon iso-icon" />
@@ -15,15 +15,15 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon farming-icon" />
-                <span>Farming</span>
+                <span>{{ $t('router.farming') }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/erc1155">
                 <i class="menu-icon nft-icon" />
-                <span>NFT Stake</span>
+                <span>{{ $t('router.nftStake') }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
-                <span>NUT Power</span>
+                <span>{{ $t('router.nutPower') }}</span>
               </b-nav-item>
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
@@ -69,7 +69,7 @@
                 <div class="menu-items">
                   <b-nav-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
-                    <span>Home</span>
+                    <span>{{ $t('router.home') }}</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/iso">
                     <i class="menu-icon iso-icon" />
@@ -77,15 +77,15 @@
                   </b-nav-item>
                   <b-nav-item to="/sub-community/staking">
                     <i class="menu-icon farming-icon" />
-                    <span>Farming</span>
+                    <span>{{ $t('router.farming') }}</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/erc1155">
                     <i class="menu-icon nft-icon" />
-                    <span>NFT Stake</span>
+                    <span>{{ $t('router.nftStake') }}</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />
-                    <span>NUT Power</span>
+                    <span>{{ $t('router.nutPower') }}</span>
                   </b-nav-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />

@@ -8,7 +8,7 @@
               <div class="col-md-8 text-left d-flex flex-column justify-content-between">
                 <!-- <img class="text-logo" src="~@/static/images/nutbox-text-logo.png" alt=""> -->
                 <div class="mt-1">
-                  <div class="s1-title s-title">Create Your Staking Economy In Minutes</div>
+                  <div class="s1-title s-title">{{ $t('desc.slogan')}}</div>
                 </div>
                 <div class="mt-3">
                   <div class="font-bold banner1-sub-title font20 line-height20 mt-1">
@@ -20,7 +20,7 @@
                   </div>
                 </div>
                 <button @click="$router.replace('/community/index')"
-                        class="s1-btn mt-3">Explore Communities</button>
+                        class="s1-btn mt-3">{{ $t('operation.exploreCommunity') }}</button>
               </div>
             </div>
           </div>
@@ -44,7 +44,7 @@
               <div class="s2-card2 s2-card2-1">
                 <img src="~@/static/images/home-s3-img1.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalCommunities }}</div>
-                <div class="label font20 line-height20 text-grey-7">Community</div>
+                <div class="label font20 line-height20 text-grey-7">{{ $t('community.community') }}</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
@@ -52,7 +52,7 @@
               <div class="s2-card2 s2-card2-2">
                 <img src="~@/static/images/home-s3-img2.svg" alt="">
                 <div class="value font40 line-height40 font-bold mt-2 mb-1">{{ walnutInfo.totalUsers }}</div>
-                <div class="label font20 line-height20 text-grey-7">Member</div>
+                <div class="label font20 line-height20 text-grey-7">{{ $t('community.member') }}</div>
                 <div v-if="loading" class="c-loading c-loading-absolute"></div>
               </div>
             </div>
@@ -108,9 +108,9 @@
         </section> -->
         <section class="section3">
           <div class="d-flex justify-content-between align-items-center">
-            <div class="font-bold">Featured Communities</div>
+            <div class="font-bold">{{ $t('desc.featuredCommunity') }}</div>
             <div class="d-flex align-items-center text-grey-9f font14 line-height18 hover" @click="$router.push('/community/index')">
-              <span>More</span>
+              <span>{{ $t('commen.more') }}</span>
               <i class="more-text-icon"></i>
             </div>
           </div>
@@ -122,7 +122,7 @@
           </div>
         </section>
         <section @click="gotoOfficial" class="my-3 font-bold font20 text-center hover">
-          About Nutbox
+          {{ $t('desc.aboutNutbox') }}
           <p/>
         </section>
       </div>

@@ -3,8 +3,8 @@
     <div class="scroll-content position-relative">
       <div class="view-top-header view-top-header-m0">
         <div class="mx-2">
-          <div class="font24 line-height28 font-bold mb-2">ISO: Initial Staking Offering</div>
-          <div class="font16 line-height24 font-bold mb-4">Stake PoS Token mint community Token. High APR, No risk.</div>
+          <div class="font24 line-height28 font-bold mb-2">{{ $t('desc.iso') }}</div>
+          <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.isoDetail')  }}</div>
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
             <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"

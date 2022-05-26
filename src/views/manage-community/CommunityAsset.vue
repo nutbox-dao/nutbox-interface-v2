@@ -2,7 +2,7 @@
   <div class="scroll-content">
     <!-- token info -->
     <div class="c-card">
-      <div class="font20 font24 font-bold mb-3">{{ $t('community.communityAsset') }}</div>
+      <div class="font20 font24 font-bold mb-3">{{ $t('community.communityToken') }}</div>
       <div class="row">
         <div class="col-md-6 d-flex justify-content-between">
           <img class="token-icon" :src="cToken.icon || './default.png'" alt="">
@@ -33,12 +33,12 @@
     </div>
     <!-- strategy -->
     <div class="c-card mt-3" style="padding-bottom:2.5rem">
-      <div class="font20 font-bold">Token Release Strategy</div>
+      <div class="font20 font-bold">{{ $t('desc.disStrategy') }}</div>
       <Progress :progress-data="distributions"></Progress>
     </div>
     <!-- fund info -->
     <div class="c-card mt-3">
-      <div class="font20 font-bold">Dao Fund Info</div>
+      <div class="font20 font-bold">{{ $t('community.daoFundInfo') }}</div>
       <div class="custom-form mt-5">
         <!-- community balance -->
         <b-form-group v-if="!isMintable" label-cols-md="2" content-cols-md="8"
@@ -123,7 +123,7 @@
       </div>
     </div>
     <div class="c-card mt-3 mb-5">
-      <div class="font20 font-bold">Dao Treasury Info</div>
+      <div class="font20 font-bold">{{ $t('community.daoTreasuryInfo') }}</div>
       <div class="custom-from" v-if="isLoadingTreasury">
         <div class="c-loading"></div>
       </div>
@@ -347,7 +347,7 @@ import {
    } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
 import { getCToken, getERC20Balance } from '@/utils/web3/asset'
-import { handleApiErrCode } from '@/utils/helper'
+import { handleApiErrCode, sleep } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
 import { createTreasury } from '@/utils/web3/treasury'
@@ -631,9 +631,16 @@ export default {
       getDistributionEras().catch(e => handleApiErrCode(e, (tip, param) => this.$bvToast.toast(tip, param)))
     } catch (e) {
     }
+    while(true) {
+      if (this.communityData) {
+        break;
+      }
+      await sleep(0.3)
+    }
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
-    this.treasuryAddress = communityInfo.treasury
+    this.treasuryAddress = this.communityData.treasury
+    console.log(235, this.communityData)
     this.isCreatedTreasury = this.treasuryAddress && Number(this.treasuryAddress) !== 0
     this.isLoadingTreasury = false
     if (!this.isMintable) {
