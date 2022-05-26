@@ -38,6 +38,7 @@ import { sleep, rollingFunction } from '@/utils/helper'
 import { getPools as getPoolsFromGraph} from '@/utils/graphql/pool'
 import { initApis } from '@/utils/polkadot/api'
 import { getAllDapps } from '../../utils/web3/dappstaking'
+import { getBalance } from '@/utils/web3/asset'
 
 export default {
   name: 'SubCommunityDappStaking',
@@ -71,9 +72,8 @@ export default {
     }
   },
   async mounted() {
-    initApis('polkadot');
-    initApis('kusama');
     getAllDapps();
+    getBalance()
     while(true) {
       if (this.communityInfo && this.allPools) {
         break;

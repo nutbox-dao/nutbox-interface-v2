@@ -19,15 +19,13 @@
         </button>
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
-        <span class="text-grey-47 font-bold mr-2 font14">{{ stakeToken.symbol }}</span>
+        <span class="text-grey-47 font-bold mr-2 font14">{{ symbol }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">STAKED</span>
-          <i class="copy-icon copy-icon-gray mx-1" @click="copy(stakeToken.address)"></i>
-          <i class="link-icon link-icon-gray" @click="gotoToken(stakeToken.address)"></i>
         </div>
       </div>
 
-      <PoolOperation :card='card'/>
+      <PoolOperationDappStaking :card='card'/>
 
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
@@ -96,8 +94,8 @@ import { withdrawReward, getPoolType } from '@/utils/web3/pool'
 import { formatUserAddress, handleApiErrCode } from '@/utils/helper'
 import StakingCardHeader from '@/components/common/StakingCardHeader'
 import showToastMixin from '@/mixins/copyToast'
-import { BLOCK_CHAIN_BROWER } from '@/config'
-import PoolOperation from '@/components/community/PoolOperation'
+import { BLOCK_CHAIN_BROWER, NATIVE_CURRENCY } from '@/config'
+import PoolOperationDappStaking from '@/components/community/PoolOperationDappStaking'
 import { BLOCK_SECOND } from '@/constant'
 import { getUserBaseInfo } from '@/utils/web3/account'
 import { getCommunityRewardPerBlock } from '@/utils/web3/community'
@@ -107,7 +105,7 @@ export default {
   components: {
     StakingHomeChainAssetModal,
     StakingCardHeader,
-    PoolOperation
+    PoolOperationDappStaking
   },
   props: {
     card: {
@@ -142,7 +140,7 @@ export default {
       const total =
         this.totalStaked[this.card.id]
       if (!total) return 0
-      return total.toString() / (10 ** (this.stakeToken ? this.stakeToken.decimal : 18))
+      return total.toString() / 1e18
     },
     stakePrice(){
       if(!this.prices) return 0
@@ -171,7 +169,8 @@ export default {
       isWithdrawing: false,
       stakers: [],
       rewardPerBlock: 0,
-      showAttention: false
+      showAttention: false,
+    symbol: NATIVE_CURRENCY['symbol']
     }
   },
   mixins: [showToastMixin],

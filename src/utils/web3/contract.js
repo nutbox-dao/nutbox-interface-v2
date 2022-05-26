@@ -18,14 +18,14 @@ import {
 import { errCode } from '../../config'
 
 export const contractAddress = {
-  "Committee": "0x3931546cA5399ef0e0b0c7d1d78C89F0e7BeB8AF",
-  "MintableERC20Factory": "0x7A220C709aC88B39fB0085BB48Bc584eB89A278F",
-  "CommunityFactory": "0x6B70dCfA3E14f532C8C9cB113558254464760023",
-  "LinearCalculator": "0xf4991e725Fdccf996F3bAdce2fEC3bDaf94EaeAe",
-  "ERC20StakingFactory": "0xF46ddB1Cb72e648138bc902d5D0E984444dC83c5",
-  "CrowdloanFactory": "0x5F75409D6BB35D382eF11aaD614EE107ec6FE77f",
-  "DelegateDappsStaking": "0xD83Fb1383A76BeaBc13Edba6D92358eDa9145AA8",
-  "AstarDappStakingFactory": "0xbBAc3A06eB1918EfC33af78e83E9A3b2D9fe81f3",
+  "Committee": "0xffb309E0A5FFF217D2Db1214CBF50807eF9b67eC",
+  "MintableERC20Factory": "0x8BE8659519e382E92C0b903f82Cc5c391fFa4220",
+  "CommunityFactory": "0x1D9A3352246c586E0f9EFf3B15F53664bFcaFC98",
+  "LinearCalculator": "0x1f43ABc3AE5e33C84b80efA837a0303d913B4dAC",
+  "ERC20StakingFactory": "0x0FfDac1a59f417fB9f0EC0beb0B583ecF06fC899",
+  "CrowdloanFactory": "0xC20Ed1aae3B8318336104bbF3BD2D2c2026dB463",
+  "DelegateDappsStaking": "0x79d7F6B690fC92918696B775d849bb4ca757C2fd",
+  "AstarDappStakingFactory": "0x0F78eE9b58B850B0E13025c03a2E2D94D87072C7",
   "DappsStaking": '0x0000000000000000000000000000000000005001'
 }
 

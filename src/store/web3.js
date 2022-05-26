@@ -9,6 +9,7 @@ export default {
     ethers: null,
     walnutInfo: {},
     account: Cookie.get("bsc-account"),
+    balance: 0,
     allAccounts: [],
     abis: {},
     chainId: -1,
@@ -69,6 +70,9 @@ export default {
     },
     saveAccount: (state, account) => {
       (state.account = account), Cookie.set("bsc-account", account, "30d");
+    },
+    saveBalance: (state, balance) => {
+      state.balance = balance
     },
     saveWalnutInfo: (state, walnutInfo) => {
       state.walnutInfo = walnutInfo;

@@ -354,7 +354,13 @@ export const getCtokenBalance = async () => {
 export const getBalance = async () => {
   const provider = await getProvider()
   const account = await getAccounts()
-  return await provider.getBalance(account);
+  try{
+    const balance = await provider.getBalance(account);
+    store.commit('web3/saveBalance', balance)
+    return balance;
+  }catch(e) {
+    console.log(5, e);
+  }
 }
 
 /**

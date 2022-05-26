@@ -2,6 +2,7 @@ import store from '@/store'
 import { getContract } from './contract'
 import { errCode } from '@/config'
 import { waitForTx } from './ethers'
+import { ethers } from 'ethers'
 
 export const getAllDapps = async () => {
     return new Promise(async (resolve, reject) => {
