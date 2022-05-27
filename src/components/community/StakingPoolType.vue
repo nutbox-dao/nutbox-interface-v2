@@ -2,7 +2,7 @@
   <div class="pool-type-modal position-relative">
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="pool-type-modal-content d-flex flex-column">
-      <div class="modal-title mt-4">Choose a pool type</div>
+      <div class="modal-title mt-4">{{ $t('pool.chosePoolType') }}</div>
       <div
         class="
           col-lg-10

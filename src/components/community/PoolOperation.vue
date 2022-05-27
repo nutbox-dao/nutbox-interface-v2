@@ -134,12 +134,11 @@
           class="modal-close-icon-right"
           @click="showWrongSteem = false"
         ></i>
-        <div class="modal-title">Please change {{type.toUpperCase()}} Account</div>
+        <div class="modal-title">{{ $t('stake.changeAccount', {type: type.toUpperCase()}) }}</div>
         <div class="text-center font20 line-height24 mt-3">
-          Your {{type.toUpperCase()}} account haven't binding with current {{ chainName }} address, please
-          change {{type.toUpperCase()}} account in your wallet first.
+          {{ $t('stake.accountMismatch1', {type: type.toUpperCase(), chainName}) }}
         </div>
-        <div class="mt-3 mb-1 text-center font20 line-height24">Your binding {{type.toUpperCase()}} account is:</div>
+        <div class="mt-3 mb-1 text-center font20 line-height24">{{ $t('stake.bindAccountTip1', {type: type.toUpperCase()}) }}</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -154,10 +153,10 @@
           class="dark-btn primary-btn-outline mx-3"
           @click="showWrongSteem = false"
         >
-          Cancel
+          {{ $t('operation.cancel') }}
         </button>
         <button class="primary-btn mx-3" @click="showWrongSteem = false, showLogin = true">
-          OK
+          {{ $t('operation.ok') }}
         </button>
       </div>
     </b-modal>
@@ -175,12 +174,11 @@
           class="modal-close-icon-right"
           @click="showWrongAccount = false"
         ></i>
-        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="modal-title">{{ $t('stake.changeAddress', {chainName}) }}</div>
         <div class="font20 line-height24 mt-3">
-          Your {{ chainName }} address haven't binding with current {{ type.toUpperCase() }} account, please
-          change {{ chainName }} address in your wallet first.
+          {{ $t('stake.accountMismatch2', {chainName, type: type.toUpperCase()}) }}
         </div>
-        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="mt-3 mb-1">{{ $t('stake.bindAddressTip1') }}</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -192,10 +190,10 @@
       </div>
       <div class="d-flex justify-content-between mt-3" style="margin: 0 -1rem">
         <button class="primary-btn primary-btn-outline mx-3" @click="showWrongAccount = false">
-          OK
+          {{ $t('operation.ok') }}
         </button>
         <button class="primary-btn mx-3" @click="showWrongAccount = false, showLogin = true">
-          Change {{type.toUpperCase()}}
+          {{ $t('operation.change') }} {{type.toUpperCase()}}
         </button>
       </div>
     </b-modal>

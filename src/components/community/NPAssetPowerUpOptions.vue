@@ -3,17 +3,21 @@
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="options-tip">
-      <span v-show="!isUpgrade">According to unlock period you chose, you can power up 1 NUT to 1-64 NP.</span>
-      <span v-show="isUpgrade">You used to power up {{ upgradeData.nut | amountForm }} NUT to {{ (upgradeData.nut * upgradeData.period) | amountForm }} NP. Now you can upgrade them to get more NP. Just chose one of the block below. Be attension, the unlocking period will grow simultaneously.</span>
+      <span v-show="!isUpgrade">{{ $t('np.powerUpTip3') }}</span>
+      <span v-show="isUpgrade">
+        {{ $t('np.powerUpTip4', {nut: formatAmount(upgradeData.nut), np: formatAmount(upgradeData.nut * upgradeData.period)}) }}
+      </span>
     </div>
     <div class="options-box">
       <div class="options-grid">
         <div class="options-item" v-for="(item, index) of options" :key="index"
              :class="['item'+(index), (isUpgrade && item.unlockTime<=upgradeData.period)?'disable-item':'active-item']"
-             :data-hover-content="`unlock period: ${item.unlockTime}week`"
+             :data-hover-content="$t('np.powerUpTip7', {unlockTime: item.unlockTime})"
              @click="$emit('setData', ({isUpgrade, srcPeriod: isUpgrade ? upgradeData.period : 1, distPeriod: item.ratio}))">
-              <span v-if="!isUpgrade">1 NUT to {{item.ratio}} NP</span>
-              <span v-else>{{ upgradeData.period + 'NP to ' + item.ratio + 'NP'}}</span>
+              <span v-if="!isUpgrade">{{ $t('np.powerUpTip5', {ratio: item.ratio}) }}</span>
+              <span v-else>
+                {{ $t('np.powerUpTip6', {period: upgradeData.period, ratio: item.ratio}) }}
+              </span>
             </div>
       </div>
     </div>
@@ -21,8 +25,10 @@
 </template>
 
 <script>
+import { formatAmount } from '@/utils/helper'
+
 export default {
-  name: 'NPAssetPowerUp',
+  name: 'NPAssetPowerUpOptions',
   props: {
     isUpgrade: {
       type: Boolean,
@@ -47,6 +53,11 @@ export default {
         { unlockTime: 32, ratio: 32 },
         { unlockTime: 64, ratio: 64 }
       ]
+    }
+  },
+  methods: {
+    formatAmount(a) {
+      return formatAmount(a)
     }
   }
 }

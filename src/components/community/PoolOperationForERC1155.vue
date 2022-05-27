@@ -45,7 +45,7 @@
             type="grow"
             v-show="isApprovingCommunity || loadingApproveCommunity"
           ></b-spinner>
-          {{ $t("operation.approve") + ' Community' }}
+          {{ $t("operation.approveCommunity") }}
         </button>
         <!-- approve pool -->
         <button
@@ -59,7 +59,7 @@
             type="grow"
             v-show="isApproving || loadingApprovements"
           ></b-spinner>
-          {{ $t("operation.approve") + ' Pool' }}
+          {{ $t("operation.approvePool") }}
         </button>
       </template>
     </template>
