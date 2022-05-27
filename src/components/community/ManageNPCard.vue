@@ -3,7 +3,7 @@
     <div class="card-link-top-box">
       <div class="d-flex align-items-center">
         <div class="card-link-title-text font-bold">
-          <div class="text-grey-7 font14 line-height14 mb-1">Vote for</div>
+          <div class="text-grey-7 font14 line-height14 mb-1">{{ $t('np.voteFor') }}</div>
           <div class="link-title font20 line-height24">
             <span>{{ gauge.name }}</span>
           </div>
@@ -31,14 +31,14 @@
         <div class="info">{{ tvl | formatPrice }}</div>
       </div>
       <div class="project-info-container">
-        <span class="name">APR</span>
+        <span class="name">{{ $t('commen.apy') }}</span>
         <div class="info d-flex align-items-center">
             <i class="help-icon mr-1" v-b-popover.hover.top="detailApr"></i>
             <span>{{ (npApr + ctokenApr).toFixed(2) }}%</span>
           </div>
       </div>
       <div class="project-info-container">
-        <span class="name">Claimble Nut</span>
+        <span class="name">{{ $t('np.claimNut') }}</span>
         <div class="info">{{ pendingRewardNut | amountForm }}</div>
       </div>
     </div>

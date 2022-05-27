@@ -1,19 +1,17 @@
 <template>
   <div class="token-tip-modal text-center">
-    <div class="font20 line-height24">You have choose <span class="text-primary-0 font20">{{ symbol }}</span> as community token.</div>
-    <div class="font20 line-height24">
-      Before distribution, you need deposit enough
-      <span class="text-primary-0 font20">{{ symbol }}</span>
-      to the community
+    <div class="font20 line-height24" v-html="$t('community.choseToken', {symbol})">
     </div>
-    <div class="font20 line-height24">You can do it now, or later in the community management page.</div>
+    <div class="font20 line-height24"  v-html="$t('community.needTokenToCreate', {symbol})">
+    </div>
+    <div class="font20 line-height24">{{ $t('community.chargeTip1') }}</div>
     <div class="custom-form mt-4">
       <b-form-group
         class="mb-4"
         label-class="overflow-hidden"
         label-cols-md="2"
         content-cols-md="10"
-        label="Amount"
+        :label="$t('commen.amount')"
       >
         <div class="d-flex">
           <div class="c-input-group c-input-group-border c-input-group-bg-dark">
@@ -25,12 +23,12 @@
               type="grow"
               v-show="depositing"
             ></b-spinner>
-            Recharge
+            {{ $t('operation.recharge') }}
           </button>
         </div>
       </b-form-group>
       <div class="col-md-6 offset-md-3">
-        <button class="primary-btn" :disabled="depositing" @click="$emit('close')">Recharge Later</button>
+        <button class="primary-btn" :disabled="depositing" @click="$emit('close')">{{ $t('tip.rechargeTip1') }}</button>
       </div>
     </div>
   </div>

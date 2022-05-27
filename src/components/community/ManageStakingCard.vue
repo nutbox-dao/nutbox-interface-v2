@@ -33,7 +33,7 @@
         <div class="info">{{ pool.ratio / 100 }}%</div>
       </div>
       <div class="project-info-container">
-        <span class="name">APR</span>
+        <span class="name">{{ $t('commen.apy') }}</span>
         <div class="info">{{ apr }}</div>
       </div>
 
