@@ -8,7 +8,9 @@
           : $t("stake.increaseDelegation")
       }}
     </div>
-    <div style="color: red;" class="font-bold font20 line-height28 text-center mt-2">You're using hive account: {{ hiveAccount }} to delegate</div>
+    <div style="color: red;" class="font-bold font20 line-height28 text-center mt-2">
+      {{ $t('tip1.delegateTip1', { chain: 'hive', account: hiveAccount }) }}
+    </div>
     <div class="custom-form">
       <div class="input-group-box mb-3">
         <div class="label text-right">
