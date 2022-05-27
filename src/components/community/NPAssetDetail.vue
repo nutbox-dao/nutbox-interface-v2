@@ -3,34 +3,34 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="d-flex justify-content-between align-items-center top-box">
       <div class="value-box">
-        <div class="font20 line-height24">Total NP</div>
+        <div class="font20 line-height24">{{ $t('np.totalNp') }}</div>
         <div class="font32 line-height36 d-flex align-items-center">
           <span>{{ totalNp | amountForm }} NP</span>
           <i class="help-icon ml-2" id="total-np-tip"></i>
           <b-popover custom-class="sub-popover-outline" target="total-np-tip" triggers="hover" placement="right">
             <div class="font12 line-height12" style="width: 130px">
-              Total NP: All NP you owned.
+              {{ $t('np.totalNpTip') }}
             </div>
           </b-popover>
         </div>
       </div>
       <div class="d-flex justify-content-center np-btn-group">
         <button class="primary-btn mr-2" @click="$emit('powerUp')">Power up</button>
-        <button class="primary-btn" :disabled="freeNp==0" @click="$emit('powerDown')">Power down</button>
+        <button class="primary-btn" :disabled="freeNp==0" @click="$emit('powerDown')">{{ $t('np.powerDown') }}</button>
       </div>
     </div>
     <div class="row pt-4 bottom-box">
       <div class="col-lg-5">
         <div class="d-flex align-items-center item-card-title">
-          <span class="font20 line-height24">Summary</span>
+          <span class="font20 line-height24">{{ $t('commen.summary') }}</span>
           <i class="help-icon ml-2" id="available-np-help"></i>
           <b-popover custom-class="sub-popover-outline" target="available-np-help" triggers="hover" placement="top">
             <div class="font12 line-height12" style="width: 130px">
               <p>
-                Available NP: NP could be used to vote or unlocking.
+                {{ $t('np.npTip3') }}
               </p>
               <p>
-                Voted NP: NP you voted into pools of entire Walnut.
+                {{ $t('np.npTip4') }}
               </p>
             </div>
           </b-popover>
@@ -38,12 +38,12 @@
         <div class="c-card">
           <div class="c-card-header c-card-header-available d-flex">
             <div class="font16 line-height16 header-left">
-              <span>NUT Staked:</span>
+              <span>{{ $t('np.nutStaked') }}</span>
               <span>{{ totalLockedNut | amountForm }} NUT</span>
             </div>
             <div class="font12 line-height12 text-grey-7 d-flex header-right">
-              <span>NP Available: {{ freeNp | amountForm }}</span>
-              <span>NP Voted: {{ lockedNp | amountForm }}</span>
+              <span>{{ $t('np.npAvailable') }} {{ freeNp | amountForm }}</span>
+              <span>{{ $t('np.npVoted') }} {{ lockedNp | amountForm }}</span>
             </div>
           </div>
           <div class="c-card-content">
@@ -56,9 +56,9 @@
                 <div v-if="amount > 0"  class="available-items d-flex justify-content-between align-items-center">
                   <div>
                     <div class="font14 line-height14">{{ (amount * releasePeriod[idx]) | amountForm}} NP</div>
-                    <div class="font12 line-height12 text-grey-7">Unlock period: {{ releasePeriod[idx] }} week</div>
+                    <div class="font12 line-height12 text-grey-7">{{ $t('np.unlockPeriod') }} {{ releasePeriod[idx] }} {{ $t('commen.weeks') }}</div>
                   </div>
-                  <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">Upgrade</button>
+                  <button v-if="idx<6" class="primary-btn-outline font12" @click="$emit('upgrade', { nut: amount, period: releasePeriod[idx] })">{{ $t('operation.upgrade') }}</button>
                 </div>
               </div>
             </div>
@@ -94,23 +94,22 @@
       <div class="col-lg-7">
         <div class="d-flex justify-content-between align-items-center item-card-title">
           <div class="d-flex align-items-center">
-            <span class="font20 line-height24">Unlocking NP</span>
+            <span class="font20 line-height24">{{ $t('np.unlockingNp') }}</span>
             <i class="help-icon ml-2" id="unlocking-np-tip"></i>
             <b-popover custom-class="sub-popover-outline" target="unlocking-np-tip" triggers="hover" placement="top">
               <div class="font12 line-height12" style="width: 130px">
-                Unlocking NP: NP you powered down, in the unlocking process.
+                {{ $t('np.npTip5') }}
               </div>
             </b-popover>
           </div>
           <button class="primary-btn-outline claim-btn font12 d-flex align-items-center" @click="claim" :disabled="claiming">
-            <b-spinner class="mb-0" style="width: 14px; height: 14px" type="grow" v-show="claiming"></b-spinner>
-            Claim NUT
+            {{ $t('np.claimNp') }}
           </button>
         </div>
         <div class="c-card">
           <div class="c-card-header">
             <div class="font16 line-height16">{{totalUnlockingNp | amountForm}} NP to {{totalUnlockingNut | amountForm}} NUT</div>
-            <div class="font12 line-height12 text-grey-7 mt-1">Claim available：{{claimableNut | amountForm}} NUT</div>
+            <div class="font12 line-height12 text-grey-7 mt-1">{{ $t('np.claimAvailable') }}{{claimableNut | amountForm}} NUT</div>
           </div>
           <div class="c-card-content">
             <div class="c-loading c-loading-bg c-loading-absolute" v-if="loadingRedeemInfo">
@@ -121,11 +120,13 @@
                 <p> {{ $t('tip.npRedeemProcess') }} </p>
               </div>
               <div v-else class="unlock-items" v-for="(unlockedItem, idx) of redeemList" :key="idx">
-                <div class="font12 line-height16">Unlock in {{unlockedItem.period}} weeks：<br>{{unlockedItem.npAmount | amountForm}} NP to {{unlockedItem.nutAmount | amountForm}} NUT</div>
+                <div class="font12 line-height16">{{ $t('np.unlockInWeeks', {period: unlockedItem.period}) }}<br>
+                  {{ $t('np.covertTip', {npAmount: formatAmount(unlockedItem.npAmount), nutAmount: formatAmount(unlockedItem.nutAmount)}) }}
+                </div>
                 <b-popover custom-class="sub-popover-outline" :target="'progress-tip' + idx"
                           triggers="hover" placement="top">
                   <div class="font12">
-                    Claimed NUT: {{unlockedItem.claimed | amountForm}}
+                    {{ $t('np.claimedNut') }} {{unlockedItem.claimed | amountForm}}
                   </div>
                 </b-popover>
                 <b-progress :max="100">
@@ -134,7 +135,7 @@
                                   :value="unlockedItem.ratio"></b-progress-bar>
                 </b-progress>
                 <div class="d-flex justify-content-between align-items-center font12 text-grey-7">
-                  <span>Claim available: {{unlockedItem.claimble | amountForm}} Nut</span>
+                  <span>{{ $t('np.claimAvailable') }} {{unlockedItem.claimble | amountForm}} Nut</span>
                   <span>{{ unlockedItem.timeLeft }}</span>
                 </div>
               </div>
@@ -149,6 +150,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getUserRedeemRequestsOfPeriod, redeem } from '@/utils/nutbox/nutpower'
+import { formatAmount } from '@/utils/helper'
 
 export default {
   name: 'NPAssetDetail',
@@ -191,17 +193,20 @@ export default {
   methods: {
     calculateLeftTime(sec) {
       if (sec > 86400) {
-        return parseInt(sec / 86400) + ' days left'
+        return parseInt(sec / 86400) + this.$t('np.daysLeft')
       }
       if (sec > 3600) {
-        return parseInt(sec / 3600) + ' hours left'
+        return parseInt(sec / 3600) + this.$t('np.hoursLeft')
       }
       if (sec > 60) {
-        return parseInt(sec / 60) + ' minutes left'
+        return parseInt(sec / 60) + this.$t('np.minutesLeft')
       } if (sec > 0) {
-        return sec + ' seconds left'
+        return sec + this.$t('np.secondsLeft')
       }
-      return '0 secondes left'
+      return '0' + this.$t('np.secondsLeft')
+    },
+    formatAmount(a) {
+      return formatAmount(a)
     },
     updateRedeemData() {
       // update datas

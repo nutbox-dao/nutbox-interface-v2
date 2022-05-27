@@ -38,7 +38,7 @@
           </div>
       </div>
       <div class="project-info-container">
-        <span class="name">{{ $t('np.claimNut') }}</span>
+        <span class="name">{{ $t('np.claimbleNut') }}</span>
         <div class="info">{{ pendingRewardNut | amountForm }}</div>
       </div>
     </div>

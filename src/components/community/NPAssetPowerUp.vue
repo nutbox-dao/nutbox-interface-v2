@@ -3,11 +3,11 @@
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="modal-title text-center">
-      <span style="width: 70%" v-if="isUpgrade">Upgrade NP unlock period from {{ srcPeriod }} week to {{ distPeriod }} week.</span>
-      <span v-else>Power up every 1 NUT to {{ distPeriod }} NP</span>
+      <span style="width: 70%" v-if="isUpgrade">{{ $t('np.powerUpTip1'),{srcPeriod, distPeriod} }}</span>
+      <span v-else>{{ $t('np.powerUpTip2', {distPeriod}) }}</span>
     </div>
     <div class="mt-4">
-      <div class="mt-2 mb-3 font14 line-height14" style="margin-left: 1rem">Balance: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
+      <div class="mt-2 mb-3 font14 line-height14" style="margin-left: 1rem">{{ $t('commen.balance') }}: {{ (isUpgrade ? srcBalance : nutBalance) | amountForm }}</div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border flex-column align-items-start px-3 py-2">
         <div class="c-input-group d-flex w-100 p-1">
           <input class="flex-1 font24 line-height24"
@@ -48,10 +48,7 @@
         <b-spinner small type="grow" v-show="executing"></b-spinner>
         {{ isUpgrade ? 'Upgrade' : $t('operation.confirm') }}
       </button>
-      <div v-if="!isUpgrade" class="tip my-4">
-        When you want to convert back your NP to NUT, you should do the power down operate, which will take
-        <strong class="text-primary-1">{{npData.distPeriod}} weeks</strong>
-        to get all your NUT back gradually.
+      <div v-if="!isUpgrade" class="tip my-4" v-html="$t('np.upgradeTip1', {distPeriod: npData.distPeriod})">
       </div>
       <!-- <div class="text-right">
         <a class="text-primary-1 link" href="https://pancakeswap.finance/swap" target="_blank">

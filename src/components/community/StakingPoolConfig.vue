@@ -9,7 +9,7 @@
                       v-if="type === 'create' && activePools && activePools.length > 0"
                       label-class="overflow-hidden font14 line-height14 d-flex align-items-center"
                       label-cols-md="3" content-cols-md="9"
-                      label="Pool Name">
+                      :label="$t('pool.poolName')">
           <b-form-input class="input-border" :placeholder="$t('placeHolder.inputPoolName')" :disabled="!enableOp" type="text" @input="nameChange" v-model.trim="newName"></b-form-input>
         </b-form-group>
         <!-- token logo -->
@@ -61,7 +61,7 @@
           </div>
         </b-form-group>
 
-        <div class="mb-2 font14 line-height14">Profit Sharing Ratio (Sum of ratios should be 100%)</div>
+        <div class="mb-2 font14 line-height14">{{ $t('pool.ratioTip') }}</div>
         <div class="pool-chart-box w-100 d-flex">
           <div class="pool-data-box">
             <b-form-group :label="activePools[inputIndex].name"
@@ -82,7 +82,7 @@
         <div class="d-flex mt-3">
           <button class="dark-btn mx-2" :disabled="!enableOp" @click="$emit('close')">
             <b-spinner small type="grow" v-show="!enableOp" />
-            Cancel
+            {{ $t('operation.cancel') }}
           </button>
           <button class="primary-btn mx-3" v-if="takeFee && (approving || loadingApproveCommunity || !approvedCommunity)" @click="approve" :disabled="approving || loadingApproveCommunity">
             <b-spinner small type="grow" v-show="approving" />
@@ -90,11 +90,11 @@
           </button>
           <button v-else class="primary-btn mx-2" :disabled="!enableOp" @click="create()">
             <b-spinner small type="grow" v-show="!enableOp" />
-            OK
+            {{ $t('operation.ok') }}
           </button>
         </div>
         <div v-if="takeFee" class="font14 my-1" style="text-align:center">
-          {{ `Operation fee: ${fee} NUT` }}
+          {{ $t('tip.feeTip',{fee})}}
         </div>
       </div>
     </div>

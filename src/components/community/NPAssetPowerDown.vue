@@ -2,7 +2,7 @@
   <div class="np-asset-up-modal position-relative">
     <i class="modal-back-icon modal-back-icon-no-bg" @click="$emit('back')"></i>
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
-    <div class="modal-title">Power down NP to NUT</div>
+    <div class="modal-title">{{ $t('np.powerDownTip') }}</div>
     <div class="mt-4">
       <div class="down-info-box mb-4">
         <div class="down-item-info d-flex justify-content-between" v-for="(item, i) of powerDownList" :key="i">
@@ -12,7 +12,7 @@
               <i class="arrow-right-icon mx-2"></i>
               <span>{{item.to | amountForm}} NUT</span>
             </div>
-            <div class="info-sub flex-1">Unlocking period:{{item.unlockTime}} weeks</div>
+            <div class="info-sub flex-1">{{ $t('np.unlockingPeriod') }} {{item.unlockTime}} {{ $t('commen.weeks') }}</div>
           </div>
 <!--          <button class="primary-btn item-btn" @click="selectChannel(item, i)">Power down</button>-->
           <b-form-radio class="sub-radio" v-model="selectIdx" :value="i" @change="selectChannel(item, i)"></b-form-radio>
@@ -31,7 +31,7 @@
       </div>
       <div class="transfer-icon text-center my-3">
         <img src="~@/static/images/transfer-icon-primary.svg" alt="">
-        <div class="font14 line-height14 mt-1 text-grey-7">{{ selectRatio }} weeks | every {{selectRatio}}NP to 1 NUT</div>
+        <div class="font14 line-height14 mt-1 text-grey-7">{{ $t('np.powerDownTip2', {selectRatio}) }}</div>
       </div>
       <div class="c-input-group c-input-group-bg-dark c-input-group-border d-flex w-100 py-2">
         <input class="flex-1 font24 line-height24 px-3"
@@ -47,7 +47,7 @@
 
       <button class="primary-btn my-4" :disabled="powerdowning" @click="powerDown">
         <b-spinner small type="grow" v-show="powerdowning"></b-spinner>
-        Confilm
+        {{ $t('operation.confirm') }}
       </button>
     </div>
   </div>

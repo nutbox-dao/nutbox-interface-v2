@@ -31,10 +31,13 @@ module.exports = {
     totalStake: 'Total Staking',
     voters: 'Voters',
     stakers: 'Stakers',
+    summary: 'Summary',
+    weeks: 'weeks',
+    or: 'OR',
 
     whitePaper: "White Paper",
     nps: "Nutbox Proposal System",
-    contract: "Contract Address",
+    contract: "Contract",
     social: "Social info",
     docs: "Docs",
     discord: "Discord",
@@ -71,12 +74,16 @@ module.exports = {
     withdraw: "Withdraw",
     harvest: "Harvest",
     approveContract: "Approve Contract",
+    approveCommunity: 'Approve Community',
+    approvePool: 'Approve Pool',
     connectMetamask: "Connect Metamask",
+    change: 'Change',
     search: "Search",
     userlogin: "Login",
     uploadLogo: "Upload Logo",
     uploadPoster: "Upload Poster",
     sign: "Sign and upload",
+    hide: 'Hide',
     cancel: "Cancel",
     commit: "Commit",
     complete: "Complete",
@@ -88,6 +95,7 @@ module.exports = {
     login: "Login",
     logout: "Log out",
     input: "Input",
+    ok: 'OK',
     copy: "Copy",
     edit: "Edit",
     charge: 'Charge',
@@ -103,7 +111,8 @@ module.exports = {
     addDelegatePool: 'Add Delegate Pool',
     addPool: 'Add Pool',
     claim: 'Claim',
-    recharge: "Recharge"
+    recharge: "Recharge",
+    upgrade: 'Upgrade'
   },
   wallet: {
     wallet: "Wallet",
@@ -156,6 +165,33 @@ module.exports = {
     stake: "Deposit",
     unStake: "Undeposit",
     staked: "Staked ",
+    changeAccount: 'Please change {type} Account',
+    changeAccountHtml: `Please change
+    <span class="text-primary-0 font-bold">{type}</span>
+    Account`,
+    changeAddress: 'Please change {chainName} address',
+    changeAddressHtml: `Please change
+    <span class="text-primary-0 font-bold"> {chainName} </span>address`,
+    accountMismatch1: `Your {type} account haven't binding with current {chainName} address, please
+    change {type} account in your wallet first.`,
+    accountMismatch2: `Your {chainName} address haven't binding with current {type} account, please
+    change {chainName} address in your wallet first.`,
+    accountMismatch3: `Your
+    <span class="text-primary-0 font-bold">{type}</span>
+    account haven't binding with current
+    <span class="text-primary-0 font-bold">{chainName}</span>
+    address, please change
+    <span class="text-primary-0 font-bold">{type}</span>
+    account in your wallet first.`,
+    accountMismatch4: ` Your <span class="text-primary-0 font-bold"> {chainName} </span>
+    address haven't binding with current
+    <span class="text-primary-0 font-bold"> {type}
+    </span>
+    account, please change
+    <span class="text-primary-0 font-bold"> {chainName} </span>
+    address in your wallet first.`,
+    bindAccountTip1: `Your binding {type} account is:`,
+    bindAddressTip1: 'Your binding address is:'
   },
   tip: {
     approveSuccess: "Approval Success",
@@ -166,6 +202,7 @@ module.exports = {
     noNominations: "No Nominators Nodes",
     noContribuitons: "No Contribution Records",
     noCommunities: "No Registered Communities ",
+    noSearchedToken: "No Searched Token",
     noCrowdloan: "No ongoing Crowdloan",
     noStakingProject: "No validators",
     picTip: "The recommended size is {size} ，smaller than 2M, support jpg、png、jpeg formats",
@@ -251,7 +288,8 @@ module.exports = {
     mintableTip1: 'You have set c-Token mintable when you create community.',
     mintableTip2: "Now you must grant mint role to the community contract, otherwise you can't use functions of this community.",
     delegateTip1: "You're using {chain} account: {account} to delegate.",
-    rechargeTip1: "Recharge Later"
+    rechargeTip1: "Recharge Later",
+    feeTip: 'Operation fee: ${fee} NUT'
   },
   nps: {
     nps: "Governance",
@@ -434,6 +472,7 @@ module.exports = {
     daoFundInfo: 'Dao Fund Info',
     daoTreasuryInfo: 'Dao Treasury Info',
     choseToken: `You have choose <span class="text-primary-0 font20"> {symbol} </span> as community token.`,
+    choseTokenAsCtoken: 'Choose a token as cToken',
     needTokenToCreate: `Before distribution, you need deposit enough
     <span class="text-primary-0 font20"> {symbol} </span>
     to the community`,
@@ -450,10 +489,14 @@ module.exports = {
   pool: {
     updatePoolRatios: "Configure Pools",
     addPool: "Add Pool",
+    chosePoolType: 'Choose a pool type',
     pools: 'Pools',
+    poolName: 'Pool Name',
     noPools: 'No pool created',
     userCount: 'User count',
     totalDeposit: 'Total deposit',
+    totalStaked: 'Total Staked',
+    totalDelegated: 'Total Delegated',
     stakedPools: 'Staked Pools',
     tvl: 'TVL',
     closePool: "Close",
@@ -462,18 +505,55 @@ module.exports = {
     closed: 'Closed',
     activePools: 'Acitive Pools',
     inactivePools: 'Inacitive Pools',
-
+    creatPool: 'Create staking pool on {chainName}',
+    createDelegatePool: 'Create {delegateType} delegate pool',
+    createNftPool: 'Create staking NFT(ERC1155) pool on {chainName}',
+    yourDelegatee: 'Your {delegateType} delegatee account',
+    ratioTip: 'Profit Sharing Ratio (Sum of ratios should be 100%)'
   },
   np: {
     nutPower: 'NUT Power（NP）',
     npDesc: "Nutbox Voting Power(NUT Power for short) is the Governance Power of Nutbox DAO. The Nutbox governance reward of a user is charged by the user's governance activity.",
     claimNut: 'Claim NUT',
+    claimNp: 'Claim NP',
+    claimAvailable: 'Claim available：',
     availabeClaimNut: '{amount} Nut is available to claim.',
     addNpPool: "Add a NP vote pool",
     npTip1: "In order to add a NUT Power vote pool, you need choose an existing staking pool. Users can earn NUT and c-token from NP vote pool.",
     npTip2: "* NUT is  issued by Nutbox contract, c-token is from staking pool's commission.",
+    npTip3: "Available NP: NP could be used to vote or unlocking.",
+    npTip4: 'Voted NP: NP you voted into pools of entire Walnut.',
+    npTip5: 'Unlocking NP: NP you powered down, in the unlocking process.',
     voteFor: 'Vote for',
-    claimNut: 'Claimble NUT'
+    claimbleNut: 'Claimble NUT',
+    claimedNut: 'Claimed NUT:',
+    totalNp: 'Total NP',
+    totalNpTip: 'Total NP: All NP you owned.',
+    powerDown: 'Power down',
+    powerDownTip: 'Power down NP to NUT',
+    powerDownTip2: '{selectRatio} weeks | every {selectRatio} NP to 1 NUT',
+    powerUpTip1: 'Upgrade NP unlock period from {srcPeriod} week to {distPeriod} week.',
+    powerUpTip2: 'Power up every 1 NUT to {distPeriod} NP',
+    powerUpTip3: 'According to unlock period you chose, you can power up 1 NUT to 1-64 NP.',
+    powerUpTip4: `You used to power up {nut} NUT to {np} NP. Now you can upgrade them to get more NP. Just chose one of the block below. Be attension, the unlocking period will grow simultaneously.`,
+    powerUpTip5: '1 NUT to {ratio} NP',
+    powerUpTip6: '{period} NP to {ratio} NP',
+    powerUpTip7: 'unlock period: {unlockTime} weeks',
+    nutStaked: "NUT Staked:",
+    npAvailable: 'NP Available:',
+    npVoted: 'NP Voted:',
+    unlockPeriod: 'Unlock period:',
+    unlockingNp: 'Unlocking NP',
+    unlockingPeriod: 'Unlocking Period',
+    unlockInWeeks: 'Unlock in {period} weeks：',
+    covertTip: '{npAmount} NP to {nutAmount} NUT',
+    daysLeft: ' days left',
+    hoursLeft: ' hours left',
+    minutesLeft: ' minutes left',
+    secondsLeft: ' seconds left',
+    upgradeTip1: `When you want to convert back your NP to NUT, you should do the power down operate, which will take
+    <strong class="text-primary-1"> {distPeriod} weeks</strong>
+    to get all your NUT back gradually.`
   },
   gauge: {
     voterCount: 'Voters',

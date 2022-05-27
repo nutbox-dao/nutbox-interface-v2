@@ -4,7 +4,7 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
-        <div class="my-4 modal-title">Create staking NFT(ERC1155) pool on {{chainName}}</div>
+        <div class="my-4 modal-title">{{ $t('pool.createNftPool', {chainName}) }}</div>
         <div class="custom-form col-lg-8 mx-auto">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
@@ -38,7 +38,7 @@
       <div class="col-md-6 mx-auto mt-3">
           <button class="primary-btn" :disabled="isChecking" @click="confirm">
             <b-spinner small type="grow" v-show="isChecking"></b-spinner>
-            Confirm
+            {{ $t('operation.confirm') }}
           </button>
         </div>
     </div>
