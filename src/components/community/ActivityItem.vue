@@ -1,6 +1,6 @@
 <template>
   <div class="activity-card">
-    <div class="title font14 font-bold">{{ opType }}</div>
+    <div class="title font14 font-bold">{{ $t('opHistory.title.' + operation.type) }}</div>
     <div
       class="content hover font14 line-height18 font-bold"
       :id="operation.id + operation.type"
@@ -85,7 +85,6 @@ export default {
       username: "",
       isAdmin: false,
       userAvatar: "",
-      opType: "",
     };
   },
   computed: {
@@ -161,7 +160,6 @@ export default {
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":
-        this.opType = "Deposit";
         this.isAdmin = false;
         if (
           this.operation.poolFactory.toLowerCase() ==
@@ -214,7 +212,6 @@ export default {
         }
         break;
       case "WITHDRAW":
-        this.opType = "Withdraw";
         this.isAdmin = false;
         if (
           this.operation.poolFactory.toLowerCase() ==
@@ -227,8 +224,8 @@ export default {
           contractAddress.ERC1155StakingFactory.toLowerCase()
         ) {
           this.description = this.showName 
-            ? this.$t('opHistory.withdrawWithName', {amount, symbol: 'ERC1155', pool: this.operation.pool.name})
-            : this.$t('opHistory.withdraw', {amount, symbol: 'ERC1155', pool: this.operation.pool.name})
+            ? this.$t('opHistory.withdrawWithName', {amount: this.operation.amount.toString(), symbol: 'ERC1155', pool: this.operation.pool.name})
+            : this.$t('opHistory.withdraw', {amount: this.operation.amount.toString(), symbol: 'ERC1155', pool: this.operation.pool.name})
         }else if (
           this.operation.poolFactory.toLowerCase() ==
           contractAddress.SPStakingFactory.toLowerCase()
@@ -267,28 +264,24 @@ export default {
         }
         break;
       case "VOTE":
-        this.opType = 'Vote pool';
         this.isAdmin = false;
         this.description = this.showName 
           ? this.$t('opHistory.voteWithName', {amount: np, symbol: 'NP', pool: this.operation.pool.name})
           : this.$t('opHistory.vote', {amount: np, symbol: 'NP', pool: this.operation.pool.name})
         break;
       case "UNVOTE":
-        this.opType = 'Unvote pool';
         this.isAdmin = false;
         this.description = this.showName 
           ? this.$t('opHistory.unvoteWithName', {amount: np, symbol: 'NP', pool: this.operation.pool.name})
           : this.$t('opHistory.unvote', {amount: np, symbol: 'NP', pool: this.operation.pool.name})
         break;
       case "WITHDRAWGAUGECTOKEN":
-        this.opType = "Harvest C-Token by NP vote";
         this.isAdmin = false;
         this.description = this.showName 
           ? this.$t('opHistory.harvestGaugeWithName', {amount, symbol: 'C-Token', pool: this.operation.pool.name})
           : this.$t('opHistory.harvestGauge', {amount, symbol: 'C-Token', pool: this.operation.pool.name})
         break;
       case 'WITHDRAWGAUGENUT':
-        this.opType = "Harvest NUT by NP vote";
         this.isAdmin = false;
         const nutAmount = this.operation.amount.toString() / 1e18
         this.description = this.showName 
@@ -296,7 +289,6 @@ export default {
           : this.$t('opHistory.harvestGauge', {amount: nutAmount, symbol: 'NUT', pool: this.operation.pool.name})
         break;
       case 'ADMINCREATENEWGAUGE':
-        this.opType = 'Create Pool Vote';
         this.isAdmin = true
         this.username = 'Admin'
         this.description = this.showName 
@@ -304,7 +296,6 @@ export default {
           : this.$t('opHistory.createGauge', {pool: this.operation.pool.name})
         break;
       case 'ADMINWITHDRAWGAUGENUT':
-        this.opType = 'Harvest NUT by NP vote';
         this.isAdmin = true;
         this.username = 'Admin';
         this.description = this.showName 
@@ -312,7 +303,6 @@ export default {
           : this.$t('opHistory.withdrawGauge', {amount: this.operation.amount.toString() / 1e18})
         break;
       case "HARVEST":
-        this.opType = "Harvest";
         this.isAdmin = false;
         while (!this.cToken) {
           await sleep(0.2);
@@ -329,7 +319,6 @@ export default {
           ).toFixed(2), symbol: ctokenSymbol, pool: this.operation.pool.name})
         break;
       case "HARVESTALL":
-        this.opType = "Harvest all";
         this.isAdmin = false;
         while (!this.cToken) {
           await sleep(0.2);
@@ -341,7 +330,6 @@ export default {
           : this.$t('opHistory.harvestAll', {symbol: ctokenSymbol})
         break;
       case "REDEEMFROMTREASURY":
-        this.opType = "Redeem From Treasury";
         this.isAdmin = false;
         while (!this.cToken) {
           await sleep(0.2);
@@ -360,7 +348,6 @@ export default {
       case "ADMINCREATE":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Create Community";
         this.description =
           (this.showName ? " creat" : "Create") + ` this community`;
         this.description = this.showName
@@ -370,7 +357,6 @@ export default {
       case "ADMINSETFEE":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Set DAO fund ratio";
         this.description = this.showName
           ? this.$t('opHistory.setFeeWithName', {amount: (
             this.operation.amount.toString() / 100
@@ -382,7 +368,6 @@ export default {
       case "ADMINADDPOOL":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Create new pool";
         this.description = this.showName
           ? this.$t('opHistory.addPoolWithName', {pool: this.operation.pool.name})
           : this.$t('opHistory.addPool', {pool: this.operation.pool.name})
@@ -390,7 +375,6 @@ export default {
       case "ADMINCLOSEPOOL":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Close pool";
         this.description = this.showName
           ? this.$t('opHistory.closePoolWithName', {pool: this.operation.pool.name})
           : this.$t('opHistory.closePool', {pool: this.operation.pool.name})
@@ -398,7 +382,6 @@ export default {
       case "ADMINSETRATIO":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Reset pool ratios";
         this.description = this.showName
           ? this.$t('opHistory.setRatioWithName', {account: this.username})
           : this.$t('opHistory.setRatio')
@@ -406,7 +389,6 @@ export default {
       case "ADMINSETDAOFUND":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Reset DAO fund";
         this.description = this.showName 
           ? this.$t('opHistory.setDaofundWithName', {address: ethers.utils.getAddress(this.operation.asset)})
           : this.$t('opHistory.setDaofund', {address: ethers.utils.getAddress(this.operation.asset)})
@@ -414,7 +396,6 @@ export default {
       case "ADMINWITHDRAWNREVENUE":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Withdraw revenue";
         this.description = this.showName 
           ? this.$t('opHistory.withdrawRevenueWithName', {address: ethers.utils.getAddress(this.operation.asset)})
           : this.$t('opHistory.withdrawRevenue', {address: ethers.utils.getAddress(this.operation.asset)})
@@ -422,7 +403,6 @@ export default {
       case "ADMINCREATETREASURY":
         this.isAdmin = true;
         this.username = "Admin";
-        this.opType = "Create Treasury";
         this.description = this.showName
           ? this.$t('opHistory.createTreasuryWithName', {address: ethers.utils.getAddress(this.operation.asset)})
           : this.$t('opHistory.createTreasury', {address: ethers.utils.getAddress(this.operation.asset)})

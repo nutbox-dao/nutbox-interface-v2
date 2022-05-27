@@ -21,6 +21,16 @@ module.exports = {
     administor: 'Administor',
     joinDate: 'Join Date',
     noData: 'No Data',
+    pageNotFound: "Page Not Found!",
+    backHome: "Back to Home",
+    amount: "Amount",
+    earned: 'EARNED',
+    voted: "VOTED",
+    staked: "STAKED",
+    delegated: "DELEGATED",
+    totalStake: 'Total Staking',
+    voters: 'Voters',
+    stakers: 'Stakers',
 
     whitePaper: "White Paper",
     nps: "Nutbox Proposal System",
@@ -92,7 +102,8 @@ module.exports = {
     configurePoolRatio: 'Configure Delegate Pool',
     addDelegatePool: 'Add Delegate Pool',
     addPool: 'Add Pool',
-    claim: 'Claim'
+    claim: 'Claim',
+    recharge: "Recharge"
   },
   wallet: {
     wallet: "Wallet",
@@ -239,7 +250,8 @@ module.exports = {
     redeemSuccess: "Redeem Successfull",
     mintableTip1: 'You have set c-Token mintable when you create community.',
     mintableTip2: "Now you must grant mint role to the community contract, otherwise you can't use functions of this community.",
-    delegateTip1: "You're using {chain} account: {account} to delegate."
+    delegateTip1: "You're using {chain} account: {account} to delegate.",
+    rechargeTip1: "Recharge Later"
   },
   nps: {
     nps: "Governance",
@@ -421,7 +433,11 @@ module.exports = {
     member: 'Member',
     daoFundInfo: 'Dao Fund Info',
     daoTreasuryInfo: 'Dao Treasury Info',
-
+    choseToken: `You have choose <span class="text-primary-0 font20"> {symbol} </span> as community token.`,
+    needTokenToCreate: `Before distribution, you need deposit enough
+    <span class="text-primary-0 font20"> {symbol} </span>
+    to the community`,
+    chargeTip1: "You can do it now, or later in the community management page.",
     noCommunity: "You have no community yet",
 
     startBlock: "Start block",
@@ -445,13 +461,19 @@ module.exports = {
     opened: 'Active',
     closed: 'Closed',
     activePools: 'Acitive Pools',
-    inactivePools: 'Inacitive Pools'
+    inactivePools: 'Inacitive Pools',
+
   },
   np: {
     nutPower: 'NUT Power（NP）',
     npDesc: "Nutbox Voting Power(NUT Power for short) is the Governance Power of Nutbox DAO. The Nutbox governance reward of a user is charged by the user's governance activity.",
     claimNut: 'Claim NUT',
-    availabeClaimNut: '{amount} Nut is available to claim.'
+    availabeClaimNut: '{amount} Nut is available to claim.',
+    addNpPool: "Add a NP vote pool",
+    npTip1: "In order to add a NUT Power vote pool, you need choose an existing staking pool. Users can earn NUT and c-token from NP vote pool.",
+    npTip2: "* NUT is  issued by Nutbox contract, c-token is from staking pool's commission.",
+    voteFor: 'Vote for',
+    claimNut: 'Claimble NUT'
   },
   gauge: {
     voterCount: 'Voters',
@@ -518,6 +540,27 @@ module.exports = {
     withdrawRevenue: "Withdraw revenue to {address}",
     withdrawRevenueWithName: " revenue to {address}",
     createTreasury: "Create treasury: {address}",
-    createTreasuryWithName: " create treasury: {address}"
+    createTreasuryWithName: " create treasury: {address}",
+    title: {
+      DEPOSIT: "Deposit",
+      WITHDRAW: 'Withdraw',
+      VOTE: "Vote pool",
+      UNVOTE: "Unvote pool",
+      WITHDRAWGAUGENUT: "Harvest NUT by NP vote",
+      ADMINCREATENEWGAUGE: "Create pool vote",
+      WITHDRAWGAUGECTOKEN: "Harvest C-Token by NP vote",
+      ADMINWITHDRAWGAUGENUT: "Harvest NUT by NP vote",
+      HARVEST: "Harvest",
+      HARVESTALL: "Harvest All",
+      REDEEMFROMTREASURY: "Redeem From Treasury",
+      ADMINCREATE: "Create Community",
+      ADMINSETFEE: "Set DAO fund ratio",
+      ADMINADDPOOL: 'Create new pool',
+      ADMINCLOSEPOOL: "Close Pool",
+      ADMINSETRATIO: "Reset pool ratios",
+      ADMINSETDAOFUND: "Reset DAO fund",
+      ADMINWITHDRAWNREVENUE: "Withdraw revenue",
+      ADMINCREATETREASURY: "Create treasury"
+    }
   }
 };

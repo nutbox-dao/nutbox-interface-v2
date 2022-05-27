@@ -7,7 +7,7 @@
           cToken ? cToken.symbol : ""
         }}</span>
         <div class="d-flex align-items-center">
-          <span class="font14 text-grey-7">EARNED</span>
+          <span class="font14 text-grey-7">{{ $t('commen.earned') }}</span>
           <i
             class="copy-icon copy-icon-gray mx-1"
             @click="copy(cToken ? cToken.address : '')"
@@ -41,7 +41,7 @@
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
-            {{ (type === "erc20staking" || type === 'erc1155') ? "STAKED" : "DELEGATED" }}</span
+            {{ (type === "erc20staking" || type === 'erc1155') ? $t('commen.staked') : $t('commen.delegated') }}</span
           >
           <template v-if="type !== 'erc1155'">
             <i
@@ -81,11 +81,11 @@
           <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name"> APR </span>
+          <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apr }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name"> Stakers </span>
+          <span class="name"> {{ $t('commen.stakers') }} </span>
           <div class="info d-flex align-items-center">
             <div :id="user.id + card.id" v-for="(user, index) of stakers" :key="user.id"
                  :style="{zIndex: stakers.length-index}">
