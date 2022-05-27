@@ -8,7 +8,9 @@
           : $t("stake.increaseDelegation")
       }}
     </div>
-    <div style="color: red;" class="font20 line-height28 font-bold text-center mt-2">You're using steem account: {{ steemAccount }} to delegate</div>
+    <div style="color: red;" class="font20 line-height28 font-bold text-center mt-2">
+      {{ $t('tip.delegateTip1', {chain: 'steem', account: steemAccount}) }}
+    </div>
     <div class="custom-form">
       <div class="input-group-box mb-3">
         <div class="label text-right">
