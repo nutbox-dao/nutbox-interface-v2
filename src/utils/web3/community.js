@@ -684,19 +684,37 @@ export const getSpecifyDistributionEras = async (communityId) => {
     }
 
     try {
-      const rewardCalculatorAddress = await contract.rewardCalculator();
+      const rewardCalculatorAddress = contractAddress["LinearCalculator"]
       if (rewardCalculatorAddress == contractAddress["LinearCalculator"]) {
         const count = await rewardCalculator.distributionCountMap(
           communityId
         );
-        let distri = await Promise.all(
-          new Array(count)
-            .toString()
-            .split(",")
-            .map((item, i) =>
-              rewardCalculator.distributionErasMap(communityId, i)
-            )
-        );
+
+        const calls = new Array(count).toString().split(',').map((item, i) => ({
+          target: rewardCalculatorAddress,
+          call: [
+            'distributionErasMap(address,uint256)(uint256,uint256,uint256)',
+            communityId,
+            i
+          ],
+          returns: [
+            ['amount-'+i],
+            ['startHeight-'+i],
+            ['stopHeight-'+i]
+          ]
+        }))
+
+        let distibution = await aggregate(calls, Multi_Config)
+        distibution = distibution.results.transformed
+        let distri = []
+        for (let dis in distibution) {
+          const [type, index] = dis.split('-');
+          if (!distri[index]) {
+            distri[index] = {}
+          }
+          distri[index][type] = distibution[dis]
+        }
+
         distri = distri.map((item, i) => ({
           percentage: item.stopHeight - item.startHeight,
           amount: item.amount.toString() / 10 ** decimal,

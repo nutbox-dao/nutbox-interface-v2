@@ -50,7 +50,24 @@ export const getCToken = async (communityId, update=false) => {
     }
 
     try{
-      const [tokenAddress, isMintable] = await Promise.all([contract.getCommunityToken(), contract.isMintableCommunityToken()])
+      const result = await aggregate([{
+        target: communityId,
+        call: [
+          'getCommunityToken()(address)'
+        ],
+        returns: [
+          ['tokenAddress']
+        ]
+      },{
+        targe: communityId,
+        call: [
+          'isMintableCommunityToken()(bool)'
+        ],
+        returns: [
+          [isMintable]
+        ]
+      }], Multi_Config)
+      const { tokenAddress, isMintable } = result.results.transformed;
       try{
         const cToken = await getERC20Info(tokenAddress);
         cToken['isMintable'] = isMintable;
