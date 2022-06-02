@@ -57,7 +57,7 @@ export const getCToken = async (communityId, update=false) => {
           'isMintableCommunityToken()(bool)'
         ],
         returns: [
-          [isMintable]
+          ['isMintable']
         ]
       }], Multi_Config)
       const { tokenAddress, isMintable } = result.results.transformed;

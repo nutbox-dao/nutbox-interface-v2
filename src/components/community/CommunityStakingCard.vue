@@ -227,6 +227,7 @@ export default {
       const fundRatio = this.card.community.feeRatio;
       const poolRatio = this.card.ratio;
       const _rewardPerBlock = this.rewardPerBlock[this.card.community.id.toLowerCase()]
+      console.log(3, this.card.communityid, this.rewardPerBlock);
       
       const reward =
         (_rewardPerBlock ?? 0) *
@@ -235,6 +236,7 @@ export default {
         poolRatio *
         cTokenPrice;
       const stake = this.tvl;
+      console.log(1243, {stake, reward, _rewardPerBlock, fundRatio, poolRatio, cTokenPrice});
       return parseFloat(reward / 1e6 / stake).toFixed(2) + "%";
     },
     tvl() {

@@ -237,7 +237,7 @@ export const getCommunityRewardPerBlock = async (communityId) => {
     try{
       communityId = communityId.toLowerCase();
       let amount = await aggregate([{
-        target: rewardCalculatorAddress,
+        target: contractAddress["LinearCalculator"],
         call: [
           'getCurrentRewardPerBlock(address)(uint256)',
           communityId
@@ -255,7 +255,7 @@ export const getCommunityRewardPerBlock = async (communityId) => {
       store.commit('community/saveRewardPerBlock', rewardPerBlock)
       resolve(reward)
     }catch(e) {
-      
+      console.log('Get reward per block fail', e);
     }
   })
 }
