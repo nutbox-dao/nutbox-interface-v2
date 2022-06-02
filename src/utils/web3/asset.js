@@ -82,14 +82,6 @@ export const getCToken = async (communityId, update=false) => {
 // get ERC20 info from home chain.
 export const getERC20Info = async (address) => {
   return new Promise(async (resolve, reject) => {
-    let contract;
-    try{
-      contract = await getContract('ERC20', address);
-    }catch (e) {
-      console.log(666);
-      reject(e);
-      return;
-    }
     try{
       const tokens = await getAllTokenFromBackend()
       let infos = await aggregate([{

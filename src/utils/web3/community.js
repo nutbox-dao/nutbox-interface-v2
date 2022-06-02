@@ -236,8 +236,17 @@ export const getCommunityRewardPerBlock = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try{
       communityId = communityId.toLowerCase();
-      const contract = await getContract('LinearCalculator')
-      const amount = await contract.getCurrentRewardPerBlock(communityId)
+      let amount = await aggregate([{
+        target: rewardCalculatorAddress,
+        call: [
+          'getCurrentRewardPerBlock(address)(uint256)',
+          communityId
+        ],
+        returns: [
+          ['amount']
+        ]
+      }], Multi_Config)
+      amount = amount.results.transformed['amount']
       const ctoken = await getCToken(communityId)
       const reward = amount.toString() / (10 ** ctoken.decimal)
       let rewardPerBlock = store.state.community.rewardPerBlock;
@@ -859,9 +868,17 @@ export const getCommunityDaoRatio = async (communityId) => {
 export const getCommunityBalance = async ({communityId, ctokenAddress}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const contract = await getContract('ERC20', ctokenAddress)
-      const balance = await contract.balanceOf(communityId)
-      resolve(balance)
+      let balance = await aggregate([{
+        target: ctokenAddress,
+        call: [
+          'balanceOf(address)(uint256)',
+          communityId
+        ],
+        returns: [
+          ['balance']
+        ]
+      }], Multi_Config)
+      resolve(balance.results.transformed['balance'])
     } catch (e) {
       
       reject(e);
@@ -878,9 +895,16 @@ export const getCommunityBalance = async ({communityId, ctokenAddress}) => {
 export const getCommunityOwner = async (communityId) => {
   return new Promise(async (resolve, reject) => {
     try{
-      const contract = await getContract('Community', communityId);
-      const owner = await contract.owner();
-      resolve(owner)
+      let owner = await aggregate([{
+        target: communityId,
+        call: [
+          'owner()(address)'
+        ],
+        returns: [
+          ['owner']
+        ]
+      }], Multi_Config)
+      resolve(owner.results.transformed['owner'])
     }catch(e) {
       reject(e)
     }
@@ -895,10 +919,16 @@ export const getCommunityOwner = async (communityId) => {
 export const getApprovement = async (token, target) => {
   return new Promise(async (resolve, reject) => {
     try{
-      const contract = await getContract('ERC20', token)
       const account = await getAccounts()
-      const [decimals, allowrance] = await Promise.all([contract.decimals(), contract.allowance(account, target)]) 
-      resolve(allowrance.toString() / (10 ** decimals) > 1e12)
+      if (account) {
+        const contract = await getContract('ERC20', token)
+        const [decimals, allowrance] = await Promise.all([contract.decimals(), contract.allowance(account, target)])
+
+        resolve(allowrance.toString() / (10 ** decimals) > 1e12)
+      }else {
+        resolve(false)
+      }
+      
     }catch(e) {
       // console.log('get approvement fail', e);
       reject(e)

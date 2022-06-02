@@ -327,6 +327,15 @@ export default {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || "en");
   },
   async created() {
+     getCommon().then((res) => {
+      if (!res) return;
+      console.log(1234, res.tvl);
+      this.$store.commit("saveTvl", res.tvl);
+      this.$store.commit("savePrices", res.prices);
+      this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);
+      this.$store.commit("hive/saveVestsToHive", res.vestsToHive);
+      this.$store.commit("np/saveCommonData", res.npDatas);
+    });
     try {
       // setupNetwork()
       await checkNetwork();
@@ -373,14 +382,6 @@ export default {
       console.log("Get accounts fail", e);
     }
 
-    getCommon().then((res) => {
-      if (!res) return;
-      this.$store.commit("saveTvl", res.tvl);
-      this.$store.commit("savePrices", res.prices);
-      this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);
-      this.$store.commit("hive/saveVestsToHive", res.vestsToHive);
-      this.$store.commit("np/saveCommonData", res.npDatas);
-    });
     setInterval(() => {
       getCommon().then((res) => {
         if (!res) return;

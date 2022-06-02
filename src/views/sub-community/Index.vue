@@ -175,6 +175,7 @@ export default {
         this.$store.commit('community/saveLoadingApproveCommunity', false)
       })
       getSpecifyCommunityInfo(this.communityId).then(community => {
+        // if this vue destroyed, dont do any with the returned data
         if (this.desdroyed) return;
         getCToken(community.id).then(ctoken => {
           if (this.desdroyed) return
