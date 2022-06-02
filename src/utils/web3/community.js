@@ -670,13 +670,9 @@ export const getSpecifyDistributionEras = async (communityId) => {
       resolve(distribuitons);
       return;
     }
-    let contract;
     let decimal;
-    let rewardCalculator;
     try {
-      contract = await getContract("Community", communityId);
       const cToken = await getCToken(communityId);
-      rewardCalculator = await getContract("LinearCalculator");
       decimal = cToken.decimal;
     } catch (e) {
       reject(e);
@@ -686,9 +682,18 @@ export const getSpecifyDistributionEras = async (communityId) => {
     try {
       const rewardCalculatorAddress = contractAddress["LinearCalculator"]
       if (rewardCalculatorAddress == contractAddress["LinearCalculator"]) {
-        const count = await rewardCalculator.distributionCountMap(
-          communityId
-        );
+        let count = await aggregate([{
+          target: rewardCalculatorAddress,
+          call: [
+            'distributionCountMap(address)(uint256)',
+            communityId
+          ],
+          returns: [
+            ['count']
+          ]
+        }], Multi_Config)
+
+        count = count.results.transformed['count']
 
         const calls = new Array(count).toString().split(',').map((item, i) => ({
           target: rewardCalculatorAddress,

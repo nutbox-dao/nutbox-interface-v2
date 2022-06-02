@@ -41,13 +41,6 @@ export const getCToken = async (communityId, update=false) => {
       resolve(cTokens[communityId])
       return;
     }
-    let contract;
-    try{
-      contract = await getContract('Community', communityId)
-    }catch(e){
-      reject(e)
-      return
-    }
 
     try{
       const result = await aggregate([{
@@ -59,7 +52,7 @@ export const getCToken = async (communityId, update=false) => {
           ['tokenAddress']
         ]
       },{
-        targe: communityId,
+        target: communityId,
         call: [
           'isMintableCommunityToken()(bool)'
         ],
