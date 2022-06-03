@@ -128,11 +128,11 @@ module.exports = {
     bond: "Bonding",
     unBond: "Unbonding",
     redeem: "Redeem",
-    bindAmount: "Binding Amount",
+    bindAmount: "Bonded Amount",
     inputAmount: "Input Amount",
     receiveAddress: "Receiver Address",
     transferAmount: "Transfer Amount",
-    unbindAmount: "Unbinding amount",
+    unbindAmount: "Unbonding amount",
     intallKeplr: "Please install keplr"
   },
   date: {
