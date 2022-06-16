@@ -239,11 +239,11 @@ export default {
     pageTitle() {
       const url = this.$route.path;
       if (url === "/") return "Nutbox";
-      else if (url.indexOf("/community") !== -1) return "Community";
+      else if (url.indexOf("/community") !== -1) return this.$t('community.community');
       else if (url.indexOf("/manage-community") !== -1)
-        return "Community Dashboard";
-      else if (url.indexOf("/profile") !== -1) return "Profile";
-      else if (url.indexOf("/create") !== -1) return "Create Community";
+        return this.$t('community.communityDashboard');
+      else if (url.indexOf("/profile") !== -1) return this.$t('router.profile');
+      else if (url.indexOf("/create") !== -1) return this.$t('community.createCommunity');
     },
     currentCommunityInfo() {
       if (this.communityId) {
