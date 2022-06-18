@@ -198,7 +198,7 @@ module.exports = {
     loading: "Loading, Please wait",
     connectingPolkadot: "Connecting Polkadot network",
     noAuction: "No ongoing Auction ",
-    // noProject: "No ongoing Project",
+    noProject: "No ongoing Project",
     noNominations: "No Nominators Nodes",
     noContribuitons: "No Contribution Records",
     noCommunities: "No Registered Communities ",

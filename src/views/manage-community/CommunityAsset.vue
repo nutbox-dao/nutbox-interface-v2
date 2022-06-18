@@ -122,7 +122,7 @@
         </b-form-group>
       </div>
     </div>
-    <div class="c-card mt-3 mb-5">
+    <!-- <div class="c-card mt-3 mb-5">
       <div class="font20 font-bold">{{ $t('community.daoTreasuryInfo') }}</div>
       <div class="custom-from" v-if="isLoadingTreasury">
         <div class="c-loading"></div>
@@ -155,7 +155,7 @@
           </div>
         </b-form-group>
       </div>
-    </div>
+    </div> -->
     <!-- charge balance tip -->
     <b-modal
       v-model="showChargeTip"
@@ -350,7 +350,7 @@ import { getCToken, getERC20Balance } from '@/utils/web3/asset'
 import { handleApiErrCode, sleep } from '@/utils/helper'
 import { mapState } from 'vuex'
 import { ethers } from 'ethers'
-import { createTreasury } from '@/utils/web3/treasury'
+// import { createTreasury } from '@/utils/web3/treasury'
 
 export default {
   name: 'CommunityAsset',
@@ -377,10 +377,10 @@ export default {
       communityBalance: 0,
       adminBalance: 0,
 
-      isCreatedTreasury: false,
-      isCreatingTreasury: false,
-      treasuryAddress: '',
-      isLoadingTreasury: true
+      // isCreatedTreasury: false,
+      // isCreatingTreasury: false,
+      // treasuryAddress: '',
+      // isLoadingTreasury: true
     }
   },
   computed: {
@@ -639,10 +639,10 @@ export default {
     }
     this.cToken = await getCToken(communityInfo.id)
     this.isMintable = this.cToken.isMintable
-    this.treasuryAddress = this.communityData.treasury
-    console.log(235, this.communityData)
-    this.isCreatedTreasury = this.treasuryAddress && Number(this.treasuryAddress) !== 0
-    this.isLoadingTreasury = false
+    // this.treasuryAddress = this.communityData.treasury
+    // console.log(235, this.communityData)
+    // this.isCreatedTreasury = this.treasuryAddress && Number(this.treasuryAddress) !== 0
+    // this.isLoadingTreasury = false
     if (!this.isMintable) {
         // updating balances of admin and community
         const interval = setInterval(() => {

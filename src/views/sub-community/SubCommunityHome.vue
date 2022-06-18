@@ -155,11 +155,10 @@
           </div>
         </div>
       </div>
-      <div class="c-card" v-if="communityInfo && (Number(communityInfo.treasury) !== 0)">
+      <!-- <div class="c-card" v-if="communityInfo && (Number(communityInfo.treasury) !== 0)">
         <div class="content3">
            <div class="title mb-3">{{ $t('treasury.daoTreasury') }}</div>
            <div class="custom-form form-row-align-center">
-            <!-- community treasury address -->
               <b-form-group label-cols-md="3" content-cols-md="8"
                             label-class="font14"
                             label-align="left"
@@ -202,7 +201,7 @@
               </button>
             </div>
         </div>
-      </div>
+      </div> -->
     </div>
   <!-- history -->
     <div class="activity-banner">
@@ -224,7 +223,7 @@
       </div>
     </div>
     <!-- redeem tip -->
-    <b-modal
+    <!-- <b-modal
       v-model="showRedeem"
       modal-class="custom-modal"
       size="m"
@@ -275,7 +274,7 @@
           </button>
         </div>
       </div>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 
@@ -322,7 +321,7 @@ export default {
   },
   computed: {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
-    ...mapState('web3', ['treasuryTokens']),
+    // ...mapState('web3', ['treasuryTokens']),
     ...mapState(["metamaskConnected"]),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
@@ -457,15 +456,15 @@ export default {
       console.log('dis', res);
     })
     getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
-    if (Number(this.communityInfo.treasury) !== 0) {
-      getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
-      getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
-        this.loadingApprovement = false
-        this.isApprovedTreasury = a
-      }).catch(res => {
-        console.log(2, res);
-      })
-    }
+    // if (Number(this.communityInfo.treasury) !== 0) {
+    //   getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
+    //   getApprovement(this.communityInfo.cToken, this.communityInfo.treasury).then(a => {
+    //     this.loadingApprovement = false
+    //     this.isApprovedTreasury = a
+    //   }).catch(res => {
+    //     console.log(2, res);
+    //   })
+    // }
     
     this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
     // start watch history
