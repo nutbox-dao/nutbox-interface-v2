@@ -589,7 +589,7 @@ module.exports = {
       withdraw: "{pool}から{amount} {symbol}を出金",
       withdrawWithName: "{pool}から{amount} {symbol}を出金",
       sub: "{pool}から{delegatee}へ {amount} {symbol} を減らす",
-      subWithname: "{pool}から{delegatee}へ {amount} {symbol} を減らす",
+      subWithName: "{pool}から{delegatee}へ {amount} {symbol} を減らす",
       vote: "{pool}へ{amount} {symbol}を投票",
       voteWithName: " {pool}へ{amount} {symbol}を投票",
       unvote: "{pool}へ{amount} {symbol}を投票取消",

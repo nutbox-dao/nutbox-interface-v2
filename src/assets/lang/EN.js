@@ -592,7 +592,7 @@ module.exports = {
     withdraw: "Withdraw {amount} {symbol} from {pool}",
     withdrawWithName: " withdraw {amount} {symbol} from {pool}",
     sub: "Minus {amount} {symbol} to {delegatee} from {pool}",
-    subWithname: " minus {amount} {symbol} to {delegatee} from {pool}",
+    subWithName: " minus {amount} {symbol} to {delegatee} from {pool}",
     vote: "Vote {amount} {symbol} to {pool}",
     voteWithName: " vote {amount} {symbol} to {pool}",
     unvote: "Unvote {amount} {symbol} to {pool}",

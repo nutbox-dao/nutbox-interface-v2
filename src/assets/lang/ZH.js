@@ -542,7 +542,7 @@ module.exports = {
       wrongTokenId: "代币ID必须是整数",
       price: "价格",
       totalSupply: '供应量',
-      cap: '市值p',
+      cap: '市值',
       distributionAmount: "预挖量",
       notErc1155: "这不是一个ERC1155代币。"
     },
@@ -561,7 +561,7 @@ module.exports = {
       withdraw: "从 {pool} 减少 {amount} {symbol}",
       withdrawWithName: "从 {pool} 减少 {amount} {symbol}",
       sub: "从 {pool} 减少 {amount} {symbol} 给 {delegatee}",
-      subWithname: "从 {pool} 减少 {amount} {symbol} 给 {delegatee}",
+      subWithName: "从 {pool} 减少 {amount} {symbol} 给 {delegatee}",
       vote: "投票 {amount} {symbol} 给 {pool}",
       voteWithName: "投票 {amount} {symbol} 给 {pool}",
       unvote: "减少投票 {amount} {symbol} 给 {pool}",

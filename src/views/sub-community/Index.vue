@@ -21,10 +21,10 @@
                 <i class="menu-icon nft-icon" />
                 <span>{{ $t('router.nftStake') }}</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/nut-power">
+              <!-- <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
                 <span>{{ $t('router.nutPower') }}</span>
-              </b-nav-item>
+              </b-nav-item> -->
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
                 <span>{{ $t("router.governance") }}</span>

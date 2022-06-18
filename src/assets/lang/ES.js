@@ -591,7 +591,7 @@ module.exports = {
     withdraw: "Retirar {amount} {symbol} de {pool}",
     withdrawWithName: " retirar {amount} {symbol} de {pool}",
     sub: "Menos {amount} {symbol} a {delegatee} de {pool}",
-    subWithname: "{accoun} menos {amount} {symbol} a {delegatee} de {pool}",
+    subWithName: "{accoun} menos {amount} {symbol} a {delegatee} de {pool}",
     vote: "Votar {amount} {symbol} a {pool}",
     voteWithName: " votae {amount} {symbol} a {pool}",
     unvote: "Eliminar voto {amount} {symbol} a {pool}",

@@ -190,8 +190,6 @@ async function getSpecifyCommunityInfoFromOurService(community) {
     store.commit('currentCommunity/saveLoadingCommunityInfo', true)
     let [data, history] = await Promise.all([restClient.request(query), getNewCommunityOPHistoryFromOurService(community)])
     data = JSON.parse(data.value).community
-    console.log(13, data);
-    data.users = data.users.edges.map(u => u.node)
     data.pools = data.pools.edges.map(p => {
         let pool = p.node
         pool.stakers = pool.stakers.edges.map(s => s.node)

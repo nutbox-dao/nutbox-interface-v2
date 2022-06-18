@@ -157,10 +157,7 @@ export default {
       }
     }
     const amount = (this.operation.amount?.toString() / 10 ** decimals).toFixed(2);
-    if (!this.operation.poolFactory)
-    {
-      console.log(444, this.operation);
-    }
+    
     // distribution
     switch (this.operation.type) {
       case "DEPOSIT":

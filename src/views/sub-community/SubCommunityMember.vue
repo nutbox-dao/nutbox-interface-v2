@@ -28,7 +28,7 @@
                   <img v-else class="avatar rounded-circle"
                        src="~@/static/images/avatars/default.png" alt="">
                   <img src="~@/static/images/avatars/admin-icon.png" class="admin-tag"
-                       v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id)" alt="">
+                       v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id.toLowerCase())" alt="">
                 </div>
                 <span class="ml-2" :id="row.item.address">{{ getName(row.item.address) }}</span>
                 <b-popover
