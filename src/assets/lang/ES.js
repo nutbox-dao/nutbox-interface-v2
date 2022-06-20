@@ -68,6 +68,11 @@ module.exports = {
     isoDetail: 'Tokens de comunidad acuñados bajo Staking. Alto APR, Sin riesgo.',
     erc1155Desc: 'HAz Stake con tus ERC1155 tokens y genera ganacias.',
     nutPower: 'El Nut power representa la gobernanza de Nutbox. Es generado por el farming: Haz Stake de algunos tokens y comienza a ganar.',
+    farming: 'Just stake some tokens to earn.',
+    assetTip1: 'If you want to use an exist token',
+    assetTip2: 'If you want to create a new token',
+    assetTipe3: `*You can premine some tokens to bootup your community,
+    the rest tokens will be minted from the contract block by block.`
   },
   operation: {
     withdraw: "Retirar",
@@ -111,7 +116,10 @@ module.exports = {
     addPool: 'Añadir pool',
     claim: 'Reclamar',
     recharge: "Recargar",
-    upgrade: 'Actualizar'
+    upgrade: 'Actualizar',
+    choseToken: "Choose Token",
+    registerAsset: "Register an asset",
+    deploy: 'Deploy'
   },
   wallet: {
     wallet: "Wallet",
@@ -481,6 +489,9 @@ module.exports = {
     a la comunidad.`,
     chargeTip1: "Puedes hacerlo ahora o más tarde en la página de administración de la comunidad.",
     noCommunity: "Aún no tienes comunidad",
+    choseAsset: 'Chose an asset',
+    deployAsset: 'Deploy community asset',
+    completeInfo: 'Complete info',
 
     startBlock: "Bloque de inicio",
     stopBlock: "Detener bloque",
@@ -574,7 +585,19 @@ module.exports = {
     totalSupply: 'Suministro',
     cap: 'Mkt Cap',
     distributionAmount: "Cantidad de recompensa",
-    notErc1155: "El token no es un token ERC1155n."
+    notErc1155: "El token no es un token ERC1155n.",
+    wrongAddress: 'Wrong Address',
+    choseCToken: 'Choose a token as cToken',
+    setDistr: 'Setting your asset distribution',
+    totalDistr: 'Total distribution by current policy',
+    currentBlock: 'Current Block height',
+    tip1: 'The token you choose is mintable.',
+    tip2: 'For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.',
+    tip3: 'It should be noted that once you set this option, it cannot be changed in the future.',
+    tip4: "If you don't understand the mechanism, just keep the box unchecked.",
+    promiseGrant: 'Yes, I will grant mint role to community contract later.',
+    tip5: 'Your community contract is deployed successfully!',
+    tip6: 'Please confirm to grant the mint role to the contract.'
   },
   treasury: {
     treasuryAddress: "Dirección de Tesorería",

@@ -3,27 +3,27 @@
     <div class="container">
       <div class="col-md-10 mx-auto mt-0 mt-sm-2 mt-md-4">
         <div class="view-top-header">
-          <Step :current-step="1" :step-label="['Deploy community asset', 'Complete info']"></Step>
+          <Step :current-step="1" :step-label="[$t('community.deployAsset'), $t('community.completeInfo')]"></Step>
         </div>
       </div>
       <div class="col-md-7 mx-auto position-relative mb-5">
         <!-- select token type -->
         <div v-show="cardStep===0" class="form-card">
           <div class="text-left">
-            <div class="font-bold line-height24 font20">Chose an asset</div>
-            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">If you want to use an exist token</div>
+            <div class="font-bold line-height24 font20">{{ $t('community.choseAsset') }}</div>
+            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">{{ $t('desc.assetTip1') }}</div>
             <div class="custom-form">
-              <button class="primary-btn" @click="cardStep=1">Choose Token</button>
+              <button class="primary-btn" @click="cardStep=1">{{$t('operation.choseToken')}}</button>
             </div>
           </div>
-          <div class="my-4 mx-auto divide-line font14 line-height14 text-center">OR</div>
+          <div class="my-4 mx-auto divide-line font14 line-height14 text-center">{{$t('commen.or')}}</div>
           <div class="form text-left">
-            <div class="font-bold line-height24 font20">Register an asset</div>
-            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">If you want to create a new token</div>
+            <div class="font-bold line-height24 font20">{{$t('operation.registerAsset')}}</div>
+            <div class="font14 line-height14 mt-1 mb-3 text-grey-7">{{$t('desc.assetTip2')}}</div>
             <div class="custom-form">
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="font14 mb-1 font-bold">Token Name</div>
+                  <div class="font14 mb-1 font-bold">{{$t('asset.tokenName')}}</div>
                   <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text"
@@ -33,7 +33,7 @@
                   </div>
                 </div>
                 <div class="col-sm-6 mt-2 mt-sm-0">
-                  <div class="font14 mb-1 font-bold">Token Symbol</div>
+                  <div class="font14 mb-1 font-bold">{{$t('asset.tokenSymbol')}}</div>
                   <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="text" @keyup="upcaseSymbol()"
@@ -42,7 +42,7 @@
                   </div>
                 </div>
                 <div class="col-12 mt-3">
-                  <div class="font14 mb-1 font-bold">Premine amount</div>
+                  <div class="font14 mb-1 font-bold">{{$t('community.mintAmount')}}</div>
                   <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"
@@ -50,10 +50,9 @@
                     </b-input-group>
                   </div>
                 </div>
-                <div class="col-12 font12 text-grey-7 my-3">*You can premine some tokens to bootup your community,
-                  the rest tokens will be minted from the contract block by block.</div>
+                <div class="col-12 font12 text-grey-7 my-3">{{$t('desc.assetTip3')}}</div>
                 <div class="col-12">
-                  <button class="primary-btn" @click="registerToken()">Register Token</button>
+                  <button class="primary-btn" @click="registerToken()">{{ $t('operation.registerAsset') }}</button>
                 </div>
               </div>
             </div>
@@ -78,7 +77,7 @@
               <div class="c-loading"></div>
             </div>
             <template v-else>
-              <div v-if="searchResult==='error'" class="text-center mt-2 font14 text-grey-7">Wrong Address</div>
+              <div v-if="searchResult==='error'" class="text-center mt-2 font14 text-grey-7">{{$t('assect.wrongAddress')}}</div>
               <div @click="choseToken()" v-if="provideName && provideSymbol">
                 <TokenItem class="my-3"
                            :logo="provideLogo"
@@ -87,8 +86,8 @@
                            :token-address="provideAddress"/>
               </div>
             </template>
-            <div class="my-3 mx-auto divide-line font14 line-height14 text-center">OR</div>
-            <div class="font14 line-height14 text-center text-grey-7 mb-3">Choose a token as cToken</div>
+            <div class="my-3 mx-auto divide-line font14 line-height14 text-center">{{$t('commen.or')}}</div>
+            <div class="font14 line-height14 text-center text-grey-7 mb-3">{{$t('asset.choseCToken')}}</div>
             <div v-if="OfficialAssets.length>0" class="token-list-card">
               <div class="list-item" v-for="token of OfficialAssets" :key="token.address"
                    @click="choseToken(token)">
@@ -106,17 +105,17 @@
           <div class="custom-form">
             <i class="back-icon" @click="goBackTo0()"></i>
             <div class="text-left mt-4">
-              <div class="font-bold font24 line-height24 mb-3">Setting your asset distribution</div>
+              <div class="font-bold font24 line-height24 mb-3">{{$t('asset.setDistr')}}</div>
               <div class="row mb-1 font-bold">
                 <div class="col-sm-8 font14 line-height14 d-flex align-items-center">
-                  Total distribution by current policy
+                  {{ $t('asset.totalDistr') }}
                 </div>
                 <div class="col-sm-4">
                   <div class="b-box font20 line-height24 text-right">{{ totalSupply }}</div>
                 </div>
               </div>
               <div class="row font-bold">
-                <div class="col-sm-8 font14 line-height14 d-flex align-items-center">Current Block height</div>
+                <div class="col-sm-8 font14 line-height14 d-flex align-items-center">{{$t('asset.currentBlock')}}</div>
                 <div class="col-md-4">
                   <div class="b-box font20 text-right">{{ blockNum }}</div>
                 </div>
@@ -198,16 +197,16 @@
             />
             <div class="text-grey-bd">
               <p class="font16 font-bold mt-3">
-                The token you choose is mintable.
+                {{$t('asset.tip1')}}
               </p>
               <p>
-                For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.
+                {{$t('asset.tip2')}}
               </p>
               <p>
-                It should be noted that once you set this option, it cannot be changed in the future.
+                {{$t('asset.tip3')}}
               </p>
               <p>
-                If you don't understand the mechanism, just keep the box unchecked.
+                {{$t('asset.tip4')}}
               </p>
             </div>
             <b-form-checkbox
@@ -217,7 +216,7 @@
               :value="true"
               :unchecked-value="false"
             >
-              Yes, I will grant mint role to community contract later.
+               {{$t('asset.promiseGrant')}}
             </b-form-checkbox>
             <button class="primary-btn mt-4" @click="cToken.isMintable = isMintable; cardStep = 2">
               {{ $t('operation.confirm') }}
@@ -230,10 +229,10 @@
             <img style="width: 120px; height: 120px;" src="~@/static/images/celebrate-img.png" alt="">
           </div>
           <p>
-            Your community contract is deployed successfully!
+            {{$t('asset.tip5')}}
           </p>
           <p>
-            Please confirm to grant the mint role to the contract.
+            {{$t('asset.tip6')}}
           </p>
           <p>
             {{ communityInfo && communityInfo.id }}
@@ -244,7 +243,7 @@
               type="grow"
               v-show="grantingRole"
             ></b-spinner>
-            Grant
+            {{ $t('operation.grant') }}
           </button>
         </div>
         <button class="next-btn primary-btn w-auto" :disabled="loadingApprovement || isApproving" v-show="takeFee && (cardStep === 2 && (loadingApprovement || !approvementCommunityFactory))" @click="approveCommunityFactory()">
@@ -253,7 +252,7 @@
               type="grow"
               v-show="loadingApprovement || isApproving"
             ></b-spinner>
-          Approve
+          {{$t('operation.approve')}}
         </button>
         <button class="next-btn primary-btn w-auto" :disabled="deploying" v-show="cardStep === 2 && (!takeFee || approvementCommunityFactory)" @click="takeFee ? showFeeTip = true : confirmDeploy()">
           <b-spinner
@@ -261,7 +260,7 @@
               type="grow"
               v-show="deploying"
             ></b-spinner>
-          <span class="mr-3">Deploy</span>
+          <span class="mr-3">{{$t('operation.deploy')}}</span>
           <i class="next-icon"></i>
         </button>
       </div>

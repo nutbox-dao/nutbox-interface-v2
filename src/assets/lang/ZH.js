@@ -69,6 +69,9 @@ module.exports = {
       erc1155Desc: '质押您的ERC115来挖矿.',
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
+      assetTip1: '如果您想使用已经存在的资产',
+      assetTip2: '创建一个新的代码',
+      assetTip3: `*您可以一次预挖一定量的代币带您的账号，余下的通过之后的分发策略进行发放。`
     },
     operation: {
       withdraw: "取消质押",
@@ -91,7 +94,7 @@ module.exports = {
       create: "创建",
       add: "添加",
       update: "更新",
-      delegatecharge: "Delegate Charge",
+      delegatecharge: "代理变更",
       login: "登录",
       logout: "登出",
       input: "输入",
@@ -112,7 +115,10 @@ module.exports = {
       addPool: '添加矿池',
       claim: '领取',
       recharge: "充值",
-      upgrade: '升级'
+      upgrade: '升级',
+      choseToken: "选择代币",
+      registerAsset: "注册新资产",
+      deploy: '部署'
     },
     wallet: {
       wallet: "钱包",
@@ -454,6 +460,9 @@ module.exports = {
       到社区`,
       chargeTip1: "您可以现在充值, 或者后续在社区管理页面充值",
       noCommunity: "您还没有创建社区",
+      choseAsset: '选择资产',
+      deployAsset: '部署社区资产',
+      completeInfo: '完善社区信息',
   
       startBlock: "开始区块",
       stopBlock: "停止区块",
@@ -544,7 +553,19 @@ module.exports = {
       totalSupply: '供应量',
       cap: '市值',
       distributionAmount: "预挖量",
-      notErc1155: "这不是一个ERC1155代币。"
+      notErc1155: "这不是一个ERC1155代币。",
+      wrongAddress: '地址错误',
+      choseCToken: '选择一个代币作为社区代币',
+      setDistr: '设置资产的分发策略',
+      totalDistr: '当前分发策略可分发总量',
+      currentBlock: '当前区块高度',
+      tip1: '您选择了开发挖取功能的代币',
+      tip2: '为了社区管理方便，你需要将代币的挖取权限转移给社区。',
+      tip3: '需要注意的是一旦移交权限给社区合约，将无法转移回去了。',
+      tip4: "如果您不了解其中的机制，不勾选复选框即可",
+      promiseGrant: '好的，我会将权限转移给社区。',
+      tip5: '您的社区合约部署成功!',
+      tip6: '请确认将代币挖取权限转移给社区合约。'
     },
     treasury: {
       treasuryAddress: "国库地址",

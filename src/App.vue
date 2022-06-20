@@ -570,4 +570,7 @@ body {
 .audit-icon {
   background-image: url("~@/static/images/h-audit.svg");
 }
+.language-icon {
+  background-image: url("~@/static/images/h-lang.svg");
+}
 </style>

@@ -69,6 +69,10 @@ module.exports = {
       erc1155Desc: 'ERC1155トークンを担保して収益がもらえる。',
       nutPower: 'Nut powerは、NutboxDAOの管理権です。NUTをステーキングすることによって生成され、NUTがロックされる時間が長いほど、より多くのNut powerが生成されます。また、新しいNUTの配布を決定するためのコアファクターでもあります。',
       farming: 'トークンを担保して稼げ。',
+      assetTip1: 'If you want to use an exist token',
+      assetTip2: 'If you want to create a new token',
+      assetTipe3: `*You can premine some tokens to bootup your community,
+      the rest tokens will be minted from the contract block by block.`
     },
     operation: {
       withdraw: "出金",
@@ -112,7 +116,10 @@ module.exports = {
       addPool: 'プール追加',
       claim: '受取',
       recharge: "チャージ",
-      upgrade: 'アップグレード'
+      upgrade: 'アップグレード',
+      choseToken: "Choose Token",
+      registerAsset: "Register an asset",
+      deploy: 'Deploy'
     },
     wallet: {
       wallet: "ウォレット",
@@ -479,6 +486,9 @@ module.exports = {
       入金が必要です。`,
       chargeTip1: "今すぐ、または後でコミュニティ管理ページで実行できます。",
       noCommunity: "まだコミュニティに加入していません",
+      choseAsset: 'Chose an asset',
+      deployAsset: 'Deploy community asset',
+      completeInfo: 'Complete info',
   
       startBlock: "開始ブロック",
       stopBlock: "終了ブロック",
@@ -572,7 +582,19 @@ module.exports = {
       totalSupply: '供給',
       cap: 'Mkt Cap',
       distributionAmount: "事前ミント数",
-      notErc1155: "ERC1155トークンではありません。"
+      notErc1155: "ERC1155トークンではありません。",
+      wrongAddress: 'Wrong Address',
+      choseCToken: 'Choose a token as cToken',
+      setDistr: 'Setting your asset distribution',
+      totalDistr: 'Total distribution by current policy',
+      currentBlock: 'Current Block height',
+      tip1: 'The token you choose is mintable.',
+      tip2: 'For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.',
+      tip3: 'It should be noted that once you set this option, it cannot be changed in the future.',
+      tip4: "If you don't understand the mechanism, just keep the box unchecked.",
+      promiseGrant: 'Yes, I will grant mint role to community contract later.',
+      tip5: 'Your community contract is deployed successfully!',
+      tip6: 'Please confirm to grant the mint role to the contract.'
     },
     treasury: {
       treasuryAddress: "トレジャリーアドレス",
