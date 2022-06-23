@@ -14,8 +14,8 @@
       </div>
       <div class="other-info d-flex justify-content-between ">
         <div class="font18 d-flex justify-content-between info-start font14 line-height20">
-          <div style="color: #50BF00; white-space: nowrap">Agree: {{proposalItem.voteAgreeTotalScore || 0}}</div>
-          <div style="color: #FF5B4D; white-space: nowrap">Disagree: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
+          <div style="color: #50BF00; white-space: nowrap">{{ $t('nps.proposalAgreeBtn') }}: {{proposalItem.voteAgreeTotalScore || 0}}</div>
+          <div style="color: #FF5B4D; white-space: nowrap">{{ $t('nps.proposalDisagreeBtn') }}: {{proposalItem.voteDisagreeTotalScore || 0}}</div>
         </div>
         <div class="d-flex align-items-end info-end">
           <div class="t-flag px-1 font14 line-height16 py-1"

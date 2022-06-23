@@ -12,7 +12,7 @@
       style="color: red"
       class="font20 line-height28 font-bold text-center mt-2"
     >
-      You're using {{ cosmosChainName }} account: {{ account }} to delegate
+      {{ $t('tip.delegateTip1', {chain: cosmosChainName, account}) }}
     </div>
     <div class="custom-form">
       <div class="input-group-box mb-3">

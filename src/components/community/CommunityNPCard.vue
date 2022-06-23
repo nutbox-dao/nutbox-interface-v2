@@ -3,7 +3,7 @@
     <div class="card-link-top-box">
       <div class="d-flex align-items-center">
         <div class="card-link-title-text font-bold">
-          <div class="text-grey-7 font14 line-height14 mb-1">Vote for</div>
+          <div class="text-grey-7 font14 line-height14 mb-1">{{ $t('np.voteFor') }}</div>
           <div class="link-title font20 line-height24">
             <span>{{ card.name }}</span>
           </div>
@@ -19,12 +19,12 @@
     </div>
     <div class="c-card">
       <div>
-        <div class="font12 text-grey-7 mb-1">EARNED</div>
+        <div class="font12 text-grey-7 mb-1">{{ $t('commen.earned') }}</div>
         <div class="d-flex justify-content-center align-items-center">
           <div class="flex-1">
             <div class="d-flex align-items-center">
               <div class="d-flex justify-content-between align-items-center font-bold flex-1">
-                <span class="font18 line-height18">{{ cToken ? cToken.name : '' }}</span>
+                <span class="font18 line-height18">{{ cToken ? cToken.symbol : '' }}</span>
                 <span class="font24 line-height24">{{ pendingCtoken | amountForm }}</span>
               </div>
               <div class="d-flex align-items-center icons-group">
@@ -53,9 +53,9 @@
         <div class="d-flex justify-content-between align-items-center font12 mb-1">
           <div class="text-grey-7">
             <span class="font-bold text-grey-47">NP</span>
-            VOTED
+            {{ $t('commen.voted') }}
           </div>
-          <div class="text-grey-47 font-bold">Available：{{ balance.freeNp | amountForm }}</div>
+          <!-- <div class="text-grey-47 font-bold">Available：{{ balance.freeNp | amountForm }}</div> -->
         </div>
         <!-- operate area -->
         <div
@@ -91,14 +91,14 @@
       </div>
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
-          <span class="name">APR</span>
+          <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info d-flex align-items-center">
             <i class="help-icon mr-1" v-b-popover.hover.top="detailApr"></i>
             <span>{{ (npApr + ctokenApr).toFixed(2) }}%</span>
           </div>
         </div>
         <div class="project-info-container">
-          <span class="name">Total Staking</span>
+          <span class="name">{{ $t('commen.totalStake') }}</span>
           <div class="info">{{ totalLockedNp | amountForm }}</div>
         </div>
         <div class="project-info-container">
@@ -106,7 +106,7 @@
           <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name">Voters</span>
+          <span class="name">{{ $t('commen.voters') }}</span>
           <div class="info d-flex align-items-center">
             <div :id="user.id + card.id" v-for="(user, index) of voters" :key="user.id"
                  :style="{zIndex: voters.length-index}">
@@ -198,7 +198,7 @@ export default {
         return 0
       }
       const ctokenPrice = this.cToken.price
-      const apr = this.rewardPerBlock[this.card.community.id] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
+      const apr = this.rewardPerBlock[this.card.community.id.toLowerCase()] * (10000 - this.feeRatio) * this.card.ratio * this.gaugeRatio * ctokenPrice * YEAR_BLOCKS / this.tvl / 1e10
       return apr;
     },
     detailApr() {

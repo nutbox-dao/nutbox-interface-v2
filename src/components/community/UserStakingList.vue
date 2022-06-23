@@ -26,12 +26,12 @@
           <div class="font-bold">{{ pendingReward | amountForm }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
-          <div class="mb-2">APR</div>
+          <div class="mb-2">{{ $t('commen.apy') }}</div>
           <div class="font-bold">{{ apr }}</div>
         </div>
         <div class="item h-100 d-flex text-center font14 line-height14">
           <div class="mb-2">
-            Total {{ type === "erc20staking" ? "Staked" : "Delegated" }}
+            {{ (type === "erc20staking" || type === "erc1155") ? $t('pool.totalStaked') : $t('pool.totalDelegated') }}
           </div>
           <div class="font-bold">{{ totalDeposited | amountForm }}</div>
         </div>
@@ -52,8 +52,8 @@
           class="toggle-btn font14"
           style="color: #408fff"
         >
-          <span class="when-open">Hide</span>
-          <span class="when-closed">Detail</span>
+          <span class="when-open">{{ $t('operation.hide') }}</span>
+          <span class="when-closed">{{ $t('commen.detail') }}</span>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@
             <i class="link-icon link-icon-gray" @click="gotoCommunity"></i>
           </div>
           <div class="d-flex align-items-center">
-            <span>{{ cToken ? cToken.symbol : "" }} Contract</span>
+            <span>{{ cToken ? cToken.symbol : "" }} {{ $t('commen.contract') }}</span>
             <i
               class="copy-icon copy-icon-gray mx-2"
               @click="copy(cToken.address)"
@@ -86,7 +86,7 @@
             ></i>
           </div>
           <div v-if="stakeToken.symbol" class="d-flex align-items-center">
-            <span>{{ stakeToken ? stakeToken.symbol : "" }} Contract</span>
+            <span>{{ stakeToken ? stakeToken.symbol : "" }} {{ $t('commen.contract') }}</span>
             <i
               class="copy-icon copy-icon-gray mx-2"
               @click="copy(stakeToken.address)"
@@ -109,7 +109,7 @@
         >
           <div>
             <div class="font-bold text-grey-7">
-              {{ cToken ? cToken.symbol : "" }} Earned
+              {{ cToken ? cToken.symbol : "" }} {{ $t('commen.earned') }}
             </div>
             <div class="font12 text-grey-7">
               {{ pendingReward | amountForm }}
@@ -121,7 +121,7 @@
             :disabled="isWithdrawing"
           >
             <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
-            Harvest
+            {{ $t('operation.harvest') }}
           </button>
         </div>
         <div
@@ -146,6 +146,7 @@
                   {{
                     type === "erc20staking"
                       ? stakeToken.symbol + " Staked"
+                      : type === "erc1155" ? "ERC1155 Staked"
                       : type === "steem"
                       ? "SP Delegated"
                       : type === 'hive' 
@@ -256,6 +257,22 @@
       />
     </b-modal>
 
+    <!-- nft stake -->
+    <b-modal
+      v-model="showNFTStake"
+      modal-class="custom-modal sub-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <StakingERC1155Modal
+        :operate="operate"
+        :card="pool"
+        @hideStakeMask="showNFTStake = false"
+      />
+    </b-modal>
+
     <!-- cosmos stake  -->
     <b-modal
       v-model="showCosmosStake"
@@ -285,30 +302,12 @@
       <div class="position-relative">
         <i class="modal-close-icon-right" @click="showWrongSteem = false"></i>
         <div class="custom-form text-center pt-3 font20 line-height28">
-          <div class="pt-4">
-            Please change
-            <span class="text-primary-0 font-bold">{{
-              type.toUpperCase()
-            }}</span>
-            Account
+          <div class="pt-4" v-html="$t('stake.changeAccountHtml', {type: type.toUpperCase()})">
           </div>
-          <div>
-            Your
-            <span class="text-primary-0 font-bold">{{
-              type.toUpperCase()
-            }}</span>
-            account haven't binding with current
-            <span class="text-primary-0 font-bold">{{
-              type.toUpperCase()
-            }}</span>
-            address, please change
-            <span class="text-primary-0 font-bold">{{
-              type.toUpperCase()
-            }}</span>
-            account in your wallet first.
+          <div v-html="$t('stake.accountMismatch3', {type: type.toUpperCase(), chainName})">
           </div>
           <div class="mt-2 mb-1">
-            Your binding {{ type.toUpperCase() }} account is:
+            {{ $t('stake.bindAccountTip1', {type: type.toUpperCase()}) }}
           </div>
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <input
@@ -327,13 +326,13 @@
             class="dark-btn primary-btn-outline mx-3"
             @click="showWrongSteem = false"
           >
-            Cancel
+            {{ $t('operation.cancel') }}
           </button>
           <button
             class="primary-btn mx-3"
             @click="(showWrongSteem = false), (showLogin = true)"
           >
-            OK
+            {{ $t('operation.ok') }}
           </button>
         </div>
       </div>
@@ -358,21 +357,11 @@
         "
       >
         <i class="modal-close-icon-right" @click="showWrongAccount = false"></i>
-        <div class="mt-4">
-          Please change
-          <span class="text-primary-0 font-bold">{{ chainName }} </span>address
+        <div class="mt-4" v-html="$t('stake.changeAddressHtml', {chainName})">
         </div>
-        <div>
-          Your <span class="text-primary-0 font-bold">{{ chainName }} </span>
-          address haven't binding with current
-          <span class="text-primary-0 font-bold"
-            >{{ type.toUpperCase() }}
-          </span>
-          account, please change
-          <span class="text-primary-0 font-bold">{{ chainName }} </span>
-          address in your wallet first.
+        <div v-html="$t('stake.accountMismatch4',{chainName, type: type.toUpperCase()})">
         </div>
-        <div class="mt-2 mb-1">Your binding address is:</div>
+        <div class="mt-2 mb-1">{{ $t('stake.bindAddressTip1') }}</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -387,13 +376,13 @@
           class="primary-btn primary-btn-outline mx-3"
           @click="showWrongAccount = false"
         >
-          OK
+          {{ $t('operation.ok') }}
         </button>
         <button
           class="primary-btn mx-3"
           @click="(showWrongAccount = false), (showLogin = true)"
         >
-          Change {{ type.toUpperCase() }}
+          {{ $t('operation.change') }} {{ type.toUpperCase() }}
         </button>
       </div>
     </b-modal>
@@ -409,15 +398,13 @@
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
         <div class="modal-title">
-          Please change {{ cosmosChainName[type] }} Account
+          {{ $t('stake.changeAccount', {type: cosmosChainName[type]}) }}
         </div>
         <div class="text-center font20 line-height24 mt-3">
-          Your {{ cosmosChainName[type] }} account haven't binding with current
-          {{ chainName }} address, please change
-          {{ cosmosChainName[type] }} account in your wallet first.
+          {{ $t('stake.accountMismatch1', {type: cosmosChainName[type], chainName}) }}
         </div>
         <div class="mt-3 mb-1 text-center font20 line-height24">
-          Your binding {{ cosmosChainName[type] }} account is:
+          {{ $t('stake.bindAccountTip1', {type: cosmosChainName[type]}) }}
         </div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input class="text-center" disabled type="text" :value="bindCosmos" />
@@ -428,13 +415,13 @@
           class="dark-btn primary-btn-outline mx-3"
           @click="showWrongCosmos = false"
         >
-          Cancel
+          {{ $t('operation.cancel') }}
         </button>
         <button
           class="primary-btn mx-3"
           @click="(showWrongCosmos = false)"
         >
-          OK
+          {{ $t('operation.ok') }}
         </button>
       </div>
     </b-modal>
@@ -449,13 +436,11 @@
     >
       <div class="custom-form text-center position-relative">
         <i class="modal-close-icon-right" @click="showWrongAccountForCosmos = false"></i>
-        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="modal-title">{{ $t('stake.changeAddress', {chainName}) }}</div>
         <div class="font20 line-height24 mt-3">
-          Your {{ chainName }} address haven't binding with current
-          {{ cosmosChainName[type] }} account, please change
-          {{ chainName }} address in your wallet first.
+          {{ $t('stake.accountMismatch2', {type: cosmosChainName[type], chainName}) }}
         </div>
-        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="mt-3 mb-1">{{ $t('stake.bindAddressTip1') }}</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -470,13 +455,13 @@
           class="primary-btn primary-btn-outline mx-3"
           @click="showWrongAccountForCosmos = false"
         >
-          Cancel
+          {{ $t('operation.cancel') }}
         </button>
         <button
           class="primary-btn mx-3"
           @click="(showWrongAccountForCosmos = false)"
         >
-          OK
+          {{ $t('operation.ok') }}
         </button>
       </div>
     </b-modal>
@@ -514,10 +499,12 @@ import Login from "@/components/common/Login";
 import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
 import SPStakingModal from "@/components/common/SPStakingModal";
 import HPStakingModal from "@/components/common/HPStakingModal";
+import StakingERC1155Modal from "@/components/common/StakingERC1155Modal";
 import CosmostakingModal from "@/components/common/CosmostakingModal";
 import { getAccount, getAccountBalance } from "@/utils/cosmos/cosmos";
 import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } from "@/utils/cosmos/osmosis";
 import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
+import { ethers } from 'ethers'
 
 export default {
   name: "",
@@ -533,6 +520,7 @@ export default {
     ConnectMetaMask,
     Login,
     StakingHomeChainAssetModal,
+    StakingERC1155Modal,
     SPStakingModal,
     HPStakingModal,
     CosmostakingModal,
@@ -553,6 +541,7 @@ export default {
       showHpStake: false,
       showCosmosStake: false,
       showCosmosStake: false,
+      showNFTStake: false,
       isCheckingAccount: false,
       bindSteem: "",
       bindCosmos: "",
@@ -580,7 +569,7 @@ export default {
     ...mapGetters("community", ["getCommunityInfoById"]),
     ...mapGetters("web3", ["tokenDecimals", "tokenByKey"]),
     ...mapState(["prices", "metamaskConnected"]),
-    ...mapState("web3", ["tokenIcons", "allTokens"]),
+    ...mapState("web3", ["tokenIcons", "allTokens", "allErc1155s"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
     ...mapState("hive", ["hiveAccount", "vestsToHive"]),
     ...mapState("cosmos", ['cosmosAccount']),
@@ -621,12 +610,20 @@ export default {
     stakeIcon() {
       if (this.type === "erc20staking") {
         return this.stakeToken.icon;
+      } else if (this.type === 'erc1155') {
+        try {
+          const address = ethers.utils.getAddress(this.pool.asset.substring(0, 42))
+          const id = parseInt(this.pool.asset.substring(42))
+          return this.allErc1155s.filter(e => e.address === address && e.tokenid === id)[0].icon
+        }catch(e) {
+          console.log(118, e);
+        }
       } else {
         return ASSET_LOGO_URL[this.type];
       }
     },
     approved() {
-      if (this.type !== "erc20staking") return true;
+      if (this.type !== "erc20staking" || this.type !== 'erc1155') return true;
       if (!this.approvements) return false;
       return this.approvements[this.pool.id];
     },
@@ -651,6 +648,8 @@ export default {
         return (stakedBn.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return stakedBn.toString() / 1e6
+      } else if (this.type === 'erc1155') {
+        return stakedBn.toString() / 1;
       }
     },
     pendingReward() {
@@ -674,6 +673,8 @@ export default {
         return (total.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6
+      } else if (this.type === 'erc1155') {
+        return total.toString() / 1
       }
       return 0;
     },
@@ -833,6 +834,8 @@ export default {
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
+      } else if(this.type === 'erc1155') {
+        this.showNFTStake = true
       }
     },
     async decrease() {
@@ -853,6 +856,8 @@ export default {
         if (await this.checkCosmosAccount()) {
           this.showCosmosStake = true
         }
+      } else if(this.type === 'erc1155') {
+        this.showNFTStake = true
       }
     },
     // Approve contract

@@ -2,14 +2,12 @@
   <div class="np-pool-modal position-relative">
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="pool-type-modal-content d-flex flex-column">
-      <div class="modal-title mt-4">Add a NP vote pool</div>
+      <div class="modal-title mt-4">{{ $t('np.addNpPool') }}</div>
       <div>
-        In order to add a NUT Power vote pool,
-        you need choose an existing staking pool.
-        Users can earn NUT and c-token from NP vote pool.
+        {{ $t("np.npTip1") }}
       </div>
       <div class="my-3">
-        *NUT is  issued by Nutbox contract, c-token is from staking pool's commission.
+        {{ $t('np.npTip2') }}
       </div>
     </div>
     <div class="modal-card-box">
@@ -23,10 +21,10 @@
       </div>
     </div>
     <div class="d-flex mt-3 justify-content-center">
-      <button class="dark-btn mx-2 w-25" :disabled="creatingGauge" @click="$emit('close')">Cancel</button>
+      <button class="dark-btn mx-2 w-25" :disabled="creatingGauge" @click="$emit('close')">{{ $t('operation.cancel') }}</button>
       <button class="primary-btn mx-2 w-25" :disabled="creatingGauge" @click="createGauge">
          <b-spinner small type="grow" v-show="creatingGauge"></b-spinner>
-        OK
+        {{ $t('operation.create') }}
       </button>
     </div>
   </div>

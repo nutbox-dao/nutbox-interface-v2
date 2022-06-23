@@ -58,8 +58,8 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['CosmosStakingFactory'].toLowerCase()
     case 'juno':
       return contractAddress['CosmosStakingFactory'].toLowerCase()
-    case 'erc1155staking':
-      return contractAddress['ERC1155StakingFacory'].toLowerCase()
+    case 'erc1155':
+      return contractAddress['ERC1155StakingFactory'].toLowerCase()
   }
 }
 
@@ -69,8 +69,8 @@ export const getPoolType = (factory, chainId) => {
   switch (factory) {
     case contractAddress['ERC20StakingFactory']:
       return 'erc20staking'
-    case contractAddress['ERC1155StakingFacory']:
-      return 'erc1155staking'
+    case contractAddress['ERC1155StakingFactory']:
+      return 'erc1155'
     case contractAddress['SPStakingFactory']: {
       if (parseInt(chainId) === 1) {
         return 'steem'
@@ -127,14 +127,15 @@ export const approvePoolERC1155 = async (pool) => {
   return new Promise(async (resolve, reject) => {
     let contract;
     try {
-      contract = await getContract('ERC1155', pool.asset.substring(42), false)
+      contract = await getContract('ERC1155', pool.asset.substring(0, 42), false)
     }catch(e) {
       reject(e);
       return;
     }
 
     try {
-      const tx = await contract.setApprovalForAll(pool.is, true);
+      const tx = await contract.setApprovalForAll(pool.id, true);
+      await waitForTx(tx.hash)
       resolve(tx.hash);
     }catch(e) {
       if (e.code === 4001) {
@@ -211,7 +212,7 @@ export const addPool = async (form) => {
             factory.removeAllListeners('ERC20StakingCreated')
           }
         })
-      } else if (form.type === 'erc1155staking') {
+      } else if (form.type === 'erc1155') {
         factory.on('ERC1155StakingCreated', (pool, community, name, erc1155Token, id) => {
           if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
             console.log('Create a new pool:', pool);
@@ -284,7 +285,7 @@ export const addPool = async (form) => {
       console.log('Create pool fail', e);
       if (form.type === 'erc20staking') {
         factory.removeAllListeners('ERC20StakingCreated')
-      } else if(form.type === 'erc1155staking') {
+      } else if(form.type === 'erc1155') {
         factory.removeAllListeners('ERC1155StakingCreated')
       } else if(form.type === 'steem' || form.type === 'hive' || form.type === 'steem-witness') {
         factory.removeAllListeners('SPStakingCreated')
@@ -396,6 +397,36 @@ export const deposit = async (poolId, amount) => {
 }
 
 /**
+ * Deposit erc1155 asset
+ * @param {*} poolId
+ * @param {*} amount
+ */
+ export const depositErc1155 = async (poolId, amount) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try {
+      contract = await getContract('ERC1155Staking', poolId, false)
+    } catch (e) {
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.deposit(amount)
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Deposit Fail', e);
+    }
+  })
+}
+
+/**
  * Withdraw 
  * @param {*} poolId 
  * @param {*} amount
@@ -413,6 +444,36 @@ export const withdraw = async (poolId, amount) => {
 
     try {
       const tx = await contract.withdraw(ethers.utils.parseUnits(amount.toString(), 18))
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Withdraw Fail', e);
+    }
+  })
+}
+/**
+ * Withdraw ERC1155
+ * @param {*} poolId 
+ * @param {*} amount
+ * @returns 
+ */
+ export const withdrawErc1155 = async (poolId, amount) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try {
+      contract = await getContract('ERC1155Staking', poolId, false)
+    } catch (e) {
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.withdraw(amount)
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {
@@ -520,7 +581,7 @@ export const updatePoolsByPolling = (pools) => {
     let pending = {}
     let approve = {}
     for (let d in res) {
-      const [type, pid] = d.split('-')
+      let [type, pid] = d.split('-')
       if (type === 'staked') {
         staked[pid] = res[d]
       } else if (type === 'total') {
@@ -568,6 +629,7 @@ const getPoolStakingInfo = async (pools) => {
         resolve();
         return;
       }
+      const ignoreList = ['0x94Cd64e037A14F9816C7b79A08C00299Fe4604A0']
       let calls = []
       for (let i = 0; i < pools.length; i++) {
         const p = pools[i]
@@ -613,16 +675,19 @@ const getPoolStakingInfo = async (pools) => {
               ['approve-' + p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset)) > 1e12]
             ]
           })
-        } else if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155staking')) {
+        } else if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155')) {
+          if (ignoreList.indexOf(ethers.utils.getAddress(p.asset.substring(0, 42))) !== -1) {
+            continue;
+          }
           calls.push({
-            target: p.asset,
+            target: p.asset.substring(0, 42),
             call: [
               'isApprovedForAll(address,address)(bool)',
               account,
               p.id
             ],
             returns: [
-              ['approveERC1155-' + p.id]
+              ['approve-' + p.id]
             ]
           })
         }
@@ -748,7 +813,7 @@ export const getApprovements = async (pools) => {
         ]
       }))
 
-      const erc1155pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolsFacotryAddress('erc1155staking')) 
+      const erc1155pools = pools.filter(p => p.poolFactory.toLowerCase() === getPoolsFacotryAddress('erc1155')) 
       calls = calls.concat(erc1155pools.map(pool => ({
         target: pool.asset.substring(42),
         call: [

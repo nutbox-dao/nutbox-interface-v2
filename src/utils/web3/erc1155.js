@@ -1,5 +1,6 @@
 import { getContract } from '@/utils/web3/contract'
 import { insertErc1155 } from '@/apis/api'
+import { getAccounts } from './account'
 
 export const isErc1155 = async (address) => {
     return new Promise(async (resolve, reject) => {
@@ -13,28 +14,33 @@ export const isErc1155 = async (address) => {
       }
   
       try{
-        const res = await contract.supportsInterface("0x00000000");
-        resolve(true);
+        const res = await contract.supportsInterface(0xd9b67a26);
+        resolve(res);
       }catch(e){
         resolve(false);
       }
     })
   }
 
-export const getBalance = async (address, id) => {
+export const getBalance = async (asset) => {
     return new Promise(async (resolve, reject) => {
         let contract;
+        let address;
+        let id;
         try {
-            contract = await getContract('ERC1155', address);
+          address = asset.substring(0, 42);
+          id = parseInt(asset.substring(42, asset.length))
+          contract = await getContract('ERC1155', address);
         }catch(e) {
-            console.log(888);
-            reject(e);
-            return;
+          console.log(888);
+          reject(e);
+          return;
         }
 
         try{
-            const res = await contract.balanceOf(address, id)
-            resolve(res.toString() / 1)
+          const account =await getAccounts();
+          const res = await contract.balanceOf(account, id)
+          resolve(res.toString() / 1)
         }catch(e) {
             reject(e);
         }

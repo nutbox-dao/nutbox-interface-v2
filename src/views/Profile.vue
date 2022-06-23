@@ -16,7 +16,7 @@
                        placeholder="Input name"
                        v-model="user.name"></b-input>
               <i v-if="!isEditName" class="edit-icon hover" @click="isEditName=true"></i>
-              <span class="hover" v-else @click="updateUser">Save</span>
+              <span class="hover" v-else @click="updateUser">{{ $t('operation.save') }}</span>
             </div>
           </div>
           <!-- token list -->
@@ -27,12 +27,12 @@
             </div> -->
             <div v-show="assetTab===0" class="asset-card">
               <div class="d-flex user-asset justify-content-between">
-                <div class="font20 line-height28 font-bold">Total Asset Value</div>
+                <div class="font20 line-height28 font-bold">{{ $t('desc.totalValue') }}</div>
                 <div class="value-box">
                   <div class="value-info">
                     <div class="font20 line-height20 font-bold">{{ totalValue | formatPrice }}</div>
                   </div>
-                  <button class="primary-btn px-4 mx-0" @click="assetModalVisible=true">Detail</button>
+                  <button class="primary-btn px-4 mx-0" @click="assetModalVisible=true">{{ $t('commen.detail') }}</button>
                 </div>
               </div>
               <div class="chart-box position-relative">
@@ -49,7 +49,7 @@
           </div>
         </div>
         <!-- community -->
-        <div class="font-bold mt-5 mb-3 font20 line-height32">Joined Communities</div>
+        <div class="font-bold mt-5 mb-3 font20 line-height32">{{ $t('community.joinedCommunity') }}</div>
         <div class="row" v-if="joinedCommunity && joinedCommunity.length > 0">
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4" v-for="(community, index) of joinedCommunity" :key="index">
             <CommunityCard :card-info="community"/>
@@ -66,7 +66,7 @@
         </div>
         <div class="c-loading" v-show="loadingCommunity"></div>
         <!-- pools -->
-        <div class="font-bold mt-4 mb-3 font20 line-height32">Staked Pools</div>
+        <div class="font-bold mt-4 mb-3 font20 line-height32">{{ $t('pool.stakedPools') }}</div>
           <StakedPools class="mb-3"/>
         </div>
     </div>

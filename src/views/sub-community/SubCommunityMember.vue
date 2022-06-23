@@ -28,7 +28,7 @@
                   <img v-else class="avatar rounded-circle"
                        src="~@/static/images/avatars/default.png" alt="">
                   <img src="~@/static/images/avatars/admin-icon.png" class="admin-tag"
-                       v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id)" alt="">
+                       v-show="row.item && (row.item.address.toLowerCase() === communityInfo.owner.id.toLowerCase())" alt="">
                 </div>
                 <span class="ml-2" :id="row.item.address">{{ getName(row.item.address) }}</span>
                 <b-popover
@@ -58,7 +58,7 @@
         <div class="user-card d-flex flex-column">
           <div class="d-flex justify-content-between align-items-center">
             <span></span>
-            <div class="user-type-tag text-black" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">Administor</div>
+            <div class="user-type-tag text-black" v-show="user && (user.address.toLowerCase() === communityInfo.owner.id)">{{ $t('commen.administor') }}</div>
           </div>
           <div class="text-center mt-3 pb-3">
             <div class="avatar-bg">
@@ -74,7 +74,7 @@
             </div>
             <div class="s-card d-flex text-center font12">
               <div class="flex-1 overflow-hidden">
-                <div class="font14 line-height14 text-grey-7">Join Date</div>
+                <div class="font14 line-height14 text-grey-7">{{ $t('commen.joinDate') }}</div>
                 <div class="font24 line-height24 font-bold mt-4">{{ user ? getDateString(user.createdAt).substring(0, 10) : '--' }}</div>
               </div>
               <div class="flex-1">
@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="mt-2 font14 line-height14 text-grey-7 d-flex justify-content-between align-items-center">
-              <span>{{ activitiesList ? activitiesList.length : '' }} Activities</span>
+              <span>{{ activitiesList ? activitiesList.length : '' }} {{ $t('commen.activities') }}</span>
           </div>
           <div class="flex-fill overflow-auto">
             <div class="c-loading" v-if="activitiesLoading"></div>
@@ -95,7 +95,7 @@
                             v-for="(active, i) of activitiesList" :key="active.tx + i"/>
             </transition-group>
             <div v-if="!activitiesLoading && activitiesList.length===0"
-                 class="text-grey-5 text-center mt-4">no data</div>
+                 class="text-grey-5 text-center mt-4">{{ $t('commen.noData') }}</div>
           </div>
         </div>
       </div>

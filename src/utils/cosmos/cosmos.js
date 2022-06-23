@@ -59,7 +59,6 @@ export const accBech32ToAddress = (address, type = 'atom') => {
 
 export const valBech32ToAddress = (address, type = 'atom') => {
   let account = new ValAddress.fromBech32(address, valTypes[type]);
-  console.log(35, account, type, valTypes[type]);
   return ethers.utils.hexlify(account.toBytes());
 }
 

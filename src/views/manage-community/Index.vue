@@ -18,16 +18,16 @@
             </b-nav-item>
             <b-nav-item to="/manage-community/staking">
               <i class="menu-icon farming-icon" />
-              <span>Farming</span>
+              <span>{{ $t('router.farming') }}</span>
             </b-nav-item>
-            <!-- <b-nav-item to="/manage-community/nft-staking">
-              <i class="menu-icon farming-icon" />
-              <span>NFT Stake</span>
+            <b-nav-item to="/manage-community/nft-staking">
+              <i class="menu-icon nft-icon" />
+              <span>{{ $t('router.nftStake') }}</span>
             </b-nav-item>
             <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />
-              <span>NUT Power</span>
-            </b-nav-item> -->
+              <span>{{ $t('router.nutPower') }}</span>
+            </b-nav-item>
             <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />
               <span>{{ $t('router.governance') }}</span>
@@ -56,13 +56,13 @@
     >
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="goHome"></i>
-        <div class="modal-title text-red font-bold">Grant mint role</div>
+        <div class="modal-title text-red font-bold">{{ $t('operation.grantMintRole') }}</div>
         <div class="mb-4 font16 line-height24 text-center my-3">
           <p>
-              You have set c-Token mintable when you create community.
+              {{ $t('tip.mintableTip1') }}
           </p>
           <p>
-            Now you must grant mint role to the community contract, otherwise you can't use functions of this community.
+            {{ $t('tip.mintableTip2') }}
           </p>
         </div>
 
@@ -219,6 +219,9 @@ export default {
 .social-icon {
   background-image: url("~@/static/images/menu-social.svg");
 }
+.nft-icon {
+  background-image: url("~@/static/images/menu-nft.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/m-menu-home-active.svg");
@@ -240,6 +243,9 @@ export default {
   }
   .social-icon {
     background-image: url("~@/static/images/m-menu-social-active.svg");
+  }
+  .nft-icon {
+    background-image: url("~@/static/images/m-menu-nft-active.svg");
   }
 }
 </style>

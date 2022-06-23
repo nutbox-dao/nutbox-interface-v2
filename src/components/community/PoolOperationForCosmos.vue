@@ -81,15 +81,13 @@
       <div class="custom-form position-relative">
         <i class="modal-close-icon-right" @click="showWrongCosmos = false"></i>
         <div class="modal-title">
-          Please change {{ cosmosChainName[type] }} Account
+          {{ $t('stake.changeAccount', {type: cosmosChainName[type]}) }}
         </div>
         <div class="text-center font20 line-height24 mt-3">
-          Your {{ cosmosChainName[type] }} account haven't binding with current
-          {{ chainName }} address, please change
-          {{ cosmosChainName[type] }} account in your wallet first.
+          {{ $t('stake.accountMismatch1', {type: cosmosChainName[type], chainName}) }}
         </div>
         <div class="mt-3 mb-1 text-center font20 line-height24">
-          Your binding {{ cosmosChainName[type] }} account is:
+         {{ $t('stake.bindAccountTip1', {type: cosmosChainName[type]}) }}
         </div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input class="text-center" disabled type="text" :value="bindCosmos" />
@@ -100,13 +98,13 @@
           class="dark-btn primary-btn-outline mx-3"
           @click="showWrongCosmos = false"
         >
-          Cancel
+          {{ $t('operation.cancel') }}
         </button>
         <button
           class="primary-btn mx-3"
           @click="(showWrongCosmos = false)"
         >
-          OK
+          {{ $t('operation.ok') }}
         </button>
       </div>
     </b-modal>
@@ -121,13 +119,11 @@
     >
       <div class="custom-form text-center position-relative">
         <i class="modal-close-icon-right" @click="showWrongAccount = false"></i>
-        <div class="modal-title">Please change {{ chainName }} address</div>
+        <div class="modal-title">{{ $t('stake.changeAddress', {chainName}) }}</div>
         <div class="font20 line-height24 mt-3">
-          Your {{ chainName }} address haven't binding with current
-          {{ cosmosChainName[type] }} account, please change
-          {{ chainName }} address in your wallet first.
+          {{ $t('stake.accountMismatch2', {type: cosmosChainName[type], chainName}) }}
         </div>
-        <div class="mt-3 mb-1">Your binding address is:</div>
+        <div class="mt-3 mb-1">{{ $t('stake.bindAddressTip1') }}</div>
         <div class="c-input-group c-input-group-bg-dark c-input-group-border">
           <input
             class="text-center"
@@ -142,13 +138,13 @@
           class="primary-btn primary-btn-outline mx-3"
           @click="showWrongAccount = false"
         >
-          Cancel
+          {{ $t('operation.cancel') }}
         </button>
         <button
           class="primary-btn mx-3"
           @click="(showWrongAccount = false)"
         >
-          OK
+          {{ $t('operation.ok') }}
         </button>
       </div>
     </b-modal>
@@ -171,7 +167,7 @@ import { getAccount as getOsmosisAccount, getAccountBalance as getOsmoBalance } 
 import { getAccount as getJunoAccount, getAccountBalance as getJunoBalance } from "@/utils/cosmos/juno";
 import store from "@/store";
 export default {
-  name: "PoolOperation",
+  name: "PoolOperationForCosmos",
   props: {
     card: {
       type: Object,

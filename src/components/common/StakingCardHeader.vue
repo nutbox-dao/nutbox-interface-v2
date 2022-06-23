@@ -48,6 +48,7 @@ import { getPoolType } from "@/utils/web3/pool";
 import { getPoolFactory } from "@/utils/web3/contract";
 import { ASSET_LOGO_URL } from "@/constant";
 import { CHAIN_NAME } from "@/config";
+import { ethers } from 'ethers'
 
 export default {
   name: "StakingCardHeader",
@@ -63,7 +64,7 @@ export default {
     ...mapGetters("community", ["getCommunityInfoById"]),
     ...mapGetters('web3', ['tokenByKey']),
     ...mapState("currentCommunity", ["communityId", "cToken"]),
-    ...mapState("web3", ["tokenIcons"]),
+    ...mapState("web3", ["tokenIcons", 'allErc1155s']),
     communityInfo() {
       if (!this.communityId || !this.getCommunityInfoById(this.communityId))
         return {};
@@ -80,6 +81,15 @@ export default {
         case getPoolFactory("cosmos").toLowerCase(): {
           const chainId = this.card.chainId;
           return ASSET_LOGO_URL[this.type];
+        }
+        case getPoolFactory('erc1155').toLowerCase(): {
+          try {
+            const address = ethers.utils.getAddress(this.card.asset.substring(0, 42));
+            const id = this.card.asset.substring(42, this.card.asset.length)
+            return this.allErc1155s.filter(f => f.address === address && parseInt(id) === f.tokenid)[0].icon
+          }catch (e) {
+
+          }
         }
       }
     },

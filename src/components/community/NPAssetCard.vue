@@ -8,7 +8,7 @@
           <div class="font12 line-height12">= {{totalLockedNut | amountForm}} NUT</div>
         </div>
         <button class="primary-btn px-4 mx-0"
-                @click="modalContentType='detail',assetModalVisible=true">Detail</button>
+                @click="modalContentType='detail',assetModalVisible=true">{{ $t('commen.detail') }}</button>
       </div>
     </div>
     <div class="chart-box position-relative">

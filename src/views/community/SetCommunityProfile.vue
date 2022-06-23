@@ -436,6 +436,7 @@ export default {
       this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }
+    this.chooseTokenTipModal = true
   },
   methods: {
     onCancel () {

@@ -4,7 +4,7 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
-        <div class="my-4 modal-title">Create staking pool on {{chainName}}</div>
+        <div class="my-4 modal-title">{{ $t('pool.creatPool', {chainName}) }}</div>
         <div class="custom-form col-lg-8 mx-auto">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
@@ -24,7 +24,7 @@
           <b-spinner label="Spinning"></b-spinner>
         </div>
         <template v-else>
-          <div v-if="!searchResult" class="text-center font14 text-grey-7">No search token</div>
+          <div v-if="!searchResult" class="text-center font14 text-grey-7">{{ $t('tip.noSearchedToken') }}</div>
           <div class="hover" v-else
                @click="$emit('confirm', searchResult)">
             <TokenItem class="my-3"
@@ -34,8 +34,8 @@
                        :token-address="searchResult.address"/>
           </div>
         </template>
-        <div class="my-3 mx-auto divide-line font14 line-height14 text-center">OR</div>
-        <div class="font14 line-height14 text-center text-grey-7 mb-3">Choose a token as cToken</div>
+        <div class="my-3 mx-auto divide-line font14 line-height14 text-center">{{ $t('commen.or') }}</div>
+        <div class="font14 line-height14 text-center text-grey-7 mb-3">{{ $t('community.choseTokenAsCtoken') }}</div>
         <div class="token-list-card mb-2">
           <div class="list-item"  v-for="token of recommendToken" :key="token.address" @click="$emit('confirm', token)">
             <TokenItem :logo="token.icon"

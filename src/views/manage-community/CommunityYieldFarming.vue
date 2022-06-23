@@ -1,8 +1,8 @@
 <template>
   <div class="scroll-content">
     <div class="view-top-header view-top-header-sticky">
-      <div class="font24 line-height28 font-bold mb-2">Farming</div>
-      <div class="font16 line-height24 font-bold mb-4">Just stake some tokens to earn.</div>
+      <div class="font24 line-height28 font-bold mb-2">{{ $t('router.farming') }}</div>
+      <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.farming') }}</div>
       <div class="row">
         <div class="col-md-6 d-flex flex-column justify-content-center">
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
@@ -24,8 +24,7 @@
                     style="height: 2rem"
                     @click="poolTypeModal=true, createPoolStep=1">
               <i class="add-icon add-icon-white mr-2"></i>
-<!--              <span>{{ $t('pool.addPool') }}</span>-->
-              <span>Add Staking Pool</span>
+              <span>{{ $t('operation.addPool') }}</span>
             </button>
           </div>
         </div>
@@ -137,6 +136,10 @@ export default {
     }
   },
   async mounted () {
+    this.tabOptions = [
+      this.$t('pool.opened'),
+      this.$t('pool.closed')
+    ]
   },
   methods: {
     selectPoolType (type) {

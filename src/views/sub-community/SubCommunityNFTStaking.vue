@@ -3,8 +3,8 @@
     <div class="scroll-content position-relative">
       <div class="view-top-header view-top-header-m0">
         <div class="mx-2">
-          <div class="font24 line-height28 font-bold mb-2">{{ $t('router.farming') }}</div>
-          <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.farming') }}</div>
+          <div class="font24 line-height28 font-bold mb-2">{{ $t('router.nftStaking') }}</div>
+          <div class="font16 line-height24 font-bold mb-4">{{ $t('desc.erc1155Desc') }}</div>
           <div class="nav-box nav-box-bg mb-3 mb-md-0">
             <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
@@ -50,7 +50,7 @@ import { getPools as getPoolsFromGraph } from "@/utils/graphql/pool";
 
 
 export default {
-  name: "SubCommunityStaking",
+  name: "SubCommunityNFTStaking",
   components: { CommunityStakingCard },
   data() {
     return {
@@ -78,7 +78,7 @@ export default {
           return this.activedPools.filter(
             (p) =>
               p.poolFactory.toLowerCase() ===
-              getPoolFactoryAddress("erc20staking")
+              getPoolFactoryAddress("erc1155")
           );
       }
     },
@@ -89,7 +89,7 @@ export default {
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
       return this.allPools.filter((p) => p.status === "CLOSED" && p.poolFactory.toLowerCase() ===
-              getPoolFactoryAddress("erc20staking"));
+              getPoolFactoryAddress("erc1155"));
     },
   },
   async mounted() {
@@ -110,7 +110,7 @@ export default {
     //   4
     // );
     // updatePoolsFromGraph.start();
-
+    
     const polling = updatePoolsByPolling(this.allPools);
 
     this.$once("hook:beforeDestroy", () => {

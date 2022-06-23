@@ -19,7 +19,7 @@
             <div
               class="community-logo-box"
               :class="
-                inSubCommunityView && community.id === communityId.toLowerCase()
+                inSubCommunityView && community.id.toLowerCase() === communityId.toLowerCase()
                   ? 'active'
                   : ''
               "
@@ -71,7 +71,7 @@
               :delay="{ show: 800 }"
               placement="right"
             >
-              Manage your community
+              {{ $t('operation.manageCommunity') }}
             </b-popover>
           </router-link>
           <!-- <div class="hover" id="tipcreatecommunity" @click="gotoCreateCommunity()" v-show="metamaskConnected && account">
@@ -151,12 +151,12 @@
                 <i class="dropdown-item-icon docs-icon"></i>
                 <span>{{ $t("commen.auditReport") }}</span>
               </b-dropdown-item> -->
-              <!-- <div class="dropdown-item" @click="langActive=true">
+              <div class="dropdown-item" @click="langActive=true">
                 <i class=" language-icon"></i>
                 <span>{{$t('commen.language')}}</span>
-              </div> -->
+              </div>
             </div>
-            <!-- <div class="dropdown-menu-card" v-show="langActive">
+            <div class="dropdown-menu-card" v-show="langActive">
               <div class="dropdown-item">
                 <i class="back-icon" @click="langActive=false"></i>
               </div>
@@ -164,7 +164,7 @@
                                v-for="lang of langOptions" :key="lang">
                 <span>{{ $t(`commen.${lang}`) }}</span>
               </b-dropdown-item>
-            </div> -->
+            </div>
           </b-dropdown>
         </div>
       </div>
@@ -239,11 +239,11 @@ export default {
     pageTitle() {
       const url = this.$route.path;
       if (url === "/") return "Nutbox";
-      else if (url.indexOf("/community") !== -1) return "Community";
+      else if (url.indexOf("/community") !== -1) return this.$t('community.community');
       else if (url.indexOf("/manage-community") !== -1)
-        return "Community Dashboard";
-      else if (url.indexOf("/profile") !== -1) return "Profile";
-      else if (url.indexOf("/create") !== -1) return "Create Community";
+        return this.$t('community.communityDashboard');
+      else if (url.indexOf("/profile") !== -1) return this.$t('router.profile');
+      else if (url.indexOf("/create") !== -1) return this.$t('community.createCommunity');
     },
     currentCommunityInfo() {
       if (this.communityId) {
@@ -280,7 +280,7 @@ export default {
     return {
       screenWidth: document.body.clientWidth,
       langActive: false,
-      langOptions: ["en", "kr", "es", "my"],
+      langOptions: ["en", "kr", "es", "my", 'jp', 'zh'],
     };
   },
   mixins: [showToastMixin],
@@ -570,5 +570,8 @@ body {
 }
 .audit-icon {
   background-image: url("~@/static/images/h-audit.svg");
+}
+.language-icon {
+  background-image: url("~@/static/images/h-lang.svg");
 }
 </style>

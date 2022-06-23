@@ -13,7 +13,9 @@ const i18n = new VueI18n({
     en: require('./assets/lang/EN'),
     kr: require('./assets/lang/KR'),
     es: require('./assets/lang/ES'),
-    my: require('./assets/lang/MY')
+    my: require('./assets/lang/MY'),
+    zh: require('./assets/lang/ZH'),
+    jp: require('./assets/lang/JP')
   },
   fallbackLocale: 'en',
   silentFallbackWarn: true

@@ -7,7 +7,7 @@
           cToken ? cToken.symbol : ""
         }}</span>
         <div class="d-flex align-items-center">
-          <span class="font14 text-grey-7">EARNED</span>
+          <span class="font14 text-grey-7">{{ $t('commen.earned') }}</span>
           <i
             class="copy-icon copy-icon-gray mx-1"
             @click="copy(cToken ? cToken.address : '')"
@@ -41,7 +41,7 @@
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
-            {{ type === "erc20staking" ? "STAKED" : "DELEGATED" }}</span
+            {{ (type === "erc20staking" || type === 'erc1155') ? $t('commen.staked') : $t('commen.delegated') }}</span
           >
           <template v-if="type !== 'erc1155'">
             <i
@@ -54,10 +54,22 @@
               @click="gotoToken(stakeToken.address)"
             ></i>
           </template>
+          <template v-if="type === 'erc1155'">
+            <i
+              class="copy-icon copy-icon-gray mx-1"
+              @click="copy(card.asset.substring(0, 42))"
+            ></i>
+            <i
+              class="link-icon link-icon-gray"
+              @click="gotoToken(card.asset.substring(0, 42))"
+            ></i>
+          </template>
         </div>
       </div>
-      <PoolOperation :card="card" v-if="type != 'atom' && type != 'osmo' && type != 'juno'" />
-      <PoolOperationForCosmos :card="card" :type="type" v-else />
+      <PoolOperationForCosmos :card="card" :type="type" v-if="type === 'atom' || type === 'osmo' || type === 'juno'" />
+      <PoolOperationForERC1155 :card="card" :type="type" v-else-if="type === 'erc1155'"/>
+      <PoolOperation :card="card" v-else />
+
 
       <div class="detail-info-box text-grey-7 font14 font-bold">
         <div class="project-info-container">
@@ -69,11 +81,11 @@
           <div class="info">{{ tvl | formatPrice }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name"> APR </span>
+          <span class="name">{{ $t('commen.apy') }}</span>
           <div class="info">{{ apr }}</div>
         </div>
         <div class="project-info-container">
-          <span class="name"> Stakers </span>
+          <span class="name"> {{ $t('commen.stakers') }} </span>
           <div class="info d-flex align-items-center">
             <div :id="user.id + card.id" v-for="(user, index) of stakers" :key="user.id"
                  :style="{zIndex: stakers.length-index}">
@@ -127,6 +139,7 @@ import StakingCardHeader from "@/components/common/StakingCardHeader";
 import showToastMixin from "@/mixins/copyToast";
 import { BLOCK_CHAIN_BROWER } from "@/config";
 import PoolOperation from "@/components/community/PoolOperation";
+import PoolOperationForERC1155 from "@/components/community/PoolOperationForERC1155";
 import PoolOperationForCosmos from "@/components/community/PoolOperationForCosmos";
 
 import { BLOCK_SECOND, YEAR_BLOCKS } from "@/constant";
@@ -144,6 +157,7 @@ export default {
     StakingCardHeader,
     PoolOperation,
     PoolOperationForCosmos,
+    PoolOperationForERC1155
   },
   props: {
     card: {
@@ -182,6 +196,15 @@ export default {
         return this.card.asset
       }
     },
+    assetToken() {
+      if (this.type === 'steem' || this.type === 'hive') {
+        return ethers.utils.parseBytes32String(this.card.asset)
+      } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
+        return addressAccToAccBech32(this.card.asset, this.type)
+      } else if (this.type === 'erc20staking') {
+        return this.card.asset
+      }
+    },
     pendingReward() {
       if (!this.userReward) return 0;
       const pendingBn = this.userReward[this.card.id];
@@ -205,6 +228,8 @@ export default {
         return (total.toString() / 1e6) * this.vestsToHive;
       } else if (this.type === "atom" || this.type === 'osmo' || this.type === 'juno') {
         return total.toString() / 1e6;
+      } else if (this.type === 'erc1155') {
+        return total.toNumber()
       }
       return 0;
     },

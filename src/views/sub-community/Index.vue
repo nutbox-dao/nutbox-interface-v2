@@ -7,7 +7,7 @@
             <b-nav vertical align="center" class="top">
               <b-nav-item to="/sub-community/home/">
                 <i class="menu-icon home-icon" />
-                <span>Home</span>
+                <span>{{ $t('router.home') }}</span>
               </b-nav-item>
               <b-nav-item to="/sub-community/iso">
                 <i class="menu-icon iso-icon" />
@@ -15,11 +15,15 @@
               </b-nav-item>
               <b-nav-item to="/sub-community/staking">
                 <i class="menu-icon farming-icon" />
-                <span>Farming</span>
+                <span>{{ $t('router.farming') }}</span>
+              </b-nav-item>
+              <b-nav-item to="/sub-community/erc1155">
+                <i class="menu-icon nft-icon" />
+                <span>{{ $t('router.nftStake') }}</span>
               </b-nav-item>
               <!-- <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
-                <span>NUT Power</span>
+                <span>{{ $t('router.nutPower') }}</span>
               </b-nav-item> -->
               <b-nav-item v-if="communityInfo && communityInfo.npsId" to="/sub-community/governance">
                 <i class="menu-icon governance-icon" />
@@ -63,22 +67,26 @@
             <template #default>
               <div class="slider-content">
                 <div class="menu-items">
-                  <b-dropdown-item :to="'/sub-community/home'">
+                  <b-nav-item :to="'/sub-community/home'">
                     <i class="menu-icon home-icon" />
-                    <span>Home</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/iso">
+                    <span>{{ $t('router.home') }}</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/iso">
                     <i class="menu-icon iso-icon" />
                     <span>ISO</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/staking">
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/staking">
                     <i class="menu-icon farming-icon" />
-                    <span>Farming</span>
-                  </b-dropdown-item>
-                  <b-dropdown-item to="/sub-community/nut-power">
+                    <span>{{ $t('router.farming') }}</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/erc1155">
+                    <i class="menu-icon nft-icon" />
+                    <span>{{ $t('router.nftStake') }}</span>
+                  </b-nav-item>
+                  <b-nav-item to="/sub-community/nut-power">
                     <i class="menu-icon nut-power-icon" />
-                    <span>NUT Power</span>
-                  </b-dropdown-item>
+                    <span>{{ $t('router.nutPower') }}</span>
+                  </b-nav-item>
                   <b-nav-item to="/sub-community/governance">
                     <i class="menu-icon governance-icon" />
                     <span>{{ $t("router.governance") }}</span>
@@ -367,6 +375,9 @@ export default {
 .dashboard-icon {
   background-image: url("~@/static/images/menu-dashboard.svg");
 }
+.nft-icon {
+  background-image: url("~@/static/images/menu-nft.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/menu-home-active.svg");
@@ -394,6 +405,9 @@ export default {
   }
   .dashboard-icon {
     background-image: url("~@/static/images/menu-dashboard-active.svg");
+  }
+  .nft-icon {
+    background-image: url("~@/static/images/menu-nft-active.svg")
   }
 }
 </style>

@@ -5,19 +5,19 @@
         <div class="row">
           <div class="col-md-7 d-flex flex-column justify-content-center">
             <div class="text-left font20 line-height28 font-bold py-lg-4">
-              It's easy to bring DeFi, social media and Governance to the community
+              {{ $t('community.communtiyDesc') }}
             </div>
           </div>
           <div class="col-md-1 d-flex flex-column justify-content-center">
             <div class="v-line mx-auto"></div>
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
-            <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">OR</div>
+            <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">{{ $t('commen.or') }}</div>
             <ConnectMetaMask class="w-100" v-if="!metamaskConnected"/>
             <button v-else :disabled="loadingMyCommunityInfo" class="primary-btn d-flex justify-content-center align-items-center w-100"
                     @click="manageCommunity">
               <i class="add-icon mr-2"></i>
-              <span>{{ settingStep === 3 ? 'Manage Community' : 'Create Community' }}</span>
+              <span>{{ settingStep === 3 ? $t('community.manageCommunity') : $t('community.createCommunity') }}</span>
             </button>
           </div>
         </div>
