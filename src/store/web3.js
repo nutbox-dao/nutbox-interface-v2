@@ -236,7 +236,11 @@ export default {
     },
     erc1155ByKey: (state) => (address, tokenid) => {
       if (!ethers.utils.isAddress(address)) return;
-      return state.allErc1155s.filter(e => e.address === address && e.tokenid === tokenid)
+      tokenid = parseInt(tokenid)
+      const res = state.allErc1155s.filter(e => e.address.toLowerCase() === address.toLowerCase() && e.tokenid === tokenid)
+      if(res.length > 0) {
+        return res[0]
+      }
     }
   },
 };

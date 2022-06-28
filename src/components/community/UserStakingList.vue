@@ -567,7 +567,7 @@ export default {
   mixins: [showToastMixin],
   computed: {
     ...mapGetters("community", ["getCommunityInfoById"]),
-    ...mapGetters("web3", ["tokenDecimals", "tokenByKey"]),
+    ...mapGetters("web3", ["tokenDecimals", "tokenByKey", 'erc1155ByKey']),
     ...mapState(["prices", "metamaskConnected"]),
     ...mapState("web3", ["tokenIcons", "allTokens", "allErc1155s"]),
     ...mapState("steem", ["steemAccount", "vestsToSteem"]),
@@ -614,7 +614,7 @@ export default {
         try {
           const address = ethers.utils.getAddress(this.pool.asset.substring(0, 42))
           const id = parseInt(this.pool.asset.substring(42))
-          return this.allErc1155s.filter(e => e.address === address && e.tokenid === id)[0].icon
+          return this.erc1155ByKey(address, id)?.icon
         }catch(e) {
           console.log(118, e);
         }

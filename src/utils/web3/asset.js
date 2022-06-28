@@ -339,7 +339,7 @@ export const getAllErc1155FromBackend = async (update = false) => {
 export const updateAllTokensFromBackend = async () => {
   while(true){
     await getAllTokenFromBackend(true)
-    // await getAllErc1155FromBackend(true)
+    await getAllErc1155FromBackend(true)
     await sleep(10)
   }
 }

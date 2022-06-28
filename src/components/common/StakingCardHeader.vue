@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     ...mapGetters("community", ["getCommunityInfoById"]),
-    ...mapGetters('web3', ['tokenByKey']),
+    ...mapGetters('web3', ['tokenByKey', 'erc1155ByKey']),
     ...mapState("currentCommunity", ["communityId", "cToken"]),
     ...mapState("web3", ["tokenIcons", 'allErc1155s']),
     communityInfo() {
@@ -86,7 +86,7 @@ export default {
           try {
             const address = ethers.utils.getAddress(this.card.asset.substring(0, 42));
             const id = this.card.asset.substring(42, this.card.asset.length)
-            return this.allErc1155s.filter(f => f.address === address && parseInt(id) === f.tokenid)[0].icon
+            return this.erc1155ByKey(address, id)?.icon
           }catch (e) {
 
           }

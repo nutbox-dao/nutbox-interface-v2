@@ -134,7 +134,7 @@ export default {
       "approvedCommunity",
       'rewardPerBlock'
     ]),
-    ...mapGetters("web3", ["tokenByKey"]),
+    ...mapGetters("web3", ["tokenByKey", 'erc1155ByKey']),
     ...mapState({
       steemVests: (state) => state.steem.vestsToSteem,
       hiveVests: (state) => state.hive.vestsToHive,
@@ -355,7 +355,7 @@ export default {
         try {
           const contract = ethers.utils.getAddress(this.pool.asset.substring(0, 42))
           const id = this.pool.asset.substring(42)
-          this.icon = this.allErc1155s.filter(e => e.address === contract && parseInt(id) === e.tokenid)[0].icon
+          this.icon = this.erc1155ByKey(contract, id)?.icon
         }catch (e) {
         }
         this.vert = 1
