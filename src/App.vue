@@ -329,7 +329,6 @@ export default {
   async created() {
      getCommon().then((res) => {
       if (!res) return;
-      console.log(1234, res.tvl);
       this.$store.commit("saveTvl", res.tvl);
       this.$store.commit("savePrices", res.prices);
       this.$store.commit("steem/saveVestsToSteem", res.vestsToSteem);

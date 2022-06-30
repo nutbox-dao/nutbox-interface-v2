@@ -232,6 +232,8 @@ module.exports = {
     copyAddress: "Copied address:  {address}",
     signing: "Signing",
     picUploadFail: "Pictures fail to upload, Please try again",
+    largeImg: 'Image size exceeds 2M',
+    outOfUsage: 'Upload so frequently, please try later.',
     uploadLogo: "Please upload logo",
     deloyTokenFail: "Token fail to deloy, Please try again",
     notContractAddress: "Please Provide Deploy Token Contract Address",

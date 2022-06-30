@@ -236,11 +236,9 @@ export default {
           this.form.poster = await uploadImage(data)
           this.coverUploadLoading = false
         } catch (e) {
-          this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-            title: this.$t('tip.tips'),
-            autoHideDelay: 5000,
-            variant: 'warning'
-          })
+          handleApiErrCode(e, (title, info) => {
+            this.$bvToast.toast(title, info)
+          });
           this.coverImg = null
           this.form.poster = null
         }

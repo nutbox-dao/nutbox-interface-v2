@@ -229,6 +229,8 @@ module.exports = {
       copyAddress: "复制地址：{address}",
       signing: "签名",
       picUploadFail: "上传图片失败，请重试",
+      largeImg: '图片大小不能超过2M',
+      outOfUsage: '操作太频繁，请稍后再试',
       uploadLogo: "请上传图标",
       deloyTokenFail: "Token部署失败，请重试",
       notContractAddress: "请提供部署代币的地址",

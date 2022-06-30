@@ -143,6 +143,7 @@ import {
   approveUseERC20
    } from '@/utils/web3/community'
 import { NutAddress } from '@/config'
+import { errCode } from '../../config'
 
 export default {
   name: 'StakingPoolConfig',
@@ -268,11 +269,9 @@ export default {
             this.propsIcon = await uploadImage(data)
             this.logoUploadLoading = false
           } catch (e) {
-            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-              title: this.$t('tip.tips'),
-              autoHideDelay: 5000,
-              variant: 'warning'
-            })
+            handleApiErrCode(e, (title, info) => {
+              this.$bvToast.toast(title, info)
+            });
             this.logo = null
             this.propsIcon = null
             this.logoUploadLoading = false

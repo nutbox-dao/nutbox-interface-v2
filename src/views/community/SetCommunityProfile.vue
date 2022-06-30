@@ -488,11 +488,9 @@ export default {
               this.form.icon = await uploadImage(data)
               this.logoUploadLoading = false
             } catch (e) {
-              this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-                title: this.$t('tip.tips'),
-                autoHideDelay: 5000,
-                variant: 'warning'
-              })
+              handleApiErrCode(e, (title, info) => {
+                this.$bvToast.toast(title, info)
+              });
               this.logo = null
               this.form.icon = null
               this.logoUploadLoading = false
@@ -509,11 +507,9 @@ export default {
             this.form.poster = await uploadImage(data)
             this.coverUploadLoading = false
           } catch (e) {
-            this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-              title: this.$t('tip.tips'),
-              autoHideDelay: 5000,
-              variant: 'warning'
-            })
+            handleApiErrCode(e, (title, info) => {
+              this.$bvToast.toast(title, info)
+            });
             this.coverImg = null
             this.form.poster = null
             this.coverUploadLoading = false
@@ -529,11 +525,9 @@ export default {
               this.form.tokenLogo = await uploadImage(data)
               this.tokenLogoUploadLoading = false
             } catch (e) {
-              this.$bvToast.toast(this.$t('tip.picUploadFail'), {
-                title: this.$t('tip.tips'),
-                autoHideDelay: 5000,
-                variant: 'warning'
-              })
+              handleApiErrCode(e, (title, info) => {
+                this.$bvToast.toast(title, info)
+              });
               this.logo = null
               this.form.tokenLogo = null
               this.tokenLogoUploadLoading = false

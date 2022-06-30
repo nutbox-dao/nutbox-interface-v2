@@ -259,6 +259,10 @@ export const uploadImage = async (img) => {
     // return;
     let param = new FormData();
     param.append("file", img);
+    if (img.size > 2048000) {
+      reject(errCode.LARGE_IMG)
+      return;
+    }
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -270,7 +274,11 @@ export const uploadImage = async (img) => {
         resolve(res?.data?.url);
       })
       .catch((err) => {
-        reject(err);
+        if (err.toJSON().message.indexOf('Request failed with status code 429') !== -1) {
+          reject(errCode.OUT_OF_USAGE)
+          return;
+        }
+        reject(errCode.UPLOAD_FAIL);
       });
   });
 };
@@ -320,9 +328,16 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t("error.signatureFailed");
   } else if (code === errCode.DB_ERROR || code == errCode.SERVER_ERR) {
     tipStr = $t("error.serveError");
-  } else {
+  } else if (code === errCode.LARGE_IMG){
+    tipStr = $t('tip.largeImg')
+  } else if (code == errCode.OUT_OF_USAGE){
+   tipStr = $t('tip.outOfUsage')
+  } else if (code === errCode.UPLOAD_FAIL){
+    tipStr = $t('tip.picUploadFail')
+  }  else {
     tipStr = $t("error.unknow");
   }
+  
   toast(tipStr, {
     title: $t("tip.error"),
     variant: "danger",
