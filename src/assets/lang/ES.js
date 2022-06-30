@@ -66,13 +66,13 @@ module.exports = {
     youWillReceive: 'Va a recibir: ',
     iso: 'ISO: Initial Staking Offering',
     isoDetail: 'Tokens de comunidad acuñados bajo Staking. Alto APR, Sin riesgo.',
-    erc1155Desc: 'HAz Stake con tus ERC1155 tokens y genera ganacias.',
+    erc1155Desc: 'Haz Stake con tus ERC1155 tokens y genera ganacias.',
     nutPower: 'El Nut power representa la gobernanza de Nutbox. Es generado por el farming: Haz Stake de algunos tokens y comienza a ganar.',
-    farming: 'Just stake some tokens to earn.',
-    assetTip1: 'If you want to use an exist token',
-    assetTip2: 'If you want to create a new token',
-    assetTipe3: `*You can premine some tokens to bootup your community,
-    the rest tokens will be minted from the contract block by block.`
+    farming: 'Solo haz stake de algunos tokens y comienza a ganar.',
+    assetTip1: 'Si quieres usar un token existente',
+    assetTip2: 'Si quieres crear un nuevo token',
+    assetTipe3: `*Puede preminar algunos tokens para iniciar su comunidad,
+    el resto de tokens se acuñarán del contrato bloque por bloque.`
   },
   operation: {
     withdraw: "Retirar",
