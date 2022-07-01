@@ -142,7 +142,7 @@ import { updateIcon } from '@/utils/web3/erc1155'
 import {
   approveUseERC20
    } from '@/utils/web3/community'
-import { NutAddress } from '@/config'
+import { NutAddress, handleApiErrCode } from '@/config'
 import { errCode } from '../../config'
 
 export default {
