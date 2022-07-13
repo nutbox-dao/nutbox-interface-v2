@@ -357,7 +357,7 @@ import Step from '@/components/common/Step'
 import { VueCropper } from 'vue-cropper'
 import Progress from '@/components/community/Progress'
 import ChooseTokenTipModal from '@/components/community/ChooseTokenTipModal'
-import { errCode, handleApiErrCode } from '@/config';
+import { errCode } from '@/config';
 
 export default {
   name: 'SetCommunityProfile',

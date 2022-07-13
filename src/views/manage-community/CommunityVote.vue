@@ -178,8 +178,7 @@ import { handleApiErrCode, uploadImage } from '@/utils/helper'
 import { getCToken } from '@/utils/web3/asset'
 import { getMyCommunityInfo } from '@/utils/web3/community'
 import {
-  BSC_STRATEGIES_NAME,
-  handleApiErrCode
+  BSC_STRATEGIES_NAME
 } from '@/config'
 import Markdown from '@/components/common/Markdown'
 import { nanoid } from 'nanoid'

@@ -134,7 +134,7 @@
 import debounce from 'lodash.debounce'
 import PoolRatio from '@/components/community/PoolRatio'
 import { mapState } from 'vuex'
-import { sleep, uploadImage } from '@/utils/helper'
+import { sleep, uploadImage, handleApiErrCode } from '@/utils/helper'
 import UploadLoading from '@/components/common/UploadLoading'
 import { VueCropper } from 'vue-cropper'
 import { updateTokenIcon } from '@/utils/web3/asset'
@@ -142,8 +142,7 @@ import { updateIcon } from '@/utils/web3/erc1155'
 import {
   approveUseERC20
    } from '@/utils/web3/community'
-import { NutAddress, handleApiErrCode } from '@/config'
-import { errCode } from '../../config'
+import { NutAddress, errCode  } from '@/config'
 
 export default {
   name: 'StakingPoolConfig',
