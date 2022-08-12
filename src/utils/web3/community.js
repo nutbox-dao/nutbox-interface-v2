@@ -639,9 +639,10 @@ export const getDistributionEras = async (update = false) => {
     try {
       const rewardCalculatorAddress = await contract.rewardCalculator();
       if (rewardCalculatorAddress == contractAddress["LinearCalculator"]) {
-        const count = await rewardCalculator.distributionCountMap(
+        let count = await rewardCalculator.distributionCountMap(
           stakingFactoryId
         );
+        count = parseInt(count)
         let distri = await Promise.all(
           new Array(count)
             .toString()
@@ -702,7 +703,7 @@ export const getSpecifyDistributionEras = async (communityId) => {
           ]
         }], Multi_Config)
 
-        count = count.results.transformed['count']
+        count = parseInt(count.results.transformed['count'])
 
         const calls = new Array(count).toString().split(',').map((item, i) => ({
           target: rewardCalculatorAddress,
@@ -717,7 +718,7 @@ export const getSpecifyDistributionEras = async (communityId) => {
             ['stopHeight-'+i]
           ]
         }))
-
+        
         let distibution = await aggregate(calls, Multi_Config)
         distibution = distibution.results.transformed
         let distri = []
