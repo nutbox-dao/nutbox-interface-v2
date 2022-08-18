@@ -168,11 +168,15 @@ export const getDelegateFromSteem = async (account, targetAccount) => {
           resolve(0)
           return;
         }
-        if (delegations[0].delegatee !== targetAccount){
-          resolve(0)
+        
+        for (let delegation of delegations) {
+          if (delegation.delegatee === targetAccount) {
+            const vests = parseFloat(delegation.vesting_shares.split(' ')[0])
+            resolve(await vestsToSteem(vests))
+            return
+          }
         }
-        const vests = parseFloat(delegations[0].vesting_shares.split(' ')[0])
-        resolve(await vestsToSteem(vests))
+        resolve(0)
       })
       
     } catch (e) {
