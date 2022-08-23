@@ -497,7 +497,7 @@ module.exports = {
 
     startBlock: "Start block",
     stopBlock: "Stop block",
-    mintAmount: "Mint amount",
+    mintAmount: "Token mint/block",
 
     opened: 'Opened',
     closed: 'Closed'

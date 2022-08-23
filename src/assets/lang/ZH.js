@@ -416,7 +416,7 @@ module.exports = {
       inputDesc: "请输入社区描述信息",
       inputStartBlock: "请输入开始区块",
       inputStopBlock: "请输入结束区块",
-      inputMintAmount: "请输入预挖数量",
+      inputMintAmount: "请输入每区块数量",
       inputDevRatio: "请输入DAO基金比例",
       remarkInput: "请输入描述",
       confirmInfo: '请输入"{info}"并确认',
@@ -468,7 +468,7 @@ module.exports = {
   
       startBlock: "开始区块",
       stopBlock: "停止区块",
-      mintAmount: "预挖量"
+      mintAmount: "每区块产量"
     },
     pool: {
       updatePoolRatios: "配置矿池",
