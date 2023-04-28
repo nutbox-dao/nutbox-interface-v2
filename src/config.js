@@ -3,9 +3,9 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 3;
+export const BLOCK_SECOND = 10;
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "https://enuls-api.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
 
@@ -14,7 +14,7 @@ export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 // wheather use the graph sevice or our service
 // because of the graph service for BSC network is udpate so slowly, so we build our
 // own index service, but we retain the graph service for backup.
-export const USE_THE_GRAPH = true;
+export const USE_THE_GRAPH = false;
 
 // np power period to channel
 export const PeriodToIdx = {
@@ -138,17 +138,29 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 //   decimals: 18
 // }
 
-// bsc
-export const RPC_NODE = 'https://bsc-dataseed.binance.org';
-export const BSC_CHAIN_ID = 56;
-export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-export const CHAIN_NAME = 'BSC-Mainnet';
+// enuls
+export const RPC_NODE = 'https://evmapi.nuls.io';
+export const BSC_CHAIN_ID = 119;
+export const BLOCK_CHAIN_BROWER = 'https://evmscan.nuls.io/';
+export const CHAIN_NAME = 'ENULS';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'NULS',
+  symbol: 'NULS',
   decimals: 18
 }
+
+// bsc
+// export const RPC_NODE = 'https://bsc-dataseed.binance.org';
+// export const BSC_CHAIN_ID = 56;
+// export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
+// export const CHAIN_NAME = 'BSC-Mainnet';
+// export const BSC_CHAIN_NAME = CHAIN_NAME;
+// export const NATIVE_CURRENCY = {
+//   name: 'BNB',
+//   symbol: 'BNB',
+//   decimals: 18
+// }
 
 export const BSC_STRATEGIES_NAME = process.env.VUE_APP_BSC_STRATEGIES_NAME;
 export const BSC_STRATEGIES_PARAMS = process.env.VUE_APP_BSC_STRATEGIES_PARAMS;
@@ -190,8 +202,12 @@ export const GasTimes = 1.5;
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
 // // bsc net
-export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
-export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+// export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+// export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+
+// // bsc net
+export const MultiAddress = "0x383870Ae4E834155192cEce2fb5B0528CE0790E9"
+export const NutAddress = "0xf23af3d4461dc54b1a0c28879b6bec9cd605f771"
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
