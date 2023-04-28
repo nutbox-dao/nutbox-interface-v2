@@ -49,8 +49,11 @@ async function getWalnutDataFromOurService() {
     try {
         let walnut = await restClient.request(query);
         walnut = JSON.parse(walnut.value)
-        walnut = walnut.walnuts.edges[0].node
-        store.commit('web3/saveWalnutInfo', walnut)
+        walnut = walnut.walnuts.edges
+        if (walnut.length > 0) {
+            walnut = walnut[0].node
+            store.commit('web3/saveWalnutInfo', walnut)
+        }
     }catch(err) {
         console.log('Get walnut info fail', err)
     }

@@ -71,7 +71,7 @@ module.exports = {
     farming: 'Just stake some tokens to earn.',
     assetTip1: 'If you want to use an exist token',
     assetTip2: 'If you want to create a new token',
-    assetTipe3: `*You can premine some tokens to bootup your community,
+    assetTip3: `*You can premine some tokens to bootup your community,
     the rest tokens will be minted from the contract block by block.`
   },
   operation: {
