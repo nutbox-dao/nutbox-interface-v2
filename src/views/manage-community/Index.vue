@@ -12,10 +12,10 @@
               <i class="menu-icon asset-icon" />
               <span>{{ $t('router.asset') }}</span>
             </b-nav-item>
-            <b-nav-item to="/manage-community/iso">
+            <!-- <b-nav-item to="/manage-community/iso">
               <i class="menu-icon iso-icon" />
               <span>ISO</span>
-            </b-nav-item>
+            </b-nav-item> -->
             <b-nav-item to="/manage-community/staking">
               <i class="menu-icon farming-icon" />
               <span>{{ $t('router.farming') }}</span>
@@ -28,10 +28,10 @@
               <i class="menu-icon nut-power-icon" />
               <span>{{ $t('router.nutPower') }}</span>
             </b-nav-item> -->
-            <b-nav-item to="/manage-community/vote">
+            <!-- <b-nav-item to="/manage-community/vote">
               <i class="menu-icon governance-icon" />
               <span>{{ $t('router.governance') }}</span>
-            </b-nav-item>
+            </b-nav-item> -->
             <b-nav-item to="/manage-community/social">
               <i class="menu-icon social-icon" />
               <span>{{ $t('router.social') }}</span>
