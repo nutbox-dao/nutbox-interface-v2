@@ -4,8 +4,7 @@ import { gql } from 'graphql-request';
 import { USE_THE_GRAPH } from '@/config'
 
 export async function getWalnutData() {
-    const useTheGraph = true
-    if (useTheGraph) {
+    if (USE_THE_GRAPH) {
         return await getWalnutDataFromTheGraph()
     }else {
         return await getWalnutDataFromOurService()
