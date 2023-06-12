@@ -468,7 +468,8 @@ module.exports = {
   
       startBlock: "开始区块",
       stopBlock: "停止区块",
-      mintAmount: "每区块产量"
+      mintAmount: "每区块产量",
+      preMintTitle: "预挖",
     },
     pool: {
       updatePoolRatios: "配置矿池",

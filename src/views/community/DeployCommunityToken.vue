@@ -42,7 +42,7 @@
                   </div>
                 </div>
                 <div class="col-12 mt-3">
-                  <div class="font14 mb-1 font-bold">{{$t('community.mintAmount')}}</div>
+                  <div class="font14 mb-1 font-bold">{{$t('community.preMintTitle')}}</div>
                   <div class="c-input-group c-input-group-border">
                     <b-input-group class="d-flex flex-between-center">
                       <b-input class="flex-full" type="number"

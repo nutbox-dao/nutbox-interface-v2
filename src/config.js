@@ -3,9 +3,9 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 3;
+export const BLOCK_SECOND = 0.2;
 // nutbox backend server
-export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
 
@@ -87,13 +87,13 @@ export const HIVE_GAS_ACCOUNT = "walnut.gas";
 export const HIVE_API_URLS = ["https://api.hive.blog"];
 
 /**===================================== cosmos  =======================================*/
-export const COSMOS_STAKE_FEE = 0.02;
+export const COSMOS_STAKE_FEE = 0;
 export const COSMOS_GAS_ACCOUNT = "cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u";
 
-export const OSMOSIS_STAKE_FEE = 0.1;
+export const OSMOSIS_STAKE_FEE = 0;
 export const OSMOSIS_GAS_ACCOUNT = 'osmo1khkaslmkk0htu0ug2j7h3geclyxfcfrsn4l477';
 
-export const JUNO_STAKE_FEE = 0.0001;
+export const JUNO_STAKE_FEE = 0;
 export const JUNO_GAS_ACCOUNT = 'juno1khkaslmkk0htu0ug2j7h3geclyxfcfrsdu070s';
 // gas address
 // export const COSMOS_GAS_ACCOUNT = 'cosmos1767jj20jaqh73qxr6ftrxcv6unwlel34crk82u';
@@ -138,15 +138,15 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 //   decimals: 18
 // }
 
-// bsc
-export const RPC_NODE = 'https://bsc-dataseed.binance.org';
-export const BSC_CHAIN_ID = 56;
-export const BLOCK_CHAIN_BROWER = 'https://bscscan.com/';
-export const CHAIN_NAME = 'BSC-Mainnet';
+// arbitrum
+export const RPC_NODE = 'https://arb1.arbitrum.io/rpc';
+export const BSC_CHAIN_ID = 42161;
+export const BLOCK_CHAIN_BROWER = 'https://arbiscan.io/';
+export const CHAIN_NAME = 'Arbitrum-one';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: 'BNB',
-  symbol: 'BNB',
+  name: 'ETH',
+  symbol: 'ETH',
   decimals: 18
 }
 
@@ -189,8 +189,8 @@ export const GasTimes = 1.5;
 // export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
-// // bsc net
-export const MultiAddress = "0x41263cba59eb80dc200f3e2544eda4ed6a90e76c"
+// // arbitrum net
+export const MultiAddress = "0x4B6EF997DbF23D320a6616ADf6499f4cdC00AB7c"
 export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
 
 export const Multi_Config = {

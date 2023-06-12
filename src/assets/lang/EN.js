@@ -71,7 +71,7 @@ module.exports = {
     farming: 'Just stake some tokens to earn.',
     assetTip1: 'If you want to use an exist token',
     assetTip2: 'If you want to create a new token',
-    assetTipe3: `*You can premine some tokens to bootup your community,
+    assetTip3: `*You can premint some tokens to bootup your community,
     the rest tokens will be minted from the contract block by block.`
   },
   operation: {
@@ -498,6 +498,7 @@ module.exports = {
     startBlock: "Start block",
     stopBlock: "Stop block",
     mintAmount: "Token mint/block",
+    preMintTitle: "Premint",
 
     opened: 'Opened',
     closed: 'Closed'
@@ -586,7 +587,7 @@ module.exports = {
     price: "Price",
     totalSupply: 'Supply',
     cap: 'Mkt Cap',
-    distributionAmount: "Premine amount",
+    distributionAmount: "Premint amount",
     notErc1155: "Token is not a ERC1155 token.",
     wrongAddress: 'Wrong Address',
     choseCToken: 'Choose a token as cToken',
