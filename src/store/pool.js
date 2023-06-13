@@ -11,6 +11,7 @@ export default {
         approvements: null,
         userReward: null,
         poolAprs: null,
+        balances: null,
 
         loadingApprovements: false,
     },
@@ -29,6 +30,9 @@ export default {
         },
         savePoolAprs(state, poolAprs) {
             state.poolAprs = poolAprs
+        },
+        saveBalances(state, balances) {
+            state.balances = balances;
         },
 
         saveLoadingApprovements(state, loadingApprovements) {

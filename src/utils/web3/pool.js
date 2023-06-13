@@ -580,6 +580,7 @@ export const updatePoolsByPolling = (pools) => {
     let total = {}
     let pending = {}
     let approve = {}
+    let balance = {}
     for (let d in res) {
       let [type, pid] = d.split('-')
       if (type === 'staked') {
@@ -590,12 +591,15 @@ export const updatePoolsByPolling = (pools) => {
         pending[pid] = res[d]
       } else if (type === 'approve') {
         approve[pid] = res[d]
+      } else if (type === 'balance') {
+        balance[pid] = res[d]
       }
     }
     store.commit('pool/saveUserStaked', staked || {})
     store.commit('pool/saveTotalStaked', total || {})
     store.commit('pool/saveUserReward', pending || {})
     store.commit('pool/saveApprovements', approve || {})
+    store.commit('pool/saveBalances', balance || {})
   })
   // const stakingRolling = rollingFunction(getUserStakings, pools, 5, res => {
   //   console.log(46325,res);
@@ -672,7 +676,17 @@ const getPoolStakingInfo = async (pools) => {
               p.id
             ],
             returns: [
-              ['approve-' + p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset)) > 1e12]
+              ['approve-' + p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset))]
+            ]
+          })
+          calls.push({
+            target: p.asset,
+            call: [
+              'balanceOf(address)(uint256)',
+              account
+            ],
+            returns: [
+              ['balance-' + p.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](p.asset))]
             ]
           })
         } else if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc1155')) {
@@ -809,7 +823,7 @@ export const getApprovements = async (pools) => {
           pool.id
         ],
         returns: [
-          [pool.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](pool.asset)) > 1e12]
+          [pool.id, val => val.toString() / (10 ** store.getters['web3/tokenDecimals'](pool.asset))]
         ]
       }))
 
