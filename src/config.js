@@ -191,7 +191,7 @@ export const GasTimes = 1.5;
 
 // // arbitrum net
 export const MultiAddress = "0x4B6EF997DbF23D320a6616ADf6499f4cdC00AB7c"
-export const NutAddress = "0x4429FcdD4eC4EA4756B493e9c0525cBe747c2745"
+export const NutAddress = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
