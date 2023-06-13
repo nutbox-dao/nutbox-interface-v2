@@ -59,7 +59,7 @@
             v-show="
               !loadingMyCommunityInfo &&
               account &&
-              settingStep === 3 &&
+              settingStep >= 2 &&
               metamaskConnected
             "
             to="/manage-community"
@@ -168,6 +168,7 @@
           </b-dropdown>
         </div>
       </div>
+
       <!-- right part -->
       <div class="page-container">
         <div
