@@ -112,7 +112,7 @@
             </template>
             <div class="dropdown-menu-card" v-show="!langActive">
               <b-dropdown-item
-                href="https://github.com/nutbox-dao"
+                href="https://github.com/nutbox-dao/nutbox-contract/tree/arbitrum"
                 target="_blank"
               >
                 <i class="dropdown-item-icon github-icon"></i>
