@@ -69,12 +69,14 @@ export default {
       return this.userStaked[this.card.id] ?? 0
     },
     formBalance(){
-      const balance = this.balance;
-      return parseFloat(balance.toString() / (10 ** this.stakedDecimal));
+      let balance = this.balance;
+      balance = parseFloat(balance.toString() / (10 ** this.stakedDecimal));
+      return Math.floor(balance * 10000) / 10000;
     },
     formStaked(){
-      const staked = this.staked;
-      return parseFloat(staked.toString() / (10 ** this.stakedDecimal))
+      let staked = this.staked;
+      staked = parseFloat(staked.toString() / (10 ** this.stakedDecimal))
+      return Math.floor(staked * 10000) / 10000;
     }, 
     fee() {
       if (this.fees){
