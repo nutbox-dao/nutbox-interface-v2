@@ -1,15 +1,16 @@
 import { sleep } from "@/utils/helper";
 import { getProvider, getReadonlyProvider } from '@/utils/web3/ethers'
 import store from "@/store";
-import { BLOCK_SECOND } from '@/constant'
+import { ethers } from 'ethers'
+import { RPC_NODE } from '@/config'
 
 export const subBlockNum = async () => {
-  const provider = await getProvider();
+  const provider = getReadonlyProvider();
   while (true) {
     try {
       const blockNumber = await provider.getBlockNumber();
       store.commit("web3/saveBlockNum", blockNumber);
     } catch (e) {}
-    await sleep(BLOCK_SECOND);
+    await sleep(2);
   }
 };
