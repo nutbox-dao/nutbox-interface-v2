@@ -270,6 +270,7 @@ export default {
       "approvements",
       "userReward",
       "loadingApprovements",
+      "balances"
     ]),
     ...mapGetters('web3', ['tokenDecimals']),
     fee() {
@@ -297,7 +298,7 @@ export default {
     },
     approved() {
       if (this.type !== 'erc20staking' || !this.approvements) return true;
-      return this.approvements[this.card.id];
+      return this.approvements[this.card.id] >= this.balances[this.card.id];
     },
     staked() {
       if (!this.userStaked) return 0;

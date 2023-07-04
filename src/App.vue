@@ -59,7 +59,7 @@
             v-show="
               !loadingMyCommunityInfo &&
               account &&
-              settingStep === 3 &&
+              settingStep >= 2 &&
               metamaskConnected
             "
             to="/manage-community"

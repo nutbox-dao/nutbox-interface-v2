@@ -115,11 +115,11 @@ export default {
 
       getCommunityRewardPerBlock(communityId)
 
-      getApprovement(NutAddress, communityId).then(res => {
-        this.$store.commit('community/saveApprovedCommunity', res)
-      }).finally(() => {
-        this.$store.commit('community/saveLoadingApproveCommunity', false)
-      })
+      // getApprovement(NutAddress, communityId).then(res => {
+      //   this.$store.commit('community/saveApprovedCommunity', res)
+      // }).finally(() => {
+      //   this.$store.commit('community/saveLoadingApproveCommunity', false)
+      // })
     }catch(e) {
       // no registered
       this.$router.replace('/')

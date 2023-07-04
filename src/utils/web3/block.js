@@ -4,7 +4,7 @@ import store from "@/store";
 import { BLOCK_SECOND } from '@/constant'
 
 export const subBlockNum = async () => {
-  const provider = await getProvider();
+  const provider = await getReadonlyProvider();
   while (true) {
     try {
       const blockNumber = await provider.getBlockNumber();

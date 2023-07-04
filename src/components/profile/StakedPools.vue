@@ -4,7 +4,6 @@
       <div class="nav-box nav-box-bg mb-3 mb-md-0 w-auto">
         <div class="nav">
                 <span v-for="(item, index) of tabOptions" :key="index"
-                    v-show="index!==0 && index !== 3"
                       :class="activeTab===index?'active':''"
                       @click="activeTab = index">{{item}}</span>
         </div>
@@ -28,8 +27,7 @@
     <div class="c-card mt-3" v-else-if="joinedPool.length>0">
       <div v-for="(pool, index) of joinedPool" :key="index">
         <template v-if="getCommunityInfoById(pool.community.id)">
-          <span v-show="false" v-if="activeTab===0"></span>
-          <UserStakingList v-else-if="activeTab !== 3" :pool="pool" :is-fold="isFold" />
+          <UserStakingList v-if="activeTab !== 3" :pool="pool" :is-fold="isFold" />
           <UserNutPowerList v-else :gauge="pool" :is-fold="isFold"/>
         </template>
       </div>
@@ -54,7 +52,7 @@ export default {
   name: 'StakedPools',
   data () {
     return {
-      activeTab: 1,
+      activeTab: 0,
       tabOptions: ["ISO", 'Farming', 'NFT', 'NUT Power', 'Inactive'],
       searchText: '',
       poolStatus: 'active',
@@ -77,7 +75,7 @@ export default {
         case 4:
           return this.inActivedPools;
         case 1:
-          // return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
+          return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking')))
           return this.activedPools.filter(p => p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking'))
         case 0:
           return this.activedPools.filter(p => (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc20staking') && (p.poolFactory.toLowerCase() !== getPoolFactoryAddress('erc1155'))))

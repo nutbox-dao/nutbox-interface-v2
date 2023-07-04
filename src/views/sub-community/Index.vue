@@ -179,7 +179,7 @@ export default {
       getCommunityRewardPerBlock(this.communityId)
       getApprovement(NutAddress, this.communityId).then(res => {
         this.$store.commit('community/saveApprovedCommunity', res)
-      }).finally(() => {
+      }).catch().finally(() => {
         this.$store.commit('community/saveLoadingApproveCommunity', false)
       })
       getSpecifyCommunityInfo(this.communityId).then(community => {
