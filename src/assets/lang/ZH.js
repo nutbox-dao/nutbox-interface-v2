@@ -67,6 +67,7 @@ module.exports = {
       iso: 'ISO: 首次质押发行',
       isoDetail: '质押POS代币挖取社区代币。高收益率、无风险。',
       erc1155Desc: '质押您的ERC115来挖矿.',
+      curation: '策展矿池可以直接将资产分配到您指定的地址特别是合约地址。所以利用好该矿池，可以更灵活的分配社区资产。',
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
       assetTip1: '如果您想使用已经存在的资产',
@@ -408,7 +409,8 @@ module.exports = {
       farming: '耕种',
       nftStake: 'NFT质押',
       nftStaking: 'NFT质押',
-      nutPower: 'NUT Power'
+      nutPower: 'NUT Power',
+      curation: '策展'
     },
     placeHolder: {
       inputName: "请输入社区名字",
@@ -476,6 +478,7 @@ module.exports = {
       addPool: "添加矿池",
       chosePoolType: '选择矿池类型',
       pools: '矿池',
+      recipient: '接收者',
       poolName: '矿池名字',
       noPools: '没有创建的矿池',
       userCount: '用户数量',

@@ -60,6 +60,8 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['CosmosStakingFactory'].toLowerCase()
     case 'erc1155':
       return contractAddress['ERC1155StakingFactory'].toLowerCase()
+    case 'curation':
+      return contractAddress['CurationGaugeFactory'].toLocaleLowerCase()
   }
 }
 
@@ -88,6 +90,9 @@ export const getPoolType = (factory, chainId) => {
       }else if(parseInt(chainId) === 5) {
         return 'juno'
       }
+    }
+    case contractAddress['CurationGaugeFactory']: {
+      return 'curation'
     }
   }
 }
@@ -276,6 +281,26 @@ export const addPool = async (form) => {
             factory.removeAllListeners('CosmosStakingCreated')
           }
         })
+      } else if (form.type === 'curation') {
+        factory.on('CurationGaugeCreated', (pool, community, name, recipient) => {
+          console.log('create a new curation pool:', pool);
+          const newPool = {
+            id: ethers.utils.getAddress(pool),
+            status: 'OPENED',
+            name,
+            asset: form.asset,
+            poolFactory: getPoolFactory(form.type),
+            ratio: form.ratios[form.ratios.length - 1] * 100,
+            chainId: 7,
+            stakersCount: 0,
+            totalAmount: 0,
+            hasCreateGauge: 0,
+            votersCount: 0,
+            votedAmount: 0
+          }
+          resolve(newPool);
+          factory.removeAllListeners('CurationGaugeCreated')
+        })
       }
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
       await waitForTx(tx.hash)
@@ -289,6 +314,8 @@ export const addPool = async (form) => {
         factory.removeAllListeners('SPStakingCreated')
       } else if(form.type === 'atom' || form.type === 'osmo' || form.type === 'juno') {
         factory.removeAllListeners('CosmosStakingCreated')
+      }else if(form.type === 'curation') {
+        factory.removeAllListeners('CurationGaugeCreated')
       }
       reject(errCode.BLOCK_CHAIN_ERR)
     }

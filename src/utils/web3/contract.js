@@ -29,6 +29,7 @@ export const contractAddress = {
   "ERC20StakingFactory": "0x7Be1085298446c041f72db9f50cd3953638B023a",
   "ERC1155StakingFactory": "0xBab99d73D20DE32D0f674dA58390b4C904654C19",
   "CosmosStakingFactory": "0x8Ea8870001216429f72CEA80fEE576dfe883E5bD",
+  "CurationGaugeFactory": "0xFc9AF0eF1bB4673ad48ee477dF231Cc3286e1464",
   "Gauge": "0x57A9D7630CC5Fd5000EE93D66b1Db121B9785832",
   "TreasuryFactory": "0x4e00a9ab92876B8F5AdB07D607aE2B8b257CF856",
 }
@@ -42,6 +43,8 @@ export const getPoolFactory = (type) => {
     return contractAddress.CosmosStakingFactory
   } else if (type === 'erc1155') {
     return contractAddress.ERC1155StakingFactory
+  } else if (type === 'curation') {
+    return contractAddress.CurationGaugeFactory
   }
 }
 
@@ -54,6 +57,8 @@ export const getPoolTypeName = (type) => {
     return 'CosmosStakingFactory'
   } else if (type === 'erc1155') {
     return 'ERC1155StakingFactory'
+  } else if (type === 'curation') {
+    return 'CurationGaugeFactory'
   }
 }
 
@@ -72,6 +77,7 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "ERC1155": "ERC1155.json",
   "ERC1155Staking": "ERC1155Staking.json",
   "ERC1155StakingFactory": "ERC1155StakingFactory.json",
+  "CurationGaugeFactory": "CurationGaugeFactory.json",
   "NutPower": "NutPower.json",
   "Gauge": "Gauge.json",
   "CosmosStaking": "CosmosStaking.json",

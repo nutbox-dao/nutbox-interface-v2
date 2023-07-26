@@ -24,6 +24,10 @@
               <i class="menu-icon nft-icon" />
               <span>{{ $t('router.nftStake') }}</span>
             </b-nav-item>
+            <b-nav-item to="/manage-community/curation">
+              <i class="menu-icon curation-icon" />
+              <span>{{ $t('router.curation') }}</span>
+            </b-nav-item>
             <!-- <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />
               <span>{{ $t('router.nutPower') }}</span>
@@ -222,6 +226,9 @@ export default {
 .nft-icon {
   background-image: url("~@/static/images/menu-nft.svg");
 }
+.curation-icon {
+  background-image: url("~@/static/images/menu-curation.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/m-menu-home-active.svg");
@@ -246,6 +253,9 @@ export default {
   }
   .nft-icon {
     background-image: url("~@/static/images/m-menu-nft-active.svg");
+  }
+  .curation-icon {
+    background-image: url("~@/static/images/menu-curation-active.svg");
   }
 }
 </style>

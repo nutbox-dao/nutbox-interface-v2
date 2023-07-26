@@ -70,6 +70,12 @@ export const insertToken = async (params) =>
 export const updateTokenIcon = async (params) =>
   put(BACKEND_API_URL + "/token/update", params);
 
+export const getPoolDesc = async (poolIds) =>
+  get(BACKEND_API_URL + "/pools/descpription", {poolIds})
+
+export const updatePoolDescription = async (poolId, description) =>
+  put(BACKEND_API_URL + '/pools/updatePoolDescription',  {poolId, description});
+
 // ============================================ user ============================================
 export const getNonce = async (accountId) =>
   get(BACKEND_API_URL + "/user/getnonce", { id: accountId });

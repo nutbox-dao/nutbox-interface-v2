@@ -378,6 +378,9 @@ export default {
 .nft-icon {
   background-image: url("~@/static/images/menu-nft.svg");
 }
+.curation-icon {
+  background-image: url("~@/static/images/menu-curation.svg");
+}
 .active {
   .home-icon {
     background-image: url("~@/static/images/menu-home-active.svg");
@@ -408,6 +411,9 @@ export default {
   }
   .nft-icon {
     background-image: url("~@/static/images/menu-nft-active.svg")
+  }
+  .curation-icon {
+    background-image: url("~@/static/images/menu-curation-active.svg");
   }
 }
 </style>
