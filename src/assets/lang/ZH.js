@@ -287,7 +287,8 @@ module.exports = {
       mintableTip2: "现在您必须将该token的挖矿权限授予给社区合约，否则您将不能使用该社区的所有合约功能。",
       delegateTip1: "您现在正在使用 {chain} 的账号: {account} 进行代理。",
       rechargeTip1: "稍后充值",
-      feeTip: '操作手续费: ${fee} NUT'
+      feeTip: '操作手续费: ${fee} NUT',
+      updatePoolDecFail: '矿池描述更新失败'
     },
     nps: {
       nps: "治理",
@@ -424,7 +425,8 @@ module.exports = {
       confirmInfo: '请输入"{info}"并确认',
       inputPoolName: '请输入矿池名字',
       inputDelegatee: '请输入您的代理账号',
-      inputDevAddress: '请输入新的DAO基金地址'
+      inputDevAddress: '请输入新的DAO基金地址',
+      inputRecipientAddress: '请输入新的接收地址'
     },
     community: {
       community: "社区",

@@ -299,7 +299,8 @@ module.exports = {
     mintableTip2: "Now you must grant mint role to the community contract, otherwise you can't use functions of this community.",
     delegateTip1: "You're using {chain} account: {account} to delegate.",
     rechargeTip1: "Recharge Later",
-    feeTip: 'Operation fee: ${fee} NUT'
+    feeTip: 'Operation fee: ${fee} NUT',
+    updatePoolDecFail: 'Update pool description fail!'
   },
   nps: {
     nps: "Governance",
@@ -452,7 +453,8 @@ module.exports = {
     confirmInfo: 'Please input "{info}" to confirm.',
     inputPoolName: 'Please input pool name.',
     inputDelegatee: 'Please input delegatee account',
-    inputDevAddress: 'Please input new DAO fund address'
+    inputDevAddress: 'Please input new DAO fund address',
+    inputRecipientAddress: 'Please input new recipient address'
   },
   community: {
     community: "Community",

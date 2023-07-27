@@ -334,7 +334,9 @@ export const handleApiErrCode = (code, toast) => {
    tipStr = $t('tip.outOfUsage')
   } else if (code === errCode.UPLOAD_FAIL){
     tipStr = $t('tip.picUploadFail')
-  }  else {
+  } else if(code === errCode.UPDATE_POOL_DEC_FAIL) {
+    tipStr = $t('tip.updatePoolDecFail')
+  } else {
     tipStr = $t("error.unknow");
   }
   

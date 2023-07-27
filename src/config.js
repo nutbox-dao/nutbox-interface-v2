@@ -55,6 +55,7 @@ export const errCode = {
   INVALID_NONCE: 452,
   DB_ERROR: 453,
   SERVER_ERR: 500,
+  UPDATE_POOL_DEC_FAIL: 454,
 };
 
 /**======================================= steem  ====================================*/

@@ -15,14 +15,31 @@
         </div>
       </div>
       <div class="c-card text-grey-7 font14 font-bold">
-        <div class="project-info-container">
+        <div class="project-info-container" :id="pool.id" style="height: 80px; overflow: hidden;">
           <div>
             {{ poolDesc }}
+            <button @click="showDescTip=true">
+              <i class="edit-icon hover"></i>
+              </button>
           </div>
+          <b-popover
+                :target="pool.id"
+                triggers="hover focus"
+                placement="top"
+              >
+                {{
+                  poolDesc
+                }}
+              </b-popover>
         </div>
         <div class="project-info-container">
           <span class="name">{{ $t("pool.recipient") }}</span>
-          <div class="info">{{ recipient || 0 }}</div>
+          <div class="info">
+            {{ recipient || 0 }}
+            <button @click="showRecipientAddressTip=true">
+              <i class="edit-icon hover"></i>
+            </button>
+          </div>
         </div>
   
         <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && !isCreateGauge" @click="showAttention=true">
@@ -80,21 +97,62 @@
           </div>
         </div>
       </b-modal>
+      <!-- update recipient address -->
+      <b-modal
+      v-model="showRecipientAddressTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
+          {{ $t("pool.recipient") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+              <input
+                type="text"
+                v-model="inputRecipientAddress"
+                :placeholder="$t('placeHolder.inputRecipientAddress')"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button
+            class="dark-btn mx-3"
+            @click="showRecipientAddressTip = false"
+            :disabled="updatingRecipientAddress"
+          >
+            <b-spinner small type="grow" v-show="updatingRecipientAddress" />
+            {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="updateRecipientAddress" :disabled="updatingRecipientAddress">
+            <b-spinner small type="grow" v-show="updatingRecipientAddress" />
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
     </div>
   </template>
   
   <script>
   import { mapState, mapGetters } from 'vuex'
   import { handleApiErrCode, sleep, formatUserAddress } from '@/utils/helper'
-  import { closePool, getPoolType } from '@/utils/web3/pool'
+  import { closePool, getPoolType, updatePoolRecipient } from '@/utils/web3/pool'
   import { getERC20Info, getCToken } from '@/utils/web3/asset'
   import { getPoolFactory } from '@/utils/web3/contract'
   import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
   import { approveUseERC20 } from '@/utils/web3/community'
-  import { NutAddress } from '@/config'
+  import { NutAddress, errCode } from '@/config'
   import StakingCardHeader from '@/components/common/StakingCardHeader'
   import {ethers} from 'ethers'
-  import { getPoolDesc } from '@/apis/api'
+  import { getPoolDesc, updatePoolDescription } from '@/apis/api'
   
   export default {
     name: 'ManageStakingCard',
@@ -117,6 +175,8 @@
     data() {
       return {
         updating: false,
+        showRecipientAddressTip: false,
+        showDescTip: false,
         minedToken: 0,
         contract: null,
         stakedERC20: {},
@@ -125,7 +185,9 @@
         icon: null,
         vert: 1e18,
         confirmInfo: "",
-        poolDesc: ''
+        poolDesc: '',
+        inputRecipientAddress: '',
+        updatingRecipientAddress: false,
       };
     },
     props: {
@@ -147,6 +209,35 @@
           return;
         }
         this.closePool();
+      },
+      async updateDesc() {
+        try{
+          
+        } catch (e) {
+          
+        } finally {
+          
+        }
+      },
+      async  updateRecipientAddress() {
+        try{
+          this.updatingRecipientAddress = true;
+          // check address
+          if(!ethers.utils.isAddress(this.inputRecipientAddress)) {
+            return handleApiErrCode(errCode.UP, (tip, param) => {
+                  this.$bvToast.toast(tip, param);
+                })
+          }
+          const hash = await updatePoolRecipient(this.pool.id, this.inputRecipientAddress);
+          this.showRecipientAddressTip = false;
+          this.pool.asset = this.inputRecipientAddress;
+        } catch (e) {
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param);
+          })
+        } finally {
+          this.updatingRecipientAddress = false
+        }
       },
       copyContract(){
         const address = ethers.utils.getAddress(this.pool.id)
@@ -275,5 +366,9 @@
   .project-info-container {
     margin: 10px 0;
   }
+  .edit-icon {
+  @include icon(1.2rem, 1.2rem);
+  background-image: url("~@/static/images/edit-icon.svg");
+}
   </style>
   

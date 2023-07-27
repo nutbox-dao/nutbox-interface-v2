@@ -77,6 +77,7 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "ERC1155": "ERC1155.json",
   "ERC1155Staking": "ERC1155Staking.json",
   "ERC1155StakingFactory": "ERC1155StakingFactory.json",
+  "CurationGauge": "CurationGauge.json",
   "CurationGaugeFactory": "CurationGaugeFactory.json",
   "NutPower": "NutPower.json",
   "Gauge": "Gauge.json",
