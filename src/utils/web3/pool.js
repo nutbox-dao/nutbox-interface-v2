@@ -542,6 +542,31 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
+export const updatePoolRecipient = async (poolId, newRecipient) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try {
+      contract = await getContract('CurationGauge', poolId, false)
+    } catch (e) {
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.adminSetRecipient(newRecipient);
+      await waitForTx(tx.hash);
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('update recipient Fail', e);
+    }
+  })
+}
+
 // get user's bind account of steem / hive
 // account: EVM
 // bindAccount: POS chain account
