@@ -364,6 +364,35 @@ export const updatePoolsRatio = async (form) => {
 }
 
 /**
+ * this is for curation pool
+ * @param {*} poolId 
+ */
+export const startPool = async (poolId) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = null
+    try {
+      contract = await getContract('CurationGauge', poolId, false)
+    } catch (e) {
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.startPool();
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Start curation pool Fail', e);
+    }
+  })
+}
+
+/**
  * Remove Pool
  * Can't be reopened if do this operation
  * @param {Object} form {poolAddress,activedPools,ratios} 

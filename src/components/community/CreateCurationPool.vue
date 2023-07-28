@@ -5,10 +5,10 @@
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
         <div class="my-4 modal-title">{{ $t('pool.createCurationPool', {chainName}) }}</div>
-        <div class="col-lg-8 mx-auto mb-3">
+        <div class="col-lg-10 mx-auto mb-3 desc">
           {{ $t('pool.recipientDescription') }}
         </div>
-        <div class="custom-form col-lg-8 mx-auto mb-5">
+        <div class="custom-form col-lg-10 mx-auto mb-5">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
               <b-input class="flex-full"
@@ -18,10 +18,10 @@
             </b-input-group>
           </div>
         </div>
-        <div class="col-lg-8 mx-auto mb-3">
+        <div class="col-lg-10 mx-auto mb-3 desc">
           {{ $t('pool.poolDescription') }}
         </div>
-        <div class="custom-form col-lg-8 mx-auto">
+        <div class="custom-form col-lg-10 mx-auto">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center h-20">
               <b-textarea class="flex-full"
@@ -97,5 +97,9 @@ export default {
   .list-item:hover {
     background-color: #272828;
   }
+}
+.desc{
+  font-weight: 400;
+  font-size: 0.8rem;
 }
 </style>

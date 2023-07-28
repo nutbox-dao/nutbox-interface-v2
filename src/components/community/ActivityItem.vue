@@ -408,6 +408,11 @@ export default {
           ? this.$t('opHistory.createTreasuryWithName', {address: ethers.utils.getAddress(this.operation.asset)})
           : this.$t('opHistory.createTreasury', {address: ethers.utils.getAddress(this.operation.asset)})
         break;
+      case "ADMINCHANGECURATIONRECIPIENT":
+        this.isAdmin = true;
+        this.username = "Admin";
+        this.description = this.$t('opHistory.changeCurationPoolRecipient', {pool: this.operation.pool.name,address: ethers.utils.getAddress(this.operation.asset)})
+        break;
     }
   },
 };

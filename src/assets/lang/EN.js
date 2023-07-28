@@ -275,6 +275,7 @@ module.exports = {
     removePoolOk: "Pool has been removed",
     tryWithdrawOk: "Redeem success.",
     stopPoolTips: "Need set pool ratio to 0 before stop pool.",
+    startPoolTips: "Pool has been started",
     completeCommunityProposalConfigSuccess: "Community proposal config success",
     completeProposalSuccess: "Proposal success",
     completeVoteSuccess: "Vote success",
@@ -523,6 +524,7 @@ module.exports = {
     stakedPools: 'Staked Pools',
     tvl: 'TVL',
     closePool: "Close",
+    startPool: 'StartPool',
     ratio: 'Ratio',
     opened: 'Active',
     closed: 'Closed',
@@ -661,6 +663,7 @@ module.exports = {
     withdrawRevenueWithName: " revenue to {address}",
     createTreasury: "Create treasury: {address}",
     createTreasuryWithName: " create treasury: {address}",
+    changeCurationPoolRecipient: 'Admin change {pool} recipient to {address}',
     title: {
       DEPOSIT: "Deposit",
       WITHDRAW: 'Withdraw',
@@ -680,7 +683,8 @@ module.exports = {
       ADMINSETRATIO: "Reset pool ratios",
       ADMINSETDAOFUND: "Reset DAO fund",
       ADMINWITHDRAWNREVENUE: "Withdraw revenue",
-      ADMINCREATETREASURY: "Create treasury"
+      ADMINCREATETREASURY: "Create treasury",
+      ADMINCHANGECURATIONRECIPIENT: "Change recipient"
     }
   }
 };

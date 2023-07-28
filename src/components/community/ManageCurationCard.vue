@@ -42,9 +42,13 @@
           </div>
         </div>
   
-        <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && !isCreateGauge" @click="showAttention=true">
+        <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && (totalStaked ? totalStaked[pool.id] > '0' : false)" @click="showAttention=true">
           <b-spinner small type="grow" v-show="updating" />
           {{ $t("pool.closePool") }}
+        </button>
+        <button class="primary-btn my-3 w-75" :disabled="updating" v-else-if="pool.status === 'OPENED'" @click="startPool">
+          <b-spinner small type="grow" v-show="updating" />
+          {{ $t("pool.startPool") }}
         </button>
       </div>
       <!-- showAttention tip -->
@@ -188,7 +192,7 @@
   <script>
   import { mapState } from 'vuex'
   import { handleApiErrCode, sleep, formatUserAddress } from '@/utils/helper'
-  import { closePool, updatePoolDesc, updatePoolRecipient } from '@/utils/web3/pool'
+  import { closePool, updatePoolDesc, updatePoolRecipient, startPool } from '@/utils/web3/pool'
   import StakingCardHeader from '@/components/common/StakingCardHeader'
   import {ethers} from 'ethers'
   import { getPoolDesc } from '@/apis/api'
@@ -204,6 +208,7 @@
         "approvedCommunity",
         'rewardPerBlock'
       ]),
+      ...mapState('pool', ['totalStaked']),
       recipient() {
         const address = ethers.utils.getAddress(this.pool.asset)
         const start = address.slice(0, 8);
@@ -235,10 +240,6 @@
       pool: {
         type: Object,
       },
-      isCreateGauge: {
-        type: Boolean,
-        default: false
-      }
     },
     methods: {
       receiveAttention() {
@@ -302,6 +303,24 @@
         }, (e) => {
           console.log(e)
         })
+      },
+      async startPool() {
+        try{
+          this.updating = true;
+          await startPool(this.pool.id);
+          this.$bvToast.toast(this.$t("tip.startPoolTips"), {
+              title: this.$t("tip.tips"),
+              variant: "success",
+            });
+          this.totalStaked[this.pool.id] = 1;
+        } catch(e) {
+          console.log(4, e)
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param);
+          });
+        } finally {
+          this.updating = false
+        }
       },
       async closePool() {
         try {

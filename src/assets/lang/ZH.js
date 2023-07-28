@@ -267,6 +267,7 @@ module.exports = {
       removePoolOk: "矿池已移除",
       tryWithdrawOk: "赎回成功",
       stopPoolTips: "矿池分润比例为0才能删除",
+      startPoolTips: '矿池已启动',
       completeCommunityProposalConfigSuccess: "提案配置成功",
       completeProposalSuccess: "提案成功",
       completeVoteSuccess: "投票成功",
@@ -491,6 +492,7 @@ module.exports = {
       stakedPools: '质押矿池',
       tvl: 'TVL',
       closePool: "关闭",
+      startPool: "启动",
       ratio: '比例',
       opened: '活跃的',
       closed: '已关闭',
@@ -629,6 +631,7 @@ module.exports = {
       withdrawRevenueWithName: "提取国库资金到{address}",
       createTreasury: "创建国库: {address}",
       createTreasuryWithName: "创建了国库: {address}",
+      changeCurationPoolRecipient: "将矿池：{pool}的接收者修改为了 {address}",
       title: {
         DEPOSIT: "质押",
         WITHDRAW: '减少质押',
@@ -648,7 +651,8 @@ module.exports = {
         ADMINSETRATIO: "重设矿池比例",
         ADMINSETDAOFUND: "重设DAO基金",
         ADMINWITHDRAWNREVENUE: "国库提款",
-        ADMINCREATETREASURY: "创建国库"
+        ADMINCREATETREASURY: "创建国库",
+        ADMINCHANGECURATIONRECIPIENT: "变更接受者"
       }
     }
   };
