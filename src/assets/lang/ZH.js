@@ -426,7 +426,8 @@ module.exports = {
       inputPoolName: '请输入矿池名字',
       inputDelegatee: '请输入您的代理账号',
       inputDevAddress: '请输入新的DAO基金地址',
-      inputRecipientAddress: '请输入新的接收地址'
+      inputRecipientAddress: '请输入接收地址',
+      inputPoolDesc: '请输入该矿池的详细描述'
     },
     community: {
       community: "社区",
@@ -496,10 +497,15 @@ module.exports = {
       activePools: '活跃矿池',
       inactivePools: '关闭矿池',
       creatPool: '在{chainName}创建质押矿池',
+      createCurationPool: '在{chainName}创建策展奖励池',
       createDelegatePool: '创建 {delegateType} 代理矿池',
       createNftPool: '在Create staking NFT(ERC1155) pool on {chainName创建质押NFT(NFT1155)矿池',
       yourDelegatee: '您的 {delegateType} 代理账号',
-      ratioTip: '调整矿池比例(矿池比例之和应为100%)'
+      ratioTip: '调整矿池比例(矿池比例之和应为100%)',
+      poolDescTitle: '矿池详细描述',
+      poolDescTip: '你可以尽量详细的描述该矿池，比如接收地址的详细描述，奖励将如何分配到用户手上等等。',
+      recipientDescription: '策展矿池会根据您配置的矿池比例来计算应该分得的奖励数量。该矿池的所有收入都会由设置的接收地址接收，该地址可以是一个EOA，也可以是一个合约地址。 这个可以使社区代币的分发更加灵活，比如可以将该地址设置为一个社交分发协议的合约，则该矿池的产品将分发到该社交协议进行二次分发。另外一点，矿池的产出将全部由该地址接收，直到您将其修改，所以矿池产出的奖励可以被任何人执行领取操作。',
+      poolDescription: '这个描述信息将展示在该矿池的卡片上，用户将从卡片上的描述了解到该矿池的作用，所以请尽可能的描述清楚该矿池的详细信息。'
     },
     np: {
       nutPower: 'NUT Power（NP）',

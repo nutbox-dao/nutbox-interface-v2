@@ -454,7 +454,8 @@ module.exports = {
     inputPoolName: 'Please input pool name.',
     inputDelegatee: 'Please input delegatee account',
     inputDevAddress: 'Please input new DAO fund address',
-    inputRecipientAddress: 'Please input new recipient address'
+    inputRecipientAddress: 'Please input recipient address',
+    inputPoolDesc: 'Please input the description of this pool'
   },
   community: {
     community: "Community",
@@ -528,10 +529,15 @@ module.exports = {
     activePools: 'Acitive Pools',
     inactivePools: 'Inacitive Pools',
     creatPool: 'Create staking pool on {chainName}',
+    createCurationPool: 'Create curation pool on {chainName}',
     createDelegatePool: 'Create {delegateType} delegate pool',
     createNftPool: 'Create staking NFT(ERC1155) pool on {chainName}',
     yourDelegatee: 'Your {delegateType} delegatee account',
-    ratioTip: 'Profit Sharing Ratio (Sum of ratios should be 100%)'
+    ratioTip: 'Profit Sharing Ratio (Sum of ratios should be 100%)',
+    poolDescTitle: "Pool description",
+    poolDescTip: 'You can descripte this pool in detail as much as possible. Like the recipient address, the reward use of the recipient and so on.',
+    recipientDescription: 'Curation pool can calculate the amount of C-Token with the pool ratios, and the rewards are totally distributed to this address that can be a EOA or contract. This make the token distribution more flexible. For example, you can set the recipient address to a social distribution contract, then the rewards amount from nutbox will be claimed from this pool to your social pool. Additional, the address is always be the one until community manager change it. So the rewards mining from this pool can be claimed by everyone.',
+    poolDescription: 'This description will be displayed on the card of the mining pool, and users can learn about the role of the mining pool from this description. Please describe the role of this mining pool as clearly as possible.'
   },
   np: {
     nutPower: 'NUT Power（NP）',

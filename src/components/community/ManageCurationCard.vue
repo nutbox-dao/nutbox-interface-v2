@@ -138,24 +138,63 @@
         </div>
       </div>
     </b-modal>
+    <!-- update pool description -->
+    <b-modal
+      v-model="showDescTip"
+      modal-class="custom-modal"
+      size="m"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form font20 line-height28">
+        <div class="modal-title font-bold mb-2">
+          {{ $t("pool.poolDescTitle") }}
+        </div>
+        <div class="mb-2 font16">
+          {{ $t("pool.poolDescTip") }}
+        </div>
+        <div class="input-group-box mb-4">
+          <div class="input-box flex-between-center">
+            <div class="c-input-group c-input-group-bg-dark c-input-group-border">
+              <textarea
+                type="text"
+                v-model="inputPoolDesc"
+                :placeholder="$t('placeHolder.inputPoolDesc')"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center" style="margin: 0 -1rem">
+          <button
+            class="dark-btn mx-3"
+            @click="showDescTip = false"
+            :disabled="updatingPoolDesc"
+          >
+            <b-spinner small type="grow" v-show="updatingPoolDesc" />
+            {{ $t('operation.cancel') }}
+          </button>
+          <button class="primary-btn mx-3" @click="updateDesc" :disabled="updatingPoolDesc">
+            <b-spinner small type="grow" v-show="updatingPoolDesc" />
+            {{ $t("operation.confirm") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
     </div>
   </template>
   
   <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState } from 'vuex'
   import { handleApiErrCode, sleep, formatUserAddress } from '@/utils/helper'
-  import { closePool, getPoolType, updatePoolRecipient } from '@/utils/web3/pool'
-  import { getERC20Info, getCToken } from '@/utils/web3/asset'
-  import { getPoolFactory } from '@/utils/web3/contract'
-  import { ASSET_LOGO_URL, YEAR_BLOCKS } from '@/constant'
-  import { approveUseERC20 } from '@/utils/web3/community'
-  import { NutAddress, errCode } from '@/config'
+  import { closePool, updatePoolDesc, updatePoolRecipient } from '@/utils/web3/pool'
   import StakingCardHeader from '@/components/common/StakingCardHeader'
   import {ethers} from 'ethers'
-  import { getPoolDesc, updatePoolDescription } from '@/apis/api'
+  import { getPoolDesc } from '@/apis/api'
   
   export default {
-    name: 'ManageStakingCard',
+    name: 'ManageCurationCard',
     components: { StakingCardHeader },
     computed: {
       ...mapState("web3", ["stakingFactoryId", "allTokens", "fees"]),
@@ -187,7 +226,9 @@
         confirmInfo: "",
         poolDesc: '',
         inputRecipientAddress: '',
+        inputPoolDesc: '',
         updatingRecipientAddress: false,
+        updatingPoolDesc: false
       };
     },
     props: {
@@ -212,11 +253,17 @@
       },
       async updateDesc() {
         try{
-          
+          this.updatingPoolDesc = true
+          await updatePoolDesc(this.pool.id, this.inputPoolDesc)
+          this.pool.description = this.inputPoolDesc;
+          this.poolDesc = this.inputPoolDesc;
+          this.showDescTip = false;
         } catch (e) {
-          
+          handleApiErrCode(e, (tip, param) => {
+            this.$bvToast.toast(tip, param)
+          })
         } finally {
-          
+          this.updatingPoolDesc = false
         }
       },
       async  updateRecipientAddress() {

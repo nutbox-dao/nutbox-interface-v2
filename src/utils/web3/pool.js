@@ -25,7 +25,8 @@ import {
 import {
   getMyCommunityContract,
   getAllCommunities,
-  getOperationFee
+  getOperationFee,
+  getNonce
 } from './community'
 import BN from 'bn.js'
 import {
@@ -38,11 +39,12 @@ import {
 import {
   rollingFunction
 } from '@/utils/helper'
-
+import { signMessage } from "./utils";
 import {
   accBech32ToAddress,
   addressAccToAccBech32
 } from "@/utils/cosmos/cosmos";
+import { updatePoolDescription } from '@/apis/api'
 
 export const getPoolFactoryAddress = (type) => {
   switch (type) {
@@ -302,6 +304,7 @@ export const addPool = async (form) => {
           factory.removeAllListeners('CurationGaugeCreated')
         })
       }
+      console.log(1, form, getPoolFactory(form.type))
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
       await waitForTx(tx.hash)
     } catch (e) {
@@ -566,6 +569,40 @@ export const updatePoolRecipient = async (poolId, newRecipient) => {
     }
   })
 }
+
+export const updatePoolDesc = async (poolId, description) => {
+  return new Promise(async (resolve, reject) => {
+    let nonce = await getNonce();
+    const userId = await getAccounts();
+    nonce = nonce ? nonce + 1 : 1;
+    const form = {poolId, description}
+    const originMessage = JSON.stringify(form);
+    let signature = "";
+    try {
+      signature = await signMessage(originMessage + nonce);
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+    const params = {
+      userId,
+      infoStr: originMessage,
+      nonce,
+      signature,
+    };
+    await updatePoolDescription(params)
+    try {
+      // update nonce in storage
+      store.commit("web3/saveNonce", nonce);
+      resolve();
+    } catch (e) {
+      console.log("Insert community info failed", e);
+      reject(e);
+    }
+  });
+};
 
 // get user's bind account of steem / hive
 // account: EVM

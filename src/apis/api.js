@@ -73,8 +73,8 @@ export const updateTokenIcon = async (params) =>
 export const getPoolDesc = async (poolIds) =>
   get(BACKEND_API_URL + "/pools/descpription", {poolIds})
 
-export const updatePoolDescription = async (poolId, description) =>
-  put(BACKEND_API_URL + '/pools/updatePoolDescription',  {poolId, description});
+export const updatePoolDescription = async (params) =>
+  put(BACKEND_API_URL + '/pools/updatePoolDescription',  params);
 
 // ============================================ user ============================================
 export const getNonce = async (accountId) =>
