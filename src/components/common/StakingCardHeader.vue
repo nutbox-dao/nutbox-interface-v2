@@ -10,7 +10,7 @@
     <div class="d-flex align-items-center">
       <div class="card-link-icons">
         <img class="icon1" :src="communityInfo.icon" alt="" />
-        <img class="icon2" :src="icon" alt="" />
+        <img v-if="!hideToken" class="icon2" :src="icon" alt="" />
       </div>
       <div class="card-link-title-text font20 font-bold">
         <div class="link-title font20 line-height24">
@@ -56,6 +56,10 @@ export default {
     card: {
       type: Object,
     },
+    hideToken: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {};

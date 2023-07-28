@@ -574,6 +574,31 @@ export const withdrawReward = async (communityId, poolId) => {
   })
 }
 
+export const withdrawRewardsToRecipient = async (poolId) => {
+  return new Promise(async (resolve, reject) => {
+    let contract = {}
+    try {
+      contract = await getContract('CurationGauge', poolId, false)
+    } catch (e) {
+      reject(e)
+      return;
+    }
+
+    try {
+      const tx = await contract.withdrawRewardsToRecipient();
+      await waitForTx(tx.hash)
+      resolve(tx.hash)
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING)
+      } else {
+        reject(errCode.BLOCK_CHAIN_ERR)
+      }
+      console.log('Withdraw reward to recipient Fail', e);
+    }
+  })
+}
+
 export const updatePoolRecipient = async (poolId, newRecipient) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
@@ -703,12 +728,14 @@ export const updatePoolsByPolling = (pools) => {
         staked[pid] = res[d]
       } else if (type === 'total') {
         total[pid] = res[d]
-      } else if (type === 'pending') {
+      } else if (type === 'pending' && !pending[pid]) {
         pending[pid] = res[d]
       } else if (type === 'approve') {
         approve[pid] = res[d]
       } else if (type === 'balance') {
         balance[pid] = res[d]
+      } else if (type === 'curationPending') {
+        pending[pid] = res[d]
       }
     }
     store.commit('pool/saveUserStaked', staked || {})
@@ -820,6 +847,18 @@ const getPoolStakingInfo = async (pools) => {
               ['approve-' + p.id]
             ]
           })
+        } else if(p.poolFactory.toLowerCase() === getPoolFactoryAddress('curation')) {
+          calls.push({
+            target: p.community.id,
+            call: [
+              'getPoolPendingRewards(address,address)(uint256)',
+              p.id,
+              p.id
+            ],
+            returns: [
+              ['curationPending-' + p.id]
+            ]
+          });
         }
       }
       const result = await aggregate(calls, Multi_Config)

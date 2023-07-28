@@ -9,6 +9,7 @@ import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 import SubCommunityStaking from '@/views/sub-community/SubCommunityYieldFarming'
+import SubCommunityCuration from '@/views/sub-community/SubCommunityCuration'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
 import SubGovernanceCreate from '@/views/sub-community/SubGovernanceCreate'
@@ -92,6 +93,10 @@ const routes = [
       {
         path: 'erc1155',
         component: SubCommunityNFTStaking
+      },
+      {
+        path: 'curation',
+        component: SubCommunityCuration
       },
       {
         path: 'member',
