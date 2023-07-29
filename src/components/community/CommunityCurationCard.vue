@@ -49,9 +49,11 @@
             </div>
           </div>
         </div>
-        <div class="font-14px my-8px">
+        <div class="detail-info-box font16 font-bold mt-2">
+            <span class="crop mx-auto">
                 {{ formatUserAddress(assetToken) }}
-            </div>
+            </span>
+        </div>
         <div class="detail-info-box text-grey-7 font14 font-bold mt-2" :id="card['id'] + card['name']">
           {{ poolDesc }}
         </div>
@@ -215,5 +217,10 @@
   .detail-info-box {
     @include text-multi-line(3);
     flex:1;
+  }
+
+  .crop {
+    text-overflow: hidden;
+    width: 70%;
   }
   </style>
