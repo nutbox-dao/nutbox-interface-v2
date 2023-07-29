@@ -2,13 +2,7 @@
     <div class="multi-card">
       <StakingCardHeader :card="card" :hideToken="true"/>
       <div class="c-card border-0">
-<!--        test-->
-
-<!--        {{ pendingReward }}-->
-<!--        <button class="primary-btn" @click="withdraw">-->
-<!--            {{ $t('operation.harvest') }}-->
-<!--        </button>-->
-        <div>
+        <div style="min-height: 120px">
           <div class="d-flex align-items-center">
           <span class="font-bold text-grey-47 mr-2 font14">
             {{cToken ? cToken.symbol : "" }}
@@ -17,8 +11,12 @@
               <span class="font14 text-grey-7">{{ $t('commen.earned') }}</span>
               <i class="copy-icon copy-icon-gray mx-1"
                  @click="copy(cToken ? cToken.address : '')"></i>
-              <i class="link-icon link-icon-gray"
-                 @click="gotoToken(cToken ? cToken.address : '')"></i>
+              <i class="warning-icon warning-icon-gray" :id="card['id'] + 'earn-tip'"></i>
+              <b-popover :target="card['id'] + 'earn-tip'" :delay="{ show: 500 }"
+                         custom-class="sub-popover"
+                         triggers="hover" placement="top">
+                描述信息
+              </b-popover>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-center">
@@ -41,10 +39,12 @@
                   class="copy-icon copy-icon-gray mx-1"
                   @click="copy(assetToken)"
                 ></i>
-                <i
-                  class="link-icon link-icon-gray"
-                  @click="gotoToken(stakeToken.address)"
-                ></i>
+                <i class="warning-icon warning-icon-gray" :id="card['id'] + 'receive-tip'"></i>
+                <b-popover :target="card['id'] + 'receive-tip'" :delay="{ show: 500 }"
+                           custom-class="sub-popover"
+                           triggers="hover" placement="top">
+                  {{assetToken}}
+                </b-popover>
               </template>
             </div>
           </div>
@@ -205,8 +205,9 @@
   .c-card {
     padding: 22px 20px;
     margin-top: -24px;
-    height: 260px;
-    min-height: 260px;
+    height: 240px;
+    min-height: 240px;
+    justify-content: flex-start;
   }
   .detail-info-box {
     @include text-multi-line(3)

@@ -442,13 +442,20 @@
     position: relative;
     height: fit-content;
     max-height: 80px;
+    width: 100%;
     .edit-icon {
       position: absolute;
       bottom: 0;
       right: 0;
+      background-color: #141414;
     }
   }
+  //.desc-wrap {
+  //  display: flex;
+  //  flex-wrap: wrap;
+  //}
   .pool-desc-text {
+    width: 100%;
     line-height: 20px;
     @include text-multi-line(4);
   }

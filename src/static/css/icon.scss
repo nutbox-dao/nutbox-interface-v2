@@ -31,3 +31,9 @@
   @include icon();
   background-image: url("~@/static/images/help-circle-icon.svg");
 }
+.warning-icon {
+  @include icon(1rem, 1rem);
+  &-gray {
+    background-image: url("~@/static/images/warning-icon-gray.svg");
+  }
+}

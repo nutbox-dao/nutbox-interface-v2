@@ -38,7 +38,7 @@
         </div>
       </div>
       <template v-else>
-        <div class="row">
+        <div class="row curation-card-container">
           <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">
             <ManageCurationCard :pool="pool"/>
           </div>
@@ -234,5 +234,10 @@
   <style scoped>
   .wrap-word {
     word-wrap: break-word;
+  }
+  @media (max-width: 991px) {
+    .curation-card-container {
+      padding-top: 15px;
+    }
   }
   </style>
