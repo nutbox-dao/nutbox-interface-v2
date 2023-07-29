@@ -305,7 +305,6 @@
         })
       },
       async startPool() {
-        console.log(35, this.pool)
         try{
           this.updating = true;
           await startPool(this.pool.id);
@@ -313,7 +312,7 @@
               title: this.$t("tip.tips"),
               variant: "success",
             });
-          this.totalStaked[this.pool.id] = 1;
+          this.pool.totalAmount = 1;
         } catch(e) {
           console.log(4, e)
           handleApiErrCode(e, (tip, param) => {

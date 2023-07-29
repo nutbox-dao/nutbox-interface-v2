@@ -124,7 +124,6 @@
         return this.pools.filter(p => p.status === 'OPENED')
       },
       activeCurationPool() {
-        console.log(354, this.activePool)
         return this.activePool.filter(p => p.poolFactory.toLowerCase() ===
                 getPoolFactoryAddress("curation"))
       },

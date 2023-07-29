@@ -67,7 +67,7 @@ module.exports = {
       iso: 'ISO: 首次质押发行',
       isoDetail: '质押POS代币挖取社区代币。高收益率、无风险。',
       erc1155Desc: '质押您的ERC115来挖矿.',
-      curation: '策展矿池可以直接将资产分配到指定的地址特别是合约地址。所以利用好该矿池，可以更灵活的分配社区资产。',
+      curation: '社交矿池可以直接将资产分配到指定的地址特别是合约地址。任何用户都可以执行领取操作，将当前的所有奖励发放给接收者地址。',
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
       assetTip1: '如果您想使用已经存在的资产',
@@ -412,7 +412,7 @@ module.exports = {
       nftStake: 'NFT质押',
       nftStaking: 'NFT质押',
       nutPower: 'NUT Power',
-      curation: '策展'
+      curation: '社交矿池'
     },
     placeHolder: {
       inputName: "请输入社区名字",
@@ -499,15 +499,17 @@ module.exports = {
       activePools: '活跃矿池',
       inactivePools: '关闭矿池',
       creatPool: '在{chainName}创建质押矿池',
-      createCurationPool: '在{chainName}创建策展奖励池',
+      createCurationPool: '在{chainName}创建社交奖励池',
       createDelegatePool: '创建 {delegateType} 代理矿池',
       createNftPool: '在Create staking NFT(ERC1155) pool on {chainName创建质押NFT(NFT1155)矿池',
       yourDelegatee: '您的 {delegateType} 代理账号',
       ratioTip: '调整矿池比例(矿池比例之和应为100%)',
       poolDescTitle: '矿池详细描述',
       poolDescTip: '你可以尽量详细的描述该矿池，比如接收地址的详细描述，奖励将如何分配到用户手上等等。',
-      recipientDescription: '策展矿池会根据您配置的矿池比例来计算应该分得的奖励数量。该矿池的所有收入都会由设置的接收地址接收，该地址可以是一个EOA，也可以是一个合约地址。 这个可以使社区代币的分发更加灵活，比如可以将该地址设置为一个社交分发协议的合约，则该矿池的产品将分发到该社交协议进行二次分发。另外一点，矿池的产出将全部由该地址接收，直到您将其修改，所以矿池产出的奖励可以被任何人执行领取操作。',
-      poolDescription: '这个描述信息将展示在该矿池的卡片上，用户将从卡片上的描述了解到该矿池的作用，所以请尽可能的描述清楚该矿池的详细信息。'
+      recipientDescription: '社交矿池会根据您配置的矿池比例来计算应该分得的奖励数量。该矿池的所有收入都会由设置的接收地址接收，该地址可以是一个EOA，也可以是一个合约地址。 这个可以使社区代币的分发更加灵活，比如可以将该地址设置为一个社交分发协议的合约，则该矿池的产品将分发到该社交协议进行二次分发。另外一点，矿池的产出将全部由该地址接收，直到您将其修改，所以矿池产出的奖励可以被任何人执行领取操作。',
+      poolDescription: '这个描述信息将展示在该矿池的卡片上，用户将从卡片上的描述了解到该矿池的作用，所以请尽可能的描述清楚该矿池的详细信息。',
+      harvestCurationPoolTip: "任何人都可以收取该矿池的奖励到接受者地址。",
+      recipientTip: "接收者地址可以是一个EOA，也可以是一个合约地址，其作用是对矿池的奖励做更复杂的二次分发。"
     },
     np: {
       nutPower: 'NUT Power（NP）',
@@ -632,8 +634,8 @@ module.exports = {
       createTreasury: "创建国库: {address}",
       createTreasuryWithName: "创建了国库: {address}",
       changeCurationPoolRecipient: "将矿池：{pool}的接收者修改为了 {address}",
-      startCurationPool: "启动策展矿池: {pool}",
-      startCurationPoolWithName: "启动策展矿池: {pool}",
+      startCurationPool: "启动社交矿池: {pool}",
+      startCurationPoolWithName: "启动社交矿池: {pool}",
       title: {
         DEPOSIT: "质押",
         WITHDRAW: '减少质押',
@@ -655,7 +657,7 @@ module.exports = {
         ADMINWITHDRAWNREVENUE: "国库提款",
         ADMINCREATETREASURY: "创建国库",
         ADMINCHANGECURATIONRECIPIENT: "变更接受者",
-        STARTCURATIONGAUGE: "启动策展矿池"
+        STARTCURATIONGAUGE: "启动社交矿池"
       }
     }
   };
