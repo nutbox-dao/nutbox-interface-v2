@@ -2,7 +2,7 @@
   <div class="bsc-pool-modal position-relative">
 <!--    <i class="modal-back-icon" @click="$emit('back')"></i>-->
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
-    <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
+    <div class="bsc-pool-modal-content overflow-auto d-flex flex-column">
       <div class="mb-3">
         <div class="my-4 modal-title">{{ $t('pool.createCurationPool', {chainName}) }}</div>
         <div class="col-lg-10 mx-auto mb-3 desc">
@@ -62,7 +62,7 @@ export default {
     }
   },
   computed: {
-    
+
   },
   methods: {
     async checkTokenAddress () {

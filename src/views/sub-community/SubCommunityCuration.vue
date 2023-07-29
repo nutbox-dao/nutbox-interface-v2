@@ -127,6 +127,6 @@ export default {
 }
 .card-item {
   width: 354px;
-  height: 434px;
+  height: 370px;
 }
 </style>

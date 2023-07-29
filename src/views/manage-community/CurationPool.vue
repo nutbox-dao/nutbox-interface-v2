@@ -5,7 +5,7 @@
         <div class="font16 line-height24 font-bold mb-4">
                 {{ $t('desc.curation') }}
         </div>
-        <div class="row">
+        <div class="row" style="width: 100%">
           <div class="col-md-6 d-flex flex-column justify-content-center">
             <div class="nav-box nav-box-bg mb-3 mb-md-0">
               <div class="nav">
@@ -15,20 +15,18 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="c-btn-group mx-2" >
-              <button class="primary-btn primary-btn-outline w-auto mr-2 px-3"
-                      style="height: 2rem"
-                      v-show="activePool.length > 1 && activeCurationPool.length > 0"
-                      @click="configPoolModal=true">
-                {{ $t('pool.updatePoolRatios') }}</button>
-              <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
-                      style="height: 2rem"
-                      @click="poolTypeModal=true, createPoolStep=1">
-                <i class="add-icon add-icon-white mr-2"></i>
-                <span>{{ $t('operation.addPool') }}</span>
-              </button>
-            </div>
+          <div class="col-md-6 d-flex align-items-center justify-content-end ">
+            <button class="primary-btn primary-btn-outline w-auto mr-2 px-3"
+                    style="height: 2rem"
+                    v-show="activePool.length > 1 && activeCurationPool.length > 0"
+                    @click="configPoolModal=true">
+              {{ $t('pool.updatePoolRatios') }}</button>
+            <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
+                    style="height: 2rem"
+                    @click="poolTypeModal=true, createPoolStep=1">
+              <i class="add-icon add-icon-white mr-2"></i>
+              <span>{{ $t('operation.addPool') }}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -84,7 +82,7 @@
       </b-modal>
     </div>
   </template>
-  
+
   <script>
   import ManageCurationCard from '@/components/community/ManageCurationCard'
   import { addPool, updatePoolsRatio, getPoolFactoryAddress, updatePoolDesc } from '@/utils/web3/pool'
@@ -96,7 +94,7 @@
   import { mapState } from 'vuex'
   import { ethers } from 'ethers'
   import { errCode } from '@/config'
-  
+
   export default {
     name: 'CurationPool',
     components: { ManageCurationCard, StakingPoolType, CreateCurationPool, StakingDelegatePool, StakingPoolConfig },
@@ -232,10 +230,9 @@
     }
   }
   </script>
-  
+
   <style scoped>
   .wrap-word {
     word-wrap: break-word;
   }
   </style>
-  

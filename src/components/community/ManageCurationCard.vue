@@ -16,11 +16,11 @@
       </div>
       <div class="c-card text-grey-7 font14 font-bold">
         <div class="project-info-container" :id="pool.id" style="height: 80px; overflow: hidden;">
-          <div>
-            {{ poolDesc }}
-            <button @click="showDescTip=true">
-              <i class="edit-icon hover"></i>
-              </button>
+          <div class="pool-desc-box">
+            <div class="pool-desc-text">
+              {{ poolDesc }}
+            </div>
+            <i class="edit-icon hover" @click="showDescTip=true"></i>
           </div>
           <b-popover
                 :target="pool.id"
@@ -32,16 +32,16 @@
                 }}
               </b-popover>
         </div>
-        <div class="project-info-container">
+        <div class="project-info-container d-flex align-items-center">
           <span class="name">{{ $t("pool.recipient") }}</span>
-          <div class="info">
-            {{ recipient || 0 }}
-            <button @click="showRecipientAddressTip=true">
-              <i class="edit-icon hover"></i>
-            </button>
+          <div class="flex-1 d-flex align-items-center">
+            <div class="info">
+              {{ recipient || 0 }}
+            </div>
+            <i class="edit-icon hover" @click="showRecipientAddressTip=true"></i>
           </div>
         </div>
-  
+
         <button class="primary-btn my-3 w-75" :disabled="updating" v-if="pool.status === 'OPENED' && (totalStaked ? totalStaked[pool.id] > '0' : false)" @click="showAttention=true">
           <b-spinner small type="grow" v-show="updating" />
           {{ $t("pool.closePool") }}
@@ -70,7 +70,7 @@
           <div class="mb-4 font20 line-height24 text-center">
             {{ `Please input pool name: "${pool.name}" to close this pool.` }}
           </div>
-  
+
           <div
             class="c-input-group c-input-group-bg-dark c-input-group-border my-3"
           >
@@ -80,7 +80,7 @@
               v-model="confirmInfo"
             ></b-input>
           </div>
-  
+
           <div class="d-flex justify-content-between" style="gap: 2rem">
             <button
               class="dark-btn"
@@ -188,7 +188,7 @@
     </b-modal>
     </div>
   </template>
-  
+
   <script>
   import { mapState } from 'vuex'
   import { handleApiErrCode, sleep, formatUserAddress } from '@/utils/helper'
@@ -196,7 +196,7 @@
   import StakingCardHeader from '@/components/common/StakingCardHeader'
   import {ethers} from 'ethers'
   import { getPoolDesc } from '@/apis/api'
-  
+
   export default {
     name: 'ManageCurationCard',
     components: { StakingCardHeader },
@@ -373,7 +373,7 @@
           });
           this.communityData.pools = pools;
           await sleep(2);
-  
+
           this.showAttention = false;
         } catch (e) {
           handleApiErrCode(e, (tip, param) => {
@@ -385,7 +385,7 @@
         }
       },
     },
-  
+
     async mounted() {
       const chainId = this.pool.chainId;
       const poolDesc = await getPoolDesc([this.pool.id])
@@ -395,7 +395,7 @@
     },
   };
   </script>
-  
+
   <style scoped lang="scss">
   @import "src/static/css/card/common-card";
   @import "src/static/css/form";
@@ -433,8 +433,22 @@
     margin: 10px 0;
   }
   .edit-icon {
-  @include icon(1.2rem, 1.2rem);
-  background-image: url("~@/static/images/edit-icon.svg");
-}
+    @include icon(1.2rem, 1.2rem);
+    background-image: url("~@/static/images/edit-icon.svg");
+    cursor: pointer;
+  }
+  .pool-desc-box {
+    position: relative;
+    height: fit-content;
+    max-height: 80px;
+    .edit-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+  .pool-desc-text {
+    line-height: 20px;
+    @include text-multi-line(4);
+  }
   </style>
-  

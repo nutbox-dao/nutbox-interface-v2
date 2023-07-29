@@ -2,16 +2,94 @@
     <div class="multi-card">
       <StakingCardHeader :card="card" :hideToken="true"/>
       <div class="c-card border-0">
-        test
+<!--        test-->
 
-        {{ pendingReward }}
-        <button class="primary-btn" @click="withdraw">
-            {{ $t('operation.harvest') }}
-        </button>
+<!--        {{ pendingReward }}-->
+<!--        <button class="primary-btn" @click="withdraw">-->
+<!--            {{ $t('operation.harvest') }}-->
+<!--        </button>-->
+        <div>
+          <div class="d-flex align-items-center">
+          <span class="font-bold text-grey-47 mr-2 font14">
+            {{cToken ? cToken.symbol : "" }}
+          </span>
+            <div class="d-flex align-items-center">
+              <span class="font14 text-grey-7">{{ $t('commen.earned') }}</span>
+              <i class="copy-icon copy-icon-gray mx-1"
+                 @click="copy(cToken ? cToken.address : '')"></i>
+              <i class="link-icon link-icon-gray"
+                 @click="gotoToken(cToken ? cToken.address : '')"></i>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+          <span class="value flex-fill font-bold font24 line-height24">
+            {{ pendingReward | amountForm }}
+          </span>
+            <button class="primary-btn m-0 w-auto d-flex align-items-center"
+                    :disabled="isWithdrawing || parseFloat(pendingReward) === 0"
+                    @click="withdraw">
+              <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
+              {{ $t("operation.harvest") }}
+            </button>
+          </div>
+          <div class="mt-1 mb-1 d-flex align-items-center">
+        <span class="text-grey-47 font-bold mr-2 font14">{{
+            type === "erc20staking"
+              ? stakeToken.symbol
+              : type === "steem"
+                ? "SP" : type === 'hive'
+                  ? "HP" : type.toUpperCase()
+          }}</span>
+            <div class="d-flex align-items-center">
+          <span class="font14 text-grey-7">
+            {{ (type === "erc20staking" || type === 'erc1155') ? $t('commen.staked') : $t('commen.delegated') }}</span
+          >
+              <template v-if="type !== 'erc1155'">
+                <i
+                  class="copy-icon copy-icon-gray mx-1"
+                  @click="copy(assetToken)"
+                ></i>
+                <i
+                  v-if="type === 'erc20staking'"
+                  class="link-icon link-icon-gray"
+                  @click="gotoToken(stakeToken.address)"
+                ></i>
+              </template>
+              <template v-if="type === 'erc1155'">
+                <i
+                  class="copy-icon copy-icon-gray mx-1"
+                  @click="copy(card.asset.substring(0, 42))"
+                ></i>
+                <i
+                  class="link-icon link-icon-gray"
+                  @click="gotoToken(card.asset.substring(0, 42))"
+                ></i>
+              </template>
+            </div>
+          </div>
+          <PoolOperationForCosmos :card="card" :type="type" v-if="type === 'atom' || type === 'osmo' || type === 'juno'" />
+          <PoolOperationForERC1155 :card="card" :type="type" v-else-if="type === 'erc1155'"/>
+          <PoolOperation :card="card" v-else />
+        </div>
+        <div class="detail-info-box text-grey-7 font14 font-bold" :id="card['id'] + card['name']">
+          描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+          描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+          描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+        </div>
+        <b-popover :target="card['id'] + card['name']" :delay="{ show: 500 }"
+                   custom-class="sub-popover-outline"
+                   triggers="hover focus" placement="top">
+          <div class="font12">
+            描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+            描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+            描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息
+          </div>
+        </b-popover>
       </div>
+
     </div>
   </template>
-  
+
   <script>
   import StakingHomeChainAssetModal from "@/components/common/StakingHomeChainAssetModal";
   import { mapState, mapGetters } from "vuex";
@@ -23,7 +101,7 @@
   import PoolOperation from "@/components/community/PoolOperation";
   import PoolOperationForERC1155 from "@/components/community/PoolOperationForERC1155";
   import PoolOperationForCosmos from "@/components/community/PoolOperationForCosmos";
-  
+
   import { BLOCK_SECOND, YEAR_BLOCKS } from "@/constant";
   import { getUserBaseInfo } from "@/utils/web3/account";
   import { ethers } from 'ethers'
@@ -31,7 +109,7 @@
     accBech32ToAddress,
     addressAccToAccBech32
   } from "@/utils/cosmos/cosmos";
-  
+
   export default {
     name: "CommunityStakingCard",
     components: {
@@ -134,7 +212,7 @@
         const fundRatio = this.card.community.feeRatio;
         const poolRatio = this.card.ratio;
         const _rewardPerBlock = this.rewardPerBlock[this.card.community.id.toLowerCase()]
-        
+
         const reward =
           (_rewardPerBlock ?? 0) *
           blocksPerYear *
@@ -212,14 +290,16 @@
     },
   };
   </script>
-  
+
   <style lang="scss" scoped>
   @import "src/static/css/card/common-card";
   .c-card {
     padding: 22px 20px;
     margin-top: -24px;
-    height: 330px;
-    min-height: 330px;
+    height: 260px;
+    min-height: 260px;
+  }
+  .detail-info-box {
+    @include text-multi-line(3)
   }
   </style>
-  

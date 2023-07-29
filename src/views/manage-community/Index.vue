@@ -1,5 +1,5 @@
 <template>
-  <div class="container h-100">
+  <div class="container h-100" style="overflow-x: hidden">
     <div class="manage-index-page">
       <div class="m-menu">
         <div class="m-menu-card font16 line-height16">
@@ -168,6 +168,7 @@ export default {
   }
   .m-page {
     flex: 1;
+    overflow-x: hidden;
   }
 }
 @media (max-width: 767px) {
