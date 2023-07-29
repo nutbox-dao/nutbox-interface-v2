@@ -632,6 +632,8 @@ module.exports = {
       createTreasury: "创建国库: {address}",
       createTreasuryWithName: "创建了国库: {address}",
       changeCurationPoolRecipient: "将矿池：{pool}的接收者修改为了 {address}",
+      startCurationPool: "启动策展矿池: {pool}",
+      startCurationPoolWithName: "启动策展矿池: {pool}",
       title: {
         DEPOSIT: "质押",
         WITHDRAW: '减少质押',
@@ -652,7 +654,8 @@ module.exports = {
         ADMINSETDAOFUND: "重设DAO基金",
         ADMINWITHDRAWNREVENUE: "国库提款",
         ADMINCREATETREASURY: "创建国库",
-        ADMINCHANGECURATIONRECIPIENT: "变更接受者"
+        ADMINCHANGECURATIONRECIPIENT: "变更接受者",
+        STARTCURATIONGAUGE: "启动策展矿池"
       }
     }
   };

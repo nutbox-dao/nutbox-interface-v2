@@ -664,6 +664,8 @@ module.exports = {
     createTreasury: "Create treasury: {address}",
     createTreasuryWithName: " create treasury: {address}",
     changeCurationPoolRecipient: 'Admin change {pool} recipient to {address}',
+    startCurationPool: "Start curation pool: {pool}",
+    startCurationPoolWithName: " start curation pool: {pool}",
     title: {
       DEPOSIT: "Deposit",
       WITHDRAW: 'Withdraw',
@@ -684,7 +686,8 @@ module.exports = {
       ADMINSETDAOFUND: "Reset DAO fund",
       ADMINWITHDRAWNREVENUE: "Withdraw revenue",
       ADMINCREATETREASURY: "Create treasury",
-      ADMINCHANGECURATIONRECIPIENT: "Change recipient"
+      ADMINCHANGECURATIONRECIPIENT: "Change recipient",
+      STARTCURATIONGAUGE: "Start curation pool"
     }
   }
 };

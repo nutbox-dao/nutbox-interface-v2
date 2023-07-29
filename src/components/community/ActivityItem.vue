@@ -413,6 +413,11 @@ export default {
         this.username = "Admin";
         this.description = this.$t('opHistory.changeCurationPoolRecipient', {pool: this.operation.pool.name,address: ethers.utils.getAddress(this.operation.asset)})
         break;
+      case "STARTCURATIONGAUGE":
+        this.isAdmin = false;
+        this.description = this.showName
+          ? this.$t('opHistory.startCurationPoolWithName', {pool: this.operation.pool.name})
+          : this.$t('opHistory.startCurationPool', {pool: this.operation.pool.name})
     }
   },
 };
