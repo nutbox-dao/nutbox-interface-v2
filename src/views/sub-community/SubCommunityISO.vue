@@ -63,11 +63,11 @@ export default {
     },
     activedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc20staking') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155'))
+      return this.allPools.filter(p => p.status === 'OPENED' && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc20staking') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('curation'))
     },
     inActivedPools() {
       if (!this.allPools || this.allPools.length === 0) return [];
-      return this.allPools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc20staking') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155'))
+      return this.allPools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc20staking') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('erc1155') && p.poolFactory.toLowerCase() != getPoolFactoryAddress('curation'))
     }
   },
   async mounted() {
