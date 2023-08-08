@@ -35,7 +35,7 @@
                        @click="copyAddress(cToken ? cToken.address : null)">
                     {{ cToken ? cToken.name : '-' }}
                   </div>
-                  <i class="link-icon link-icon-gray"></i>
+                  <i class="link-icon link-icon-gray" @click="gotoToken(cToken ? cToken.address : null)"></i>
                 </div>
               </div>
             </div>
@@ -307,6 +307,8 @@ import ToggleSwitch from '@/components/common/ToggleSwitch'
 import { getTreasuryBalance, redeem } from '@/utils/web3/treasury'
 import { handleApiErrCode } from '../../utils/helper'
 import { ethers } from 'ethers'
+import { BLOCK_CHAIN_BROWER } from "@/config";
+
 
 export default {
   name: 'Home',
@@ -424,6 +426,9 @@ export default {
       }, (e) => {
         console.log(e)
       })
+    },
+    gotoToken(address) {
+      window.open(BLOCK_CHAIN_BROWER + "token/" + address, "_blank");
     },
     treasuryBtnClick() {
       if (this.isApprovedTreasury) {
