@@ -2,7 +2,7 @@
     <div class="multi-card">
       <StakingCardHeader :card="card" :hideToken="true"/>
       <div class="c-card border-0">
-        <div style="min-height: 120px">
+        <div>
           <div class="d-flex align-items-center">
           <span class="font-bold text-grey-47 mr-2 font14">
             {{cToken ? cToken.symbol : "" }}
@@ -15,7 +15,7 @@
               <b-popover :target="card['id'] + 'earn-tip'" :delay="{ show: 500 }"
                          custom-class="sub-popover"
                          triggers="hover" placement="top">
-                描述信息
+                {{ $t('pool.harvestCurationPoolTip') }}
               </b-popover>
             </div>
           </div>
@@ -43,13 +43,18 @@
                 <b-popover :target="card['id'] + 'receive-tip'" :delay="{ show: 500 }"
                            custom-class="sub-popover"
                            triggers="hover" placement="top">
-                  {{assetToken}}
+                  {{ $t('pool.recipientTip') }}
                 </b-popover>
               </template>
             </div>
           </div>
         </div>
-        <div class="detail-info-box text-grey-7 font14 font-bold" :id="card['id'] + card['name']">
+        <div class="detail-info-box font16 font-bold mt-2">
+            <span class="crop mx-auto">
+                {{ formatUserAddress(assetToken) }}
+            </span>
+        </div>
+        <div class="detail-info-box text-grey-7 font14 font-bold mt-2" :id="card['id'] + card['name']">
           {{ poolDesc }}
         </div>
         <b-popover :target="card['id'] + card['name']" :delay="{ show: 500 }"
@@ -207,9 +212,15 @@
     margin-top: -24px;
     height: 240px;
     min-height: 240px;
-    justify-content: flex-start;
+    // justify-content: flex-start;
   }
   .detail-info-box {
-    @include text-multi-line(3)
+    @include text-multi-line(3);
+    flex:1;
+  }
+
+  .crop {
+    text-overflow: hidden;
+    width: 70%;
   }
   </style>

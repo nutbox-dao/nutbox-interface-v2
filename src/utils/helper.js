@@ -117,6 +117,9 @@ export const formatPrice = function (value, abb=false) {
   if(Number(value) < 1) {
     digit = 4
   }
+  if (Number(value) < 0.0001) {
+    digit = 8
+  }
   if (abb) {
     value = Number(value)
     if (value < 1000) {}

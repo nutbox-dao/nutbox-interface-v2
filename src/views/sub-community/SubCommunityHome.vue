@@ -67,11 +67,23 @@
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>
       </div>
+      <!-- token distribution -->
+      <div class="c-card">
+        <div class="content3" v-if="tokenAllocation && (tokenAllocation.length > 0)">
+          <div class="title mb-3">{{ $t('pool.tokenDistribution') }}</div>
+          <PoolRatio canvas-id="token-distribution" :animation='false' :pools-data="tokenAllocation" :chart-style="{maxWidth: '15rem'}"/>
+        </div>
+        <div class="empty-bg" v-else>
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p> {{ $t('pool.noPools') }} </p>
+        </div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="loadingPool"></div>
+      </div>
       <!-- pools -->
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
           <div class="title mb-3">{{ $t('pool.pools') }}</div>
-          <PoolRatio :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
+          <PoolRatio canvas-id="pools" :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
@@ -285,14 +297,15 @@
 import { mapGetters, mapState } from 'vuex'
 import Progress from '@/components/community/Progress'
 import PoolRatio from '@/components/community/PoolRatio'
-import ConnectMetaMask from '@/components/common/ConnectMetaMask'
+import ConnectMetaMask from "@/components/common/ConnectMetaMask";
 import { getSingleCtokenBalance } from '@/utils/web3/asset'
-import { sleep, formatBalance, rollingFunction, formatAmount, handleApiErrCode } from '@/utils/helper'
+import { sleep, formatBalance, rollingFunction, formatAmount } from '@/utils/helper'
 import { getSpecifyDistributionEras, getCommunityBalance, getApprovement, approveUseERC20 } from '@/utils/web3/community'
 import ActivityItem from '@/components/community/ActivityItem'
 import { getUpdateCommunityOPHistory } from '@/utils/graphql/community'
 import ToggleSwitch from '@/components/common/ToggleSwitch'
 import { getTreasuryBalance, redeem } from '@/utils/web3/treasury'
+import { handleApiErrCode } from '../../utils/helper'
 import { ethers } from 'ethers'
 
 export default {
@@ -312,19 +325,19 @@ export default {
       loadingApprovement: true,
       isApprovedTreasury: false,
       isApprovingTreasury: false,
-      fund: '',
+      fund:'',
       isAdmin: false,
       treasuryBalances: {},
       showRedeem: false,
       redeemValue: '',
       redeeming: false,
-      ctokenBalance: 0
+      ctokenBalance: 0,
     }
   },
   computed: {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
     // ...mapState('web3', ['treasuryTokens']),
-    ...mapState(['metamaskConnected']),
+    ...mapState(["metamaskConnected"]),
     ...mapGetters('community', ['getCommunityInfoById']),
     poolsData () {
       if (!this.allPools) return []
@@ -334,12 +347,24 @@ export default {
         ratio: parseFloat(pool.ratio) / 100
       }))
     },
-    redeemAssetsAmount () {
+    tokenAllocation() {
+      return [
+        {
+          name: this.$t('pool.pools'),
+          ratio: (10000 - this.feeRatio) / 100
+        },
+        {
+          name: this.$t('community.communityAsset'),
+          ratio: this.feeRatio / 100
+        }
+      ]
+    },
+    redeemAssetsAmount() {
       if (Object.keys(this.treasuryTokens).length === 0 || Object.keys(this.treasuryBalances).length === 0) return {}
-      const inputAmount = parseFloat(this.redeemValue)
-      const amounts = {}
+      let inputAmount = parseFloat(this.redeemValue)
+      let amounts = {}
       const rate = inputAmount / this.totalSupply
-      for (const t of this.treasuryTokens) {
+      for (let t of this.treasuryTokens) {
         amounts[t] = rate * (this.treasuryBalances[t + '-balance'].toString() / 1e18)
       }
       return amounts
@@ -351,23 +376,23 @@ export default {
     },
     isMintable () {
       if (!this.cToken) {
-        return false
+        return false;
       }
       return !this.cToken.isMintable
     },
     communityBalanceValue () {
-      if (!this.cToken) return 0
+      if (!this.cToken) return 0;
       return this.communityBalance.toString() / (10 ** this.cToken.decimal)
     },
     totalSupply () {
       return (this.cToken ? (this.cToken.totalSupply / (10 ** this.cToken.decimal)) : 0)
     },
-    formatTotalSupply () {
+    formatTotalSupply() {
       return formatAmount(this.totalSupply)
     }
   },
   methods: {
-    open (url) {
+    open(url) {
       window.open(url, '_blank')
     },
     formatUserAddress (address, long = true) {
@@ -400,34 +425,34 @@ export default {
         console.log(e)
       })
     },
-    treasuryBtnClick () {
+    treasuryBtnClick() {
       if (this.isApprovedTreasury) {
         this.showRedeem = true
-      } else {
+      }else {
         this.approve()
       }
     },
-    async approve () {
-      try {
+    async approve() {
+      try{
         this.isApprovingTreasury = true
         await approveUseERC20(this.communityInfo.cToken, this.communityInfo.treasury)
-        this.isApprovedTreasury = true
+        this.isApprovedTreasury = true;
       } catch (e) {
         handleApiErrCode(e, (title, info) => {
           this.bvToast.toast(title, info)
-        })
+        });
       } finally {
         this.isApprovingTreasury = false
       }
     },
-    async redeem () {
-      try {
-        if (parseFloat(this.redeemValue) >= this.ctokenBalance) {
+    async redeem() {
+      try{
+        if (parseFloat(this.redeemValue) >= this.ctokenBalance){
           this.$bvToast.toast(this.$t('tip.insufficientBalance'), {
             title: this.$t('tip.tips'),
             variant: 'info'
           })
-          return
+          return;
         }
         this.redeeming = true
         await redeem(this.communityInfo.treasury, this.redeemValue)
@@ -437,8 +462,8 @@ export default {
           variant: 'success'
         })
         getTreasuryBalance(this.communityInfo.treasury).then(b => this.treasuryBalances = b)
-        await sleep(5)
-        this.showRedeem = false
+        await sleep(5);
+        this.showRedeem = false;
       } catch (e) {
         handleApiErrCode(e, (title, info) => {
           this.$bvToast.toast(title, info)
@@ -455,7 +480,7 @@ export default {
     this.fund = this.communityInfo.daoFund
 
     getSpecifyDistributionEras(this.communityId).then(res => {
-      console.log('dis', res)
+      console.log('dis', res);
     })
     getSingleCtokenBalance(this.communityInfo.cToken).then(b => this.ctokenBalance = b)
     // if (Number(this.communityInfo.treasury) !== 0) {
@@ -468,17 +493,17 @@ export default {
     //   })
     // }
 
-    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal)
+    this.retainedRevenue = this.communityInfo.retainedRevenue.toString() / (10 ** this.cToken.decimal);
     // start watch history
     while (!this.operationHistory || this.operationHistory.length === 0) {
       await sleep(0.3)
     }
     const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
-    interval.start()
+    interval.start();
     this.$once('hook:beforeDestroy', () => {
-      interval.stop()
+      interval.stop();
     })
-  }
+  },
 }
 </script>
 
