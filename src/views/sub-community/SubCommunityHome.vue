@@ -64,6 +64,18 @@
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>
       </div>
+      <!-- token distribution -->
+      <div class="c-card">
+        <div class="content3" v-if="tokenAllocation && (tokenAllocation.length > 0)">
+          <div class="title mb-3">{{ $t('pool.tokenDistribution') }}</div>
+          <PoolRatio :animation='false' :pools-data="tokenAllocation" :chart-style="{maxWidth: '15rem'}"/>
+        </div>
+        <div class="empty-bg" v-else>
+          <img src="~@/static/images/empty-data.png" alt="" />
+          <p> {{ $t('pool.noPools') }} </p>
+        </div>
+        <div class="c-loading c-loading-absolute c-loading-bg" v-show="loadingPool"></div>
+      </div>
       <!-- pools -->
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
@@ -331,6 +343,18 @@ export default {
         name: pool.name,
         ratio: parseFloat(pool.ratio) / 100
       }))
+    },
+    tokenAllocation() {
+      return [
+        {
+          name: this.$t('pool.pools'),
+          ratio: (10000 - this.feeRatio) / 100
+        },
+        {
+          name: this.$t('community.communityAsset'),
+          ratio: this.feeRatio / 100
+        }
+      ]
     },
     redeemAssetsAmount() {
       if (Object.keys(this.treasuryTokens).length === 0 || Object.keys(this.treasuryBalances).length === 0) return {}
