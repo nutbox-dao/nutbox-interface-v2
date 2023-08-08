@@ -68,7 +68,7 @@
       <div class="c-card">
         <div class="content3" v-if="tokenAllocation && (tokenAllocation.length > 0)">
           <div class="title mb-3">{{ $t('pool.tokenDistribution') }}</div>
-          <PoolRatio :animation='false' :pools-data="tokenAllocation" :chart-style="{maxWidth: '15rem'}"/>
+          <PoolRatio canvas-id="token-distribution" :animation='false' :pools-data="tokenAllocation" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
@@ -80,7 +80,7 @@
       <div class="c-card">
         <div class="content3" v-if="poolsData && (poolsData.length > 0)">
           <div class="title mb-3">{{ $t('pool.pools') }}</div>
-          <PoolRatio :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
+          <PoolRatio canvas-id="pools" :animation='false' :pools-data="poolsData" :chart-style="{maxWidth: '15rem'}"/>
         </div>
         <div class="empty-bg" v-else>
           <img src="~@/static/images/empty-data.png" alt="" />
