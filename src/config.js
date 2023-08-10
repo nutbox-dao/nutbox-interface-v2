@@ -3,9 +3,9 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 0.2;
+export const BLOCK_SECOND = 12;
 // nutbox backend server
-export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
+export const BACKEND_API_URL = "https://api-linea.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
 
@@ -14,7 +14,7 @@ export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 // wheather use the graph sevice or our service
 // because of the graph service for BSC network is udpate so slowly, so we build our
 // own index service, but we retain the graph service for backup.
-export const USE_THE_GRAPH = true;
+export const USE_THE_GRAPH = false;
 
 // np power period to channel
 export const PeriodToIdx = {
@@ -101,49 +101,11 @@ export const JUNO_GAS_ACCOUNT = 'juno1khkaslmkk0htu0ug2j7h3geclyxfcfrsdu070s';
 export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api.cosmos.network", "https://api.cosmos.network"];
 
 /** ==================================Main chain============================================*/
-
-//  moonbase alpha
-// export const RPC_NODE = 'https://rpc.api.moonbase.moonbeam.network';
-// export const BSC_CHAIN_ID = 1287;
-// export const BLOCK_CHAIN_BROWER = 'https://moonbase.moonscan.io/';
-// export const CHAIN_NAME = 'Moonbase-alpha';
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'DEV',
-//   symbol: 'DEV',
-//   decimals: 18
-// }
-
-// chapel
-// export const RPC_NODE = 'https://data-seed-prebsc-1-s1.binance.org:8545';
-// export const BSC_CHAIN_ID = 97;
-// export const BLOCK_CHAIN_BROWER = 'https://testnet.bscscan.com//';
-// export const CHAIN_NAME = 'BSC-Test';
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'BNB',
-//   symbol: 'BNB',
-//   decimals: 18
-// }
-
-// goerli
-// export const RPC_NODE = 'https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
-// export const BSC_CHAIN_ID = 5;
-// export const BLOCK_CHAIN_BROWER = 'https://goerli.etherscan.io/';
-// export const CHAIN_NAME = 'Goerli';
-
-// export const BSC_CHAIN_NAME = CHAIN_NAME;
-// export const NATIVE_CURRENCY = {
-//   name: 'ETH',
-//   symbol: 'ETH',
-//   decimals: 18
-// }
-
-// arbitrum
-export const RPC_NODE = 'https://arb1.arbitrum.io/rpc';
-export const BSC_CHAIN_ID = 42161;
-export const BLOCK_CHAIN_BROWER = 'https://arbiscan.io/';
-export const CHAIN_NAME = 'Arbitrum-one';
+// linea
+export const RPC_NODE = 'https://rpc.linea.build';
+export const BSC_CHAIN_ID = 59144;
+export const BLOCK_CHAIN_BROWER = 'https://rpc.linea.build';
+export const CHAIN_NAME = 'Linea';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
   name: 'ETH',
@@ -170,29 +132,9 @@ export const DELEGATION_CHAINID_TO_NAME = {
 
 export const GasTimes = 1.5;
 
-
-// local network
-// export const MultiAddress = '0x6cA267098BEcC68Eb6094967f3Fb4bfaAF9ba979'      // on imac
-// export const NutAddress = '0x8F45066eE7B4a09355A43bC689188a46b33797eB'
-
-// export const MultiAddress = '0x0a73FCef08419d68E3f646151B5cFE0D3D4415fB'    // on local mac book
-// export const NutAddress = '0x4E42eB91E2A27817cDB8C8094eB495a1322BbA01'      // onlocal mac book
-
-// goerli network
-// export const MultiAddress = "0x0de95fe541D4017A1a64AAe448BA80F07f96A937";
-// export const NutAddress = "0xc821eC39fd35E6c8414A6C7B32674D51aD0c2468";
-
-// bsc test
-// export const MultiAddress = "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C";
-// export const NutAddress = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
-
-// moonbase alpha
-// export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
-// export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
-
-// // arbitrum net
-export const MultiAddress = "0x4B6EF997DbF23D320a6616ADf6499f4cdC00AB7c"
-export const NutAddress = "0xED4D88303973615cC3D61D5F4D06A809055a07b8"
+// // linea net
+export const MultiAddress = "0xcA11bde05977b3631167028862bE2a173976CA11"
+export const NutAddress = "0x2DaE3A44D3C6e9Ab402f6e616ce1d02c1836A6Ac"
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,
