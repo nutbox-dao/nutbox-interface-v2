@@ -90,6 +90,9 @@ export const formatAmount = function (value) {
   }else if(value < 1e12) {
     value = value / 1e9
     unit = 'B'
+  }else {
+    value = value / 1e12
+    unit = 'T'
   }
   const str = Number(value).toFixed(digit).toString();
   let integer = str;
@@ -110,7 +113,7 @@ export const formatAmount = function (value) {
 export const formatPrice = function (value, abb=false) {
   if (!value) return "--";
   let unit = ''
-  if(Number(value) > 1e6) {
+  if(Number(value) > 1e3) {
     abb = true
   }
   let digit = 3
@@ -119,6 +122,9 @@ export const formatPrice = function (value, abb=false) {
   }
   if (Number(value) < 0.0001) {
     digit = 8
+  }
+  if (Number(value) < 0.000000001) {
+    digit = 12
   }
   if (abb) {
     value = Number(value)
