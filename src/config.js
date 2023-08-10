@@ -104,7 +104,7 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 // linea
 export const RPC_NODE = 'https://rpc.linea.build';
 export const BSC_CHAIN_ID = 59144;
-export const BLOCK_CHAIN_BROWER = 'https://rpc.linea.build';
+export const BLOCK_CHAIN_BROWER = 'https://lineascan.build/';
 export const CHAIN_NAME = 'Linea';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {

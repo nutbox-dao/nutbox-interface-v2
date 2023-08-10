@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/rest-graph': {
-        target: 'https://center-rest.nutbox.app/v1/common/search',
+        target: 'https://linea-graph.nutbox.app/v1/common/search',
         changeOrigin: true,
         secure: false,
         pathRewrite: {
