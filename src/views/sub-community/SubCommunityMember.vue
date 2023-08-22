@@ -1,5 +1,9 @@
 <template>
   <div class="sub-member-page">
+      <div>
+        {{ $t('community.totalUsers') }}
+        {{ communityInfo.usersCount }}
+      </div>
     <div class="row">
       <div class="block col-md-7  pr-sm-0">
         <div class="member-card position-relative">
@@ -144,6 +148,7 @@ export default {
     while (!this.communityInfo) {
       await sleep(0.3)
     }
+    console.log(11, this.communityInfo)
     const interval = watchMemberBalance((res) => {
       if (!res) return;
       const allUsers = this.allUsers.map(u => ({

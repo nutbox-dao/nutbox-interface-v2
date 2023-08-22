@@ -8,6 +8,7 @@ module.exports = {
       optional: "(可选)",
       connectMetamask: '连接Metamask',
       delegateFee: '代理手续费',
+      block: '块',
   
       apy: "APR",
       balance: "余额",
@@ -471,6 +472,7 @@ module.exports = {
       choseAsset: '选择资产',
       deployAsset: '部署社区资产',
       completeInfo: '完善社区信息',
+      totalUsers: '总用户数',
   
       startBlock: "开始区块",
       stopBlock: "停止区块",
@@ -570,6 +572,8 @@ module.exports = {
       wrongTokenId: "代币ID必须是整数",
       price: "价格",
       totalSupply: '供应量',
+      distirbuteAmount: '总发行量：',
+      currentMint: '当前挖矿速度：',
       cap: '市值',
       distributionAmount: "预挖量",
       notErc1155: "这不是一个ERC1155代币。",
@@ -578,6 +582,7 @@ module.exports = {
       setDistr: '设置资产的分发策略',
       totalDistr: '当前分发策略可分发总量',
       currentBlock: '当前区块高度',
+      nextBlock: '下阶段开始区块号：',
       tip1: '您选择了开发挖取功能的代币',
       tip2: '为了社区管理方便，你需要将代币的挖取权限转移给社区。',
       tip3: '需要注意的是一旦移交权限给社区合约，将无法转移回去了。',

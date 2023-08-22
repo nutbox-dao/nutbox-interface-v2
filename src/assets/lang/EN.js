@@ -8,6 +8,7 @@ module.exports = {
     optional: "(Optional)",
     connectMetamask: 'Connect Metamask',
     delegateFee: 'Delegate fee',
+    block: 'block',
 
     apy: "APR",
     balance: "Balance",
@@ -500,6 +501,7 @@ module.exports = {
     choseAsset: 'Chose an asset',
     deployAsset: 'Deploy community asset',
     completeInfo: 'Complete info',
+    totalUsers: "Total users",
 
     startBlock: "Start block",
     stopBlock: "Stop block",
@@ -602,6 +604,8 @@ module.exports = {
     wrongTokenId: "Token ID must be a integer number.",
     price: "Price",
     totalSupply: 'Supply',
+    distirbuteAmount: 'Total distribution:',
+    currentMint: 'Current mint rate:',
     cap: 'Mkt Cap',
     distributionAmount: "Premint amount",
     notErc1155: "Token is not a ERC1155 token.",
@@ -610,6 +614,7 @@ module.exports = {
     setDistr: 'Setting your asset distribution',
     totalDistr: 'Total distribution by current policy',
     currentBlock: 'Current Block height',
+    nextBlock: 'Next period block height:',
     tip1: 'The token you choose is mintable.',
     tip2: 'For your convenience, you can grant the mint authority to community contract. Then you need not reserve your token into community contract in the future times and times.',
     tip3: 'It should be noted that once you set this option, it cannot be changed in the future.',

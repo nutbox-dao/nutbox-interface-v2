@@ -64,6 +64,24 @@
         <div class="content2 mb-5">
           <div class="title mb-3">{{ $t('desc.disStrategy') }}</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
+          <div class="mt-6">
+            <div class="flex">
+              <div>
+                {{ $t('asset.distirbuteAmount') }} {{ formatAmount(distributeAmount) }}
+              </div>
+              <div>
+                {{ $t('asset.currentMint') }} {{ currentMint }}/{{ $t('commen.block') }}
+              </div>
+            </div>
+            <div class="flex">
+              <div>
+                {{ $t('asset.currentBlock') }}: {{ blockNum }}
+              </div>
+              <div>
+                {{ $t('asset.nextBlock') }} {{ nextEraBlock }}
+              </div>
+            </div>
+          </div>
         </div>
         <div class="c-loading c-loading-absolute c-loading-bg" v-show="specifyDistributionEras.length == 0"></div>
       </div>
@@ -334,13 +352,14 @@ export default {
       redeemValue: '',
       redeeming: false,
       ctokenBalance: 0,
+      nextEraBlock: 0
     }
   },
   computed: {
     ...mapState('currentCommunity', ['communityId', 'communityInfo', 'loadingCommunityInfo', 'allPools', 'feeRatio', 'cToken', 'specifyDistributionEras', 'operationHistory', 'communityBalance']),
-    // ...mapState('web3', ['treasuryTokens']),
     ...mapState(["metamaskConnected"]),
     ...mapGetters('community', ['getCommunityInfoById']),
+    ...mapState('web3', ['blockNum']),
     poolsData () {
       if (!this.allPools) return []
       this.loadingPool = false
@@ -391,9 +410,29 @@ export default {
     },
     formatTotalSupply() {
       return formatAmount(this.totalSupply)
-    }
+    },
+    distributeAmount() {
+      let total = 0;
+      if (this.specifyDistributionEras && this.specifyDistributionEras.length > 0) {
+        total = this.specifyDistributionEras.reduce((s, e) => s + ((parseInt(e.stopHeight) - parseInt(e.startHeight)) * e.amount), 0)
+      }
+      return total;
+    },
+    currentMint() {
+      if (this.specifyDistributionEras && this.specifyDistributionEras.length > 0) {
+        for(let era of this.specifyDistributionEras) {
+          if (this.blockNum > parseInt(era.startHeight) && this.blockNum < parseInt(era.stopHeight)){
+            this.nextEraBlock = parseInt(era.stopHeight);
+            return formatAmount(era.amount)
+          }
+        }
+      }
+      return 0
+    },
+    
   },
   methods: {
+    formatAmount,
     open(url) {
       window.open(url, '_blank')
     },
