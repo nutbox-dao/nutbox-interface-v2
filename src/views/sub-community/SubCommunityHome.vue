@@ -61,23 +61,23 @@
       </div>
       <!-- distribution -->
       <div class="c-card">
-        <div class="content2 mb-5">
+        <div class="content2 mb-3">
           <div class="title mb-3">{{ $t('desc.disStrategy') }}</div>
           <Progress :progress-data="specifyDistributionEras"></Progress>
-          <div class="mt-6">
-            <div class="flex">
-              <div>
+          <div class="mt-5 font14 font-bold">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="flex-1">
                 {{ $t('asset.distirbuteAmount') }} {{ formatAmount(distributeAmount) }}
               </div>
-              <div>
+              <div class="flex-1">
                 {{ $t('asset.currentMint') }} {{ currentMint }}/{{ $t('commen.block') }}
               </div>
             </div>
-            <div class="flex">
-              <div>
+            <div class="d-flex align-items-center justify-content-between mt-3">
+              <div class="flex-1">
                 {{ $t('asset.currentBlock') }}: {{ blockNum }}
               </div>
-              <div>
+              <div class="flex-1">
                 {{ $t('asset.nextBlock') }} {{ nextEraBlock }}
               </div>
             </div>
