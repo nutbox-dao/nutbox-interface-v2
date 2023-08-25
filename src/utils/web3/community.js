@@ -10,7 +10,7 @@ import {
   updateSocial,
 } from "@/apis/api";
 import { signMessage } from "./utils";
-import { errCode, Multi_Config, FEE_TYPES, NutAddress } from "@/config";
+import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep, utf8ToHex } from "@/utils/helper";
 import { createWatcher, aggregate } from "@makerdao/multicall";
@@ -1002,3 +1002,24 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
     }
   });
 };
+
+/************************************ wormhole3 *******************************/
+
+export const createWh3CommunityContract = async (cid, prizeToken) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const contract = await getContract('CommunityCuration', token, false)
+      const tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, prizeToken)
+      await waitForTx(tx.hash)
+      const communityInfo = await contract.getCommunityInfo(cid);
+      resolve(communityInfo)
+    }catch(e) {
+      console.log('create wh3 community fail', e);
+      reject(e)
+    }
+  })
+}
+
+export const createWh3Community = async (community) => {
+  
+}

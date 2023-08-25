@@ -3,11 +3,14 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 0.2;
+export const BLOCK_SECOND = 0.3;
 // nutbox backend server
 export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
+
+// wormhole3 api
+export const WH3_API_URL = "https://alpha-api.wormhole3.io"
 
 export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 
@@ -193,6 +196,8 @@ export const GasTimes = 1.5;
 // // arbitrum net
 export const MultiAddress = "0x4B6EF997DbF23D320a6616ADf6499f4cdC00AB7c"
 export const NutAddress = "0xED4D88303973615cC3D61D5F4D06A809055a07b8"
+
+export const DEFAULT_CLAIM_CURATION_REWARD_SYNGER = "0x4A584E33Dec216a124E36Aceb0B06Bc37642027B"
 
 export const Multi_Config = {
   rpcUrl: RPC_NODE,

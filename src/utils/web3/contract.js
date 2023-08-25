@@ -32,6 +32,7 @@ export const contractAddress = {
   "CurationGaugeFactory": "0xFc9AF0eF1bB4673ad48ee477dF231Cc3286e1464",
   "Gauge": "0x57A9D7630CC5Fd5000EE93D66b1Db121B9785832",
   "TreasuryFactory": "0x4e00a9ab92876B8F5AdB07D607aE2B8b257CF856",
+  "CommunityCuration": "0xDda7947F795B4636C68a14bC590fEb08cA69eef3",
 }
 
 export const getPoolFactory = (type) => {
@@ -84,7 +85,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "CosmosStaking": "CosmosStaking.json",
   "CosmosStakingFactory": "CosmosStakingFactory.json",
   "TreasuryFactory": "TreasuryFactory.json",
-  "Treasury": "Treasury.json"
+  "Treasury": "Treasury.json",
+  "CommunityCuration": "CommunityCuration.json"
 }
 
 // Get contract Abi
