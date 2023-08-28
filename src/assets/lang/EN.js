@@ -697,5 +697,11 @@ module.exports = {
       ADMINCHANGECURATIONRECIPIENT: "Change recipient",
       STARTCURATIONGAUGE: "Start social pool"
     }
+  },
+  wh3: {
+    registerWh3: "Regster WH3",
+    createCommunity: "Create WH3",
+    createPool: "Create Social",
+
   }
 };

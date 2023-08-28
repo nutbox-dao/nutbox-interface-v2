@@ -1,6 +1,6 @@
 import { getProvider } from './ethers'
 import utf8 from 'utf8';
-
+import { ethers } from 'ethers';
 
 /**
  * Sining message
@@ -63,3 +63,15 @@ export const signMessage = async (message) => {
  export const hexToString = (hex) => {
     return hexToUtf8(hex)
 }
+
+export const u8arryToHex = (buffer) => {
+    return [...new Uint8Array(buffer)]
+      .map(x => x.toString(16).padStart(2, '0'))
+      .join('')
+  }
+  
+export const randomCurationId = () => {
+    let id = ethers.utils.randomBytes(6)
+    id = u8arryToHex(id);
+    return id;
+  }
