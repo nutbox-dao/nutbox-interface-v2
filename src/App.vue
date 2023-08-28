@@ -200,6 +200,31 @@
         </div>
       </div>
     </div>
+    <b-modal v-model="showLogin" modal-class="custom-modal" ref="loginModal"
+             centered hide-header hide-footer no-close-on-backdrop>
+      <div class="login-modal position-relative">
+        <i class="modal-close-icon-right" @click="beforeCloseLogin"></i>
+        <LoginAuth class="px-2rem pb-2rem" ref="loginRef" @close="beforeCloseLogin"/>
+        <div v-show="closeLoginTipVisible"
+             class="position-absolute close-tip-box">
+          <div class="w-100 h-100 d-flex flex-column justify-content-center px-2">
+            <div class="s-title mx-auto mb-3">
+              {{$t('signUpView.quitTip')}}
+            </div>
+            <div class="d-flex justify-content-between w-75 mx-auto" style="column-gap: 15px">
+              <button class="flex-1 primary-btn primary-btn-outline"
+                      @click="closeLoginTipVisible=false, $store.commit('saveShowLogin', false)">
+                {{$t('signUpView.close')}}
+              </button>
+              <button class="flex-1 primary-btn"
+                      @click="closeLoginTipVisible=false">
+                {{$t('signUpView.cancel')}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -217,8 +242,10 @@ import showToastMixin from './mixins/copyToast'
 import { ethers } from 'ethers'
 import { getCommon } from '@/apis/api'
 import { connectWallet as connectKeplr } from '@/utils/cosmos/cosmos'
+import LoginAuth from '@/components/common/LoginAuth.vue'
 
 export default {
+  components: { LoginAuth },
   computed: {
     ...mapState(["lang", "prices", "metamaskConnected"]),
     ...mapState("web3", [
@@ -229,7 +256,7 @@ export default {
     ]),
     ...mapState("community", ["loadingMyCommunityInfo", "communityInfo"]),
     ...mapState("currentCommunity", ["communityId"]),
-    ...mapState("user", ["userGraphInfo"]),
+    ...mapState("user", ["userGraphInfo", "showLogin"]),
     ...mapGetters("community", ["getCommunityInfoById"]),
     ...mapGetters("user", ["getUserByAddress"]),
     address() {
@@ -282,6 +309,7 @@ export default {
       screenWidth: document.body.clientWidth,
       langActive: false,
       langOptions: ["en", "kr", "es", "my", 'jp', 'zh'],
+      closeLoginTipVisible: false
     };
   },
   mixins: [showToastMixin],
@@ -323,6 +351,10 @@ export default {
       }
       setupNetwork();
     },
+    beforeCloseLogin () {
+      if (this.$refs.loginRef.authStep === 'login') this.$store.commit('user/saveShowLogin', false)
+      else this.closeLoginTipVisible = true
+    }
   },
   async mounted() {
     this.setLanguage(localStorage.getItem(LOCALE_KEY) || "en");
@@ -573,5 +605,22 @@ body {
 }
 .language-icon {
   background-image: url("~@/static/images/h-lang.svg");
+}
+.close-tip-box {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-bg);
+  .s-title {
+    text-align: center;
+    font-size: 1.6rem;
+    line-height: 2.3rem;
+    font-weight: bolder;
+    background-image:-webkit-linear-gradient(left,#FADDC5,#B6B9F8);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    width: fit-content;
+  }
 }
 </style>
