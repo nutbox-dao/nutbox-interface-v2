@@ -208,7 +208,7 @@
         <div v-show="closeLoginTipVisible"
              class="position-absolute close-tip-box">
           <div class="w-100 h-100 d-flex flex-column justify-content-center px-2">
-            <div class="s-title mx-auto mb-3">
+            <div class="s-title mx-auto mb-3" style="white-space: pre-line">
               {{$t('signUpView.quitTip')}}
             </div>
             <div class="d-flex justify-content-between w-75 mx-auto" style="column-gap: 15px">

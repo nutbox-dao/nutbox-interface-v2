@@ -671,5 +671,42 @@ module.exports = {
       createCommunity: "创建虫洞3社区",
       createPool: "创建社交矿池",
 
+    },
+    metamaskView: {
+      p1: '请确认你的地址',
+      p2: '对这个地址不满意? \n 前往MetaMask，并更改为不同的地址.',
+      p3: '当前地址已通过Twitter {account}注册. 请返回并通过 {account} 登录或更改metamask中的其他帐户.',
+      p4: `当前地址与您原应用的地址不匹配，请在小狐狸中切换为该地址：{account}.`,
+      p5: '完成!\n 我们会核对您的Twitter账号 \n 验证过程请稍等...',
+      p6: '最后一步!',
+      p7: '尝试去发布你的第一条Web3推文吧!',
+      address: '地址',
+      confirm: '确认',
+      back: '返回',
+      verify: '验证',
+      verifying: '验证中...',
+      postBtn: '☝️ 一键发布',
+      skip: '跳过'
+    },
+    signInView: {
+      join: '一键进入',
+      p1: '请授权您的Twitter帐号登录.',
+      p2: '当前还未注册?',
+      p3: '创建一个账号',
+      p4: '你的账号正在注册制',
+      p5: '请稍后',
+      p6: '你当前还未发送推文',
+      signInWithTwitter: '通过twitter登录'
+    },
+    signUpView: {
+      p1: '你还没有绑定你的地址.',
+      p2: '注册然后...',
+      createAccount: '创建一个新钱包',
+      notAuth: ' Twitter授权失败',
+      or: '或者',
+      metamask: '通过MetaMask连接',
+      quitTip: '确认退出吗?\n 所有信息将被丢弃.',
+      cancel: '取消',
+      close: '关闭'
     }
   };

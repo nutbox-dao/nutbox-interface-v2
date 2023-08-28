@@ -163,7 +163,7 @@ module.exports = {
     withdrawOk: "Decrease Deposit Success!",
     voteOk: 'Vote Success',
     unvoteOk: "Unvote Success",
-    
+
   },
   stake: {
     stake: "Staking Mining",
@@ -703,5 +703,42 @@ module.exports = {
     createCommunity: "Create WH3",
     createPool: "Create Social",
 
+  },
+  metamaskView: {
+    p1: 'Please confirm your address',
+    p2: 'Not happy with this address? \n Go to MetaMask and change to a different address.',
+    p3: '️Current address has already be signed up with twitter account {account}. Please go back and sign in via {account} or change another account in metamask.',
+    p4: 'Current connect address is not your addres from original page. Please change to {account} in your metamask.',
+    p5: 'Great!\n We will check your Twitter Account status. Please verify and wait for a while...',
+    p6: 'One last step!',
+    p7: 'Let’s try post your first Web3 tweet!',
+    address: 'Address',
+    confirm: 'Confirm',
+    back: 'Back',
+    verify: 'Verify',
+    verifying: 'Verifying...',
+    postBtn: '☝️ One-Click Post',
+    skip: 'Skip'
+  },
+  signInView: {
+    join: 'Join with one click',
+    p1: 'Please authorize your Twitter account to sign in.',
+    p2: 'Haven\'t signed up yet ?',
+    p3: 'Create an account',
+    p4: 'Your account is in the process of registration',
+    p5: 'Please wait for a moment',
+    p6: 'You havn\'t send twitter yet',
+    signInWithTwitter: 'Sign in with twitter'
+  },
+  signUpView: {
+    p1: 'You have not yet bind your address.',
+    p2: 'Sign up and...',
+    createAccount: 'Create a new wallet',
+    notAuth: 'Twitter auth fail',
+    or: 'Or',
+    metamask: 'Connect To MetaMask',
+    quitTip: 'Are you sure to quit? \n All the information will be discarded.',
+    cancel: 'Cancel',
+    close: 'Close'
   }
 };
