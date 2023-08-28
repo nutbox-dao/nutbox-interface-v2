@@ -7,7 +7,7 @@
         </div>
         <div class="row" style="width: 100%">
           <div class="col-md-6 d-flex flex-column justify-content-center">
-            <div class="nav-box nav-box-bg mb-3 mb-md-0">
+            <div class="nav-box nav-box-bg mb-3 mb-md-0" v-if="wh3State === 3">
               <div class="nav">
                   <span v-for="(item, index) of tabOptions" :key="index"
                         :class="activeTab===index?'active':''"
@@ -21,11 +21,12 @@
                     v-show="activePool.length > 1 && activeCurationPool.length > 0"
                     @click="configPoolModal=true">
               {{ $t('pool.updatePoolRatios') }}</button>
-            <button class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
+            <button v-if="wh3State === 1 || wh3State === 2" class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
-                    @click="poolTypeModal=true, createPoolStep=1">
+                    :disable="wh3State === 0"
+                    @click="createWh3">
               <i class="add-icon add-icon-white mr-2"></i>
-              <span>{{ $t('operation.addPool') }}</span>
+              <span>{{ createBtnName }}</span>
             </button>
           </div>
         </div>
@@ -94,13 +95,14 @@
   import { mapState } from 'vuex'
   import { ethers } from 'ethers'
   import { errCode } from '@/config'
+  import { getAccountByAddress, getCommunityByEth } from "@/apis/wh3Api" 
 
   export default {
     name: 'CurationPool',
     components: { ManageCurationCard, StakingPoolType, CreateCurationPool, StakingDelegatePool, StakingPoolConfig },
     data () {
       return {
-        tabOptions: ['Active', 'Inactive'],
+        tabOptions: ['Curation pool', 'Community credit'],
         activeTab: 0,
         poolTypeModal: false,
         createPoolStep: 1,
@@ -111,11 +113,15 @@
         updating: false,
         needIcon: false,
         selectToken: {},
-        provideDesc: ''
+        provideDesc: '',
+        wh3State: 0, // 0: pending 1: not register 2: not create community 3: created community
+        wh3Account: {},
+        wh3Community: {}
       }
     },
     computed: {
       ...mapState('community', ['communityData']),
+      ...mapState('web3', ['account']),
       pools() {
         console.log(this.communityData);
         return this.communityData ? this.communityData.pools : []
@@ -135,13 +141,48 @@
             return this.pools.filter(p => p.status === 'CLOSED' && p.poolFactory.toLowerCase() ===
                 getPoolFactoryAddress("curation"))
         }
+      },
+      createBtnName() {
+        switch (this.wh3State) {
+          case 0:
+            return this.$t('wh3.registerWh3');
+          case 1: 
+            return this.$t('wh3.registerWh3');
+          case 2: 
+            return this.$t('wh3.createCommunity');
+          case 3:
+            return ''
+        }
       }
     },
     async mounted () {
       this.tabOptions = [
         this.$t('pool.opened'),
         this.$t('pool.closed')
-      ]
+      ];
+      // checkout user registered wh3
+      console.log(1, this.account)
+      getAccountByAddress('0x405F2cd911c0E5063CAD58D6ae5E15BB1849E9Fd').then(res => {
+        console.log(2, res)
+        if (res.code === 3) {
+          this.wh3State = 2
+          this.wh3Account = res.account
+        }else if(res.code === 0) {
+          this.wh3State = 1;
+          return;
+        }
+
+        console.log(4)
+        getCommunityByEth('0x405F2cd911c0E5063CAD58D6ae5E15BB1849E9Fd').then(com => {
+          console.log(3, com)
+          if (com && com.communityId) {
+            this.wh3State = 3
+            this.wh3Community = com;
+          }else {
+            this.wh3State = 2
+          }
+        })
+      });
     },
     methods: {
       selectPoolType (type) {
@@ -159,6 +200,9 @@
         this.provideDesc = provideDesc;
         console.log(44, form, this.stakeAsset, this.provideDesc)
         this.createPoolStep = 3
+      },
+      async createWh3() {
+        poolTypeModal=true, createPoolStep=1
       },
       // create new pool
       async create (pool) {

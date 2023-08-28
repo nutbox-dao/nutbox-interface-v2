@@ -9,7 +9,10 @@ import {
   getAllCommunities as gac,
   updateSocial,
 } from "@/apis/api";
-import { signMessage } from "./utils";
+import { 
+  createCommunity as creCom
+} from '@/apis/wh3Api'
+import { signMessage, randomCurationId } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep, utf8ToHex } from "@/utils/helper";
@@ -1020,6 +1023,83 @@ export const createWh3CommunityContract = async (cid, prizeToken) => {
   })
 }
 
-export const createWh3Community = async (community) => {
+export const createWh3Community = async (twitterId, displayTag, tags) => {
+
+  // generate community id
+  const cid = randomCurationId();
   
+  // get nutbox community and token info
+  const communityId = store.state.currentCommunity.communityId;
+  const community = store.getters['community/getCommunityInfoById'](communityId);
+  const ctoken = await getCToken(communityId);
+
+  // set default policy
+  let policy = {
+    did: {
+      ratio: 1
+    },
+    community: {
+      ratio: 0
+    },
+    topoic: {
+      ratio: 0
+    }
+  }
+
+  let wh3Community = {
+    communityId: cid,
+    name: community.name,
+    icon: community.icon,
+    banner: community.poster,
+    description: community.description,
+    hiveTag: community.blogTag,
+    twitterId,
+    tags: displayTag,
+    displayTag,
+    chainId: 42161,
+    rewardToken: ethers.utils.getAddress(community.ctoken),
+    rewardSymbol: ctoken.symbol,
+    rewardName: ctoken.name,
+    decimals: ctoken.decimals,
+    rewardPerDay: '',
+    settleDay: 3,
+    policy: JSON.stringify(policy),
+    annPerDay: '',
+    spacePerDay: '',
+    twitter: community.twitter,
+    telegram: community.telegram,
+    discord: community.discord,
+    doc: community.document,
+    official: community.website,
+    stakeUrl: '',
+    swapUrl: '',
+    nutboxContract: ethers.utils.getAddress(community.id)
+  }
+
+  const originMessage = JSON.stringify(wh3Community);
+  let signature = "";
+  try {
+    signature = await signMessage(originMessage);
+  } catch (e) {
+    if (e.code === 4001) {
+      reject(errCode.USER_CANCEL_SIGNING);
+      return;
+    }
+  }
+
+  const params = {
+    ethAddress: ethers.utils.isAddress(store.state.web3.account),
+    infoStr: originMessage,
+    signature,
+  };
+
+  try {
+    let res = await creCom(params);
+    store.commit("web3/saveNonce", nonce);
+    resolve(res);
+  } catch (e) {
+    console.log("Update community social info failed", e);
+    reject(e);
+  }  
+
 }

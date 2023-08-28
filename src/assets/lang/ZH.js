@@ -665,5 +665,11 @@ module.exports = {
         ADMINCHANGECURATIONRECIPIENT: "变更接受者",
         STARTCURATIONGAUGE: "启动社交矿池"
       }
+    },
+    wh3: {
+      registerWh3: "注册虫洞3",
+      createCommunity: "创建虫洞3社区",
+      createPool: "创建社交矿池",
+  
     }
   };
