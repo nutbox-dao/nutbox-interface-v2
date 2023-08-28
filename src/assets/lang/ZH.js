@@ -670,7 +670,8 @@ module.exports = {
       registerWh3: "注册虫洞3",
       createCommunity: "创建虫洞3社区",
       createPool: "创建社交矿池",
-
+      curationPool: '社交矿池',
+      communityCredit: '社区信用分'
     },
     metamaskView: {
       p1: '请确认你的地址',

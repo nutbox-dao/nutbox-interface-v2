@@ -53,7 +53,9 @@ import MetaMaskAccount from '@/components/common/MetaMaskAccount'
 import { connectMetamask } from '@/utils/web3/web3'
 import { ethers } from 'ethers'
 import { mapState } from 'vuex'
-import emptyAvatar from '@/static/images/avatar-1.png'
+import emptyAvatar from '@/static/images/avatar-default.svg'
+import { randomWallet } from '@/utils/web3/ethers'
+import { createKeypair } from '@/utils/tweet-nacl'
 
 export default {
   name: 'Login',
@@ -166,7 +168,7 @@ export default {
               console.log('not register')
               Cookie.set('account-auth-info', JSON.stringify(userInfo.account), '180s')
               this.pendingAccount = userInfo.account
-              this.authStep = 'select'
+              this.connectMetamask();
               return
             } else if (userInfo.code === 3) { // log in
               this.$store.commit('saveAccountInfo', userInfo.account)

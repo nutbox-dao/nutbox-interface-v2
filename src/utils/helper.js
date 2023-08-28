@@ -11,6 +11,42 @@ var cryptoOptions = {
   method: process.env.VUE_APP_CRYPTO_METHOD,
 }
 
+
+export const u8arryToHex = (buffer) => {
+  return [...new Uint8Array(buffer)]
+      .map(x => x.toString(16).padStart(2, '0'))
+      .join('')
+}
+
+export const hexTou8array = (hex) => {
+  return Uint8Array.from(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)))
+}
+
+export const hexToString = (str) => {
+if (str.length % 2 !== 0){
+  console.log('Not a hex');
+  return ""
+}
+ let val = "";
+ for (let i = 0; i < str.length; i+=2) {
+   const n = parseInt(str[i] + str[i+1], 16)
+   val += String.fromCharCode(n);
+ }
+ return val;
+}
+
+export const stringToHex = (str) => {
+let val = "";
+for (let i = 0; i < str.length; i++) {
+  if (val == "") {
+    val = str.charCodeAt(i).toString(16);
+  } else {
+    val += str.charCodeAt(i).toString(16);
+  }
+}
+return val;
+}
+
 export const firstToUpper = function (str) {
   if (!str) {
     return;

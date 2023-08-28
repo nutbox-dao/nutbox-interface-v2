@@ -205,3 +205,7 @@ export const Multi_Config = {
   multicallAddress: MultiAddress,
   interval: 3000,
 };
+
+/**===================================== wormhole3  =======================================*/
+export const SendPwdServerPubKey = '215ae8d490ddbf62242a3cca9849a73df847997f91982d77b9708411e17c647f'
+export const ParseKeyNonce = '111111111111111111111111111111111111111111111111'

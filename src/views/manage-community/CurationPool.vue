@@ -157,9 +157,11 @@
     },
     async mounted () {
       this.tabOptions = [
-        this.$t('pool.opened'),
-        this.$t('pool.closed')
+        this.$t('wh3.curationPool'),
+        this.$t('wh3.communityCredit')
       ];
+      this.$store.commit('user/saveShowLogin', true)
+      return;
       // checkout user registered wh3
       console.log(1, this.account)
       getAccountByAddress('0x405F2cd911c0E5063CAD58D6ae5E15BB1849E9Fd').then(res => {
@@ -202,7 +204,13 @@
         this.createPoolStep = 3
       },
       async createWh3() {
-        poolTypeModal=true, createPoolStep=1
+        if (this.wh3State === 1) {
+          // registry
+          this.$store.commit('user/saveShowLogin', true)
+        }else if(this.wh3State === 2) {
+          // create community
+        }
+        // poolTypeModal=true, createPoolStep=1
       },
       // create new pool
       async create (pool) {

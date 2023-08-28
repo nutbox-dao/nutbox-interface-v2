@@ -32,6 +32,7 @@
     "module": "^1.2.5",
     "nanoid": "^3.1.29",
     "remarkable": "^2.0.1",
+    "tweetnacl": "^1.0.3",
     "utf8": "^3.0.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",

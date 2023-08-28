@@ -109,7 +109,7 @@ import { accountChanged } from '@/utils/web3/account'
 import { ethers } from 'ethers'
 // import { bytesToHex } from '@/utils/code'
 // import { generateSteemAuth } from '@/utils/steem'
-// import { box, createKeypair } from '@/utils/tweet-nacl'
+import { box, createKeypair } from '@/utils/tweet-nacl'
 import Cookie from 'vue-cookies'
 import { sleep } from '@/utils/helper'
 

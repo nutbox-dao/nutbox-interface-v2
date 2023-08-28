@@ -702,7 +702,8 @@ module.exports = {
     registerWh3: "Regster WH3",
     createCommunity: "Create WH3",
     createPool: "Create Social",
-
+    curationPool: 'Curation Pool',
+    communityCredit: 'Community credit'
   },
   metamaskView: {
     p1: 'Please confirm your address',
