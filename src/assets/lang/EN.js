@@ -56,6 +56,8 @@ module.exports = {
     jp: "日本語",
     goToHome: "Back to homepage",
     home: 'Home',
+    stakeUrl: 'Stake url',
+    swapUrl: 'Swap url'
   },
   desc: {
     slogan: 'Create Your Staking Economy In Minutes',

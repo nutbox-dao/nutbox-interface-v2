@@ -56,6 +56,24 @@
             </div>
           </div>
         </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon document">{{ $t('commen.stakeUrl') }}</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
+            </div>
+          </div>
+        </b-form-group>
+        <b-form-group label-cols-md="0" content-cols-md="12" label=""
+                      label-class="d-flex align-items-center font16 font-bold">
+          <div class="d-flex align-items-center">
+            <div class="link-info-icon document">{{ $t('commen.swapUrl') }}</div>
+            <div class="c-input-group c-input-group-bg">
+              <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
+            </div>
+          </div>
+        </b-form-group>
         <b-form-group label-cols-md="0" content-cols-md="12" label="">
           <div class="text-center mt-4">
             <button class="primary-btn col-md-6" @click="checkInput() && (showSignatureTip = true)">

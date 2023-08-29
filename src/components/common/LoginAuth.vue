@@ -13,30 +13,6 @@
       </button>
       <div class="text-center text-grey-7" style="word-break: break-word">{{$t('signInView.p1')}}</div>
     </div>
-    <div v-else-if="authStep === 'select'">
-      <div class="d-flex justify-content-center align-items-center">
-        <img v-if="pendingAccount.profileImg"
-             :src="pendingAccount.profileImg" @error="replaceEmptyImg" alt=""
-             class="twitter-avatar"/>
-        <img v-else src="~@/static/images/avatar-1.png" alt=""
-             class="twitter-avatar"/>
-        <div class="d-flex flex-column align-items-start">
-            <span class="font18">
-              {{pendingAccount.twitterName}}
-            </span>
-          <span class="font14 text-grey-7">@{{pendingAccount.twitterUsername}}</span>
-        </div>
-      </div>
-      <div class="s-title my-3">
-        {{$t('signUpView.p1')}}
-      </div>
-      <button @click="connectMetamask" :disabled="connecting"
-              class="primary-btn twitter-auth-btn w-75 mx-auto mt-4 mb-3">
-        <img class="icon-twitter" src="~@/static/images/icon-metamask.png" alt="">
-        <span class="mr-2">{{$t('signUpView.metamask')}}</span>
-        <b-spinner v-show="connecting" small />
-      </button>
-    </div>
     <MetaMaskAccount v-else-if="authStep==='metamask'"
                      :address="walletAddress"
                      :pair="pair"
@@ -47,7 +23,7 @@
 
 <script>
 import { sleep } from '@/utils/helper'
-// import { twitterLogin, twitterAuth, testTwitterAuth } from '@/api/api'
+import { twitterLogin, twitterAuth } from '@/apis/wh3Api'
 import Cookie from 'vue-cookies'
 import MetaMaskAccount from '@/components/common/MetaMaskAccount'
 import { connectMetamask } from '@/utils/web3/web3'
@@ -75,7 +51,8 @@ export default {
       wallet: {},
       pair: {},
       pendingAccount: {},
-      thirdPartInfo: {}
+      thirdPartInfo: {},
+      isWeb: false
     }
   },
   mounted () {
@@ -83,12 +60,14 @@ export default {
     const thirdPartInfo = Cookie.get('partner-info')
     if (loginInfo) {
       this.pendingAccount = loginInfo
-      if (thirdPartInfo) {
-        this.thirdPartInfo = thirdPartInfo
-        this.connectMetamask()
-        return
-      }
-      this.authStep = 'select'
+      this.connectMetamask()
+    }
+    const isIOS = navigator.userAgent.toUpperCase().indexOf('IPHONE') >= 0
+    const isAndroid = navigator.userAgent.toUpperCase().indexOf('ANDROID') >= 0
+    if(isIOS || isAndroid) {
+      this.isWeb = false;
+    }else {
+      this.isWeb = true;
     }
   },
   beforeUnmount () {
@@ -189,7 +168,7 @@ export default {
             console.log('not register')
             Cookie.set('account-auth-info', JSON.stringify(userInfo.account), '180s')
             this.pendingAccount = userInfo.account
-            this.authStep = 'select'
+            this.connectMetamask();
           } else if (userInfo.code === 3) { // log in
             this.$store.commit('saveAccountInfo', userInfo.account)
             this.$bus.emit('login')

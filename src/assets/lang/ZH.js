@@ -56,6 +56,8 @@ module.exports = {
       jp: "日本語",
       goToHome: "回到首页",
       home: '首页',
+      stakeUrl: '质押链接',
+      swapUrl: '交易链接'
     },
     desc: {
       slogan: '快速创建您的质押经济',
