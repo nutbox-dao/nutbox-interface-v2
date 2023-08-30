@@ -1,6 +1,14 @@
 <template>
   <div class="login-view">
-    <div v-if="authStep==='login'">
+    <div v-if="!isWeb">
+      <div class="join-tip s-title">
+        {{$t('signInView.needWebview')}}
+      </div>
+      <div class="text-center text-grey-7" style="word-break: break-word">
+        {{$t('signInView.changeWebview')}}
+      </div>
+    </div>
+    <div v-else-if="authStep==='login'">
       <div class="join-tip s-title">
         {{$t('signInView.join')}}
       </div>
@@ -57,7 +65,6 @@ export default {
   },
   mounted () {
     const loginInfo = Cookie.get('account-auth-info')
-    const thirdPartInfo = Cookie.get('partner-info')
     if (loginInfo) {
       this.pendingAccount = loginInfo
       this.connectMetamask()
@@ -89,29 +96,21 @@ export default {
     },
     async login () {
       const timeoutTip = this.$t('err.loginTimeout')
-      this.$gtag.event('login', {
-        method: 'login'
-      })
+      // this.$gtag.event('login', {
+      //   method: 'login'
+      // })
       try {
-        const isIOS = navigator.userAgent.toUpperCase().indexOf('IPHONE') >= 0
-        const isAndroid = navigator.userAgent.toUpperCase().indexOf('ANDROID') >= 0
+        if(!this.isWeb) return
 
-        console.log(navigator.userAgent)
-        const source = this.$route.query?.utm_source
+        // get call back url
+        let wPath = window.document.location.href;
+        let pathName = this.$route.path;
+        let callback = wPath.replace(pathName, '/loginsuccess')
 
         this.loging = true
-        let needLogin = false
-        if (isIOS && (source === 'tokenpocket' || (navigator.userAgent.indexOf('TokenPocket_iOS') >= 0))) {
-          console.log('token pocket')
-        }
-        if (isAndroid || isIOS) {
-          needLogin = true
-          // const res = await twitterAuth(true);
-          // window.location.href = res;
-          // return;
-        }
+        let needLogin = true;
 
-        const res = await twitterAuth({ needLogin, referee: this.referee })
+        const res = await twitterAuth({ needLogin, callback })
         const params = res.split('?')[1].split('&')
         let state
         for (const p of params) {
@@ -121,15 +120,10 @@ export default {
             break
           }
         }
-        if (isIOS || isAndroid) {
-          setTimeout(() => {
-            window.location.href = res
-          })
-        } else {
-          setTimeout(() => {
-            window.open(res, 'newwindow', 'height=700,width=500,top=0,left=0,toolbar=no,menubar=no,resizable=no,scrollbars=no,location=no,status=no')
-          })
-        }
+        
+        setTimeout(() => {
+          window.open(res, 'newwindow', 'height=700,width=500,top=0,left=0,toolbar=no,menubar=no,resizable=no,scrollbars=no,location=no,status=no')
+        })
 
         await sleep(1)
         randomWallet().then(wallet => this.wallet = wallet)
@@ -150,13 +144,12 @@ export default {
               this.connectMetamask();
               return
             } else if (userInfo.code === 3) { // log in
-              this.$store.commit('saveAccountInfo', userInfo.account)
-              this.$bus.emit('login')
+              this.$store.commit('user/saveWh3AccountInfo', userInfo.account)
               this.$emit('close')
               return
             }
             count++
-            await sleep(1)
+            await sleep(2)
           }
           // time out
           this.showNotify(timeoutTip, 5000, 'error')
@@ -170,8 +163,7 @@ export default {
             this.pendingAccount = userInfo.account
             this.connectMetamask();
           } else if (userInfo.code === 3) { // log in
-            this.$store.commit('saveAccountInfo', userInfo.account)
-            this.$bus.emit('login')
+            this.$store.commit('user/saveWh3AccountInfo', userInfo.account)
             this.$emit('close')
           }
         }

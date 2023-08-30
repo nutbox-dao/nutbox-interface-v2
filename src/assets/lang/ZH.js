@@ -699,7 +699,9 @@ module.exports = {
       p4: '你的账号正在注册制',
       p5: '请稍后',
       p6: '你当前还未发送推文',
-      signInWithTwitter: '通过twitter登录'
+      signInWithTwitter: '通过twitter登录',
+      needWebview: "电脑端使用",
+      changeWebview: "请在电脑端注册和配置您的社区。"
     },
     signUpView: {
       p1: '你还没有绑定你的地址.',
