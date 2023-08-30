@@ -11,7 +11,7 @@
         <span>{{$t('signInView.signInWithTwitter')}}</span>
         <b-spinner v-show="loging" small />
       </button>
-      <div class="text-center text-grey-7" style="word-break: break-word">{{$t('signInView.p1')}}</div>
+      <div class="text-center text-grey-7 font14" style="word-break: break-word">{{$t('signInView.p1')}}</div>
     </div>
     <MetaMaskAccount v-else-if="authStep==='metamask'"
                      :address="walletAddress"

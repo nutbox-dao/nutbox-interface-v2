@@ -11,7 +11,7 @@ export default {
         nutBalance: 0,
         approveToNutPower: false,
         loadingApproveToNutPower: true,
-      showLogin: true
+      showLogin: false
     },
     getters: {
         getUserByAddress: state => (address) => {

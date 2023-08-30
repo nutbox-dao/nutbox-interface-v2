@@ -37,3 +37,8 @@
     background-image: url("~@/static/images/warning-icon-gray.svg");
   }
 }
+.edit-icon {
+  @include icon(1.2rem, 1.2rem);
+  background-image: url("~@/static/images/edit-icon.svg");
+  cursor: pointer;
+}

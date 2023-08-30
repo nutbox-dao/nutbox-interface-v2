@@ -711,5 +711,23 @@ module.exports = {
       quitTip: '确认退出吗?\n 所有信息将被丢弃.',
       cancel: '取消',
       close: '关闭'
+    },
+    socialView: {
+      chainTag: '推文上链标签',
+      communityCategoryTags: '社区类别标签',
+      deploy: '部署',
+      createNewPool: '创建矿池',
+      contractAddress: '合约地址',
+      distributeBalance: '分发余额',
+      editPoolRatio: '调整矿池比例',
+      communityContent: '社区内容',
+      curation: '策展公告',
+      settleTime: '结算时间',
+      tweetSettleTime: '发推后，3+1天结算',
+      curationSettleTime: '公告推发布后，3+1天结算',
+      spaceSettleTime: '每周二凌晨，结算上周Space',
+      socialInfluence: '社交影响力',
+      communityStaking: '社区质押',
+      nftHolder: 'NFT 持有'
     }
   };

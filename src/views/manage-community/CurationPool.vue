@@ -31,29 +31,27 @@
           </div>
         </div>
       </div>
-      <div v-if="stakingPools && stakingPools.length===0"
-           class="empty-card mb-5 d-flex flex-column justify-content-center">
-        <div class="empty-bg">
-          <img src="~@/static/images/empty-data.png" alt="" />
-          <p>{{ $t('pool.noPools') }}</p>
-        </div>
-      </div>
-      <template v-else>
-        <div class="row curation-card-container">
-          <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">
-            <ManageCurationCard :pool="pool"/>
+      <div v-show="activeTab===0">
+        <div v-if="stakingPools && stakingPools.length===0"
+             class="empty-card mb-5 d-flex flex-column justify-content-center">
+          <div class="empty-bg">
+            <img src="~@/static/images/empty-data.png" alt="" />
+            <p>{{ $t('pool.noPools') }}</p>
           </div>
         </div>
-      </template>
-      <b-modal
-        v-model="poolTypeModal"
-        modal-class="custom-modal"
-        size="lg"
-        centered
-        hide-header
-        hide-footer
-        no-close-on-backdrop>
-        <CreateCurationPool v-if="createPoolStep===1"
+        <WH3SocialPool v-else></WH3SocialPool>
+      </div>
+      <WH3SocialCredit v-show="activeTab===1"/>
+<!--      <template v-else>-->
+<!--        <div class="row curation-card-container">-->
+<!--          <div class="col-xl-4 col-md-6 mb-4" v-for="pool of stakingPools" :key="pool.id">-->
+<!--            <ManageCurationCard :pool="pool"/>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </template>-->
+      <b-modal v-model="poolTypeModal" modal-class="custom-modal"
+               centered hide-header hide-footer no-close-on-backdrop>
+        <WH3CreatePool v-if="createPoolStep===1"
                         @confirm="selectPoolToken"
                         @close="poolTypeModal=false"/>
         <StakingPoolConfig v-if="createPoolStep===3"
@@ -95,11 +93,15 @@
   import { mapState } from 'vuex'
   import { ethers } from 'ethers'
   import { errCode } from '@/config'
-  import { getAccountByAddress, getCommunityByEth } from "@/apis/wh3Api" 
+  import { getAccountByAddress, getCommunityByEth } from "@/apis/wh3Api"
+  import WH3CreatePool from "@/components/community/WH3CreatePool.vue";
+  import WH3SocialPool from "@/components/community/WH3SocialPool.vue";
+  import WH3SocialCredit from "@/components/community/WH3SocialCredit.vue";
 
   export default {
     name: 'CurationPool',
-    components: { ManageCurationCard, StakingPoolType, CreateCurationPool, StakingDelegatePool, StakingPoolConfig },
+    components: { ManageCurationCard, StakingPoolType, WH3CreatePool, StakingDelegatePool,
+      StakingPoolConfig, WH3SocialPool, WH3SocialCredit },
     data () {
       return {
         tabOptions: ['Curation pool', 'Community credit'],
@@ -146,9 +148,9 @@
         switch (this.wh3State) {
           case 0:
             return this.$t('wh3.registerWh3');
-          case 1: 
+          case 1:
             return this.$t('wh3.registerWh3');
-          case 2: 
+          case 2:
             return this.$t('wh3.createCommunity');
           case 3:
             return ''
@@ -283,6 +285,9 @@
   </script>
 
   <style scoped>
+  .view-top-header-sticky {
+    background-color: var(--background);
+  }
   .wrap-word {
     word-wrap: break-word;
   }
