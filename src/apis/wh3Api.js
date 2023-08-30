@@ -1,6 +1,5 @@
 import { get, post, put } from "./axios";
 import {
-    BACKEND_API_URL,
     WH3_API_URL,
 } from "../config";
 
@@ -11,7 +10,7 @@ export const getCommunityByEth = async (ethAddress) =>
     get(WH3_API_URL +'/community/getCommunityByEth', {ethAddress})
 
 export const twitterLogin = async (state) =>
-    get(BACKEND_API_URL + '/users/login', {state})
+    get(WH3_API_URL + '/users/login', {state})
 
-export const twitterAuth = async () =>
-    get(BACKEND_API_URL + '/auth/login', params)
+export const twitterAuth = async (params) =>
+    post(WH3_API_URL + '/auth/login', params)

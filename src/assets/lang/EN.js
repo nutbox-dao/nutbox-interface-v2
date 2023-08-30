@@ -731,7 +731,9 @@ module.exports = {
     p4: 'Your account is in the process of registration',
     p5: 'Please wait for a moment',
     p6: 'You havn\'t send twitter yet',
-    signInWithTwitter: 'Sign in with twitter'
+    signInWithTwitter: 'Sign in with twitter',
+    needWebview: "PC only",
+    changeWebview: "Please change to PC to register and configure your community."
   },
   signUpView: {
     p1: 'You have not yet bind your address.',

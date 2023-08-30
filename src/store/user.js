@@ -11,7 +11,8 @@ export default {
         nutBalance: 0,
         approveToNutPower: false,
         loadingApproveToNutPower: true,
-      showLogin: true
+        showLogin: false,
+        wh3AccountInfo: {},
     },
     getters: {
         getUserByAddress: state => (address) => {
@@ -41,8 +42,11 @@ export default {
         saveLoadingApproveToNutPower(state, loadingApproveToNutPower) {
             state.loadingApproveToNutPower = loadingApproveToNutPower
         },
-      saveShowLogin (state, showLogin) {
-        state.showLogin = showLogin
-      },
+        saveShowLogin (state, showLogin) {
+            state.showLogin = showLogin
+        },
+        saveWh3AccountInfo: (state, wh3AccountInfo) => {
+            state.wh3AccountInfo = wh3AccountInfo;
+        },
     }
 }

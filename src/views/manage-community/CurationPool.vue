@@ -115,13 +115,13 @@
         selectToken: {},
         provideDesc: '',
         wh3State: 0, // 0: pending 1: not register 2: not create community 3: created community
-        wh3Account: {},
         wh3Community: {}
       }
     },
     computed: {
       ...mapState('community', ['communityData']),
       ...mapState('web3', ['account']),
+      ...mapState('user', ['wh3AccountInfo']),
       pools() {
         console.log(this.communityData);
         return this.communityData ? this.communityData.pools : []
@@ -155,35 +155,43 @@
         }
       }
     },
+    watch: {
+      wh3AccountInfo(newValue, oldValue) {
+        if (newValue?.twitterId) {
+          this.wh3State = 2;
+        }else {
+          this.wh3State = 1;
+        }
+      },
+      wh3State(newValue) {
+        if (newValue === 2) {
+          getCommunityByEth(this.account).then(com => {
+            console.log(3, com)
+            if (com && com.communityId) {
+              this.wh3State = 3
+              this.wh3Community = com;
+            }
+          })
+        }
+      } 
+    },
     async mounted () {
       this.tabOptions = [
         this.$t('wh3.curationPool'),
         this.$t('wh3.communityCredit')
       ];
-      this.$store.commit('user/saveShowLogin', true)
-      return;
+      // this.$store.commit('user/saveShowLogin', true)
+      // return;
       // checkout user registered wh3
       console.log(1, this.account)
-      getAccountByAddress('0x405F2cd911c0E5063CAD58D6ae5E15BB1849E9Fd').then(res => {
+      getAccountByAddress(this.account).then(res => {
         console.log(2, res)
         if (res.code === 3) {
-          this.wh3State = 2
-          this.wh3Account = res.account
+          this.$store.commit('user/saveWh3AccountInfo', res.account)
         }else if(res.code === 0) {
           this.wh3State = 1;
           return;
         }
-
-        console.log(4)
-        getCommunityByEth('0x405F2cd911c0E5063CAD58D6ae5E15BB1849E9Fd').then(com => {
-          console.log(3, com)
-          if (com && com.communityId) {
-            this.wh3State = 3
-            this.wh3Community = com;
-          }else {
-            this.wh3State = 2
-          }
-        })
       });
     },
     methods: {

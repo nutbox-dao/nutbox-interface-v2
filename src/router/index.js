@@ -28,6 +28,7 @@ import CommunityVote from '@/views/manage-community/CommunityVote'
 import CommunityISO from '@/views/manage-community/CommunityISO'
 import CommunityNutPower from '@/views/manage-community/CommunityNutPower'
 import Faucet from '@/views/Faucet'
+import LoginSuccess from "@/components/common/LoginSuccess"
 Vue.use(VueRouter)
 
 const routes = [
@@ -45,6 +46,10 @@ const routes = [
     path: '/faucet',
     component: Faucet
   },
+  {
+    path: '/loginsuccess',
+    component: LoginSuccess
+  }, 
   {
     path: '/community',
     name: 'community',
