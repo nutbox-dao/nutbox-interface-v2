@@ -38,6 +38,7 @@
         </b-form-group>
         <div class="d-flex align-items-center justify-content-center ">
           <button class="primary-btn w-50 mx-0 d-flex align-items-center px-3"
+                  @click="createCommunity"
                   :disabled="loading">
             <span>{{$t('socialView.deploy')}}</span>
             <b-spinner v-show="loading" class="ml-1" small></b-spinner>
@@ -49,6 +50,14 @@
 </template>
 
 <script>
+import { checkDisplayTag } from '@/apis/wh3Api'
+import { handleApiErrCode, sleep } from '@/utils/helper'
+import { errCode } from '@/config'
+import { createWh3CommunityContract } from '@/utils/web3/community'
+import { randomCurationId } from '@/utils/web3/utils'
+import { getCToken, getERC20Balance } from '@/utils/web3/asset'
+import { mapState } from 'vuex'
+
 export default {
   name: 'WH3CreatePool',
   data () {
@@ -60,13 +69,50 @@ export default {
       loading: false
     }
   },
+  computed: {
+    ...mapState('community', ['communityData']),
+  },
   methods: {
     addCommunityTag () {
+      if (this.categoryTags.length >= 3) {
+        return;
+      }
       this.categoryTags.push(this.communityTag)
       this.communityTag = ''
     },
     subCommunityTag (index) {
       this.categoryTags.splice(index, 1)
+    },
+    async createCommunity() {
+      try{
+        this.loading = true;
+        // check display tag
+        const reg = this.chainTag.match(/^[a-zA-Z_0-9]+$/)
+        if (!reg || this.chainTag.length > 16) {
+          handleApiErrCode(errCode.DISPLAY_TAG_INVALID, (tip, params) => {
+            this.$bvToast.toast(tip, params)
+          })
+          this.loading = false;
+          return;
+        }
+        const com = await checkDisplayTag(this.chainTag);
+        if (com && com.length > 0) {
+          handleApiErrCode(errCode.DISPLAY_TAG_USED, (tip, params) => {
+            this.$bvToast.toast(tip, params)
+          })
+          this.loading = false;
+          return;
+        }
+        
+        // deploy community contract
+        const cid = randomCurationId();
+        const comm = await createWh3CommunityContract(cid);
+        this.$emit('confirm', {tag: this.chainTag, tags: this.categoryTags, comm, cid})
+      } catch (e) {
+        console.log('select tag fail', e)
+        this.loading = false;
+      } finally {
+      }
     }
   }
 }

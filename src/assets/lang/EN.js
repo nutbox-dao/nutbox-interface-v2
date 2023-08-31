@@ -304,7 +304,11 @@ module.exports = {
     delegateTip1: "You're using {chain} account: {account} to delegate.",
     rechargeTip1: "Recharge Later",
     feeTip: 'Operation fee: ${fee} NUT',
-    updatePoolDecFail: 'Update pool description fail!'
+    updatePoolDecFail: 'Update pool description fail!',
+    // wh3
+    displayTagUsed: "The tag has been used, please change to another tag",
+    displayTagInvalide: "The on-chain tag is invalid",
+    userNotREgisteredWh3: "You have not registered Wormhole3"
   },
   nps: {
     nps: "Governance",
@@ -705,7 +709,8 @@ module.exports = {
     createCommunity: "Create WH3",
     createPool: "Create Social",
     curationPool: 'Curation Pool',
-    communityCredit: 'Community credit'
+    communityCredit: 'Community credit',
+    createCurationPool: 'Create Pool'
   },
   metamaskView: {
     p1: 'Please confirm your address',

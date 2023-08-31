@@ -14,10 +14,10 @@ import { signMessage } from './utils'
 export const getAccounts = async (update=false) => {
     const metamask = await getEthWeb()
     const unlock = await metamask._metamask.isUnlocked()
-    // if (!unlock) {
-    //     store.commit('web3/saveAccount', null);
-    //     return
-    // }
+    if (!unlock) {
+        store.commit('web3/saveAccount', null);
+        return
+    }
     let count  = 0;
     while(count++ < 60) {
         if (parseInt(store.state.web3.chainId) > 0){

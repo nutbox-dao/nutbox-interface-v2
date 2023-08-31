@@ -12,7 +12,7 @@ import {
 import { 
   createCommunity as creCom
 } from '@/apis/wh3Api'
-import { signMessage, randomCurationId } from "./utils";
+import { signMessage } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
 import { waitForTx, getGasPrice } from "./ethers";
 import { sleep, utf8ToHex } from "@/utils/helper";
@@ -1008,11 +1008,29 @@ export const monitorCommunityDevInfo = async (communityInfo) => {
 
 /************************************ wormhole3 *******************************/
 
-export const createWh3CommunityContract = async (cid, prizeToken) => {
+export const getWh3CommunityContract = async (cid) => {
   return new Promise(async (resolve, reject) => {
     try{
-      const contract = await getContract('CommunityCuration', token, false)
-      const tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, prizeToken)
+      const contract = await getContract('CommunityCuration', null, false)
+      cid = ethers.BigNumber.from('0x' + cid);
+      const communityInfo = await contract.getCommunityInfo(cid);
+      resolve(communityInfo)
+    }catch(e) {
+      console.log('get wh3 community contract fail:', e);
+      reject(e)
+    }
+  })
+}
+
+export const createWh3CommunityContract = async (cid) => {
+  return new Promise(async (resolve, reject) => {
+    try{
+      const communityId = store.state.currentCommunity.communityId;
+      const community = store.getters['community/getCommunityInfoById'](communityId);
+      const ctoken = await getCToken(communityId);
+      const contract = await getContract('CommunityCuration', null, false)
+      cid = ethers.BigNumber.from('0x' + cid);
+      const tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
       const communityInfo = await contract.getCommunityInfo(cid);
       resolve(communityInfo)
@@ -1023,83 +1041,81 @@ export const createWh3CommunityContract = async (cid, prizeToken) => {
   })
 }
 
-export const createWh3Community = async (twitterId, displayTag, tags) => {
-
-  // generate community id
-  const cid = randomCurationId();
+export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
+  return new Promise(async (resolve, reject) => {
+    // get nutbox community and token info
+    const community = store.state.community.communityInfo;
+    
+    const ctoken = community.cToken;
   
-  // get nutbox community and token info
-  const communityId = store.state.currentCommunity.communityId;
-  const community = store.getters['community/getCommunityInfoById'](communityId);
-  const ctoken = await getCToken(communityId);
-
-  // set default policy
-  let policy = {
-    did: {
-      ratio: 1
-    },
-    community: {
-      ratio: 0
-    },
-    topoic: {
-      ratio: 0
+    // set default policy
+    let policy = {
+      did: {
+        ratio: 1
+      },
+      community: {
+        ratio: 0
+      },
+      topoic: {
+        ratio: 0
+      }
     }
-  }
-
-  let wh3Community = {
-    communityId: cid,
-    name: community.name,
-    icon: community.icon,
-    banner: community.poster,
-    description: community.description,
-    hiveTag: community.blogTag,
-    twitterId,
-    tags: displayTag,
-    displayTag,
-    chainId: 42161,
-    rewardToken: ethers.utils.getAddress(community.ctoken),
-    rewardSymbol: ctoken.symbol,
-    rewardName: ctoken.name,
-    decimals: ctoken.decimals,
-    rewardPerDay: '',
-    settleDay: 3,
-    policy: JSON.stringify(policy),
-    annPerDay: '',
-    spacePerDay: '',
-    twitter: community.twitter,
-    telegram: community.telegram,
-    discord: community.discord,
-    doc: community.document,
-    official: community.website,
-    stakeUrl: '',
-    swapUrl: '',
-    nutboxContract: ethers.utils.getAddress(community.id)
-  }
-
-  const originMessage = JSON.stringify(wh3Community);
-  let signature = "";
-  try {
-    signature = await signMessage(originMessage);
-  } catch (e) {
-    if (e.code === 4001) {
-      reject(errCode.USER_CANCEL_SIGNING);
-      return;
+  
+    let wh3Community = {
+      communityId: cid,
+      name: community.name,
+      icon: community.icon,
+      banner: community.poster,
+      description: community.description,
+      hiveTag: community.blogTag,
+      twitterId,
+      steemId: store.state.user.wh3AccountInfo.steemId,
+      tags: tags ? tags.join(','): '',
+      displayTag,
+      chainId: 42161,
+      rewardToken: ethers.utils.getAddress(community.ctoken),
+      rewardSymbol: ctoken.symbol,
+      rewardName: ctoken.name,
+      decimals: ctoken.decimals,
+      rewardPerDay: '0',
+      settleDay: 3,
+      policy: JSON.stringify(policy),
+      annPerDay: '0',
+      spacePerDay: '0',
+      twitter: community.twitter,
+      telegram: community.telegram,
+      discord: community.discord,
+      doc: community.document,
+      official: community.website,
+      stakeUrl: '',
+      swapUrl: '',
+      nutboxContract: ethers.utils.getAddress(community.id)
     }
-  }
+  
+    const originMessage = JSON.stringify(wh3Community);
+    let signature = "";
+    try {
+      signature = await signMessage(originMessage);
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+  
+    const params = {
+      ethAddress: ethers.utils.getAddress(store.state.web3.account),
+      infoStr: originMessage,
+      signature,
+    };
+  
+    try {
+      let res = await creCom(params);
+      resolve(res);
+    } catch (e) {
+      console.log("create community social info failed", e);
+      reject(e);
+    }  
 
-  const params = {
-    ethAddress: ethers.utils.isAddress(store.state.web3.account),
-    infoStr: originMessage,
-    signature,
-  };
-
-  try {
-    let res = await creCom(params);
-    store.commit("web3/saveNonce", nonce);
-    resolve(res);
-  } catch (e) {
-    console.log("Update community social info failed", e);
-    reject(e);
-  }  
-
+  })
 }

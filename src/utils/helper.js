@@ -375,6 +375,12 @@ export const handleApiErrCode = (code, toast) => {
     tipStr = $t('tip.picUploadFail')
   } else if(code === errCode.UPDATE_POOL_DEC_FAIL) {
     tipStr = $t('tip.updatePoolDecFail')
+  } else if (code === errCode.DISPLAY_TAG_USED){
+    tipStr = $t('tip.displayTagUsed')
+  } else if (code === errCode.DISPLAY_TAG_INVALID) {
+    tipStr = $t('tip.displayTagInvalide')
+  } else if (code === errCode.USER_NOT_REGISTERED_WH3) {
+    tipStr = $t('tip.userNotREgisteredWh3');
   } else {
     tipStr = $t("error.unknow");
   }

@@ -292,7 +292,12 @@ module.exports = {
       delegateTip1: "您现在正在使用 {chain} 的账号: {account} 进行代理。",
       rechargeTip1: "稍后充值",
       feeTip: '操作手续费: ${fee} NUT',
-      updatePoolDecFail: '矿池描述更新失败'
+      updatePoolDecFail: '矿池描述更新失败',
+      // wh3
+      displayTagUsed: "标签已经被使用了，请更换其他标签",
+      displayTagInvalide: "推文上链标签不合法",
+      userNotREgisteredWh3: "您的账号还未注册虫洞3"
+
     },
     nps: {
       nps: "治理",
@@ -673,7 +678,8 @@ module.exports = {
       createCommunity: "创建虫洞3社区",
       createPool: "创建社交矿池",
       curationPool: '社交矿池',
-      communityCredit: '社区信用分'
+      communityCredit: '社区信用分',
+      createCurationPool: '创建社交矿池'
     },
     metamaskView: {
       p1: '请确认你的地址',
