@@ -220,9 +220,6 @@
           return;
         }
       });
-
-      this.poolTypeModal = true;
-      this.createPoolStep = 3;
     },
     methods: {
       selectPoolType (type) {
