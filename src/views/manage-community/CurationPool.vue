@@ -35,7 +35,7 @@
         <div v-show="activeTab===0">
           <WH3SocialPool :community="wh3Community"></WH3SocialPool>
         </div>
-        <!-- <WH3SocialCredit :community="wh3Community" v-show="activeTab===1"/> -->
+        <WH3SocialCredit :community="wh3Community" v-show="activeTab===1"/>
       </template>
       <div v-else
          class="empty-card mb-5 d-flex flex-column justify-content-center">

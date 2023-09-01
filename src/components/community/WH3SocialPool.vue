@@ -30,7 +30,7 @@
         </div>
         <div class="col-xl-1 d-flex justify-content-center align-items-center"><div class="v-line"></div></div>
         <div class="col-12 col-xl-2 mt-2 mt-xl-0">
-          <button class="primary-btn text-black"
+          <button v-if="poolPercentage.length === 3" class="primary-btn text-black"
                   @click="ratioModalVisible=true">
             {{$t('socialView.editPoolRatio')}}
           </button>

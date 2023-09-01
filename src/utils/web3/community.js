@@ -11,7 +11,8 @@ import {
 } from "@/apis/api";
 import { 
   createCommunity as creCom,
-  updateRewards
+  updateRewards,
+  updateCCPoloicy as uccp
 } from '@/apis/wh3Api'
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
@@ -1142,6 +1143,35 @@ export const updateRewardInfo = async (rewardInfo) => {
   
     try {
       let res = await updateRewards(params);
+      resolve(res);
+    } catch (e) {
+      console.log("update community reward info failed", e);
+      reject(e);
+    }  
+  })
+}
+
+export const updateCCInfo = async (CCInfo) => {
+  return new Promise(async (resolve, reject) => {
+    const originMessage = JSON.stringify(CCInfo);
+    let signature = "";
+    try {
+      signature = await signMessage(originMessage);
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+  
+    const params = {
+      ethAddress: ethers.utils.getAddress(store.state.web3.account),
+      infoStr: originMessage,
+      signature,
+    };
+  
+    try {
+      let res = await uccp(params);
       resolve(res);
     } catch (e) {
       console.log("update community reward info failed", e);

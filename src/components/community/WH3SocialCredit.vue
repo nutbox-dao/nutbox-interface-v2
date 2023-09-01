@@ -2,15 +2,14 @@
   <div class="social-credit-view">
     <div class="row">
       <div class="col-12 col-lg-5">
-        <button class="w-25 primary-btn text-black ml-0"
+        <!-- <button class="w-25 primary-btn text-black ml-0"
                 :disabled="editConfig"
-                @click="editConfig=true">{{$t('operation.edit')}}</button>
+                @click="editConfig=true">{{$t('operation.edit')}}</button> -->
         <div class="pt-lg-5 pb-5">
           <div class="text-center">
-            <div class="c-input-group c-input-group-bg mx-auto"
-                 :class="editConfig?'edit-border':'c-input-group-border'"
+            <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                  style="width: 80px">
-              <b-form-input v-model="creditRatioList[0]"></b-form-input>
+              <b-form-input  v-model="creditRatioList[0]"></b-form-input>
               <span class="pr-2">%</span>
             </div>
             <div class="text-grey-9f font14">{{$t('socialView.socialInfluence')}}</div>
@@ -24,8 +23,7 @@
             </svg>
             <div class="position-absolute text-center triangle-left">
               <div class="text-grey-9f font14">{{$t('socialView.communityStaking')}}</div>
-              <div class="c-input-group c-input-group-bg mx-auto"
-                   :class="editConfig?'edit-border':'c-input-group-border'"
+              <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                    style="width: 80px">
                 <b-form-input v-model="creditRatioList[1]"></b-form-input>
                 <span class="pr-2">%</span>
@@ -33,8 +31,7 @@
             </div>
             <div class="position-absolute text-center triangle-right">
               <div class="text-grey-9f font14">{{$t('socialView.nftHolder')}}</div>
-              <div class="c-input-group c-input-group-bg mx-auto"
-                   :class="editConfig?'edit-border':'c-input-group-border'"
+              <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                    style="width: 80px">
                 <b-form-input v-model="creditRatioList[2]"></b-form-input>
                 <span class="pr-2">%</span>
@@ -57,7 +54,7 @@
                           label-cols-md="8" content-cols-md="4"
                           label="Twitter Reputation NFT">
               <div class="c-input-group c-input-group-bg">
-                <b-form-input :value="100"></b-form-input>
+                <b-form-input disabled :value="100"></b-form-input>
                 <span class="c-append">%</span>
               </div>
             </b-form-group>
@@ -73,9 +70,8 @@
                           label-class="overflow-hidden font14 line-height14 font-bold text-primary-0"
                           label-cols-md="8" content-cols-md="4"
                           :label="sPool['name']">
-              <div class="c-input-group c-input-group-bg"
-                   :class="editConfig?'edit-border':'c-input-group-border'">
-                <b-form-input v-model="sPool.ratio" :disabled="!editConfig"></b-form-input>
+              <div class="c-input-group c-input-group-bg c-input-group-border">
+                <b-form-input v-model="sPool.ratio"></b-form-input>
                 <span class="c-append">%</span>
               </div>
             </b-form-group>
@@ -94,18 +90,15 @@
             <div v-for="(nItem, index) of nftHolders" :key="index"
                  class="row position-relative">
               <div class="col-8">
-                <div class="c-input-group c-input-group-bg text-primary-0"
-                     :class="editConfig?'edit-border':'c-input-group-border'">
-                  <b-form-input placeholder="Name"
-                                class="text-primary-0 font-bold"
-                                :disabled="!editConfig"></b-form-input>
+                <div class="c-input-group c-input-group-bg text-primary-0 c-input-group-border">
+                  <b-form-input placeholder="Address"
+                                v-model="nItem.address"
+                                class="text-primary-0 font-bold"></b-form-input>
                 </div>
               </div>
               <div class="col-4">
-                <div class="c-input-group c-input-group-bg"
-                     :class="editConfig?'edit-border':'c-input-group-border'">
-                  <b-form-input v-model="nItem.ratio"
-                                :disabled="!editConfig"></b-form-input>
+                <div class="c-input-group c-input-group-bg c-input-group-border">
+                  <b-form-input v-model="nItem.ratio"></b-form-input>
                   <span class="c-append">%</span>
                 </div>
               </div>
@@ -115,21 +108,41 @@
             </div>
           </div>
         </div>
-        <button v-if="editConfig"
-                class="w-50 mx-auto mt-3 primary-btn text-black"
-                @click="onSaveNftConfig">{{$t('operation.save')}}</button>
+        <button class="w-50 mx-auto mt-3 primary-btn text-black"
+                :disabled="loading"
+                @click="onCommit">
+          {{$t('operation.save')}}
+          <b-spinner v-show="loading" class="ml-1" small></b-spinner>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { getPoolFactoryAddress } from '@/utils/web3/pool'
+import { ethers } from 'ethers'
+import { updateCCInfo } from "@/utils/web3/community"
+import { sleep } from '@/utils/helper'
+
 export default {
   name: 'WH3SocialCredit',
+  props: {
+    // this is wh3 community info
+    community: {
+      type: Object,
+      default: {}
+    },
+  },
+  computed: {
+    ...mapState('community', ['communityData']),
+    ...mapState('web3', ['account']),
+    ...mapState('user', ['wh3AccountInfo']),
+  },
   data () {
     return {
       creditRatioList: [20, 60, 20],
-      editConfig: false,
       stakingPools: [
         { name: 'FERC Staking', ratio: 25 },
         { name: 'MFERC Staking', ratio: 25 },
@@ -137,8 +150,9 @@ export default {
         { name: 'tweet pool', ratio: 25 }
       ],
       nftHolders: [
-        { name: '', ratio: 0 }
-      ]
+      ],
+      policy: {},
+      loading: false
     }
   },
   methods: {
@@ -146,15 +160,130 @@ export default {
       this.editStaking = false
     },
     addNft () {
-      this.nftHolders.push({ name: '', ratio: 0 })
+      this.nftHolders.push({ address: '', ratio: 0 })
     },
     subNft (index) {
       this.nftHolders.splice(index, 1)
     },
-    onSaveNftConfig () {
-      this.editNft = false
+    async onCommit () {
+      // check sum
+      if (this.creditRatioList.reduce((s, a) => s + parseFloat(a), 0) !== 100) {
+        this.$bvToast.toast('Ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+      }
+
+      if (parseFloat(this.creditRatioList[1]) > 0) {
+        if (this.stakingPools.reduce((s, a) => s + parseFloat(a.ratio), 0) !== 100) {
+          this.$bvToast.toast('Stakinging pool ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+      }
+
+      if (parseFloat(this.creditRatioList[2]) > 0) {
+        if (this.nftHolders.length === 0) {
+          this.$bvToast.toast('You must set NFT holders or set the NFT ratio to 0%', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+        if (this.nftHolders.filter(n => !ethers.utils.isAddress(n.address)).length > 0) {
+          this.$bvToast.toast('Some NFT address is wrong, please check', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          });
+          return;
+        }
+
+        if (this.nftHolders.reduce((s, a) => s + parseFloat(a.ratio), 0) !== 100) {
+          this.$bvToast.toast('NFT holder ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          return;
+        }
+      }
+
+      try{
+        this.loading = true;
+        let newPolicy = {
+          did: {
+            ratio: parseFloat(this.creditRatioList[0]) / 100
+          },
+          community: {
+            ratio: parseFloat(this.creditRatioList[1]) / 100
+          },
+          nft: {
+            ratio: parseFloat(this.creditRatioList[2]) / 100
+          }
+        };
+
+        if (parseFloat(this.creditRatioList[1]) > 0) {
+          newPolicy.community.policys = this.stakingPools.filter(pool => parseFloat(pool.ratio) > 0)
+          .map(pool => ({
+            ...pool,
+            method: 'getUserStakedAmount(address)(uint256)',
+            type: 'stake',
+            ratio: parseFloat(pool.ratio) / 100
+          }))
+        }
+
+        if (parseFloat(this.creditRatioList[2]) > 0) {
+          newPolicy.nft.policys = this.nftHolders.map(p => ({
+            type: 'nft-hold',
+            ratio: parseFloat(p.ratio) / 100,
+            method: 'balanceOf(address)(uint256)',
+            contract: p.address
+          }))
+        }
+
+        newPolicy = JSON.stringify(newPolicy);
+
+        await updateCCInfo({communityId: this.community.communityId, ccPolicy: newPolicy})
+
+      } catch (e) {
+          console.log('update cc fail:', e)
+      } finally {
+        this.loading = false;
+      }
     }
-  }
+  },
+  
+  async mounted () {
+    this.policy = JSON.parse(this.community.CCPolicy);
+    this.creditRatioList = [this.policy.did ? this.policy.did.ratio * 100 : 0,
+                          this.policy.community ? this.policy.community.ratio * 100 : 0,
+                          this.policy.nft ? this.policy.nft.ratio * 100 : 0]
+
+    while(true) {
+      if (this.communityData) {
+        break;
+      }
+      await sleep(0.2);
+    }
+    const stakingPool = this.communityData.pools.filter(p => p.poolFactory.toLowerCase() !==
+                getPoolFactoryAddress("curation") && p.status === 'OPENED')
+    this.stakingPools = stakingPool.map(pool => {
+      const com = this.policy.community;
+      return {
+        name: pool.name,
+        ratio: (com && com.policys) ? com.policys.find(p => p.name === pool.name)?.ratio * 100 : 0,
+        contract: ethers.utils.getAddress(pool.id),
+        tokenDecimals: 18
+      }
+    });
+
+    this.nftHolders = (this.policy && this.policy.nft && this.policy.nft.policys > 0) ? this.policy.nft.policys.map(n => ({
+      address: n.address,
+      ratio: n.ratio * 100
+    })) : []
+  },
 }
 </script>
 
