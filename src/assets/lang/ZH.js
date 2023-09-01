@@ -736,6 +736,7 @@ module.exports = {
       spaceSettleTime: '每周二凌晨，结算上周Space',
       socialInfluence: '社交影响力',
       communityStaking: '社区质押',
-      nftHolder: 'NFT 持有'
+      nftHolder: 'NFT 持有',
+      ratioTip: '调整矿池比例(矿池比例之和应为100%)'
     }
   };
