@@ -20,3 +20,9 @@ export const checkDisplayTag = async (tag) =>
 
 export const createCommunity = async (params) =>
     put(WH3_API_URL + '/community/createCommunity', params)
+
+export const updateRewards = async (params) =>
+    put(WH3_API_URL + '/community/updateRewards', params);
+
+export const updateCCPoloicy = async (params) =>
+    put(WH3_API_URL + '/community/updateCCPolicy', params)

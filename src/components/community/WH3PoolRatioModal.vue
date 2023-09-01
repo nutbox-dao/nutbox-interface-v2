@@ -28,6 +28,7 @@
     </div>
     <div class="d-flex align-items-center justify-content-center mt-3">
       <button class="primary-btn w-50 mx-0 d-flex align-items-center px-3"
+              @click="confirm"
               :disabled="loading">
         <span>{{$t('operation.confirm')}}</span>
         <b-spinner v-show="loading" class="ml-1" small></b-spinner>
@@ -43,6 +44,12 @@ import i18n from '@/i18n'
 export default {
   name: 'WH3PoolRatioModal',
   components: { PoolRatio },
+  props: {
+    poolPercentage: {
+      type: Array,
+      default: []
+    },
+  },
   data () {
     return {
       activePools: [
@@ -56,8 +63,30 @@ export default {
   methods: {
     inputChange: debounce(function (e) {
       console.log(e)
-    }, 1000)
-  }
+    }, 1000),
+    confirm() {
+      this.loading = true;
+      // check sum
+      if (parseFloat(this.activePools[0].ratio)
+        + parseFloat(this.activePools[1].ratio)
+        + parseFloat(this.activePools[2].ratio) !== 100) {
+          this.$bvToast.toast('Ratios summary must be 100', {
+            title: this.$t('tip.tips'),
+            variant: 'info'
+          })
+          this.loading = false
+          return;
+      }
+      this.$emit('confirm', this.activePools.map(p => parseFloat(p.ratio)));
+    }
+  },
+  mounted () {
+    this.activePools = [
+      { name: this.$t('socialView.communityContent'), ratio: this.poolPercentage[0] },
+      { name: this.$t('socialView.curation'), ratio: this.poolPercentage[1] },
+      { name: 'Space', ratio: this.poolPercentage[2] }
+    ];
+  },
 }
 </script>
 

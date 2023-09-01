@@ -6,25 +6,25 @@
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.contractAddress')}}</div>
             <div class="d-flex align-items-center">
-              <span>0x123123...123123123</span>
-              <i class="copy-icon copy-icon-gray ml-2"></i>
+              <span>{{ storageContract }}</span>
+              <!-- <i class="copy-icon copy-icon-gray ml-2"></i> -->
             </div>
           </div>
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.distributeBalance')}}</div>
-            <div class="font-bold">1000,000,000 $M</div>
+            <div class="font-bold">{{ formatAmount(retainedReward) }} ${{ community.rewardTokenSymbol }}</div>
           </div>
         </div>
         <div class="col-12 col-xl-1 d-flex justify-content-center align-items-center"><div class="v-line"></div></div>
         <div class="col-12 col-xl-4">
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.chainTag')}}</div>
-            <div class="font-bold">#tag</div>
+            <div class="font-bold">#{{ community ? community.displayTag : '' }}</div>
           </div>
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.communityCategoryTags')}}</div>
             <div class="ml-4 d-flex flex-wrap align-items-center">
-              <span v-for="i of 3" :key="i" class="ml-2 font-bold">#tag</span>
+              <span v-for="tag of tags" :key="tag" class="ml-2 font-bold">#{{ tag }}</span>
             </div>
           </div>
         </div>
@@ -41,17 +41,17 @@
       <div class="info-card">
         <div class="border-bottom border-dark px-3 py-2 font16 font-bold row-info">
           <span class="py-1">{{$t('socialView.communityContent')}}</span>
-          <span class="text-primary-0">40%</span>
+          <span class="text-primary-0">{{ poolPercentage[0] }}%</span>
         </div>
         <div class="px-3 py-2 font14">
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.chainTag')}}</div>
-            <div class="font-bold">#tag</div>
+            <div class="font-bold">#{{ community ? community.displayTag : '' }}</div>
           </div>
           <div class="row-info py-1">
             <div class="info-key">Reward</div>
             <div class="font-bold d-flex flex-wrap ml-4 justify-content-end" style="gap: 4px">
-              <div class="reward-item">curator: 100</div>
+              <div class="reward-item">curator: 100%</div>
             </div>
           </div>
           <div class="row-info py-1">
@@ -66,18 +66,18 @@
       <div class="info-card">
         <div class="border-bottom border-dark px-3 py-2 font16 font-bold row-info">
           <span class="py-1">{{$t('socialView.curation')}}</span>
-          <span class="text-primary-0">30%</span>
+          <span class="text-primary-0">{{ poolPercentage[1] }}%</span>
         </div>
         <div class="px-3 py-2 font14">
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.chainTag')}}</div>
-            <div class="font-bold">#tag</div>
+            <div class="font-bold">#{{ community ? community.displayTag : '' }} #ann</div>
           </div>
           <div class="d-flex justify-content-between py-1">
             <div class="info-key">Reward</div>
             <div class="font-bold d-flex flex-wrap ml-4 justify-content-end" style="gap: 4px">
-              <div class="reward-item">creator: 30</div>
-              <div class="reward-item">curator: 70</div>
+              <div class="reward-item">creator: 30%</div>
+              <div class="reward-item">curator: 70%</div>
             </div>
           </div>
           <div class="row-info py-1">
@@ -92,20 +92,20 @@
       <div class="info-card">
         <div class="border-bottom border-dark px-3 py-2 font16 font-bold row-info">
           <span class="py-1">Space</span>
-          <span class="text-primary-0">30%</span>
+          <span class="text-primary-0">{{ poolPercentage[2] }}%</span>
         </div>
         <div class="px-3 py-2 font14">
           <div class="row-info py-1">
             <div class="info-key">{{$t('socialView.chainTag')}}</div>
-            <div class="font-bold">#tag</div>
+            <div class="font-bold">#{{ community ? community.displayTag : '' }}</div>
           </div>
           <div class="d-flex justify-content-between py-1">
             <div class="info-key text-break">Reward</div>
             <div class="font-bold d-flex flex-wrap ml-4 justify-content-end" style="gap: 4px">
-              <div class="reward-item">host: 25</div>
-              <div class="reward-item">co-host: 25</div>
-              <div class="reward-item">speaker: 25</div>
-              <div class="reward-item">curator: 25</div>
+              <div class="reward-item">host: 25%</div>
+              <div class="reward-item">co-host: 25%</div>
+              <div class="reward-item">speaker: 25%</div>
+              <div class="reward-item">curator: 25%</div>
             </div>
           </div>
           <div class="row-info py-1">
@@ -120,21 +120,122 @@
     </div>
     <b-modal v-model="ratioModalVisible" modal-class="custom-modal"
              centered hide-header hide-footer no-close-on-backdrop>
-      <WH3PoolRatioModal @close="ratioModalVisible=false"/>
+      <WH3PoolRatioModal
+          :poolPercentage="poolPercentage"
+           @confirm="updatePoolRatio" @close="ratioModalVisible=false"/>
     </b-modal>
   </div>
 </template>
 
 <script>
 import WH3PoolRatioModal from '@/components/community/WH3PoolRatioModal.vue'
+import { mapState } from 'vuex';
+import { getERC20Balance } from '@/utils/web3/asset'
+import {
+  getMyCommunityInfo,
+  getWh3CommunityContract,
+  getCommunityRewardPerBlock,
+  updateRewardInfo
+   } from '@/utils/web3/community'
+import { formatAmount, handleApiErrCode } from '../../utils/helper';
+import { getPoolFactoryAddress } from '@/utils/web3/pool'
+import { ethers } from 'ethers';
+import { DAY_BLOCKS } from '@/constant'
+
 export default {
   name: 'WH3SocialPool',
   components: { WH3PoolRatioModal },
+  props: {
+    // this is wh3 community info
+    community: {
+      type: Object,
+      default: {},
+    },
+  },
+  computed: {
+    ...mapState('community', ['communityData']),
+    ...mapState('web3', ['account']),
+    ...mapState('user', ['wh3AccountInfo']),
+    tags() {
+      if (this.community && this.community.tags) {
+        return this.community.tags.split(',')
+      }
+    }
+  },
   data () {
     return {
-      ratioModalVisible: false
+      ratioModalVisible: false,
+      cToken: {},
+      storageContract: '',
+      retainedReward: '',
+      poolPercentage: [],
+      totalRewardPerDay: 0,
     }
-  }
+  },
+  methods: {
+    formatAmount,
+    async updatePoolRatio(ratios) {
+      try{
+        // update rewards
+        let rewardsInfo = {
+          rewardPerDay: (this.totalRewardPerDay.mul(ethers.BigNumber.from(parseInt(ratios[0] * 10000))).div(1000000)).toString(),
+          annRewardPerDay:  (this.totalRewardPerDay.mul(ethers.BigNumber.from(parseInt(ratios[1] * 10000))).div(1000000)).toString(),
+          spaceRewardPerDay:  (this.totalRewardPerDay.mul(ethers.BigNumber.from(parseInt(ratios[2] * 10000))).div(1000000)).toString(),
+          communityId: this.community.communityId,
+          ethAddress: this.account
+        }
+        this.loading = true
+        await updateRewardInfo(rewardsInfo);
+        this.ratioModalVisible = false;
+        this.poolPercentage = ratios.map(r => parseFloat(r))
+      } catch (e) {
+        handleApiErrCode(e, (title, info) => {
+          this.$bvToast.toast(title, info)
+        });
+      } finally {
+        this.loading = false
+      }
+    }
+  },
+  async mounted () {
+    let communityInfo
+    try {
+      communityInfo = await getMyCommunityInfo()
+    } catch (e) {
+    }
+    while(true) {
+      if (this.communityData && this.community) {
+        break;
+      }
+      await sleep(0.3)
+    }
+
+    getCommunityRewardPerBlock(communityInfo.id).then(reward => {
+      this.totalRewardPerDay = ethers.BigNumber.from(reward).mul(ethers.BigNumber.from(10).pow(this.community.rewardTokenDecimals));
+      const pool = this.communityData.pools.find(p => p.poolFactory.toLowerCase() ===
+                getPoolFactoryAddress("curation") && p.status === 'OPENED')
+      if (pool) {
+        this.totalRewardPerDay = this.totalRewardPerDay.mul(10000 - this.communityData.feeRatio).mul(pool.ratio).div(100000000).mul(DAY_BLOCKS);
+      }else {
+        this.totalRewardPerDay = ethers.BigNumber.from(0);
+      }
+    }).catch(e => {
+      console.log(2, e)
+    });
+    
+    const curationContract = await getWh3CommunityContract(this.community.communityId);
+    this.storageContract = curationContract.storageAddr;
+    const retainedReward = await getERC20Balance(this.community.rewardToken, this.storageContract);
+    const dec = (10 ** this.community.rewardTokenDecimals);
+    this.retainedReward = retainedReward.toString() / dec;
+    const rewards = [this.community.rewardPerDay / dec, this.community.annRewardPerDay / dec, this.community.spaceRewardPerDay / dec];
+    const total = rewards.reduce((s, a) => s + a, 0);
+    if (total === 0) {
+      this.poolPercentage = [100, 0, 0]
+    }else {
+      this.poolPercentage = rewards.map(r => parseFloat(r * 100 / total).toFixed(2));
+    }
+  },
 }
 </script>
 

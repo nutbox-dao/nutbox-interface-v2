@@ -3,6 +3,8 @@ export const BLOCK_SECOND = sec
 
 export const YEAR_BLOCKS = 31536000 / BLOCK_SECOND
 
+export const DAY_BLOCKS = 86400 / BLOCK_SECOND;
+
 export const SP_DELEGATE_DECIMAL = 6
 
 export const TIME_PERIOD = {

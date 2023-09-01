@@ -10,7 +10,8 @@ import {
   updateSocial,
 } from "@/apis/api";
 import { 
-  createCommunity as creCom
+  createCommunity as creCom,
+  updateRewards
 } from '@/apis/wh3Api'
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
@@ -1076,7 +1077,7 @@ export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
       rewardToken: ethers.utils.getAddress(community.ctoken),
       rewardSymbol: ctoken.symbol,
       rewardName: ctoken.name,
-      decimals: ctoken.decimals,
+      decimals: ctoken.decimal,
       rewardPerDay: '0',
       settleDay: 3,
       policy: JSON.stringify(policy),
@@ -1117,5 +1118,34 @@ export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
       reject(e);
     }  
 
+  })
+}
+
+export const updateRewardInfo = async (rewardInfo) => {
+  return new Promise(async (resolve, reject) => {
+    const originMessage = JSON.stringify(rewardInfo);
+    let signature = "";
+    try {
+      signature = await signMessage(originMessage);
+    } catch (e) {
+      if (e.code === 4001) {
+        reject(errCode.USER_CANCEL_SIGNING);
+        return;
+      }
+    }
+  
+    const params = {
+      ethAddress: ethers.utils.getAddress(store.state.web3.account),
+      infoStr: originMessage,
+      signature,
+    };
+  
+    try {
+      let res = await updateRewards(params);
+      resolve(res);
+    } catch (e) {
+      console.log("update community reward info failed", e);
+      reject(e);
+    }  
   })
 }
