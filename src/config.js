@@ -3,7 +3,7 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 0.3;
+export const BLOCK_SECOND = 0.25;
 // nutbox backend server
 export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
