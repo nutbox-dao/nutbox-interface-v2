@@ -10,8 +10,8 @@ export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
 // export const BACKEND_API_URL = "http://localhost:3000";
 
 // wormhole3 api
-// export const WH3_API_URL = "https://alpha-api.wormhole3.io"
-export const WH3_API_URL = "http://localhost:3100"
+export const WH3_API_URL = "https://alpha-api.wormhole3.io"
+// export const WH3_API_URL = "http://localhost:3100"
 
 export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 
