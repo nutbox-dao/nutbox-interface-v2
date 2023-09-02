@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <template v-if="!loadingCommunityInfo">
+      <template v-if="!loadingCommunityInfo && activeCurationPool.length > 0">
         <div v-show="activeTab===0">
           <WH3SocialPool :community="wh3Community"></WH3SocialPool>
         </div>

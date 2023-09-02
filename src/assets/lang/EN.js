@@ -750,5 +750,24 @@ module.exports = {
     quitTip: 'Are you sure to quit? \n All the information will be discarded.',
     cancel: 'Cancel',
     close: 'Close'
+  },
+  socialView: {
+    chainTag: 'Tweet tag',
+    communityCategoryTags: 'Categary tags',
+    deploy: 'Deploy',
+    createNewPool: 'Create pool',
+    contractAddress: 'Contract',
+    distributeBalance: 'Pending reward',
+    editPoolRatio: 'Reset pool ratio',
+    communityContent: 'Common tweets',
+    curation: 'Announcement tweets',
+    settleTime: 'Settlement time',
+    tweetSettleTime: 'Settlement 3+1 days later',
+    curationSettleTime: 'Settlement 3+1 days later',
+    spaceSettleTime: 'Every Tuesday morning, settle last weeks Spaces',
+    socialInfluence: 'Social influence',
+    communityStaking: 'Community staking',
+    nftHolder: 'NFT Holder',
+    ratioTip: 'Configure pools(Sum of pools ratio should be 100%)'
   }
 };
