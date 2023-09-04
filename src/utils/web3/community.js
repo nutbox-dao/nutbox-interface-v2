@@ -1024,16 +1024,36 @@ export const getWh3CommunityContract = async (cid) => {
   })
 }
 
+export const checkCurationPoolStarted = async (pool) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+        const contract = await getContract('CurationGauge', pool, false);
+        const deposit = await contract.getTotalStakedAmount();
+        if (deposit.toString() / 1 === 0) {
+          resolve(false)
+          return;
+        }
+        resolve(true);
+        return;
+    } catch (e) {
+      console.log('checkout curaiton pool start fail:', e);
+      reject(e)
+    }
+  })
+}
+
 export const createWh3CommunityContract = async (cid) => {
   return new Promise(async (resolve, reject) => {
     try{
       const communityId = store.state.currentCommunity.communityId;
-      const community = store.getters['community/getCommunityInfoById'](communityId);
       const ctoken = await getCToken(communityId);
       const contract = await getContract('CommunityCuration', null, false)
       cid = ethers.BigNumber.from('0x' + cid);
-      const tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
+      let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
+      // start pool
+      tx = await contract.startPool();
+      await waitForTx(tx.hash);
       const communityInfo = await contract.getCommunityInfo(cid);
       resolve(communityInfo)
     }catch(e) {

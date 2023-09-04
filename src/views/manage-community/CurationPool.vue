@@ -21,7 +21,7 @@
                     v-show="activePool.length > 1 && activeCurationPool.length > 0"
                     @click="configPoolModal=true">
               {{ $t('pool.updatePoolRatios') }}</button>
-            <button v-if="wh3State === 1 || wh3State === 2 || wh3State === 3" class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
+            <button v-if="wh3State === 1 || wh3State === 2 || wh3State === 3 || wh3State === 4" class="primary-btn w-auto mx-0 d-flex align-items-center px-3"
                     style="height: 2rem"
                     :disable="loadingCommunityInfo"
                     @click="createWh3">
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <template v-if="!loadingCommunityInfo && activeCurationPool.length > 0">
+      <template v-if="!loadingCommunityInfo && activeCurationPool.length > 0 && wh3Community.communityId">
         <div v-show="activeTab===0">
           <WH3SocialPool :community="wh3Community"></WH3SocialPool>
         </div>
@@ -101,7 +101,8 @@
   import WH3CreatePool from "@/components/community/WH3CreatePool.vue";
   import WH3SocialPool from "@/components/community/WH3SocialPool.vue";
   import WH3SocialCredit from "@/components/community/WH3SocialCredit.vue";
-  import { createWh3Community, getWh3CommunityContract } from '@/utils/web3/community'
+  import { createWh3Community, getWh3CommunityContract, checkCurationPoolStarted } from '@/utils/web3/community'
+  import { startPool } from '@/utils/web3/pool'
 
   export default {
     name: 'CurationPool',
@@ -161,7 +162,9 @@
           case 3:
             return this.$t('wh3.createCurationPool');
           case 4:
-            return ''
+            return this.$t('wh3.startPool');
+          case 5:
+            return '';
         }
       }
     },
@@ -178,12 +181,18 @@
         if (newValue === 2) {
           this.loadingCommunityInfo = true;
           getCommunityByEth(this.account).then(com => {
-            getWh3CommunityContract(com.communityId).then(res => {
-              this.stakeAsset = res.storageAddr
-            })
             if (com && com.communityId) {
+              getWh3CommunityContract(com.communityId).then(res => {
+                this.stakeAsset = res.storageAddr
+              })
               if (this.activeCurationPool.length > 0) {
-                this.wh3State = 4
+                checkCurationPoolStarted(this.activeCurationPool[0].id).then(res => {
+                  if (res) {
+                    this.wh3State = 5
+                  }else {
+                    this.wh3State = 4
+                  }
+                })
               }else {
                 this.wh3State = 3
               }
@@ -258,6 +267,19 @@
           // create curation pool
           this.poolTypeModal = true
           this.createPoolStep = 3;
+        }else if (this.wh3State === 4) {
+          // start pool
+          try{
+            this.startingPool = true
+            await startPool(this.activeCurationPool[0].id);
+            this.wh3State = 5;
+          } catch (e) {
+            handleApiErrCode(errCode.BLOCK_CHAIN_ERR, (tip, params) => {
+              this.$bvToast.toast(tip, params)
+            })
+          } finally {
+            this.startingPool = false
+          }
         }
         // poolTypeModal=true, createPoolStep=1
       },
