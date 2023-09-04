@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="box-info-container">
+    <div v-if="verified" class="box-info-container">
       <div class="info-card">
         <div class="border-bottom border-dark px-3 py-2 font16 font-bold row-info">
           <span class="py-1">{{$t('socialView.communityContent')}}</span>
@@ -54,9 +54,9 @@
               <div class="reward-item">curator: 100%</div>
             </div>
           </div>
-          <div class="row-info py-1">
+          <div class="d-flex justify-content-between py-1">
             <div class="info-key">{{$t('socialView.settleTime')}}</div>
-            <div class="font-bold">{{$t('socialView.tweetSettleTime')}}</div>
+            <div class="font-bold text-right">{{$t('socialView.tweetSettleTime')}}</div>
           </div>
           <div class="row-info py-1 mt-2 text-primary-0">
             所有人发推带上链标签，即可参加
@@ -80,9 +80,9 @@
               <div class="reward-item">curator: 70%</div>
             </div>
           </div>
-          <div class="row-info py-1">
+          <div class="d-flex justify-content-between py-1">
             <div class="info-key">{{$t('socialView.settleTime')}}</div>
-            <div class="font-bold">{{$t('socialView.curationSettleTime')}}</div>
+            <div class="font-bold text-right">{{$t('socialView.curationSettleTime')}}</div>
           </div>
           <div class="row-info py-1 mt-2 text-primary-0">
             仅 Twitter 官方能发布公告推，且必须带上链标签
@@ -108,15 +108,18 @@
               <div class="reward-item">curator: 25%</div>
             </div>
           </div>
-          <div class="row-info py-1">
+          <div class="d-flex justify-content-between py-1">
             <div class="info-key">{{$t('socialView.settleTime')}}</div>
-            <div class="font-bold">{{$t('socialView.spaceSettleTime')}}</div>
+            <div class="font-bold text-right">{{$t('socialView.spaceSettleTime')}}</div>
           </div>
           <div class="row-info py-1 mt-2 text-primary-0">
             Space 主持人发推带上链标签 + Space 链接，即可开启
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="tip-info-container font16 text-primary-0 text-center">
+      您的ETH地址：0x。。。。 绑定的推特账号为：@ttt，请使用绑定的推特登录
     </div>
     <b-modal v-model="ratioModalVisible" modal-class="custom-modal"
              centered hide-header hide-footer no-close-on-backdrop>
@@ -170,6 +173,7 @@ export default {
       retainedReward: '',
       poolPercentage: [],
       totalRewardPerDay: 0,
+      verified: false
     }
   },
   methods: {
@@ -222,7 +226,7 @@ export default {
     }).catch(e => {
       console.log(2, e)
     });
-    
+
     const curationContract = await getWh3CommunityContract(this.community.communityId);
     this.storageContract = curationContract.storageAddr;
     const retainedReward = await getERC20Balance(this.community.rewardToken, this.storageContract);
@@ -261,6 +265,7 @@ export default {
 .info-key {
   white-space: nowrap;
   color: var(--text-9f);
+  margin-right: 10px;
 }
 .box-info-container {
   margin-top: 1rem;
@@ -273,6 +278,16 @@ export default {
     background-color: var(--card-bg-primary);
     border-radius: 12px;
   }
+}
+.tip-info-container {
+  margin-top: 1rem;
+  background-color: var(--card-bg-primary);
+  border-radius: 12px;
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 2rem;
 }
 .reward-item {
   background-color: var(--nav-tab-bg);

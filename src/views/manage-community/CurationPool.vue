@@ -52,7 +52,7 @@
 <!--          </div>-->
 <!--        </div>-->
 <!--      </template>-->
-      <b-modal v-model="poolTypeModal" modal-class="custom-modal"
+      <b-modal v-model="poolTypeModal" modal-class="custom-modal" :size="createPoolStep===1?'md':'lg'"
                centered hide-header hide-footer no-close-on-backdrop>
         <WH3CreatePool v-if="createPoolStep===1"
                         @confirm="depolyedCommunity"
@@ -193,7 +193,7 @@
             this.loadingCommunityInfo = false;
           })
         }
-      } 
+      }
     },
     async mounted () {
       this.tabOptions = [
@@ -224,7 +224,7 @@
           const { tag, tags, comm, cid } = form;
           // receiption address
           this.stakeAsset = comm.storageAddr;
-          
+
           // create wormhole3 community
           await createWh3Community(cid, this.wh3AccountInfo.twitterId, tag, tags);
 
@@ -242,9 +242,9 @@
               this.$bvToast.toast(tip, params)
             })
           }
-          this.poolTypeModal = false; 
+          this.poolTypeModal = false;
         }
-        
+
       },
       async createWh3() {
         if (this.wh3State === 1) {

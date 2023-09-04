@@ -9,8 +9,8 @@
           <div class="text-center">
             <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                  style="width: 80px">
-              <b-form-input  v-model="creditRatioList[0]"></b-form-input>
-              <span class="pr-2">%</span>
+              <b-form-input class="font14" v-model="creditRatioList[0]"></b-form-input>
+              <span class="pr-2 font14">%</span>
             </div>
             <div class="text-grey-9f font14">{{$t('socialView.socialInfluence')}}</div>
           </div>
@@ -25,16 +25,16 @@
               <div class="text-grey-9f font14">{{$t('socialView.communityStaking')}}</div>
               <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                    style="width: 80px">
-                <b-form-input v-model="creditRatioList[1]"></b-form-input>
-                <span class="pr-2">%</span>
+                <b-form-input class="font14" v-model="creditRatioList[1]"></b-form-input>
+                <span class="pr-2 font14">%</span>
               </div>
             </div>
             <div class="position-absolute text-center triangle-right">
               <div class="text-grey-9f font14">{{$t('socialView.nftHolder')}}</div>
               <div class="c-input-group c-input-group-bg mx-auto c-input-group-border"
                    style="width: 80px">
-                <b-form-input v-model="creditRatioList[2]"></b-form-input>
-                <span class="pr-2">%</span>
+                <b-form-input class="font14" v-model="creditRatioList[2]"></b-form-input>
+                <span class="pr-2 font14">%</span>
               </div>
             </div>
           </div>
@@ -254,7 +254,7 @@ export default {
       }
     }
   },
-  
+
   async mounted () {
     this.policy = JSON.parse(this.community.CCPolicy);
     this.creditRatioList = [this.policy.did ? this.policy.did.ratio * 100 : 0,

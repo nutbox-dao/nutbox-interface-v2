@@ -103,7 +103,7 @@ export default {
           this.loading = false;
           return;
         }
-        
+
         // deploy community contract
         const cid = randomCurationId();
         const comm = await createWh3CommunityContract(cid);
@@ -124,10 +124,10 @@ export default {
   min-height: 300px;
 }
 .add-tag-btn {
-  width: 36px;
-  max-width: 36px;
-  min-width: 36px;
-  height: 36px;
+  width: 2.4rem;
+  max-width: 2.4rem;
+  min-width: 2.4rem;
+  height: 2.4rem;
   margin-left: 10px;
 }
 .tags-container {
