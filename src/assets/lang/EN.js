@@ -711,7 +711,8 @@ module.exports = {
     curationPool: 'Curation Pool',
     communityCredit: 'Community credit',
     createCurationPool: 'Create Pool',
-    accountMismatch: "Your login twiter id: @{twitterUsername} is bond to ETH address: {ethAddress}. Please change to it in your metamask and login again."
+    accountMismatch: "Your login twiter id: @{twitterUsername} is bond to ETH address: {ethAddress}. Please change to it in your metamask and login again.",
+    startPool: '启动矿池'
   },
   metamaskView: {
     p1: 'Please confirm your address',
