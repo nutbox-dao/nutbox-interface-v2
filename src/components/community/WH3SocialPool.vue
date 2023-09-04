@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div v-if="verified" class="box-info-container">
+    <div class="box-info-container">
       <div class="info-card">
         <div class="border-bottom border-dark px-3 py-2 font16 font-bold row-info">
           <span class="py-1">{{$t('socialView.communityContent')}}</span>
@@ -118,9 +118,6 @@
         </div>
       </div>
     </div>
-    <div v-else class="tip-info-container font16 text-primary-0 text-center">
-      您的ETH地址：0x。。。。 绑定的推特账号为：@ttt，请使用绑定的推特登录
-    </div>
     <b-modal v-model="ratioModalVisible" modal-class="custom-modal"
              centered hide-header hide-footer no-close-on-backdrop>
       <WH3PoolRatioModal
@@ -173,7 +170,6 @@ export default {
       retainedReward: '',
       poolPercentage: [],
       totalRewardPerDay: 0,
-      verified: false
     }
   },
   methods: {

@@ -679,7 +679,8 @@ module.exports = {
       createPool: "创建社交矿池",
       curationPool: '社交矿池',
       communityCredit: '社区信用分',
-      createCurationPool: '创建社交矿池'
+      createCurationPool: '创建社交矿池',
+      accountMismatch: '您的推特账号：@{twitterUsername} 绑定的ETH地址为： {ethAddress}。请在小狐狸中切换成该地址后再登录。'
     },
     metamaskView: {
       p1: '请确认你的地址',

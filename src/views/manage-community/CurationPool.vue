@@ -37,6 +37,11 @@
         </div>
         <WH3SocialCredit :community="wh3Community" v-show="activeTab===1"/>
       </template>
+      <div v-else-if="accountMismatch">
+        <div class="tip-info-container font16 text-primary-0 text-center mt-5">
+          {{ $t('wh3.accountMismatch', {twitterUsername: wh3AccountInfo.twitterUsername, ethAddress: wh3AccountInfo.ethAddress}) }}
+        </div>
+      </div>
       <div v-else
          class="empty-card mb-5 d-flex flex-column justify-content-center">
       <div class="empty-bg">
@@ -121,6 +126,7 @@
         updating: false,
         needIcon: false,
         selectToken: {},
+        accountMismatch: false,
         provideDesc: "点击获取后会转入到虫洞3社区tweet pool专用合约地址，地址里面的代币会通过wormhole3平台分发",
         wh3State: 0, // 0: pending 1: not register 2: not create community 3: created community
         wh3Community: {},
@@ -171,7 +177,11 @@
     watch: {
       wh3AccountInfo(newValue, oldValue) {
         if (newValue?.twitterId) {
-          this.wh3State = 2;
+          if (newValue.ethAddress.toLowerCase() === this.account.toLowerCase()) {
+            this.wh3State = 2;
+          }else {
+            this.accountMismatch = true;
+          }
         }else {
           this.wh3State = 1;
           this.loadingCommunityInfo = false
