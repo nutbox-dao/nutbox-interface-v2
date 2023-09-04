@@ -450,7 +450,7 @@ export default {
           symbol: this.provideSymbol,
           icon: this.provideLogo,
           address: this.provideAddress,
-          isMintable: false
+          isMintable: true
         }
       }else {
         this.cToken = {...token, isMintable: false}
@@ -459,7 +459,7 @@ export default {
       const res = await hasMintAdmminRole(this.cToken.address)
       this.cToken.isCustom = true;
       this.readingRole = false
-      this.isMintable = false
+      this.isMintable = this.cToken.isMintable
       this.cardStep = res ? 3 : 2;
     },
     registerToken() {

@@ -12,6 +12,10 @@
               <i class="menu-icon asset-icon" />
               <span>{{ $t('router.asset') }}</span>
             </b-nav-item>
+            <b-nav-item to="/manage-community/curation">
+              <i class="menu-icon curation-icon" />
+              <span>{{ $t('router.curation') }}</span>
+            </b-nav-item>
             <b-nav-item to="/manage-community/iso">
               <i class="menu-icon iso-icon" />
               <span>ISO</span>
@@ -23,10 +27,6 @@
             <b-nav-item to="/manage-community/nft-staking">
               <i class="menu-icon nft-icon" />
               <span>{{ $t('router.nftStake') }}</span>
-            </b-nav-item>
-            <b-nav-item to="/manage-community/curation">
-              <i class="menu-icon curation-icon" />
-              <span>{{ $t('router.curation') }}</span>
             </b-nav-item>
             <!-- <b-nav-item to="/manage-community/nut-power">
               <i class="menu-icon nut-power-icon" />
