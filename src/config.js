@@ -3,9 +3,9 @@
 export const DEBUG = false;
 
 export const LOCALE_KEY = "localeLanguage";
-export const BLOCK_SECOND = 0.25;
+export const BLOCK_SECOND = 2;
 // nutbox backend server
-export const BACKEND_API_URL = "https://arbi-api.nutbox.app"
+export const BACKEND_API_URL = "https://base-api.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
 // export const BACKEND_API_URL = "http://localhost:3000";
 
@@ -146,11 +146,11 @@ export const COSMOS_API_URLS = ["https://anyplace-cors.herokuapp.com/https://api
 //   decimals: 18
 // }
 
-// arbitrum
-export const RPC_NODE = 'https://arb1.arbitrum.io/rpc';
-export const BSC_CHAIN_ID = 42161;
-export const BLOCK_CHAIN_BROWER = 'https://arbiscan.io/';
-export const CHAIN_NAME = 'Arbitrum-one';
+// base
+export const RPC_NODE = 'https://mainnet.base.org/';
+export const BSC_CHAIN_ID = 8453;
+export const BLOCK_CHAIN_BROWER = 'https://basescan.org/';
+export const CHAIN_NAME = 'Base';
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
   name: 'ETH',
@@ -175,7 +175,7 @@ export const DELEGATION_CHAINID_TO_NAME = {
   2: "hive",
 };
 
-export const GasTimes = 1.5;
+export const GasTimes = 1.2;
 
 
 // local network
@@ -197,9 +197,9 @@ export const GasTimes = 1.5;
 // export const MultiAddress = '0xBf27B3a22A76cA18E6dbb0F10190af78346da732'
 // export const NutAddress = '0x871AD5aAA75C297EB22A6349871ce4588E3c0306'
 
-// // arbitrum net
-export const MultiAddress = "0x4B6EF997DbF23D320a6616ADf6499f4cdC00AB7c"
-export const NutAddress = "0xED4D88303973615cC3D61D5F4D06A809055a07b8"
+// // base net
+export const MultiAddress = "0xcA11bde05977b3631167028862bE2a173976CA11"
+export const NutAddress = "0xA643e598364A9dFB3328aD2E70AF6f9E3C477A42"
 
 export const DEFAULT_CLAIM_CURATION_REWARD_SYNGER = "0x4A584E33Dec216a124E36Aceb0B06Bc37642027B"
 

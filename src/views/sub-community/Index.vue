@@ -21,10 +21,10 @@
                 <i class="menu-icon nft-icon" />
                 <span>{{ $t('router.nftStake') }}</span>
               </b-nav-item>
-              <b-nav-item to="/sub-community/curation">
+              <!-- <b-nav-item to="/sub-community/curation">
                 <i class="menu-icon curation-icon" />
                 <span>{{ $t('router.curation') }}</span>
-              </b-nav-item>
+              </b-nav-item> -->
               <!-- <b-nav-item to="/sub-community/nut-power">
                 <i class="menu-icon nut-power-icon" />
                 <span>{{ $t('router.nutPower') }}</span>
