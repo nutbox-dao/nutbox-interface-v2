@@ -624,6 +624,7 @@ export const updatePoolRecipient = async (poolId, newRecipient) => {
   })
 }
 
+// upload pool info to nutbox
 export const updatePoolDesc = async (poolId, description) => {
   return new Promise(async (resolve, reject) => {
     let nonce = await getNonce();

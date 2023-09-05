@@ -7,12 +7,13 @@ import {
   insertCommunity,
   updateCommunity,
   getAllCommunities as gac,
-  updateSocial,
+  updateSocial
 } from "@/apis/api";
 import { 
   createCommunity as creCom,
   updateRewards,
-  updateCCPoloicy as uccp
+  updateCCPoloicy as uccp,
+  updateWh3ComConfig
 } from '@/apis/wh3Api'
 import { signMessage } from "./utils";
 import { errCode, Multi_Config, FEE_TYPES, NutAddress, DEFAULT_CLAIM_CURATION_REWARD_SYNGER } from "@/config";
@@ -789,7 +790,7 @@ export const watchMemberBalance = (callback) => {
  * update social info
  * @param {*} social
  */
-export const udpateSocialInfo = async (social) => {
+export const udpateSocialInfo = async (social, wh3CommunityId) => {
   return new Promise(async (resolve, reject) => {
     let id;
     try {
@@ -807,6 +808,7 @@ export const udpateSocialInfo = async (social) => {
     nonce = nonce ? nonce + 1 : 1;
     const infoStr = JSON.stringify({
       id,
+      communityId: wh3CommunityId,
       ...social,
     });
     let signature = "";
@@ -823,9 +825,13 @@ export const udpateSocialInfo = async (social) => {
       infoStr,
       nonce,
       signature,
+      ethAddress: userId
     };
     try {
       let res = await updateSocial(params);
+      if (wh3CommunityId) {
+        await updateWh3ComConfig(params)
+      }
       store.commit("web3/saveNonce", nonce);
       resolve(res);
     } catch (e) {
@@ -1051,9 +1057,6 @@ export const createWh3CommunityContract = async (cid) => {
       cid = ethers.BigNumber.from('0x' + cid);
       let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
-      // start pool
-      tx = await contract.startPool();
-      await waitForTx(tx.hash);
       const communityInfo = await contract.getCommunityInfo(cid);
       resolve(communityInfo)
     }catch(e) {

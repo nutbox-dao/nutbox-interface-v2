@@ -61,7 +61,7 @@
           <div class="d-flex align-items-center">
             <div class="link-info-icon document">{{ $t('commen.stakeUrl') }}</div>
             <div class="c-input-group c-input-group-bg">
-              <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
+              <b-form-input v-model="socialForm.stakeUrl" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
           </div>
         </b-form-group>
@@ -70,7 +70,7 @@
           <div class="d-flex align-items-center">
             <div class="link-info-icon document">{{ $t('commen.swapUrl') }}</div>
             <div class="c-input-group c-input-group-bg">
-              <b-form-input v-model="socialForm.document" :placeholder="$t('commen.optional')"></b-form-input>
+              <b-form-input v-model="socialForm.swapUrl" :placeholder="$t('commen.optional')"></b-form-input>
             </div>
           </div>
         </b-form-group>
@@ -120,6 +120,7 @@ import { mapState } from 'vuex'
 import { getMyCommunityInfo, udpateSocialInfo } from '@/utils/web3/community'
 import Login from '@/components/common/Login'
 import { handleApiErrCode } from '@/utils/helper'
+import { getCommunityByEth } from '@/apis/wh3Api'
 
 export default {
   name: 'SocialSetting',
@@ -135,15 +136,18 @@ export default {
         telegram: '',
         facebook: '',
         github: '',
-        document: ''
-      }
+        document: '',
+        stakeUrl: '',
+        swapUrl: ''
+      },
+      cid: null
     }
   },
   components: {
     Login,
   },
   computed: {
-    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio"]),
+    ...mapState("web3", ["communityBalance", "userBalances", "ctokenApprovement", "devAddress", "devRatio", "account"]),
     ...mapState("steem", ['steemAccount']),
     ...mapState('community', ['communityInfo']),
   },
@@ -203,7 +207,7 @@ export default {
     async onConfirm() {
       try{
         this.uploading = true
-        const res = await udpateSocialInfo(this.socialForm)
+        const res = await udpateSocialInfo(this.socialForm, this.cid)
         this.$bvToast.toast(this.$t('tip.updateSocialSuccess'), {
           title: this.$t('tip.success'),
           variant: 'success'
@@ -231,7 +235,11 @@ export default {
   },
   async mounted () {
     getMyCommunityInfo().then().catch();
-    this.fixNullOfSocial()
+    this.fixNullOfSocial();
+    // get wh3 community info;
+    getCommunityByEth(this.account).then(com => {
+      this.cid = com.communityId
+    })
   },
 }
 </script>

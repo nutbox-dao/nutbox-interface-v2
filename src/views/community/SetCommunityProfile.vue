@@ -428,7 +428,7 @@ export default {
         return;
       }
     }
-
+    
     if (this.communityInfo && this.communityInfo.cToken){
       // this.tokenLogo = this.communityInfo.cToken.icon
       this.form.tokenLogo = this.communityInfo.cToken.icon
@@ -436,7 +436,6 @@ export default {
       this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
     }
-    this.chooseTokenTipModal = true
   },
   methods: {
     onCancel () {

@@ -93,7 +93,7 @@
 
   <script>
   import ManageCurationCard from '@/components/community/ManageCurationCard'
-  import { addPool, updatePoolsRatio, getPoolFactoryAddress, updatePoolDesc } from '@/utils/web3/pool'
+  import { addPool, updatePoolsRatio, getPoolFactoryAddress, updatePoolDesc, startPool } from '@/utils/web3/pool'
   import { handleApiErrCode, sleep } from '@/utils/helper'
   import StakingPoolType from '@/components/community/StakingPoolType'
   import CreateCurationPool from '@/components/community/CreateCurationPool'
@@ -107,7 +107,6 @@
   import WH3SocialPool from "@/components/community/WH3SocialPool.vue";
   import WH3SocialCredit from "@/components/community/WH3SocialCredit.vue";
   import { createWh3Community, getWh3CommunityContract, checkCurationPoolStarted } from '@/utils/web3/community'
-  import { startPool } from '@/utils/web3/pool'
 
   export default {
     name: 'CurationPool',
@@ -311,6 +310,7 @@
             title:this.$t('tip.success'),
             variant: 'success'
           })
+          await startPool(newPool.id);
           this.communityData.pools.push(newPool)
           let index = 0
           this.communityData.pools.map(pool => {

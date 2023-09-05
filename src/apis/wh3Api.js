@@ -26,3 +26,6 @@ export const updateRewards = async (params) =>
 
 export const updateCCPoloicy = async (params) =>
     put(WH3_API_URL + '/community/updateCCPolicy', params)
+
+export const updateWh3ComConfig = async (params) =>
+    put(WH3_API_URL + '/community/updateWh3ComConfig', params)

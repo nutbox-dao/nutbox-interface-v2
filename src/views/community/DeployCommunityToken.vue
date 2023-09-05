@@ -450,10 +450,10 @@ export default {
           symbol: this.provideSymbol,
           icon: this.provideLogo,
           address: this.provideAddress,
-          isMintable: true
+          isMintable: false
         }
       }else {
-        this.cToken = {...token, isMintable: false}
+        this.cToken = {...token, isMintable: true}
       }
       this.readingRole = true
       const res = await hasMintAdmminRole(this.cToken.address)
