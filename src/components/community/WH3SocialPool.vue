@@ -189,6 +189,7 @@ export default {
         this.ratioModalVisible = false;
         this.poolPercentage = ratios.map(r => parseFloat(r))
       } catch (e) {
+        console.log(55, e)
         handleApiErrCode(e, (title, info) => {
           this.$bvToast.toast(title, info)
         });
