@@ -213,7 +213,7 @@ export default {
 
     getCommunityRewardPerBlock(communityInfo.id).then(reward => {
       console.log(1, reward, this.community.rewardTokenDecimals)
-      this.totalRewardPerDay = ethers.BigNumber.from(reward).mul(ethers.BigNumber.from(10).pow(this.community.rewardTokenDecimals));
+      this.totalRewardPerDay = ethers.BigNumber.from(parseInt(reward * 10000)).mul(ethers.BigNumber.from(10).pow(this.community.rewardTokenDecimals)).div(10000);
       const pool = this.communityData.pools.find(p => p.poolFactory.toLowerCase() ===
                 getPoolFactoryAddress("curation") && p.status === 'OPENED')
       if (pool) {
