@@ -31,6 +31,11 @@ export const PeriodToIdx = {
   64:6
 }
 
+export const SignUpMessage = JSON.stringify({
+  project: 'wormhole3',
+  method: 'create account'
+}, null, 4)
+
 /**
  * ERROR CODE DEFINE
  */

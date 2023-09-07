@@ -101,14 +101,14 @@
 
 <script>
 import showToastMixin from '@/mixins/copyToast'
-import { getUserByEth, register, check } from '@/api/wh3Api'
+import { getUserByEth, register, check } from '@/apis/wh3Api'
 import { mapState, mapGetters } from 'vuex'
 import { accountChanged } from '@/utils/web3/account'
 import { signMessage } from '@/utils/web3/web3'
-// import { SignUpMessage, SendPwdServerPubKey } from '@/config'
+import { SignUpMessage, SendPwdServerPubKey } from '@/config'
 import { ethers } from 'ethers'
-// import { bytesToHex } from '@/utils/code'
-// import { generateSteemAuth } from '@/utils/steem'
+import { bytesToHex } from '@/utils/code'
+import { generateSteemAuth } from '@/utils/steem'
 import { box, createKeypair } from '@/utils/tweet-nacl'
 import Cookie from 'vue-cookies'
 import { sleep } from '@/utils/helper'
