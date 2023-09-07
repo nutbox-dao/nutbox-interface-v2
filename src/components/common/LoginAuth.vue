@@ -136,7 +136,7 @@ export default {
         if (userInfo.code === 1) {
           while (count < 80) {
             userInfo = await twitterLogin(state)
-            if (userInfo.code === 3) {
+            if (userInfo.code === 0) {
               // not registry
               // store auth info
               console.log('not register')
@@ -156,7 +156,7 @@ export default {
           this.showNotify(timeoutTip, 5000, 'error')
           return
         } else {
-          if (userInfo.code === 3) {
+          if (userInfo.code === 0) {
             // not registry
             // store auth info
             console.log('not register')
