@@ -138,6 +138,15 @@ export const chainChanged = async (refresh) => {
   })
 }
 
+export const signMessage = async (message, address) => {
+  const metamask = await getEthWeb()
+  const provider = new ethers.providers.Web3Provider(metamask)
+  const signer = provider.getSigner();
+  if (await signer.getAddress() === address) {
+    return await signer.signMessage(message)
+  }
+}
+
 /**
  * Is metamask unlocked
  * @returns bool

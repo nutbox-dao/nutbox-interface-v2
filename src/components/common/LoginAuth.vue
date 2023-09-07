@@ -84,7 +84,8 @@ export default {
     Cookie.remove('account-auth-info')
   },
   computed: {
-    ...mapState(['referee'])
+    ...mapState(['referee']),
+    ...mapState('web3', ['account'])
     // ...mapGetters(['getPrivateKey'])
   },
   methods: {
@@ -135,7 +136,7 @@ export default {
         if (userInfo.code === 1) {
           while (count < 80) {
             userInfo = await twitterLogin(state)
-            if (userInfo.code === 0) {
+            if (userInfo.code === 3) {
               // not registry
               // store auth info
               console.log('not register')
@@ -155,7 +156,7 @@ export default {
           this.showNotify(timeoutTip, 5000, 'error')
           return
         } else {
-          if (userInfo.code === 0) {
+          if (userInfo.code === 3) {
             // not registry
             // store auth info
             console.log('not register')
@@ -169,7 +170,7 @@ export default {
         }
       } catch (e) {
         // login error
-        this.showNotify(e.toString(), 5000, 'error')
+        this.showNotify(e, 5000, 'error')
       } finally {
         this.loging = false
       }
@@ -178,7 +179,7 @@ export default {
       try {
         this.connecting = true
         const acc = await connectMetamask()
-        this.walletAddress = ethers.utils.getAddress(acc[0])
+        this.walletAddress = ethers.utils.getAddress(this.account)
         this.authStep = 'metamask'
       } catch (e) {
         console.log('connect metamask fail', e)

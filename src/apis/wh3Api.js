@@ -15,6 +15,12 @@ export const twitterLogin = async (state) =>
 export const twitterAuth = async (params) =>
     post(WH3_API_URL + '/auth/login', params)
 
+export const check = async (params) =>
+    post(WH3_API_URL + '/register/check', params)
+
+export const register = async (params) => 
+    post(WH3_API_URL + '/register', params)
+
 export const checkDisplayTag = async (tag) => 
     get(WH3_API_URL + '/community/checkDisplayTag', {tag})
 

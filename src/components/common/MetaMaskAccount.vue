@@ -33,7 +33,7 @@
         </template>
         <template v-else>
           <div class="whitespace-pre-line text-left text-grey-7 font14 mt-2 mb-3">
-            {{$t('metamaskView.p2')}}
+
           </div>
           <div class="d-flex justify-content-between align-items-center" style="column-gap: 15px">
             <button v-show="!thirdPartInfo || !thirdPartInfo.ethAddress"
@@ -101,10 +101,10 @@
 
 <script>
 import showToastMixin from '@/mixins/copyToast'
-// import { getUserByEth, register, check } from '@/api/api'
+import { getUserByEth, register, check } from '@/api/wh3Api'
 import { mapState, mapGetters } from 'vuex'
 import { accountChanged } from '@/utils/web3/account'
-// import { signMessage } from '@/utils/web3/web3'
+import { signMessage } from '@/utils/web3/web3'
 // import { SignUpMessage, SendPwdServerPubKey } from '@/config'
 import { ethers } from 'ethers'
 // import { bytesToHex } from '@/utils/code'
@@ -165,33 +165,33 @@ export default {
       // this.$gtag.event('sync up with metamask', {
       //   method: 'confirm'
       // })
-      // if (this.isRegister) {
-      //   this.$emit('back')
-      // } else {
-      //   try {
-      //     this.isSigning = true
-      //     const sig = await signMessage(SignUpMessage, this.account)
-      //     if (!sig) {
-      //       this.showNotify(this.$t('tips.dismatchAddress'), 5000, 'error')
-      //       return
-      //     }
-      //     const salt = bytesToHex(ethers.utils.randomBytes(4))
-      //     let pair = this.pair
-      //     await sleep(0.6)
-      //     if (!pair.privateKey) {
-      //       pair = await createKeypair()
-      //     }
-      //     const pwd = box(generateSteemAuth(sig.substring(2) + salt, this.account), SendPwdServerPubKey, pair.privateKey)
-      //     this.pwd = pwd,
-      //     this.salt = salt
-      //     this.sendPubKey = pair.publicKey
-      //     this.step = 2
-      //   } catch (e) {
-      //     console.log('sign message fail:', e)
-      //   } finally {
-      //     this.isSigning = false
-      //   }
-      // }
+      if (this.isRegister) {
+        this.$emit('back')
+      } else {
+        try {
+          this.isSigning = true
+          const sig = await signMessage(SignUpMessage, this.account)
+          if (!sig) {
+            this.showNotify(this.$t('tips.dismatchAddress'), 5000, 'error')
+            return
+          }
+          const salt = bytesToHex(ethers.utils.randomBytes(4))
+          let pair = this.pair
+          await sleep(0.6)
+          if (!pair.privateKey) {
+            pair = await createKeypair()
+          }
+          const pwd = box(generateSteemAuth(sig.substring(2) + salt, this.account), SendPwdServerPubKey, pair.privateKey)
+          this.pwd = pwd,
+          this.salt = salt
+          this.sendPubKey = pair.publicKey
+          this.step = 2
+        } catch (e) {
+          console.log('sign message fail:', e)
+        } finally {
+          this.isSigning = false
+        }
+      }
     },
     async checkoutAccount () {
       try {
@@ -219,9 +219,9 @@ export default {
     },
     async signup () {
       console.log('signup')
-      this.$gtag.event('sync up with metamask', {
-        method: 'signup'
-      })
+      // this.$gtag.event('sync up with metamask', {
+      //   method: 'signup'
+      // })
       const loginInfo = Cookie.get('account-auth-info')
       Cookie.remove('account-auth-info')
       Cookie.remove('partner-info')
@@ -246,7 +246,7 @@ export default {
             this.$gtag.event('sync up with metamask ok', {
               method: 'signup'
             })
-            this.$store.commit('saveAccountInfo', res.account)
+            this.$store.commit('user/saveWh3AccountInfo', res.account)
             // signup success
             this.step = 3
           }
