@@ -105,7 +105,7 @@ module.exports = {
       ok: '好的',
       copy: "复制",
       edit: "编辑",
-      charge: '重置',
+      charge: '充值',
       redeem: "赎回",
       enter: '进入',
       approve: '授权',
