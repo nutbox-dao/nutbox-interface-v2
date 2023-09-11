@@ -1057,7 +1057,15 @@ export const createWh3CommunityContract = async (cid) => {
       cid = ethers.BigNumber.from('0x' + cid);
       let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
-      const communityInfo = await contract.getCommunityInfo(cid);
+      let communityInfo = await contract.getCommunityInfo(cid);
+      if (!communityInfo.storageAddr) {
+        await sleep(3)
+        communityInfo = await contract.getCommunityInfo(cid);
+      }
+      if (!communityInfo.storageAddr) {
+        await sleep(3)
+        communityInfo = await contract.getCommunityInfo(cid);
+      }
       resolve(communityInfo)
     }catch(e) {
       console.log('create wh3 community fail', e);
