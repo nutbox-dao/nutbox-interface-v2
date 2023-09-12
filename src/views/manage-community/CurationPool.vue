@@ -66,7 +66,7 @@
                            type="create"
                            :needIcon="needIcon"
                            :token="selectToken"
-                           name="Tweet pool"
+                           name="Social Module"
                            @back="poolTypeModal=false"
                            @close="poolTypeModal=false"
                            :enable-op="!creating"
@@ -126,7 +126,7 @@
         needIcon: false,
         selectToken: {},
         accountMismatch: false,
-        provideDesc: "点击获取后会转入到虫洞3社区tweet pool专用合约地址，地址里面的代币会通过wormhole3平台分发",
+        provideDesc: "点击获取后会转入到虫洞3社区社交模块专用合约地址，地址里面的代币会通过wormhole3平台分发",
         wh3State: 0, // 0: pending 1: not register 2: not create community 3: created community
         wh3Community: {},
         loadingCommunityInfo: true

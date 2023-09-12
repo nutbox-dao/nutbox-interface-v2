@@ -260,7 +260,7 @@
                 label=""
               >
                 <button class="primary-btn w-50" @click="showTips">
-                  {{ $t("operation.commit") }}
+                  {{ $t("operation.add") }}
                 </button>
               </b-form-group>
             </div>

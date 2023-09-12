@@ -15,7 +15,7 @@ module.exports = {
       max: "最大",
       complete: "已完成",
       now: "现在",
-      poster: "Poster",
+      poster: "封面",
       more: '更多',
       detail:'详情',
       activities: '动作',
@@ -70,7 +70,7 @@ module.exports = {
       iso: 'ISO: 首次质押发行',
       isoDetail: '质押POS代币挖取社区代币。高收益率、无风险。',
       erc1155Desc: '质押您的ERC115来挖矿.',
-      curation: '社交矿池可以直接将资产分配到接收者地址（通常是合约地址）。任何用户都可以执行领取操作，执行领取后的奖励将直接转移到接收者地址。',
+      curation: '可以添加社交模块来奖励用户的社交贡献。（当成员在社区中创建和策划内容时，他们会收到代币。可以为推文、公告、推特空间和讨论主题创建代币奖励池。）Wormhole3上的社区。社区代币的一部分可以分配给社交模块。一旦设置了社交模块，您的社区也将在Wormhole3上创建(https://alpha.wormhole3.io), 代币将自动分配给社区成员的钱包。要了解更多关于Wormhole3的信息，请参阅此处(https://wormhole3.gitbook.io/wh3-cn/)',
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
       assetTip1: '如果您想使用已经存在的资产',
@@ -420,7 +420,7 @@ module.exports = {
       nftStake: 'NFT质押',
       nftStaking: 'NFT质押',
       nutPower: 'NUT Power',
-      curation: '社交矿池'
+      curation: '社交模块'
     },
     placeHolder: {
       inputName: "请输入社区名字",
@@ -450,7 +450,7 @@ module.exports = {
       communityLink: "官网链接",
       communityDesc: "描述",
       communityLogo: "图标",
-      cTokenLogo: "C-Token图标",
+      cTokenLogo: "社区代币(C-Token)图标",
       communityPoster: "封面",
       communityBalance: "社区余额",
       communityToken: "社区代币",
@@ -519,7 +519,7 @@ module.exports = {
       ratioTip: '调整矿池比例(矿池比例之和应为100%)',
       poolDescTitle: '矿池详细描述',
       poolDescTip: '你可以尽量详细的描述该矿池，比如接收地址的详细描述，奖励将如何分配到用户手上等等。',
-      recipientDescription: '社交矿池会根据您配置的矿池比例来计算应该分得的奖励数量。该矿池的所有收入都会由设置的接收地址接收，该地址可以是一个EOA，也可以是一个合约地址。 这个可以使社区代币的分发更加灵活，比如可以将该地址设置为一个社交分发协议的合约，则该矿池的产品将分发到该社交协议进行二次分发。另外一点，矿池的产出将全部由该地址接收，直到您将其修改，所以矿池产出的奖励可以被任何人执行领取操作。',
+      recipientDescription: '社交模块会根据您配置的矿池比例来计算应该分得的奖励数量。该矿池的所有收入都会由设置的接收地址接收，该地址可以是一个EOA，也可以是一个合约地址。 这个可以使社区代币的分发更加灵活，比如可以将该地址设置为一个社交分发协议的合约，则该矿池的产品将分发到该社交协议进行二次分发。另外一点，矿池的产出将全部由该地址接收，直到您将其修改，所以矿池产出的奖励可以被任何人执行领取操作。',
       poolDescription: '这个描述信息将展示在该矿池的卡片上，用户将从卡片上的描述了解到该矿池的作用，所以请尽可能的描述清楚该矿池的详细信息。',
       harvestCurationPoolTip: "任何人都可以收取该矿池的奖励到接受者地址。",
       recipientTip: "接收者地址可以是一个EOA，也可以是一个合约地址，其作用是对矿池的奖励做更复杂的二次分发。"
@@ -650,8 +650,8 @@ module.exports = {
       createTreasury: "创建国库: {address}",
       createTreasuryWithName: "创建了国库: {address}",
       changeCurationPoolRecipient: "将矿池：{pool}的接收者修改为了 {address}",
-      startCurationPool: "启动社交矿池: {pool}",
-      startCurationPoolWithName: "启动社交矿池: {pool}",
+      startCurationPool: "启动社交模块: {pool}",
+      startCurationPoolWithName: "启动社交模块: {pool}",
       title: {
         DEPOSIT: "质押",
         WITHDRAW: '减少质押',
@@ -673,18 +673,20 @@ module.exports = {
         ADMINWITHDRAWNREVENUE: "国库提款",
         ADMINCREATETREASURY: "创建国库",
         ADMINCHANGECURATIONRECIPIENT: "变更接受者",
-        STARTCURATIONGAUGE: "启动社交矿池"
+        STARTCURATIONGAUGE: "启动社交模块"
       }
     },
     wh3: {
       registerWh3: "注册虫洞3",
-      createCommunity: "创建虫洞3社区",
-      createPool: "创建社交矿池",
-      curationPool: '社交矿池',
+      createCommunity: "创建社交模块",
+      createPool: "创建社交模块",
+      curationPool: '内容激励池',
       communityCredit: '社区信用分',
-      createCurationPool: '创建社交矿池',
+      createCurationPool: '创建社交模块',
       accountMismatch: '您的推特账号：@{twitterUsername} 绑定的ETH地址为： {ethAddress}。请在小狐狸中切换成该地址后再登录。',
-      startPool: 'Start pool'
+      startPool: '启动社交模块',
+      setModule: '设置社交模块分发'
+
     },
     metamaskView: {
       p1: '请确认你的地址',
