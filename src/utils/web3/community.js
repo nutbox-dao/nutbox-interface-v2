@@ -1054,21 +1054,17 @@ export const createWh3CommunityContract = async (cid) => {
       const communityId = store.state.currentCommunity.communityId;
       const ctoken = await getCToken(communityId);
       const contract = await getContract('CommunityCuration', null, false)
-      console.log('cid1', cid)
       cid = ethers.BigNumber.from('0x' + cid);
       let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
       let communityInfo = await contract.getCommunityInfo(cid);
-      console.log(10, communityInfo)
       if (!communityInfo.storageAddr) {
         await sleep(3)
         communityInfo = await contract.getCommunityInfo(cid);
-        console.log(20, communityInfo)
       }
       if (!communityInfo.storageAddr) {
         await sleep(3)
         communityInfo = await contract.getCommunityInfo(cid);
-        console.log(30, communityInfo)
       }
       resolve(communityInfo)
     }catch(e) {
@@ -1081,7 +1077,6 @@ export const createWh3CommunityContract = async (cid) => {
 export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log('cid2', cid)
       // get nutbox community and token info
       const community = store.state.community.communityInfo;
       console.log('community:', community)
@@ -1113,7 +1108,7 @@ export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
         tags: tags ? tags.join(','): '',
         displayTag,
         chainId: 42161,
-        rewardToken: ethers.utils.getAddress(community.ctoken),
+        rewardToken: ethers.utils.getAddress(ctoken.address),
         rewardSymbol: ctoken.symbol,
         rewardName: ctoken.name,
         decimals: ctoken.decimal,
