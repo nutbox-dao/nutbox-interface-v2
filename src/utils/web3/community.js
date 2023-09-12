@@ -1084,6 +1084,7 @@ export const createWh3Community = async (cid, twitterId, displayTag, tags) => {
       console.log('cid2', cid)
       // get nutbox community and token info
       const community = store.state.community.communityInfo;
+      console.log('community:', community)
       
       const ctoken = community.cToken;
     
