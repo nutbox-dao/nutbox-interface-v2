@@ -65,7 +65,30 @@
           </div>
         </b-popover>
       </div>
+      <b-modal
+      v-model="showAttention"
+      modal-class="custom-modal"
+      centered
+      hide-header
+      hide-footer
+      no-close-on-backdrop
+    >
+      <div class="custom-form">
+        <h3 style="color: red; text-align: center">{{ $t("tip.tips") }}</h3>
+        <div class="my-3 font20 line-height24 text-center">
+          {{ $t("community.insufficientBalance") }}
+        </div>
+        <div class="mb-4 font20 line-height24 text-center">
+          {{ `Please contact community manager to recharge balance.` }}
+        </div>
 
+        <div class="d-flex justify-content-between" style="gap: 2rem">
+          <button class="primary-btn" @click="showAttention = false">
+            {{ $t("operation.cancel") }}
+          </button>
+        </div>
+      </div>
+    </b-modal>
     </div>
   </template>
 

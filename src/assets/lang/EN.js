@@ -122,7 +122,7 @@ module.exports = {
     recharge: "Recharge",
     upgrade: 'Upgrade',
     choseToken: "Choose Token",
-    registerAsset: "Register an asset",
+    registerAsset: "Create New Token",
     deploy: 'Deploy'
   },
   wallet: {
@@ -467,6 +467,9 @@ module.exports = {
   },
   community: {
     community: "Community",
+    welcome: `Welcome to creating a community! When members contribute to a community, whether by staking, providing liquidity or contributing and curating content, they can receive community tokens. `,
+    createTip1: '* Please take note that each wallet address can only create one community, and this cannot be amended. ',
+    createTip2: '* If you are deploying community token to be used on Wormhole3, please make sure to use the same wallet address to bind with your community twitter account on Wormhole3 to ensure you can manage the community.',
     social: "Social",
     communityList: "Community List",
     communityTokenList: "C-Token List",
@@ -504,8 +507,8 @@ module.exports = {
     to the community`,
     chargeTip1: "You can do it now, or later in the community management page.",
     noCommunity: "You have no community yet",
-    choseAsset: 'Chose an asset',
-    deployAsset: 'Deploy community asset',
+    choseAsset: 'Chose Existing Token',
+    deployAsset: 'Deploy community token',
     completeInfo: 'Complete info',
     totalUsers: "Total users",
 

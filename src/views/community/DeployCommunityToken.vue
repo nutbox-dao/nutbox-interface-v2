@@ -10,7 +10,8 @@
         <!-- select token type -->
         <div v-show="cardStep===0" class="form-card">
           <div class="text-left">
-            <div class="font-bold line-height24 font20">{{ $t('community.choseAsset') }}</div>
+            <div class="line-height20 font16 mb-1">{{ $t('community.welcome') }}</div>
+            <div class="font-bold line-height24 font20 mt-3">- {{ $t('community.choseAsset') }}</div>
             <div class="font14 line-height14 mt-1 mb-3 text-grey-7">{{ $t('desc.assetTip1') }}</div>
             <div class="custom-form">
               <button class="primary-btn" @click="cardStep=1">{{$t('operation.choseToken')}}</button>
@@ -18,7 +19,7 @@
           </div>
           <div class="my-4 mx-auto divide-line font14 line-height14 text-center">{{$t('commen.or')}}</div>
           <div class="form text-left">
-            <div class="font-bold line-height24 font20">{{$t('operation.registerAsset')}}</div>
+            <div class="font-bold line-height24 font20">- {{$t('operation.registerAsset')}}</div>
             <div class="font14 line-height14 mt-1 mb-3 text-grey-7">{{$t('desc.assetTip2')}}</div>
             <div class="custom-form">
               <div class="row">
@@ -54,6 +55,8 @@
                 <div class="col-12">
                   <button class="primary-btn" @click="registerToken()">{{ $t('operation.registerAsset') }}</button>
                 </div>
+                <div class="line-height20 font16 mt-3">{{ $t('community.createTip1') }}</div>
+                <div class="line-height20 font16 mt-3">{{ $t('community.createTip2') }}</div>
               </div>
             </div>
           </div>

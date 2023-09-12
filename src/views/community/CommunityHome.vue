@@ -12,7 +12,7 @@
             <div class="v-line mx-auto"></div>
           </div>
           <div class="col-md-4 d-flex align-items-center flex-md-row flex-column">
-            <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">{{ $t('commen.or') }}</div>
+            <!-- <div class="mx-3 my-md-0 my-3 font-bold font20 line-height28">{{ $t('commen.or') }}</div> -->
             <ConnectMetaMask class="w-100" v-if="!metamaskConnected"/>
             <button v-else :disabled="loadingMyCommunityInfo" class="primary-btn d-flex justify-content-center align-items-center w-100"
                     @click="manageCommunity">

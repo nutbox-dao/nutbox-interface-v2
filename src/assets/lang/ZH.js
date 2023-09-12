@@ -121,7 +121,7 @@ module.exports = {
       recharge: "充值",
       upgrade: '升级',
       choseToken: "选择代币",
-      registerAsset: "注册新资产",
+      registerAsset: "创建新代币",
       deploy: '部署'
     },
     wallet: {
@@ -440,6 +440,9 @@ module.exports = {
     },
     community: {
       community: "社区",
+      welcome: '欢迎创建社区！当成员为社区做出贡献时，无论是通过质押、提供流动性还是贡献和策划内容，他们都可以获得社区代币。',
+      createTip1: `* 请注意，每个钱包地址只能创建一个社区，不能重复创建。`,
+      createTip2: '* 如果您正在部署将在Wormhole3上使用的社区代币，请确保使用与您在Wormhole3上的社区推特帐户绑定相同的地址，以确保您可以管理社区。',
       social: "社交信息",
       communityList: "社区列表",
       communityTokenList: "C-Token列表",
@@ -476,8 +479,8 @@ module.exports = {
       到社区`,
       chargeTip1: "您可以现在充值, 或者后续在社区管理页面充值",
       noCommunity: "您还没有创建社区",
-      choseAsset: '选择资产',
-      deployAsset: '部署社区资产',
+      choseAsset: '选择代币',
+      deployAsset: '部署社区代币',
       completeInfo: '完善社区信息',
       totalUsers: '总用户数',
 
