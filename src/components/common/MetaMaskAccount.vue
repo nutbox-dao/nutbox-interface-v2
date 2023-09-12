@@ -243,9 +243,6 @@ export default {
           // checkout register progress
           const res = await check({ accessToken, twitterId })
           if (res && res.code === 3) {
-            this.$gtag.event('sync up with metamask ok', {
-              method: 'signup'
-            })
             this.$store.commit('user/saveWh3AccountInfo', res.account)
             // signup success
             this.step = 3

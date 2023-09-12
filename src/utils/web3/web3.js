@@ -9,7 +9,7 @@ import {
   BLOCK_CHAIN_BROWER
 } from '@/config'
 import store from '@/store'
-
+import { ethers } from 'ethers'
 import { getProvider } from './ethers'
 import { getAccounts } from "./account"
 import { getMyCommunityInfo } from './community'

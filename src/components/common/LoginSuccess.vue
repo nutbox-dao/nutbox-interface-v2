@@ -1,6 +1,12 @@
 <template>
-    <div>
-        Login success
+    <div style="text-align: center;">
+        <h3>
+            Authorization successful
+        </h3>
+        <p>
+            Please close this window
+        </p>
+
     </div>
 </template>
 
