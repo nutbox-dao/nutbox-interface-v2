@@ -1059,16 +1059,16 @@ export const createWh3CommunityContract = async (cid) => {
       let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
       await waitForTx(tx.hash)
       let communityInfo = await contract.getCommunityInfo(cid);
-      console(10, communityInfo)
+      console.log(10, communityInfo)
       if (!communityInfo.storageAddr) {
         await sleep(3)
         communityInfo = await contract.getCommunityInfo(cid);
-        console(20, communityInfo)
+        console.log(20, communityInfo)
       }
       if (!communityInfo.storageAddr) {
         await sleep(3)
         communityInfo = await contract.getCommunityInfo(cid);
-        console(30, communityInfo)
+        console.log(30, communityInfo)
       }
       resolve(communityInfo)
     }catch(e) {
