@@ -242,7 +242,7 @@
           const { tag, tags, comm, cid } = form;
           // receiption address
           this.stakeAsset = comm.storageAddr;
-
+          console.log(2)
           // create wormhole3 community
           await createWh3Community(cid, this.wh3AccountInfo.twitterId, tag, tags);
 

@@ -279,8 +279,8 @@ export default {
       }
     });
 
-    this.nftHolders = (this.policy && this.policy.nft && this.policy.nft.policys > 0) ? this.policy.nft.policys.map(n => ({
-      address: n.address,
+    this.nftHolders = (this.policy && this.policy.nft && this.policy.nft.policys.length > 0) ? this.policy.nft.policys.map(n => ({
+      address: n.contract,
       ratio: n.ratio * 100
     })) : []
   },
