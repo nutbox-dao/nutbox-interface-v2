@@ -222,7 +222,6 @@
       }
     },
     async mounted () {
-      this.poolTypeModal = true
       this.tabOptions = [
         this.$t('wh3.curationPool'),
         this.$t('wh3.communityCredit')
