@@ -10,7 +10,7 @@
             <div class="flex align-items-center" style="white-space: nowrap">
               <span>{{$t('socialView.chainTag')}}</span>
               <img id="chain-tag-tip" class="ml-1" src="~@/static/images/warning-icon-gray.svg" alt="">
-              <b-popover triggers="hover" target="chain-tag-tip" placement="right" custom-class="">
+              <b-popover triggers="hover" target="chain-tag-tip" placement="bottom" custom-class="">
                 {{$t('socialView.chainTagTip')}}
               </b-popover>
             </div>
@@ -29,7 +29,7 @@
             <div class="flex align-items-center" style="white-space: nowrap">
               <span>{{$t('socialView.communityCategoryTags')}}</span>
               <img id="com-tag-tip" class="ml-1" src="~@/static/images/warning-icon-gray.svg" alt="">
-              <b-popover triggers="hover" target="com-tag-tip" placement="rigth" custom-class="">
+              <b-popover triggers="hover" target="com-tag-tip" placement="bottom" custom-class="">
                 {{$t('socialView.communityCategoryTagsTip')}}
               </b-popover>
             </div>
