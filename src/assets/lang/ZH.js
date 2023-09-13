@@ -736,6 +736,8 @@ module.exports = {
     socialView: {
       chainTag: '推文上链标签',
       communityCategoryTags: '社区类别标签',
+      chainTagTip: '这是你所在社区的链上标签。所有带有此标签的推文都将在链上同步。标签设置后不能修改',
+      communityCategoryTagsTip: '添加类别标签来描述您的社区。用户可以通过搜索这些标签找到您的社区。',
       deploy: '部署',
       createNewPool: '创建矿池',
       contractAddress: '合约地址',

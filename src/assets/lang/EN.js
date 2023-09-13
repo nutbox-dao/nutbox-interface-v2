@@ -767,6 +767,8 @@ module.exports = {
   socialView: {
     chainTag: 'Tweet tag',
     communityCategoryTags: 'Categary tags',
+    chainTagTip: 'This is the on-chain hashtag of your community. All tweets with this hashtag will be synced on-chain. This cannot be amended later.',
+    communityCategoryTags : 'Add category tags to describe your community. Users can find your community by searching these tags.',
     deploy: 'Deploy',
     createNewPool: 'Create pool',
     contractAddress: 'Contract',

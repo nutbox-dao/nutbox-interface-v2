@@ -10,8 +10,8 @@
             <div class="flex align-items-center" style="white-space: nowrap">
               <span>{{$t('socialView.chainTag')}}</span>
               <img id="chain-tag-tip" class="ml-1" src="~@/static/images/warning-icon-gray.svg" alt="">
-              <b-popover target="chain-tag-tip" custom-class="">
-                内容
+              <b-popover triggers="hover" target="chain-tag-tip" placement="right" custom-class="">
+                {{$t('socialView.chainTagTip')}}
               </b-popover>
             </div>
           </template>
@@ -24,8 +24,16 @@
         </b-form-group>
         <b-form-group class="mb-4"
                       label-class="overflow-hidden font14 line-height14 d-flex"
-                      label-cols-md="4" content-cols-md="8"
-                      :label="$t('socialView.communityCategoryTags')" >
+                      label-cols-md="4" content-cols-md="8">
+          <template #label>
+            <div class="flex align-items-center" style="white-space: nowrap">
+              <span>{{$t('socialView.communityCategoryTags')}}</span>
+              <img id="com-tag-tip" class="ml-1" src="~@/static/images/warning-icon-gray.svg" alt="">
+              <b-popover triggers="hover" target="com-tag-tip" placement="rigth" custom-class="">
+                {{$t('socialView.communityCategoryTagsTip')}}
+              </b-popover>
+            </div>
+          </template>
           <div class="d-flex flex-1">
             <div class="c-input-group c-input-group-bg">
               <span class="pl-3 text-grey-7">#</span>
