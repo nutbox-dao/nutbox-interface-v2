@@ -70,7 +70,13 @@ module.exports = {
       iso: 'ISO: 首次质押发行',
       isoDetail: '质押POS代币挖取社区代币。高收益率、无风险。',
       erc1155Desc: '质押您的ERC115来挖矿.',
-      curation: '可以添加社交模块来奖励用户的社交贡献。（当成员在社区中创建和策划内容时，他们会收到代币。可以为推文、公告、推特空间和讨论主题创建代币奖励池。）Wormhole3上的社区。社区代币的一部分可以分配给社交模块。一旦设置了社交模块，您的社区也将在Wormhole3上创建(https://alpha.wormhole3.io), 代币将自动分配给社区成员的钱包。要了解更多关于Wormhole3的信息，请参阅此处(https://wormhole3.gitbook.io/wh3-cn/)',
+      curation: '可以添加社交模块来奖励用户的社交贡献。',
+      curationP1: `当成员在社区中创建和策划内容时，他们会收到代币。可以为推文、公告、推特空间和讨论主题创建代币奖励池。
+      Wormhole3上的社区。社区代币的一部分可以分配给社交模块。一旦设置了社交模块，
+      您的社区也将在Wormhole3上创建 <a href="https://alpha.womrhole3.io" target="_blank">https://alpha.womrhole3.io</a>,
+      代币将自动分配给社区成员的钱包。
+      要了解更多关于Wormhole3的信息，请参阅此处
+      <a href="https://wormhole3.gitbook.io/wh3-cn/" target="_blank">https://wormhole3.gitbook.io/wh3-cn/</a>`,
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
       assetTip1: '如果您想使用已经存在的资产',

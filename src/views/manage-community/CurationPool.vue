@@ -3,7 +3,15 @@
       <div class="view-top-header-sticky">
         <div class="font24 line-height28 font-bold mb-2">{{ $t('router.curation') }}</div>
         <div class="font16 line-height24 font-bold mb-4">
-                {{ $t('desc.curation') }}
+          <span>{{ $t('desc.curation') }}</span>
+          <img class="tip-target" id="info-tip-target"
+               src="~@/static/images/warning-icon-gray.svg" alt="">
+        </div>
+        <b-popover target="info-tip-target"  custom-class="sub-popover-outline"
+                   triggers="hover" placement="bottom">
+          <div class="font12 line-height24" v-html="$t('desc.curationP1')"></div>
+        </b-popover>
+        <div class="font16 line-height24 font-bold mb-4" v-html="$t('desc.curationP1')">
         </div>
         <div class="row" style="width: 100%">
           <div class="col-md-6 d-flex flex-column justify-content-center">
