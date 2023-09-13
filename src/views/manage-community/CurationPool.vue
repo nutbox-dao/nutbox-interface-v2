@@ -11,8 +11,8 @@
                    triggers="hover" placement="bottom">
           <div class="font12 line-height24" v-html="$t('desc.curationP1')"></div>
         </b-popover>
-        <div class="font16 line-height24 font-bold mb-4" v-html="$t('desc.curationP1')">
-        </div>
+        <!-- <div class="font16 line-height24 font-bold mb-4" v-html="$t('desc.curationP1')">
+        </div> -->
         <div class="row" style="width: 100%">
           <div class="col-md-6 d-flex flex-column justify-content-center">
             <div class="nav-box nav-box-bg mb-3 mb-md-0" v-if="activeCurationPool.length > 0">
@@ -222,6 +222,7 @@
       }
     },
     async mounted () {
+      this.poolTypeModal = true
       this.tabOptions = [
         this.$t('wh3.curationPool'),
         this.$t('wh3.communityCredit')
