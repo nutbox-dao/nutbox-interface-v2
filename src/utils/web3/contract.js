@@ -32,6 +32,7 @@ export const contractAddress = {
   "Gauge": "0xF21649D901A082772Bd7B5d5eD5039C7a43A5789",
   "TreasuryFactory": "0x97e9ca88Eb99bAA07d15B8aB846c53886FDB2f74",
   "CommunityCuration": "0x3686218f11c58ca46479acc5DdEE7e41374dF73A",
+  "TaxedERC20StakingFactory": "0x9C2804015b55D02F0cBeDa1ee8a9c24Ee7aF00d7"
 }
 
 export const getPoolFactory = (type) => {
@@ -45,6 +46,8 @@ export const getPoolFactory = (type) => {
     return contractAddress.ERC1155StakingFactory
   } else if (type === 'curation') {
     return contractAddress.CurationGaugeFactory
+  } else if (type === 'taxederc20staking') {
+    return contractAddress.TaxedERC20StakingFactory
   }
 }
 
@@ -59,6 +62,8 @@ export const getPoolTypeName = (type) => {
     return 'ERC1155StakingFactory'
   } else if (type === 'curation') {
     return 'CurationGaugeFactory'
+  } else if (type === 'taxederc20staking') {
+    return "TaxedERC20StakingFactory"
   }
 }
 
@@ -85,7 +90,8 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   "CosmosStakingFactory": "CosmosStakingFactory.json",
   "TreasuryFactory": "TreasuryFactory.json",
   "Treasury": "Treasury.json",
-  "CommunityCuration": "CommunityCuration.json"
+  "CommunityCuration": "CommunityCuration.json",
+  "TaxedERC20StakingFactory": "TaxedERC20StakingFactory.json"
 }
 
 // Get contract Abi
