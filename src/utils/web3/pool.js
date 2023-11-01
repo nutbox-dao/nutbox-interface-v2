@@ -54,16 +54,10 @@ export const getPoolFactoryAddress = (type) => {
       return contractAddress['SPStakingFactory'].toLowerCase()
     case 'hive':
       return contractAddress['SPStakingFactory'].toLowerCase()
-    case 'cosmos':
-      return contractAddress['CosmosStakingFactory'].toLowerCase()
-    case 'atom':
-      return contractAddress['CosmosStakingFactory'].toLowerCase()
-    case 'juno':
-      return contractAddress['CosmosStakingFactory'].toLowerCase()
     case 'erc1155':
       return contractAddress['ERC1155StakingFactory'].toLowerCase()
-    case 'curation':
-      return contractAddress['CurationGaugeFactory'].toLocaleLowerCase()
+    case 'taxederc20staking':
+      return contractAddress['TaxedERC20StakingFactory'].toLowerCase()
   }
 }
 
@@ -95,6 +89,9 @@ export const getPoolType = (factory, chainId) => {
     }
     case contractAddress['CurationGaugeFactory']: {
       return 'curation'
+    }
+    case contractAddress['TaxedERC20StakingFactory']: {
+      return 'taxederc20staking'
     }
   }
 }
@@ -303,6 +300,28 @@ export const addPool = async (form) => {
           resolve(newPool);
           factory.removeAllListeners('CurationGaugeCreated')
         })
+      } else if (form.type === 'taxederc20staking') {
+        factory.on('TaxedERC20StakingCreated', (pool, community, name, token) => {
+          if (community.toLowerCase() == stakingFactoryId.toLowerCase() && name === form.name) {
+            console.log('Create a new pool:', pool);
+            const newPool = {
+              id: ethers.utils.getAddress(pool),
+              status: 'OPENED',
+              name,
+              asset: form.asset,
+              poolFactory: getPoolFactory(form.type),
+              ratio: form.ratios[form.ratios.length - 1] * 100,
+              chainId: 0,
+              stakersCount: 0,
+              totalAmount: 0,
+              hasCreateGauge: 0,
+              votersCount: 0,
+              votedAmount:0
+            }
+            resolve(newPool)
+            factory.removeAllListeners('TaxedERC20StakingCreated')
+          }
+        })
       }
       console.log(1, form, getPoolFactory(form.type))
       const tx = await contract.adminAddPool(form.name, form.ratios.map(r => parseInt(r * 100)), getPoolFactory(form.type), form.asset)
@@ -319,6 +338,8 @@ export const addPool = async (form) => {
         factory.removeAllListeners('CosmosStakingCreated')
       }else if(form.type === 'curation') {
         factory.removeAllListeners('CurationGaugeCreated')
+      }else if (form.type === 'taxederc20staking') {
+        factory.removeAllListeners('TaxedERC20StakingCreated')
       }
       reject(errCode.BLOCK_CHAIN_ERR)
     }
@@ -810,7 +831,7 @@ const getPoolStakingInfo = async (pools) => {
             ['pending-' + p.id]
           ]
         });
-        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking')) {
+        if (p.poolFactory.toLowerCase() === getPoolFactoryAddress('erc20staking') || p.poolFactory.toLowerCase() === getPoolFactoryAddress('taxederc20staking')) {
           calls.push({
             target: p.asset,
             call: [

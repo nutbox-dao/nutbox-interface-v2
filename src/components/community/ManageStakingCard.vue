@@ -149,7 +149,7 @@ export default {
       return getPoolType(this.pool.poolFactory, this.pool.chainId);
     },
     poolType() {
-      if (this.type === 'erc20staking') {
+      if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         return this.stakeToken.is_lp ? 'LP' : null
       }
       return this.type.toUpperCase()
@@ -158,7 +158,7 @@ export default {
       return this.tokenByKey(this.communityData.cToken) ?? {}
     },
     stakeToken() {
-      if (this.type !== "erc20staking" || !this.allTokens) return {};
+      if ((this.type !== "erc20staking" && this.type !== 'taxederc20staking') || !this.allTokens) return {};
       const token = this.tokenByKey(this.pool.asset);
       return token;
     },
@@ -340,6 +340,11 @@ export default {
     const chainId = this.pool.chainId;
     switch (this.pool.poolFactory.toLowerCase()) {
       case getPoolFactory("erc20staking").toLowerCase():
+        this.stakedERC20 = await getERC20Info(this.pool.asset);
+        this.icon = this.stakedERC20.icon;
+        this.vert = 10 ** this.stakedERC20.decimal;
+        break;
+      case getPoolFactory('taxederc20staking').toLowerCase():
         this.stakedERC20 = await getERC20Info(this.pool.asset);
         this.icon = this.stakedERC20.icon;
         this.vert = 10 ** this.stakedERC20.decimal;

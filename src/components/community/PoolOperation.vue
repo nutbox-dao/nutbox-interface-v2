@@ -296,15 +296,15 @@ export default {
       }
       return false;
     },
-    approved() {
-      if (this.type !== 'erc20staking' || !this.approvements) return true;
+    approved() {      
+      if ((this.type !== 'erc20staking' && this.type !== 'taxederc20staking') || !this.approvements) return true;
       return this.approvements[this.card.id] >= this.balances[this.card.id];
     },
     staked() {
       if (!this.userStaked) return 0;
       const userStakingBn = this.userStaked[this.card.id];
       if (!userStakingBn) return 0;
-      if (this.type === 'erc20staking') {
+      if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         return userStakingBn.toString() / (10 ** this.tokenDecimals(this.card.asset));
       } else if (this.type === "steem") {
         return (userStakingBn.toString() / 1e6) * this.vestsToSteem;
@@ -317,7 +317,7 @@ export default {
   methods: {
     async increase() {
       this.operate = "add";
-      if (this.type === 'erc20staking') {
+      if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         this.updateStaking = true;
       } else if (this.type === "steem") {
         // check account first
@@ -332,7 +332,7 @@ export default {
     },
     async decrease() {
       this.operate = "minus";
-      if (this.type === 'erc20staking') {
+      if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         this.updateStaking = true;
       } else if (this.type === "steem") {
         // check account first

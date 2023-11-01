@@ -33,7 +33,7 @@
       </div>
       <div class="mt-1 mb-1 d-flex align-items-center">
         <span class="text-grey-47 font-bold mr-2 font14">{{
-          type === "erc20staking"
+          (type === "erc20staking" || type === 'taxederc20staking')
             ? stakeToken.symbol
             : type === "steem"
             ? "SP" : type === 'hive'
@@ -41,7 +41,7 @@
         }}</span>
         <div class="d-flex align-items-center">
           <span class="font14 text-grey-7">
-            {{ (type === "erc20staking" || type === 'erc1155') ? $t('commen.staked') : $t('commen.delegated') }}</span
+            {{ (type === "erc20staking" || type === 'erc1155' || type === 'taxederc20staking') ? $t('commen.staked') : $t('commen.delegated') }}</span
           >
           <template v-if="type !== 'erc1155'">
             <i
@@ -49,7 +49,7 @@
               @click="copy(assetToken)"
             ></i>
             <i
-              v-if="type === 'erc20staking'"
+              v-if="type === 'erc20staking' || type === 'taxederc20staking'"
               class="link-icon link-icon-gray"
               @click="gotoToken(stakeToken.address)"
             ></i>
@@ -183,7 +183,7 @@ export default {
       return getPoolType(this.card.poolFactory, this.card.chainId);
     },
     stakeToken() {
-      if (this.type !== "erc20staking" || !this.allTokens) return {};
+      if ((this.type !== "erc20staking" && this.type !== 'taxederc20staking') || !this.allTokens) return {};
       const token = this.tokenByKey(this.card.asset);
       return token ?? {};
     },
@@ -192,7 +192,7 @@ export default {
         return ethers.utils.parseBytes32String(this.card.asset)
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return addressAccToAccBech32(this.card.asset, this.type)
-      } else if (this.type === 'erc20staking') {
+      } else if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         return this.card.asset
       }
     },
@@ -201,7 +201,7 @@ export default {
         return ethers.utils.parseBytes32String(this.card.asset)
       } else if (this.type === 'atom' || this.type === 'osmo' || this.type === 'juno') {
         return addressAccToAccBech32(this.card.asset, this.type)
-      } else if (this.type === 'erc20staking') {
+      } else if (this.type === 'erc20staking' || this.type === 'taxederc20staking') {
         return this.card.asset
       }
     },
@@ -222,6 +222,11 @@ export default {
           total.toString() /
           10 ** (this.stakeToken ? this.stakeToken.decimal : 18)
         );
+      } else if (this.type === "taxederc20staking") {
+        return (
+          total.toString() /
+          10 ** (this.stakeToken ? this.stakeToken.decimal : 18)
+        );
       } else if (this.type === "steem") {
         return (total.toString() / 1e6) * this.vestsToSteem;
       } else if (this.type === "hive") {
@@ -236,7 +241,7 @@ export default {
     stakePrice() {
       if (!this.prices) return 0;
       let price;
-      if (this.type === "erc20staking") {
+      if (this.type === "erc20staking" || this.type === 'taxederc20staking') {
         price = this.stakeToken.price;
       } else {
         price = this.prices[this.type];

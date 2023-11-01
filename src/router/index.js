@@ -9,6 +9,7 @@ import SetCommunityProfile from '@/views/community/SetCommunityProfile'
 import SubCommunityIndex from '@/views/sub-community/Index'
 import SubCommunityHome from '@/views/sub-community/SubCommunityHome'
 import SubCommunityStaking from '@/views/sub-community/SubCommunityYieldFarming'
+import SubCommunityTaxedStaking from '@/views/sub-community/SubCommunityTaxedFarming'
 import SubCommunityCuration from '@/views/sub-community/SubCommunityCuration'
 import SubCommunityMember from '@/views/sub-community/SubCommunityMember'
 import SubCommunityGovernance from '@/views/sub-community/SubCommunityGovernance'
@@ -21,6 +22,7 @@ import ManageCommunityIndex from '@/views/manage-community/Index'
 import CommunityProfile from '@/views/manage-community/CommunityProfile'
 import CommunityAsset from '@/views/manage-community/CommunityAsset'
 import CommunityStaking from '@/views/manage-community/CommunityYieldFarming'
+import CommunityTaxedStaking from '@/views/manage-community/CommunityYieldFarming2'
 import CommunityNFTStaking from '@/views/manage-community/CommunityNFTStaking'
 import CurationPool from '@/views/manage-community/CurationPool'
 import CommunitySocial from '@/views/manage-community/CommunitySocial'
@@ -96,6 +98,10 @@ const routes = [
         component: SubCommunityStaking
       },
       {
+        path: 'staking2',
+        component: SubCommunityTaxedStaking
+      },
+      {
         path: 'erc1155',
         component: SubCommunityNFTStaking
       },
@@ -151,6 +157,11 @@ const routes = [
         path: 'staking',
         name: 'CommunityStaking',
         component: CommunityStaking
+      },
+      {
+        path: 'staking2',
+        name: 'CommunityTaxedStaking',
+        component: CommunityTaxedStaking
       },
       {
         path: 'nft-staking',

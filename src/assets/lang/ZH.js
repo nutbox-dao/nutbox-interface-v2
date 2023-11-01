@@ -73,6 +73,7 @@ module.exports = {
       curation: '社交矿池可以直接将资产分配到接收者地址（通常是合约地址）。任何用户都可以执行领取操作，执行领取后的奖励将直接转移到接收者地址。',
       nutPower: 'Nut Power（NP）是Nutbox DAO的治理权。是由质押NUT生成的，解锁时间越长，获取的NP越多。它还是你获取新产生NUT的收益权。',
       farming: '质押您的代币以挖取社区代币',
+      farming2: '质押您的代币以挖取社区代币, 质押会收取您2.5%的手续费，其中2%给社区，0.5%给Walnut平台。',
       assetTip1: '如果您想使用已经存在的资产',
       assetTip2: '创建一个新的代码',
       assetTip3: `*您可以一次预挖一定量的代币带您的账号，余下的通过之后的分发策略进行发放。`
@@ -417,6 +418,7 @@ module.exports = {
       member: "成员列表",
       home: '主页',
       farming: '耕种',
+      farming2: '耕种2',
       nftStake: 'NFT质押',
       nftStaking: 'NFT质押',
       nutPower: 'NUT Power',
@@ -509,6 +511,7 @@ module.exports = {
       activePools: '活跃矿池',
       inactivePools: '关闭矿池',
       creatPool: '在{chainName}创建质押矿池',
+      creatTaxedPool: '在{chainName}创建质押矿池2',
       createCurationPool: '在{chainName}创建社交奖励池',
       createDelegatePool: '创建 {delegateType} 代理矿池',
       createNftPool: '在Create staking NFT(ERC1155) pool on {chainName创建质押NFT(NFT1155)矿池',

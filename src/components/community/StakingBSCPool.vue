@@ -4,7 +4,7 @@
     <i class="modal-close-icon-right" @click="$emit('close')"></i>
     <div class="bsc-pool-modal-content overflow-hidden d-flex flex-column">
       <div class="mb-3">
-        <div class="my-4 modal-title">{{ $t('pool.creatPool', {chainName}) }}</div>
+        <div class="my-4 modal-title">{{ pooltype === 'erc20' ? $t('pool.creatPool', {chainName}) : $t('pool.creatTaxedPool', {chainName}) }}</div>
         <div class="custom-form col-lg-8 mx-auto">
           <div class="c-input-group c-input-group-bg-dark c-input-group-border">
             <b-input-group class="d-flex flex-between-center">
@@ -59,6 +59,12 @@ import { ethers } from 'ethers'
 export default {
   name: 'StakingBSCPool',
   components: { TokenItem },
+  props: {
+    pooltype: {
+      type: String,
+      default: 'erc20'
+    },
+  },
   data () {
     return {
       loading: false,

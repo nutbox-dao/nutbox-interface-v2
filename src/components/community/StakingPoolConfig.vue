@@ -169,6 +169,10 @@ export default {
     },
     name: {
       type: String
+    },
+    pooltype: {
+      type: String,
+      default: 'erc20'
     }
   },
   computed: {

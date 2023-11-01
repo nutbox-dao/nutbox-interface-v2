@@ -164,7 +164,9 @@ export default {
         this.isAdmin = false;
         if (
           this.operation.poolFactory.toLowerCase() ==
-          contractAddress.ERC20StakingFactory.toLowerCase()
+          contractAddress.ERC20StakingFactory.toLowerCase() || 
+          this.operation.poolFactory.toLowerCase() ==
+          contractAddress.TaxedERC20StakingFactory.toLowerCase()
         ) {
           this.description =
             this.showName ? this.$t('opHistory.depositWithName', {amount, symbol, pool: this.operation.pool.name})
@@ -216,7 +218,9 @@ export default {
         this.isAdmin = false;
         if (
           this.operation.poolFactory.toLowerCase() ==
-          contractAddress.ERC20StakingFactory.toLowerCase()
+          contractAddress.ERC20StakingFactory.toLowerCase() ||
+          this.operation.poolFactory.toLowerCase() ==
+          contractAddress.TaxedERC20StakingFactory.toLowerCase()
         ) {
           this.description = this.showName 
             ? this.$t('opHistory.withdrawWithName', {amount, symbol, pool: this.operation.pool.name})
