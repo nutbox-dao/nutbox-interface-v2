@@ -57,7 +57,7 @@
               {{$t("operation.charge") }}
             </button>
             <button class="primary-btn ml-2" style="width: 5rem" @click="showWithdrawTip = true">
-              {{$t("operation.withdraw") }}
+              {{$t("operation.harvest") }}
             </button>
           </div>
         </b-form-group>
