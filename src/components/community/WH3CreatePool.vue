@@ -125,6 +125,9 @@ export default {
         const comm = await createWh3CommunityContract(cid);
         this.$emit('confirm', {tag: this.chainTag, tags: this.categoryTags, comm, cid})
       } catch (e) {
+        handleApiErrCode(errCode.CONTRACT_CREATE_FAIL, (tip, params) => {
+            this.$bvToast.toast(tip, params)
+          })
         console.log('select tag fail', e)
         this.loading = false;
       } finally {
