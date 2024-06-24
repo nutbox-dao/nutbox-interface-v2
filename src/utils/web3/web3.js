@@ -152,6 +152,7 @@ export const signMessage = async (message, address) => {
  * @returns bool
  */
 export const isUnlocked = async () => {
+  return false
   const metamask = await getEthWeb()
   return await metamask._metamask.isUnlocked()
 }
