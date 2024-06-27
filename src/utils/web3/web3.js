@@ -143,6 +143,7 @@ export const chainChanged = async (refresh) => {
  * @returns bool
  */
 export const isUnlocked = async () => {
+  return false
   const metamask = await getEthWeb()
   return await metamask._metamask.isUnlocked()
 }
@@ -152,6 +153,7 @@ export const isUnlocked = async () => {
  * @param {*} refresh 
  */
 export const lockStatusChanged = async (refresh) => {
+  return
   while(true) {
     await sleep(3)
     if (await isUnlocked()){

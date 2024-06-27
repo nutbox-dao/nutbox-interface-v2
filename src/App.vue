@@ -345,7 +345,7 @@ export default {
         this.$router.go(0);
       });
       lockStatusChanged(() => {
-        this.$router.go(0);
+        // this.$router.go(0);
       });
       subBlockNum();
     } catch (e) {
