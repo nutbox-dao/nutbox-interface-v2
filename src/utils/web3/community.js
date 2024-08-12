@@ -1051,12 +1051,12 @@ export const checkCurationPoolStarted = async (pool) => {
 export const createWh3CommunityContract = async (cid) => {
   return new Promise(async (resolve, reject) => {
     try{
-      const communityId = store.state.communityInfo.id;
-      const ctoken = await getCToken(communityId);
-      console.log(535, ctoken, store.state.communityInfo.ctoken, store.state.communityInfo);
+      const ctoken = store.state.community.communityData.cToken;
+      console.log(235, store.state.community.communityData)
+      // const ctoken = await getCToken(communityId);
       const contract = await getContract('CommunityCuration', null, false)
       cid = ethers.BigNumber.from('0x' + cid);
-      let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ctoken.address)
+      let tx = await contract.createCommunity(cid, DEFAULT_CLAIM_CURATION_REWARD_SYNGER, ethers.utils.isAddress(ctoken) ? ctoken : ctoken.address)
       await waitForTx(tx.hash)
       let communityInfo = await contract.getCommunityInfo(cid);
       if (!communityInfo.storageAddr) {
