@@ -32,7 +32,7 @@ export const contractAddress = {
   "CurationGaugeFactory": "0xFc9AF0eF1bB4673ad48ee477dF231Cc3286e1464",
   "Gauge": "0x57A9D7630CC5Fd5000EE93D66b1Db121B9785832",
   "TreasuryFactory": "0x4e00a9ab92876B8F5AdB07D607aE2B8b257CF856",
-  "CommunityCuration": "0xDda7947F795B4636C68a14bC590fEb08cA69eef3",
+  "CommunityCuration": "0x9d287b5670f65C537C51407086DDe4D9A399d683",
 }
 
 export const getPoolFactory = (type) => {
