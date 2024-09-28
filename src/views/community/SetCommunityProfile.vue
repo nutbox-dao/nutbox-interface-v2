@@ -435,8 +435,10 @@ export default {
       if (this.form.tokenLogo) this.editToken = false
       this.chooseTokenTipModal = !this.communityInfo.cToken.isMintable;
       getDistributionEras();
+      if (this.communityInfo.cToken.isCustom) {
+        this.chooseTokenTipModal = true
+      }
     }
-    this.chooseTokenTipModal = true
   },
   methods: {
     onCancel () {

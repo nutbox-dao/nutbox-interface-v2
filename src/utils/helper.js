@@ -2,7 +2,7 @@ import { TIME_PERIOD, BLOCK_SECOND } from "@/constant";
 import CryptoJS from "crypto";
 import { $t } from "@/i18n";
 import axios from "axios";
-import { QN_UPLOAD_URL, errCode } from "@/config";
+import { ALI_UPLOAD_URL, errCode } from "@/config";
 import store from "@/store";
 
 var cryptoOptions = {
@@ -288,7 +288,7 @@ export function formatCountdown(end, currentBlockNum, blockInterval) {
 }
 
 /**
- * 上传图片到七牛云，返回图片url
+ * 上传图片到阿里云，返回图片url
  * @param {*} img
  * @returns
  */
@@ -308,9 +308,9 @@ export const uploadImage = async (img) => {
       },
     };
     axios
-      .post(QN_UPLOAD_URL, param, config)
+      .put(ALI_UPLOAD_URL + `?fileName=${Date.now()}${Math.ceil(Math.random() * 1000)}.${img.type.split('/')[1]}&path=walnut-base&bucket=tiptag`, param, config)
       .then((res) => {
-        resolve(res?.data?.url);
+        resolve((res?.data ?? '').replace('cn-shenzhen', 'accelerate'));
       })
       .catch((err) => {
         if (err.toJSON().message.indexOf('Request failed with status code 429') !== -1) {

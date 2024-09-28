@@ -48,20 +48,6 @@ async function getMyJoinedCommunityFromGraph() {
                     stakersCount
                     totalAmount
                 }
-                inGauges {
-                    id
-                    name
-                    status
-                    community{
-                        id
-                        cToken
-                        feeRatio
-                    }
-                    ratio,
-                    asset,
-                    votersCount,
-                    votedAmount
-                }
             }
         }
     `

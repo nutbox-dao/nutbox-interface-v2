@@ -401,7 +401,9 @@ export default {
         this.loadingApprovement = false
       })
     try{
+      console.log(34)
       const id = await getMyCommunityContract()
+      console.log(52, id)
       if (id) {
         this.$router.replace('set-profile')
         return;

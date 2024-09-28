@@ -139,33 +139,6 @@ export const chainChanged = async (refresh) => {
 }
 
 /**
- * Is metamask unlocked
- * @returns bool
- */
-export const isUnlocked = async () => {
-  const metamask = await getEthWeb()
-  return await metamask._metamask.isUnlocked()
-}
-
-/**
- * Monitor metamask lock state
- * @param {*} refresh 
- */
-export const lockStatusChanged = async (refresh) => {
-  while(true) {
-    await sleep(3)
-    if (await isUnlocked()){
-    }else{
-      store.commit('saveMetamaskConnected', false)
-      if(!store.state.web3.account) continue;
-      store.commit('web3/saveAccount', null)
-      refresh()
-      break;
-    }
-  }
-}
-
-/**
  * Add asset to metamask
  */
  export const addAssetToWallet = async (address, symbol, decimals, image) => {

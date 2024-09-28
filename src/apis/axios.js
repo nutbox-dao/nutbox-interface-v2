@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-axiosRetry(axios, { retries: 5 });
+axiosRetry(axios, { retries: 2 });
 
 axios.defaults.timeout = 30000;
 

@@ -231,7 +231,7 @@
 <script>
 import { LOCALE_KEY } from '@/config'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { setupNetwork, chainChanged, lockStatusChanged, checkNetwork } from '@/utils/web3/web3'
+import { setupNetwork, chainChanged, checkNetwork } from '@/utils/web3/web3'
 import { accountChanged, getAccounts, updateAllUsersByPolling } from '@/utils/web3/account'
 import { subBlockNum } from '@/utils/web3/block'
 import { getMyCommunityInfo, updateAllCommunitiesFromBackend, getOperationFee } from '@/utils/web3/community'
@@ -375,9 +375,6 @@ export default {
         this.$router.go(0);
       });
       accountChanged(() => {
-        this.$router.go(0);
-      });
-      lockStatusChanged(() => {
         this.$router.go(0);
       });
       subBlockNum();

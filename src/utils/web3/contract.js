@@ -2,7 +2,6 @@ import axios from 'axios'
 import store from '@/store'
 import {
   setupNetwork,
-  isUnlocked,
   connectMetamask
 } from './web3'
 import {
@@ -115,7 +114,7 @@ export const getContract = async function (contractName, address, onlyRead = tru
   return new Promise(async (resolve, reject) => {
     // await connectMetamask()
     // wheather metamask is locked
-    if (await !isUnlocked() && !onlyRead) {
+    if (!onlyRead) {
       console.log('metamask locked');
       try {
         await connectMetamask()

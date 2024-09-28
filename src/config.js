@@ -13,7 +13,7 @@ export const BACKEND_API_URL = "https://base-api.nutbox.app"
 export const WH3_API_URL = "https://alpha-api.wormhole3.io"
 // export const WH3_API_URL = "http://localhost:3100"
 
-export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
+export const ALI_UPLOAD_URL = "https://upload.wormhole3.io/files/upload";
 
 // wheather use the graph sevice or our service
 // because of the graph service for BSC network is udpate so slowly, so we build our
