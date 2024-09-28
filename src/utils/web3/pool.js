@@ -574,7 +574,10 @@ export const withdraw = async (poolId, amount) => {
 export const withdrawReward = async (communityId, poolId) => {
   return new Promise(async (resolve, reject) => {
     let contract = {}
+    let claimFee;
     try {
+      const committee = await getContract('Committee')
+      claimFee = await committee.getClaimFee();
       contract = await getContract('Community', communityId, false)
     } catch (e) {
       reject(e)
@@ -582,7 +585,9 @@ export const withdrawReward = async (communityId, poolId) => {
     }
 
     try {
-      const tx = await contract.withdrawPoolsRewards([poolId])
+      const tx = await contract.withdrawPoolsRewards([poolId], {
+        value: claimFee
+      })
       await waitForTx(tx.hash)
       resolve(tx.hash)
     } catch (e) {

@@ -8,6 +8,7 @@ function requestBroadcastWithFee (account, pid, address, fee, symbol, operation,
   let memo = [
     "delegate_vesting_shares",
     {
+      "chain_id": BSC_CHAIN_ID,
       "pid": pid,
       "delegator_address": address,
     }
