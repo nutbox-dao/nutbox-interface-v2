@@ -59,18 +59,18 @@
       hide-header
       hide-footer
       no-close-on-backdrop>
-      <StakingPoolType v-if="createPoolStep===1"
+      <!-- <StakingPoolType v-if="createPoolStep===1"
                        @close="poolTypeModal=false"
-                       @onType="selectPoolType"/>
-      <StakingDelegatePool v-if="createPoolStep===2"
-                           :delegate-type="poolType"
+                       @onType="selectPoolType"/> -->
+      <StakingDelegatePool v-if="createPoolStep===1"
+                           delegate-type="steem"
                            @confirm="selectPoolToken"
-                           @back="createPoolStep=1"/>
-      <StakingPoolConfig v-if="createPoolStep===3"
+                           @back="poolTypeModal=false"/>
+      <StakingPoolConfig v-if="createPoolStep===2"
                          type="create"
                          :needIcon="needIcon"
                          :token="selectToken"
-                         @back="createPoolStep=2"
+                         @back="createPoolStep=1"
                          @close="poolTypeModal=false"
                          :enable-op="!creating"
                          :enable-back="!creating"
@@ -118,7 +118,7 @@ export default {
       activeTab: 0,
       poolTypeModal: false,
       createPoolStep: 1,
-      poolType: "",
+      poolType: "steem",
       configPoolModal: false,
       stakeAsset: "",
       creating: false,
@@ -209,7 +209,7 @@ export default {
           return;
         }
       }
-      this.createPoolStep = 3;
+      this.createPoolStep = 2;
     },
     // create new pool
     async create(pool) {

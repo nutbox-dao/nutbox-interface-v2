@@ -191,6 +191,7 @@ export const addPool = async (form) => {
       return
     }
 
+
     try {
       if (form.type === 'erc20staking') {
         factory.on('ERC20StakingCreated', (pool, community, name, token) => {

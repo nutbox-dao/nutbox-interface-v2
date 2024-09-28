@@ -20,10 +20,6 @@
               <i class="menu-icon farming-icon" />
               <span>{{ $t('router.farming') }}</span>
             </b-nav-item>
-            <b-nav-item to="/manage-community/staking2">
-              <i class="menu-icon farming-icon" />
-              <span>{{ $t('router.farming2') }}</span>
-            </b-nav-item>
             <b-nav-item to="/manage-community/nft-staking">
               <i class="menu-icon nft-icon" />
               <span>{{ $t('router.nftStake') }}</span>
