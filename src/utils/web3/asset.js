@@ -397,7 +397,7 @@ export const getSingleCtokenBalance = async (ctoken) => {
  * @returns 
  */
 export const getBalance = async () => {
-  const provider = await getProvider()
+  const provider = await getReadonlyProvider()
   const account = await getAccounts()
   return await provider.getBalance(account);
 }

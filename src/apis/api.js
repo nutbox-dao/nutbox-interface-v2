@@ -108,3 +108,25 @@ export const updateGame = async (params) =>
   put(BACKEND_API_URL + "/game/update", params);
 
 export const getAllGame = async (communityId) => get(BACKEND_API_URL + "/game/get", {communityId});
+
+// ============================================ graph ============================================
+export const getWalnut = async () =>
+  get(BACKEND_API_URL + "/graph/walnut");
+
+export const getCommunity = async (communityId) =>
+  get(BACKEND_API_URL + "/graph/community", {communityId});
+
+export const getPools = async (ids) =>
+  get(BACKEND_API_URL + "/graph/pools", {ids});
+
+export const getUser = async (ethAddr) => 
+  get(BACKEND_API_URL + "/graph/user", {ethAddr});
+
+export const getUserCommunityOPHistory = async (ethAddr, community) =>
+  get(BACKEND_API_URL + "/graph/history", {ethAddr});
+
+export const getCommunityOPHistory = async (ethAddr, community) =>
+  get(BACKEND_API_URL + "/graph/community/history", {ethAddr, community});
+
+export const getMyCommunityData = async (ethAddr) =>
+  get(BACKEND_API_URL + "/graph/my/community", {ethAddr});

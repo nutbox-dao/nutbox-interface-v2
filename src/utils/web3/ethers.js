@@ -36,7 +36,7 @@ export const getReadonlyProvider = () => {
  * get price
  */
 export const getGasPrice = async () => {
-    const provider = await getProvider()
+    const provider = await getReadonlyProvider()
     return await provider.getGasPrice()
 }
 
