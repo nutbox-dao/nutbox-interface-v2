@@ -2,8 +2,11 @@ import { client, restClient } from './index';
 import store from '@/store'
 import { gql } from 'graphql-request';
 import { USE_THE_GRAPH } from '@/config'
+import { getWalnut } from '@/apis/api'
 
 export async function getWalnutData() {
+    return await getWalnutDataFromApi()
+    return
     const useTheGraph = true
     if (useTheGraph) {
         return await getWalnutDataFromTheGraph()
@@ -55,4 +58,10 @@ async function getWalnutDataFromOurService() {
     }catch(err) {
         console.log('Get walnut info fail', err)
     }
+}
+
+async function getWalnutDataFromApi() {
+    const walnut = await getWalnut()
+    console.log('walnut', walnut)
+    store.commit('web3/saveWalnutInfo', walnut)
 }

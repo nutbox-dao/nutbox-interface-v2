@@ -4,9 +4,13 @@ import store from '@/store'
 import { getAccounts } from '../web3/account';
 import { gql } from 'graphql-request'
 import { ethers } from 'ethers';
+import { getUser as gu, 
+    getUserCommunityOPHistory as gucop, 
+    getMyCommunityData as gmcd } from '@/apis/api';
 
 // get user summary: include all joined communities and pools
 export async function getMyJoinedCommunity() {
+    return await getMyJoinedCommunityFromApi()
     const useTheGraph = USE_THE_GRAPH;
     if (useTheGraph) {
         return await getMyJoinedCommunityFromGraph()
@@ -150,6 +154,14 @@ async function getMyJoinedCommunityFromService() {
     }catch(e) {
         console.log('Get my joined community from service fail', e);
     }
+}
+
+async function getMyJoinedCommunityFromApi() {
+    const account = await getAccounts();
+    const data = await gu(account)
+    store.commit('user/saveUserGraphInfo', data)
+    store.commit('user/saveLoadingUserGraph', false)
+    return data
 }
 
 /**
@@ -310,6 +322,40 @@ async function getMyCommunityDataFromService() {
         }
     }
     return {}
+}
+
+async function getMyCommunityDataFromApi() {
+    const data = await gmcd(store.state.web3.stakingFactoryId)
+    // read cache data
+    // if cache data exsit, use it
+    let cacheCommunity = store.state.cache.myCreatedCommunityInfo;
+    try{
+        cacheCommunity = cacheCommunity && JSON.parse(cacheCommunity)
+    }catch(e) {
+        cacheCommunity = null
+    }
+    let cachePools = store.state.cache.myCreatedPools;
+    try{
+        cachePools = cachePools && JSON.parse(cachePools)
+    }catch(e) {
+        cachePools = null
+    }
+    if (data) {
+        let community = data
+        if (cachePools && community.pools.length < cachePools.length) {
+            community.pools = cachePools;
+        }
+        store.commit('community/saveCommunityData', community)
+        console.log('my community data', community);
+        return community
+    }else if (cacheCommunity) {
+        if (cachePools) {
+            cacheCommunity.pools = cachePools;
+        }
+        store.commit('community/saveCommunityData', cacheCommunity)
+        console.log('my community data', cacheCommunity);
+        return cacheCommunity;
+    }
 }
 
 // fetch first 500 history of user in specify community

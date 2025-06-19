@@ -11,8 +11,10 @@ import {
 } from '@/config';
 import { ethers } from 'ethers';
 import { parseOperationStructure } from './utils'
+import { getCommunity, getCommunityOPHistory, getUserCommunityOPHistory } from '@/apis/api'
 
 export async function getSpecifyCommunityInfo(community) {
+  return await getSpecifyCommunityInfoFromApi(community)
   const useTheGraph = USE_THE_GRAPH
   if (useTheGraph) {
     return await getSpecifyCommunityInfoFromTheGraph(community)
@@ -22,6 +24,7 @@ export async function getSpecifyCommunityInfo(community) {
 }
 
 export async function getNewCommunityOPHistory(community) {
+    return await getNewCommunityOPHistoryFromApi(community)
     const useTheGraph = USE_THE_GRAPH
     if (useTheGraph) {
         return await getNewCommunityOPHistoryFromTheGraph(community)
@@ -31,6 +34,7 @@ export async function getNewCommunityOPHistory(community) {
 }
 
 export async function getUpdateCommunityOPHistory(community) {
+    return await getUpdateCommunityOPHistoryFromApi(community)  
     const useTheGraph = USE_THE_GRAPH
     if (useTheGraph) {
         return await getUpdateCommunityOPHistoryFromTheGraph(community)
@@ -207,6 +211,12 @@ async function getSpecifyCommunityInfoFromOurService(community) {
   }
 }
 
+async function getSpecifyCommunityInfoFromApi(community) {
+  const data = await getCommunity(community)
+  store.commit('currentCommunity/saveCommunityInfo', data)
+  return data
+}
+
 // get specify community's op history
 async function getNewCommunityOPHistoryFromTheGraph(community) {
   const query = gql `
@@ -285,6 +295,28 @@ async function getNewCommunityOPHistoryFromOurService(community) {
     }catch (err) {
         console.log('Get new community history fail:', err);
     }
+}
+
+async function getNewCommunityOPHistoryFromApi(community) {
+  const userOperationHistories = await getCommunityOPHistory(community)
+  if (userOperationHistories[0].community.id === store.state.currentCommunity.communityId.toLowerCase()) {
+    store.commit('currentCommunity/saveOperationHistory', userOperationHistories)
+  }
+  return userOperationHistories
+}
+
+async function getUpdateCommunityOPHistoryFromApi(community) {
+  const existHistory = store.state.currentCommunity.operationHistory
+  if (!existHistory || existHistory.length === 0) {
+    return
+  }
+  const lastTime = existHistory[0].timestamp;
+  const userOperationHistories = await getCommunityOPHistory(community, lastTime)
+  console.log('userOperationHistories', userOperationHistories)
+  if (userOperationHistories[0] && userOperationHistories[0].id === store.state.currentCommunity.communityId.toLowerCase()) {
+    store.commit('currentCommunity/saveOperationHistory', existHistory.concat(userOperationHistories))
+  }
+  return existHistory.concat(userOperationHistories)
 }
 
 async function getUpdateCommunityOPHistoryFromTheGraph(community) {

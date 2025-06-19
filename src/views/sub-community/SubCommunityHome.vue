@@ -471,11 +471,11 @@ export default {
     while (!this.operationHistory || this.operationHistory.length === 0) {
       await sleep(0.3)
     }
-    const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
-    interval.start();
-    this.$once('hook:beforeDestroy', () => {
-      interval.stop();
-    })
+    // const interval = rollingFunction(getUpdateCommunityOPHistory, this.communityId, 3)
+    // interval.start();
+    // this.$once('hook:beforeDestroy', () => {
+    //   interval.stop();
+    // })
   },
 }
 </script>

@@ -125,8 +125,8 @@ export const getUser = async (ethAddr) =>
 export const getUserCommunityOPHistory = async (ethAddr, community) =>
   get(BACKEND_API_URL + "/graph/history", {ethAddr});
 
-export const getCommunityOPHistory = async (ethAddr, community) =>
-  get(BACKEND_API_URL + "/graph/community/history", {ethAddr, community});
+export const getCommunityOPHistory = async (community, timestamp) =>
+  get(BACKEND_API_URL + "/graph/community/history", {community, timestamp});
 
 export const getMyCommunityData = async (ethAddr) =>
   get(BACKEND_API_URL + "/graph/my/community", {ethAddr});
