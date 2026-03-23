@@ -5,9 +5,9 @@ export const DEBUG = false;
 export const LOCALE_KEY = "localeLanguage";
 export const BLOCK_SECOND = 0.5;
 // nutbox backend server
-// export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
+export const BACKEND_API_URL = "https://api-walnut.nutbox.app"
 // export const BACKEND_API_URL = "https://v2-api-test.nutbox.io";
-export const BACKEND_API_URL = "http://localhost:3200";
+// export const BACKEND_API_URL = "http://localhost:3200";
 
 export const QN_UPLOAD_URL = "https://api-walnut.nutbox.app/qiNiu/upload";
 
