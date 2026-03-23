@@ -340,7 +340,7 @@ export default {
       await checkNetwork();
       chainChanged(() => {
         this.$router.go(0);
-      });
+      }).catch();
       accountChanged(() => {
         this.$router.go(0);
       });

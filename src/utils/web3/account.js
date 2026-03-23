@@ -109,7 +109,7 @@ export const getUsers = async (users)  => {
 export const getUserBaseInfo = async (user) => {
     return new Promise(async (resolve, reject) => {
         try{
-            while(store.state.user.loadingUsers) {
+            while(store.state.user.loadingUsers || !store.state.user.users) {
                 await sleep(0.3)
             }
             user = ethers.utils.getAddress(user)
